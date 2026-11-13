@@ -4,10 +4,10 @@
  "presence": "Active 5 min ago",
  "day": "Yesterday 18:20",
  "messages": [
-  {"from": "them", "text": "Did the landlord get back to you about the boiler?"},
-  {"from": "me", "text": "Yes, someone is coming Thursday between 10 and 12"},
+  {"from": "them", "reply_to_name": "", "reply_to_text": "", "text": "Did the landlord get back to you about the boiler?"},
+  {"from": "me", "reply_to_name": "", "reply_to_text": "", "text": "Yes, someone is coming Thursday between 10 and 12"},
   {"from": "them", "reply_to_name": "You", "reply_to_text": "Yes, someone is coming Thursday between 10 and 12", "text": "I can let them in, I'm working from home that day"},
-  {"from": "me", "text": "That would be a big help, thank you", "reaction": "true"}
+  {"from": "me", "reply_to_name": "", "reply_to_text": "", "text": "That would be a big help, thank you", "reaction": "true"}
  ],
  "seen": "Seen 18:31",
  "typing": "true"}

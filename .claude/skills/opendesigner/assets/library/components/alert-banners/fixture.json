@@ -1,8 +1,8 @@
 {"label": "Account notices",
  "notices": [
   {"tone": "info", "title": "Payroll runs a day early.", "body": "Because of the public holiday on Nov 27, salaries go out on Nov 26.",
-   "secondary": {"label": "See calendar", "event": {"name": "open_calendar"}}, "dismiss": {"label": "Dismiss notice", "event": {"name": "dismiss_notice", "context": {"id": "n-31"}}}},
-  {"tone": "success", "title": "Q3 VAT return filed.", "dismiss": {"label": "Dismiss notice", "event": {"name": "dismiss_notice", "context": {"id": "n-32"}}}},
+   "secondary": {"label": "See calendar", "event": {"name": "open_calendar"}}, "dismiss": {"label": "Dismiss notice", "a11y_label": "Dismiss notice: Payroll runs a day early", "event": {"name": "dismiss_notice", "context": {"id": "n-31"}}}},
+  {"tone": "success", "title": "Q3 VAT return filed.", "dismiss": {"label": "Dismiss notice", "a11y_label": "Dismiss notice: Q3 VAT return filed", "event": {"name": "dismiss_notice", "context": {"id": "n-32"}}}},
   {"tone": "warning", "title": "6 invoices are past due.", "body": "The oldest, to Kessel Joinery, is 21 days late.", "secondary": {"label": "Send reminders", "event": {"name": "send_reminders"}}},
   {"tone": "danger", "title": "Card payment to Morrow Cloud declined.", "body": "The card ending 2291 has expired. The service stops on Dec 1.",
    "primary": {"label": "Update card", "event": {"name": "update_card"}}, "secondary": {"label": "Pay by transfer", "event": {"name": "pay_by_transfer"}}}]}

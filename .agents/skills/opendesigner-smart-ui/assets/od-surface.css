@@ -1,6 +1,11 @@
 /* <od-surface> states: loading, missing, stale, no permission, empty, approval. Tokens only (--ds-*), like the
    library components. Load after tokens.css. MIT. */
 .od-surface { display: block; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
+/* an answer's words can be longer than the sample's: break a long word rather than push the page sideways */
+.od-surface [data-od-slot] { overflow-wrap: anywhere; }
+/* a button label written by the model may be longer than the sample: let it wrap inside the button, never past the edge */
+.od-surface [data-od-action] { max-inline-size: 100%; }
+.od-surface [data-od-action] [data-od-slot="label"], .od-surface [data-od-action]:not(:has(*)) { white-space: normal; text-align: center; }
 .od-surface .od-column { display: grid; gap: var(--ds-space-stack-md); }
 .od-surface .od-column[data-gap="sm"] { gap: var(--ds-space-stack-sm); }
 .od-surface .od-column[data-gap="lg"] { gap: var(--ds-space-stack-lg); }

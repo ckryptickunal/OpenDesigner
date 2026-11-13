@@ -2,5 +2,8 @@
   "code": "Error 500",
   "title": "Something went wrong on our side",
   "message": "This page didn't load, but your work is saved. Try again in a moment. If it keeps happening, send us the code below.",
-  "reference": "LRK-500-7Q2K-91D"
+  "reference": "LRK-500-7Q2K-91D",
+  "retry": {"label": "Try again", "event": {"name": "retry_load"}},
+  "copy": {"label": "Copy code", "event": {"name": "copy_reference"}},
+  "support": {"label": "Contact support", "event": {"name": "open_support"}}
 }

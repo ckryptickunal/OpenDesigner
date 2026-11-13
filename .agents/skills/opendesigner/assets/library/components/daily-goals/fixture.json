@@ -1,7 +1,7 @@
 {"title": "Today's goals",
  "date": "Monday, 9 Nov",
  "goals": [
-  {"name": "Steps", "value": 5230, "goal": 8000, "percent": 65},
+  {"name": "Steps", "value": 5230, "goal": 8000, "unit": "", "percent": 65},
   {"name": "Stretching", "value": 10, "goal": 10, "unit": "min", "percent": 100},
   {"name": "Sleep", "value": 6.5, "goal": 8, "unit": "hours", "percent": 81}
  ],

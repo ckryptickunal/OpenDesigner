@@ -1,6 +1,6 @@
 ---
 name: opendesigner-smart-ui
-description: Optional. An assistant's answer arrives as the right piece of interface (a chart, a form, a comparison, a booking step) built only from the person's own design system. Reads the repo's scope, writes an A2UI catalog, validates every answer before it renders.
+description: Optional. An assistant's answers show a part of the person's own system (a chart, a form, a booking step) instead of text. Reads the repo, writes an A2UI catalog, checks each answer before it renders.
 license: MIT
 compatibility: Python 3.10+ (standard library, no network) for scope, catalog, prompt, validate and text. The renderer is plain JavaScript in any browser. The audit needs Playwright for Python, which the skill never installs. Needs the opendesigner skill beside it (the library and slots.py).
 metadata:

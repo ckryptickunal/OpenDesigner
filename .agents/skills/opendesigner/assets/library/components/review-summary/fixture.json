@@ -10,7 +10,7 @@
  "filters": [{"key": "photos", "label": "With photos", "count": "41"}, {"key": "verified", "label": "Verified", "count": "590"}, {"key": "low", "label": "1 to 3 stars", "count": "115"}],
  "reviews": [
   {"name": "Marisol K.", "avatar": {"src": "https://images.unsplash.com/photo-1596215143922-eedeaba0d91c?w=96&h=96&fit=crop&auto=format&q=70", "alt": "Marisol K."}, "verified": "true", "date": "3 Nov", "rating": 5,
-   "title": "Warm without the bulk", "text": "Wore it on a cold ferry crossing and stayed warm. The knit is soft against the neck and it hasn't pilled after four washes.",
+   "title": "Warm without the bulk", "text": "Wore it on a cold ferry crossing and stayed warm. The knit is soft against the neck and no pilling after four washes.",
    "photos": [{"photo": {"src": "https://images.unsplash.com/photo-1646270968802-6bad28659329?w=192&h=192&fit=crop&auto=format&q=70", "alt": "Folded sweaters"}, "label": "Photo 1 from Marisol K."}],
    "facts": [{"label": "Size bought", "value": "S"}, {"label": "Usual size", "value": "S"}],
    "helpful_yes": 12, "helpful_no": 0},

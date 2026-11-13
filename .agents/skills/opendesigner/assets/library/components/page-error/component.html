@@ -63,7 +63,7 @@ document.querySelectorAll(".odl-page-error").forEach(function (root) {
   if (root.hasAttribute("data-odl-wired")) return;
   root.setAttribute("data-odl-wired", "");
   var retry = root.querySelector("[data-od-action='retry']"), copy = root.querySelector("[data-od-action='copy']"), live = root.querySelector(".odl-live"), code = root.querySelector(".odl-ref code");
-  retry.addEventListener("click", function () {
+  if (retry) retry.addEventListener("click", function () {
     if (retry.getAttribute("aria-disabled") === "true") return;
     retry.setAttribute("aria-disabled", "true");
     retry.classList.add("is-busy");
@@ -74,7 +74,7 @@ document.querySelectorAll(".odl-page-error").forEach(function (root) {
       live.textContent = "Still not working. Your work is saved; try again in a few minutes.";
     }, 1400);
   });
-  copy.addEventListener("click", function () {
+  if (copy && code) copy.addEventListener("click", function () {
     var done = function () { live.textContent = "Reference code copied."; };
     if (navigator.clipboard) navigator.clipboard.writeText(code.textContent).then(done, function () { live.textContent = "Select the code to copy it."; });
     else live.textContent = "Select the code to copy it.";

@@ -2,7 +2,7 @@
  "lede": "They lose access to every project in this workspace straight away. Their tasks stay, marked as unassigned.",
  "items": [
   {"name": "Joaquín Barragán", "note": "Editor", "value": "14 tasks"},
-  {"name": "Saoirse Whelan", "value": "3 tasks"}
+  {"name": "Saoirse Whelan", "note": "", "value": "3 tasks"}
  ],
  "items_label": "Members to remove",
  "confirm_text": "harbourline-studio",

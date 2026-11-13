@@ -29,7 +29,7 @@
 .odl-product-card .odl-stars { position: relative; display: inline-flex; gap: var(--ds-space-2); color: var(--ds-color-text-primary); }
 .odl-product-card .odl-stars svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; }
 /* the filled stars sit on top of the outlines, cut to the rating (--od-ratio: rating out of 5) */
-.odl-product-card .odl-fill { position: absolute; inset-block: 0; inset-inline-start: 0; display: inline-flex; gap: var(--ds-space-2); inline-size: calc(var(--od-ratio, 1) * 100%); overflow: hidden; }
+.odl-product-card .odl-fill { position: absolute; inset-block: 0; inset-inline-start: 0; display: inline-flex; gap: var(--ds-space-2); inline-size: calc(var(--od-ratio, 1) * 100%); overflow: hidden; background: var(--ds-color-surface-raised); }
 .odl-product-card .odl-fill svg { fill: currentColor; }
 .odl-product-card .odl-buy { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-stack-md) var(--ds-space-inline-md);
   margin-block-start: var(--ds-space-stack-sm); padding-block-start: var(--ds-space-stack-md); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }

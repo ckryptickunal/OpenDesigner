@@ -12,9 +12,10 @@
 .odl-setup-steps progress::-moz-progress-bar { background: var(--ds-color-bg-action-primary); border-radius: var(--ds-radius-full); }
 .odl-setup-steps ol { list-style: none; margin: 0; padding: 0; display: grid; counter-reset: odl-step; }
 .odl-setup-steps li { counter-increment: odl-step; display: grid; grid-template-columns: var(--ds-size-control-sm) minmax(0, 1fr); gap: 0 var(--ds-space-inset-lg); padding-block: var(--ds-space-stack-md); }
-.odl-setup-steps li:first-child { padding-block-start: 0; }
+.odl-setup-steps li:first-child, .odl-setup-steps li[hidden]:first-child + li { padding-block-start: 0; }
 .odl-setup-steps li:last-child { padding-block-end: 0; }
 .odl-setup-steps li + li { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-setup-steps li[hidden]:first-child + li { border-block-start: 0; }
 .odl-setup-steps .odl-mark { grid-row: span 3; inline-size: var(--ds-size-control-sm); block-size: var(--ds-size-control-sm); display: grid; place-items: center; border-radius: var(--ds-radius-full);
   border: var(--ds-border-width-emphasis) solid var(--ds-color-border-default); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
 .odl-setup-steps .odl-mark svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); stroke-width: var(--ds-icon-stroke-lg); }

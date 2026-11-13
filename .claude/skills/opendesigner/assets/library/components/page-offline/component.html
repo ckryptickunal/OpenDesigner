@@ -70,7 +70,7 @@ document.querySelectorAll(".odl-page-offline").forEach(function (root) {
   if (root.hasAttribute("data-odl-wired")) return;
   root.setAttribute("data-odl-wired", "");
   var btn = root.querySelector("[data-od-action='reconnect']"), live = root.querySelector(".odl-live");
-  btn.addEventListener("click", function () {
+  if (btn) btn.addEventListener("click", function () {
     if (btn.getAttribute("aria-disabled") === "true") return;
     btn.setAttribute("aria-disabled", "true"); btn.classList.add("is-busy"); live.textContent = "Checking your connection…";
     setTimeout(function () {

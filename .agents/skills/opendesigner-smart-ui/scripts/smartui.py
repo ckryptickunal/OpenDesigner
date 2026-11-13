@@ -102,8 +102,9 @@ def props_for(nodes, spec, css, tokens, where=""):
         if k == "text":
             names_text.append(name)
             t = s.get("type")
-            p = s if (set(t) if isinstance(t, list) else {t}) & {"string", "number", "integer"} or "enum" in s else {"type": "string", "maxLength": 120}
-            if p.get("type") == "string" and "maxLength" not in p:
+            # without an authored type, a slot shows text or a number (the renderer formats numbers for the reader's locale)
+            p = s if (set(t) if isinstance(t, list) else {t}) & {"string", "number", "integer"} or "enum" in s else {"type": ["string", "number"], "maxLength": 120}
+            if "string" in (p.get("type") if isinstance(p.get("type"), list) else [p.get("type")]) and "maxLength" not in p:
                 p["maxLength"] = 120
             props.setdefault(name, p)
         elif k == "input":
@@ -119,7 +120,7 @@ def props_for(nodes, spec, css, tokens, where=""):
         elif k == "label":
             props.setdefault(name, {"type": "string", "maxLength": 120, **{x: y for x, y in s.items() if x in ("maxLength", "description")}})
         elif k == "measure":
-            if name in props and props[name].get("type") == "string":
+            if name in props and props[name].get("type") in ("string", ["string", "number"]):
                 props[name] = {"type": s.get("type") if s.get("type") in (["number", "null"], ["null", "number"]) else "number", **{x: y for x, y in s.items() if x in ("minimum", "maximum", "description")}}
             else:
                 props.setdefault(name, {"type": s.get("type") if isinstance(s.get("type"), list) else "number", **{x: y for x, y in s.items() if x in ("minimum", "maximum", "description")}})
@@ -154,11 +155,9 @@ def props_for(nodes, spec, css, tokens, where=""):
             props[name] = arr
     req = [r for r in (spec or {}).get("required", []) if r in props] if spec and "required" in spec else \
         [n["name"] for n in nodes if n["kind"] == "text" and not n.get("optional")]
-    for n in nodes:  # actions and media are required unless the authored spec says otherwise
-        if n["kind"] in ("action",) and not spec and n["name"] not in req:
-            req.append(n["name"])
+    # buttons are optional unless the part's spec says so: a step's Start exists only on the current step
     return {"properties": props, "required": sorted(set(req), key=list(props).index),
-            "name_from": next((t for t in names_text if props.get(t, {}).get("type") == "string"), None)}
+            "name_from": next((t for t in names_text if "string" in (lambda ty: ty if isinstance(ty, list) else [ty])(props.get(t, {}).get("type"))), None)}
 
 
 def pascal(slug):
@@ -476,10 +475,13 @@ def data_signals(data):
     return out
 
 
-def select(msg, catalog, k=3, scope=None, data=None):
-    """The top-k components for one message, and whether the message gives a reason for UI at all (R1)."""
+def select(msg, catalog, k=3, scope=None, data=None, boost=None):
+    """The top-k components for one message, and whether the message gives a reason for UI at all (R1).
+    boost: extra weight per part, for example the parts the scope step mapped to the actions the app just ran."""
     ranked = []
     sig = data_signals(data) if data is not None else {}
+    for n, w in (boost or {}).items():
+        sig[n] = sig.get(n, 0) + w
     for name, c in catalog["components"].items():
         if od(c).get("container"):
             continue
@@ -515,14 +517,17 @@ def compact(schema):
             return "{" + ", ".join(f"{k}{'' if k in req else '?'}: {one(v)}" for k, v in p.get("properties", {}).items()) + "}"
         if t == "string":
             return f"text<={p.get('maxLength', '')}" if "format" not in p else "url"
+        if isinstance(t, list):
+            return "|".join("text" if x == "string" else x for x in t if x != "null") + (" or null" if "null" in t else "")
         return str(t)
     req = set(schema.get("required", []))
     return ", ".join(f"{k}{'' if k in req else '?'}: {one(v)}" for k, v in schema["properties"].items()
                      if k not in ("component", "id", "@accessibility", "@metadata"))
 
 
-def build_prompt(msg, catalog, k=3, scope=None, data=None):
-    sel = select(msg, catalog, k, scope, data)
+def build_prompt(msg, catalog, k=3, scope=None, data=None, boost=None, always=()):
+    """always: parts whose properties are listed whenever there is UI (the approval prompt, when the app can change data)."""
+    sel = select(msg, catalog, k, scope, data, boost)
     lines = [
         "You can answer with interface parts from the person's own design system (OpenDesigner Smart UI).",
         catalog["instructions"],
@@ -536,7 +541,7 @@ def build_prompt(msg, catalog, k=3, scope=None, data=None):
     ]
     if sel["ui"]:
         lines.append("Parts that may fit this message (use at most one, or none):")
-        for n in sel["candidates"]:
+        for n in list(sel["candidates"]) + [a for a in always if a not in sel["candidates"] and a in catalog["components"]]:
             c = catalog["components"][n]
             lines.append(f"- {n}: {c['description']} When: {'; '.join(od(c).get('use_when', [])[:2]) or od(c).get('use')}. "
                          f"Properties: {compact(c)}")
@@ -1063,7 +1068,7 @@ def scope(root):
             pytext += (root / f).read_text(errors="ignore").lower()
     found["framework"] = next((label for key, label in FRAMEWORKS if key in deps), None) or \
         next((label for key, label in (("django", "Django"), ("flask", "Flask"), ("fastapi", "FastAPI"), ("rails", "Rails")) if key in pytext), None) or \
-        ("plain HTML" if list(root.glob("*.html")) else None)
+        ("plain HTML" if list(root.glob("*.html")) or list(root.glob("*/*.html")) else None)
     found["ai_sdks"] = sorted({label for key, label in AI_SDKS if key in deps or (label.endswith("(Python)") and re.search(rf"^{key}\b", pytext, re.M))})
     # tokens
     toks = [p for p in (root / "opendesigner/build/css/tokens.css", root / "build/css/tokens.css") if p.exists()]
@@ -1085,10 +1090,15 @@ def scope(root):
             t = p.read_text(errors="ignore")
         except OSError:
             continue
-        for m in re.finditer(r"""(?:app|router|api|bp)\.(get|post|put|patch|delete)\(\s*["'`]([^"'`]+)""", t):
-            actions.append({"kind": "route", "method": m.group(1).upper(), "path": m.group(2), "file": rel})
-        for m in re.finditer(r"""@(?:app|router|bp)\.(get|post|put|patch|delete|route)\(\s*["']([^"']+)""", t):
-            actions.append({"kind": "route", "method": m.group(1).upper(), "path": m.group(2), "file": rel})
+        for m in re.finditer(r"""(?:app|router|api|bp)\.(get|post|put|patch|delete|route)\(\s*["'`]([^"'`]+)""", t):
+            a = {"kind": "route", "method": m.group(1).upper(), "path": m.group(2), "file": rel}
+            after = t[m.end():m.end() + 800]   # the handler's name and first doc line, when it is right below
+            d = re.search(r"def\s+(\w+)\(", after)
+            if d:
+                a["name"] = d.group(1)
+                doc = re.match(r"[^:]*:\s*\n\s*[\"']{3}(.+)", after[d.start():])
+                a["doc"] = doc.group(1).split('"' * 3)[0].split("'" * 3)[0].strip() if doc else ""
+            actions.append(a)
         for m in re.finditer(r"""\btool\(\s*\{[^}]*?description|\bname:\s*["'`]([a-z][a-z0-9_]+)["'`],\s*description""", t):
             if m.group(1):
                 actions.append({"kind": "tool", "name": m.group(1), "file": rel})
@@ -1098,7 +1108,13 @@ def scope(root):
     found["chat_surface"] = sorted(set(chats))[:10]
     if not chats:
         found["not_known"].append("where the assistant lives (no chat or assistant file found)")
-    found["actions"] = actions[:60]
+    seen, uniq = set(), []
+    for a in actions:
+        key = (a.get("kind"), a.get("method"), a.get("path"), a.get("name"))
+        if key not in seen:
+            seen.add(key)
+            uniq.append(a)
+    found["actions"] = uniq[:60]
     for a in found["actions"]:
         a["changes_data"] = a.get("method") in ("POST", "PUT", "PATCH", "DELETE")
     if not product:
@@ -1109,6 +1125,38 @@ def scope(root):
     found["components_proposed"] = sorted({c for it in found["intents"] for c in it["components"]})
     found["components_confirmed"] = []
     return found
+
+
+ROUTE_HINTS = [  # words in a read route's path, handler name or doc line -> the parts that usually show that data
+    (r"\b(usage|history|trend|per month|monthly|over time|metrics|timeseries)\b", ["LineChart", "BarChart"]),
+    (r"\b(plans?|tiers?|pricing|compare)\b", ["Comparison"]),
+    (r"\b(refunds?|status|tracking|delivery|progress)\b", ["ProgressStatus"]),
+    (r"\b(pdf|file|download|attachment)\b", ["FileCard", "KeyFacts"]),
+    (r"\b(subscription|account|profile|settings|summary)\b", ["KeyFacts"]),
+    (r"\b(slots?|availability|times|calendar)\b", ["TimeSlots"]),
+    (r"\b(search|results|flights|hotels|products)\b", ["ResultList"]),
+    (r"\b(list|all|records|invoices|orders|transactions|tickets)\b", ["DataTable"]),
+]
+
+
+def route_parts(a):
+    """The route's path and handler name decide; its doc line only when they say nothing."""
+    first = " ".join([a.get("path", "").replace("/", " ").replace("_", " "), (a.get("name") or "").replace("_", " ")]).lower()
+    first = re.sub(r"<[^>]+>|\{[^}]+\}|:\w+", " ", first)
+    one = bool(re.search(r"(<[^>]+>|\{[^}]+\}|:\w+)/?$", a.get("path", "")))   # /invoices/<number>: one record, not a list
+    doc = (a.get("doc") or "").lower()
+    for text in (first, doc):
+        for pat, parts in ROUTE_HINTS:
+            if re.search(pat, text):
+                if one and parts == ["DataTable"]:
+                    return ["FileCard", "KeyFacts"] if re.search(r"\b(pdf|file|download)\b", doc) else ["KeyFacts"]
+                return parts
+    return []
+
+
+def route_phrases(a):
+    words = [w for w in re.findall(r"[a-z]+", (a.get("name") or "").replace("_", " ")) if w not in ("get", "list", "fetch", "show")]
+    return [" ".join(words)] if words else []
 
 
 def propose_intents(product, actions):
@@ -1122,6 +1170,12 @@ def propose_intents(product, actions):
     out = []
     for it in (PRODUCT_INTENTS.get(key, {}).get("intents", []) if key else []):
         out.append({**it, "from": f"product type {key}"})
+    for a in actions:
+        if a.get("kind") == "route" and not a.get("changes_data"):
+            parts = route_parts(a)
+            if parts:
+                out.append({"intent": f"{a.get('name') or a['path']}: {a.get('doc') or a['path']}"[:90], "phrases": route_phrases(a),
+                            "components": parts, "from": f"GET {a['path']} in {a['file']}"})
     for a in actions:
         if a.get("kind") == "route" and a.get("changes_data"):
             out.append({"intent": f"{a['method']} {a['path']}", "phrases": [], "components": ["ApprovalPrompt", "Receipt", "ErrorRetry"],

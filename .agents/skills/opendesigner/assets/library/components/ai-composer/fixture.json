@@ -5,6 +5,7 @@
    "meta": "88 pages",
    "remove": {
     "label": "Remove",
+    "a11y_label": "Remove Harbour board accounts 1971",
     "event": {
      "name": "remove_source",
      "context": {
@@ -18,6 +19,7 @@
    "meta": "Reading, 30%",
    "remove": {
     "label": "Cancel",
+    "a11y_label": "Cancel pier-survey-1974.pdf",
     "event": {
      "name": "remove_source",
      "context": {
@@ -30,6 +32,7 @@
    "name": "Dredging contract notes",
    "remove": {
     "label": "Remove",
+    "a11y_label": "Remove Dredging contract notes",
     "event": {
      "name": "remove_source",
      "context": {

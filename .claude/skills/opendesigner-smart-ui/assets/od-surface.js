@@ -244,7 +244,12 @@ export class ODSurface extends (G.HTMLElement || class {}) {
     for (const el of marked(scope, "[data-od-action]")) {
       if (el === scope) continue;
       const name = el.dataset.odAction, a = data[name], p = props[name] || {};
-      if (!a || !a.label) { if (partial) { el.disabled = true; el.setAttribute("data-od-pending", ""); } else el.remove(); continue; }
+      if (!a || !a.label) {
+        // still loading: keep the shape, but nobody can reach or hear a button with a sample label
+        if (partial) { el.disabled = true; el.setAttribute("data-od-pending", ""); el.setAttribute("aria-hidden", "true"); el.tabIndex = -1; }
+        else el.remove();
+        continue;
+      }
       this.fillAction(el, a, p, compId, ctx.itemName, partial);
     }
     for (const el of marked(scope, "[data-od-list]")) {
@@ -260,7 +265,13 @@ export class ODSurface extends (G.HTMLElement || class {}) {
         if (ps["x-od-measure"]) max[k] = Math.max(0, ...items.map((x) => (x && typeof x[k] === "number" ? x[k] : 0)));
       }
       if (!items.length && partial) {
-        for (let i = 0; i < 2; i++) { const n = tpl.cloneNode(true); this.fill(n, {}, itemSchema, true, compId, { max }); el.append(n); }
+        for (let i = 0; i < 2; i++) {
+          const n = tpl.cloneNode(true);
+          this.fill(n, {}, itemSchema, true, compId, { max });
+          n.setAttribute("aria-hidden", "true");  // placeholder rows: seen as loading, never read out or focused
+          n.inert = true;
+          el.append(n);
+        }
         continue;
       }
       if (!items.length) { el.append(this.emptyItem(tpl)); continue; }
@@ -311,7 +322,8 @@ export class ODSurface extends (G.HTMLElement || class {}) {
   }
 
   emptyItem(tpl) {
-    const n = document.createElement(tpl.tagName);
+    const interactive = /^(BUTTON|A|INPUT|SELECT|TEXTAREA|LABEL)$/.test(tpl.tagName) || tpl.hasAttribute("tabindex");
+    const n = document.createElement(interactive ? "div" : tpl.tagName);
     n.className = "od-empty";
     if (tpl.tagName === "TR") {
       const td = document.createElement("td");
