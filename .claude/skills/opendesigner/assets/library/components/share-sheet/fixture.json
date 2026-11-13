@@ -1,0 +1,11 @@
+{"backdrop": {"src": "https://images.unsplash.com/photo-1508971607899-a238a095d417?w=960&h=576&fit=crop&auto=format&q=70", "alt": "Aerial view of a beach with mountains"},
+ "title": "Share trip", "people_label": "Frequent",
+ "people": [
+  {"name": "Ines", "photo": {"src": "https://images.unsplash.com/photo-1596215143922-eedeaba0d91c?w=112&h=112&fit=crop&auto=format&q=70", "alt": "Ines"}},
+  {"name": "Dario", "photo": {"src": "https://images.unsplash.com/photo-1564866657311-e9cc905d29cf?w=112&h=112&fit=crop&auto=format&q=70", "alt": "Dario"}},
+  {"name": "Fatou", "photo": {"src": "https://images.unsplash.com/photo-1611432579699-484f7990b127?w=112&h=112&fit=crop&auto=format&q=70", "alt": "Fatou"}},
+  {"name": "Leo", "photo": {"src": "https://images.unsplash.com/photo-1622626426572-c268eb006092?w=112&h=112&fit=crop&auto=format&q=70", "alt": "Leo"}}
+ ],
+ "apps_label": "Send with",
+ "apps": [{"name": "Mail", "icon": "mail"}, {"name": "Texts", "icon": "msg"}, {"name": "Nearby", "icon": "near"}, {"name": "More", "icon": "more"}],
+ "link": "coastroute.example/t/q7m4"}

@@ -1,0 +1,67 @@
+{
+ "stream": {
+  "src": "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=1600&h=900&fit=crop&auto=format&q=70",
+  "alt": "Crowd facing a lit stage"
+ },
+ "viewers": 1306,
+ "title": "Harbour Lights, acoustic hour from the boathouse",
+ "host_name": "Maren Solberg",
+ "host_photo": {
+  "src": "https://images.unsplash.com/photo-1541823709867-1b206113eafd?w=96&h=96&fit=crop&crop=faces&auto=format&q=70",
+  "alt": "Photo of Maren Solberg"
+ },
+ "host_meta": "Music · live for 38 min",
+ "chat_title": "Chat",
+ "chatting": 240,
+ "pinned_by": "Maren Solberg",
+ "pinned_text": "The new record and spring dates are at",
+ "pinned_link": {
+  "label": "maren-solberg.example",
+  "event": {
+   "name": "open_link"
+  }
+ },
+ "messages": [
+  {
+   "author": "saltmarsh",
+   "avatar": {
+    "src": "https://images.unsplash.com/photo-1518725522904-4b3939358342?w=64&h=64&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Photo of saltmarsh"
+   },
+   "role": "none",
+   "text": "the room sounds so warm"
+  },
+  {
+   "author": "fennel.b",
+   "avatar": {
+    "src": "https://images.unsplash.com/photo-1596215143922-eedeaba0d91c?w=64&h=64&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Photo of fennel.b"
+   },
+   "role": "member",
+   "badge": "Member · 8 mo",
+   "text": "which guitar is that?"
+  },
+  {
+   "author": "harbourmod",
+   "role": "mod",
+   "badge": "Mod",
+   "text": "Please keep links out of chat, thanks!"
+  },
+  {
+   "author": "Maren Solberg",
+   "avatar": {
+    "src": "https://images.unsplash.com/photo-1541823709867-1b206113eafd?w=64&h=64&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Photo of Maren Solberg"
+   },
+   "role": "host",
+   "badge": "Host",
+   "text": "A 1970s parlour guitar, borrowed from my uncle."
+  },
+  {
+   "author": "you",
+   "role": "you",
+   "badge": "You",
+   "text": "this made my evening"
+  }
+ ]
+}

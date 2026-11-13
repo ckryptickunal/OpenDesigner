@@ -1,0 +1,9 @@
+{"cover": {"src": "https://images.unsplash.com/photo-1551380701-5dd33d5b5d06?w=800&h=600&fit=crop&auto=format&q=70", "alt": "A dark desk with a desk lamp"},
+ "category": "Guide",
+ "read_time": "4 min read",
+ "open": {"label": "Set up spending limits for each team", "event": {"name": "open_article", "context": {"slug": "team-spending-limits"}}},
+ "summary": "Give every team its own monthly limit and get a note when one is close to running out.",
+ "author_photo": {"src": "https://images.unsplash.com/photo-1758600587839-56ba05596c69?w=80&h=80&fit=crop&crop=faces&auto=format&q=70", "alt": ""},
+ "author": "Mirela Dobrescu",
+ "date": "Nov 12, 2026",
+ "save": {"label": "Save", "event": {"name": "save_article", "context": {"slug": "team-spending-limits"}}}}

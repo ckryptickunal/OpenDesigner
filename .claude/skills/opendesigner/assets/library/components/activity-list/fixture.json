@@ -1,0 +1,18 @@
+{"title": "Notifications",
+ "empty": "No notifications of this kind yet.",
+ "groups": [
+  {"title": "Today",
+   "items": [
+    {"kind": "like", "people": [{"photo": {"src": "https://images.unsplash.com/photo-1757649734013-705dd6456c02?w=96&h=96&fit=crop&crop=faces&auto=format&q=70", "alt": "noor.ceramics"}}, {"photo": {"src": "https://images.unsplash.com/photo-1654155427842-a4a249bf693e?w=96&h=96&fit=crop&crop=faces&auto=format&q=70", "alt": "teodor.v"}}],
+     "names": "noor.ceramics, teodor.v", "text": "and 48 others liked your post.", "time": "1h", "end": "thumb",
+     "thumb": {"src": "https://images.unsplash.com/photo-1446038202205-1c96430dbdab?w=96&h=96&fit=crop&auto=format&q=70", "alt": "Your coastline photo"}},
+    {"kind": "follow", "people": [{"photo": {"src": "https://images.unsplash.com/photo-1596215143922-eedeaba0d91c?w=96&h=96&fit=crop&crop=faces&auto=format&q=70", "alt": "aoife.draws"}}],
+     "names": "aoife.draws", "text": "started following you.", "time": "4h", "end": "follow_back",
+     "follow_back": {"label": "Follow back", "event": {"name": "follow_back", "context": {"user": "aoife.draws"}}}}]},
+  {"title": "Earlier",
+   "items": [
+    {"kind": "mention", "people": [{"photo": {"src": "https://images.unsplash.com/photo-1607346256330-dee7af15f7c5?w=96&h=96&fit=crop&crop=faces&auto=format&q=70", "alt": "bram.outdoors"}}],
+     "names": "bram.outdoors", "text": "mentioned you:", "quote": "@you that lake trail was worth the climb", "time": "3d", "end": "story",
+     "story": {"src": "https://images.unsplash.com/photo-1559310589-2673bfe16970?w=96&h=96&fit=crop&auto=format&q=70", "alt": "bram.outdoors's story: a lake below snowy mountains"}},
+    {"kind": "like", "people": [{"photo": {"src": "https://images.unsplash.com/photo-1613498382159-0972b7b4c9f1?w=96&h=96&fit=crop&crop=faces&auto=format&q=70", "alt": "selin.k"}}],
+     "names": "selin.k", "text": "liked your comment.", "time": "6d"}]}]}

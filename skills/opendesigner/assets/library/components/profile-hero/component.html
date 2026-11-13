@@ -16,6 +16,10 @@
 .odl-profile-hero h2 { margin: 0; font: var(--ds-text-title-lg); }
 .odl-profile-hero .odl-handle { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-stack-xs) var(--ds-space-inline-sm); margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); }
 .odl-profile-hero .odl-tag { padding: var(--ds-space-2) var(--ds-space-8); border-radius: var(--ds-radius-control-sm); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); white-space: nowrap; }
+/* Rendered from data: the tag list adds no box; data-is_following is the starting state (the script copies it). */
+.odl-profile-hero .odl-tags { display: contents; }
+.odl-profile-hero .odl-follow[data-is_following="true"], .odl-profile-hero .odl-follow[data-is_following="false"] { cursor: pointer; }
+.odl-profile-hero [hidden] { display: none !important; }
 .odl-profile-hero .odl-bio { grid-area: bio; display: grid; gap: var(--ds-space-stack-xs); margin: calc(-1 * var(--ds-space-stack-sm)) 0 0; }
 .odl-profile-hero .odl-bio p { margin: 0; }
 .odl-profile-hero .odl-link { display: inline-flex; align-items: center; gap: var(--ds-space-inline-sm); color: var(--ds-color-text-link); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); min-block-size: var(--ds-size-target-touch); text-decoration: none; border-radius: var(--ds-radius-control-sm); }
@@ -65,29 +69,30 @@
 </style>
 <section class="odl-profile-hero" aria-labelledby="odl-ph-name">
   <div class="odl-card">
-    <div class="odl-cover"><img src="https://images.unsplash.com/photo-1609194246158-702022cc4f13?w=1408&h=400&fit=crop&auto=format&q=70" alt="Cover photo: a city skyline at sunset" width="704" height="200" loading="lazy" decoding="async"></div>
+    <div class="odl-cover"><img data-od-media="cover" src="https://images.unsplash.com/photo-1609194246158-702022cc4f13?w=1408&h=400&fit=crop&auto=format&q=70" alt="Cover photo: a city skyline at sunset" width="704" height="200" loading="lazy" decoding="async"></div>
     <div class="odl-body">
-      <span class="odl-ring" aria-hidden="true"><span class="odl-gap"><img class="odl-av" src="https://images.unsplash.com/photo-1705645930353-0e335311ef20?w=192&h=192&fit=crop&auto=format&q=70" alt="" width="96" height="96" loading="lazy" decoding="async"></span></span>
-      <div class="odl-name"><h2 id="odl-ph-name">Rafał Ostrowiak</h2>
-        <p class="odl-handle"><span>@rafal.makes</span><span class="odl-tag">he/him</span><span class="odl-tag">Photographer</span></p></div>
-      <div class="odl-bio"><p>Chasing blue hour on rooftops. Film on weekends, ceramics on Tuesdays. Prints ship in spring.</p>
-        <p><a class="odl-link" href="https://rafal.example/prints"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>rafal.example/prints</a></p></div>
+      <span class="odl-ring" aria-hidden="true"><span class="odl-gap"><img class="odl-av" data-od-media="avatar" src="https://images.unsplash.com/photo-1705645930353-0e335311ef20?w=192&h=192&fit=crop&auto=format&q=70" alt="" width="96" height="96" loading="lazy" decoding="async"></span></span>
+      <div class="odl-name"><h2 id="odl-ph-name" data-od-slot="name">Rafał Ostrowiak</h2>
+        <p class="odl-handle"><span data-od-slot="handle">@rafal.makes</span><span class="odl-tags" data-od-list="tags"><span class="odl-tag" data-od-item data-od-template hidden><span data-od-slot="text"></span></span><span class="odl-tag" data-od-item>he/him</span><span class="odl-tag" data-od-item>Photographer</span></span></p></div>
+      <div class="odl-bio"><p data-od-slot="bio" data-od-optional>Chasing blue hour on rooftops. Film on weekends, ceramics on Tuesdays. Prints ship in spring.</p>
+        <p data-od-optional><a class="odl-link" href="https://rafal.example/prints" data-od-action="link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg><span data-od-slot="label">rafal.example/prints</span></a></p></div>
       <ul class="odl-counts">
-        <li><button type="button" class="odl-count"><b>214</b>posts</button></li>
-        <li><button type="button" class="odl-count"><b class="odl-fol">1,208</b>followers</button></li>
-        <li><button type="button" class="odl-count"><b>381</b>following</button></li>
+        <li><button type="button" class="odl-count"><b data-od-slot="posts">214</b>posts</button></li>
+        <li><button type="button" class="odl-count"><b class="odl-fol" data-od-slot="followers">1,208</b>followers</button></li>
+        <li><button type="button" class="odl-count"><b data-od-slot="following">381</b>following</button></li>
       </ul>
       <div class="odl-actions">
-        <button type="button" class="odl-btn odl-follow" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Follow</span></button>
-        <button type="button" class="odl-btn">Message</button>
+        <button type="button" class="odl-btn odl-follow" aria-pressed="false" data-od-var="is_following" data-is_following="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Follow</span></button>
+        <button type="button" class="odl-btn" data-od-action="message">Message</button>
         <button type="button" class="odl-btn is-icon" aria-label="Similar accounts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg></button>
       </div>
-      <ul class="odl-hl" aria-label="Highlights">
-        <li><button type="button"><span class="odl-cv" aria-hidden="true"><img src="https://images.unsplash.com/photo-1512531123205-560f5974e686?w=128&h=128&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"></span><span>Blue hour</span></button></li>
-        <li><button type="button"><span class="odl-cv" aria-hidden="true"><img src="https://images.unsplash.com/photo-1578429827733-272eb6d7972e?w=128&h=128&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"></span><span>Film</span></button></li>
-        <li><button type="button"><span class="odl-cv" aria-hidden="true"><img src="https://images.unsplash.com/photo-1520485521983-bfaa0bc6c80e?w=128&h=128&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"></span><span>Ceramics</span></button></li>
-        <li><button type="button"><span class="odl-cv" aria-hidden="true"><img src="https://images.unsplash.com/photo-1559310589-2673bfe16970?w=128&h=128&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"></span><span>Trips</span></button></li>
-        <li><button type="button"><span class="odl-cv is-new" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span>New</span></button></li>
+      <ul class="odl-hl" aria-label="Highlights" data-od-list="highlights">
+        <li data-od-item data-od-template hidden><button type="button"><span class="odl-cv" aria-hidden="true"><img data-od-media="cover" alt="" width="64" height="64" loading="lazy" decoding="async"></span><span data-od-slot="title"></span></button></li>
+        <li data-od-item><button type="button"><span class="odl-cv" aria-hidden="true"><img src="https://images.unsplash.com/photo-1512531123205-560f5974e686?w=128&h=128&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"></span><span>Blue hour</span></button></li>
+        <li data-od-item><button type="button"><span class="odl-cv" aria-hidden="true"><img src="https://images.unsplash.com/photo-1578429827733-272eb6d7972e?w=128&h=128&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"></span><span>Film</span></button></li>
+        <li data-od-item><button type="button"><span class="odl-cv" aria-hidden="true"><img src="https://images.unsplash.com/photo-1520485521983-bfaa0bc6c80e?w=128&h=128&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"></span><span>Ceramics</span></button></li>
+        <li data-od-item><button type="button"><span class="odl-cv" aria-hidden="true"><img src="https://images.unsplash.com/photo-1559310589-2673bfe16970?w=128&h=128&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"></span><span>Trips</span></button></li>
+        <li data-od-sample><button type="button"><span class="odl-cv is-new" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></span><span>New</span></button></li>
       </ul>
     </div>
   </div>
@@ -97,7 +102,9 @@ document.querySelectorAll(".odl-profile-hero").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
   const follow = root.querySelector(".odl-follow"), label = follow.querySelector("span"), count = root.querySelector(".odl-fol");
-  const base = 1208, fmt = new Intl.NumberFormat("en");
+  const fmt = new Intl.NumberFormat("en");
+  if (follow.dataset.is_following === "true") { follow.setAttribute("aria-pressed", "true"); label.textContent = "Following"; }
+  const base = Number(count.textContent.replace(/\D/g, "")) - (follow.getAttribute("aria-pressed") === "true" ? 1 : 0);
   follow.addEventListener("click", () => {
     const on = follow.getAttribute("aria-pressed") !== "true";
     follow.setAttribute("aria-pressed", String(on)); label.textContent = on ? "Following" : "Follow";

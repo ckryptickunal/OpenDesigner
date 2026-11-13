@@ -1,0 +1,162 @@
+{
+  "name": "Error with retry",
+  "summary": "Says in plain words what failed and that nothing else broke, with an optional error code, a Try again button and one other way forward.",
+  "use": "when a load, search or action failed and trying again may work",
+  "type": "feedback",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "error",
+    "retry",
+    "failed",
+    "try again",
+    "offline"
+  ],
+  "states": [
+    "with error code",
+    "hover",
+    "focus",
+    "disabled while retrying"
+  ],
+  "source": null,
+  "a11y": "A section named by its heading; the icon is decorative, so the failure is said in words, and Try again is a real button that comes first in tab order.",
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "something the person asked for failed (a load, a search, a payment that did not start) and trying again may work"
+    ],
+    "avoid_when": [
+      "the action went through, or was refused for a known reason: use receipt with the danger tone",
+      "a list loaded and is simply empty: use empty-state",
+      "a warning about something that has not failed yet: use approval-prompt"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-error-retry h3",
+        "what": "what failed, in a few words",
+        "slot": "text"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-message",
+        "what": "what happened in plain words and what was not affected",
+        "slot": "text"
+      },
+      {
+        "name": "detail",
+        "selector": ".odl-detail",
+        "what": "an optional error code or reference for support",
+        "slot": "text"
+      },
+      {
+        "name": "retry",
+        "selector": ".odl-retry",
+        "what": "the primary Try again button",
+        "slot": "action"
+      },
+      {
+        "name": "secondary",
+        "selector": ".odl-other",
+        "what": "an optional other way forward",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "message",
+        "retry"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "title"
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 200,
+          "part": "message"
+        },
+        "detail": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "detail"
+        },
+        "retry": {
+          "type": "object",
+          "part": "retry",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "label",
+            "event"
+          ]
+        },
+        "secondary": {
+          "type": "object",
+          "part": "secondary",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "label",
+            "event"
+          ]
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "an error always says what failed; there is no empty version"
+      },
+      "loading": {
+        "status": "shown",
+        "how": "while a retry runs the button is disabled and quiet, so it cannot be pressed twice",
+        "evidence": "button:disabled { cursor: not-allowed;"
+      },
+      "error": {
+        "status": "shown",
+        "how": "this component is the error state: an icon and a border in the danger colour, never a red block",
+        "evidence": "var(--ds-color-border-danger)"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "a disabled or still-loading button turns quiet neutral (secondary text on a subtle fill), still readable at AA",
+        "evidence": "button:disabled { cursor: not-allowed;"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the buttons wrap, and on a phone they stack at full width under the text",
+        "evidence": "@container (max-width: 26rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "title, message and error code wrap, also long codes with no spaces",
+        "evidence": "overflow-wrap: anywhere"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Try again, then the other action",
+      "Enter or Space presses either"
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{"cover": {"src": "https://images.unsplash.com/photo-1600298882525-1ac025c98b68?w=896&h=504&fit=crop&auto=format&q=70", "alt": "Snowy mountain above green trees"},
+ "title": "Ski week", "goal": 1800, "saved": 645, "currency": "EUR",
+ "pace": "On track for 12 Jan", "pace_detail": "· €55 a week",
+ "roundups_on": "false", "roundups_note": "€6.20 this month",
+ "amounts": [{"value": 20, "label": "€20"}, {"value": 50, "label": "€50"}, {"value": 100, "label": "€100"}],
+ "from_account": "Main account"}

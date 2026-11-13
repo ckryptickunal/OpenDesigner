@@ -1,0 +1,27 @@
+{
+ "applied": [
+  {
+   "name": "Status",
+   "value": "Overdue"
+  },
+  {
+   "name": "Region",
+   "value": "North"
+  }
+ ],
+ "filters": [
+  {
+   "name": "Customer"
+  },
+  {
+   "name": "Order date"
+  },
+  {
+   "name": "Sales rep"
+  }
+ ],
+ "add_label": "More filters",
+ "count": 1307,
+ "noun": "orders",
+ "sort": "Largest first"
+}

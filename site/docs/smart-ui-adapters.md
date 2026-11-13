@@ -1,7 +1,7 @@
 ---
 title: Where Smart UI runs
 seo_title: "Smart UI adapters: your product, A2UI and MCP Apps"
-description: Smart UI answers show in your own product with a plain HTML element, through the A2UI v1.0 format, and inside Claude and ChatGPT through MCP Apps. What has been tested in each.
+description: Smart UI answers show in your product with a plain HTML element, through A2UI v1.0, and in Claude and ChatGPT through MCP Apps. What was tested in each.
 section: Reference
 order: 8.5
 updated: 2026-11-13

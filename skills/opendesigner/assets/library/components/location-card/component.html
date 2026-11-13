@@ -36,6 +36,8 @@
   .odl-location-card .odl-body { padding: var(--ds-space-inset-lg); }
   .odl-location-card button { justify-self: stretch; }
 }
+/* Disabled or still loading: quiet but readable (AA), never the faint disabled pair. */
+.odl-location-card button:disabled { cursor: not-allowed; background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); }
 @media (prefers-reduced-motion: reduce) { .odl-location-card, .odl-location-card *, .odl-location-card *::before { transition: none !important; animation: none !important; } }
 </style>
 <article class="odl-location-card" aria-labelledby="odl-lc-title">

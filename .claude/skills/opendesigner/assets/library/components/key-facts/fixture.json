@@ -1,0 +1,11 @@
+{"title": "Apartment 3C, Alder Court",
+ "subtitle": "Lease from 1 March 2026 to 28 February 2027",
+ "facts": [
+  {"label": "Monthly rent", "value": "€1,240", "note": "Paid by bank transfer on the 1st"},
+  {"label": "Next payment", "value": "Due in 3 days", "tone": "warning", "note": "1 December"},
+  {"label": "Deposit", "value": "Held", "tone": "success", "note": "€2,480 with the deposit scheme"},
+  {"label": "Heating repair", "value": "Booked", "tone": "info", "note": "Engineer visits Tuesday morning"},
+  {"label": "Notice period", "value": "2 months"},
+  {"label": "Pets", "value": "Not allowed", "tone": "danger"},
+  {"label": "Landlord contact", "value": "Brackwood Lettings", "tone": "accent", "note": "lettings@brackwood.example"}
+ ]}

@@ -1,0 +1,8 @@
+{"title": "Security events",
+ "scope": "Last 24 hours · Bramwell Logistics workspace",
+ "events": [
+  {"actor": "Oona Lindqvist", "actor_type": "person", "avatar": {"src": "https://images.unsplash.com/photo-1617309644714-89d2ab1c9e19?w=64&h=64&fit=crop&crop=faces&auto=format&q=70", "alt": "Oona Lindqvist"},
+   "severity": "high", "action": "gave admin rights to an outside contractor account", "ip": "192.0.2.118", "meta": [{"text": "Oslo"}, {"text": "Approved by nobody"}], "time": "16:47"},
+  {"actor": "backup-runner", "actor_type": "service", "action": "copied the nightly database snapshot to cold storage", "meta": [{"text": "Service account"}], "time": "03:00"},
+  {"actor": "Dev Malhotra", "actor_type": "person", "avatar": {"src": "https://images.unsplash.com/photo-1622626426572-c268eb006092?w=64&h=64&fit=crop&crop=faces&auto=format&q=70", "alt": "Dev Malhotra"},
+   "severity": "medium", "action": "changed the password policy to allow 10-character passwords", "ip": "198.51.100.64", "time": "Yesterday"}]}

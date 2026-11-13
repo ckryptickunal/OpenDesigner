@@ -1,0 +1,8 @@
+{"title": "Household spending", "period": "November 1 to 13, 2026",
+ "total": "£1,284", "total_caption": "spent so far",
+ "categories": [
+  {"name": "Rent and bills", "note": "4 payments", "amount": "£812.40", "share": 63.3},
+  {"name": "Groceries", "note": "11 shops", "amount": "£246.15", "share": 19.2},
+  {"name": "Travel", "amount": "£139.80", "share": 10.9},
+  {"name": "Eating out", "note": "5 visits", "amount": "£85.65", "share": 6.6}],
+ "foot": "Rent is the same as October. Groceries are down 8% on last month."}

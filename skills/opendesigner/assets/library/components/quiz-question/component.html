@@ -20,6 +20,7 @@
 .odl-quiz-question h3 { margin-block-start: var(--ds-space-stack-sm); font: var(--ds-text-title-lg); }
 .odl-quiz-question .odl-pic { display: block; inline-size: 100%; block-size: auto; aspect-ratio: 2 / 1; object-fit: cover; border-radius: var(--ds-radius-nested); background: var(--ds-color-bg-neutral-subtle); }
 .odl-quiz-question fieldset { display: grid; gap: var(--ds-space-stack-md); margin: 0; padding: 0; border: 0; min-inline-size: 0; }
+.odl-quiz-question [hidden] { display: none !important; }
 .odl-quiz-question .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .odl-quiz-question .odl-choice { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-inline-md);
   min-block-size: max(var(--ds-size-row-lg), var(--ds-size-target-touch)); padding: var(--ds-space-inset-sm) var(--ds-space-inset-md); cursor: pointer;
@@ -73,32 +74,35 @@
     <div class="odl-body">
       <div class="odl-bar">
         <button type="button" class="odl-close" aria-label="Leave quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
-        <div class="odl-progress" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="10" aria-valuenow="5" aria-valuetext="5 of 10 answered" style="--p: 50%"><span></span></div>
-        <p class="odl-lives"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span class="odl-sr">Lives left: </span><span class="odl-n">4</span></p>
+        <div class="odl-progress" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="10" aria-valuenow="5" aria-valuetext="5 of 10 answered" style="--p: 50%"><span></span><data data-od-slot="answered" hidden>5</data><data data-od-slot="total" hidden>10</data></div>
+        <p class="odl-lives" data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span class="odl-sr">Lives left: </span><span class="odl-n" data-od-slot="lives">4</span></p>
       </div>
       <div>
-        <p class="odl-eyebrow">Question 6 of 10 · How plants grow</p>
-        <h3 id="odl-qq-q">Which gas do plants take in from the air to make their food?</h3>
+        <p class="odl-eyebrow" data-od-slot="eyebrow" data-od-optional>Question 6 of 10 · How plants grow</p>
+        <h3 id="odl-qq-q" data-od-slot="question">Which gas do plants take in from the air to make their food?</h3>
       </div>
-      <img class="odl-pic" src="https://images.unsplash.com/photo-1545239705-1564e58b9e4a?w=960&h=480&fit=crop&auto=format&q=70" alt="A leafy green plant in a white pot" width="960" height="480" loading="lazy" decoding="async">
-      <fieldset>
+      <img class="odl-pic" data-od-media="picture" src="https://images.unsplash.com/photo-1545239705-1564e58b9e4a?w=960&h=480&fit=crop&auto=format&q=70" alt="A leafy green plant in a white pot" width="960" height="480" loading="lazy" decoding="async">
+      <fieldset data-od-list="choices">
         <legend class="odl-sr">Choose one answer</legend>
-        <label class="odl-choice"><input type="radio" name="odl-qq" value="oxygen"><span class="odl-key" aria-hidden="true">A</span><span>Oxygen</span>
+        <label class="odl-choice" data-od-item data-od-template hidden><input type="radio" name="odl-qq"><span class="odl-key" aria-hidden="true"></span><span data-od-slot="label"></span><data data-od-slot="value" hidden></data>
+          <svg class="odl-mark odl-yes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><svg class="odl-mark odl-no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></label>
+        <label class="odl-choice" data-od-item><input type="radio" name="odl-qq" value="oxygen"><span class="odl-key" aria-hidden="true">A</span><span>Oxygen</span>
           <svg class="odl-mark odl-no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></label>
-        <label class="odl-choice is-right"><input type="radio" name="odl-qq" value="co2"><span class="odl-key" aria-hidden="true">B</span><span>Carbon dioxide</span>
+        <label class="odl-choice is-right" data-od-item><input type="radio" name="odl-qq" value="co2"><span class="odl-key" aria-hidden="true">B</span><span>Carbon dioxide</span>
           <svg class="odl-mark odl-yes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></label>
-        <label class="odl-choice"><input type="radio" name="odl-qq" value="nitrogen"><span class="odl-key" aria-hidden="true">C</span><span>Nitrogen</span>
+        <label class="odl-choice" data-od-item><input type="radio" name="odl-qq" value="nitrogen"><span class="odl-key" aria-hidden="true">C</span><span>Nitrogen</span>
           <svg class="odl-mark odl-no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></label>
-        <label class="odl-choice"><input type="radio" name="odl-qq" value="helium"><span class="odl-key" aria-hidden="true">D</span><span>Helium</span>
+        <label class="odl-choice" data-od-item><input type="radio" name="odl-qq" value="helium"><span class="odl-key" aria-hidden="true">D</span><span>Helium</span>
           <svg class="odl-mark odl-no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></label>
       </fieldset>
     </div>
     <div class="odl-foot">
       <div class="odl-say is-yes" role="status"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>
-        <b>Correct</b><p>Plants take in carbon dioxide and, with sunlight and water, turn it into sugar. The oxygen is what they give back.</p></div>
+        <b>Correct</b><p data-od-slot="explain_right">Plants take in carbon dioxide and, with sunlight and water, turn it into sugar. The oxygen is what they give back.</p></div>
       <div class="odl-say is-no" role="status"><span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span>
-        <b>Not quite</b><p>The answer is carbon dioxide. Plants turn it into sugar with sunlight and water, and give off oxygen.</p></div>
+        <b>Not quite</b><p data-od-slot="explain_wrong">The answer is carbon dioxide. Plants turn it into sugar with sunlight and water, and give off oxygen.</p></div>
       <button type="button" class="odl-go" disabled>Check</button>
+      <data data-od-slot="correct" hidden>co2</data>
     </div>
   </div>
 </section>
@@ -108,6 +112,19 @@ document.querySelectorAll(".odl-quiz-question").forEach((root) => {
   root.dataset.odlReady = "1";
   const go = root.querySelector(".odl-go"), inputs = [...root.querySelectorAll(".odl-choice input")], lives = root.querySelector(".odl-n");
   const bar = root.querySelector(".odl-progress");
+  // Rendered from data: each choice's value, its letter and the right answer come from the marked parts.
+  const num = (n) => Number(root.querySelector(`[data-od-slot="${n}"]`)?.textContent);
+  const correct = root.querySelector('[data-od-slot="correct"]')?.textContent.trim();
+  root.querySelectorAll(".odl-choice:not([hidden])").forEach((c, i) => {
+    const v = c.querySelector('[data-od-slot="value"]')?.textContent.trim();
+    if (v) c.querySelector("input").value = v;
+    c.querySelector(".odl-key").textContent = "ABCD"[i] || "";
+    if (correct) c.classList.toggle("is-right", c.querySelector("input").value === correct);
+  });
+  const answered = num("answered") || 0, total = num("total") || 1;
+  const progress = (n) => { bar.style.setProperty("--p", `${Math.min(100, (n / total) * 100)}%`); bar.setAttribute("aria-valuemax", String(total));
+    bar.setAttribute("aria-valuenow", String(n)); bar.setAttribute("aria-valuetext", `${n} of ${total} answered`); };
+  progress(answered);
   let checked = false;
   inputs.forEach((i) => i.addEventListener("change", () => { if (!checked) go.disabled = false; }));
   go.addEventListener("click", () => {
@@ -119,13 +136,13 @@ document.querySelectorAll(".odl-quiz-question").forEach((root) => {
       root.classList.add("is-checked", right ? "is-pass" : "is-fail");
       inputs.forEach((i) => { i.disabled = true; });
       if (!right) lives.textContent = String(Math.max(0, Number(lives.textContent) - 1));
-      bar.style.setProperty("--p", "60%"); bar.setAttribute("aria-valuenow", "6"); bar.setAttribute("aria-valuetext", "6 of 10 answered");
+      progress(Math.min(total, answered + 1));
       go.textContent = right ? "Continue" : "Got it";
     } else { // the demo starts the same question again
       checked = false;
       root.classList.remove("is-checked", "is-pass", "is-fail");
       inputs.forEach((i) => { i.disabled = false; i.checked = false; });
-      bar.style.setProperty("--p", "50%"); bar.setAttribute("aria-valuenow", "5"); bar.setAttribute("aria-valuetext", "5 of 10 answered");
+      progress(answered);
       go.textContent = "Check"; go.disabled = true;
     }
   });

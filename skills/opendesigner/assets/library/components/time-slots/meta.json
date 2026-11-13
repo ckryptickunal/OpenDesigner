@@ -47,7 +47,7 @@
       "error": {"status": "not_built", "how": "if a picked time was just taken, the host disables it and the assistant offers the next free time"},
       "disabled": {"status": "shown", "how": "a time that was just taken is disabled and struck through", "evidence": ".odl-slot:disabled"},
       "overflow": {"status": "handled", "how": "times wrap onto more lines; on a phone the day's name moves above its times", "evidence": "repeat(auto-fill, minmax(5.5rem, 1fr))"},
-      "long_text": {"status": "handled", "how": "titles, day names and the time-zone line wrap; times never wrap", "evidence": "overflow-wrap: anywhere"}
+      "long_text": {"status": "handled", "how": "titles, day names, the time-zone line and an unusually long time label wrap inside their box", "evidence": "overflow-wrap: anywhere"}
     },
     "keyboard": ["Tab moves through the times, day by day", "Enter or Space picks one"]
   }

@@ -1,0 +1,13 @@
+{"art": {"src": "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=240&h=240&fit=crop&auto=format&q=70", "alt": "Show art: a podcast microphone on a stand"},
+ "kicker": "Podcast · every other Monday",
+ "title": "Small Harbour Stories",
+ "count": "64 episodes · newest first",
+ "episodes": [
+  {"title": "The last ferryman on the lake", "date": "Mon 9 Nov", "length": "41 min", "is_new": "true", "download": "idle",
+   "description": "Arvid Holm has rowed passengers across for forty years. He talks weather, old engines and the night the ice came early."},
+  {"title": "Mending nets with three generations", "date": "Mon 26 Oct", "length": "55 min", "progress": 40, "time_left": "33 min left", "download": "done",
+   "description": "A grandmother, her son and his daughter repair the same nets on the same quay, and argue about knots."},
+  {"title": "What the lighthouse keeper kept", "date": "Mon 12 Oct", "length": "37 min", "download": "loading"},
+  {"title": "Fish market at four in the morning", "date": "Mon 28 Sep", "length": "46 min", "played": "true", "download": "idle",
+   "description": "Auctioneers, ice and a lot of shouting. We follow one crate of mackerel from boat to breakfast."}
+ ]}

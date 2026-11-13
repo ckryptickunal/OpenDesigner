@@ -1,0 +1,21 @@
+{"title": "Customer reviews",
+ "average": 4.2, "counts": "642 ratings · 158 reviews",
+ "distribution": [
+  {"stars": "5", "label": "5 stars", "percent": 58, "share": "58%"},
+  {"stars": "4", "label": "4 stars", "percent": 24, "share": "24%"},
+  {"stars": "3", "label": "3 stars", "percent": 10, "share": "10%"},
+  {"stars": "2", "label": "2 stars", "percent": 5, "share": "5%"},
+  {"stars": "1", "label": "1 star", "percent": 3, "share": "3%"}],
+ "fit_label": "Runs a little small", "fit_summary": "Fit: most say it runs a little small", "fit_position": 34, "fit_low": "Small", "fit_high": "Large",
+ "filters": [{"key": "photos", "label": "With photos", "count": "41"}, {"key": "verified", "label": "Verified", "count": "590"}, {"key": "low", "label": "1 to 3 stars", "count": "115"}],
+ "reviews": [
+  {"name": "Marisol K.", "avatar": {"src": "https://images.unsplash.com/photo-1596215143922-eedeaba0d91c?w=96&h=96&fit=crop&auto=format&q=70", "alt": "Marisol K."}, "verified": "true", "date": "3 Nov", "rating": 5,
+   "title": "Warm without the bulk", "text": "Wore it on a cold ferry crossing and stayed warm. The knit is soft against the neck and it hasn't pilled after four washes.",
+   "photos": [{"photo": {"src": "https://images.unsplash.com/photo-1646270968802-6bad28659329?w=192&h=192&fit=crop&auto=format&q=70", "alt": "Folded sweaters"}, "label": "Photo 1 from Marisol K."}],
+   "facts": [{"label": "Size bought", "value": "S"}, {"label": "Usual size", "value": "S"}],
+   "helpful_yes": 12, "helpful_no": 0},
+  {"name": "Dariusz P.", "avatar": {"src": "https://images.unsplash.com/photo-1596075700978-ecba72d16eb0?w=96&h=96&fit=crop&auto=format&q=70", "alt": "Dariusz P."}, "verified": "false", "date": "19 Oct", "rating": 3,
+   "text": "Nice colour, but the sleeves are short on me. I'd size up next time.",
+   "facts": [{"label": "Size bought", "value": "M"}],
+   "helpful_yes": 4, "helpful_no": 1}],
+ "more": {"label": "Show all 158 reviews", "event": {"name": "show_all_reviews"}}}

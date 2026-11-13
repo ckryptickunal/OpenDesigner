@@ -1,0 +1,11 @@
+{"title": "Remove 2 team members?",
+ "lede": "They lose access to every project in this workspace straight away. Their tasks stay, marked as unassigned.",
+ "items": [
+  {"name": "Joaquín Barragán", "note": "Editor", "value": "14 tasks"},
+  {"name": "Saoirse Whelan", "value": "3 tasks"}
+ ],
+ "items_label": "Members to remove",
+ "confirm_text": "harbourline-studio",
+ "hint": "Type the workspace name exactly as shown.",
+ "cancel": {"label": "Keep them", "event": {"name": "cancel_removal"}},
+ "delete": {"label": "Remove 2 members", "event": {"name": "remove_members"}}}

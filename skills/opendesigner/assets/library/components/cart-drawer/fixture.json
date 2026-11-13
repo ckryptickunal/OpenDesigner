@@ -1,0 +1,14 @@
+{"title": "Your basket",
+ "currency": "EUR",
+ "free_delivery_at": 150,
+ "delivery_fee": 5.5,
+ "items": [
+  {"name": "Leather satchel", "variant": "Slate grey", "price": 140, "quantity": 1,
+   "image": {"src": "https://images.unsplash.com/photo-1605733513597-a8f8341084e6?w=192&h=240&fit=crop&auto=format&q=70", "alt": "Grey leather satchel"},
+   "remove": {"label": "Remove", "event": {"name": "remove_item", "context": {"sku": "SAT-GR"}}}},
+  {"name": "Speckled cup", "variant": "Moss · 250 ml", "price": 16, "quantity": 2,
+   "image": {"src": "https://images.unsplash.com/photo-1782351076283-73aa35f76058?w=192&h=240&fit=crop&auto=format&q=70", "alt": "Speckled green ceramic cup"},
+   "remove": {"label": "Remove", "event": {"name": "remove_item", "context": {"sku": "CUP-MS"}}}}],
+ "empty_text": "Nothing in your basket yet.",
+ "checkout": {"label": "Go to checkout", "event": {"name": "checkout"}},
+ "note": "Secure payment · duties shown at the next step"}

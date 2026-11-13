@@ -45,6 +45,7 @@
 .odl-notification-inbox .odl-actions .odl-primary:hover { background: var(--ds-color-bg-action-primary-hover); color: var(--ds-color-text-on-action); }
 .odl-notification-inbox .odl-done { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); margin-block-start: var(--ds-space-stack-sm); color: var(--ds-color-text-success); font: var(--ds-text-label-md); }
 .odl-notification-inbox [hidden] { display: none; }
+.odl-notification-inbox .odl-gwrap:not([hidden]) { display: contents; }
 .odl-notification-inbox .odl-foot { display: flex; justify-content: center; border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); padding: var(--ds-space-inset-sm); }
 .odl-notification-inbox .odl-foot button { color: var(--ds-color-text-link); }
 @media (prefers-reduced-motion: reduce) { .odl-notification-inbox, .odl-notification-inbox *, .odl-notification-inbox *::before { transition: none !important; animation: none !important; } }
@@ -55,17 +56,31 @@
 </style>
 <section class="odl-notification-inbox" aria-labelledby="odl-ni-title">
   <div class="odl-head">
-    <h3 id="odl-ni-title">Notifications</h3>
-    <button type="button" class="odl-markall"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg>Mark all read</button>
+    <h3 id="odl-ni-title" data-od-slot="title">Notifications</h3>
+    <button type="button" class="odl-markall" data-od-action="mark_all"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg><span data-od-slot="label">Mark all read</span></button>
   </div>
-  <div role="tablist" aria-label="Filter notifications">
-    <button type="button" role="tab" id="odl-ni-t1" aria-selected="true" aria-controls="odl-ni-panel" data-filter="all">All</button>
-    <button type="button" role="tab" id="odl-ni-t2" aria-selected="false" aria-controls="odl-ni-panel" data-filter="mention" tabindex="-1">Mentions <span class="odl-badge" aria-label="2 unread">2</span></button>
+  <div role="tablist" aria-label="Filter notifications" data-od-list="tabs">
+    <button type="button" role="tab" aria-selected="false" tabindex="-1" data-od-item data-od-template hidden><bdi data-od-slot="label"></bdi> <span class="odl-badge" data-od-slot="count" data-od-optional></span><data data-od-slot="filter" hidden></data></button>
+    <button type="button" role="tab" data-od-item id="odl-ni-t1" aria-selected="true" aria-controls="odl-ni-panel" data-filter="all">All</button>
+    <button type="button" role="tab" data-od-item id="odl-ni-t2" aria-selected="false" aria-controls="odl-ni-panel" data-filter="mention" tabindex="-1">Mentions <span class="odl-badge" aria-label="2 unread">2</span></button>
   </div>
-  <div id="odl-ni-panel" role="tabpanel" aria-labelledby="odl-ni-t1">
-    <p class="odl-group" id="odl-ni-today">Today</p>
-    <ul aria-labelledby="odl-ni-today">
-      <li class="odl-row is-unread" data-kind="mention" tabindex="0">
+  <div id="odl-ni-panel" role="tabpanel" aria-labelledby="odl-ni-t1" data-od-list="groups">
+    <div class="odl-gwrap" data-od-item data-od-template hidden><p class="odl-group" data-od-slot="label"></p>
+    <ul data-od-label="label" data-od-list="items">
+      <li class="odl-row" tabindex="0" data-od-item>
+        <span class="odl-dot"></span><img class="odl-avatar" data-od-media="avatar" data-od-optional alt="" width="32" height="32" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=faces&auto=format&q=70">
+        <div class="odl-body">
+          <p class="odl-line" data-od-slot="line"></p>
+          <p class="odl-quote" data-od-slot="quote" data-od-optional></p>
+          <div class="odl-meta"><time data-od-slot="time"></time><span data-od-slot="source" data-od-optional></span></div>
+          <div class="odl-actions" data-od-optional><button type="button" class="odl-primary" data-od-action="primary" data-od-effect="change"></button><button type="button" data-od-action="secondary"></button></div>
+          <span class="odl-done" data-od-optional hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><bdi data-od-slot="done"></bdi></span><data data-od-slot="kind" hidden></data>
+        </div>
+      </li>
+    </ul></div>
+    <div class="odl-gwrap" data-od-item><p class="odl-group" id="odl-ni-today">Today</p>
+    <ul aria-labelledby="odl-ni-today" data-od-list="items">
+      <li class="odl-row is-unread" data-kind="mention" tabindex="0" data-od-item>
         <span class="odl-dot"></span><img class="odl-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=64&h=64&fit=crop&crop=faces&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async">
         <div class="odl-body">
           <p class="odl-line"><strong>Bettina Marangoni</strong> mentioned you on <strong>Tressel Freight Brokers · TFB-118204</strong></p>
@@ -74,7 +89,7 @@
           <div class="odl-actions"><button type="button">View bill</button></div>
         </div>
       </li>
-      <li class="odl-row is-unread" data-kind="approval" tabindex="0">
+      <li class="odl-row is-unread" data-kind="approval" tabindex="0" data-od-item>
         <span class="odl-dot"></span><img class="odl-avatar" src="https://images.unsplash.com/photo-1725033489648-a819750348eb?w=64&h=64&fit=crop&crop=faces&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async">
         <div class="odl-body">
           <p class="odl-line"><strong>Nandini Iyer</strong> asked you to approve <strong>Wyndell Staffing Partners</strong> for $22,486.40</p>
@@ -83,52 +98,58 @@
           <span class="odl-done" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Approved · ACH on Oct 23</span>
         </div>
       </li>
-      <li class="odl-row is-unread" data-kind="mention" tabindex="0">
+      <li class="odl-row is-unread" data-kind="mention" tabindex="0" data-od-item>
         <span class="odl-dot"></span><img class="odl-avatar" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=64&h=64&fit=crop&crop=faces&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async">
         <div class="odl-body">
           <p class="odl-line"><strong>Arash Tehrani</strong> mentioned you in <strong>October close checklist</strong></p>
           <div class="odl-meta"><time datetime="2026-10-21T07:15">7:15 AM</time><span>Accounting</span></div>
         </div>
       </li>
-    </ul>
-    <p class="odl-group" id="odl-ni-earlier">Earlier</p>
-    <ul aria-labelledby="odl-ni-earlier">
-      <li class="odl-row" data-kind="system" tabindex="0">
+    </ul></div>
+    <div class="odl-gwrap" data-od-item><p class="odl-group" id="odl-ni-earlier">Earlier</p>
+    <ul aria-labelledby="odl-ni-earlier" data-od-list="items">
+      <li class="odl-row" data-kind="system" tabindex="0" data-od-item>
         <span class="odl-dot"></span><span class="odl-avatar is-sys" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg></span>
         <div class="odl-body">
           <p class="odl-line"><strong>14 payments</strong> went out by ACH, $41,920.18 in total</p>
           <div class="odl-meta"><time datetime="2026-10-20T17:00">Yesterday, 5:00 PM</time><span>Payments</span></div>
         </div>
       </li>
-      <li class="odl-row" data-kind="approval" tabindex="0">
+      <li class="odl-row" data-kind="approval" tabindex="0" data-od-item>
         <span class="odl-dot"></span><img class="odl-avatar" src="https://images.unsplash.com/photo-1684598273404-2d94d7a7ce2f?w=64&h=64&fit=crop&crop=faces&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async">
         <div class="odl-body">
           <p class="odl-line"><strong>Yuki Hanabusa</strong> rejected <strong>Pendrick Telecom · BT-0098341</strong></p>
           <div class="odl-meta"><time datetime="2026-10-19T14:22">Oct 19</time><span>“Billed twice for September.”</span></div>
         </div>
       </li>
-    </ul>
+    </ul></div>
   </div>
-  <div class="odl-foot"><button type="button">Notification settings</button></div>
+  <div class="odl-foot" data-od-optional><button type="button" data-od-action="footer">Notification settings</button></div>
 </section>
 <script>
 document.querySelectorAll(".odl-notification-inbox").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
-  const tabs = [...root.querySelectorAll('[role="tab"]')], rows = [...root.querySelectorAll(".odl-row")], panel = root.querySelector('[role="tabpanel"]');
+  // A rendered answer carries each tab's filter and each row's kind in hidden marked parts.
+  const live = (sel) => [...root.querySelectorAll(sel)].filter((n) => !n.closest("[data-od-template]"));
+  const slot = (el, n) => ((el.querySelector(`[data-od-slot="${n}"]`) || {}).textContent || "").trim();
+  const tabs = live('[role="tab"]'), rows = live(".odl-row"), panel = root.querySelector('[role="tabpanel"]');
+  tabs.forEach((t) => { if (!t.dataset.filter) t.dataset.filter = slot(t, "filter") || "all"; });
+  rows.forEach((r) => { if (!r.dataset.kind) r.dataset.kind = slot(r, "kind"); });
   const select = (tab) => {
     tabs.forEach((t) => { const on = t === tab; t.setAttribute("aria-selected", on ? "true" : "false"); t.tabIndex = on ? 0 : -1; });
-    panel.setAttribute("aria-labelledby", tab.id);
+    if (tab.id) panel.setAttribute("aria-labelledby", tab.id); else panel.setAttribute("aria-label", tab.textContent.trim());
     const f = tab.dataset.filter;
     rows.forEach((r) => { r.hidden = f !== "all" && r.dataset.kind !== f; });
-    root.querySelectorAll(".odl-group").forEach((g) => { const list = g.nextElementSibling; g.hidden = list.hidden = ![...list.children].some((r) => !r.hidden); });
+    live(".odl-group").forEach((g) => { const list = g.nextElementSibling; g.hidden = list.hidden = ![...list.children].some((r) => !r.hidden); });
   };
   tabs.forEach((t, i) => {
     t.addEventListener("click", () => select(t));
     t.addEventListener("keydown", (e) => { if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); const n = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length]; n.focus(); select(n); } });
   });
-  const badge = root.querySelector(".odl-badge");
-  const refresh = () => { const n = root.querySelectorAll('.is-unread[data-kind="mention"]').length; badge.textContent = n; badge.setAttribute("aria-label", n + " unread"); badge.hidden = n === 0; };
+  if (tabs.length) select(tabs.find((t) => t.getAttribute("aria-selected") === "true") || tabs[0]);
+  const badge = live(".odl-badge")[0];
+  const refresh = () => { if (!badge) return; const n = root.querySelectorAll('.is-unread[data-kind="mention"]').length; badge.textContent = n; badge.setAttribute("aria-label", n + " unread"); badge.hidden = n === 0; };
   root.querySelector(".odl-markall").addEventListener("click", () => { rows.forEach((r) => r.classList.remove("is-unread")); refresh(); });
   root.querySelectorAll(".odl-approve").forEach((b) => b.addEventListener("click", (e) => {
     e.stopPropagation(); const body = b.closest(".odl-body"); body.querySelector(".odl-actions").hidden = true; body.querySelector(".odl-done").hidden = false; b.closest(".odl-row").classList.remove("is-unread"); refresh();

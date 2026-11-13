@@ -1,0 +1,7 @@
+{"title": "Wishlist", "share_label": "Send list",
+ "items": [
+  {"name": "Brushed wool jumper", "photo": {"src": "https://images.unsplash.com/photo-1646270968802-6bad28659329?w=480&h=600&fit=crop&auto=format&q=70", "alt": "Stack of folded sweaters"}, "variant": "Oat · L", "price": "£54", "was": "£72"},
+  {"name": "Canvas tote with zip", "photo": {"src": "https://images.unsplash.com/photo-1640901555383-7335ec5a6476?w=480&h=600&fit=crop&auto=format&q=70", "alt": "Yellow bag on a white background"}, "variant": "Mustard", "price": "£38"},
+  {"name": "Glazed breakfast mug", "photo": {"src": "https://images.unsplash.com/photo-1520485521983-bfaa0bc6c80e?w=480&h=600&fit=crop&auto=format&q=70", "alt": "White and beige ceramic mug"}, "price": "£16", "back_on": "Back 2 Dec"},
+  {"name": "Trailing pothos", "photo": {"src": "https://images.unsplash.com/photo-1545239705-1564e58b9e4a?w=480&h=600&fit=crop&auto=format&q=70", "alt": "Leafy plant in a white pot"}, "variant": "15 cm pot", "price": "£22"}
+ ]}

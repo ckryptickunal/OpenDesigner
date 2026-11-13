@@ -36,14 +36,21 @@
   .odl-settings-toggles .odl-row { gap: var(--ds-space-inset-lg); padding: var(--ds-space-inset-md) var(--ds-space-inset-lg); }
   .odl-settings-toggles .odl-row:last-child { padding-block-end: var(--ds-space-inset-lg); }
 }
+/* Rendered rows: one template holds the switch and the lock; data-locked keeps the one that applies. */
+.odl-settings-toggles .odl-row[data-locked="true"] input, .odl-settings-toggles .odl-row[data-locked="false"] .odl-locked { display: none; }
+.odl-settings-toggles [hidden] { display: none; }
 @media (prefers-reduced-motion: reduce) { .odl-settings-toggles, .odl-settings-toggles *, .odl-settings-toggles *::before { transition: none !important; animation: none !important; } }
 </style>
 <fieldset class="odl-settings-toggles">
-  <legend>Sign-in and sessions</legend>
-  <label class="odl-row"><span class="odl-text"><span>Require single sign-on</span><small>Members sign in through your identity provider. Owners keep a password as a backup.</small></span>
+  <legend data-od-slot="title">Sign-in and sessions</legend>
+  <div data-od-list="settings">
+  <label class="odl-row" data-od-item data-od-template hidden data-od-var="locked" data-locked="false"><span class="odl-text"><span data-od-slot="name"></span><small data-od-optional><span data-od-slot="help" data-od-optional></span> <em data-od-slot="locked_by" data-od-optional></em></small></span>
+    <input type="checkbox" role="switch" data-od-input="key"><span class="odl-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><b data-od-slot="state_label" data-od-optional></b><span class="odl-sr">, locked</span></span></label>
+  <label class="odl-row" data-od-item><span class="odl-text"><span>Require single sign-on</span><small>Members sign in through your identity provider. Owners keep a password as a backup.</small></span>
     <input type="checkbox" role="switch" checked></label>
-  <label class="odl-row"><span class="odl-text"><span>Two-step sign-in for guests</span><small>Guests confirm a code from an authenticator app at each new device.</small></span>
+  <label class="odl-row" data-od-item><span class="odl-text"><span>Two-step sign-in for guests</span><small>Guests confirm a code from an authenticator app at each new device.</small></span>
     <input type="checkbox" role="switch"></label>
-  <div class="odl-row" role="group" aria-labelledby="odl-st-idle"><span class="odl-text"><span id="odl-st-idle">Sign out after 12 hours idle</span><small>Applies to the web and desktop apps. <em>Set by your organization.</em></small></span>
+  <div class="odl-row" data-od-item role="group" aria-labelledby="odl-st-idle"><span class="odl-text"><span id="odl-st-idle">Sign out after 12 hours idle</span><small>Applies to the web and desktop apps. <em>Set by your organization.</em></small></span>
     <span class="odl-locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><b>On</b><span class="odl-sr">, locked</span></span></div>
+  </div>
 </fieldset>

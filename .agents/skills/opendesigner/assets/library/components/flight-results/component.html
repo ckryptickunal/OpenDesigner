@@ -64,20 +64,60 @@
 @container (max-width: 21rem) {
   .odl-flight-results .odl-time, .odl-flight-results .odl-price { font: var(--ds-text-title-md); }
 }
+/* Smart UI fills the hidden template items below: there the card holds one full-size button (the renderer has no links),
+   a next-day arrival gets its plus sign, and the airline mark is a neutral plane, never a carrier's own mark. */
+.odl-flight-results [hidden] { display: none !important; }
+.odl-flight-results .odl-flight:has(> .odl-choose) { position: relative; }
+.odl-flight-results .odl-choose { position: absolute; inset: 0; overflow: hidden; margin: 0; padding: 0; border: 0; border-radius: var(--ds-radius-container); background: transparent; cursor: pointer; }
+.odl-flight-results .odl-flight:has(> .odl-choose:hover) { border-color: var(--ds-color-border-strong); }
+.odl-flight-results .odl-choose-label { position: absolute; inline-size: 1px; block-size: 1px; clip-path: inset(50%); white-space: nowrap; color: var(--ds-color-text-primary); }
+.odl-flight-results .odl-choose:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-flight-results .odl-time sup[data-od-slot]::before { content: "+"; }
+.odl-flight-results .odl-mark:has(.odl-plane) { display: grid; place-items: center; }
+.odl-flight-results .odl-mark .odl-plane { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); fill: none; stroke: var(--ds-color-icon-default); stroke-width: var(--ds-icon-stroke-md); }
+.odl-flight-results .odl-sort:has(> .od-empty) { display: none; }
+/* While the answer loads, the placeholder chips and card buttons keep their space but are not offered yet. */
+.odl-flight-results .odl-sort:has([data-od-pending]) { display: none; }
+.odl-flight-results .odl-choose[data-od-pending] { visibility: hidden; }
+.odl-flight-results .odl-flight:has(> .odl-choose) .odl-airline { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+/* Filled copies never push the page sideways: every value may wrap inside its column. */
+.odl-flight-results .odl-flight:has(> .odl-choose) { grid-template-columns: minmax(0, 1fr) minmax(0, max-content); }
+.odl-flight-results .odl-flight:has(> .odl-choose) .odl-route { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1fr); }
+.odl-flight-results .odl-flight:has(> .odl-choose) .odl-end, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-buy { min-inline-size: 0; }
+.odl-flight-results .odl-flight:has(> .odl-choose) .odl-time, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-code, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-price, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-per, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-tag, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-dur, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-stops { white-space: normal; overflow-wrap: anywhere; }
+@container (min-width: 38rem) { .odl-flight-results .odl-flight:has(> .odl-choose) { grid-template-columns: minmax(0, 13rem) minmax(0, 1fr) minmax(0, max-content); } }
+.odl-flight-results .odl-sort button[data-key="best"], .odl-flight-results .odl-sort button[data-key="price"], .odl-flight-results .odl-sort button[data-key="time"] { text-align: start; }
 @media (prefers-reduced-motion: reduce) { .odl-flight-results, .odl-flight-results *, .odl-flight-results *::before { transition: none !important; animation: none !important; } }
 </style>
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
 <section class="odl-flight-results" aria-labelledby="odl-fr-title">
   <div class="odl-head">
-    <h3 id="odl-fr-title">Lisbon to Tokyo</h3>
-    <p class="odl-sub">Sat 14 Nov · 1 adult · Economy · 4 of 38 flights</p>
+    <h3 id="odl-fr-title" data-od-slot="title">Lisbon to Tokyo</h3>
+    <p class="odl-sub" data-od-slot="summary" data-od-optional>Sat 14 Nov · 1 adult · Economy · 4 of 38 flights</p>
   </div>
-  <ul class="odl-sort" aria-label="Sort flights">
-    <li><button type="button" data-sort="best" aria-pressed="true">Best <small>€612<span class="odl-also"> · 17h 20m</span></small></button></li>
-    <li><button type="button" data-sort="price" aria-pressed="false">Cheapest <small>€548<span class="odl-also"> · 22h 05m</span></small></button></li>
-    <li><button type="button" data-sort="time" aria-pressed="false">Fastest <small>€689<span class="odl-also"> · 16h 05m</span></small></button></li>
+  <ul class="odl-sort" aria-label="Sort flights" data-od-list="sorts">
+    <li data-od-item data-od-template hidden><button type="button" data-od-var="key" data-key="best" aria-pressed="false"><span data-od-slot="label"></span> <small><span data-od-slot="price"></span><span class="odl-also" data-od-optional> · <span data-od-slot="duration"></span></span></small></button></li>
+    <li data-od-item><button type="button" data-sort="best" aria-pressed="true">Best <small>€612<span class="odl-also"> · 17h 20m</span></small></button></li>
+    <li data-od-item><button type="button" data-sort="price" aria-pressed="false">Cheapest <small>€548<span class="odl-also"> · 22h 05m</span></small></button></li>
+    <li data-od-item><button type="button" data-sort="time" aria-pressed="false">Fastest <small>€689<span class="odl-also"> · 16h 05m</span></small></button></li>
   </ul>
-  <ul class="odl-list">
-    <li data-best="1" data-price="612" data-time="1040">
+  <ul class="odl-list" data-od-list="flights">
+    <li data-od-item data-od-template hidden>
+      <article class="odl-flight">
+        <div class="odl-route">
+          <div class="odl-end"><span class="odl-time"><span data-od-slot="depart"></span></span><span class="odl-code" data-od-slot="from"></span></div>
+          <div class="odl-path"><span class="odl-dur" data-od-slot="duration"></span><span class="odl-line" aria-hidden="true"></span><span class="odl-stops" data-od-slot="stops"></span></div>
+          <div class="odl-end"><span class="odl-time"><span data-od-slot="arrive"></span><sup data-od-slot="day_offset" data-od-optional></sup></span><span class="odl-code" data-od-slot="to"></span></div>
+        </div>
+        <div class="odl-carrier">
+          <span class="odl-mark" aria-hidden="true"><svg class="odl-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></span>
+          <span class="odl-who"><span class="odl-airline" data-od-slot="airline"></span><span class="odl-tags" data-od-optional><span class="odl-tag is-note" data-od-slot="tag" data-od-optional></span></span></span>
+        </div>
+        <div class="odl-buy"><span class="odl-price" data-od-slot="price"></span><span class="odl-per" data-od-slot="per" data-od-optional></span></div>
+        <button type="button" class="odl-choose" data-od-action="select"><span class="odl-choose-label" data-od-slot="label">Choose this flight</span></button>
+      </article>
+    </li>
+    <li data-od-item data-best="1" data-price="612" data-time="1040">
       <a class="odl-pick" href="#flight-1" aria-label="Vellora Air, departs 10:15 from LIS, arrives 09:35 next day at HND, 17 hours 20 minutes, 1 stop in Doha, €612. Best">
       <article class="odl-flight">
         <div class="odl-route" aria-hidden="true">
@@ -92,7 +132,7 @@
         <div class="odl-buy" aria-hidden="true"><span class="odl-price">€612</span><span class="odl-per">per adult</span></div>
       </article></a>
     </li>
-    <li data-best="2" data-price="548" data-time="1325">
+    <li data-od-item data-best="2" data-price="548" data-time="1325">
       <a class="odl-pick" href="#flight-2" aria-label="Brisaline, departs 06:40 from LIS, arrives 10:45 next day at NRT, 22 hours 5 minutes, 2 stops in Frankfurt and Seoul, €548. Cheapest">
       <article class="odl-flight">
         <div class="odl-route" aria-hidden="true">
@@ -107,7 +147,7 @@
         <div class="odl-buy" aria-hidden="true"><span class="odl-price">€548</span><span class="odl-per">per adult</span></div>
       </article></a>
     </li>
-    <li data-best="3" data-price="689" data-time="965">
+    <li data-od-item data-best="3" data-price="689" data-time="965">
       <a class="odl-pick" href="#flight-3" aria-label="Peldra Airways, departs 13:50 from LIS, arrives 11:55 next day at HND, 16 hours 5 minutes, 1 stop in Istanbul, €689. Fastest">
       <article class="odl-flight">
         <div class="odl-route" aria-hidden="true">
@@ -122,7 +162,7 @@
         <div class="odl-buy" aria-hidden="true"><span class="odl-price">€689</span><span class="odl-per">per adult</span></div>
       </article></a>
     </li>
-    <li data-best="4" data-price="731" data-time="1090">
+    <li data-od-item data-best="4" data-price="731" data-time="1090">
       <a class="odl-pick" href="#flight-4" aria-label="Tamsu Air, departs 21:30 from LIS, arrives 21:40 next day at KIX, 18 hours 10 minutes, 1 stop in Dubai, €731">
       <article class="odl-flight">
         <div class="odl-route" aria-hidden="true">
@@ -141,14 +181,32 @@
 </section>
 <script>
 document.querySelectorAll(".odl-flight-results").forEach((root) => {
+  // Smart UI fills fresh copies of the hidden template and runs this again: each time, draw what a filled flight implies
+  // (a dot per stop, the direct colour, no "+0") and give it sort keys read from its own text.
+  root.querySelectorAll(".odl-list > li:not([hidden])").forEach((li, i) => {
+    const line = li.querySelector(".odl-line"), stops = li.querySelector(".odl-stops");
+    if (line && stops && !line.children.length) {
+      const n = parseInt(stops.textContent, 10) || 0;
+      for (let s = 0; s < n; s++) line.appendChild(document.createElement("i"));
+      stops.classList.toggle("is-direct", !n);
+    }
+    li.querySelectorAll(".odl-time sup").forEach((sup) => { if (sup.textContent.trim() === "0") sup.remove(); });
+    if (!li.dataset.best) {
+      const dur = (li.querySelector(".odl-dur")?.textContent || "").match(/(\d+)\s*h(?:\s*(\d+)\s*m)?/);
+      li.dataset.best = String(i + 1);
+      li.dataset.price = String(parseFloat((li.querySelector(".odl-price")?.textContent || "").replace(/[^\d.]/g, "")) || 0);
+      li.dataset.time = String(dur ? Number(dur[1]) * 60 + Number(dur[2] || 0) : 0);
+    }
+  });
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
   const list = root.querySelector(".odl-list"), chips = root.querySelectorAll(".odl-sort button");
   const key = { best: "best", price: "price", time: "time" };
+  if (chips.length && ![...chips].some((c) => c.getAttribute("aria-pressed") === "true")) chips[0].setAttribute("aria-pressed", "true");
   chips.forEach((chip) => chip.addEventListener("click", () => {
     chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
-    const k = key[chip.dataset.sort];
-    [...list.children].sort((a, b) => Number(a.dataset[k]) - Number(b.dataset[k])).forEach((li) => list.appendChild(li));
+    const k = key[chip.dataset.sort || chip.dataset.key];
+    [...list.children].filter((li) => !li.hidden).sort((a, b) => Number(a.dataset[k]) - Number(b.dataset[k])).forEach((li) => list.appendChild(li));
   }));
 });
 </script>

@@ -1,0 +1,58 @@
+{
+ "sources": [
+  {
+   "name": "Harbour board accounts 1971",
+   "meta": "88 pages",
+   "remove": {
+    "label": "Remove",
+    "event": {
+     "name": "remove_source",
+     "context": {
+      "index": 0
+     }
+    }
+   }
+  },
+  {
+   "name": "pier-survey-1974.pdf",
+   "meta": "Reading, 30%",
+   "remove": {
+    "label": "Cancel",
+    "event": {
+     "name": "remove_source",
+     "context": {
+      "index": 1
+     }
+    }
+   }
+  },
+  {
+   "name": "Dredging contract notes",
+   "remove": {
+    "label": "Remove",
+    "event": {
+     "name": "remove_source",
+     "context": {
+      "index": 2
+     }
+    }
+   }
+  }
+ ],
+ "modes": [
+  {
+   "label": "Ask"
+  },
+  {
+   "label": "Summarise"
+  }
+ ],
+ "starters": [
+  {
+   "text": "Who paid for the new pier?"
+  },
+  {
+   "text": "List the dredging costs by year"
+  }
+ ]
+}

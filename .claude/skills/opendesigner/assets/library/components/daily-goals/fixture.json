@@ -1,0 +1,17 @@
+{"title": "Today's goals",
+ "date": "Monday, 9 Nov",
+ "goals": [
+  {"name": "Steps", "value": 5230, "goal": 8000, "percent": 65},
+  {"name": "Stretching", "value": 10, "goal": 10, "unit": "min", "percent": 100},
+  {"name": "Sleep", "value": 6.5, "goal": 8, "unit": "hours", "percent": 81}
+ ],
+ "hint": "2,770 steps to go. A walk after dinner would cover it.",
+ "week": [
+  {"label": "Tuesday 3 Nov", "initial": "T", "percent": 92},
+  {"label": "Wednesday 4 Nov", "initial": "W", "percent": 100},
+  {"label": "Thursday 5 Nov", "initial": "T", "percent": 58},
+  {"label": "Friday 6 Nov", "initial": "F", "percent": 77},
+  {"label": "Saturday 7 Nov", "initial": "S", "percent": 100},
+  {"label": "Sunday 8 Nov", "initial": "S", "percent": 34},
+  {"label": "Today", "initial": "M", "percent": 82, "selected": "true"}
+ ]}

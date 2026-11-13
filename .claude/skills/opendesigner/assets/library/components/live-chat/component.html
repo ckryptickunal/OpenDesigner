@@ -54,18 +54,18 @@
 .odl-live-chat .odl-pin a span { white-space: nowrap; }
 .odl-live-chat .odl-pin a:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-radius: var(--ds-radius-2); }
 .odl-live-chat .odl-log { display: flex; flex-direction: column; gap: var(--ds-space-stack-md); max-block-size: 40rem; margin: 0; padding: var(--ds-space-inset-md) var(--ds-space-inset-lg); overflow-y: auto; overscroll-behavior: contain; list-style: none; }
-.odl-live-chat .odl-log li:first-child { margin-block-start: auto; }
+.odl-live-chat .odl-log li:first-child, .odl-live-chat .odl-log li[data-od-template] + li { margin-block-start: auto; }
 .odl-live-chat .odl-log li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--ds-space-inline-md); align-items: start; }
 .odl-live-chat .odl-log li.is-new { animation: odl-live-chat-in var(--ds-motion-duration-medium) var(--ds-motion-easing-enter); }
 @keyframes odl-live-chat-in { from { opacity: 0; transform: translateY(var(--ds-space-8)); } to { opacity: 1; transform: none; } }
 .odl-live-chat .odl-log p { margin: 0; font: var(--ds-text-body-md); overflow-wrap: anywhere; }
 .odl-live-chat .odl-av { display: block; inline-size: var(--ds-size-icon-lg); block-size: var(--ds-size-icon-lg); border-radius: var(--ds-radius-person); object-fit: cover; background: var(--ds-color-bg-neutral-subtle); }
 .odl-live-chat .odl-who { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-inline-xs); margin-inline-end: var(--ds-space-inline-sm); vertical-align: top; }
-.odl-live-chat .odl-who b { color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); }
-.odl-live-chat .odl-who b.is-host { color: var(--ds-color-text-primary); }
+.odl-live-chat .odl-who b, .odl-live-chat .odl-who b[data-role="none"], .odl-live-chat .odl-who b[data-role="member"], .odl-live-chat .odl-who b[data-role="mod"] { color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); }
+.odl-live-chat .odl-who b.is-host, .odl-live-chat .odl-who b[data-role="host"] { color: var(--ds-color-text-primary); }
 .odl-live-chat .odl-text { color: var(--ds-color-text-primary); }
 .odl-live-chat .odl-badge { padding: 0 var(--ds-space-6); border-radius: var(--ds-radius-control-sm); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); white-space: nowrap; }
-.odl-live-chat .odl-badge.is-host { background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); }
+.odl-live-chat .odl-badge.is-host, .odl-live-chat .odl-who:has(b[data-role="host"]) .odl-badge { background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); }
 .odl-live-chat .odl-compose { display: flex; align-items: center; gap: var(--ds-space-inline-sm); padding: var(--ds-space-inset-md) var(--ds-space-inset-lg); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
 .odl-live-chat .odl-field { position: relative; display: flex; flex: 1; min-inline-size: 0; }
 .odl-live-chat .odl-compose input { flex: 1; min-inline-size: 0; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md); padding-inline-end: max(var(--ds-size-control-md), var(--ds-size-target-min));
@@ -95,35 +95,39 @@
   .odl-live-chat .odl-log { max-block-size: none; }
 }
 @media (prefers-reduced-motion: reduce) { .odl-live-chat, .odl-live-chat *, .odl-live-chat *::before, .odl-live-chat *::after { transition: none !important; animation: none !important; } }
+/* For a renderer: a message from the person reading reads like their own; the hidden template stays hidden. */
+.odl-live-chat .odl-who b[data-role="you"] { color: var(--ds-color-text-primary); }
+.odl-live-chat .odl-log li[hidden] { display: none; }
 </style>
-<section class="odl-live-chat" aria-label="Live stream: Oriane Valdmar, night two, full set">
+<section class="odl-live-chat" aria-label="Live stream: Oriane Valdmar, night two, full set" data-od-label="title">
   <div class="odl-wrap">
     <div class="odl-stage">
       <div class="odl-frame">
-        <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1600&h=900&fit=crop&auto=format&q=70" alt="Stage lights over the audience at the concert" width="1600" height="900" loading="lazy" decoding="async">
-        <div class="odl-chips"><span class="odl-live"><i aria-hidden="true"></i>LIVE</span><span class="odl-viewers"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg><span><span class="odl-vc">2,418</span><span class="odl-sr"> watching</span></span></span></div>
+        <img data-od-media="stream" src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1600&h=900&fit=crop&auto=format&q=70" alt="Stage lights over the audience at the concert" width="1600" height="900" loading="lazy" decoding="async">
+        <div class="odl-chips"><span class="odl-live"><i aria-hidden="true"></i>LIVE</span><span class="odl-viewers"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg><span><span class="odl-vc" data-od-slot="viewers">2,418</span><span class="odl-sr"> watching</span></span></span></div>
       </div>
       <div class="odl-about">
-        <h3>Night two at the Quayside Room, full set</h3>
+        <h3 data-od-slot="title">Night two at the Quayside Room, full set</h3>
         <div class="odl-channel">
-          <img class="odl-host" src="https://images.unsplash.com/photo-1543949806-2c9935e6aa78?w=96&h=96&fit=crop&auto=format&q=70" alt="" width="96" height="96" loading="lazy" decoding="async">
-          <div><p class="odl-name">Oriane Valdmar</p><p class="odl-meta">Music · live for 1 h 24 min</p></div>
+          <img class="odl-host" data-od-media="host_photo" data-od-optional src="https://images.unsplash.com/photo-1543949806-2c9935e6aa78?w=96&h=96&fit=crop&auto=format&q=70" alt="" width="96" height="96" loading="lazy" decoding="async">
+          <div><p class="odl-name" data-od-slot="host_name">Oriane Valdmar</p><p class="odl-meta" data-od-slot="host_meta" data-od-optional>Music · live for 1 h 24 min</p></div>
           <button type="button" class="odl-follow" aria-pressed="false"><span class="is-off"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>Follow</span><span class="is-on"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Following</span></button>
         </div>
       </div>
     </div>
     <aside class="odl-chat" aria-labelledby="odl-lc-title">
-      <div class="odl-chat-top"><h4 id="odl-lc-title">Live chat</h4><span class="odl-count"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>812 chatting</span></div>
-      <div class="odl-pin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg><p><small>Pinned by Oriane Valdmar</small>Setlist and tour dates are at <a href="https://oriane-valdmar.example/tour"><span>oriane-valdmar.example</span><wbr><span>/tour</span></a></p></div>
-      <ol class="odl-log" role="log" aria-live="polite" aria-label="Messages" tabindex="0">
-        <li><img class="odl-av" src="https://images.unsplash.com/photo-1518725522904-4b3939358342?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>tidepool_kai</b></span><span class="odl-text">the crowd sounds so good tonight</span></p></li>
-        <li><img class="odl-av" src="https://images.unsplash.com/photo-1614273867161-22da2cd8ab39?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>marguerite.v</b><span class="odl-badge">Member · 14 mo</span></span><span class="odl-text">what was the opening song called?</span></p></li>
-        <li><img class="odl-av" src="https://images.unsplash.com/photo-1770058428159-50cca6566c19?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>oakleaf</b><span class="odl-badge">Mod</span></span><span class="odl-text">Reminder: be kind, and no setlist spoilers for tomorrow.</span></p></li>
-        <li><img class="odl-av" src="https://images.unsplash.com/photo-1564866657311-e9cc905d29cf?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>bram_k</b></span><span class="odl-text">first time catching a stream, this is lovely</span></p></li>
-        <li><img class="odl-av" src="https://images.unsplash.com/photo-1617309644714-89d2ab1c9e19?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>lunafjord</b><span class="odl-badge">Member · 3 mo</span></span><span class="odl-text">night two already? night one feels like yesterday</span></p></li>
-        <li><img class="odl-av" src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>pinecone_jo</b></span><span class="odl-text">is the encore acoustic again?</span></p></li>
-        <li><img class="odl-av" src="https://images.unsplash.com/photo-1543949806-2c9935e6aa78?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b class="is-host">Oriane Valdmar</b><span class="odl-badge is-host">Host</span></span><span class="odl-text">Yes! Two quiet ones before we close.</span></p></li>
-        <li><img class="odl-av" src="https://images.unsplash.com/photo-1525599428495-0441bd5c67de?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>quietkettle</b></span><span class="odl-text">those lights in the second verse though</span></p></li>
+      <div class="odl-chat-top"><h4 id="odl-lc-title" data-od-slot="chat_title">Live chat</h4><span class="odl-count"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span><bdi data-od-slot="chatting">812</bdi> chatting</span></span></div>
+      <div class="odl-pin" data-od-optional><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg><p><small>Pinned by <bdi data-od-slot="pinned_by">Oriane Valdmar</bdi></small><bdi data-od-slot="pinned_text">Setlist and tour dates are at</bdi> <a href="https://oriane-valdmar.example/tour" data-od-action="pinned_link" data-od-optional><span data-od-sample>oriane-valdmar.example</span><wbr data-od-sample><span data-od-sample>/tour</span><span data-od-slot="label"></span></a></p></div>
+      <ol class="odl-log" role="log" aria-live="polite" aria-label="Messages" tabindex="0" data-od-list="messages">
+        <li data-od-item data-od-template hidden><img class="odl-av" data-od-media="avatar" data-od-optional alt="" width="64" height="64" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1518725522904-4b3939358342?w=64&h=64&fit=crop&auto=format&q=70"><p><span class="odl-who"><b data-od-slot="author" data-od-var="role" data-role="none"></b><span class="odl-badge" data-od-slot="badge" data-od-optional></span></span><span class="odl-text" data-od-slot="text"></span></p></li>
+        <li data-od-item><img class="odl-av" src="https://images.unsplash.com/photo-1518725522904-4b3939358342?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>tidepool_kai</b></span><span class="odl-text">the crowd sounds so good tonight</span></p></li>
+        <li data-od-item><img class="odl-av" src="https://images.unsplash.com/photo-1614273867161-22da2cd8ab39?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>marguerite.v</b><span class="odl-badge">Member · 14 mo</span></span><span class="odl-text">what was the opening song called?</span></p></li>
+        <li data-od-item><img class="odl-av" src="https://images.unsplash.com/photo-1770058428159-50cca6566c19?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>oakleaf</b><span class="odl-badge">Mod</span></span><span class="odl-text">Reminder: be kind, and no setlist spoilers for tomorrow.</span></p></li>
+        <li data-od-item><img class="odl-av" src="https://images.unsplash.com/photo-1564866657311-e9cc905d29cf?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>bram_k</b></span><span class="odl-text">first time catching a stream, this is lovely</span></p></li>
+        <li data-od-item><img class="odl-av" src="https://images.unsplash.com/photo-1617309644714-89d2ab1c9e19?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>lunafjord</b><span class="odl-badge">Member · 3 mo</span></span><span class="odl-text">night two already? night one feels like yesterday</span></p></li>
+        <li data-od-item><img class="odl-av" src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>pinecone_jo</b></span><span class="odl-text">is the encore acoustic again?</span></p></li>
+        <li data-od-item><img class="odl-av" src="https://images.unsplash.com/photo-1543949806-2c9935e6aa78?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b class="is-host">Oriane Valdmar</b><span class="odl-badge is-host">Host</span></span><span class="odl-text">Yes! Two quiet ones before we close.</span></p></li>
+        <li data-od-item><img class="odl-av" src="https://images.unsplash.com/photo-1525599428495-0441bd5c67de?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><p><span class="odl-who"><b>quietkettle</b></span><span class="odl-text">those lights in the second verse though</span></p></li>
       </ol>
       <form class="odl-compose">
         <label class="odl-sr" for="odl-lc-input">Message</label>

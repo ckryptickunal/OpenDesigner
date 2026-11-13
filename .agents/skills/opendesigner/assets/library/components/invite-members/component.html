@@ -55,18 +55,20 @@
 @container (max-width: 26rem) { .odl-invite-members .odl-actions button { flex: 1; justify-content: center; } }
 @media (max-width: 30rem) { .odl-invite-members { padding: var(--ds-space-inset-lg); } }
 @media (prefers-reduced-motion: reduce) { .odl-invite-members, .odl-invite-members *, .odl-invite-members *::before { transition: none !important; animation: none !important; } }
+.odl-invite-members [hidden] { display: none; }
 </style>
 <section class="odl-invite-members" role="dialog" aria-labelledby="odl-im-title">
   <div class="odl-head">
-    <h2 id="odl-im-title">Invite people to Thistlecombe Foods</h2>
-    <p>They get an email with a link that works for 7 days.</p>
+    <h2 id="odl-im-title" data-od-slot="title">Invite people to Thistlecombe Foods</h2>
+    <p data-od-slot="lede" data-od-optional>They get an email with a link that works for 7 days.</p>
   </div>
   <div class="odl-field">
     <label for="odl-im-input">Email addresses</label>
-    <div class="odl-chips">
-      <span class="odl-chip"><span>nandini.iyer@thistlecombe.example</span><button type="button" aria-label="Remove nandini.iyer@thistlecombe.example"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
-      <span class="odl-chip"><span>kwabena.asante@thistlecombe.example</span><button type="button" aria-label="Remove kwabena.asante@thistlecombe.example"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
-      <span class="odl-chip is-invalid"><span>bettina.marangoni@thistlecombe</span><button type="button" aria-label="Remove bettina.marangoni@thistlecombe, not a full address"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
+    <div class="odl-chips" data-od-list="emails">
+      <span class="odl-chip" data-od-item data-od-template hidden><span data-od-slot="address"></span><button type="button" aria-label="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
+      <span class="odl-chip" data-od-item><span>nandini.iyer@thistlecombe.example</span><button type="button" aria-label="Remove nandini.iyer@thistlecombe.example"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
+      <span class="odl-chip" data-od-item><span>kwabena.asante@thistlecombe.example</span><button type="button" aria-label="Remove kwabena.asante@thistlecombe.example"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
+      <span class="odl-chip is-invalid" data-od-item><span>bettina.marangoni@thistlecombe</span><button type="button" aria-label="Remove bettina.marangoni@thistlecombe, not a full address"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
       <input id="odl-im-input" type="email" placeholder="Add another email" aria-describedby="odl-im-hint" autocomplete="off">
     </div>
     <p class="odl-hint is-error" id="odl-im-hint">bettina.marangoni@thistlecombe is not a full email address.</p>
@@ -74,20 +76,21 @@
   <div class="odl-field">
     <label for="odl-im-role">Role</label>
     <div class="odl-select">
-      <select id="odl-im-role" aria-describedby="odl-im-role-desc">
-        <option value="admin">Admin</option>
-        <option value="member" selected>Member</option>
-        <option value="viewer">Viewer</option>
+      <select id="odl-im-role" aria-describedby="odl-im-role-desc" data-od-list="roles">
+        <option data-od-item data-od-template hidden data-od-slot="label"></option>
+        <option value="admin" data-od-item>Admin</option>
+        <option value="member" selected data-od-item>Member</option>
+        <option value="viewer" data-od-item>Viewer</option>
       </select>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
     </div>
-    <p class="odl-role-desc" id="odl-im-role-desc">Can create and approve bills up to their limit. Cannot change billing or invite people.</p>
+    <p class="odl-role-desc" id="odl-im-role-desc" data-od-slot="role_description" data-od-optional>Can create and approve bills up to their limit. Cannot change billing or invite people.</p>
   </div>
   <p class="odl-seats"><span class="odl-meter" aria-hidden="true"><i style="inline-size: 70%"></i><i class="is-pending" style="inline-size: 20%"></i></span>
-    <span class="odl-seat-text"><strong>3 of 10 seats left.</strong> These invites use 2.</span></p>
+    <span class="odl-seat-text"><strong>3 of 10 seats left.</strong> These invites use 2.</span><data data-od-slot="seats_used" hidden>7</data><data data-od-slot="seats_total" hidden>10</data></p>
   <div class="odl-actions">
-    <button type="button" class="odl-cancel">Cancel</button>
-    <button type="button" class="odl-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>Send 2 invites</button>
+    <button type="button" class="odl-cancel" data-od-action="cancel">Cancel</button>
+    <button type="button" class="odl-send" data-od-action="send" data-od-effect="change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg><span data-od-slot="label">Send 2 invites</span></button>
   </div>
 </section>
 <script>
@@ -95,11 +98,25 @@ document.querySelectorAll(".odl-invite-members").forEach((root) => {
   if (root.dataset.odlReady) return; root.dataset.odlReady = "1";
   const box = root.querySelector(".odl-chips"), input = box.querySelector("input"), hint = root.querySelector(".odl-hint"), send = root.querySelector(".odl-send");
   const select = root.querySelector("select"), desc = root.querySelector(".odl-role-desc"), seatText = root.querySelector(".odl-seat-text"), [usedBar, pendBar] = root.querySelectorAll(".odl-meter i");
-  const tpl = box.querySelector(".odl-chip").cloneNode(true), USED = 7, TOTAL = 10;
+  // A new chip copies the first one; a renderer that got no addresses leaves none, so one is made the same way.
+  const first = box.querySelector(".odl-chip");
+  const make = () => {
+    const chip = document.createElement("span"), b = document.createElement("button"), NS = "http://www.w3.org/2000/svg", svg = document.createElementNS(NS, "svg");
+    chip.className = "odl-chip"; b.type = "button"; b.setAttribute("aria-label", "Remove");
+    svg.setAttribute("viewBox", "0 0 24 24"); svg.setAttribute("fill", "none"); svg.setAttribute("stroke", "currentColor"); svg.setAttribute("stroke-linecap", "round"); svg.setAttribute("stroke-linejoin", "round"); svg.setAttribute("aria-hidden", "true");
+    ["M18 6 6 18", "m6 6 12 12"].forEach((d) => { const path = document.createElementNS(NS, "path"); path.setAttribute("d", d); svg.append(path); });
+    b.append(svg); chip.append(document.createElement("span"), b); return chip;
+  };
+  const tpl = first ? first.cloneNode(true) : make();
+  tpl.removeAttribute("hidden"); tpl.removeAttribute("data-od-template"); tpl.classList.remove("is-invalid");
+  box.querySelectorAll(".od-empty").forEach((n) => n.remove()); // no addresses yet is this field's own empty state
+  const num = (slot, v) => { const t = ((root.querySelector(`[data-od-slot="${slot}"]`) || {}).textContent || "").replace(/[^\d.]/g, ""); return t ? Number(t) : v; };
+  const TOTAL = Math.max(1, num("seats_total", 10)), USED = Math.min(TOTAL, num("seats_used", 0));
+  box.append(input); // a renderer adds the chips after the field; it belongs last
   const ROLES = { admin: "Can change billing, roles and approval rules, and invite people.", member: "Can create and approve bills up to their limit. Cannot change billing or invite people.", viewer: "Can see bills and reports. Cannot create, approve or export." };
   const valid = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   const update = () => {
-    const chips = [...box.querySelectorAll(".odl-chip")], ok = chips.filter((c) => !c.classList.contains("is-invalid")).length, bad = chips.find((c) => c.classList.contains("is-invalid"));
+    const chips = [...box.querySelectorAll(".odl-chip:not([hidden])")], ok = chips.filter((c) => !c.classList.contains("is-invalid")).length, bad = chips.find((c) => c.classList.contains("is-invalid"));
     const left = TOTAL - USED, over = ok > left;
     usedBar.style.inlineSize = `${(USED / TOTAL) * 100}%`; pendBar.style.inlineSize = `${(Math.min(ok, left) / TOTAL) * 100}%`;
     const strong = document.createElement("strong"); strong.textContent = `${left} of ${TOTAL} seats left.`;
@@ -112,6 +129,12 @@ document.querySelectorAll(".odl-invite-members").forEach((root) => {
     const chip = tpl.cloneNode(true); chip.firstElementChild.textContent = v; chip.classList.toggle("is-invalid", !valid(v));
     chip.querySelector("button").setAttribute("aria-label", `Remove ${v}`); box.insertBefore(chip, input);
   });
+  // Chips a renderer filled: check each address and name its remove button.
+  box.querySelectorAll(".odl-chip:not([hidden])").forEach((c) => {
+    const v = c.firstElementChild.textContent.trim(), b = c.querySelector("button");
+    c.classList.toggle("is-invalid", !valid(v));
+    if (b.getAttribute("aria-label") === "Remove") b.setAttribute("aria-label", `Remove ${v}`);
+  });
   input.addEventListener("keydown", (e) => {
     if ((e.key === "Enter" || e.key === ",") && input.value.trim()) { e.preventDefault(); add(input.value); input.value = ""; update(); }
     else if (e.key === "Backspace" && !input.value) { const last = input.previousElementSibling; if (last) { last.remove(); update(); } }
@@ -119,6 +142,7 @@ document.querySelectorAll(".odl-invite-members").forEach((root) => {
   input.addEventListener("paste", (e) => { const t = e.clipboardData && e.clipboardData.getData("text"); if (t && /[\s,;]/.test(t.trim())) { e.preventDefault(); add(t); update(); } });
   input.addEventListener("blur", () => { if (input.value.trim()) { add(input.value); input.value = ""; update(); } });
   box.addEventListener("click", (e) => { const b = e.target.closest(".odl-chip button"); if (b) { b.closest(".odl-chip").remove(); update(); input.focus(); } else if (e.target === box) input.focus(); });
-  select.addEventListener("change", () => { desc.textContent = ROLES[select.value]; });
+  select.addEventListener("change", () => { desc.hidden = !(select.value in ROLES); if (!desc.hidden) desc.textContent = ROLES[select.value]; });
+  update();
 });
 </script>

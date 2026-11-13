@@ -1,0 +1,189 @@
+{
+ "title": "Book a video call with a nurse",
+ "timezone": "20 minutes · times in Dublin (GMT)",
+ "legend": "Only one place left at this time",
+ "days": [
+  {
+   "label": "Mon 24 Nov",
+   "slots": [
+    {
+     "select": {
+      "label": "08:00",
+      "event": {
+       "name": "pick_time",
+       "context": {
+        "day": "Mon 24 Nov",
+        "time": "08:00"
+       }
+      }
+     },
+     "tone": "neutral"
+    },
+    {
+     "select": {
+      "label": "08:30",
+      "event": {
+       "name": "pick_time",
+       "context": {
+        "day": "Mon 24 Nov",
+        "time": "08:30"
+       }
+      }
+     }
+    },
+    {
+     "select": {
+      "label": "10:00",
+      "event": {
+       "name": "pick_time",
+       "context": {
+        "day": "Mon 24 Nov",
+        "time": "10:00"
+       }
+      }
+     }
+    },
+    {
+     "select": {
+      "label": "13:30",
+      "event": {
+       "name": "pick_time",
+       "context": {
+        "day": "Mon 24 Nov",
+        "time": "13:30"
+       }
+      },
+      "a11y_label": "13:30, Mon 24 Nov, last one"
+     },
+     "tone": "warning"
+    }
+   ]
+  },
+  {
+   "label": "Tue 25 Nov",
+   "slots": []
+  },
+  {
+   "label": "Wed 26 Nov",
+   "slots": [
+    {
+     "select": {
+      "label": "09:00",
+      "event": {
+       "name": "pick_time",
+       "context": {
+        "day": "Wed 26 Nov",
+        "time": "09:00"
+       }
+      }
+     }
+    },
+    {
+     "select": {
+      "label": "11:30",
+      "event": {
+       "name": "pick_time",
+       "context": {
+        "day": "Wed 26 Nov",
+        "time": "11:30"
+       }
+      }
+     }
+    },
+    {
+     "select": {
+      "label": "16:00",
+      "event": {
+       "name": "pick_time",
+       "context": {
+        "day": "Wed 26 Nov",
+        "time": "16:00"
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "Thu 27 Nov",
+   "slots": [
+    {
+     "select": {
+      "label": "07:30",
+      "event": {
+       "name": "pick_time",
+       "context": {
+        "day": "Thu 27 Nov",
+        "time": "07:30"
+       }
+      }
+     }
+    },
+    {
+     "select": {
+      "label": "12:00",
+      "event": {
+       "name": "pick_time",
+       "context": {
+        "day": "Thu 27 Nov",
+        "time": "12:00"
+       }
+      },
+      "a11y_label": "12:00, Thu 27 Nov, last one"
+     },
+     "tone": "warning"
+    }
+   ]
+  },
+  {
+   "label": "Fri 28 Nov",
+   "slots": [
+    {
+     "select": {
+      "label": "09:30",
+      "event": {
+       "name": "pick_time",
+       "context": {
+        "day": "Fri 28 Nov",
+        "time": "09:30"
+       }
+      }
+     }
+    },
+    {
+     "select": {
+      "label": "14:00",
+      "event": {
+       "name": "pick_time",
+       "context": {
+        "day": "Fri 28 Nov",
+        "time": "14:00"
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "Sat 29 Nov",
+   "slots": [
+    {
+     "select": {
+      "label": "10:00",
+      "event": {
+       "name": "pick_time",
+       "context": {
+        "day": "Sat 29 Nov",
+        "time": "10:00"
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "label": "Sun 30 Nov",
+   "slots": []
+  }
+ ]
+}

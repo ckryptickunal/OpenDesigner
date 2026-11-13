@@ -1,0 +1,181 @@
+{
+  "name": "File card",
+  "summary": "One file to download: an icon for its kind, the file name, its type and size, an optional date, Download and an optional Preview.",
+  "use": "when an answer hands over a file: a statement, an export, a signed contract or an image",
+  "type": "content",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "file",
+    "download",
+    "attachment",
+    "document",
+    "export"
+  ],
+  "states": [
+    "pdf",
+    "sheet",
+    "image",
+    "doc",
+    "other",
+    "hover",
+    "focus",
+    "disabled"
+  ],
+  "source": null,
+  "a11y": "An article named by the file name; the kind icon is decorative because the type is also written, and Download and Preview are real buttons.",
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "the assistant made or found one file the person can download, such as an export or a statement"
+    ],
+    "avoid_when": [
+      "several files to pick from: use data-table",
+      "the person must upload a file: use file-dropzone",
+      "the content itself should be read here: use summary-card or code-block"
+    ],
+    "parts": [
+      {
+        "name": "kind",
+        "selector": ".odl-icon",
+        "what": "an icon for the kind of file (pdf, sheet, image, doc, other)",
+        "slot": "none"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-file-card h3",
+        "what": "the file name",
+        "slot": "text"
+      },
+      {
+        "name": "meta",
+        "selector": ".odl-meta",
+        "what": "type label, size and an optional date, separated by dots",
+        "slot": "text"
+      },
+      {
+        "name": "preview",
+        "selector": ".odl-preview",
+        "what": "an optional quiet Preview button",
+        "slot": "action"
+      },
+      {
+        "name": "download",
+        "selector": ".odl-download",
+        "what": "the primary Download button",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "name",
+        "kind_label",
+        "size",
+        "download"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "pdf",
+            "sheet",
+            "image",
+            "doc",
+            "other"
+          ],
+          "part": "kind"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 80,
+          "part": "name"
+        },
+        "kind_label": {
+          "type": "string",
+          "maxLength": 8,
+          "part": "meta"
+        },
+        "size": {
+          "type": "string",
+          "maxLength": 12,
+          "part": "meta"
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "meta"
+        },
+        "preview": {
+          "type": "object",
+          "part": "preview",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "label",
+            "event"
+          ]
+        },
+        "download": {
+          "type": "object",
+          "part": "download",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "label",
+            "event"
+          ]
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no file to give, answer in text"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "while the file is being made, show it once it exists; the Download button can show its pending state"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the file could not be made, use error-retry"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "a disabled or still-loading button turns quiet neutral (secondary text on a subtle fill), still readable at AA",
+        "evidence": "button:disabled { cursor: not-allowed;"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrower box the buttons drop under the name and share the row",
+        "evidence": "@container (max-width: 34rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "long file names wrap anywhere, also names with no spaces",
+        "evidence": "overflow-wrap: anywhere"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Preview, then Download",
+      "Enter or Space presses either"
+    ]
+  }
+}

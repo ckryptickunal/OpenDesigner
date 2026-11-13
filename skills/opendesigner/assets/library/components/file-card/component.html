@@ -36,6 +36,8 @@
   .odl-file-card button { flex: 1 1 8rem; }
 }
 @container (max-width: 26rem) { .odl-file-card .odl-card { padding: var(--ds-space-inset-lg); } }
+/* Disabled or still loading: quiet but readable (AA), never the faint disabled pair. */
+.odl-file-card button:disabled { cursor: not-allowed; background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); }
 @media (prefers-reduced-motion: reduce) { .odl-file-card, .odl-file-card *, .odl-file-card *::before { transition: none !important; animation: none !important; } }
 </style>
 <article class="odl-file-card" data-od-var="kind" data-kind="pdf" aria-labelledby="odl-fc-title">

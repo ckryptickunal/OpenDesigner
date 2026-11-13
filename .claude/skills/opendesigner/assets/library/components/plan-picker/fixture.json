@@ -1,0 +1,6 @@
+{"title": "Pick your plan", "period": "month", "yearly_note": "Save 15%",
+ "plans": [
+  {"id": "solo", "name": "Solo", "price_month": "€0", "price_year": "€0", "unit": "for one person", "for": "For keeping your own notes in order.", "features": [{"text": "Unlimited notes"}, {"text": "Sync on 2 devices"}], "selected": "false"},
+  {"id": "studio", "name": "Studio", "tag": "Best for small teams", "price_month": "€9", "price_year": "€7.50", "unit": "per seat a month", "billed_yearly": "€90 a seat, billed yearly", "for": "For studios sharing work with clients.", "features": [{"text": "Everything in Solo"}, {"text": "Shared spaces"}, {"text": "Client guest access"}], "selected": "true"},
+  {"id": "agency", "name": "Agency", "price_month": "€18", "price_year": "€15", "unit": "per seat a month", "billed_yearly": "€180 a seat, billed yearly", "features": [{"text": "Everything in Studio"}, {"text": "Admin roles and audit log"}, {"text": "Priority support"}, {"text": "Custom domains"}], "selected": "false"}
+ ]}

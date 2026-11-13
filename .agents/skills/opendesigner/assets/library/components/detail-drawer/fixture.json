@@ -1,0 +1,17 @@
+{"title": "Ostrava Tool Hire",
+ "position": "2 of 9",
+ "status": "Waiting for you",
+ "amount": 1286.5,
+ "currency": "EUR",
+ "subtitle": [{"text": "Due Nov 20 · in 7 days · Net 14"}, {"text": "Approving pays it by SEPA on Nov 19."}],
+ "fields": [
+  {"label": "Invoice", "value": "OTH-20417"},
+  {"label": "Submitted by", "value": "Lukas Brenner", "note": "Nov 6"},
+  {"label": "Cost centre", "value": "Site works · Brno"},
+  {"label": "Pay from", "value": "Main account ··0381"},
+  {"label": "Matched to", "value": "PO-7742", "note": "2 of 2 lines"}
+ ],
+ "file_name": "OTH-20417.pdf",
+ "file_meta": "Invoice · 1 page · 96 KB",
+ "approve": {"label": "Approve", "event": {"name": "approve_bill"}},
+ "reject": {"label": "Send back", "event": {"name": "reject_bill"}}}

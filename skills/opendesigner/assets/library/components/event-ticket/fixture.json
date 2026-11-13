@@ -1,0 +1,11 @@
+{"photo": {"src": "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=768&h=520&fit=crop&auto=format&q=70", "alt": "Crowd facing a lit stage"},
+ "count": "Ticket 2 of 4",
+ "tour": "Harbour Lights 2027",
+ "act": "The Saltmarsh Trio",
+ "venue": "Corran Halls, Oban",
+ "when": [{"label": "Date", "value": "Fri 5 Mar"}, {"label": "Doors", "value": "18:30"}, {"label": "Show", "value": "19:45"}],
+ "seat": [{"label": "Block", "value": "C"}, {"label": "Row", "value": "4"}, {"label": "Seat", "value": "22"}],
+ "ticket_number": "9021 5530 7718",
+ "code_note": "Scan at entry",
+ "in_wallet": "true",
+ "transfer": {"label": "Send", "event": {"name": "transfer_ticket"}}}

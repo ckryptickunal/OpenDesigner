@@ -1,0 +1,6 @@
+{"photo": {"src": "https://images.unsplash.com/photo-1782351076283-73aa35f76058?w=720&h=576&fit=crop&auto=format&q=70", "alt": "Speckled green ceramic cup"},
+ "tag": "Back in stock", "category": "Kitchen · Stoneware", "name": "Moss glaze cup",
+ "description": "Hand-thrown stoneware with a speckled glaze. Holds 250 ml and is safe in the dishwasher.",
+ "rating": 4.3, "reviews": "1,086", "price": "$24", "old_price": "$32", "saving": "Save $8",
+ "save": {"label": "Save to favourites", "event": {"name": "save_product", "context": {"sku": "cup-moss-250"}}},
+ "add": {"label": "Add to bag", "event": {"name": "add_to_bag", "context": {"sku": "cup-moss-250", "quantity": 1}}}}

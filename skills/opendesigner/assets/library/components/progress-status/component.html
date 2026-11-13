@@ -26,6 +26,7 @@
 .odl-progress-status .odl-pct { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* Steps: a line of markers, done ones checked, the current one ringed. */
+.odl-progress-status [hidden] { display: none !important; }
 .odl-progress-status .odl-steps { display: grid; margin: 0; padding: 0; list-style: none; }
 .odl-progress-status .odl-steps li { position: relative; display: grid; grid-template-columns: var(--ds-size-icon-md) minmax(0, 1fr); column-gap: var(--ds-space-inline-md); align-items: start;
   padding-block-end: var(--ds-space-stack-md); }
@@ -35,7 +36,7 @@
 .odl-progress-status .odl-steps li:has(> [data-state="done"]):not(:last-child)::after { border-inline-start-color: var(--ds-color-bg-accent-bold); }
 .odl-progress-status .odl-mark { display: grid; place-items: center; inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); border-radius: var(--ds-radius-full);
   border: var(--ds-border-width-emphasis) solid var(--ds-color-border-strong); background: var(--ds-color-surface-raised); color: var(--ds-color-text-on-accent); }
-.odl-progress-status .odl-mark svg { display: none; inline-size: 70%; block-size: 70%; fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-lg); stroke-linecap: round; stroke-linejoin: round; }
+.odl-progress-status .odl-mark svg { display: none; inline-size: 80%; block-size: 80%; fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-lg); stroke-linecap: round; stroke-linejoin: round; }
 .odl-progress-status .odl-mark[data-state="done"] { border-color: var(--ds-color-bg-accent-bold); background: var(--ds-color-bg-accent-bold); }
 .odl-progress-status .odl-mark[data-state="done"] svg { display: block; }
 .odl-progress-status .odl-mark[data-state="now"] { border-color: var(--ds-color-bg-accent-bold); }

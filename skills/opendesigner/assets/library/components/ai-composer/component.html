@@ -70,32 +70,37 @@
   .odl-ai-composer .odl-modes label { flex: 1 1 0; }
 }
 @media (prefers-reduced-motion: reduce) { .odl-ai-composer, .odl-ai-composer *, .odl-ai-composer *::before { transition: none !important; animation: none !important; } }
+.odl-ai-composer li[hidden] { display: none; }
 </style>
 <div class="odl-ai-composer">
   <form class="odl-box" aria-label="Ask about your sources">
-    <ul class="odl-sources" aria-label="Attached sources">
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg><span class="odl-name">Quay commission minutes 1952–60</span><small>212 pages</small>
+    <ul class="odl-sources" aria-label="Attached sources" data-od-list="sources">
+      <li data-od-item data-od-template hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg><span class="odl-name" data-od-slot="name"></span><small data-od-slot="meta" data-od-optional></small>
+        <button type="button" class="odl-remove" aria-label="Remove this source" data-od-action="remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></li>
+      <li data-od-item><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg><span class="odl-name">Quay commission minutes 1952–60</span><small>212 pages</small>
         <button type="button" class="odl-remove" aria-label="Remove Quay commission minutes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></li>
-      <li class="is-uploading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><span class="odl-name">foreshore-order.pdf</span><small>Reading, 64%</small>
+      <li class="is-uploading" data-od-item><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><span class="odl-name">foreshore-order.pdf</span><small>Reading, 64%</small>
         <button type="button" class="odl-remove" aria-label="Cancel foreshore-order.pdf"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></li>
     </ul>
     <textarea rows="2" aria-label="Your question" placeholder="Ask about these sources, or type @ to mention one"></textarea>
     <div class="odl-bar">
       <button type="button" aria-label="Attach a source"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
-      <div class="odl-modes" role="radiogroup" aria-label="Mode">
-        <label><input type="radio" name="odl-ai-composer-mode" value="ask" checked><span>Ask</span></label>
-        <label><input type="radio" name="odl-ai-composer-mode" value="research"><span>Research</span></label>
-        <label><input type="radio" name="odl-ai-composer-mode" value="draft"><span>Draft</span></label>
+      <div class="odl-modes" role="radiogroup" aria-label="Mode" data-od-list="modes">
+        <label data-od-item data-od-template hidden><input type="radio" name="odl-ai-composer-mode"><span data-od-slot="label"></span></label>
+        <label data-od-item><input type="radio" name="odl-ai-composer-mode" value="ask" checked><span>Ask</span></label>
+        <label data-od-item><input type="radio" name="odl-ai-composer-mode" value="research"><span>Research</span></label>
+        <label data-od-item><input type="radio" name="odl-ai-composer-mode" value="draft"><span>Draft</span></label>
       </div>
       <span class="odl-spacer"></span>
       <span class="odl-hint"><kbd>Enter</kbd> to send</span>
       <button type="submit" class="odl-send" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg></button>
     </div>
   </form>
-  <ul class="odl-starters" aria-label="Suggested questions">
-    <li><button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>List every licence the board granted</button></li>
-    <li><button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M11 18H8a2 2 0 0 1-2-2V9"/></svg>Compare both sources on 1956</button></li>
-    <li><button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>Summarise the closures</button></li>
+  <ul class="odl-starters" aria-label="Suggested questions" data-od-list="starters">
+    <li data-od-item data-od-template hidden><button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg><span data-od-slot="text"></span></button></li>
+    <li data-od-item><button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>List every licence the board granted</button></li>
+    <li data-od-item><button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M11 18H8a2 2 0 0 1-2-2V9"/></svg>Compare both sources on 1956</button></li>
+    <li data-od-item><button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>Summarise the closures</button></li>
   </ul>
 </div>
 <script>

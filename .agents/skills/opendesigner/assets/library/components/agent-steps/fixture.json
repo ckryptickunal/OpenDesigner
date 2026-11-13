@@ -1,0 +1,13 @@
+{"title": "Reconcile the November card spend",
+ "status": "running",
+ "started": "Started 2:05 pm · 48s so far",
+ "stop": {"label": "Stop run", "event": {"name": "stop_run", "context": {"run": "rec-1142"}}},
+ "steps": [
+  {"title": "Pulled 64 card transactions", "state": "done", "time": "0:06", "detail": "From the Ardent Bank business account"},
+  {"title": "Matched 61 to receipts", "state": "done", "time": "0:19", "detail": "Totals agree to the cent",
+   "tool_output": "match_receipts(month=\"2026-11\")\nTX-8812  Halden Rail      €84.20  matched\nTX-8815  Corvo Coffee      €6.40  matched\nTX-8821  Brightwell Hotel €412.00  no receipt"},
+  {"title": "Ask about 3 without receipts", "state": "waiting", "time": "0:27", "detail": "Brightwell Hotel, €412.00, has no receipt. Mark it as a client cost?",
+   "approve": {"label": "Mark as client cost", "event": {"name": "approve_step", "context": {"step": 3}}},
+   "deny": {"label": "Leave it", "event": {"name": "deny_step", "context": {"step": 3}}}},
+  {"title": "Writing the expense report", "state": "running", "time": "0:40", "detail": "18 of 61 lines written", "progress": 0.3, "progress_label": "Expense report lines"},
+  {"title": "Post the report to the ledger", "state": "skipped", "detail": "Skipped: needs a finance lead"}]}

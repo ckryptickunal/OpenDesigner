@@ -1,0 +1,62 @@
+<style>
+.odl-result-list { box-sizing: border-box; inline-size: 100%; max-inline-size: 40rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-result-list *, .odl-result-list *::before { box-sizing: border-box; }
+.odl-result-list header { display: grid; gap: var(--ds-space-stack-xs); margin-block-end: var(--ds-space-stack-lg); }
+.odl-result-list h3 { margin: 0; font: var(--ds-text-title-md); overflow-wrap: anywhere; }
+.odl-result-list .odl-sub { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-md); overflow-wrap: anywhere; }
+.odl-result-list ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--ds-space-stack-md); }
+.odl-result-list li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-inline-md) var(--ds-space-inset-lg); padding: var(--ds-space-inset-md);
+  background: var(--ds-color-surface-raised); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); }
+.odl-result-list li:not(:has(.odl-thumb)) { grid-template-columns: minmax(0, 1fr) auto; padding-inline-start: var(--ds-space-inset-lg); }
+.odl-result-list .odl-thumb { display: block; inline-size: 7.5rem; aspect-ratio: 1; block-size: auto; object-fit: cover; border-radius: var(--ds-radius-nested); background: var(--ds-color-surface-sunken); }
+.odl-result-list .od-missing-image.odl-thumb { display: grid; place-items: center; padding: var(--ds-space-inset-xs); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); text-align: center; overflow: hidden; }
+.odl-result-list .odl-text { display: flex; flex-direction: column; align-items: flex-start; gap: var(--ds-space-stack-xs); min-inline-size: 0; }
+.odl-result-list .odl-title { margin: 0; font: var(--ds-text-title-sm); overflow-wrap: anywhere; }
+.odl-result-list .odl-badge { order: -1; max-inline-size: 100%; display: inline-flex; align-items: center; min-block-size: var(--ds-size-control-sm); padding: 0 var(--ds-space-inset-sm);
+  border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label);
+  overflow-wrap: anywhere; }
+.odl-result-list .odl-meta { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.odl-result-list .odl-detail { margin: var(--ds-space-stack-xs) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); overflow-wrap: anywhere; }
+.odl-result-list .odl-side { display: grid; justify-items: end; align-content: center; gap: var(--ds-space-stack-sm); text-align: end; }
+.odl-result-list .odl-price { display: grid; gap: var(--ds-space-2); }
+.odl-result-list .odl-value { font: var(--ds-text-numeric-md); font-weight: var(--ds-font-weight-heading); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.odl-result-list .odl-per { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); overflow-wrap: anywhere; }
+.odl-result-list .odl-act { display: inline-flex; align-items: center; justify-content: center; min-inline-size: 6rem; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min));
+  padding: 0 var(--ds-space-inset-md); border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised);
+  color: var(--ds-color-text-primary); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); cursor: pointer; white-space: nowrap;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-result-list .odl-act:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-result-list .odl-act:disabled { cursor: not-allowed; border-color: var(--ds-color-border-subtle); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); }
+.odl-result-list .odl-act:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-result-list .od-empty { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) dashed var(--ds-color-border-default); border-radius: var(--ds-radius-container); color: var(--ds-color-text-secondary); text-align: center; }
+/* Phone: the photo stays beside the text; price and the button move to one line under them. */
+@container (max-width: 32rem) {
+  .odl-result-list li { grid-template-columns: auto minmax(0, 1fr); align-items: start; }
+  .odl-result-list .odl-thumb { inline-size: 5.5rem; }
+  .odl-result-list .odl-side { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-stack-sm) var(--ds-space-inline-md);
+    padding-block-start: var(--ds-space-stack-sm); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); text-align: start; }
+  .odl-result-list .odl-price { justify-items: start; }
+  .odl-result-list .odl-side:not(:has(.odl-price)) { justify-content: flex-end; }
+}
+/* the hidden template item (data-od-template) stays out of sight in the static file */
+.odl-result-list [hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { .odl-result-list, .odl-result-list *, .odl-result-list *::before { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-result-list" aria-label="Places to stay in Alfama" data-od-label="title">
+  <header><h3 data-od-slot="title">Places to stay in Alfama</h3><p class="odl-sub" data-od-slot="note" data-od-optional>3 of 41 places, 12 to 15 March, 2 guests</p></header>
+  <ul data-od-list="results">
+    <li data-od-item data-od-template hidden><img class="odl-thumb" data-od-media="image" data-od-optional src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=240&amp;h=240&amp;fit=crop&amp;auto=format&amp;q=70" alt="" width="120" height="120" loading="lazy" decoding="async">
+      <div class="odl-text"><p class="odl-title" data-od-slot="title"></p><span class="odl-badge" data-od-slot="badge" data-od-optional></span><p class="odl-meta" data-od-slot="meta"></p><p class="odl-detail" data-od-slot="detail" data-od-optional></p></div>
+      <div class="odl-side"><p class="odl-price" data-od-optional><span class="odl-value" data-od-slot="value" data-od-optional></span><span class="odl-per" data-od-slot="value_note" data-od-optional></span></p>
+        <button type="button" class="odl-act" data-od-action="action">View</button></div></li>
+    <li data-od-item><img class="odl-thumb" src="https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=240&amp;h=240&amp;fit=crop&amp;auto=format&amp;q=70" alt="Bedroom with a wooden bed and a garden view" width="120" height="120" loading="lazy" decoding="async">
+      <div class="odl-text"><p class="odl-title">Casa da Calçada</p><span class="odl-badge">Free cancellation</span><p class="odl-meta">Guesthouse · 4.8 · 300 m from the tram</p><p class="odl-detail">Quiet courtyard rooms with breakfast on the terrace.</p></div>
+      <div class="odl-side"><p class="odl-price"><span class="odl-value">€138</span><span class="odl-per">a night</span></p><button type="button" class="odl-act" aria-label="View, Casa da Calçada">View</button></div></li>
+    <li data-od-item><img class="odl-thumb" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=240&amp;h=240&amp;fit=crop&amp;auto=format&amp;q=70" alt="Hotel room with a made bed" width="120" height="120" loading="lazy" decoding="async">
+      <div class="odl-text"><p class="odl-title">Miradouro Rooms</p><p class="odl-meta">Hotel · 4.6 · 650 m from the castle</p></div>
+      <div class="odl-side"><p class="odl-price"><span class="odl-value">€112</span><span class="odl-per">a night</span></p><button type="button" class="odl-act" aria-label="View, Miradouro Rooms">View</button></div></li>
+    <li data-od-item><img class="odl-thumb" src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?w=240&amp;h=240&amp;fit=crop&amp;auto=format&amp;q=70" alt="Living room with a large window" width="120" height="120" loading="lazy" decoding="async">
+      <div class="odl-text"><p class="odl-title">Rua das Flores flat</p><span class="odl-badge">Sleeps 4</span><p class="odl-meta">Apartment · 4.9 · 1.1 km from the river</p><p class="odl-detail">Two bedrooms and a kitchen, third floor with a lift.</p></div>
+      <div class="odl-side"><p class="odl-price"><span class="odl-value">€164</span><span class="odl-per">a night</span></p><button type="button" class="odl-act" aria-label="View, Rua das Flores flat">View</button></div></li>
+  </ul>
+</section>

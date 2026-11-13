@@ -1,0 +1,18 @@
+{"place": "Kestrel Bay", "when": "Sat 14 Nov · 09:30", "temp": 6, "condition": "Light rain", "icon": "rain",
+ "range": "H 8° · L 3° · Feels 2°", "note": "Showers until about 13:00, then dry and brighter.",
+ "hours": [
+  {"label": "Now", "temp": 6, "condition": "rain", "rain_chance": 80},
+  {"label": "10", "temp": 6, "condition": "rain", "rain_chance": 70},
+  {"label": "11", "temp": 7, "condition": "rain", "rain_chance": 50},
+  {"label": "12", "temp": 7, "condition": "cloudy", "rain_chance": 20},
+  {"label": "13", "temp": 8, "condition": "partly-cloudy"},
+  {"label": "14", "temp": 8, "condition": "sunny"},
+  {"label": "15", "temp": 7, "condition": "partly-cloudy"}
+ ],
+ "days": [
+  {"label": "Today", "low": 3, "high": 8, "condition": "rain", "rain_chance": 80},
+  {"label": "Sun", "low": 1, "high": 7, "condition": "sunny"},
+  {"label": "Mon", "low": -2, "high": 5, "condition": "clear-night"},
+  {"label": "Tue", "low": 0, "high": 6, "condition": "cloudy", "rain_chance": 10},
+  {"label": "Wed", "low": 2, "high": 9, "condition": "partly-cloudy"}
+ ]}

@@ -1,0 +1,75 @@
+{
+ "photos": [
+  {
+   "photo": {
+    "src": "https://images.unsplash.com/photo-1691480150204-66dd1eb77391?w=1200&h=1500&fit=crop&auto=format&q=70",
+    "alt": "Brown leather handbag on a white background"
+   },
+   "label": "front"
+  },
+  {
+   "photo": {
+    "src": "https://images.unsplash.com/photo-1605733513597-a8f8341084e6?w=1200&h=1500&fit=crop&auto=format&q=70",
+    "alt": "Grey leather satchel on a white surface"
+   },
+   "label": "grey"
+  }
+ ],
+ "eyebrow": "Atelier Norrvik · Bags",
+ "name": "Everyday leather satchel",
+ "price": 145,
+ "was_price": 180,
+ "currency": "EUR",
+ "sale_label": "Sale · Save 19%",
+ "rating_average": 4.4,
+ "rating_count": 87,
+ "colours": [
+  {
+   "name": "Sand",
+   "swatch": "sand"
+  },
+  {
+   "name": "Ink",
+   "swatch": "ink"
+  },
+  {
+   "name": "Moss",
+   "swatch": "moss"
+  }
+ ],
+ "sizes": [
+  {
+   "label": "S",
+   "sold_out": "false"
+  },
+  {
+   "label": "M",
+   "sold_out": "false"
+  },
+  {
+   "label": "L",
+   "sold_out": "true"
+  }
+ ],
+ "size_note": "Strap adjusts 90–130 cm",
+ "stock": "Only 2 left in Sand",
+ "add": {
+  "label": "Add to basket",
+  "event": {
+   "name": "add_to_basket"
+  }
+ },
+ "perks": [
+  {
+   "title": "Free delivery",
+   "detail": "by Tuesday, 17 Nov"
+  },
+  {
+   "title": "Free returns",
+   "detail": "for 60 days"
+  },
+  {
+   "title": "Two-year warranty"
+  }
+ ]
+}

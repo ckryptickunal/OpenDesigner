@@ -14,13 +14,14 @@
 .odl-comparison [role="row"] { display: grid; grid-template-columns: var(--odl-label) repeat(var(--odl-cols, 3), var(--odl-col)); column-gap: var(--ds-space-inline-md); }
 .odl-comparison .odl-vals { display: contents; }
 .odl-comparison .odl-head { align-items: stretch; padding-block-end: var(--ds-space-stack-md); }
-.odl-comparison .odl-head:has(.odl-badge) .odl-opt { padding-block-start: calc(var(--ds-size-control-sm) + var(--ds-space-stack-sm)); }
+/* the badge sits above its option's name; the other options keep that much room so the names line up */
+.odl-comparison .odl-head:has(.odl-badge) .odl-opt:not(:has(.odl-badge)) { padding-block-start: calc(var(--ds-size-control-sm) + var(--ds-space-stack-xs)); }
 .odl-comparison .odl-corner { min-inline-size: 0; }
 .odl-comparison .odl-opt { position: relative; display: flex; flex-direction: column; gap: var(--ds-space-stack-xs); min-inline-size: 0; }
 .odl-comparison .odl-name { font: var(--ds-text-title-sm); overflow-wrap: anywhere; }
-.odl-comparison .odl-badge { position: absolute; inset-block-start: 0; inset-inline-start: 0; max-inline-size: 100%; display: inline-flex; align-items: center; min-block-size: var(--ds-size-control-sm);
+.odl-comparison .odl-badge { order: -1; align-self: flex-start; max-inline-size: 100%; display: inline-flex; align-items: center; min-block-size: var(--ds-size-control-sm);
   padding: 0 var(--ds-space-inset-sm); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-accent); font: var(--ds-text-label-md);
-  font-weight: var(--ds-font-weight-label); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  font-weight: var(--ds-font-weight-label); overflow-wrap: anywhere; }
 .odl-comparison .odl-price { font: var(--ds-text-numeric-md); font-weight: var(--ds-font-weight-heading); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .odl-comparison .odl-per { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); overflow-wrap: anywhere; }
 .odl-comparison .odl-choose { margin-block-start: auto; display: inline-flex; align-items: center; justify-content: center; inline-size: 100%; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min));
@@ -47,7 +48,7 @@
 /* Phone: each attribute's name sits on its own line above the values, so every column gets the full width. */
 @container (max-width: 34rem) {
   .odl-comparison .odl-card { padding: var(--ds-space-inset-lg); }
-  .odl-comparison [role="row"] { grid-template-columns: repeat(var(--odl-cols, 3), minmax(5.5rem, 1fr)); column-gap: var(--ds-space-inline-sm); row-gap: var(--ds-space-stack-xs); }
+  .odl-comparison [role="row"] { grid-template-columns: repeat(var(--odl-cols, 3), minmax(4.5rem, 1fr)); column-gap: var(--ds-space-inline-sm); row-gap: var(--ds-space-stack-xs); }
   .odl-comparison .odl-corner { display: none; }
   .odl-comparison .odl-label { grid-column: 1 / -1; position: sticky; inset-inline-start: 0; justify-self: start; }
 }

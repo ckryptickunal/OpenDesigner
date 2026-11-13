@@ -14,7 +14,7 @@
 .odl-result-list .odl-title { margin: 0; font: var(--ds-text-title-sm); overflow-wrap: anywhere; }
 .odl-result-list .odl-badge { order: -1; max-inline-size: 100%; display: inline-flex; align-items: center; min-block-size: var(--ds-size-control-sm); padding: 0 var(--ds-space-inset-sm);
   border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label);
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  overflow-wrap: anywhere; }
 .odl-result-list .odl-meta { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .odl-result-list .odl-detail { margin: var(--ds-space-stack-xs) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); overflow-wrap: anywhere; }
 .odl-result-list .odl-side { display: grid; justify-items: end; align-content: center; gap: var(--ds-space-stack-sm); text-align: end; }
@@ -26,7 +26,7 @@
   color: var(--ds-color-text-primary); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); cursor: pointer; white-space: nowrap;
   transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
 .odl-result-list .odl-act:hover { background: var(--ds-color-bg-neutral-subtle); }
-.odl-result-list .odl-act:disabled { cursor: not-allowed; opacity: var(--ds-opacity-disabled-content); }
+.odl-result-list .odl-act:disabled { cursor: not-allowed; border-color: var(--ds-color-border-subtle); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); }
 .odl-result-list .odl-act:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 .odl-result-list .od-empty { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) dashed var(--ds-color-border-default); border-radius: var(--ds-radius-container); color: var(--ds-color-text-secondary); text-align: center; }
 /* Phone: the photo stays beside the text; price and the button move to one line under them. */

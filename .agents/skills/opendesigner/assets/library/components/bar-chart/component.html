@@ -20,14 +20,14 @@
 .odl-bar-chart .odl-grid { position: absolute; inset-inline: 0; inset-block-end: calc(var(--y) * 1%); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
 .odl-bar-chart .odl-grid.is-base { border-block-start-color: var(--ds-color-border-strong); }
 .odl-bar-chart .odl-budget { position: absolute; z-index: 1; inset-inline: 0; inset-block-end: 60%; border-block-start: var(--ds-border-width-emphasis) dashed var(--ds-color-text-secondary); pointer-events: none; }
-.odl-bar-chart .odl-budget span { position: absolute; inset-inline-start: 0; inset-block-end: var(--ds-space-2); padding: 0 var(--ds-space-4); border-radius: var(--ds-radius-4);
+.odl-bar-chart .odl-budget > span { position: absolute; inset-inline-start: 0; inset-block-end: var(--ds-space-2); padding: 0 var(--ds-space-4); border-radius: var(--ds-radius-4);
   background: var(--ds-color-surface-raised); color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
-.odl-bar-chart .odl-cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--ds-space-4); }
+.odl-bar-chart .odl-cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(var(--n, 6), minmax(0, 1fr)); gap: var(--ds-space-4); }
 .odl-bar-chart .odl-col { position: relative; display: flex; align-items: end; justify-content: center; min-inline-size: var(--ds-size-target-min); block-size: 100%; margin: 0; padding: 0;
   border: 0; border-radius: var(--ds-radius-4); background: transparent; color: inherit; cursor: pointer; }
 .odl-bar-chart .odl-col:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
-.odl-bar-chart .odl-bar { display: flex; flex-direction: column-reverse; inline-size: 56%; max-inline-size: 2.75rem; block-size: calc(var(--v) * 1%);
+.odl-bar-chart .odl-bar { display: flex; flex-direction: column-reverse; inline-size: 56%; max-inline-size: 2.75rem; block-size: calc(var(--v, calc(var(--od-ratio, 0.5) * 100)) * 1%);
   transition: opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
 .odl-bar-chart .odl-actual { flex: none; block-size: calc(var(--a, 100) * 1%); background: var(--ds-color-bg-accent-bold); border-radius: var(--ds-radius-4) var(--ds-radius-4) 0 0; }
 .odl-bar-chart .odl-fc + .odl-actual, .odl-bar-chart .odl-actual:not(:last-child) { border-radius: 0; }
@@ -35,19 +35,19 @@
   background: repeating-linear-gradient(135deg, var(--ds-color-border-accent) 0 1.5px, transparent 1.5px 5px), var(--ds-color-bg-accent-subtle); }
 .odl-bar-chart .odl-cols:hover .odl-col:not(:hover) .odl-bar, .odl-bar-chart .odl-cols:has(.odl-col:focus-visible) .odl-col:not(:focus-visible) .odl-bar { opacity: 0.4; }
 
-.odl-bar-chart .odl-tip { position: absolute; z-index: 2; inset-block-end: calc(var(--v) * 1%); inline-size: max-content; min-inline-size: 10.5rem; display: grid; gap: var(--ds-space-2);
+.odl-bar-chart .odl-tip { position: absolute; z-index: 2; inset-block-end: calc(var(--v, 50) * 1%); inline-size: max-content; min-inline-size: 10.5rem; display: grid; gap: var(--ds-space-2);
   padding: var(--ds-space-inset-sm) var(--ds-space-inset-md); border-radius: var(--ds-radius-container); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse);
   box-shadow: var(--ds-elevation-floating); text-align: start; font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; pointer-events: none;
   opacity: 0; transform: translateY(50%); transition: opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
 .odl-bar-chart .odl-col:nth-child(-n+3) .odl-tip { inset-inline-start: calc(50% + var(--ds-space-24)); }
 .odl-bar-chart .odl-col:nth-child(n+4) .odl-tip { inset-inline-end: calc(50% + var(--ds-space-24)); }
 .odl-bar-chart .odl-tip b { font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-heading); }
-.odl-bar-chart .odl-tip span { display: flex; justify-content: space-between; gap: var(--ds-space-inline-md); }
+.odl-bar-chart .odl-tip > span { display: flex; justify-content: space-between; gap: var(--ds-space-inline-md); }
 .odl-bar-chart .odl-tip i { font-style: normal; opacity: 0.72; }
 /* The tip shows on hover or keyboard focus only: at rest it would cover the bar beside it, and the header already states the month so far. */
 .odl-bar-chart .odl-col:hover .odl-tip, .odl-bar-chart .odl-col:focus-visible .odl-tip { opacity: 1; }
 
-.odl-bar-chart .odl-x { grid-column: 2; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--ds-space-4); margin: 0; padding: 0; list-style: none;
+.odl-bar-chart .odl-x { grid-column: 2; display: grid; grid-template-columns: repeat(var(--n, 6), minmax(0, 1fr)); gap: var(--ds-space-4); margin: 0; padding: 0; list-style: none;
   color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); text-align: center; }
 .odl-bar-chart .odl-x .is-current { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-heading); }
 
@@ -60,6 +60,8 @@
 .odl-bar-chart .odl-key.is-fc { border: var(--ds-border-width-default) solid var(--ds-color-border-accent);
   background: repeating-linear-gradient(135deg, var(--ds-color-border-accent) 0 1.5px, transparent 1.5px 4px), var(--ds-color-bg-accent-subtle); }
 .odl-bar-chart .odl-key.is-budget { block-size: 0; border-radius: 0; border-block-start: var(--ds-border-width-emphasis) dashed var(--ds-color-text-secondary); }
+.odl-bar-chart [hidden] { display: none !important; }
+.odl-bar-chart .odl-cols > .od-empty { grid-column: 1 / -1; align-self: center; border: 0; background: transparent; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
 .odl-bar-chart .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 @container (min-width: 44rem) {
@@ -84,50 +86,63 @@
 }
 @media (prefers-reduced-motion: reduce) { .odl-bar-chart, .odl-bar-chart *, .odl-bar-chart *::before { transition: none !important; animation: none !important; } }
 </style>
-<section class="odl-bar-chart" aria-label="Monthly spend">
+<section class="odl-bar-chart" aria-label="Monthly spend" data-od-label="title">
   <div class="odl-card">
     <div class="odl-head">
       <div>
-        <h3>Monthly spend</h3>
-        <p class="odl-sub">May to Oct 2026 · updated Oct 14, 22:40 UTC</p>
+        <h3 data-od-slot="title">Monthly spend</h3>
+        <p class="odl-sub" data-od-slot="subtitle" data-od-optional>May to Oct 2026 · updated Oct 14, 22:40 UTC</p>
       </div>
-      <dl class="odl-stats">
-        <div><dt>October so far</dt><dd>$6,412.38</dd></div>
-        <div><dt>Forecast by Oct 31</dt><dd>$15,536<span class="odl-over">129%</span></dd></div>
+      <dl class="odl-stats" data-od-list="stats">
+        <div data-od-item><dt>October so far</dt><dd>$6,412.38</dd></div>
+        <div data-od-item><dt>Forecast by Oct 31</dt><dd>$15,536<span class="odl-over">129%</span></dd></div>
+        <div data-od-item data-od-template hidden><dt data-od-slot="label"></dt><dd><span data-od-slot="value"></span><span class="odl-over" data-od-slot="badge" data-od-optional></span></dd></div>
       </dl>
     </div>
     <div class="odl-chart">
+      <span data-od-slot="currency" hidden>USD</span><span data-od-slot="axis_max" data-od-optional hidden></span>
       <div class="odl-axis" aria-hidden="true">
         <span style="--y: 0">$0</span><span style="--y: 25">$5k</span><span style="--y: 50">$10k</span><span style="--y: 75">$15k</span><span style="--y: 100">$20k</span>
       </div>
       <div class="odl-plot">
         <div class="odl-grid is-base" style="--y: 0" aria-hidden="true"></div><div class="odl-grid" style="--y: 25" aria-hidden="true"></div>
         <div class="odl-grid" style="--y: 50" aria-hidden="true"></div><div class="odl-grid" style="--y: 75" aria-hidden="true"></div><div class="odl-grid" style="--y: 100" aria-hidden="true"></div>
-        <div class="odl-budget" aria-hidden="true"><span>Budget $12,000</span></div>
-        <div class="odl-cols" role="list" aria-label="Spend per month">
-          <button type="button" class="odl-col" role="listitem" style="--v: 40.51" aria-label="May 2026: spent $8,102.55, $3,897.45 under budget">
+        <div class="odl-budget" aria-hidden="true" data-od-optional><span>Budget <span data-od-slot="budget" data-od-optional>$12,000</span></span></div>
+        <div class="odl-cols" role="list" aria-label="Spend per month" data-od-list="months">
+          <button type="button" data-od-item class="odl-col" role="listitem" style="--v: 40.51" aria-label="May 2026: spent $8,102.55, $3,897.45 under budget">
             <span class="odl-bar"><span class="odl-actual"></span></span>
             <span class="odl-tip" aria-hidden="true"><b>May 2026</b><span><i>Spent</i>$8,102.55</span><span><i>Under budget</i>$3,897.45</span></span>
+            <span class="odl-short" hidden>May</span>
           </button>
-          <button type="button" class="odl-col" role="listitem" style="--v: 43.69" aria-label="June 2026: spent $8,738.66, $3,261.34 under budget">
+          <button type="button" data-od-item class="odl-col" role="listitem" style="--v: 43.69" aria-label="June 2026: spent $8,738.66, $3,261.34 under budget">
             <span class="odl-bar"><span class="odl-actual"></span></span>
             <span class="odl-tip" aria-hidden="true"><b>June 2026</b><span><i>Spent</i>$8,738.66</span><span><i>Under budget</i>$3,261.34</span></span>
+            <span class="odl-short" hidden>Jun</span>
           </button>
-          <button type="button" class="odl-col" role="listitem" style="--v: 52.06" aria-label="July 2026: spent $10,412.80, $1,587.20 under budget">
+          <button type="button" data-od-item class="odl-col" role="listitem" style="--v: 52.06" aria-label="July 2026: spent $10,412.80, $1,587.20 under budget">
             <span class="odl-bar"><span class="odl-actual"></span></span>
             <span class="odl-tip" aria-hidden="true"><b>July 2026</b><span><i>Spent</i>$10,412.80</span><span><i>Under budget</i>$1,587.20</span></span>
+            <span class="odl-short" hidden>Jul</span>
           </button>
-          <button type="button" class="odl-col" role="listitem" style="--v: 49.53" aria-label="August 2026: spent $9,906.42, $2,093.58 under budget">
+          <button type="button" data-od-item class="odl-col" role="listitem" style="--v: 49.53" aria-label="August 2026: spent $9,906.42, $2,093.58 under budget">
             <span class="odl-bar"><span class="odl-actual"></span></span>
             <span class="odl-tip" aria-hidden="true"><b>August 2026</b><span><i>Spent</i>$9,906.42</span><span><i>Under budget</i>$2,093.58</span></span>
+            <span class="odl-short" hidden>Aug</span>
           </button>
-          <button type="button" class="odl-col" role="listitem" style="--v: 56.42" aria-label="September 2026: spent $11,284.17, $715.83 under budget">
+          <button type="button" data-od-item class="odl-col" role="listitem" style="--v: 56.42" aria-label="September 2026: spent $11,284.17, $715.83 under budget">
             <span class="odl-bar"><span class="odl-actual"></span></span>
             <span class="odl-tip" aria-hidden="true"><b>September 2026</b><span><i>Spent</i>$11,284.17</span><span><i>Under budget</i>$715.83</span></span>
+            <span class="odl-short" hidden>Sep</span>
           </button>
-          <button type="button" class="odl-col is-current" role="listitem" style="--v: 77.68" aria-label="October 2026, in progress: $6,412.38 so far, forecast $15,536.26, $3,536.26 over budget">
+          <button type="button" data-od-item class="odl-col is-current" role="listitem" style="--v: 77.68" aria-label="October 2026, in progress: $6,412.38 so far, forecast $15,536.26, $3,536.26 over budget">
             <span class="odl-bar"><span class="odl-actual" style="--a: 41.27"></span><span class="odl-fc"></span></span>
             <span class="odl-tip" aria-hidden="true"><b>October 2026 · day 14 of 31</b><span><i>So far</i>$6,412.38</span><span><i>Forecast</i>$15,536.26</span><span><i>Over budget</i>$3,536.26</span></span>
+            <span class="odl-short" hidden>Oct</span>
+          </button>
+          <button type="button" class="odl-col" role="listitem" data-od-item data-od-template hidden>
+            <span class="odl-bar" data-od-measure="spent"><span class="odl-actual"></span><span class="odl-fc" data-od-measure="forecast" data-od-optional></span></span>
+            <span class="odl-tip" aria-hidden="true"><b data-od-slot="label"></b><span><i>Spent</i><span data-od-slot="spent"></span></span><span data-od-optional><i>Forecast</i><span data-od-slot="forecast" data-od-optional></span></span><span class="odl-diff"><i></i></span></span>
+            <span class="odl-short" data-od-slot="short" hidden></span>
           </button>
         </div>
       </div>
@@ -139,7 +154,74 @@
         <li><span class="odl-key is-fc" aria-hidden="true"></span>Forecast</li>
         <li><span class="odl-key is-budget" aria-hidden="true"></span>Budget</li>
       </ul>
-      <span>Forecast from the last 7 days</span>
+      <span data-od-slot="note" data-od-optional>Forecast from the last 7 days</span>
     </div>
   </div>
 </section>
+<script>
+document.querySelectorAll(".odl-bar-chart").forEach((root) => {
+  const chart = root.querySelector(".odl-chart"), cols = root.querySelector(".odl-cols");
+  if (!chart || !cols) return;
+  const items = [...cols.querySelectorAll(":scope > .odl-col")].filter((b) => !b.hasAttribute("data-od-template"));
+  const key = root.querySelector(".odl-card").textContent.replace(/\s+/g, " ").trim();
+  if (!items.length || root.dataset.odlKey === key) return; // drawn from these numbers already; new numbers redraw
+  root.dataset.odlKey = key;
+  const lang = root.closest("[lang]")?.getAttribute("lang") || undefined;
+  const dec = (new Intl.NumberFormat(lang).formatToParts(1.5).find((p) => p.type === "decimal") || { value: "." }).value;
+  const num = (t) => { t = (t || "").trim(); if (!/\d/.test(t)) return null;
+    const n = Number(t.split(dec).map((x) => x.replace(/[^\d-]/g, "")).join(".")); return Number.isFinite(n) ? n : null; };
+  const cur = (root.querySelector('[data-od-slot="currency"]')?.textContent || "").trim();
+  const money = (v, whole) => {
+    const o = { minimumFractionDigits: whole ? 0 : 2, maximumFractionDigits: whole ? 0 : 2 };
+    if (/^[A-Z]{3}$/.test(cur)) try { return new Intl.NumberFormat(lang, { style: "currency", currency: cur, ...o }).format(v); } catch (e) { /* unknown code: plain number below */ }
+    return (cur && cur.length < 3 ? cur : "") + new Intl.NumberFormat(lang, o).format(v);
+  };
+  const symbol = money(0, true).replace(/[\d\s.,]/g, "");
+  const short = (v) => (v === 0 ? money(0, true) : symbol + (v >= 1e6 ? +(v / 1e6).toFixed(1) + "M" : v >= 1e3 ? +(v / 1e3).toFixed(1) + "k" : v));
+  const val = (row) => { const i = row && row.querySelector("i"); return row ? num(row.textContent.slice(i ? i.textContent.length : 0)) : null; };
+
+  // each month's numbers, read from what is on screen
+  const months = items.map((b) => {
+    const rows = [...b.querySelectorAll(".odl-tip > span")];
+    const fc = rows.length >= 3 ? val(rows[1]) : null;
+    return { b, rows, label: (b.querySelector(".odl-tip b")?.textContent || "").trim(), spent: val(rows[0]), fc, short: (b.querySelector(".odl-short")?.textContent || "").trim() };
+  });
+  const budget = num(root.querySelector('[data-od-slot="budget"]')?.textContent);
+  const top = Math.max(0, budget || 0, ...months.map((m) => Math.max(m.spent || 0, m.fc || 0)));
+  let axis = num(root.querySelector('[data-od-slot="axis_max"]')?.textContent);
+  if (!axis || axis < top) { // four even steps of 1, 2, 2.5 or 5 times a power of ten
+    const raw = (top || 1) / 4, p = 10 ** Math.floor(Math.log10(raw));
+    axis = 4 * p * ([1, 2, 2.5, 5, 10].find((m) => m * p >= raw) || 10);
+  }
+  chart.style.setProperty("--n", months.length);
+  root.querySelectorAll(".odl-axis span").forEach((s, i, all) => { s.textContent = short((axis * i) / (all.length - 1)); });
+  const line = root.querySelector(".odl-budget"), bslot = root.querySelector('[data-od-slot="budget"]');
+  if (line && budget !== null) { line.style.insetBlockEnd = (budget / axis) * 100 + "%"; if (bslot) bslot.textContent = money(budget, budget % 1 === 0); }
+
+  const pct = (v) => +((v / axis) * 100).toFixed(2);
+  const put = (row, word, v) => { const i = document.createElement("i"); i.textContent = word; row.replaceChildren(i, document.createTextNode(money(v))); };
+  months.forEach((m) => {
+    if (m.spent === null) return;
+    const now = m.fc !== null, end = now ? m.fc : m.spent;
+    m.b.classList.toggle("is-current", now);
+    m.b.style.setProperty("--v", pct(end));
+    const act = m.b.querySelector(".odl-actual");
+    if (act) { if (now) act.style.setProperty("--a", +((m.spent / m.fc) * 100).toFixed(2)); else act.style.removeProperty("--a"); }
+    put(m.rows[0], now ? "So far" : "Spent", m.spent);
+    if (now) put(m.rows[1], "Forecast", m.fc);
+    const diff = m.rows[m.rows.length - 1];
+    let says = "";
+    if (budget === null && diff && m.rows.length > 1 && !diff.textContent.trim()) diff.hidden = true; // no budget: no over or under row
+    if (budget !== null && diff && m.rows.length > 1) {
+      const d = end - budget;
+      put(diff, d > 0 ? "Over budget" : "Under budget", Math.abs(d));
+      says = `, ${money(Math.abs(d))} ${d > 0 ? "over" : "under"} budget`;
+    }
+    m.b.setAttribute("aria-label", now ? `${m.label}, in progress: ${money(m.spent)} so far, forecast ${money(m.fc)}${says}`
+      : `${m.label}: spent ${money(m.spent)}${says}`);
+  });
+  // the short names under the bars
+  const x = root.querySelector(".odl-x");
+  if (x && months.every((m) => m.short)) x.replaceChildren(...months.map((m) => { const li = document.createElement("li"); li.textContent = m.short; if (m.fc !== null) li.className = "is-current"; return li; }));
+});
+</script>

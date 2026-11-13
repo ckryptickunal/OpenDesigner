@@ -57,7 +57,7 @@
       "error": {"status": "handled", "how": "a photo that fails to load keeps its square, with the photo's description written in it", "evidence": ".od-missing-image"},
       "disabled": {"status": "shown", "how": "a result that cannot be opened (sold out) has its button disabled and dimmed", "evidence": ".odl-act:disabled"},
       "overflow": {"status": "handled", "how": "on a phone the photo stays beside the text and the price and button move to one line underneath", "evidence": "@container (max-width: 32rem)"},
-      "long_text": {"status": "handled", "how": "names, meta and detail wrap; the badge keeps one line with an ellipsis; the price never wraps", "evidence": "overflow-wrap: anywhere"}
+      "long_text": {"status": "handled", "how": "names, badge, meta and detail wrap; the price never wraps", "evidence": "overflow-wrap: anywhere"}
     },
     "keyboard": ["Tab moves through the result buttons in list order", "Enter or Space presses one"]
   }

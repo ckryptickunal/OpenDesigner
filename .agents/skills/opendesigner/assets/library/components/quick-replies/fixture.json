@@ -1,0 +1,8 @@
+{"prompt": "Which size should I reorder?",
+ "replies": [
+  {"reply": {"label": "Small, same as last time", "event": {"name": "pick_size", "context": {"size": "s"}}}},
+  {"reply": {"label": "Medium", "event": {"name": "pick_size", "context": {"size": "m"}}}},
+  {"reply": {"label": "Large", "event": {"name": "pick_size", "context": {"size": "l"}}}},
+  {"reply": {"label": "Extra large", "event": {"name": "pick_size", "context": {"size": "xl"}}}},
+  {"reply": {"label": "Show me the size guide", "event": {"name": "open_size_guide"}}},
+  {"reply": {"label": "Not now", "event": {"name": "dismiss"}}}]}

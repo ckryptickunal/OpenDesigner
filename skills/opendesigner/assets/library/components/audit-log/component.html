@@ -44,23 +44,28 @@
   .odl-audit-log .odl-filters label { flex: 1; }
 }
 .odl-audit-log:has(input[value="high"]:checked) li:not(:has(.is-high)) { display: none; }
+/* Slot marks: the template row stays out of sight; a rendered meta list adds no boxes of its own. */
+.odl-audit-log li[hidden] { display: none; }
+.odl-audit-log .odl-meta-list, .odl-audit-log .odl-meta-list > * { display: contents; }
 </style>
 <section class="odl-audit-log" aria-labelledby="odl-al-title"><div class="odl-card">
   <header>
-    <div><h3 id="odl-al-title">Audit log</h3><p>Today · Quenwick Mutual workspace</p></div>
+    <div><h3 id="odl-al-title" data-od-slot="title" data-od-optional>Audit log</h3><p data-od-slot="scope" data-od-optional>Today · Quenwick Mutual workspace</p></div>
     <div class="odl-filters" role="radiogroup" aria-label="Show">
       <label><input type="radio" name="odl-audit-log-show" value="all" checked><span>All events</span></label>
       <label><input type="radio" name="odl-audit-log-show" value="high"><span>High risk</span></label>
     </div>
   </header>
-  <ol>
-    <li><img class="odl-avatar odl-who" src="https://images.unsplash.com/photo-1681097561932-36d0df02b379?w=64&h=64&fit=crop&crop=faces&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async">
+  <ol data-od-list="events">
+    <li data-od-item data-od-template hidden><img class="odl-avatar odl-who" data-od-when="actor_type=person" data-od-media="avatar" src="https://images.unsplash.com/photo-1681097561932-36d0df02b379?w=64&amp;h=64&amp;fit=crop&amp;crop=faces&amp;auto=format&amp;q=70" alt="" width="32" height="32" loading="lazy" decoding="async"><span class="odl-who is-bot" data-od-when="actor_type=service" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></span>
+      <p><span class="odl-sev is-high" data-od-when="severity=high">High</span><span class="odl-sev is-med" data-od-when="severity=medium">Medium</span><strong data-od-slot="actor"></strong> <span data-od-slot="action"></span></p><span class="odl-meta"><span class="odl-ip" data-od-slot="ip" data-od-optional></span><span class="odl-meta-list" data-od-list="meta"><span data-od-item><span data-od-slot="text"></span></span></span></span><time data-od-slot="time"></time></li>
+    <li data-od-item><img class="odl-avatar odl-who" src="https://images.unsplash.com/photo-1681097561932-36d0df02b379?w=64&h=64&fit=crop&crop=faces&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async">
       <p><span class="odl-sev is-high">High</span><strong>Yerlan Abenov</strong> turned off single sign-on enforcement for <code>Quenwick Mutual</code></p><span class="odl-meta"><span class="odl-ip">203.0.113.42</span><span>Lisbon · “vendor login broken”</span></span><time>14:02</time></li>
-    <li><span class="odl-who is-bot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></span>
+    <li data-od-item><span class="odl-who is-bot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg></span>
       <p><strong>people-sync</strong> removed 3 people who left the company</p><span class="odl-meta"><span>Service account</span><span>SCIM</span></span><time>13:40</time></li>
-    <li><img class="odl-avatar odl-who" src="https://images.unsplash.com/photo-1604072366595-e75dc92d6bdc?w=64&h=64&fit=crop&crop=faces&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async">
+    <li data-od-item><img class="odl-avatar odl-who" src="https://images.unsplash.com/photo-1604072366595-e75dc92d6bdc?w=64&h=64&fit=crop&crop=faces&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async">
       <p><span class="odl-sev is-med">Medium</span><strong>Ragnhild Torvik</strong> created API key <code>policy-vault</code> with read access to all records</p><span class="odl-meta"><span class="odl-ip">198.51.100.7</span><span>Expires in 90 days</span></span><time>11:15</time></li>
-    <li><img class="odl-avatar odl-who" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=64&h=64&fit=crop&crop=faces&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async">
+    <li data-od-item><img class="odl-avatar odl-who" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=64&h=64&fit=crop&crop=faces&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async">
       <p><strong>Thiago Carvalho</strong> exported 1,204 rows from <code>analytics_main</code></p><span class="odl-meta"><span class="odl-ip">198.51.100.23</span><span>CSV</span></span><time>09:58</time></li>
   </ol>
 </div></section>

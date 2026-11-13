@@ -35,13 +35,15 @@
 }
 /* the hidden full template item (data-od-template) stays out of sight in the static file */
 .odl-toast-stack [hidden] { display: none !important; }
+/* a renderer's "nothing to show" row spans the whole toast */
+.odl-toast-stack li.od-empty { display: block; color: var(--ds-color-text-secondary); }
 @media (prefers-reduced-motion: reduce) { .odl-toast-stack, .odl-toast-stack *, .odl-toast-stack *::before { transition: none !important; animation: none !important; } }
 </style>
 <ol class="odl-toast-stack" aria-label="Notifications" data-od-list="toasts">
   <li data-od-item data-od-template hidden data-od-var="kind" data-kind="ok" role="status">
     <svg class="odl-icon" data-od-when="kind=ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg><svg class="odl-icon" data-od-when="kind=busy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg><svg class="odl-icon" data-od-when="kind=error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
     <p><span data-od-slot="message"></span><small data-od-slot="detail" data-od-optional></small><span class="odl-progress" data-od-measure="progress" data-od-optional aria-hidden="true"></span></p>
-    <span class="odl-acts"><button type="button" class="odl-act" data-od-action="action" data-od-optional></button><button type="button" class="odl-close" aria-label="Dismiss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
+    <span class="odl-acts"><button type="button" class="odl-act" data-od-action="action" ></button><button type="button" class="odl-close" aria-label="Dismiss" data-od-action="dismiss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
   </li>
   <li data-od-item data-kind="ok" role="status">
     <svg class="odl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>

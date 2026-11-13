@@ -58,7 +58,7 @@
       "error": {"status": "not_built", "how": "if prices cannot load, leave price out and say why in the note"},
       "disabled": {"status": "shown", "how": "a Choose button for a sold-out option is disabled and dimmed", "evidence": ".odl-choose:disabled"},
       "overflow": {"status": "handled", "how": "on a phone each attribute name moves above its values; four options scroll sideways in their own box", "evidence": "overflow-x: auto"},
-      "long_text": {"status": "handled", "how": "names, values and labels wrap inside their column; the badge stays on one line with an ellipsis", "evidence": "overflow-wrap: anywhere"}
+      "long_text": {"status": "handled", "how": "names, values, labels and the badge wrap inside their column", "evidence": "overflow-wrap: anywhere"}
     },
     "keyboard": ["Tab moves through the Choose buttons, one per option, left to right", "Enter or Space presses one"]
   }

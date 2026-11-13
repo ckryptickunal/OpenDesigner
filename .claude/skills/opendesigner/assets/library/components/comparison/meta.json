@@ -1,0 +1,65 @@
+{
+  "name": "Comparison",
+  "summary": "Two to four options side by side: each with its name, price and a Choose button, then one row per attribute so the differences line up.",
+  "use": "when someone is choosing between a few fares, plans or memberships and wants the differences in one view",
+  "type": "commerce",
+  "style": "quiet",
+  "industries": ["travel", "retail", "saas", "money", "any"],
+  "tags": ["compare", "options", "plans", "fares", "side by side"],
+  "states": ["recommended option", "included", "not included", "hover", "focus", "disabled", "scrolls sideways on a phone"],
+  "source": null,
+  "a11y": "A table with a column header per option and a row header per attribute, so each value is read with both; ticks and crosses are decorative and the value is always in words; each Choose button is named with its option.",
+  "width": "medium",
+  "spec": {
+    "use_when": ["two to four options of the same kind that differ on a few named attributes, such as fare types or plan tiers"],
+    "avoid_when": ["more than four options or a long list to browse: use result-list", "one item and its details: use product-card", "options that only need a name to pick from: use quick-replies"],
+    "parts": [
+      {"name": "title", "selector": ".odl-comparison h3", "what": "what is being compared", "slot": "text"},
+      {"name": "note", "selector": ".odl-note", "what": "one line of context: route and date, or who it is for", "slot": "text"},
+      {"name": "options", "selector": ".odl-head > .odl-opt", "what": "one option's column header", "slot": "list"},
+      {"name": "name", "selector": ".odl-name", "what": "the option's name", "slot": "text"},
+      {"name": "badge", "selector": ".odl-badge", "what": "a short badge on the recommended option, which also gets the accent button", "slot": "text"},
+      {"name": "price", "selector": ".odl-price", "what": "the price or headline value", "slot": "text"},
+      {"name": "price_note", "selector": ".odl-per", "what": "what the price covers, such as 'per person'", "slot": "text"},
+      {"name": "choose", "selector": ".odl-choose", "what": "picks this option", "slot": "action"},
+      {"name": "rows", "selector": ".odl-row", "what": "one attribute, with a value per option", "slot": "list"},
+      {"name": "label", "selector": ".odl-label", "what": "the attribute's name", "slot": "text"},
+      {"name": "values", "selector": ".odl-val", "what": "one value, in the same order as the options", "slot": "list"},
+      {"name": "value", "selector": ".odl-cell", "what": "the value in words, with a tick or a cross when it is a yes or no", "slot": "text"}
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "options", "rows"],
+      "properties": {
+        "title": {"type": "string", "maxLength": 40, "part": "title"},
+        "note": {"type": "string", "maxLength": 80, "part": "note"},
+        "options": {"type": "array", "minItems": 2, "maxItems": 4, "part": "options",
+          "items": {"type": "object", "required": ["name", "choose"], "properties": {
+            "name": {"type": "string", "maxLength": 24, "part": "name"},
+            "badge": {"type": "string", "maxLength": 18, "part": "badge"},
+            "price": {"type": "string", "maxLength": 14, "part": "price"},
+            "price_note": {"type": "string", "maxLength": 24, "part": "price_note"},
+            "choose": {"type": "object", "part": "choose", "properties": {"label": {"type": "string", "maxLength": 40}, "event": {"type": "object"}}, "required": ["label", "event"]}
+          }}},
+        "rows": {"type": "array", "minItems": 1, "maxItems": 10, "part": "rows",
+          "items": {"type": "object", "required": ["label", "values"], "properties": {
+            "label": {"type": "string", "maxLength": 32, "part": "label"},
+            "values": {"type": "array", "minItems": 1, "maxItems": 4, "part": "values",
+              "items": {"type": "object", "required": ["value"], "properties": {
+                "value": {"type": "string", "maxLength": 40, "part": "value"},
+                "mark": {"type": "string", "enum": ["none", "yes", "no"], "part": "value"}
+              }}}
+          }}}
+      }
+    },
+    "edge": {
+      "empty": {"status": "not_built", "how": "with fewer than two options there is nothing to compare: answer in text, or use product-card for one"},
+      "loading": {"status": "not_built", "how": "keep the column headers and fill names, prices and values with muted blocks of their height"},
+      "error": {"status": "not_built", "how": "if prices cannot load, leave price out and say why in the note"},
+      "disabled": {"status": "shown", "how": "a Choose button for a sold-out option is disabled and dimmed", "evidence": ".odl-choose:disabled"},
+      "overflow": {"status": "handled", "how": "on a phone each attribute name moves above its values; four options scroll sideways in their own box", "evidence": "overflow-x: auto"},
+      "long_text": {"status": "handled", "how": "names, values, labels and the badge wrap inside their column", "evidence": "overflow-wrap: anywhere"}
+    },
+    "keyboard": ["Tab moves through the Choose buttons, one per option, left to right", "Enter or Space presses one"]
+  }
+}

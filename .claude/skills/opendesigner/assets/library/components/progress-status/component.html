@@ -1,0 +1,89 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-progress-status { box-sizing: border-box; inline-size: 100%; max-inline-size: 30rem; margin-inline: auto; container-type: inline-size; text-wrap: pretty; }
+.odl-progress-status *, .odl-progress-status *::before, .odl-progress-status *::after { box-sizing: border-box; }
+.odl-progress-status .odl-card { display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); }
+.odl-progress-status .odl-head { display: grid; justify-items: start; gap: var(--ds-space-stack-sm); }
+.odl-progress-status h3 { margin: 0; font: var(--ds-text-title-md); overflow-wrap: anywhere; }
+
+/* The status line: a tinted pill whose colour and icon follow the tone. */
+.odl-progress-status .odl-status { display: inline-flex; align-items: center; gap: var(--ds-space-inline-sm); max-inline-size: 100%; margin: 0; padding: var(--ds-space-inset-xs) var(--ds-space-inset-sm);
+  border-radius: var(--ds-radius-control-sm); font: var(--ds-text-label-lg); overflow-wrap: anywhere; }
+.odl-progress-status .odl-status svg { flex: none; display: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); stroke-linecap: round; stroke-linejoin: round; }
+.odl-progress-status .odl-status[data-tone="neutral"] { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
+.odl-progress-status .odl-status[data-tone="info"] { background: var(--ds-color-bg-info-subtle); color: var(--ds-color-text-info); }
+.odl-progress-status .odl-status[data-tone="success"] { background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); }
+.odl-progress-status .odl-status[data-tone="warning"] { background: var(--ds-color-bg-warning-subtle); color: var(--ds-color-text-warning); }
+.odl-progress-status .odl-status[data-tone="danger"] { background: var(--ds-color-bg-danger-subtle); color: var(--ds-color-text-danger); }
+.odl-progress-status .odl-status[data-tone="neutral"] .odl-i-neutral, .odl-progress-status .odl-status[data-tone="info"] .odl-i-info,
+.odl-progress-status .odl-status[data-tone="success"] .odl-i-success, .odl-progress-status .odl-status[data-tone="warning"] .odl-i-warning,
+.odl-progress-status .odl-status[data-tone="danger"] .odl-i-danger { display: block; }
+
+.odl-progress-status .odl-progress { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-inline-md); }
+.odl-progress-status .odl-track { block-size: var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); overflow: hidden; }
+.odl-progress-status .odl-track i { display: block; block-size: 100%; inline-size: calc(var(--od-ratio, 0.5) * 100%); border-radius: inherit; background: var(--ds-color-bg-accent-bold); }
+.odl-progress-status .odl-pct { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* Steps: a line of markers, done ones checked, the current one ringed. */
+.odl-progress-status [hidden] { display: none !important; }
+.odl-progress-status .odl-steps { display: grid; margin: 0; padding: 0; list-style: none; }
+.odl-progress-status .odl-steps li { position: relative; display: grid; grid-template-columns: var(--ds-size-icon-md) minmax(0, 1fr); column-gap: var(--ds-space-inline-md); align-items: start;
+  padding-block-end: var(--ds-space-stack-md); }
+.odl-progress-status .odl-steps li:last-child { padding-block-end: 0; }
+.odl-progress-status .odl-steps li:not(:last-child)::after { content: ""; position: absolute; inset-block: calc(var(--ds-size-icon-md) + var(--ds-space-2)) var(--ds-space-2);
+  inset-inline-start: calc(var(--ds-size-icon-md) / 2 - var(--ds-border-width-emphasis) / 2); border-inline-start: var(--ds-border-width-emphasis) solid var(--ds-color-border-subtle); }
+.odl-progress-status .odl-steps li:has(> [data-state="done"]):not(:last-child)::after { border-inline-start-color: var(--ds-color-bg-accent-bold); }
+.odl-progress-status .odl-mark { display: grid; place-items: center; inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); border-radius: var(--ds-radius-full);
+  border: var(--ds-border-width-emphasis) solid var(--ds-color-border-strong); background: var(--ds-color-surface-raised); color: var(--ds-color-text-on-accent); }
+.odl-progress-status .odl-mark svg { display: none; inline-size: 80%; block-size: 80%; fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-lg); stroke-linecap: round; stroke-linejoin: round; }
+.odl-progress-status .odl-mark[data-state="done"] { border-color: var(--ds-color-bg-accent-bold); background: var(--ds-color-bg-accent-bold); }
+.odl-progress-status .odl-mark[data-state="done"] svg { display: block; }
+.odl-progress-status .odl-mark[data-state="now"] { border-color: var(--ds-color-bg-accent-bold); }
+.odl-progress-status .odl-mark[data-state="now"]::before { content: ""; inline-size: 40%; block-size: 40%; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-bold); }
+.odl-progress-status .odl-text { display: grid; gap: var(--ds-space-2); min-inline-size: 0; padding-block-start: var(--ds-space-2); }
+.odl-progress-status .odl-label { overflow-wrap: anywhere; }
+.odl-progress-status li:has(> [data-state="next"]) .odl-label { color: var(--ds-color-text-secondary); }
+.odl-progress-status li:has(> [data-state="now"]) .odl-label { font-weight: var(--ds-font-weight-heading); }
+.odl-progress-status .odl-time { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.odl-progress-status .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-progress-status .odl-updated { margin: 0; padding-block-start: var(--ds-space-stack-md); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
+  color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); overflow-wrap: anywhere; }
+
+@container (max-width: 26rem) {
+  .odl-progress-status .odl-card { padding: var(--ds-space-inset-lg); gap: var(--ds-space-stack-md); }
+}
+</style>
+<section class="odl-progress-status" aria-label="Refund for order 30418" data-od-label="title">
+  <div class="odl-card">
+    <div class="odl-head">
+      <h3 data-od-slot="title">Refund for order 30418</h3>
+      <p class="odl-status" data-od-var="tone" data-tone="info">
+        <svg class="odl-i-neutral" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <svg class="odl-i-info" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        <svg class="odl-i-success" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+        <svg class="odl-i-warning" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+        <svg class="odl-i-danger" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>
+        <span data-od-slot="status">With your bank, due by Nov 18</span>
+      </p>
+    </div>
+    <div class="odl-progress" data-od-optional>
+      <div class="odl-track" aria-hidden="true"><i data-od-measure="progress" style="--od-ratio: 0.66"></i></div>
+      <span class="odl-pct"><span data-od-slot="progress">66</span>% done</span>
+    </div>
+    <ol class="odl-steps" aria-label="Steps" data-od-list="steps">
+      <li data-od-item data-od-template hidden><span class="odl-mark" aria-hidden="true" data-od-var="state" data-state="next"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <span class="odl-text"><span class="odl-label"><span class="odl-sr" data-od-when="state=done">Done: </span><span class="odl-sr" data-od-when="state=now">Now: </span><span class="odl-sr" data-od-when="state=next">Next: </span><span data-od-slot="label"></span></span><span class="odl-time" data-od-slot="time" data-od-optional></span></span></li>
+      <li data-od-item><span class="odl-mark" aria-hidden="true" data-state="done"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <span class="odl-text"><span class="odl-label"><span class="odl-sr">Done: </span>Return received at the warehouse</span><span class="odl-time">Nov 6, 14:12</span></span></li>
+      <li data-od-item><span class="odl-mark" aria-hidden="true" data-state="done"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <span class="odl-text"><span class="odl-label"><span class="odl-sr">Done: </span>Refund approved, $84.50 to your card ending 4417</span><span class="odl-time">Nov 7, 09:30</span></span></li>
+      <li data-od-item><span class="odl-mark" aria-hidden="true" data-state="now"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <span class="odl-text"><span class="odl-label"><span class="odl-sr">Now: </span>Your bank is processing it</span><span class="odl-time">Usually 3 to 5 working days</span></span></li>
+      <li data-od-item><span class="odl-mark" aria-hidden="true" data-state="next"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <span class="odl-text"><span class="odl-label"><span class="odl-sr">Next: </span>Money back in your account</span></span></li>
+    </ol>
+    <p class="odl-updated" data-od-slot="updated" data-od-optional>Updated today at 10:42</p>
+  </div>
+</section>

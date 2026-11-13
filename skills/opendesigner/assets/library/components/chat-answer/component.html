@@ -58,7 +58,8 @@
   .odl-chat-answer .odl-pages { grid-column: 2; margin-block-start: calc(-1 * var(--ds-space-stack-sm)); }
 }
 @media (prefers-reduced-motion: reduce) { .odl-chat-answer, .odl-chat-answer *, .odl-chat-answer *::before { transition: none !important; animation: none !important; } }
-.odl-chat-answer [data-od-template] { display: none; }
+.odl-chat-answer .odl-cites > .od-empty, .odl-chat-answer .odl-who .od-empty { display: none; } /* a renderer's "nothing yet" line where an empty list should simply show nothing */
+.odl-chat-answer [hidden] { display: none; }
 </style>
 <section class="odl-chat-answer" aria-label="Answer about dredging on the sands" data-od-label="question">
   <div class="odl-thread">
@@ -68,7 +69,7 @@
       <div class="odl-main">
         <p class="odl-who"><b data-od-slot="assistant">Saxifrage</b><span style="display: contents" data-od-list="byline"><span data-od-item><span data-od-slot="text">Careful reading · 2 sources</span></span><span data-od-item>Answered in 14 s</span></span></p>
         <div class="odl-text" data-od-list="answer">
-          <p data-od-item data-od-template hidden><span data-od-slot="text"></span><span data-od-list="cites"><a class="odl-cite" href="#" data-od-item><span data-od-slot="number"></span></a></span></p>
+          <p data-od-item data-od-template hidden><span data-od-slot="text"></span><span class="odl-cites" data-od-list="cites"><a class="odl-cite" href="#" data-od-item><span data-od-slot="number"></span></a></span></p>
           <p data-od-item>The board licensed dredging on the east sands twice in the 1950s. It granted two licences on 12 March 1953
             and renewed them for four boats on 9 May <span class="odl-nw">1958.<a class="odl-cite" href="#sands-src-1" data-src="1" aria-label="Source 1, pages 14 and 141">1</a></span></p>
           <p data-od-item>In between, the cockle beds were closed: the minute of 3 October 1956 says so, and the pier master turned two boats away that same <span class="odl-nw">week.<a class="odl-cite" href="#sands-src-2" data-src="2" aria-label="Source 2, page 41">2</a></span>

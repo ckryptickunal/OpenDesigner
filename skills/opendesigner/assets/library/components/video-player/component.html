@@ -62,7 +62,7 @@
 .odl-video-player .odl-sub { grid-column: 1 / -1; max-inline-size: 40rem; margin: var(--ds-space-stack-sm) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-md); }
 .odl-video-player .odl-tag { grid-row: 2; grid-column: 2; align-self: center; padding: var(--ds-space-2) var(--ds-space-8); border: var(--ds-border-width-default) solid var(--ds-color-border-default);
   border-radius: var(--ds-radius-control-sm); color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); white-space: nowrap; }
-.odl-video-player .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.odl-video-player .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; clip-path: inset(50%); white-space: nowrap; }
 /* Phone: a taller 4:3 frame gives the caption and controls room; the device sets the volume and a double tap skips, so those controls go. */
 @container (max-width: 34rem) {
   .odl-video-player .odl-frame { aspect-ratio: 4 / 3; }
@@ -76,12 +76,12 @@
 }
 @media (prefers-reduced-motion: reduce) { .odl-video-player, .odl-video-player *, .odl-video-player *::before, .odl-video-player *::after { transition: none !important; animation: none !important; } }
 </style>
-<section class="odl-video-player" aria-label="Video player: Snowmelt">
+<section class="odl-video-player" aria-label="Video player: Snowmelt" data-od-label="title">
   <div class="odl-frame has-cc">
-    <img class="odl-poster" src="https://images.unsplash.com/photo-1559310589-2673bfe16970?w=1472&h=828&fit=crop&auto=format&q=70" alt="Turquoise lake below snowy mountains" width="1472" height="828" loading="lazy" decoding="async">
+    <img class="odl-poster" data-od-media="poster" src="https://images.unsplash.com/photo-1559310589-2673bfe16970?w=1472&h=828&fit=crop&auto=format&q=70" alt="Turquoise lake below snowy mountains" width="1472" height="828" loading="lazy" decoding="async">
     <div class="odl-layer">
     <div class="odl-center"><button type="button" class="odl-big" aria-label="Play Snowmelt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div>
-    <p class="odl-caption" aria-live="off"><span>Down here, the river already sounds different.</span></p>
+    <p class="odl-caption" aria-live="off" hidden><span></span></p>
     <div class="odl-bar">
       <input class="odl-scrub" type="range" min="0" max="1120" step="1" value="252" aria-label="Seek" aria-valuetext="4 minutes 12 seconds of 18 minutes 40 seconds">
       <div class="odl-row">
@@ -98,10 +98,14 @@
     </div>
   </div>
   <div class="odl-info">
-    <p class="odl-eyebrow">Field Notes from the Ridge · Episode 4</p>
-    <span class="odl-tag">CC · 4K</span>
-    <h3>Snowmelt</h3>
-    <p class="odl-sub">Teodor Okonjo follows one valley's water from the first trickle to the lake below. 18 min.</p>
+    <p class="odl-eyebrow" data-od-slot="eyebrow" data-od-optional>Field Notes from the Ridge · Episode 4</p>
+    <span class="odl-tag" data-od-slot="tag" data-od-optional>CC · 4K</span>
+    <h3 data-od-slot="title">Snowmelt</h3>
+    <p class="odl-sub" data-od-slot="summary" data-od-optional>Teodor Okonjo follows one valley's water from the first trickle to the lake below. 18 min.</p>
+  </div>
+  <div class="odl-data" hidden><!-- what the player starts from: read by the script below, never shown -->
+    <span class="odl-duration" data-od-slot="duration">1120</span><span class="odl-position" data-od-slot="position" data-od-optional>252</span><span class="odl-buffered" data-od-slot="buffered" data-od-optional>420</span><span class="odl-volume" data-od-slot="volume" data-od-optional>80</span>
+    <ol class="odl-cues" data-od-list="cues"><li data-od-item><span class="odl-at" data-od-slot="at">240</span> <span class="odl-text" data-od-slot="text">The snow line moved forty metres up the valley this week.</span></li><li data-od-item><span class="odl-at">252</span> <span class="odl-text">Down here, the river already sounds different.</span></li><li data-od-item><span class="odl-at">266</span> <span class="odl-text">Louder. Faster. Colder than you would think.</span></li><li data-od-item><span class="odl-at">280</span> <span class="odl-text">We follow it from the first trickle to the lake.</span></li><li data-od-item><span class="odl-at">296</span> <span class="odl-text">It takes the water eleven hours.</span></li></ol>
   </div>
 </section>
 <script>
@@ -111,13 +115,20 @@ document.querySelectorAll(".odl-video-player").forEach((root) => {
   const frame = root.querySelector(".odl-frame"), seek = root.querySelector(".odl-scrub"), now = root.querySelector(".odl-now");
   const play = root.querySelector(".odl-play"), big = root.querySelector(".odl-big"), cap = root.querySelector(".odl-caption span");
   const cc = root.querySelector(".odl-cc"), mute = root.querySelector(".odl-mute"), vol = root.querySelector(".odl-vol"), full = root.querySelector(".odl-full");
-  const total = Number(seek.max);
-  const cues = [[240, "The snow line moved forty metres up the valley this week."], [252, "Down here, the river already sounds different."],
-    [266, "Louder. Faster. Colder than you would think."], [280, "We follow it from the first trickle to the lake."], [296, "It takes the water eleven hours."]];
+  // the starting values and the captions live in the hidden .odl-data block, so data can replace them
+  const num = (el) => { const n = parseInt((el ? el.textContent : "").replace(/[^0-9]/g, ""), 10); return Number.isFinite(n) ? n : null; };
+  const pick = (c) => num(root.querySelector(".odl-data .odl-" + c));
+  const total = pick("duration") || Number(seek.max), title = root.querySelector("h3").textContent;
+  seek.max = String(total);
+  seek.value = String(Math.min(total, pick("position") ?? Number(seek.value)));
+  if (pick("volume") !== null) vol.value = String(Math.min(100, pick("volume")));
+  root.querySelector(".odl-time span:last-child").textContent = "/ " + `${Math.floor(total / 60)}:${String(total % 60).padStart(2, "0")}`;
+  big.setAttribute("aria-label", `Play ${title}`);
+  const cues = [...root.querySelectorAll(".odl-cues > li:not(.od-empty)")].map((li) => [num(li.querySelector(".odl-at")), li.querySelector(".odl-text").textContent]).filter(([t]) => t !== null);
   const clock = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
   const unit = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
   const spoken = (s) => `${unit(Math.floor(s / 60), "minute")} ${unit(s % 60, "second")}`;
-  let timer = null, buffered = 420;
+  let timer = null, buffered = pick("buffered") ?? 0;
   const show = () => {
     const s = Number(seek.value);
     buffered = Math.min(total, Math.max(buffered, s + 90));

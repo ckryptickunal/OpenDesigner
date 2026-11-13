@@ -24,7 +24,6 @@
 .odl-error-retry .odl-retry:hover { background: var(--ds-color-bg-action-primary-hover); }
 .odl-error-retry .odl-other { border: var(--ds-border-width-default) solid var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
 .odl-error-retry .odl-other:hover { background: var(--ds-color-bg-neutral-subtle); }
-.odl-error-retry button:disabled { cursor: progress; background: var(--ds-color-bg-disabled); border-color: transparent; color: var(--ds-color-text-disabled); }
 .odl-error-retry button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 /* Phone: the icon sits above the words, and the buttons take the full width. */
 @container (max-width: 26rem) {
@@ -32,6 +31,8 @@
   .odl-error-retry .odl-acts { grid-column: 1; }
   .odl-error-retry button { flex: 1 1 100%; }
 }
+/* Disabled or still loading: quiet but readable (AA), never the faint disabled pair. */
+.odl-error-retry button:disabled { cursor: not-allowed; background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); }
 @media (prefers-reduced-motion: reduce) { .odl-error-retry, .odl-error-retry *, .odl-error-retry *::before { transition: none !important; animation: none !important; } }
 </style>
 <section class="odl-error-retry" aria-labelledby="odl-er-title"><div class="odl-card">

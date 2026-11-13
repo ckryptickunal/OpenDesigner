@@ -1,0 +1,39 @@
+{
+ "title": "Lakeside cabin",
+ "summary": "18° inside · garage door closed",
+ "rooms": [
+  {
+   "id": "lounge",
+   "name": "Lounge",
+   "count": 2
+  },
+  {
+   "id": "study",
+   "name": "Study",
+   "count": 1
+  },
+  {
+   "id": "garage",
+   "name": "Garage",
+   "count": 1
+  }
+ ],
+ "thermostat_name": "Heat pump",
+ "thermostat_detail": "Lounge · now 17.6°",
+ "thermostat_target": 19,
+ "thermostat_mode": "Heating",
+ "devices": [
+  {
+   "name": "Reading lamp",
+   "room": "lounge"
+  },
+  {
+   "name": "Desk light",
+   "room": "study"
+  },
+  {
+   "name": "Garage door",
+   "room": "garage"
+  }
+ ]
+}

@@ -20,6 +20,8 @@
 @container (max-width: 26rem) {
   .odl-image-card figcaption { grid-template-columns: minmax(0, 1fr); padding: var(--ds-space-inset-md) var(--ds-space-inset-lg) var(--ds-space-inset-lg); }
 }
+/* Disabled or still loading: quiet but readable (AA), never the faint disabled pair. */
+.odl-image-card button:disabled { cursor: not-allowed; background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); }
 @media (prefers-reduced-motion: reduce) { .odl-image-card, .odl-image-card *, .odl-image-card *::before { transition: none !important; animation: none !important; } }
 </style>
 <figure class="odl-image-card">

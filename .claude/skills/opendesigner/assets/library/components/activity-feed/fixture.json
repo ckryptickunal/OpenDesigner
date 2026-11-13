@@ -1,0 +1,52 @@
+{
+ "title": "Recent activity",
+ "label": "Activity on Harrowgate Freight",
+ "events": [
+  {
+   "actor": "Ines Okonkwo-Lund",
+   "avatar": {
+    "src": "https://images.unsplash.com/photo-1611432579699-484f7990b127?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Ines Okonkwo-Lund"
+   },
+   "kind": "edit",
+   "action": "updated 2 fields on",
+   "target": "Northern depot renewal",
+   "time": "Today, 09:02",
+   "changes": [
+    {
+     "field": "Contract term",
+     "from": "12 months",
+     "to": "24 months"
+    },
+    {
+     "field": "Annual value",
+     "from": "$31,200.00",
+     "to": "$58,800.00",
+     "delta": "+$27,600"
+    }
+   ]
+  },
+  {
+   "actor": "Tomasz Brennan",
+   "kind": "email",
+   "action": "sent a reply about",
+   "target": "Pallet pricing",
+   "time": "Tue, 14:20",
+   "quote": "Finance wants the volume discount written into the order form before Friday.",
+   "avatar": {
+    "src": "https://images.unsplash.com/photo-1605980776566-0486c3ac7617?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Tomasz Brennan"
+   }
+  },
+  {
+   "actor": "Tomasz Brennan",
+   "avatar": {
+    "src": "https://images.unsplash.com/photo-1605980776566-0486c3ac7617?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Tomasz Brennan"
+   },
+   "kind": "call",
+   "action": "logged a 20-minute call",
+   "time": "Tue, 10:45"
+  }
+ ]
+}

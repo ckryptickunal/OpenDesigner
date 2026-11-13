@@ -17,8 +17,8 @@
 .odl-sign-in-form .odl-control:has(input:focus-visible) { border-color: var(--ds-color-border-focus); box-shadow: 0 0 0 var(--ds-border-width-default) var(--ds-color-border-focus); }
 .odl-sign-in-form .odl-control input { flex: 1; min-inline-size: 0; align-self: stretch; padding: 0 var(--ds-space-inset-md); border: 0; background: transparent; color: inherit; font: var(--ds-text-body-md); outline: none; }
 .odl-sign-in-form .odl-control input::placeholder { color: var(--ds-color-text-tertiary); }
-.odl-sign-in-form .odl-field.is-invalid .odl-control { border-color: var(--ds-color-border-danger); }
-.odl-sign-in-form .odl-field.is-invalid .odl-control:has(input:focus-visible) { box-shadow: 0 0 0 var(--ds-border-width-default) var(--ds-color-border-danger); }
+.odl-sign-in-form .odl-field:has(> .odl-error) .odl-control { border-color: var(--ds-color-border-danger); }
+.odl-sign-in-form .odl-field:has(> .odl-error) .odl-control:has(input:focus-visible) { box-shadow: 0 0 0 var(--ds-border-width-default) var(--ds-color-border-danger); }
 .odl-sign-in-form .odl-error { display: flex; gap: var(--ds-space-inline-sm); margin: 0; color: var(--ds-color-text-danger); font: var(--ds-text-label-md); }
 .odl-sign-in-form .odl-error svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); margin-block-start: var(--ds-space-2); }
 .odl-sign-in-form .odl-reveal { flex: none; display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); align-self: stretch; min-inline-size: max(var(--ds-size-control-sm), var(--ds-size-target-min));
@@ -53,26 +53,26 @@
 </style>
 <section class="odl-sign-in-form" aria-labelledby="odl-sif-title">
   <div class="odl-head">
-    <h2 id="odl-sif-title">Sign in to Oskarby Analytics</h2>
-    <p>Use the work email your admin invited.</p>
+    <h2 id="odl-sif-title" data-od-slot="title">Sign in to Oskarby Analytics</h2>
+    <p data-od-slot="hint" data-od-optional>Use the work email your admin invited.</p>
   </div>
   <form novalidate>
     <div class="odl-field">
-      <label for="odl-sif-email">Work email</label>
+      <label for="odl-sif-email" data-od-slot="email_label">Work email</label>
       <div class="odl-control"><input id="odl-sif-email" type="email" autocomplete="username" value="jonas.ekdahl@oskarby.example" required></div>
     </div>
     <div class="odl-field is-invalid">
-      <div class="odl-label-row"><label for="odl-sif-pass">Password</label><a href="#odl-sif-title">Forgot password?</a></div>
+      <div class="odl-label-row"><label for="odl-sif-pass" data-od-slot="password_label">Password</label><a href="#odl-sif-title" data-od-slot="forgot_label" data-od-optional>Forgot password?</a></div>
       <div class="odl-control"><input id="odl-sif-pass" type="password" autocomplete="current-password" value="winter-ledger-26" aria-invalid="true" aria-describedby="odl-sif-err" required>
         <button type="button" class="odl-reveal" aria-pressed="false" aria-controls="odl-sif-pass"><svg class="odl-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg><svg class="odl-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/></svg><span>Show</span></button></div>
-      <p class="odl-error" id="odl-sif-err"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span>That password does not match this email. 2 tries left before a 15-minute pause.</span></p>
+      <p class="odl-error" id="odl-sif-err" data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span data-od-slot="error">That password does not match this email. 2 tries left before a 15-minute pause.</span></p>
     </div>
-    <label class="odl-check"><input type="checkbox" checked><span>Remember this device <small>for 30 days</small></span></label>
-    <button type="submit" class="odl-btn odl-primary">Sign in</button>
+    <label class="odl-check"><input type="checkbox" checked><span><span data-od-slot="remember_label">Remember this device</span> <small data-od-slot="remember_note" data-od-optional>for 30 days</small></span></label>
+    <button type="submit" class="odl-btn odl-primary" data-od-slot="submit_label">Sign in</button>
   </form>
   <div class="odl-divider" role="separator">or</div>
-  <button type="button" class="odl-btn odl-secondary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg>Continue with single sign-on</button>
-  <p class="odl-foot">New to the team? <a href="#odl-sif-title">Ask an admin for an invite</a></p>
+  <button type="button" class="odl-btn odl-secondary" data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg><span data-od-slot="sso_label">Continue with single sign-on</span></button>
+  <p class="odl-foot" data-od-optional><span data-od-slot="foot_text">New to the team?</span> <a href="#odl-sif-title" data-od-slot="foot_link">Ask an admin for an invite</a></p>
 </section>
 <script>
 document.querySelectorAll(".odl-sign-in-form").forEach((root) => {

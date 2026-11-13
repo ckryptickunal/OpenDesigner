@@ -1,0 +1,9 @@
+{"workspace_initial": "M", "workspace_name": "Marlow Street Clinic", "workspace_detail": "Team · 12 members",
+ "search_label": "Find",
+ "sections": [
+  {"items": [{"label": "Today"}, {"label": "Messages", "count": 6, "count_label": "6 unread"}]},
+  {"heading": "Patients", "items": [{"label": "Appointments", "count": 18, "count_label": "18 today"}, {"label": "Records"}, {"label": "Referrals", "count": 2, "count_label": "2 waiting"}]},
+  {"heading": "Admin", "items": [{"label": "Rota"}, {"label": "Invoices"}]}
+ ],
+ "person_photo": {"src": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=64&h=64&fit=crop&auto=format&q=70", "alt": "Dr Adaeze Obi"},
+ "person_name": "Dr Adaeze Obi", "person_detail": "GP · online"}

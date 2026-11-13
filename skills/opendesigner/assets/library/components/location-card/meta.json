@@ -4,42 +4,152 @@
   "use": "when an answer is one place to go: a shop, a clinic, a restaurant or a pick-up point",
   "type": "content",
   "style": "quiet",
-  "industries": ["any"],
-  "tags": ["location", "address", "place", "map", "directions"],
-  "states": ["with distance", "with hours", "hover", "focus"],
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "location",
+    "address",
+    "place",
+    "map",
+    "directions"
+  ],
+  "states": [
+    "with distance",
+    "with hours",
+    "hover",
+    "focus",
+    "disabled"
+  ],
   "source": null,
   "a11y": "An article named by the place; the drawn map is decorative and hidden from screen readers, the address is an address element, and Open in maps is a real button.",
   "width": "narrow",
   "spec": {
-    "use_when": ["the person asked where something is, and one place with its address and hours answers it"],
-    "avoid_when": ["several places to compare or choose from: use result-list", "a photo of the place is the point: use image-card", "a route with steps or a live map is needed: hand off to a maps app with the Open in maps event"],
+    "use_when": [
+      "the person asked where something is, and one place with its address and hours answers it"
+    ],
+    "avoid_when": [
+      "several places to compare or choose from: use result-list",
+      "a photo of the place is the point: use image-card",
+      "a route with steps or a live map is needed: hand off to a maps app with the Open in maps event"
+    ],
     "parts": [
-      {"name": "map", "selector": ".odl-map", "what": "a drawn street pattern in the system's neutral colours with a pin; no map tiles", "slot": "none"},
-      {"name": "name", "selector": ".odl-location-card h3", "what": "the place's name", "slot": "text"},
-      {"name": "address", "selector": "address", "what": "the street line, then an optional postcode and town line", "slot": "text"},
-      {"name": "facts", "selector": ".odl-facts li", "what": "how far it is, and when it is open", "slot": "text"},
-      {"name": "open_maps", "selector": ".odl-location-card button", "what": "hands the place to a maps app as an event, never a URL", "slot": "action"}
+      {
+        "name": "map",
+        "selector": ".odl-map",
+        "what": "a drawn street pattern in the system's neutral colours with a pin; no map tiles",
+        "slot": "none"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-location-card h3",
+        "what": "the place's name",
+        "slot": "text"
+      },
+      {
+        "name": "address",
+        "selector": "address",
+        "what": "the street line, then an optional postcode and town line",
+        "slot": "text"
+      },
+      {
+        "name": "facts",
+        "selector": ".odl-facts li",
+        "what": "how far it is, and when it is open",
+        "slot": "text"
+      },
+      {
+        "name": "open_maps",
+        "selector": ".odl-location-card button",
+        "what": "hands the place to a maps app as an event, never a URL",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
-      "required": ["name", "address", "open_maps"],
+      "required": [
+        "name",
+        "address",
+        "open_maps"
+      ],
       "properties": {
-        "name": {"type": "string", "maxLength": 48, "part": "name"},
-        "address": {"type": "string", "maxLength": 80, "part": "address"},
-        "locality": {"type": "string", "maxLength": 60, "part": "address"},
-        "distance": {"type": "string", "maxLength": 40, "part": "facts"},
-        "hours": {"type": "string", "maxLength": 48, "part": "facts"},
-        "open_maps": {"type": "object", "part": "open_maps", "properties": {"label": {"type": "string", "maxLength": 40}, "event": {"type": "object"}}, "required": ["label", "event"]}
+        "name": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "name"
+        },
+        "address": {
+          "type": "string",
+          "maxLength": 80,
+          "part": "address"
+        },
+        "locality": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "address"
+        },
+        "distance": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "facts"
+        },
+        "hours": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "facts"
+        },
+        "open_maps": {
+          "type": "object",
+          "part": "open_maps",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "label",
+            "event"
+          ]
+        }
       }
     },
     "edge": {
-      "empty": {"status": "handled", "how": "with no distance and no hours the facts list is hidden", "evidence": ".odl-facts:not(:has(li)) { display: none; }"},
-      "loading": {"status": "not_built", "how": "show it once the place is known; the drawn map needs nothing to load"},
-      "error": {"status": "not_built", "how": "if the place cannot be found, say so in text or use error-retry"},
-      "disabled": {"status": "not_built", "how": "the one button has no disabled state"},
-      "overflow": {"status": "handled", "how": "on a phone the map gets taller and the button takes the full width", "evidence": "@container (max-width: 26rem)"},
-      "long_text": {"status": "handled", "how": "name, address and facts wrap, also long words", "evidence": "overflow-wrap: anywhere"}
+      "empty": {
+        "status": "handled",
+        "how": "with no distance and no hours the facts list is hidden",
+        "evidence": ".odl-facts:not(:has(li)) { display: none; }"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "show it once the place is known; the drawn map needs nothing to load"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the place cannot be found, say so in text or use error-retry"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "a disabled or still-loading button turns quiet neutral (secondary text on a subtle fill), still readable at AA",
+        "evidence": "button:disabled { cursor: not-allowed;"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "on a phone the map gets taller and the button takes the full width",
+        "evidence": "@container (max-width: 26rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "name, address and facts wrap, also long words",
+        "evidence": "overflow-wrap: anywhere"
+      }
     },
-    "keyboard": ["Tab reaches Open in maps", "Enter or Space presses it"]
+    "keyboard": [
+      "Tab reaches Open in maps",
+      "Enter or Space presses it"
+    ]
   }
 }

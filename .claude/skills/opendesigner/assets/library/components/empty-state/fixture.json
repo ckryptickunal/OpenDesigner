@@ -1,0 +1,3 @@
+{"label": "Orders", "title": "No orders waiting to ship", "body": "New orders from your shop appear here as soon as a customer pays.",
+ "primary": {"label": "Create an order", "event": {"name": "create_order"}},
+ "secondary": {"label": "View shipped orders", "event": {"name": "show_shipped"}}}

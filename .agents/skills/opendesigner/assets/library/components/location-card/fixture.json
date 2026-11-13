@@ -1,0 +1,3 @@
+{"name": "Northside Health Clinic", "address": "14 Larkfield Road, Unit 3", "locality": "Dublin D06 F2X7",
+ "distance": "2.4 km · 8 min by car", "hours": "Open now · closes 18:30",
+ "open_maps": {"label": "Get directions", "event": {"name": "open_maps", "context": {"place": "northside-clinic"}}}}

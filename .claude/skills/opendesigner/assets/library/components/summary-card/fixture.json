@@ -1,0 +1,9 @@
+{"kind": "Policy · travel",
+ "title": "Flexible fare",
+ "summary": "A ticket you can change or cancel up to two hours before departure without a fee. If the new trip costs more you pay the difference; if it costs less, the rest comes back as travel credit.",
+ "points": [
+  {"text": "Changes are free until two hours before the train leaves."},
+  {"text": "A cancelled ticket is refunded in full to the original card."},
+  {"text": "Travel credit lasts twelve months and works on any route."}
+ ],
+ "also_called": "open ticket, anytime fare"}

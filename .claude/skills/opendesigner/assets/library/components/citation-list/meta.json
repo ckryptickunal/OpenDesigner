@@ -1,0 +1,55 @@
+{
+  "name": "Citation list",
+  "summary": "Numbered sources on their own: title, publisher and date, a short excerpt where it helps, and a button to open each one.",
+  "use": "to list the sources behind an answer, or reading to follow up on",
+  "type": "content",
+  "style": "editorial",
+  "industries": ["education", "media", "productivity", "any"],
+  "tags": ["sources", "references", "citations", "reading list"],
+  "states": ["with excerpt", "without date", "hover", "focus", "button under the text on a phone"],
+  "source": null,
+  "a11y": "An ordered list, so each source is read with its number; every Open button is named with its source's title.",
+  "width": "medium",
+  "spec": {
+    "use_when": ["the person asks where an answer came from, or for sources or further reading on a topic"],
+    "avoid_when": ["an answer with its sources: use answer-sources", "files the person can download: use file-card", "search results to choose from: use result-list"],
+    "parts": [
+      {"name": "title", "selector": "h3", "what": "a heading for the list, such as Sources or Further reading", "slot": "text"},
+      {"name": "items", "selector": "li", "what": "one numbered source", "slot": "list"},
+      {"name": "item_title", "selector": ".odl-src-title", "what": "the source's title", "slot": "text"},
+      {"name": "publisher", "selector": ".odl-meta", "what": "who published it, as plain text", "slot": "text"},
+      {"name": "date", "selector": ".odl-date", "what": "when it was published or updated", "slot": "text"},
+      {"name": "excerpt", "selector": ".odl-excerpt", "what": "a short passage from the source that matters here", "slot": "text"},
+      {"name": "open", "selector": ".odl-open", "what": "opens the source; the host decides where (no raw URL in the data)", "slot": "action"}
+    ],
+    "data": {
+      "type": "object",
+      "required": ["items"],
+      "properties": {
+        "title": {"type": "string", "maxLength": 40, "part": "title"},
+        "items": {
+          "type": "array", "minItems": 1, "maxItems": 10, "part": "items",
+          "items": {
+            "type": "object", "required": ["title", "publisher"],
+            "properties": {
+              "title": {"type": "string", "maxLength": 100, "part": "item_title"},
+              "publisher": {"type": "string", "maxLength": 60, "part": "publisher"},
+              "date": {"type": "string", "maxLength": 24, "part": "date"},
+              "excerpt": {"type": "string", "maxLength": 240, "part": "excerpt"},
+              "open": {"type": "object", "properties": {"label": {"type": "string", "maxLength": 40}, "event": {"type": "object"}}, "required": ["label", "event"], "part": "open"}
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {"status": "not_built", "how": "with no sources, say so in plain text instead of this part"},
+      "loading": {"status": "not_built", "how": "the renderer keeps two rows with muted blocks for title and publisher"},
+      "error": {"status": "not_built", "how": "a source that cannot be opened leaves out its open action"},
+      "disabled": {"status": "not_built", "how": "an item with no open action shows no button rather than a disabled one"},
+      "overflow": {"status": "handled", "how": "up to ten rows stack; on a phone the button moves under the text", "evidence": "@container (max-width: 28rem)"},
+      "long_text": {"status": "handled", "how": "titles, publishers and excerpts wrap, and long words break", "evidence": "overflow-wrap: anywhere"}
+    },
+    "keyboard": ["Tab moves from one Open button to the next", "Enter or Space presses it"]
+  }
+}

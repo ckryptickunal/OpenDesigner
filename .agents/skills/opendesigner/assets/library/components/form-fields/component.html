@@ -1,0 +1,136 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-form-fields { box-sizing: border-box; inline-size: 100%; max-inline-size: 30rem; margin-inline: auto; container-type: inline-size; display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl);
+  background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container);
+  box-shadow: var(--ds-elevation-raised); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-form-fields *, .odl-form-fields *::before { box-sizing: border-box; }
+.odl-form-fields header { display: grid; gap: var(--ds-space-stack-xs); }
+.odl-form-fields h3 { margin: 0; font: var(--ds-text-title-md); overflow-wrap: anywhere; }
+.odl-form-fields .odl-intro { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-md); overflow-wrap: anywhere; }
+.odl-form-fields .odl-fields { display: grid; gap: var(--ds-space-stack-lg); }
+.odl-form-fields .odl-field { display: grid; gap: var(--ds-space-stack-xs); min-inline-size: 0; }
+.odl-form-fields .odl-lab { display: grid; gap: var(--ds-space-stack-sm); min-inline-size: 0; }
+.odl-form-fields .odl-name { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--ds-space-inline-sm); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); overflow-wrap: anywhere; }
+.odl-form-fields .odl-opt { display: none; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-body); }
+.odl-form-fields .odl-field:not(:has(:required)):not(:has([role="switch"])) .odl-opt { display: inline; }
+.odl-form-fields .odl-input { inline-size: 100%; min-inline-size: 0; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); margin: 0; padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); color: var(--ds-color-text-primary);
+  font: var(--ds-text-body-md); font-variant-numeric: tabular-nums;
+  transition: border-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-form-fields .odl-input:hover { border-color: var(--ds-color-border-strong); }
+.odl-form-fields .odl-input:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); border-color: var(--ds-color-border-focus); }
+.odl-form-fields .odl-input[aria-invalid="true"] { border-color: var(--ds-color-border-danger); }
+.odl-form-fields .odl-input:disabled { cursor: not-allowed; background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); }
+.odl-form-fields .odl-sel { position: relative; display: grid; }
+.odl-form-fields .odl-sel select { appearance: none; -webkit-appearance: none; padding-inline-end: calc(var(--ds-space-inset-md) * 2 + var(--ds-size-icon-sm)); cursor: pointer; }
+.odl-form-fields .odl-sel svg { position: absolute; inset-inline-end: var(--ds-space-inset-md); inset-block-start: 50%; translate: 0 -50%; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm);
+  color: var(--ds-color-text-secondary); stroke-width: var(--ds-icon-stroke-md); pointer-events: none; }
+/* a toggle: its name on the left, the switch on the right, the whole row is the label */
+.odl-form-fields .odl-lab:has([role="switch"]) { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-inline-md); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); cursor: pointer; }
+.odl-form-fields [role="switch"] { appearance: none; -webkit-appearance: none; margin: 0; flex: none; position: relative; inline-size: calc(var(--ds-size-target-pointer) * 1.75); block-size: var(--ds-size-target-pointer);
+  border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); box-shadow: inset 0 0 0 var(--ds-border-width-default) var(--ds-color-border-strong); cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-form-fields [role="switch"]::before { content: ""; position: absolute; inset-block: var(--ds-space-2); inset-inline-start: var(--ds-space-2); aspect-ratio: 1; border-radius: var(--ds-radius-full);
+  background: var(--ds-color-surface-raised); box-shadow: var(--ds-elevation-raised); transition: transform var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-form-fields [role="switch"]:checked { background: var(--ds-color-bg-action-primary); box-shadow: none; }
+.odl-form-fields [role="switch"]:checked::before { transform: translateX(calc(var(--ds-size-target-pointer) * 0.75)); }
+.odl-form-fields [role="switch"]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-form-fields .odl-hint { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); overflow-wrap: anywhere; }
+.odl-form-fields .odl-error { display: flex; gap: var(--ds-space-inline-sm); margin: 0; color: var(--ds-color-text-danger); font: var(--ds-text-label-md); overflow-wrap: anywhere; }
+.odl-form-fields .odl-error[hidden] { display: none; }
+.odl-form-fields .odl-error svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); margin-block-start: var(--ds-space-2); stroke-width: var(--ds-icon-stroke-md); }
+.odl-form-fields footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--ds-space-inline-sm); padding-block-start: var(--ds-space-stack-md); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-form-fields .odl-btn { display: inline-flex; align-items: center; justify-content: center; min-inline-size: 7rem; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); cursor: pointer; overflow-wrap: anywhere;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-form-fields .odl-btn:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-form-fields .odl-submit { border-color: transparent; background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
+.odl-form-fields .odl-submit:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-form-fields .odl-btn:disabled { cursor: not-allowed; border-color: var(--ds-color-border-subtle); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); }
+.odl-form-fields .odl-btn:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+@container (max-width: 24rem) { .odl-form-fields footer { flex-direction: column-reverse; align-items: stretch; } .odl-form-fields footer .odl-btn { flex: none; inline-size: 100%; } }
+@media (max-width: 30rem) { .odl-form-fields { padding: var(--ds-space-inset-lg); } }
+/* the hidden template item (data-od-template) stays out of sight in the static file */
+.odl-form-fields [hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { .odl-form-fields, .odl-form-fields *, .odl-form-fields *::before { transition: none !important; animation: none !important; } }
+</style>
+<form class="odl-form-fields" novalidate aria-label="Change your delivery" data-od-label="title">
+  <header><h3 data-od-slot="title">Change your delivery</h3><p class="odl-intro" data-od-slot="intro" data-od-optional>Order HB-20931 is still in the warehouse, so these can change until 18:00 today.</p></header>
+  <div class="odl-fields" data-od-list="fields">
+    <div class="odl-field" data-od-item data-od-template hidden>
+      <label class="odl-lab"><span class="odl-name"><span data-od-slot="label"></span><span class="odl-opt">Optional</span></span>
+        <input class="odl-input" type="text" data-od-when="kind=text" data-od-input="name">
+        <input class="odl-input" type="number" inputmode="decimal" data-od-when="kind=number" data-od-input="name">
+        <input class="odl-input" type="date" data-od-when="kind=date" data-od-input="name">
+        <span class="odl-sel" data-od-when="kind=select"><select class="odl-input" data-od-input="name"><option value="">Choose one</option></select><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span>
+        <input type="checkbox" role="switch" data-od-when="kind=toggle" data-od-input="name"></label>
+      <p class="odl-hint" data-od-slot="hint" data-od-optional></p>
+      <p class="odl-error" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span></span></p></div>
+    <div class="odl-field" data-od-item>
+      <label class="odl-lab"><span class="odl-name"><span>Who will take it in</span></span><input class="odl-input" type="text" name="recipient" value="Marta Lindqvist" required></label>
+      <p class="odl-error" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span></span></p></div>
+    <div class="odl-field" data-od-item>
+      <label class="odl-lab"><span class="odl-name"><span>Delivery day</span></span>
+        <span class="odl-sel"><select class="odl-input" name="day" required><option value="thu">Thursday 20 November</option><option value="fri">Friday 21 November</option><option value="sat">Saturday 22 November</option></select><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span></label>
+      <p class="odl-error" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span></span></p></div>
+    <div class="odl-field" data-od-item>
+      <label class="odl-lab"><span class="odl-name"><span>Parcels to hold back</span><span class="odl-opt">Optional</span></span><input class="odl-input" type="number" inputmode="decimal" name="hold_back" value="4" min="0" max="2" aria-invalid="true"></label>
+      <p class="odl-hint">The order has 2 parcels.</p>
+      <p class="odl-error"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span>Parcels to hold back must be 2 or less.</span></p></div>
+    <div class="odl-field" data-od-item>
+      <label class="odl-lab"><span class="odl-name"><span>Leave it with a neighbour</span></span><input type="checkbox" role="switch" name="neighbour" checked></label>
+      <p class="odl-hint">Only if nobody answers the door.</p>
+      <p class="odl-error" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span></span></p></div>
+  </div>
+  <footer><button type="button" class="odl-btn" data-od-action="cancel">Keep as it is</button><button type="submit" class="odl-btn odl-submit" data-od-action="submit">Continue</button></footer>
+</form>
+<script>
+document.querySelectorAll(".odl-form-fields").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once
+  root.dataset.odlReady = "1";
+  const tag = "odl-ff-" + Math.random().toString(36).slice(2, 8);
+  const fields = [...root.querySelectorAll(".odl-field:not([hidden])")].map((f, i) => {
+    const input = f.querySelector("input, select, textarea");
+    const hint = f.querySelector(".odl-hint"), err = f.querySelector(".odl-error");
+    const name = (f.querySelector(".odl-name > span") || {}).textContent || "This field";
+    if (!input || !err) return null;
+    err.id = `${tag}-e${i}`;
+    if (hint) hint.id = `${tag}-h${i}`;
+    err.setAttribute("aria-live", "off");
+    const describe = () => input.setAttribute("aria-describedby", [hint && hint.id, !err.hidden && err.id].filter(Boolean).join(" "));
+    const problem = () => {
+      const v = input.validity, label = name.trim();
+      if (input.type === "checkbox") return input.required && !input.checked ? `Turn on ${label.toLowerCase()} to go on.` : "";
+      if (v.badInput) return input.type === "number" ? `${label} must be a number.` : `Enter ${label.toLowerCase()} in full.`;
+      if (v.valueMissing || (input.required && !String(input.value).trim())) return input.tagName === "SELECT" ? `Choose ${label.toLowerCase()}.` : `Enter ${label.toLowerCase()}.`;
+      if (v.rangeUnderflow) return `${label} must be ${input.min} or more.`;
+      if (v.rangeOverflow) return `${label} must be ${input.max} or less.`;
+      if (v.stepMismatch) return `${label} must be a whole number.`;
+      return "";
+    };
+    const check = () => {
+      const msg = problem();
+      err.hidden = !msg;
+      err.querySelector("span").textContent = msg;
+      if (msg) input.setAttribute("aria-invalid", "true"); else input.removeAttribute("aria-invalid");
+      describe();
+      return !msg;
+    };
+    let touched = input.getAttribute("aria-invalid") === "true";
+    input.addEventListener("input", () => { touched = true; if (input.getAttribute("aria-invalid") === "true") check(); });
+    input.addEventListener("change", () => { touched = true; });
+    input.addEventListener("blur", () => { if (touched) check(); });
+    describe();
+    return { input, check };
+  }).filter(Boolean);
+  // the submit button is checked first (capture), so a form with mistakes never reaches the host
+  root.addEventListener("click", (e) => {
+    const btn = e.target.closest && e.target.closest('[type="submit"]');
+    if (!btn || !root.contains(btn)) return;
+    const bad = fields.filter((f) => !f.check());
+    if (bad.length) { e.preventDefault(); e.stopPropagation(); bad[0].input.focus(); }
+  }, true);
+  root.addEventListener("submit", (e) => e.preventDefault()); // the host sends the answer; the page never reloads
+});
+</script>

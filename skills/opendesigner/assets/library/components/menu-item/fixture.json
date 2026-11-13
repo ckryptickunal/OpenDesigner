@@ -1,0 +1,49 @@
+{
+ "photo": {
+  "src": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=896&h=560&fit=crop&auto=format&q=70",
+  "alt": "Bowl of mixed vegetable salad"
+ },
+ "flag": "New this week",
+ "title": "Green goddess salad",
+ "description": "Crisp leaves, cucumber, edamame and herbs with a tahini-lime dressing.",
+ "price": 11.25,
+ "currency": "EUR",
+ "calories": "420 kcal",
+ "tag": "Vegan",
+ "base_title": "Choose your greens",
+ "base_options": [
+  {
+   "label": "Mixed leaves"
+  },
+  {
+   "label": "Kale",
+   "note": "Massaged with lemon"
+  },
+  {
+   "label": "Spinach and rocket",
+   "extra": 0.5
+  }
+ ],
+ "extras_title": "Add toppings",
+ "extras_limit": 2,
+ "extras_options": [
+  {
+   "label": "Grilled halloumi",
+   "price": 2.5
+  },
+  {
+   "label": "Avocado",
+   "price": 1.75
+  },
+  {
+   "label": "Toasted seeds",
+   "price": 0.75
+  }
+ ],
+ "add": {
+  "label": "Add to basket",
+  "event": {
+   "name": "add_to_basket"
+  }
+ }
+}

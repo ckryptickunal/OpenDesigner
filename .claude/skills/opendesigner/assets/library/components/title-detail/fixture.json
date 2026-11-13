@@ -1,0 +1,23 @@
+{"still": {"src": "https://images.unsplash.com/photo-1494783367193-149034c05e8f?w=2304&h=832&fit=crop&auto=format&q=70", "alt": "Lone road heading to mountains"},
+ "kicker": "Limited series · Thriller",
+ "title": "Northbound",
+ "facts": [{"text": "2025"}, {"text": "16+"}, {"text": "1 season"}, {"text": "6 episodes"}],
+ "score": 4.4,
+ "resume_label": "Resume E2",
+ "synopsis": "A courier drives one sealed parcel 900 kilometres north and starts to wonder who keeps calling ahead of her.",
+ "cast": [
+  {"name": "Saoirse Delaney", "role": "Courier", "photo": {"src": "https://images.unsplash.com/photo-1543949806-2c9935e6aa78?w=128&h=128&fit=crop&crop=faces&auto=format&q=70", "alt": "Saoirse Delaney"}},
+  {"name": "Mateus Okafor", "role": "Dispatcher", "photo": {"src": "https://images.unsplash.com/photo-1770096951056-c94a812e9fd4?w=128&h=128&fit=crop&crop=faces&auto=format&q=70", "alt": "Mateus Okafor"}},
+  {"name": "Ruth Albrecht"}
+ ],
+ "details": [{"label": "Genres", "value": "Thriller, Road"}, {"label": "Audio", "value": "English, Irish"}],
+ "seasons": [
+  {"label": "Season 1", "episodes": [
+   {"number": 1, "title": "Sealed", "length": "48 min", "summary": "The parcel comes with one rule: do not stop after dark.", "still": {"src": "https://images.unsplash.com/photo-1617195737496-bc30194e3a19?w=320&h=180&fit=crop&auto=format&q=70", "alt": "Roadside station in fog at night"}, "progress": 100},
+   {"number": 2, "title": "Service station", "length": "51 min", "summary": "A stranger knows her name and her route.", "still": {"src": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=320&h=180&fit=crop&auto=format&q=70", "alt": "Road through red desert rocks"}, "progress": 40},
+   {"number": 3, "title": "Detour", "length": "47 min"}
+  ]},
+  {"label": "Extras", "episodes": [
+   {"number": 1, "title": "Making Northbound", "length": "22 min", "summary": "The crew on filming 900 kilometres of road in five weeks."}
+  ]}
+ ]}

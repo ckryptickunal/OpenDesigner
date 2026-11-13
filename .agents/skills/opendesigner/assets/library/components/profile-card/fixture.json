@@ -1,0 +1,10 @@
+{"cover": {"src": "https://images.unsplash.com/photo-1505490096310-204ef067fe6b?w=832&h=224&fit=crop&auto=format&q=70", "alt": "Pine trees by teal water"},
+ "avatar": {"src": "https://images.unsplash.com/photo-1605980776566-0486c3ac7617?w=160&h=160&fit=crop&crop=faces&auto=format&q=70", "alt": "Tomasz Brenner"},
+ "presence": "In a meeting",
+ "name": "Tomasz Brenner",
+ "role": "Data platform engineer · Ingestion",
+ "meta": [{"icon": "place", "text": "Gdańsk, Poland"}, {"icon": "time", "text": "9:40 am local time"}],
+ "stats": [{"label": "Merges", "value": "342"}, {"label": "Reviews", "value": "915"}, {"label": "Replies in", "value": "45m"}],
+ "about": "Keeps the nightly import jobs running and owns the warehouse schema. Page him for failed loads after 6 pm.",
+ "following": "true",
+ "message": {"label": "Message", "a11y_label": "Message Tomasz Brenner", "event": {"name": "open_direct_message"}}}

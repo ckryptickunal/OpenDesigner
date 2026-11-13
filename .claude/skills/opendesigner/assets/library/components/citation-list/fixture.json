@@ -1,0 +1,6 @@
+{"title": "Further reading",
+ "items": [
+  {"title": "Sleep and screen light in teenagers", "publisher": "Journal of Youth Health", "date": "2025", "excerpt": "Students who stopped using screens an hour before bed fell asleep 18 minutes sooner on average.", "open": {"label": "Open", "event": {"name": "open_source", "context": {"source": "1"}}}},
+  {"title": "How much sleep do I need?", "publisher": "wellbeing.brightwater.example", "date": "Updated 12 Oct 2026", "open": {"label": "Open", "event": {"name": "open_source", "context": {"source": "2"}}}},
+  {"title": "School start times: a review of 40 districts", "publisher": "Carrow Education Institute", "excerpt": "Later starts went with better attendance in most of the districts studied."}
+ ]}

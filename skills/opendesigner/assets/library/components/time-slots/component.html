@@ -13,11 +13,11 @@
 .odl-time-slots .odl-day + .odl-day { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
 .odl-time-slots .odl-dlabel { margin: 0; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); display: flex; align-items: center; font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); overflow-wrap: anywhere; }
 .odl-time-slots ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr)); gap: var(--ds-space-target-gap) var(--ds-space-inline-sm); }
-.odl-time-slots li { display: grid; }
-.odl-time-slots .odl-wrap { display: grid; }
-.odl-time-slots .odl-slot { position: relative; display: inline-flex; align-items: center; justify-content: center; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-sm);
+.odl-time-slots li { display: grid; min-inline-size: 0; }
+.odl-time-slots .odl-wrap { display: grid; min-inline-size: 0; }
+.odl-time-slots .odl-slot { position: relative; display: inline-flex; align-items: center; justify-content: center; min-inline-size: 0; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: var(--ds-space-inset-xs) var(--ds-space-inset-sm);
   border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-control); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
-  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); font-variant-numeric: tabular-nums; white-space: nowrap; cursor: pointer;
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); font-variant-numeric: tabular-nums; text-align: center; overflow-wrap: anywhere; cursor: pointer;
   transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), border-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
 .odl-time-slots .odl-slot:hover { background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-strong); }
 /* almost full: a small dot in the corner; say so in words too (the action's a11y_label) */

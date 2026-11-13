@@ -1,13 +1,13 @@
 ---
 title: Add Smart UI to your assistant
-seo_title: "Smart UI quickstart: add your own components to a chatbot"
-description: Add OpenDesigner Smart UI to a chatbot you already have. Scope the repo, confirm the parts, write the catalog, check each answer and render it with your own tokens.
+seo_title: "Add generative UI to your chatbot with your own components"
+description: Add OpenDesigner Smart UI to a chatbot you already have: scope the repo, confirm the parts, write the catalog, then check and render each answer.
 section: Guides
 order: 9
 updated: 2026-11-13
 ---
 
-You need an assistant in your product (or a plan for one) and an OpenDesigner system. No system yet? Run the five-question sketch first: it takes a few minutes. Then ask your AI: "Add Smart UI to our assistant."
+This guide sets up your assistant to answer by rendering your own components instead of plain text. You need an assistant in your product (or a plan for one) and an OpenDesigner system. No system yet? Run the five-question sketch first: it takes a few minutes. Smart UI comes with OpenDesigner, so there's nothing more to install. Ask your AI: "Add Smart UI to our assistant."
 
 ## 1. Let it read your repo
 

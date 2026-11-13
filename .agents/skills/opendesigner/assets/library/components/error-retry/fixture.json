@@ -1,0 +1,4 @@
+{"title": "Search didn't finish", "message": "The hotel list stopped loading halfway. Your dates and filters are kept, so trying again picks up where it left off.",
+ "detail": "Timeout after 30 s · req a91c-0f4e",
+ "retry": {"label": "Try again", "event": {"name": "retry_search"}},
+ "secondary": {"label": "Change dates", "event": {"name": "edit_search"}}}

@@ -1,13 +1,13 @@
 ---
 title: Smart UI: answers that show your interface
-seo_title: "Smart UI: generative UI built from your own design system"
-description: An optional OpenDesigner package. Your assistant answers with a table, a comparison or a booking step made from your own components and tokens, and every answer is checked before it shows.
+seo_title: "Generative UI from your own design system components"
+description: Comes with OpenDesigner: your assistant answers with a table, a comparison or a booking step made from your own components, checked before it shows.
 section: Concepts
 order: 8
 updated: 2026-11-13
 ---
 
-Ask your travel app's assistant for flights to Lisbon and it can answer with a list of flights you can book, not three paragraphs. Smart UI is the optional OpenDesigner package that does this with your own design system: your components, your colours, your type, in any framework.
+Smart UI makes your assistant answer by rendering your own components instead of plain text. Ask your travel app's assistant for flights to Lisbon and it can answer with a list of flights you can book, not three paragraphs. Smart UI comes with OpenDesigner and does this with your own design system: your components, your colours, your type, in any framework. There's nothing separate to install. It stays off until you ask for it, or until OpenDesigner sees an assistant or chat in your product, offers it once, and you say yes.
 
 The model picks a part and fills in words and numbers. It never picks a colour, a size or a link. Every answer is checked before anything shows, and anything that books, pays, sends or deletes waits for the person to press a button.
 
@@ -34,7 +34,7 @@ The model picks a part and fills in words and numbers. It never picks a colour, 
 
 ## What you get
 
-- 26 parts in six jobs: answer, data, choose, act, confirm, and media. They're all in the [component library](/library/), so they work in your product with or without the assistant. The full list is in the [Smart UI reference](/docs/smart-ui-components/).
+- 26 parts in six jobs: answer, data, choose, act, confirm, and media. They're all in the [component library](/library/), so they work in your product with or without the assistant. The full list, by job, is on the [Smart UI page](/smart-ui/#parts).
 - A catalog in the A2UI v1.0 format, an MCP Apps view for Claude and ChatGPT, and a plain-text version for anywhere that shows no interface. See [where it runs](/docs/smart-ui-adapters/).
 - An audit of every part in every state, and evals of how Claude and Gemini use it.
 

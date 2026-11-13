@@ -1,0 +1,9 @@
+{"programme": "Pinewick Perks", "tier": "Gold member", "balance": 3615,
+ "next_tier_name": "Platinum", "next_tier_target": 5000,
+ "member_name": "Amara Okonkwo", "member_instruction": "Show this at checkout to earn points", "member_number": "6021 4470 1185",
+ "offers_title": "This week's offers",
+ "offers": [
+  {"photo": {"src": "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=144&h=144&fit=crop&auto=format&q=70", "alt": "Two croissants"}, "title": "Half-price pastry after 3 pm", "detail": "Ends Friday", "active": "false", "activate_label": "Activate half-price pastry offer"},
+  {"photo": {"src": "https://images.unsplash.com/photo-1512568400610-62da28bc8a13?w=144&h=144&fit=crop&auto=format&q=70", "alt": "A latte with heart art"}, "title": "Triple points on lattes", "detail": "5 days left · any size", "active": "true", "activate_label": "Activate triple points offer"},
+  {"photo": {"src": "https://images.unsplash.com/photo-1570784332176-fdd73da66f03?w=144&h=144&fit=crop&auto=format&q=70", "alt": "A white ceramic mug"}, "title": "Free refill with your own mug", "active": "false", "activate_label": "Activate free refill offer"}
+ ]}

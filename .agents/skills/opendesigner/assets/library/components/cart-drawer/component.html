@@ -42,7 +42,7 @@
 /* Items */
 .odl-cart-drawer ul { margin: 0; padding: var(--ds-space-stack-sm) var(--ds-space-inset-xl); list-style: none; overflow-y: auto; overscroll-behavior: contain; }
 .odl-cart-drawer li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--ds-space-inline-md); padding-block: var(--ds-space-stack-lg); }
-.odl-cart-drawer li + li { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-cart-drawer li:not([hidden]) + li { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
 .odl-cart-drawer .odl-pic { display: block; inline-size: calc(var(--ds-size-control-lg) * 2); block-size: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: var(--ds-radius-nested); background: var(--ds-color-surface-sunken); }
 .odl-cart-drawer .odl-item { display: grid; align-content: space-between; gap: var(--ds-space-stack-md); min-inline-size: 0; }
 .odl-cart-drawer .odl-line { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--ds-space-stack-xs) var(--ds-space-inline-md); }
@@ -60,6 +60,7 @@
 .odl-cart-drawer .odl-remove { min-block-size: var(--odl-tap); padding: 0 var(--ds-space-inset-sm); border: 0; border-radius: var(--ds-radius-control-sm); background: transparent; color: var(--ds-color-text-secondary);
   font: var(--ds-text-label-md); text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
 .odl-cart-drawer .odl-remove:hover { color: var(--ds-color-text-primary); background: var(--ds-color-bg-neutral-subtle); }
+.odl-cart-drawer li[hidden] { display: none; }
 .odl-cart-drawer .odl-empty { display: none; margin: 0; padding: var(--ds-space-inset-xl); color: var(--ds-color-text-secondary); text-align: center; }
 .odl-cart-drawer .odl-sheet.is-empty .odl-empty { display: block; }
 .odl-cart-drawer .odl-sheet.is-empty .odl-free, .odl-cart-drawer .odl-sheet.is-empty ul { display: none; }
@@ -95,7 +96,7 @@
 </style>
 <div class="odl-cart-drawer">
   <div class="odl-stage">
-    <div class="odl-page" aria-hidden="true">
+    <div class="odl-page" aria-hidden="true" data-od-sample>
       <div class="odl-nav"><b>WRENFOLD</b><span>New in</span><span>Knitwear</span><span>Home</span></div>
       <div class="odl-hero"><b>Autumn layers</b><span>Soft knits and leather goods for cooler mornings</span></div>
       <div class="odl-shelf">
@@ -107,15 +108,27 @@
     </div>
     <section class="odl-sheet" role="dialog" aria-modal="false" aria-labelledby="odl-cd-title">
       <div class="odl-top">
-        <h3 id="odl-cd-title">Your bag <span class="odl-count">(3)</span></h3>
+        <h3 id="odl-cd-title"><data data-od-slot="title">Your bag</data> <span class="odl-count">(3)</span></h3>
         <button type="button" class="odl-icon" aria-label="Close bag"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
       </div>
       <div class="odl-free" data-free="120">
+        <span class="odl-cfg" hidden><data data-od-slot="currency">USD</data><data data-od-slot="free_delivery_at" data-od-optional>120</data><data data-od-slot="delivery_fee" data-od-optional>4.95</data></span>
         <p><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg><span class="odl-free-left">Add <b class="odl-left">$10.00</b> more for free delivery</span><span class="odl-free-ok"><b>You get free delivery</b></span></p>
         <div class="odl-bar" role="progressbar" aria-label="Towards free delivery" aria-valuemin="0" aria-valuemax="120" aria-valuenow="110"><span></span></div>
       </div>
-      <ul aria-label="Items in your bag">
-        <li data-price="68">
+      <ul aria-label="Items in your bag" data-od-list="items">
+        <li data-od-item data-od-template hidden>
+          <img class="odl-pic" data-od-media="image" src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=192&amp;h=240&amp;fit=crop&amp;auto=format&amp;q=70" alt="" width="192" height="240" loading="lazy" decoding="async">
+          <div class="odl-item">
+            <div class="odl-line"><p class="odl-name" data-od-slot="name"></p><p class="odl-sum"></p><p class="odl-var" data-od-slot="variant" data-od-optional></p></div>
+            <div class="odl-act">
+              <div class="odl-step" role="group" aria-label="Quantity" data-od-label="name"><button type="button" class="odl-minus" aria-label="One fewer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button><output aria-live="polite" data-od-slot="quantity"></output><button type="button" class="odl-plus" aria-label="One more"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button></div>
+              <button type="button" class="odl-remove" data-od-action="remove" data-od-effect="change"><span data-od-slot="label">Remove</span></button>
+            </div>
+          </div>
+          <data class="odl-price" data-od-slot="price" hidden></data>
+        </li>
+        <li data-od-item data-price="68">
           <img class="odl-pic" src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=192&h=240&fit=crop&auto=format&q=70" alt="Cotton crew sweatshirt in white" width="192" height="240" loading="lazy" decoding="async">
           <div class="odl-item">
             <div class="odl-line"><p class="odl-name">Cotton crew sweatshirt</p><p class="odl-sum">$68.00</p><p class="odl-var">White · M</p></div>
@@ -125,7 +138,7 @@
             </div>
           </div>
         </li>
-        <li data-price="24">
+        <li data-od-item data-price="24">
           <img class="odl-pic" src="https://images.unsplash.com/photo-1570784332176-fdd73da66f03?w=192&h=240&fit=crop&auto=format&q=70" alt="White stoneware mug" width="192" height="240" loading="lazy" decoding="async">
           <div class="odl-item">
             <div class="odl-line"><p class="odl-name">Stoneware mug</p><p class="odl-sum">$24.00</p><p class="odl-var">Chalk · 350 ml</p></div>
@@ -135,7 +148,7 @@
             </div>
           </div>
         </li>
-        <li data-price="18">
+        <li data-od-item data-price="18">
           <img class="odl-pic" src="https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=192&h=240&fit=crop&auto=format&q=70" alt="Small succulent in a teal glazed pot" width="192" height="240" loading="lazy" decoding="async">
           <div class="odl-item">
             <div class="odl-line"><p class="odl-name">Glazed plant pot</p><p class="odl-sum">$18.00</p><p class="odl-var">Teal · Small, with plant</p></div>
@@ -146,11 +159,11 @@
           </div>
         </li>
       </ul>
-      <p class="odl-empty">Your bag is empty.</p>
+      <p class="odl-empty" data-od-slot="empty_text" data-od-optional>Your bag is empty.</p>
       <div class="odl-foot">
         <dl><dt>Subtotal</dt><dd class="odl-sub">$110.00</dd><dt>Delivery</dt><dd class="odl-ship">$4.95</dd><dt class="is-total">Total</dt><dd class="is-total odl-total">$114.95</dd></dl>
-        <button type="button" class="odl-go">Checkout<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
-        <p class="odl-note"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure checkout · taxes worked out there</p>
+        <button type="button" class="odl-go" data-od-action="checkout"><span data-od-slot="label">Checkout</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
+        <p class="odl-note" data-od-optional><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span data-od-slot="note">Secure checkout · taxes worked out there</span></p>
       </div>
     </section>
   </div>
@@ -159,18 +172,24 @@
 document.querySelectorAll(".odl-cart-drawer").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
-  const sheet = root.querySelector(".odl-sheet"), free = root.querySelector(".odl-free"), goal = Number(free.dataset.free), ship = 4.95;
-  const money = (n) => "$" + n.toFixed(2);
+  const sheet = root.querySelector(".odl-sheet"), free = root.querySelector(".odl-free");
+  // Rendered from data (Smart UI), the numbers come from hidden slots; the static sample keeps its own.
+  const rendered = !!root.dataset.odComponent, num = (el) => (el ? Number(el.textContent.replace(/[^0-9.-]/g, "")) : NaN);
+  const goal = rendered ? num(root.querySelector('[data-od-slot="free_delivery_at"]')) : Number(free.dataset.free);
+  const ship = rendered ? num(root.querySelector('[data-od-slot="delivery_fee"]')) || 0 : 4.95;
+  const cur = rendered ? (root.querySelector('[data-od-slot="currency"]') || {}).textContent : "";
+  const money = (n) => { try { if (cur) return new Intl.NumberFormat(undefined, { style: "currency", currency: cur }).format(n); } catch (e) { /* unknown code */ } return "$" + n.toFixed(2); };
+  if (!(goal > 0)) free.hidden = true;
   const update = () => {
-    const rows = [...root.querySelectorAll("li")];
+    const rows = [...root.querySelectorAll("li:not([data-od-template])")].filter((li) => li.querySelector("output"));
     let sub = 0, count = 0;
     rows.forEach((li) => {
-      const q = Number(li.querySelector("output").textContent), p = Number(li.dataset.price);
+      const q = Number(li.querySelector("output").textContent) || 1, p = li.dataset.price ? Number(li.dataset.price) : num(li.querySelector(".odl-price"));
       sub += q * p; count += q;
       li.querySelector(".odl-sum").textContent = money(q * p);
       li.querySelector(".odl-minus").disabled = q <= 1;
     });
-    const left = Math.max(goal - sub, 0), fee = left ? ship : 0;
+    const left = goal > 0 ? Math.max(goal - sub, 0) : 1, fee = left ? ship : 0;
     root.querySelector(".odl-count").textContent = `(${count})`;
     root.querySelector(".odl-sub").textContent = money(sub);
     root.querySelector(".odl-ship").textContent = fee ? money(fee) : "Free";
@@ -178,15 +197,16 @@ document.querySelectorAll(".odl-cart-drawer").forEach((root) => {
     root.querySelector(".odl-left").textContent = money(left);
     free.classList.toggle("is-done", !left);
     const bar = free.querySelector(".odl-bar"); bar.setAttribute("aria-valuenow", String(Math.min(sub, goal)));
-    bar.firstElementChild.style.setProperty("--p", Math.min(sub / goal, 1) * 100 + "%");
+    if (goal > 0) bar.firstElementChild.style.setProperty("--p", Math.min(sub / goal, 1) * 100 + "%");
     sheet.classList.toggle("is-empty", !rows.length);
     root.querySelector(".odl-go").disabled = !rows.length;
   };
-  root.querySelectorAll("li").forEach((li) => {
+  root.querySelectorAll("li:not([data-od-template])").forEach((li) => {
+    if (!li.querySelector("output")) return;
     const out = li.querySelector("output");
     li.querySelector(".odl-plus").addEventListener("click", () => { out.textContent = Number(out.textContent) + 1; update(); });
     li.querySelector(".odl-minus").addEventListener("click", () => { out.textContent = Math.max(1, Number(out.textContent) - 1); update(); });
-    li.querySelector(".odl-remove").addEventListener("click", () => { const next = li.nextElementSibling || li.previousElementSibling; li.remove(); update(); (next ? next.querySelector(".odl-remove") : root.querySelector(".odl-icon")).focus(); });
+    if (!rendered) li.querySelector(".odl-remove").addEventListener("click", () => { const next = li.nextElementSibling || li.previousElementSibling; li.remove(); update(); (next ? next.querySelector(".odl-remove") : root.querySelector(".odl-icon")).focus(); });
   });
   update();
 });

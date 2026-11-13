@@ -1,0 +1,9 @@
+{"day_num": 9,
+ "date": "Wednesday, Dec 9",
+ "summary": "4 events · 3 h 15 min booked",
+ "all_day": [{"title": "Year-end freeze", "note": "No deploys until Jan 4", "tone": "info"}],
+ "events": [
+  {"title": "Design crit", "start": "09:30", "end": "10:15", "place": "Studio 2", "tone": "neutral"},
+  {"title": "Pricing page review", "start": "11:00", "end": "12:00", "place": "Video call", "tone": "accent", "people_names": "Saoirse Quinlan, Tobias Wren and 2 others"},
+  {"title": "Lunch with the Aster team", "start": "12:30", "end": "13:30", "tone": "warn"},
+  {"title": "Hiring sync", "start": "15:00", "end": "15:30"}]}

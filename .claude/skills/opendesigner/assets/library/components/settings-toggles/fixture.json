@@ -1,0 +1,7 @@
+{"title": "Notifications for Larkfield Studio",
+ "settings": [
+  {"name": "Email me when a client comments", "help": "One email per thread, at most every 15 minutes.", "key": "notify_comments", "value": true, "locked": "false"},
+  {"name": "Weekly project digest", "help": "A Monday summary of every open project and its deadlines.", "key": "weekly_digest", "value": false, "locked": "false"},
+  {"name": "Push alerts on this phone", "key": "push_alerts", "value": true, "locked": "false"},
+  {"name": "Share activity with workspace admins", "help": "Admins see when you last opened each project.", "locked_by": "Set by your workspace admin.", "key": "share_activity", "value": true, "locked": "true", "state_label": "On"}
+ ]}

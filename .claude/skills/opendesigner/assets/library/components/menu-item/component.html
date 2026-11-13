@@ -34,7 +34,7 @@
 .odl-menu-item .odl-req.is-ok { background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); }
 .odl-menu-item .odl-opt { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--ds-space-inline-md); min-block-size: max(var(--odl-tap), var(--ds-size-control-lg));
   padding-block: var(--ds-space-inset-sm); cursor: pointer; }
-.odl-menu-item .odl-opt + .odl-opt { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-menu-item .odl-opt:not([hidden]) + .odl-opt { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
 .odl-menu-item .odl-opt input { position: absolute; opacity: 0; inline-size: 1px; block-size: 1px; margin: 0; }
 .odl-menu-item .odl-box { display: grid; place-items: center; inline-size: var(--ds-space-20); block-size: var(--ds-space-20); border: var(--ds-border-width-emphasis) solid var(--ds-color-border-input); border-radius: var(--ds-radius-full);
   background: var(--ds-color-bg-field); transition: border-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
@@ -79,31 +79,39 @@
 .odl-menu-item .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @container (max-width: 24rem) { .odl-menu-item .odl-body, .odl-menu-item .odl-foot { padding-inline: var(--ds-space-inset-lg); } .odl-menu-item .odl-body { padding-block-start: var(--ds-space-inset-lg); } .odl-menu-item .odl-foot { padding-block-end: var(--ds-space-inset-lg); } }
 @media (prefers-reduced-motion: reduce) { .odl-menu-item, .odl-menu-item *, .odl-menu-item *::before, .odl-menu-item *::after { transition: none !important; animation: none !important; } }
+.odl-menu-item .odl-opt[hidden] { display: none; }
+.odl-menu-item .odl-opts { display: contents; }
 </style>
 <div class="odl-menu-item">
   <form aria-labelledby="odl-mi-title" data-base="14.50">
     <div class="odl-photo">
-      <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=896&h=560&fit=crop&auto=format&q=70" alt="A grain bowl with vegetables and sliced chicken" width="448" height="280" loading="lazy" decoding="async">
+      <img data-od-media="photo" data-od-optional src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=896&h=560&fit=crop&auto=format&q=70" alt="A grain bowl with vegetables and sliced chicken" width="448" height="280" loading="lazy" decoding="async">
       <button type="button" class="odl-close" aria-label="Close"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span></button>
     </div>
     <div class="odl-body">
       <div class="odl-head">
-        <div class="odl-titles"><p class="odl-flag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>#2 most ordered</p><h3 id="odl-mi-title">Sesame chicken grain bowl</h3></div>
-        <p class="odl-desc">Charred chicken thigh in a sesame-chilli glaze over your choice of base, with roast squash, greens, radish and toasted seeds.</p>
-        <p class="odl-facts"><b>$14.50</b><span>640 kcal</span><span class="odl-pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>Mildly spicy</span></p>
+        <div class="odl-titles"><p class="odl-flag" data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg><bdi data-od-slot="flag">#2 most ordered</bdi></p><h3 id="odl-mi-title" data-od-slot="title">Sesame chicken grain bowl</h3></div>
+        <p class="odl-desc" data-od-slot="description" data-od-optional>Charred chicken thigh in a sesame-chilli glaze over your choice of base, with roast squash, greens, radish and toasted seeds.</p>
+        <p class="odl-facts"><b data-od-slot="price">$14.50</b><data data-od-slot="currency" hidden>USD</data><span data-od-slot="calories" data-od-optional>640 kcal</span><span class="odl-pill" data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg><bdi data-od-slot="tag">Mildly spicy</bdi></span></p>
       </div>
       <fieldset class="odl-base">
-        <legend><span class="odl-gh"><span><b>Choose your base</b><small>Pick 1</small></span><span class="odl-req">Required</span></span></legend>
-        <label class="odl-opt"><input type="radio" name="odl-menu-item-base" value="0" required><span class="odl-box"></span><span class="odl-on">Jasmine rice</span><span class="odl-add"></span></label>
-        <label class="odl-opt"><input type="radio" name="odl-menu-item-base" value="0"><span class="odl-box"></span><span class="odl-on">Brown rice <small>More fibre</small></span><span class="odl-add"></span></label>
-        <label class="odl-opt"><input type="radio" name="odl-menu-item-base" value="1"><span class="odl-box"></span><span class="odl-on">Buckwheat noodles</span><span class="odl-add">+$1.00</span></label>
+        <legend><span class="odl-gh"><span><b data-od-slot="base_title">Choose your base</b><small>Pick 1</small></span><span class="odl-req">Required</span></span></legend>
+        <div class="odl-opts" data-od-list="base_options">
+        <label class="odl-opt" data-od-item data-od-template hidden><input type="radio" name="odl-menu-item-base" required><span class="odl-box"></span><span class="odl-on"><bdi data-od-slot="label"></bdi> <small data-od-slot="note" data-od-optional></small></span><span class="odl-add"></span><data data-od-slot="extra" hidden></data></label>
+        <label class="odl-opt" data-od-item><input type="radio" name="odl-menu-item-base" value="0" required><span class="odl-box"></span><span class="odl-on">Jasmine rice</span><span class="odl-add"></span></label>
+        <label class="odl-opt" data-od-item><input type="radio" name="odl-menu-item-base" value="0"><span class="odl-box"></span><span class="odl-on">Brown rice <small>More fibre</small></span><span class="odl-add"></span></label>
+        <label class="odl-opt" data-od-item><input type="radio" name="odl-menu-item-base" value="1"><span class="odl-box"></span><span class="odl-on">Buckwheat noodles</span><span class="odl-add">+$1.00</span></label>
+        </div>
       </fieldset>
       <fieldset class="odl-extras">
-        <legend><span class="odl-gh"><span><b>Add extras</b><small>Up to 3</small></span><span class="odl-req is-opt">Optional</span></span></legend>
-        <label class="odl-opt"><input type="checkbox" value="3" checked><span class="odl-box"></span><span class="odl-on">Extra chicken</span><span class="odl-add">+$3.00</span></label>
-        <label class="odl-opt"><input type="checkbox" value="1.5"><span class="odl-box"></span><span class="odl-on">Soy-cured egg</span><span class="odl-add">+$1.50</span></label>
-        <label class="odl-opt"><input type="checkbox" value="2"><span class="odl-box"></span><span class="odl-on">Avocado</span><span class="odl-add">+$2.00</span></label>
-        <label class="odl-opt"><input type="checkbox" value="0.5"><span class="odl-box"></span><span class="odl-on">Pickled ginger</span><span class="odl-add">+$0.50</span></label>
+        <legend><span class="odl-gh"><span><b data-od-slot="extras_title">Add extras</b><small>Up to <bdi data-od-slot="extras_limit">3</bdi></small></span><span class="odl-req is-opt">Optional</span></span></legend>
+        <div class="odl-opts" data-od-list="extras_options">
+        <label class="odl-opt" data-od-item data-od-template hidden><input type="checkbox"><span class="odl-box"></span><span class="odl-on" data-od-slot="label"></span><span class="odl-add"></span><data data-od-slot="price" hidden></data></label>
+        <label class="odl-opt" data-od-item><input type="checkbox" value="3" checked><span class="odl-box"></span><span class="odl-on">Extra chicken</span><span class="odl-add">+$3.00</span></label>
+        <label class="odl-opt" data-od-item><input type="checkbox" value="1.5"><span class="odl-box"></span><span class="odl-on">Soy-cured egg</span><span class="odl-add">+$1.50</span></label>
+        <label class="odl-opt" data-od-item><input type="checkbox" value="2"><span class="odl-box"></span><span class="odl-on">Avocado</span><span class="odl-add">+$2.00</span></label>
+        <label class="odl-opt" data-od-item><input type="checkbox" value="0.5"><span class="odl-box"></span><span class="odl-on">Pickled ginger</span><span class="odl-add">+$0.50</span></label>
+        </div>
       </fieldset>
       <div class="odl-note">
         <label for="odl-mi-note">Note for the kitchen</label>
@@ -112,7 +120,7 @@
     </div>
     <div class="odl-foot">
       <div class="odl-step" role="group" aria-label="Quantity"><button type="button" class="odl-minus" aria-label="One fewer" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button><output aria-live="polite">1</output><button type="button" class="odl-plus" aria-label="One more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button></div>
-      <button type="submit" class="odl-go"><span class="odl-go-label">Add to order</span><span class="odl-total">$17.50</span></button>
+      <button type="submit" class="odl-go" data-od-action="add" data-od-effect="change"><span class="odl-go-label" data-od-slot="label">Add to order</span><span class="odl-total">$17.50</span></button>
     </div>
   </form>
 </div>
@@ -120,22 +128,35 @@
 document.querySelectorAll(".odl-menu-item").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
-  const form = root.querySelector("form"), base = Number(form.dataset.base), out = root.querySelector("output"), minus = root.querySelector(".odl-minus");
-  const extras = [...root.querySelectorAll(".odl-extras input")], req = root.querySelector(".odl-base .odl-req"), label = root.querySelector(".odl-go-label");
+  // Prices come from the marked parts, so a rendered answer adds up the same way as the sample.
+  const slot = (el, n) => ((el.querySelector(`[data-od-slot="${n}"]`) || {}).textContent || "").trim(), num = (t) => parseFloat(String(t).replace(/[^\d.-]/g, ""));
+  const cur = slot(root, "currency") || "USD", lang = (root.closest("[lang]") || {}).lang || "en";
+  const money = (v) => { try { return new Intl.NumberFormat(lang, { style: "currency", currency: cur }).format(v); } catch (e) { return `${cur} ${v.toFixed(2)}`; } };
+  const form = root.querySelector("form"), out = root.querySelector("output"), minus = root.querySelector(".odl-minus"), priceEl = root.querySelector('.odl-facts [data-od-slot="price"]');
+  const base = form.dataset.base ? Number(form.dataset.base) : num(priceEl ? priceEl.textContent : 0) || 0;
+  if (priceEl) priceEl.textContent = money(base);
+  root.querySelectorAll(".odl-opt:not([hidden])").forEach((o) => {
+    const input = o.querySelector("input"), add = o.querySelector(".odl-add");
+    if (input.hasAttribute("value")) return; // the sample's options carry their price already
+    const v = num(slot(o, input.type === "radio" ? "extra" : "price")) || 0;
+    input.value = String(v); if (add) add.textContent = v > 0 ? "+" + money(v) : "";
+  });
+  const limit = parseInt(slot(root, "extras_limit"), 10) || 3, addText = root.querySelector(".odl-go-label").textContent;
+  const extras = [...root.querySelectorAll(".odl-extras .odl-opt:not([hidden]) input")], req = root.querySelector(".odl-base .odl-req"), label = root.querySelector(".odl-go-label");
   const update = () => {
     const q = Number(out.textContent), pick = root.querySelector(".odl-base input:checked");
     const each = base + (pick ? Number(pick.value) : 0) + extras.filter((x) => x.checked).reduce((s, x) => s + Number(x.value), 0);
-    root.querySelector(".odl-total").textContent = "$" + (each * q).toFixed(2);
+    root.querySelector(".odl-total").textContent = money(each * q);
     minus.disabled = q <= 1;
-    const full = extras.filter((x) => x.checked).length >= 3;
+    const full = extras.filter((x) => x.checked).length >= limit;
     extras.forEach((x) => { x.disabled = full && !x.checked; });
     req.classList.toggle("is-ok", !!pick); req.textContent = pick ? "Done" : "Required";
-    label.textContent = !pick ? "Pick a base" : q > 1 ? `Add ${q} to order` : "Add to order";
+    label.textContent = !pick && root.querySelector(".odl-base .odl-opt:not([hidden])") ? "Pick a base" : q > 1 ? (addText === "Add to order" ? `Add ${q} to order` : `${addText} · ${q}`) : addText;
   };
   form.addEventListener("change", update);
   root.querySelector(".odl-plus").addEventListener("click", () => { out.textContent = Number(out.textContent) + 1; update(); });
   minus.addEventListener("click", () => { out.textContent = Math.max(1, Number(out.textContent) - 1); update(); });
-  form.addEventListener("submit", (e) => { e.preventDefault(); if (!root.querySelector(".odl-base input:checked")) { root.querySelector(".odl-base input").focus(); return; } label.textContent = "Added"; });
+  form.addEventListener("submit", (e) => { e.preventDefault(); if (!root.querySelector(".odl-base input:checked")) { const first = root.querySelector(".odl-base .odl-opt:not([hidden]) input"); if (first) { first.focus(); return; } } label.textContent = "Added"; });
   update();
 });
 </script>

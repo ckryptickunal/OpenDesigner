@@ -1,0 +1,48 @@
+{
+  "name": "Summary card",
+  "summary": "One term, plan or policy explained: what kind of thing it is, a short summary, up to four key points and other names it goes by.",
+  "use": "to define a term or sum up one policy, plan or document in a few lines",
+  "type": "content",
+  "style": "editorial",
+  "industries": ["education", "finance", "productivity", "any"],
+  "tags": ["definition", "summary", "glossary", "explainer", "tl;dr"],
+  "states": ["with key points", "without key points", "with other names", "narrow on a phone"],
+  "source": null,
+  "a11y": "An article with one heading; the key points are a list, and the check marks are hidden from screen readers.",
+  "width": "medium",
+  "spec": {
+    "use_when": ["the person asks what something means, or wants one plan, policy or document summed up"],
+    "avoid_when": ["an answer that has to cite where each statement comes from: use answer-sources", "the details of a booking or product as label and value: use key-facts", "two or more things compared: use comparison"],
+    "parts": [
+      {"name": "kind", "selector": ".odl-kind", "what": "one line on what kind of thing it is: a noun, a policy, a plan", "slot": "text"},
+      {"name": "title", "selector": "h3", "what": "the term or the thing summed up", "slot": "text"},
+      {"name": "summary", "selector": ".odl-summary", "what": "the definition or summary in two or three sentences", "slot": "text"},
+      {"name": "points", "selector": "li", "what": "one key point", "slot": "list"},
+      {"name": "text", "selector": "li > span", "what": "the point's words", "slot": "text"},
+      {"name": "also_called", "selector": ".odl-aka span", "what": "other names for the same thing", "slot": "text"}
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "summary"],
+      "properties": {
+        "kind": {"type": "string", "maxLength": 40, "part": "kind"},
+        "title": {"type": "string", "maxLength": 60, "part": "title"},
+        "summary": {"type": "string", "maxLength": 420, "part": "summary"},
+        "points": {
+          "type": "array", "minItems": 0, "maxItems": 4, "part": "points",
+          "items": {"type": "object", "required": ["text"], "properties": {"text": {"type": "string", "maxLength": 140, "part": "text"}}}
+        },
+        "also_called": {"type": "string", "maxLength": 100, "part": "also_called"}
+      }
+    },
+    "edge": {
+      "empty": {"status": "handled", "how": "with no key points the block and its heading are hidden; without other names that line goes", "evidence": ".odl-points:has(.od-empty) { display: none; }"},
+      "loading": {"status": "not_built", "how": "the renderer shows muted blocks for the title, summary and points"},
+      "error": {"status": "not_built", "how": "if there is nothing to summarise, say so in plain text instead of this part"},
+      "disabled": {"status": "not_built", "how": "the part has no controls, so there is no disabled state"},
+      "overflow": {"status": "handled", "how": "at most four points; on a phone the padding and the title step down", "evidence": "@container (max-width: 26rem)"},
+      "long_text": {"status": "handled", "how": "every line wraps, and long words break", "evidence": "overflow-wrap: anywhere"}
+    },
+    "keyboard": []
+  }
+}

@@ -1,0 +1,9 @@
+{"title": "Check your phone",
+ "intro": "We texted a 6-digit code to",
+ "destination": "+44 •••• ••• 218",
+ "label": "Code from the text",
+ "help": "Type or paste the code. It works for 5 minutes.",
+ "error": "That code has expired. Ask for a new one below.",
+ "resend_seconds": 30,
+ "verify": {"label": "Confirm", "event": {"name": "verify_code"}},
+ "change": {"label": "Use a different number", "event": {"name": "change_destination"}}}

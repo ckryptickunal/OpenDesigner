@@ -29,6 +29,10 @@
   .odl-empty-state .odl-acts > * { align-self: stretch; }
 }
 .odl-empty-state .odl-acts:not(:has(button)):not(:has(a)) { display: none; }
+.odl-empty-state .odl-acts > button, .odl-empty-state .odl-acts > a { display: inline-flex; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); }
+/* Disabled or still loading: quiet but readable (AA), never the faint disabled pair. */
+.odl-empty-state .odl-acts > a[data-od-pending] { background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); }
+.odl-empty-state button:disabled { cursor: not-allowed; background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); }
 @media (prefers-reduced-motion: reduce) { .odl-empty-state, .odl-empty-state *, .odl-empty-state *::before { transition: none !important; animation: none !important; } }
 </style>
 <section class="odl-empty-state" aria-label="Receipts" data-od-label="label">

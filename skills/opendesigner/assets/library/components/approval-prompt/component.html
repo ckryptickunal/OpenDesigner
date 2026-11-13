@@ -35,7 +35,6 @@
 .odl-approval-prompt .odl-approve { border: var(--ds-border-width-default) solid transparent; background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
 .odl-approval-prompt .odl-approve:hover { background: var(--ds-color-bg-action-primary-hover); }
 .odl-approval-prompt .odl-approve:active { background: var(--ds-color-bg-action-primary-pressed); }
-.odl-approval-prompt button:disabled { cursor: not-allowed; background: var(--ds-color-bg-disabled); border-color: transparent; color: var(--ds-color-text-disabled); }
 .odl-approval-prompt button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 /* Phone: the two buttons share the row, each half; a long label wraps inside its own button. */
 @container (max-width: 26rem) {
@@ -44,6 +43,8 @@
   .odl-approval-prompt dl > div { grid-template-columns: minmax(0, 1fr); gap: var(--ds-space-2); }
   .odl-approval-prompt button { flex: 1 1 auto; }
 }
+/* Disabled or still loading: quiet but readable (AA), never the faint disabled pair. */
+.odl-approval-prompt button:disabled { cursor: not-allowed; background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); }
 @media (prefers-reduced-motion: reduce) { .odl-approval-prompt, .odl-approval-prompt *, .odl-approval-prompt *::before { transition: none !important; animation: none !important; } }
 </style>
 <section class="odl-approval-prompt" aria-labelledby="odl-ap-title"><div class="odl-card">

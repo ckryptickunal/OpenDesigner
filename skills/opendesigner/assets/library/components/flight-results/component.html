@@ -68,13 +68,24 @@
    a next-day arrival gets its plus sign, and the airline mark is a neutral plane, never a carrier's own mark. */
 .odl-flight-results [hidden] { display: none !important; }
 .odl-flight-results .odl-flight:has(> .odl-choose) { position: relative; }
-.odl-flight-results .odl-choose { position: absolute; inset: 0; margin: 0; padding: 0; border: 0; border-radius: var(--ds-radius-container); background: transparent; cursor: pointer; }
+.odl-flight-results .odl-choose { position: absolute; inset: 0; overflow: hidden; margin: 0; padding: 0; border: 0; border-radius: var(--ds-radius-container); background: transparent; cursor: pointer; }
 .odl-flight-results .odl-flight:has(> .odl-choose:hover) { border-color: var(--ds-color-border-strong); }
+.odl-flight-results .odl-choose-label { position: absolute; inline-size: 1px; block-size: 1px; clip-path: inset(50%); white-space: nowrap; color: var(--ds-color-text-primary); }
 .odl-flight-results .odl-choose:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 .odl-flight-results .odl-time sup[data-od-slot]::before { content: "+"; }
 .odl-flight-results .odl-mark:has(.odl-plane) { display: grid; place-items: center; }
 .odl-flight-results .odl-mark .odl-plane { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); fill: none; stroke: var(--ds-color-icon-default); stroke-width: var(--ds-icon-stroke-md); }
 .odl-flight-results .odl-sort:has(> .od-empty) { display: none; }
+/* While the answer loads, the placeholder chips and card buttons keep their space but are not offered yet. */
+.odl-flight-results .odl-sort:has([data-od-pending]) { display: none; }
+.odl-flight-results .odl-choose[data-od-pending] { visibility: hidden; }
+.odl-flight-results .odl-flight:has(> .odl-choose) .odl-airline { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+/* Filled copies never push the page sideways: every value may wrap inside its column. */
+.odl-flight-results .odl-flight:has(> .odl-choose) { grid-template-columns: minmax(0, 1fr) minmax(0, max-content); }
+.odl-flight-results .odl-flight:has(> .odl-choose) .odl-route { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1fr); }
+.odl-flight-results .odl-flight:has(> .odl-choose) .odl-end, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-buy { min-inline-size: 0; }
+.odl-flight-results .odl-flight:has(> .odl-choose) .odl-time, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-code, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-price, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-per, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-tag, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-dur, .odl-flight-results .odl-flight:has(> .odl-choose) .odl-stops { white-space: normal; overflow-wrap: anywhere; }
+@container (min-width: 38rem) { .odl-flight-results .odl-flight:has(> .odl-choose) { grid-template-columns: minmax(0, 13rem) minmax(0, 1fr) minmax(0, max-content); } }
 .odl-flight-results .odl-sort button[data-key="best"], .odl-flight-results .odl-sort button[data-key="price"], .odl-flight-results .odl-sort button[data-key="time"] { text-align: start; }
 @media (prefers-reduced-motion: reduce) { .odl-flight-results, .odl-flight-results *, .odl-flight-results *::before { transition: none !important; animation: none !important; } }
 </style>
@@ -103,7 +114,7 @@
           <span class="odl-who"><span class="odl-airline" data-od-slot="airline"></span><span class="odl-tags" data-od-optional><span class="odl-tag is-note" data-od-slot="tag" data-od-optional></span></span></span>
         </div>
         <div class="odl-buy"><span class="odl-price" data-od-slot="price"></span><span class="odl-per" data-od-slot="per" data-od-optional></span></div>
-        <button type="button" class="odl-choose" data-od-action="select"><span class="odl-sr" data-od-slot="label">Choose this flight</span></button>
+        <button type="button" class="odl-choose" data-od-action="select"><span class="odl-choose-label" data-od-slot="label">Choose this flight</span></button>
       </article>
     </li>
     <li data-od-item data-best="1" data-price="612" data-time="1040">

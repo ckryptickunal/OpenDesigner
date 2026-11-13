@@ -1,0 +1,10 @@
+{"title": "When will my refund arrive?",
+ "paragraphs": [
+  {"text": "Refunds go back to the card you paid with. Once the parcel reaches our returns centre, we check it within two working days and then send the money.", "cites": [{"number": 1}]},
+  {"text": "Your bank usually takes another three to five working days to show it, so in total most people see the refund about a week after the parcel arrives.", "cites": [{"number": 1}, {"number": 2}]},
+  {"text": "If you paid with a gift card, the amount goes back onto that card straight away instead."}
+ ],
+ "sources": [
+  {"number": 1, "title": "Returns and refunds", "publisher": "help.lindenmarket.example", "date": "Updated 30 Oct 2026"},
+  {"number": 2, "title": "How long card refunds take", "publisher": "Lindenmarket payments team"}
+ ]}

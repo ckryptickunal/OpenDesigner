@@ -1,0 +1,192 @@
+{
+  "name": "Approval prompt",
+  "summary": "Asks the person before something that changes data happens: what will happen, the details that matter, a warning when it cannot be undone, and Cancel or the action itself.",
+  "use": "just before an action that sends, pays, books or deletes, so the person confirms it first",
+  "type": "overlay",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "confirm",
+    "approval",
+    "dialog",
+    "warning",
+    "destructive action"
+  ],
+  "states": [
+    "with warning",
+    "without details",
+    "hover",
+    "focus",
+    "disabled"
+  ],
+  "source": null,
+  "a11y": "A labelled section whose heading says what will happen; the details are a description list, and Cancel comes first in tab order so a stray Enter does not confirm.",
+  "width": "narrow",
+  "spec": {
+    "use_when": [
+      "an assistant is about to do something that changes data (send, pay, book, delete) and the person must say yes first"
+    ],
+    "avoid_when": [
+      "the action already happened: use receipt",
+      "the person still has to fill in values: use form-fields",
+      "a bill or request that goes through several approvers: use approval-panel"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-approval-prompt h3",
+        "what": "what will happen, as a question",
+        "slot": "text"
+      },
+      {
+        "name": "summary",
+        "selector": ".odl-summary",
+        "what": "one line on what confirming does",
+        "slot": "text"
+      },
+      {
+        "name": "details",
+        "selector": ".odl-approval-prompt dl > div",
+        "what": "one fact about the action: who, what, how much, when",
+        "slot": "list"
+      },
+      {
+        "name": "warning",
+        "selector": ".odl-warning",
+        "what": "an optional caution, for actions that cannot be undone",
+        "slot": "text"
+      },
+      {
+        "name": "cancel",
+        "selector": ".odl-cancel",
+        "what": "the quiet way out, first in tab order",
+        "slot": "action"
+      },
+      {
+        "name": "approve",
+        "selector": ".odl-approve",
+        "what": "the primary button that does the action",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "approve",
+        "cancel"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "title"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 140,
+          "part": "summary"
+        },
+        "details": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 6,
+          "part": "details",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "value"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
+          }
+        },
+        "warning": {
+          "type": "string",
+          "maxLength": 140,
+          "part": "warning"
+        },
+        "approve": {
+          "type": "object",
+          "part": "approve",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "label",
+            "event"
+          ]
+        },
+        "cancel": {
+          "type": "object",
+          "part": "cancel",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "label",
+            "event"
+          ]
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "with no details the details box is hidden, so only the question and the buttons show",
+        "evidence": "dl:not(:has(dt:not(:empty))) { display: none; }"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "the prompt is shown only once the action is known; while it is being prepared show nothing"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the action fails after confirming, replace the prompt with error-retry"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "a disabled or still-loading button turns quiet neutral (secondary text on a subtle fill), still readable at AA",
+        "evidence": "button:disabled { cursor: not-allowed;"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "at most six details; on a phone each detail stacks label over value and the buttons share the row",
+        "evidence": "@container (max-width: 26rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "titles, values and button labels wrap, also long addresses with no spaces",
+        "evidence": "overflow-wrap: anywhere"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Cancel first, then the action",
+      "Enter or Space presses the focused button",
+      "Escape cancels when the renderer shows it"
+    ]
+  }
+}

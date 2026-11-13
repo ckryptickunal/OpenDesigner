@@ -32,8 +32,11 @@
 .odl-podcast-episodes .is-playing .odl-play .odl-i-pause { display: block; }
 .odl-podcast-episodes .is-playing .odl-play, .odl-podcast-episodes .is-playing .odl-play:hover { background: var(--ds-color-bg-accent-bold); color: var(--ds-color-text-on-accent); }
 .odl-podcast-episodes .odl-bar { flex: none; inline-size: var(--ds-space-32); block-size: var(--ds-space-4); border-radius: var(--ds-radius-full); background: var(--ds-color-border-default); overflow: hidden; }
-.odl-podcast-episodes .odl-bar i { display: block; inline-size: var(--w); block-size: 100%; border-radius: var(--ds-radius-full); background: currentColor; }
+.odl-podcast-episodes .odl-bar i { display: block; inline-size: calc(var(--od-ratio, 0) * 100%); block-size: 100%; border-radius: var(--ds-radius-full); background: currentColor; }
 .odl-podcast-episodes .is-playing .odl-bar { background: var(--ds-color-neutral-alpha-dark-6); }
+/* Rendered from data: data-download is the download's starting state (the script copies it to data-state); the template item stays hidden. */
+.odl-podcast-episodes .odl-dl[data-download="idle"], .odl-podcast-episodes .odl-dl[data-download="loading"], .odl-podcast-episodes .odl-dl[data-download="done"] { cursor: pointer; }
+.odl-podcast-episodes [hidden] { display: none !important; }
 .odl-podcast-episodes .odl-played { display: inline-flex; align-items: center; gap: var(--ds-space-inline-xs); margin-inline-start: var(--ds-space-inline-xs); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); }
 .odl-podcast-episodes .odl-played .odl-i { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); }
 .odl-podcast-episodes .odl-dl { margin-inline-start: auto; }
@@ -53,15 +56,25 @@
 <section class="odl-podcast-episodes" aria-labelledby="odl-pe-title">
   <div class="odl-card">
     <header class="odl-head">
-      <img class="odl-art" src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=240&h=240&fit=crop&auto=format&q=70" alt="Show art: a studio microphone close-up" width="120" height="120" loading="lazy" decoding="async">
+      <img class="odl-art" data-od-media="art" src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=240&h=240&fit=crop&auto=format&q=70" alt="Show art: a studio microphone close-up" width="120" height="120" loading="lazy" decoding="async">
       <div class="odl-about">
-        <p class="odl-show">Podcast · weekly</p>
-        <h3 id="odl-pe-title">The Long Table</h3>
-        <p class="odl-count">128 episodes · newest first</p>
+        <p class="odl-show" data-od-slot="kicker" data-od-optional>Podcast · weekly</p>
+        <h3 id="odl-pe-title" data-od-slot="title">The Long Table</h3>
+        <p class="odl-count" data-od-slot="count" data-od-optional>128 episodes · newest first</p>
       </div>
     </header>
-    <ol aria-label="Episodes">
-      <li>
+    <ol aria-label="Episodes" data-od-list="episodes">
+      <li data-od-item data-od-template hidden>
+        <p class="odl-meta"><span class="odl-new" data-od-when="is_new=true">New</span><span data-od-slot="date"></span><span aria-hidden="true">·</span><span data-od-slot="length"></span></p>
+        <h4 data-od-slot="title"></h4>
+        <p class="odl-desc" data-od-slot="description" data-od-optional></p>
+        <div class="odl-row">
+          <button type="button" class="odl-play"><svg class="odl-i odl-i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg><svg class="odl-i odl-i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg><span class="odl-bar" aria-hidden="true" data-od-optional><i data-od-measure="progress"></i></span><span data-od-slot="time_left" data-od-optional></span></button>
+          <span class="odl-played" data-od-when="played=true"><svg class="odl-i odl-i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Played</span><button type="button" class="odl-dl" data-state="idle" data-od-var="download" data-download="idle"><svg class="odl-i odl-i-dl is-idle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg><span class="odl-ring" aria-hidden="true"><b></b></span><svg class="odl-i odl-i-done is-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></button>
+          <button type="button" class="odl-more" aria-label="More"><svg class="odl-i odl-i-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+        </div>
+      </li>
+      <li data-od-item>
         <p class="odl-meta"><span class="odl-new">New</span><span>Thu 15 Oct</span><span aria-hidden="true">·</span><span>48 min</span></p>
         <h4>What bakers know about patience</h4>
         <p class="odl-desc">Ilka Ferenczi has run a night bakery for thirty years. We talk sourdough, broken sleep and why the best loaves take two days.</p>
@@ -71,17 +84,17 @@
           <button type="button" class="odl-more" aria-label="More for What bakers know about patience"><svg class="odl-i odl-i-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
         </div>
       </li>
-      <li>
+      <li data-od-item>
         <p class="odl-meta"><span>Thu 8 Oct</span><span aria-hidden="true">·</span><span>52 min</span></p>
         <h4>A night shift at the river port</h4>
         <p class="odl-desc">Crane drivers, a ship's cook and the woman who checks every container seal. What a port sounds like at three in the morning.</p>
         <div class="odl-row">
-          <button type="button" class="odl-play" aria-label="Resume A night shift at the river port, 18 minutes left"><svg class="odl-i odl-i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg><svg class="odl-i odl-i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg><span class="odl-bar" aria-hidden="true"><i style="--w: 65%"></i></span><span>18 min left</span></button>
+          <button type="button" class="odl-play" aria-label="Resume A night shift at the river port, 18 minutes left"><svg class="odl-i odl-i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg><svg class="odl-i odl-i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></svg><span class="odl-bar" aria-hidden="true"><i style="--od-ratio: 0.65"></i></span><span>18 min left</span></button>
           <button type="button" class="odl-dl" data-state="done" aria-label="Downloaded. Remove download of A night shift at the river port"><svg class="odl-i odl-i-dl is-idle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg><span class="odl-ring" aria-hidden="true"><b></b></span><svg class="odl-i odl-i-done is-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></button>
           <button type="button" class="odl-more" aria-label="More for A night shift at the river port"><svg class="odl-i odl-i-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
         </div>
       </li>
-      <li>
+      <li data-od-item>
         <p class="odl-meta"><span>Thu 1 Oct</span><span aria-hidden="true">·</span><span>39 min</span></p>
         <h4>Learning Portuguese at sixty</h4>
         <p class="odl-desc">Joaquim Teles moved back to his mother's village and found he had forgotten the language. A year of flashcards, market chats and one very patient neighbour.</p>
@@ -91,7 +104,7 @@
           <button type="button" class="odl-more" aria-label="More for Learning Portuguese at sixty"><svg class="odl-i odl-i-more" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
         </div>
       </li>
-      <li>
+      <li data-od-item>
         <p class="odl-meta"><span>Thu 24 Sep</span><span aria-hidden="true">·</span><span>44 min</span></p>
         <h4>The town that rebuilt its cinema</h4>
         <p class="odl-desc">When the last screen closed, four hundred neighbours bought it back, one seat at a time.</p>
@@ -108,9 +121,16 @@
 document.querySelectorAll(".odl-podcast-episodes").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
-  const items = [...root.querySelectorAll("li")];
+  const items = [...root.querySelectorAll("li:not([hidden])")].filter((li) => li.querySelector("h4") && li.querySelector(".odl-play"));
   items.forEach((li) => {
-    const title = li.querySelector("h4").textContent, play = li.querySelector(".odl-play"), first = play.getAttribute("aria-label");
+    const title = li.querySelector("h4").textContent, play = li.querySelector(".odl-play");
+    // Rendered from data: the play button's text and names, and the download state, come from the marked values.
+    const length = li.querySelector('[data-od-slot="length"]')?.textContent.trim(), left = li.querySelector('[data-od-slot="time_left"]')?.textContent.trim();
+    if (length && !play.querySelector("span:not(.odl-bar)")) { const t = document.createElement("span"); t.textContent = length; play.append(t); }
+    if (!play.hasAttribute("aria-label")) play.setAttribute("aria-label", left ? `Resume ${title}, ${left}` : `Play ${title}, ${length}`);
+    const more = li.querySelector(".odl-more");
+    if (more && more.getAttribute("aria-label") === "More") more.setAttribute("aria-label", `More for ${title}`);
+    const first = play.getAttribute("aria-label");
     play.addEventListener("click", () => {
       const on = !li.classList.contains("is-playing");
       items.forEach((o) => { o.classList.remove("is-playing"); const b = o.querySelector(".odl-play"); b.setAttribute("aria-label", b.dataset.label || b.getAttribute("aria-label")); });
@@ -134,6 +154,7 @@ document.querySelectorAll(".odl-podcast-episodes").forEach((root) => {
       if (dl.dataset.state === "idle") { set("loading", 0); run(0); }
       else { clearInterval(timer); timer = null; set("idle"); }
     });
+    if (dl.dataset.download) set(dl.dataset.download === "loading" ? "loading" : dl.dataset.download, 0);
     if (dl.dataset.state === "loading") run(Number(dl.dataset.done || 0));
   });
 });

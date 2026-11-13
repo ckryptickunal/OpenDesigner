@@ -44,6 +44,8 @@
   .odl-receipt .odl-card { padding: var(--ds-space-inset-lg); }
   .odl-receipt h3 { font: var(--ds-text-title-md); }
 }
+/* Disabled or still loading: quiet but readable (AA), never the faint disabled pair. */
+.odl-receipt button:disabled { cursor: not-allowed; background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); }
 @media (prefers-reduced-motion: reduce) { .odl-receipt, .odl-receipt *, .odl-receipt *::before { transition: none !important; animation: none !important; } }
 </style>
 <article class="odl-receipt" aria-labelledby="odl-rc-title"><div class="odl-card">

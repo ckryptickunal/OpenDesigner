@@ -74,7 +74,7 @@
   border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-alpha-light-11); fill: currentColor; }
 .odl-title-detail .odl-ep:hover .odl-go, .odl-title-detail .odl-ep:focus-visible .odl-go { opacity: 1; }
 .odl-title-detail .odl-bar { position: absolute; inset-inline: var(--ds-space-inset-xs); inset-block-end: var(--ds-space-inset-xs); block-size: var(--ds-space-4); overflow: hidden; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-alpha-dark-7); }
-.odl-title-detail .odl-bar i { display: block; inline-size: var(--w); block-size: 100%; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-dark-12); }
+.odl-title-detail .odl-bar i { display: block; inline-size: var(--w, calc(var(--od-ratio, 0) * 100%)); block-size: 100%; border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-dark-12); }
 .odl-title-detail .odl-ep-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--ds-space-inline-md); padding-block-start: var(--ds-space-2); }
 .odl-title-detail .odl-ep-t { font: var(--ds-text-label-lg); }
 .odl-title-detail .odl-ep-m { flex: none; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
@@ -99,42 +99,48 @@
   .odl-title-detail .odl-body { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); column-gap: var(--ds-space-section-sm); }
 }
 @media (prefers-reduced-motion: reduce) { .odl-title-detail, .odl-title-detail *, .odl-title-detail *::before, .odl-title-detail *::after { transition: none !important; animation: none !important; } }
-.odl-title-detail .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+/* marks: a season wrapper and the facts list add no box; hidden full template items stay out of sight; the score stays last among the facts */
+.odl-title-detail .odl-season, .odl-title-detail .odl-factl { display: contents; }
+.odl-title-detail [hidden] { display: none !important; }
+.odl-title-detail .odl-score { order: 1; }
+.odl-title-detail .odl-epn:not(:empty)::after { content: ". "; }
+.odl-title-detail .od-empty { grid-column: 1 / -1; color: var(--ds-color-text-secondary); font: var(--ds-text-body-md); }
+.odl-title-detail .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; contain: paint; clip-path: inset(50%); white-space: nowrap; }
 </style>
 <article class="odl-title-detail" aria-labelledby="odl-td-title">
   <div class="odl-shell">
     <div class="odl-hero">
-      <img class="odl-pic" src="https://images.unsplash.com/photo-1446038202205-1c96430dbdab?w=2304&h=832&fit=crop&auto=format&q=70" alt="Rocky coastline and blue ocean" width="2304" height="832" loading="lazy" decoding="async">
+      <img class="odl-pic" data-od-media="still" src="https://images.unsplash.com/photo-1446038202205-1c96430dbdab?w=2304&h=832&fit=crop&auto=format&q=70" alt="Rocky coastline and blue ocean" width="2304" height="832" loading="lazy" decoding="async">
       <div class="odl-over">
-        <p class="odl-kicker">Series · Mystery · Drama</p>
-        <h3 id="odl-td-title">The Ninth Lighthouse</h3>
-        <p class="odl-facts"><span>2026</span><span class="odl-age" aria-label="Rated 13 and over">13+</span><span>2 seasons</span><span>50 min episodes</span><span class="odl-score"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><span><span class="odl-sr">Rated </span>4.7</span></span></p>
+        <p class="odl-kicker" data-od-slot="kicker" data-od-optional>Series · Mystery · Drama</p>
+        <h3 id="odl-td-title" data-od-slot="title">The Ninth Lighthouse</h3>
+        <p class="odl-facts"><span class="odl-factl" data-od-list="facts"><span data-od-item data-od-slot="text">2026</span><span data-od-item class="odl-age" aria-label="Rated 13 and over">13+</span><span data-od-item>2 seasons</span><span data-od-item>50 min episodes</span></span><span class="odl-score" data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg><span><span class="odl-sr">Rated </span><span data-od-slot="score">4.7</span></span></span></p>
       </div>
     </div>
     <div class="odl-body">
       <div class="odl-info">
         <div class="odl-actions">
-          <button type="button" class="odl-play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg><span>Resume S1 · E3</span></button>
+          <button type="button" class="odl-play"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg><span data-od-slot="resume_label">Resume S1 · E3</span></button>
           <button type="button" class="odl-ghost odl-list" aria-pressed="false"><svg class="is-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><svg class="is-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>My list</span></button>
           <button type="button" class="odl-ghost odl-icon odl-rate" aria-label="I like this" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></svg></button>
           <button type="button" class="odl-ghost odl-icon odl-share" aria-label="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg></button>
         </div>
-        <p class="odl-synopsis">A new keeper takes over a lighthouse on a tidal island and finds the logbook full of ships that never docked. Slow, salty and quietly unsettling.</p>
-        <section aria-labelledby="odl-td-cast">
+        <p class="odl-synopsis" data-od-slot="synopsis" data-od-optional>A new keeper takes over a lighthouse on a tidal island and finds the logbook full of ships that never docked. Slow, salty and quietly unsettling.</p>
+        <section aria-labelledby="odl-td-cast" data-od-optional>
           <h4 class="odl-label" id="odl-td-cast">Starring</h4>
-          <ul class="odl-people">
-            <li class="odl-person"><img class="odl-face" src="https://images.unsplash.com/photo-1647082286159-16a43c39eab1?w=128&h=128&fit=crop&crop=faces&auto=format&q=70" alt="" width="128" height="128" loading="lazy" decoding="async"><span class="odl-name">Ottilie Brennholt</span><span class="odl-role">Keeper</span></li>
-            <li class="odl-person"><img class="odl-face" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=128&h=128&fit=crop&crop=faces&auto=format&q=70" alt="" width="128" height="128" loading="lazy" decoding="async"><span class="odl-name">Leandro Pires</span><span class="odl-role">Pier master</span></li>
-            <li class="odl-person"><img class="odl-face" src="https://images.unsplash.com/photo-1536766768598-e09213fdcf22?w=128&h=128&fit=crop&crop=faces&auto=format&q=70" alt="" width="128" height="128" loading="lazy" decoding="async"><span class="odl-name">Zainab Qureshi</span><span class="odl-role">Visitor</span></li>
+          <ul class="odl-people" data-od-list="cast">
+            <li class="odl-person" data-od-item><img class="odl-face" data-od-media="photo" src="https://images.unsplash.com/photo-1647082286159-16a43c39eab1?w=128&h=128&fit=crop&crop=faces&auto=format&q=70" alt="" width="128" height="128" loading="lazy" decoding="async"><span class="odl-name" data-od-slot="name">Ottilie Brennholt</span><span class="odl-role" data-od-slot="role" data-od-optional>Keeper</span></li>
+            <li class="odl-person" data-od-item><img class="odl-face" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=128&h=128&fit=crop&crop=faces&auto=format&q=70" alt="" width="128" height="128" loading="lazy" decoding="async"><span class="odl-name">Leandro Pires</span><span class="odl-role">Pier master</span></li>
+            <li class="odl-person" data-od-item><img class="odl-face" src="https://images.unsplash.com/photo-1536766768598-e09213fdcf22?w=128&h=128&fit=crop&crop=faces&auto=format&q=70" alt="" width="128" height="128" loading="lazy" decoding="async"><span class="odl-name">Zainab Qureshi</span><span class="odl-role">Visitor</span></li>
           </ul>
         </section>
-        <dl class="odl-cast">
-          <div><dt>Genres</dt><dd>Mystery, Drama, Coastal</dd></div>
-          <div><dt>Audio</dt><dd>English, Portuguese</dd></div>
-          <div><dt>Subtitles</dt><dd>12 languages</dd></div>
+        <dl class="odl-cast" data-od-list="details">
+          <div data-od-item><dt data-od-slot="label">Genres</dt><dd data-od-slot="value">Mystery, Drama, Coastal</dd></div>
+          <div data-od-item><dt>Audio</dt><dd>English, Portuguese</dd></div>
+          <div data-od-item><dt>Subtitles</dt><dd>12 languages</dd></div>
         </dl>
       </div>
-      <section class="odl-eps" aria-labelledby="odl-td-eps">
+      <section class="odl-eps" aria-labelledby="odl-td-eps" data-od-list="seasons">
         <div class="odl-eps-top">
           <h4 id="odl-td-eps">Episodes</h4>
           <fieldset><legend class="odl-sr">Season</legend><div class="odl-seg">
@@ -142,17 +148,18 @@
             <label><input type="radio" name="odl-td-season" value="2"><span>Season 2</span></label>
           </div></fieldset>
         </div>
-        <ol class="odl-s1" aria-label="Season 1">
-          <li><button type="button" class="odl-ep is-seen" aria-label="Play episode 1: The keeper's ledger, watched"><span class="odl-thumb"><img class="odl-pic" src="https://images.unsplash.com/photo-1608126199278-50a5f584dbdd?w=320&h=180&fit=crop&auto=format&q=70" alt="" width="320" height="180" loading="lazy" decoding="async"><span class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span class="odl-bar"><i style="--w: 100%"></i></span></span><span class="odl-ep-head"><span class="odl-ep-t">1. The keeper's ledger</span><span class="odl-ep-m">54 min</span></span><span class="odl-ep-d">A new keeper arrives on the island and finds the last one's logbook stops mid-sentence.</span></button></li>
-          <li><button type="button" class="odl-ep is-seen" aria-label="Play episode 2: Fog signal, watched"><span class="odl-thumb"><img class="odl-pic" src="https://images.unsplash.com/photo-1578429827733-272eb6d7972e?w=320&h=180&fit=crop&auto=format&q=70" alt="" width="320" height="180" loading="lazy" decoding="async"><span class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span class="odl-bar"><i style="--w: 100%"></i></span></span><span class="odl-ep-head"><span class="odl-ep-t">2. Fog signal</span><span class="odl-ep-m">49 min</span></span><span class="odl-ep-d">Three ships report a light where none should be. The harbour master wants it kept quiet.</span></button></li>
-          <li><button type="button" class="odl-ep" aria-label="Play episode 3: Low water, 32 minutes left"><span class="odl-thumb"><img class="odl-pic" src="https://images.unsplash.com/photo-1505490096310-204ef067fe6b?w=320&h=180&fit=crop&auto=format&q=70" alt="" width="320" height="180" loading="lazy" decoding="async"><span class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span class="odl-bar"><i style="--w: 38%"></i></span></span><span class="odl-ep-head"><span class="odl-ep-t">3. Low water</span><span class="odl-ep-m">51 min</span></span><span class="odl-ep-d">The tide goes out further than anyone remembers, and the causeway shows something old.</span></button></li>
-          <li><button type="button" class="odl-ep" aria-label="Play episode 4: Salt in the gears, 47 minutes"><span class="odl-thumb"><img class="odl-pic" src="https://images.unsplash.com/photo-1625851823298-70d1151f5b71?w=320&h=180&fit=crop&auto=format&q=70" alt="" width="320" height="180" loading="lazy" decoding="async"><span class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span></span><span class="odl-ep-head"><span class="odl-ep-t">4. Salt in the gears</span><span class="odl-ep-m">47 min</span></span><span class="odl-ep-d">The lamp fails on the longest night. A visitor offers to help, for a price.</span></button></li>
-        </ol>
-<ol class="odl-s2" aria-label="Season 2">
+        <div class="odl-season" data-od-item><ol class="odl-s1" aria-label="Season 1" data-od-label="label" data-od-list="episodes">
+          <li data-od-item data-od-template hidden><button type="button" class="odl-ep"><span class="odl-thumb"><img class="odl-pic" data-od-media="still" src="" alt="" width="320" height="180" loading="lazy" decoding="async"><span class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span class="odl-bar" data-od-optional><i data-od-measure="progress"></i></span></span><span class="odl-ep-head"><span class="odl-ep-t"><span class="odl-epn" data-od-slot="number"></span><span data-od-slot="title"></span></span><span class="odl-ep-m" data-od-slot="length" data-od-optional></span></span><span class="odl-ep-d" data-od-slot="summary" data-od-optional></span></button></li>
+          <li data-od-item><button type="button" class="odl-ep is-seen" aria-label="Play episode 1: The keeper's ledger, watched"><span class="odl-thumb"><img class="odl-pic" src="https://images.unsplash.com/photo-1608126199278-50a5f584dbdd?w=320&h=180&fit=crop&auto=format&q=70" alt="" width="320" height="180" loading="lazy" decoding="async"><span class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span class="odl-bar"><i style="--w: 100%"></i></span></span><span class="odl-ep-head"><span class="odl-ep-t">1. The keeper's ledger</span><span class="odl-ep-m">54 min</span></span><span class="odl-ep-d">A new keeper arrives on the island and finds the last one's logbook stops mid-sentence.</span></button></li>
+          <li data-od-item><button type="button" class="odl-ep is-seen" aria-label="Play episode 2: Fog signal, watched"><span class="odl-thumb"><img class="odl-pic" src="https://images.unsplash.com/photo-1578429827733-272eb6d7972e?w=320&h=180&fit=crop&auto=format&q=70" alt="" width="320" height="180" loading="lazy" decoding="async"><span class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span class="odl-bar"><i style="--w: 100%"></i></span></span><span class="odl-ep-head"><span class="odl-ep-t">2. Fog signal</span><span class="odl-ep-m">49 min</span></span><span class="odl-ep-d">Three ships report a light where none should be. The harbour master wants it kept quiet.</span></button></li>
+          <li data-od-item><button type="button" class="odl-ep" aria-label="Play episode 3: Low water, 32 minutes left"><span class="odl-thumb"><img class="odl-pic" src="https://images.unsplash.com/photo-1505490096310-204ef067fe6b?w=320&h=180&fit=crop&auto=format&q=70" alt="" width="320" height="180" loading="lazy" decoding="async"><span class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span><span class="odl-bar"><i style="--w: 38%"></i></span></span><span class="odl-ep-head"><span class="odl-ep-t">3. Low water</span><span class="odl-ep-m">51 min</span></span><span class="odl-ep-d">The tide goes out further than anyone remembers, and the causeway shows something old.</span></button></li>
+          <li data-od-item><button type="button" class="odl-ep" aria-label="Play episode 4: Salt in the gears, 47 minutes"><span class="odl-thumb"><img class="odl-pic" src="https://images.unsplash.com/photo-1625851823298-70d1151f5b71?w=320&h=180&fit=crop&auto=format&q=70" alt="" width="320" height="180" loading="lazy" decoding="async"><span class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span></span><span class="odl-ep-head"><span class="odl-ep-t">4. Salt in the gears</span><span class="odl-ep-m">47 min</span></span><span class="odl-ep-d">The lamp fails on the longest night. A visitor offers to help, for a price.</span></button></li>
+        </ol></div>
+<div class="odl-season" data-od-item><ol class="odl-s2" aria-label="Season 2">
           <li><button type="button" class="odl-ep" aria-label="Play episode 1: Return crossing, 56 minutes"><span class="odl-thumb"><img class="odl-pic" src="https://images.unsplash.com/photo-1514565131-fce0801e5785?w=320&h=180&fit=crop&auto=format&q=70" alt="" width="320" height="180" loading="lazy" decoding="async"><span class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span></span><span class="odl-ep-head"><span class="odl-ep-t">1. Return crossing</span><span class="odl-ep-m">56 min</span></span><span class="odl-ep-d">A year later, a letter with no stamp brings the keeper back to the mainland.</span></button></li>
           <li><button type="button" class="odl-ep" aria-label="Play episode 2: Two lights, 50 minutes"><span class="odl-thumb"><img class="odl-pic" src="https://images.unsplash.com/photo-1589194837853-340f4a2f6559?w=320&h=180&fit=crop&auto=format&q=70" alt="" width="320" height="180" loading="lazy" decoding="async"><span class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span></span><span class="odl-ep-head"><span class="odl-ep-t">2. Two lights</span><span class="odl-ep-m">50 min</span></span><span class="odl-ep-d">On the chart there is a second lighthouse. On the coast there is not.</span></button></li>
           <li><button type="button" class="odl-ep" aria-label="Play episode 3: The ninth, 58 minutes"><span class="odl-thumb"><img class="odl-pic" src="https://images.unsplash.com/photo-1598760122223-45f0f18a1bbd?w=320&h=180&fit=crop&auto=format&q=70" alt="" width="320" height="180" loading="lazy" decoding="async"><span class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"/></svg></span></span><span class="odl-ep-head"><span class="odl-ep-t">3. The ninth</span><span class="odl-ep-m">58 min</span></span><span class="odl-ep-d">Every keeper's name is carved inside the tower. One space is still blank.</span></button></li>
-        </ol>
+        </ol></div>
       </section>
     </div>
   </div>
@@ -161,6 +168,20 @@
 document.querySelectorAll(".odl-title-detail").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
+  // seasons and episodes from data: each season list gets its place, its label on the switch, and each episode a spoken name
+  const seasons = [...root.querySelectorAll(".odl-eps > .odl-season > ol")], picks = root.querySelectorAll(".odl-seg label");
+  seasons.forEach((ol, i) => {
+    ol.className = "odl-s" + (i + 1);
+    const pick = picks[i] && picks[i].querySelector("span");
+    if (pick && ol.getAttribute("aria-label")) pick.textContent = ol.getAttribute("aria-label");
+    ol.querySelectorAll(".odl-ep:not([aria-label])").forEach((ep) => {
+      const n = ep.querySelector(".odl-epn"), t = ep.querySelector(".odl-ep-t").textContent, m = ep.querySelector(".odl-ep-m");
+      if (t) ep.setAttribute("aria-label", `Play episode ${n ? n.textContent : ""}: ${t.replace(/^\d+\.\s*/, "")}${m && m.textContent ? ", " + m.textContent : ""}`);
+    });
+  });
+  picks.forEach((l, i) => { if (i >= seasons.length) l.hidden = true; });
+  const seg = root.querySelector(".odl-eps fieldset");
+  if (seg && seasons.length < 2) seg.hidden = true;
   root.querySelectorAll(".odl-list, .odl-rate").forEach((b) => b.addEventListener("click", () => b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true"))));
 });
 </script>
