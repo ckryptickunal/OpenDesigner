@@ -110,6 +110,10 @@ try:
 except ImportError:
     taste_py = None
 try:
+    import audit as audit_py  # scripts/audit.py: the audit page (the system as built) and the adapt page; optional
+except ImportError:
+    audit_py = None
+try:
     import research as research_py  # scripts/research.py: user research, its checks and what it recommends; optional
 except ImportError:
     research_py = None
@@ -11786,6 +11790,25 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             f"- Validation: {vr.count('error')} errors, {vr.count('warning')} warnings."]
     out.append(section("Open Items", "\n".join(body), lead="**These parts are still defaults, guesses, or waiting for a person.**", fold=False))
 
+    # Audit Ledger: what each implementation round did, broke and skipped on purpose (engine.py ledger); only once there is one
+    rounds_ = ledger_rounds(state)
+    if rounds_:
+        word = {"done": "Done", "broken": "Broken", "waived": "Skipped on purpose", "planned": "Not done yet"}
+        rows = ["| Round | Item | Status | Note, or why it was skipped and who decided |", "|---|---|---|---|"]
+        for r_ in rounds_[-6:]:
+            for it in r_.get("items") or []:
+                st_ = it.get("status", "planned")
+                why_ = f"{it.get('why', '')} ({it.get('by', '?')})" if st_ == "waived" else (it.get("note") or "")
+                rows.append(f"| {r_['id']} {r_.get('title', '')}{' (open)' if not r_.get('closed') else ''} | {it['id']} | {word.get(st_, st_)} | "
+                            f"{why_.replace('|', '/')} |")
+        left_ = ledger_open(state)
+        body = "\n".join(rows) + ("\n\n" + f"**Still open:** {', '.join(o['round'] + '/' + o['item'] for o in left_)}. "
+                                  "`engine.py review` fails until each is done or skipped on purpose." if left_ else
+                                  "\n\nEvery item is done or skipped on purpose.") \
+            + (f"\n\nEarlier rounds: {len(rounds_) - 6}, in `{R('state.json')}`." if len(rounds_) > 6 else "")
+        out.append(section("Audit Ledger", body, lead="**What each implementation round did, what broke, and what was skipped on "
+                                                       "purpose, with the reason and who decided.**", fold=False))
+
     # 17 For Agents
     body = [f"1. Before any visual work, read this file, PRODUCT.md and `{R('tokens/')}` (start at `{R('tokens/opendesigner.resolver.json')}`).",
             "2. Use tokens, never raw values" + (": " + ", ".join(x for f, x in (
@@ -11808,6 +11831,9 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
         body += ["", "**Tailwind v4 classes** (one import: `@import \"tailwindcss\"; @import \"<path>/opendesigner/build/tailwind/theme.css\";`"
                  + ("; Tailwind's default colors, text sizes, radii and shadows are switched off, so only these exist" if (state.get("exports") or {}).get("tailwindReset", True) else "")
                  + "):", "", _md_table(["Area", "Classes"], [(k.title(), ", ".join(f"`{c}`" for c in v)) for k, v in tw.items() if v])]
+    note_ = research_py.design_md_note(state) if research_py and hasattr(research_py, "design_md_note") else ""  # S3: the research summary page
+    if note_:
+        body += ["", note_]
     out.append(section("For Agents", "\n".join(body), lead="**AI agents: read this file and the tokens before you change any screen.**", fold=False))
     out.append(keeps.notes())  # kept blocks whose section is no longer written: never dropped
     return "\n".join(out).rstrip() + "\n"
@@ -13344,6 +13370,35 @@ def _main(argv=None):
     p.add_argument("--use", action="store_true", help="also pick the saved style at Q-dir-01")
     p.add_argument("--tiles", action="store_true", help="mix, mutate, explore: show the results as tiles (preview/style-tiles.html)")
     p.add_argument("--open", action="store_true", help="tiles: open the page")
+    p = sub.add_parser("audit-page", parents=[common], help="audit.html: the system as the code builds it, every inconsistency with "
+                                                            "file:line evidence and tweak options to preview and copy (reports only)")
+    p.add_argument("--project", default=None, help="folder to scan (default: the project root)")
+    p.add_argument("--open", action="store_true")
+    p.add_argument("--json", action="store_true", help="print the page's data instead of writing it")
+    p.add_argument("--out", default=None, help="where to write the page (default opendesigner/audit.html)")
+    p = sub.add_parser("adapt", parents=[common], help="adapt.html: what a reference (opendesigner-extract output) would change in this "
+                                                       "system and what stays, side by side; records nothing")
+    p.add_argument("file", help="the reference measurements: css_scan.py --json output, or the engine's reference schema")
+    p.add_argument("--open", action="store_true")
+    p.add_argument("--json", action="store_true")
+    p.add_argument("--out", default=None, help="where to write the page (default opendesigner/adapt.html)")
+    p = sub.add_parser("exempt", parents=[common], help="keep example files that break the system on purpose out of review, with why")
+    p.add_argument("glob", nargs="?", help="a folder, file or glob, from the repository's top folder (site/figures/*)")
+    p.add_argument("--why", default=None)
+    p.add_argument("--by", default="owner", choices=["owner", "agent"])
+    p.add_argument("--remove", action="store_true")
+    p.add_argument("--json", action="store_true")
+    p = sub.add_parser("ledger", parents=[common], help="the audit ledger: what each implementation round did, broke and skipped on purpose")
+    p.add_argument("action", choices=["start", "add", "done", "broke", "waive", "close", "show"])
+    p.add_argument("item", nargs="?", help="the item id (a building block such as comp.action.button, an audit issue such as A-color-01, "
+                                           "or your own); for start, the round's title")
+    p.add_argument("--items", default=None, help="start: comma-separated items planned for the round")
+    p.add_argument("--note", default=None, help="done: what was done; broke: what broke; add: what the item is")
+    p.add_argument("--why", default=None, help="waive: why it is skipped on purpose")
+    p.add_argument("--by", default=None, choices=["owner", "agent"], help="waive: who decided")
+    p.add_argument("--quote", default=None, help="waive --by owner: the person's own words")
+    p.add_argument("--files", default=None, help="the files the item touched, comma-separated")
+    p.add_argument("--json", action="store_true")
     p = sub.add_parser("review", parents=[common], help="find hard-coded values, broken standards, removed things that came back, guard "
                                                         "problems and stale DESIGN.md sections")
     p.add_argument("--project", default=None, help="folder to scan (default: the project root)")
@@ -13516,6 +13571,20 @@ def _main(argv=None):
         cmd_show(d, a.template, a.out, a.open, a.json)
     elif a.cmd == "review":
         return cmd_review(d, a.project, a.strict, a.json)
+    elif a.cmd == "audit-page":
+        if not audit_py:
+            raise SystemExit("audit-page needs scripts/audit.py next to engine.py.")
+        return audit_py.audit_page(sys.modules[__name__], d, a.project, open_=a.open, as_json=a.json, out=a.out)
+    elif a.cmd == "adapt":
+        if not audit_py:
+            raise SystemExit("adapt needs scripts/audit.py next to engine.py.")
+        return audit_py.adapt_page(sys.modules[__name__], d, a.file, open_=a.open, as_json=a.json, out=a.out)
+    elif a.cmd == "exempt":
+        return cmd_exempt(d, a.glob, a.why, a.by, a.remove, a.json)
+    elif a.cmd == "ledger":
+        start = a.action == "start"
+        return cmd_ledger(d, a.action, item=None if start else a.item, title=a.item if start else None, items=a.items, note=a.note,
+                          why=a.why, by=a.by, quote=a.quote, files=a.files, as_json=a.json)
     elif a.cmd == "standards":
         res = {}
         cmd_standards(d, a.json, a.update, a.show_all, result=res)
@@ -15659,14 +15728,233 @@ def cmd_review_unbound(d, project, strict, as_json, limit=40):
     return 1 if broken or (strict and total) else 0
 
 
-def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
+# =============================================================================================
+# exempt and ledger: examples kept out of review on purpose, and what each implementation round did (DC-L21-01, P13, P14)
+# =============================================================================================
+
+LEDGER_STATUS = ("planned", "done", "broken", "waived")
+LEDGER_BY = ("owner", "agent")
+
+
+def exempt_rules(state):
+    """The files the owner keeps out of review on purpose: [{glob, why, by, date}] (purpose audit D7: demo figures that plant
+    mistakes on purpose)."""
+    return [r for r in (state.get("exempt") or []) if isinstance(r, dict) and r.get("glob")]
+
+
+def exempt_root(d, project=None):
+    """Where exempt globs are read from: the repository's top folder, else the folder that holds the system."""
+    return _git(project or doc_dir(d), "rev-parse", "--show-toplevel") or doc_dir(d)
+
+
+def exempt_match(rules, path, root):
+    """The first rule whose glob matches path (relative to root, with /). A glob without a wildcard is a folder or a file."""
+    import fnmatch
+    rel = os.path.relpath(os.path.abspath(path), os.path.abspath(root)).replace(os.sep, "/")
+    for r in rules:
+        g = r["glob"].strip().lstrip("./").rstrip("/")
+        if any(c in g for c in "*?["):
+            if fnmatch.fnmatch(rel, g) or fnmatch.fnmatch(rel, g + "/*") or fnmatch.fnmatch(rel, g.rstrip("*").rstrip("/") + "/*"):
+                return r
+        elif rel == g or rel.startswith(g + "/"):
+            return r
+    return None
+
+
+def cmd_exempt(d, glob=None, why=None, by="owner", remove=False, as_json=False):
+    """Mark files as examples that break the system on purpose (a demo of mistakes), so review leaves them out and says so.
+    Without a glob: list them. A reason of at least two words is required; nothing is exempt silently."""
+    sp = os.path.join(d, STATE_FILE)
+    if not os.path.exists(sp):
+        raise SystemExit(f"No system here ({sp}). Run engine.py sketch or init first.")
+    state = read_json(sp)
+    rules = state.setdefault("exempt", [])
+    if glob and remove:
+        left = [r for r in rules if r.get("glob") != glob]
+        if len(left) == len(rules):
+            raise SystemExit(f"{glob} is not exempt. Exempt now: {', '.join(r['glob'] for r in rules) or 'nothing'}.")
+        state["exempt"] = left
+        dump_json(sp, state)
+        print(f"{glob} is reviewed again.")
+        return 0
+    if glob:
+        if not why or len(why.split()) < 2:
+            raise SystemExit("Say why these files break the system on purpose, in at least two words: --why \"demo figures show mistakes\".")
+        if by not in LEDGER_BY:
+            raise SystemExit(f"--by is owner or agent, not {by}.")
+        rules[:] = [r for r in rules if r.get("glob") != glob] + [{"glob": glob, "why": why, "by": by, "date": _dt.date.today().isoformat()}]
+        dump_json(sp, state)
+        root = exempt_root(d)
+        n = sum(1 for f in _code_files(root, {os.path.abspath(d)}) if exempt_match([rules[-1]], f, root))
+        print(f"Exempt: {glob} ({n} code file{'s' if n != 1 else ''} now; {why}; marked by {by}). review leaves them out and lists them."
+              + (" An agent marked this: confirm it with the owner." if by == "agent" else ""))
+        return 0
+    if as_json:
+        print(json.dumps(exempt_rules(state), indent=2))
+    elif not rules:
+        print("Nothing is exempt from review.")
+    for r in exempt_rules(state) if not as_json else []:
+        print(f"{r['glob']}: {r['why']} ({r['by']}, {r['date']})")
+    return 0
+
+
+def ledger_rounds(state):
+    return [r for r in ((state.get("ledger") or {}).get("rounds") or []) if isinstance(r, dict)]
+
+
+def ledger_open(state):
+    """Ledger items that are neither done nor waived (planned, or broken and not yet fixed), in every round."""
+    return [{"round": r["id"], "item": it["id"], "status": it.get("status", "planned"), "note": it.get("note") or ""}
+            for r in ledger_rounds(state) for it in r.get("items") or [] if it.get("status", "planned") in ("planned", "broken")]
+
+
+def _ontology_ids():
+    try:
+        return {n["id"]: n.get("name") for n in read_json(os.path.join(REFERENCES, "ontology-slim.json"))["nodes"]}
+    except (OSError, ValueError, KeyError):
+        return {}
+
+
+def cmd_ledger(d, action, item=None, title=None, items=None, note=None, why=None, by=None, quote=None, files=None, as_json=False):
+    """The audit ledger: each implementation round lists what it will do, then records each item as done, broken (with what
+    broke) or waived (skipped on purpose, with the reason and who decided). Items named after a building block in the
+    ontology (comp.button, say) fill state.blocks, the block coverage validate reads. A waiver is also written to
+    state.waivers, so DESIGN.md shows it. review fails while any item is neither done nor waived."""
+    sp = os.path.join(d, STATE_FILE)
+    if not os.path.exists(sp):
+        raise SystemExit(f"No system here ({sp}). Run engine.py sketch or init first.")
+    state = read_json(sp)
+    led = state.setdefault("ledger", {"rounds": []})
+    rounds = led.setdefault("rounds", [])
+    today = _dt.date.today().isoformat()
+    onto = _ontology_ids()
+    blocks = state.setdefault("blocks", {})
+
+    def current():
+        open_ = [r for r in rounds if not r.get("closed")]
+        if not open_:
+            raise SystemExit("No round is open. Start one: engine.py ledger start \"<what this round implements>\" --items a,b,c")
+        return open_[-1]
+
+    def find(iid):
+        for r in reversed(rounds):
+            for it in r.get("items") or []:
+                if it["id"] == iid:
+                    return r, it
+        known = [it["id"] for r in rounds for it in r.get("items") or []]
+        raise SystemExit(f"No ledger item {iid}. Items: {', '.join(known[-12:]) or 'none'}. Add it: engine.py ledger add {iid}")
+
+    def add_item(r, iid, what=None):
+        if any(it["id"] == iid for it in r["items"]):
+            return None
+        it = {"id": iid, "what": what or onto.get(iid) or iid, "status": "planned", "date": today}
+        if iid in onto:
+            it["block"] = iid
+            blocks[iid] = {"status": "pending", "round": r["id"]}
+        r["items"].append(it)
+        return it
+
+    def block_status(it):
+        if it.get("block"):
+            blocks[it["block"]] = {"status": {"done": "done", "waived": "not-applicable", "broken": "pending"}.get(it["status"], "pending"),
+                                   "round": next(r["id"] for r in rounds if it in r.get("items", [])),
+                                   **({"reason": it["why"]} if it["status"] == "waived" else {})}
+
+    msg = ""
+    if action == "start":
+        if not title:
+            raise SystemExit("Name the round: engine.py ledger start \"<what this round implements>\" --items a,b,c")
+        r = {"id": f"R{len(rounds) + 1}", "title": title, "started": today, "items": []}
+        rounds.append(r)
+        for x in [x.strip() for x in (items or "").split(",") if x.strip()]:
+            add_item(r, x)
+        still = [o for o in ledger_open(state) if o["round"] != r["id"]]
+        msg = (f"Round {r['id']} started: {title}. {len(r['items'])} item{'s' if len(r['items']) != 1 else ''} planned"
+               + (f" ({sum(1 for it in r['items'] if it.get('block'))} of them building blocks, counted in coverage)" if r["items"] else "")
+               + "." + (f" {len(still)} item{'s' if len(still) != 1 else ''} from earlier rounds are still open." if still else ""))
+    elif action == "add":
+        r = current()
+        if not item:
+            raise SystemExit("Name the item: engine.py ledger add <id> [--note \"what it is\"]")
+        it = add_item(r, item, note)
+        msg = f"{r['id']}: {item} planned." if it else f"{r['id']} already lists {item}."
+    elif action in ("done", "broke", "waive"):
+        if not item:
+            raise SystemExit(f"Name the item: engine.py ledger {action} <id>")
+        r, it = find(item)
+        if action == "done":
+            it.update(status="done", date=today, **({"note": note} if note else {}))
+            it.pop("why", None)
+        elif action == "broke":
+            if not note:
+                raise SystemExit("Say what broke: engine.py ledger broke <id> --note \"the focus ring is gone on dark\"")
+            it.update(status="broken", note=note, date=today)
+        else:
+            if not why or len(why.split()) < 2:
+                raise SystemExit("Say why it is skipped on purpose, in at least two words: --why \"...\" --by owner|agent")
+            if by not in LEDGER_BY:
+                raise SystemExit("Say who decided: --by owner (the person said so; add --quote with their words) or --by agent.")
+            if by == "owner" and not quote:
+                raise SystemExit("--by owner needs the person's own words: --quote \"...\". If you decided, say --by agent and ask them.")
+            it.update(status="waived", why=why, by=by, date=today, **({"quote": quote} if quote else {}))
+            it.pop("note", None)
+            state.setdefault("waivers", {})[f"{r['id']}/{item}"] = f"{why} ({by}, {today})"
+        if action != "waive":
+            (state.get("waivers") or {}).pop(f"{r['id']}/{item}", None)
+        if files:
+            it["files"] = [x.strip() for x in files.split(",") if x.strip()]
+        block_status(it)
+        msg = f"{r['id']}: {item} is {it['status']}." + (" An agent waived it: the round closes only after the owner agrees "
+                                                       "(ledger waive again with --by owner --quote)."
+                                                       if action == "waive" and by == "agent" else "")
+    elif action == "close":
+        r = current()
+        left = [it for it in r["items"] if it.get("status", "planned") in ("planned", "broken")
+                or (it.get("status") == "waived" and it.get("by") == "agent")]
+        if left:
+            print(f"{r['id']} cannot close: {len(left)} item{'s' if len(left) != 1 else ''} neither done nor waived:")
+            for it in left:
+                agent_ = it.get("status") == "waived"
+                print(f"  {it['id']}: " + ("waived by an agent; the owner has not agreed yet" if agent_ else it.get("status", "planned"))
+                      + (f" ({it['note']})" if it.get("note") else ""))
+            print("Finish each (ledger done <id>) or skip it on purpose with the owner's words "
+                  "(ledger waive <id> --why \"...\" --by owner --quote \"...\").")
+            return 1
+        r["closed"] = today
+        msg = f"{r['id']} closed: " + ", ".join(f"{sum(1 for it in r['items'] if it['status'] == s_)} {s_}" for s_ in ("done", "waived")) + "."
+    elif action == "show":
+        data = {"rounds": ledger_rounds(state), "open": ledger_open(state)}
+        if as_json:
+            print(json.dumps(data, indent=2))
+            return 0
+        if not data["rounds"]:
+            print("The ledger is empty. Start a round before implementing: engine.py ledger start \"<what>\" --items a,b,c")
+            return 0
+        for r in data["rounds"]:
+            print(f"{r['id']} {r['title']} (started {r['started']}" + (f", closed {r['closed']})" if r.get("closed") else ", open)"))
+            for it in r.get("items") or []:
+                extra = it.get("note") or (f"{it.get('why')} ({it.get('by')})" if it.get("status") == "waived" else "")
+                print(f"  [{it.get('status', 'planned'):7s}] {it['id']}" + (f": {extra}" if extra else ""))
+        print(f"Open: {len(data['open'])}." if data["open"] else "Nothing open.")
+        return 0
+    else:
+        raise SystemExit(f"Unknown ledger action {action}.")
+    dump_json(sp, state)
+    refresh_docs(d)
+    print(msg)
+    return 0
+
+
+def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=None):
     """End-of-implementation check: hard-coded colors, sizes, radii, shadows and durations that bypass tokens (CSS, JSX style
     objects, Tailwind arbitrary values and default scales, SwiftUI, Compose), role-appropriate token suggestions, code that
     breaks a standard or brings back something removed on purpose, od-ignore exceptions with and without a reason, guard
     checks (DC-L21-01), the errors `validate` finds in the tokens, and stale or untrue DESIGN.md sections. Without a system it
     still scans (cmd_review_unbound). It fails when AGENTS.md, CLAUDE.md or DESIGN.md point at an opendesigner/ that is
     missing. It ends with one verdict line, "Review: ok" or what is left to fix, and --strict exits 1 exactly when that line
-    is not "Review: ok", so it can guard commits."""
+    is not "Review: ok", so it can guard commits. Files the owner marked as examples (`engine.py exempt`) are left out and
+    listed; ledger items neither done nor waived (`engine.py ledger`) are reasons too. collect: a dict that receives the
+    result, every finding and the token uses by name, and nothing is printed (audit-page builds on this scan)."""
     if not os.path.exists(os.path.join(d, STATE_FILE)):
         return cmd_review_unbound(d, project, strict, as_json, limit)
     state = merge_defaults(load_state(d))
@@ -15813,6 +16101,10 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     wb_std = next((x for x in std_followed(state) if x.get("id") == WHITE_BLACK_RULE), None)
     wb_seen = {}  # "white" / "black" -> (file, line, text) of the first opaque use in code
     tok_rx, token_uses = token_use_rx(prefix), 0
+    tok_by = collections.defaultdict(list)  # var(--ds-x) name -> [(file, line)], for audit-page
+    tok_name_rx = re.compile(rf"var\(\s*--{re.escape(prefix)}-([a-z0-9-]+)")
+    exempt = exempt_rules(state)
+    exempt_hits = collections.Counter()
     kept, bare, std_notes = [], [], []  # od-ignore lines with and without a reason; standards broken on od-ignore lines (notes)
     floor_kept = []  # lines a removed pattern matches that carry an accessibility floor: never reported as removed
     std_rules = std_review_rules(state)  # house standards followed and project standards that carry a review pattern
@@ -15820,6 +16112,13 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
     locked_literals = std_locked_literals(state)
     stateroot = os.path.abspath(d)
     targets, base, review_notes = review_targets(project, stateroot)
+    if exempt:
+        top_ = exempt_root(d, project)
+        kept_out = [(t_, exempt_match(exempt, t_, top_)) for t_ in targets]
+        for _, r_ in kept_out:
+            if r_:
+                exempt_hits[r_["glob"]] += 1
+        targets = [t_ for t_, r_ in kept_out if not r_]
     code_hex, code_fonts, look_tokens = collections.Counter(), collections.Counter(), 0
     for path in targets:
         ext = os.path.splitext(path)[1].lower()
@@ -15857,6 +16156,8 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
                                                               if ignored else ""), "removed": r["id"], "severity": "warning"})
             if not ignored:  # an od-ignore line keeps its raw values: it counts toward nothing below except standards, as notes
                 token_uses += len(tok_rx.findall(line))
+                for m_ in tok_name_rx.finditer(line[:REVIEW_LINE_CAP]):
+                    tok_by[m_.group(1)].append((rel, i))
                 look_tokens += len(re.findall(rf"var\(\s*--{re.escape(prefix)}-(?:color|font|text)-", line))
                 for m_ in RX_HEX.finditer(line[:REVIEW_LINE_CAP]):  # the colors and fonts the code uses, to compare with DESIGN.md
                     if not re.search(r"href=[\"']?$", line[max(0, m_.start() - 7):m_.start()]):
@@ -16074,6 +16375,9 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
               "missing": missing, "untrue": sorted(set(untrue)), "tasteDrift": drift,
               "research": {"errors": r_errs, "notes": r_notes, "status": (state.get("research") or {}).get("status") or "none"}}
     result["broken"] = broken = binding_gaps(doc_dir(d), d)
+    result["exempt"] = [dict(r_, files=exempt_hits.get(r_["glob"], 0)) for r_ in exempt]
+    open_items = ledger_open(state)
+    result["ledgerOpen"] = open_items
     guard, guard_notes = review_guard(d, state, files)  # the decided system was not undone (DC-L21-01)
     # what `engine.py validate` says about the tokens state.json gives now: "Review: ok" is the line people quote before a merge,
     # so it never prints over a failed contrast, target-size or standards check
@@ -16092,13 +16396,18 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         + ([plural(len(guard), "guard problem")] if guard else []) \
         + ([plural(len(invalid), "validate error") + " in the system"] if invalid else []) \
         + ([plural(len(r_errs), "user research error")] if r_errs else []) \
-        + [f"{b} points at a missing {DEFAULT_DIR}/" for b in broken]
+        + [f"{b} points at a missing {DEFAULT_DIR}/" for b in broken] \
+        + ([plural(len(open_items), "ledger item") + " neither done nor waived"] if open_items else [])
     to_fix = len(findings) + (0 if in_charge else 1) + len(drift_look) + (1 if stale or missing else 0) + len(set(untrue)) \
-        + len(guard) + len(invalid) + len(r_errs) + len(broken)
+        + len(guard) + len(invalid) + len(r_errs) + len(broken) + len(open_items)
     result.update({"keptOnPurpose": kept[:500], "ignoredWithoutReason": bare[:500], "guard": guard, "guardNotes": guard_notes,
                    "standardNotes": std_notes[:500], "floorKept": floor_kept[:500],
                    "validateErrors": [{"category": i_["category"], "message": i_["message"], "where": i_["where"]} for i_ in invalid[:500]],
                    "toFix": to_fix, "ok": not reasons, "reasons": reasons})
+    if collect is not None:
+        collect.update(result, allFindings=findings, tokenUses_by={k: v for k, v in tok_by.items()}, base=base, prefix=prefix,
+                       keptAll=kept, meta=meta, light=light, files=files, state=state, ladder=ladder, radii=radii, sizes=sizes)
+        return 1 if broken or (strict and reasons) else 0
     if as_json:
         print(json.dumps(result, indent=2))
     else:
@@ -16112,6 +16421,9 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
         print(f"Review of {project}: {scanned} file{'s' if scanned != 1 else ''} scanned.")
         for n_ in review_notes:
             print(f"  {n_}.")
+        for r_ in result["exempt"]:
+            print(f"  Left out on purpose: {r_['files']} file{'s' if r_['files'] != 1 else ''} under {r_['glob']} ({r_['why']}; "
+                  f"marked by {r_['by']} on {r_['date']}). Undo with engine.py exempt --remove '{r_['glob']}'.")
         if not scanned:
             print("No code yet, so there is nothing to check.")
         elif total:
@@ -16233,6 +16545,10 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40):
             print(f"User research: {t_}. Fix the file, then engine.py research add {research_py.FILE}.")
         for t_ in r_notes:
             print(f"User research: {t_}")
+        for o_ in open_items:
+            print(f"Ledger {o_['round']}: {o_['item']} is {o_['status']}" + (f" ({o_['note']})" if o_.get("note") else "")
+                  + f". Finish it (engine.py ledger done {o_['item']}) or skip it on purpose with the reason and who decided "
+                  f"(engine.py ledger waive {o_['item']} --why \"...\" --by owner).")
         # one fixed closing line, so a report can quote it (S-L21-01 02.14; DC-L19-176's verdict line)
         print("Review: ok" if not reasons else f"Review: {to_fix} to fix: {'; '.join(reasons)}."
               + ("" if strict else " Run with --strict to make this fail."))
