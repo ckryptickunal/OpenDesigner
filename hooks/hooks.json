@@ -1,5 +1,5 @@
 {
-  "description": "OpenDesigner: when the project has opendesigner/state.json, print where the design work stands and a short check-in (engine.py status --hook) at startup, on resume, after /clear and after compaction; read-only in the project, no network. In a project with UI code and no design system, one short note for the agent, once per project and at most once a week (engine.py checkin --offer; remembered in ~/.opendesigner, never in the project). engine.py checkin --offers off, or OD_CHECKINS=off, silences it.",
+  "description": "OpenDesigner: when the project has opendesigner/state.json, print where the design work stands and a short check-in (engine.py status --hook) at startup, on resume, after /clear and after compaction; read-only in the project, no network. In a project with UI code and no design system, one short note for the agent, once per project and at most once a week (engine.py checkin --offer; remembered in ~/.opendesigner, never in the project). engine.py checkin --offers off silences the offers (and the note on a system nobody changed in 30 days); engine.py checkin --off turns check-ins off for a project; OD_CHECKINS=off silences everything.",
   "hooks": {
     "SessionStart": [
       {

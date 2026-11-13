@@ -6048,8 +6048,10 @@ def checkin_facts(d, state, scan=True, project=None):
         nxt = "engine.py design-md (DESIGN.md is out of date in " + ", ".join(stale[:3]) + ("..." if len(stale) > 3 else "") + ")"
     elif review and prev is not None and review["toFix"] > prev:
         nxt = f"engine.py review: {review['toFix'] - prev} new thing(s) to fix since the last check-in"
-    elif review and review["toFix"]:
+    elif review and review["toFix"] and any(re.search(r"finding|tokens are not in charge", x) for x in review["reasons"]):
         nxt = "engine.py audit-page --open, so the owner can see and settle what the code does differently"
+    elif review and review["toFix"]:
+        nxt = "engine.py review, and fix what it names first (" + "; ".join(review["reasons"][:2]) + ")"
     else:
         nf = now_facts(d, state)["next"]  # the protocol's next step (the hand-off question, research, a gate)
         nxt = nf if nf and not nf.startswith("engine.py review at the end") else "nothing waits: carry on"
@@ -6097,13 +6099,18 @@ def checkin_after_change(d):
     if not os.path.exists(os.path.join(d, STATE_FILE)):
         return
     state = merge_defaults(load_state(d))
+    if not ((state.get("checkins") or {}).get("last")):  # the first time: a baseline, said nowhere, so the first result
+        if checkin_settings(state)["enabled"] and first_result_shown(d, state):  # and the interview right after it stay clean
+            record_checkin(d, checkin_facts(d, state, scan=False))
+        return
     if not checkin_due(d, state):
         return
     f = checkin_facts(d, state, scan=True)
     for ln in checkin_lines(f):
         print("  " + ln)
     print("  Pass this check-in on: end your reply with a short paragraph that starts \"Check-in:\" and says, in two or three "
-          "plain sentences, what changed, what is still open and the next step. Ask at most one question. "
+          "plain sentences, what changed, what is still open and this one next step. Name no other pending item there, and ask at "
+          "most one question. "
           "(engine.py checkin --off turns check-ins off.)")
     record_checkin(d, f)
 
@@ -6143,7 +6150,8 @@ def cmd_offer(project):
         last = rec.get("lastOffer")
         if last and (_dt.date.today() - _dt.date.fromisoformat(last)).days < OFFER_QUIET_DAYS:
             return 0
-        print("OpenDesigner is installed, and this project has UI code but no design system yet (no opendesigner/ folder). "
+        print("OpenDesigner is installed, and this project has UI code but no design system yet ("
+              + ("an opendesigner/ folder with no state.json" if os.path.isdir(os.path.join(project, DEFAULT_DIR)) else "no opendesigner/ folder") + "). "
               "Do not bring it up unprompted; if the person asks for UI, styling or visual work, offer once, in one line: "
               "\"Want me to sketch a design system from what is already here? About five questions.\" "
               "(engine.py detect reads what exists first.) This note shows once per project; "
@@ -6188,7 +6196,11 @@ def cmd_checkin(d, project=None, hook=False, as_json=False, every=None, on=None,
         return 0
     state = merge_defaults(load_state(d))
     cfg = checkin_settings(state)
-    if hook and (not cfg["enabled"] or not first_result_shown(d, state)):
+    if not first_result_shown(d, state):  # no housekeeping before the first result (rules.md section 3)
+        if not hook and not as_json:
+            print("No check-in yet: they start once the first result exists (DESIGN.md or a build).")
+        return 0
+    if hook and not cfg["enabled"]:
         return 0
     f = checkin_facts(d, state, scan=not hook, project=project)
     if as_json:
@@ -6228,10 +6240,12 @@ def cmd_status(d, as_json=False, hook=False):
         try:
             cfg = checkin_settings(state)
             if cfg["enabled"] and first_result_shown(d, state):
-                for ln in checkin_lines(checkin_facts(d, state, scan=False)):  # no code scan at session start: it must stay fast
+                lines_ = checkin_lines(checkin_facts(d, state, scan=False))  # no code scan at session start: it must stay fast
+                lines_ = [x for x in lines_ if not x.startswith("Next: ")]  # the Now line above names the one next step
+                for ln in lines_:
                     print(ln)
                 idle = idle_days(d)
-                if idle is not None and idle >= CHECKIN_IDLE_DAYS:
+                if idle is not None and idle >= CHECKIN_IDLE_DAYS and cfg["offers"]:
                     rec = _home_json("checkins.json")
                     seen = rec.setdefault("idle", {})
                     key = os.path.abspath(d)
@@ -16975,9 +16989,14 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
                     print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']} ({', '.join(f_.get('standards') or [f_['standard']])}, "
                           f"{f_['strength']})")
             else:
+                tag = {}
+                for f_ in stdf:
+                    tag.setdefault(f_.get("fix", ""), f"{', '.join(f_.get('standards') or [f_['standard']])}, {f_['strength']}")
                 rows = group_findings(stdf)
+                if len(rows) > 10:
+                    print(f"  The 10 biggest of {len(rows)} groups, most places first:")
                 for n, nf, v, fix, first in rows[:10]:
-                    print(f"  {n:>4} x  {v}  ->  {fix}  ({nf} file{'s' if nf != 1 else ''}, first at {first})")
+                    print(f"  {n:>4} x  {v}  ->  {fix} ({tag.get(fix, '')})  ({nf} file{'s' if nf != 1 else ''}, first at {first})")
                 if len(rows) > 10:
                     print(f"  ... and {len(rows) - 10} more groups (engine.py review --all).")
             ids_ = {x for f_ in stdf for x in f_.get("standards") or [f_["standard"]]}

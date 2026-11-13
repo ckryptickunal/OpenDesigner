@@ -63,8 +63,21 @@ class CheckIns(unittest.TestCase):
         self.assertIn("Check-in, since the last check-in", out)
         self.assertIn("5 decisions", out)
         self.assertIn("Next:", out)
-        self.assertIn("Ask at most one question", out)
+        self.assertIn("ask at most one question", out)
         self.assertFalse(any("Check-in" in o for o in self.decide(2, start=50)), "the counter restarted")
+
+    def test_the_first_check_in_is_a_silent_baseline(self):
+        self.assertNotIn("checkins", self.state())
+        first = self.decide(1)[0]
+        self.assertNotIn("Check-in", first, "the first decision after the first result only sets the baseline")
+        self.assertIn("last", self.state()["checkins"])
+        self.assertFalse(any("Check-in" in o for o in self.decide(4, start=40)))
+        self.assertIn("Check-in", self.decide(1, start=50)[0])
+
+    def test_the_hook_names_one_next_step(self):
+        run("checkin", cwd=self.root)
+        out = run("status", "--hook", "--dir", "opendesigner", cwd=self.root).stdout
+        self.assertEqual(out.count("Next:"), 1, out)
 
     def test_every_and_off(self):
         run("checkin", "--every", "2", cwd=self.root)

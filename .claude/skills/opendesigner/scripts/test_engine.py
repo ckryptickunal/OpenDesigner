@@ -4208,8 +4208,9 @@ class PersonaOutputFixes(unittest.TestCase):
                 self.assertIn("no color token is close to #ff0000", got[("a.css", 7, "color")])
                 self.assertNotIn("var(--ds-color", got[("a.css", 7, "color")])
                 self.assertFalse([k for k in got if k[:2] == ("a.css", 8)])
-                self.assertIn("--ds-radius-control", got[("B.jsx", 1, "radius")])
-                self.assertIn("the control radius", got[("B.jsx", 1, "radius")])
+                # owner, 2026-11-14: one suggestion per value everywhere, the nearest token (12px is the overlay step here); the
+                # element's role only breaks a tie, so the same raw value never gets two different tokens
+                self.assertIn("--ds-radius-overlay", got[("B.jsx", 1, "radius")])
 
     def test_r19_springs_budget_and_the_extra_step(self):
         for z in (0.8, 1.0, 1.4):
