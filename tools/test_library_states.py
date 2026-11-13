@@ -67,6 +67,34 @@ class Fallback(unittest.TestCase):
         self.assertEqual(len(self.errors("background: var(--ds-color-made-up, var(--ds-color-bg-neutral-subtle));")), 1)
 
 
+class AddReport(unittest.TestCase):
+    """library.py add calls a --ds-state-* token with a fallback optional, and still names a token that is really missing."""
+
+    def add(self, tokens):
+        import argparse, contextlib, io
+        with tempfile.TemporaryDirectory() as t:
+            tok = pathlib.Path(t) / "tokens.css"
+            tok.write_text("".join(f"{v}: 0;\n" for v in tokens))
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                L.cmd_add(argparse.Namespace(slug="skeleton-table", into=str(pathlib.Path(t) / "odl"), tokens=str(tok), force=False))
+            return out.getvalue()
+
+    def test_state_tokens_are_optional(self):
+        html = (L.LIB / "skeleton-table" / "component.html").read_text()
+        have = {v for v in L.used_vars(html) if not v.startswith("--ds-state-")}
+        out = self.add(have)
+        self.assertIn("Every variable it uses is in your tokens.", out)
+        self.assertIn("optional state token", out)
+
+    def test_missing_fallback_target_is_reported(self):
+        html = (L.LIB / "skeleton-table" / "component.html").read_text()
+        have = {v for v in L.used_vars(html) if not v.startswith("--ds-state-")} - {"--ds-color-bg-neutral-subtle"}
+        out = self.add(have)
+        self.assertIn("--ds-color-bg-neutral-subtle", out.split("optional")[0])
+        self.assertIn("--ds-state-skeleton-base", out.split("optional")[0])
+
+
 class StatesKit(unittest.TestCase):
     """Every component of type "states" carries what the kit promises: the spec block, a fixture that matches it,
     a live region when it says it has one, motion that stops when motion is reduced, and planned tokens it really uses."""

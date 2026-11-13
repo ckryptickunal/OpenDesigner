@@ -117,9 +117,14 @@ def cmd_add(a):
     tok = pathlib.Path(a.tokens)
     if tok.exists():
         have = set(re.findall(r"(--ds-[a-z0-9-]+)\s*:", tok.read_text()))
-        missing = sorted(used_vars(text) - have)
+        lacking = sorted(used_vars(text) - have)
+        # a --ds-state-* variable whose every use falls back to a token the project has is optional, not missing
+        optional = [v for v in lacking if v.startswith("--ds-state-") and all(fb and used_vars(fb) <= have for fb in fallbacks(text, v))]
+        missing = [v for v in lacking if v not in optional]
         print("Every variable it uses is in your tokens." if not missing else
               f"Your tokens lack {len(missing)} variable(s); map each to one of yours or run engine.py build: " + ", ".join(missing))
+        if optional:
+            print(f"It also reads {len(optional)} optional state token(s) your system doesn't set; each falls back to one of your tokens: " + ", ".join(optional))
     else:
         print(f"No {tok}: map its --ds-* variables to your own tokens ({len(used_vars(text))} used).")
     return 0
