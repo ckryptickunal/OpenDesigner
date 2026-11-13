@@ -44,7 +44,7 @@ assets/library/
 | `edge` | The six edge states, `empty`, `loading`, `error`, `disabled`, `overflow` and `long_text`, each `shown` (the file shows it), `handled` (its CSS or script copes) or `not_built`, with `how` (one sentence). `shown` and `handled` need `evidence`: a string found in the file |
 | `keyboard` | What the keyboard does, in plain sentences; only what the file really does |
 
-`library.py check` checks every selector, every `part` name, the six edge states and their evidence. The website serves the catalog at `/library/index.json`, each entry at `/library/<slug>.json`, and the MCP server (`server/mcp/`) returns it from `get_component`.
+`library.py check` checks every selector, every `part` name and the six edge states, and that each piece of evidence is in the file (it cannot tell whether the state looks right). The website serves the catalog at `/library/index.json`, each entry at `/library/<slug>.json`, and the MCP server (`server/mcp/`) returns it from `get_component`.
 
 **Types:** `data` (tables, rows, feeds, stats), `chart`, `form` (inputs, toggles, pickers), `feedback` (toasts, banners, empty states), `navigation` (command menus, steppers, tabs, sidebars), `overlay` (dialogs, drawers, menus), `ai` (composers, answers), `commerce` (plans, checkout, products), `content` (profiles, media, cards).
 **Styles:** `quiet` (calm, lots of space), `dense` (many rows, small type, work tools), `technical` (mono figures, status), `friendly` (rounder, warmer copy), `editorial` (reading first).
@@ -62,7 +62,7 @@ Every part also meets the craft standard in [CRAFT.md](CRAFT.md): generous spaci
 7. **Photos and icons.** A picture of a thing (a product, a dish, a place, a person, a post) is a photo from `photos.json`: free Unsplash License, hotlinked in an `<img>` with `alt`, `width`, `height` and `loading="lazy"`, credited in `meta.json` `photos`. Common icons are Lucide (ISC), copied inline, with a one-line licence comment. `library.py check` enforces the photo rules.
 
 ## Pulling one into a project
-- **With OpenDesigner installed** (the person's agent has the skill): `python3 <skill>/scripts/library.py add <slug> [--into src/components/odl]`. It copies the file and lists any `--ds-*` variable the project's tokens lack.
+- **With OpenDesigner installed** (the person's agent has the skill): `python3 path/to/skills/opendesigner/scripts/library.py add <slug> [--into src/components/odl]`, where `path/to` is the folder OpenDesigner is in. It copies the file and lists any `--ds-*` variable the project's tokens lack.
 - **From the website:** `library.py add <slug> --from https://opendesigner.dev` takes the newest copy; with no OpenDesigner at all, `curl -fsSLo <slug>.html https://opendesigner.dev/library/<slug>.html`.
 - **Any agent:** paste the prompt shown on the website, for example:
   `Add the OpenDesigner component approval-panel to this project: https://opendesigner.dev/library/approval-panel.html. Keep its markup and states; map its --ds-* variables to my tokens.`

@@ -20,8 +20,10 @@ curl -fsSLo approval-panel.html https://opendesigner.dev/library/approval-panel.
 With OpenDesigner installed, this copies it into your project and lists any token your system doesn't have yet:
 
 ```
-python3 <skill>/scripts/library.py add approval-panel --from https://opendesigner.dev
+python3 path/to/skills/opendesigner/scripts/library.py add approval-panel --from https://opendesigner.dev
 ```
+
+Put the folder where OpenDesigner is in place of `path/to`; if your AI installed it, it knows the folder.
 
 Leave out `--from` to use the copy that came with the skill.
 
@@ -38,19 +40,19 @@ Each component also has a catalog entry in JSON. It says what the part is for an
 | `/library/<id>.html` | The component file |
 | `/library/<id>/` | Its page, with a live preview |
 
-The six hard states are always listed: empty, loading, error, disabled, too many items, and long text. Each says whether the file shows it, copes with it, or leaves it for you to build, with one line on how. Of the 492 across the library, 289 are left for you. The entry says so rather than guessing.
+The six hard states are always listed: empty, loading, error, disabled, too many items, and long text. Each says whether the file shows it, copes with it, or leaves it for you to build, with one line on how. Many are left for you, and the entry says so rather than guessing.
 
 :::dev
-The catalog is `skills/opendesigner/assets/library/library.json`, written by `library.py catalog` from each component's `component.html` and `meta.json`. Tokens, roles and control counts are read from the file. Purpose, limits and states are written by whoever wrote the component; the limits are what the layout holds at its width, read from the layout, not measured in a browser. `library.py check` fails when the catalog is out of date or a part names a selector the file doesn't have.
+The catalog is `skills/opendesigner/assets/library/library.json`, written by `library.py catalog` from each component's `component.html` and `meta.json`. Tokens, roles and control counts are read from the file. Purpose, limits and states are written by whoever wrote the component; the limits are what the layout holds at its width, read from the layout, not measured in a browser. A state marked shown or handled names a piece of the file as evidence; the check confirms that piece is in the file, not that the state looks right. `library.py check` fails when the catalog is out of date or a part names a selector the file doesn't have.
 :::
 
 ## Browse it from your AI (MCP)
 
-MCP is the way AI apps such as Claude Desktop call tools on your computer. OpenDesigner has a small MCP server for the library. It only reads: it never writes to your project and never goes online.
+MCP is the way AI apps such as Claude Desktop call tools on your computer. OpenDesigner has a small MCP server for the library. It only reads: it never writes to your project, and the server itself never goes online. Previews in the gallery load the parts' sample photos from Unsplash.
 
 | Tool | What it does |
 |---|---|
-| `list_components` | Lists the parts, filtered by type, style, width, audience or industry. In Claude Desktop it opens a gallery; Claude Code shows the list as text |
+| `list_components` | Lists the parts, filtered by type, style, width, audience or industry. In apps that show MCP views, such as Claude Desktop, it opens a gallery; Claude Code shows the list as text |
 | `get_component` | One part: its catalog entry and its file |
 | `suggest_components` | Parts that fit a screen you describe. It matches words against the catalog, so check each suggestion's "avoid when" |
 | `get_tokens_template` | A `tokens.css` with every variable the parts read, made from a brand colour, for a project with no system yet |

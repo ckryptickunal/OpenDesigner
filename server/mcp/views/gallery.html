@@ -206,10 +206,17 @@ body.inline .compact { display: block; }
     var st = $("status");
     st.textContent = "";
     st.textContent = "Sending " + line + " to the chat…";
+    // a host may ask the person first, so the request has no time limit; after a while the line is offered to copy as well
+    var slow = setTimeout(function () {
+      st.textContent = "Still waiting for the chat. You can also copy this line into it:";
+      var code = document.createElement("code"); code.className = "od"; code.textContent = line; st.appendChild(code);
+    }, 10000);
     request("ui/message", { role: "user", content: [{ type: "text", text: line }] }, 0).then(function (r) {
+      clearTimeout(slow);
       if (r && r.isError) throw new Error("refused");
       st.textContent = "Sent to the chat: " + line;
     }).catch(function () {
+      clearTimeout(slow);
       st.textContent = "Copy this line into the chat to add " + c.name + ":";
       var code = document.createElement("code"); code.className = "od"; code.textContent = line; st.appendChild(code);
     });
@@ -262,7 +269,7 @@ body.inline .compact { display: block; }
     $("sub").textContent = "Open this through the OpenDesigner MCP server: list_components fills it.";
     return;
   }
-  request("ui/initialize", { protocolVersion: "2026-01-26", appInfo: { name: "opendesigner-library-gallery", version: "0.3.1" },
+  request("ui/initialize", { protocolVersion: "2026-01-26", appInfo: { name: "opendesigner-library-gallery", version: "1" },
                              appCapabilities: { availableDisplayModes: ["inline", "fullscreen"] } })
     .then(function (r) { applyContext((r && r.hostContext) || {}); notify("ui/notifications/initialized", {}); sized(); })
     .catch(function () { $("sub").textContent = "The host did not answer. Ask in the chat for list_components as text."; });

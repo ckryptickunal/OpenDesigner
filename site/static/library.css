@@ -275,7 +275,7 @@
 .part-sum { margin: 0; font-size: 16px; line-height: 25px; color: var(--ink-muted); text-wrap: pretty; }
 .part-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .part-side .cmd { margin: 0; max-width: none; }
-.part-facts { margin: 6px 0 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+.part-facts { margin: 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
 .part-facts > div { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
 .part-facts dt { font-size: 13px; line-height: 20px; color: var(--ink-muted); }
 .part-facts dd { margin: 0; font-size: 14px; line-height: 20px; text-wrap: pretty; overflow-wrap: anywhere; }

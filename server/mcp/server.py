@@ -10,7 +10,8 @@ Tools (all read-only; nothing is written outside a temporary folder that is dele
   get_tokens_template  a tokens.css with every --ds-* variable the components read, made by the engine from a short brief
   suggest_components   components that fit a described screen, by keyword match against the catalog (not a model)
 
-Python 3.10+ standard library, no network. The catalog is skills/opendesigner/assets/library/library.json, written by
+Python 3.10+ standard library; the server itself makes no network calls (the gallery's previews load sample photos from
+images.unsplash.com in the host). The catalog is skills/opendesigner/assets/library/library.json, written by
 library.py catalog. Speaks MCP 2026-07-28 (server/discover, no handshake) and the older initialize handshake
 (2025-11-25, 2025-06-18, 2025-03-26), and the MCP Apps extension (io.modelcontextprotocol/ui) for the gallery view.
 """
@@ -30,7 +31,6 @@ GALLERY_URI = "ui://opendesigner/library-gallery"
 APP_MIME = "text/html;profile=mcp-app"
 MODERN = ["2026-07-28"]
 LEGACY = ["2025-11-25", "2025-06-18", "2025-03-26"]
-SERVER_INFO = {"name": "opendesigner-library", "title": "OpenDesigner component library", "version": "0.3.1"}
 CSP = {"connectDomains": [], "resourceDomains": ["https://images.unsplash.com"], "frameDomains": []}  # the parts' sample photos
 READ_ONLY = {"readOnlyHint": True, "destructiveHint": False, "idempotentHint": True, "openWorldHint": False}
 INSTRUCTIONS = ("Components built only on --ds-* design tokens. Use list_components or suggest_components to find one, "
@@ -42,6 +42,7 @@ _spec = importlib.util.spec_from_file_location("od_library", SKILL / "scripts" /
 library = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(library)
 _tokens_cache = {}
+SERVER_INFO = {"name": "opendesigner-library", "title": "OpenDesigner component library", "version": library.version()}
 
 
 def log(*a):
@@ -261,7 +262,7 @@ def view_resources():
 
 def catalog_resource():
     return {"uri": "od://library/catalog", "name": "library-catalog", "title": "Component catalog (library.json)",
-            "mimeType": "application/json", "description": "Every component's catalog entry, the same file the website serves at /library/index.json."}
+            "mimeType": "application/json", "description": "Every component's catalog entry (library.json). The website's /library/index.json is the same with each entry's web addresses added."}
 
 
 class Server:

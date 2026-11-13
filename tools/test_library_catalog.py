@@ -112,10 +112,40 @@ class Catalog(unittest.TestCase):
             self.assertIn("out of date", out.getvalue())
 
     def test_audience(self):
-        self.assertEqual(library.audience(["finance"]), "work")
-        self.assertEqual(library.audience(["food", "travel"]), "consumer")
-        self.assertEqual(library.audience(["finance", "food"]), "any")
-        self.assertEqual(library.audience(["any"]), "any")
+        c = lambda t, *ind: {"type": t, "industries": list(ind)}
+        self.assertEqual(library.audience(c("data", "finance")), "work")
+        self.assertEqual(library.audience(c("data", "food", "travel")), "consumer")
+        self.assertEqual(library.audience(c("data", "finance", "food")), "work")
+        self.assertEqual(library.audience(c("data", "any")), "work")
+        self.assertEqual(library.audience(c("content", "finance")), "consumer")
+
+
+class Website(unittest.TestCase):
+    """What site/build.py serves for the library: addresses, the one audience rule and URL wrapping."""
+
+    @classmethod
+    def setUpClass(cls):
+        sys.path.insert(0, str(ROOT / "site"))
+        import library_page
+        cls.lp = library_page
+
+    def test_wrap_never_inside_scheme(self):
+        out = self.lp.wrap_url("curl -fsSLo a-b.html https://opendesigner.dev/library/a-b.html")
+        self.assertIn("https://opendesigner.dev/<wbr>library/<wbr>", out)
+        self.assertNotIn(":/<wbr>", out)
+        self.assertIn('<span class="nb">a-b.html</span>', out)
+
+    def test_web_entry_addresses(self):
+        b = type("B", (), {"SITE_URL": "https://opendesigner.dev"})()
+        e = self.lp.web_entry(b, json.loads(library.CATALOG.read_text())["components"][0])
+        self.assertEqual(e["urls"]["html"], f"https://opendesigner.dev/library/{e['id']}.html")
+        self.assertEqual(e["urls"]["json"], f"https://opendesigner.dev/library/{e['id']}.json")
+        self.assertIn("--from https://opendesigner.dev", e["get"]["opendesigner"])
+        self.assertNotIn("<skill>", json.dumps(e))
+
+    def test_one_audience_rule(self):
+        for c in self.lp.components():
+            self.assertEqual(self.lp.who(c) == "Consumer", library.audience(c) == "consumer", c["slug"])
 
 
 class Fetch(unittest.TestCase):

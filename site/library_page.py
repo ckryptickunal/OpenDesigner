@@ -125,7 +125,7 @@ def get_group(label, text, kind, note=""):
     body = f'<code>{wrap_url(text)}</code>' if kind == "cmd" else f'<p>{wrap_url(text)}</p>'
     return (f'<div class="part-get"><p class="part-get-label">{esc(label)}</p>'
             f'<div class="part-get-box part-get-{kind}">{body}<button class="copy" type="button" data-copy-text="{esc(text)}" '
-            f'aria-label="Copy: {esc(label.lower())}">Copy</button></div>'
+            f'aria-label="Copy: {esc(label)}">Copy</button></div>'
             + (f'<p class="part-get-note">{note}</p>' if note else "") + "</div>")
 
 
@@ -138,7 +138,7 @@ def web_entry(b, e):
     c = {"slug": e["id"]}
     return {**e, "urls": {"html": f"{b.SITE_URL}/library/{e['id']}.html", "json": f"{b.SITE_URL}/library/{e['id']}.json",
                           "page": f"{b.SITE_URL}/library/{e['id']}/"},
-            "get": {"curl": curl(b, c), "opendesigner": f"python3 <skill>/scripts/library.py add {e['id']} --from {b.SITE_URL}",
+            "get": {"curl": curl(b, c), "opendesigner": f"python3 path/to/skills/opendesigner/scripts/library.py add {e['id']} --from {b.SITE_URL}",
                     "prompt": prompt(b, c)}}
 
 
@@ -147,7 +147,7 @@ def ind(x):
 
 
 def who(c):
-    return "Consumer" if c["type"] == "content" or (set(c["industries"]) & CONSUMER and not set(c["industries"]) & {"finance", "saas", "devtools", "security", "crm"}) else "B2B"
+    return "Consumer" if od_library.audience(c) == "consumer" else "B2B"  # one rule with the catalog's audience tag
 
 
 def meta_line(c):

@@ -45,8 +45,7 @@
   ],
   "audiences": [
    "work",
-   "consumer",
-   "any"
+   "consumer"
   ],
   "widths": [
    "narrow",
@@ -95,7 +94,7 @@
    "style": "dense",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "any"
     ],
@@ -388,7 +387,7 @@
    "style": "quiet",
    "width": "medium",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "crm",
      "saas",
@@ -1414,7 +1413,7 @@
    "style": "editorial",
    "width": "medium",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "productivity",
      "education",
@@ -2029,7 +2028,7 @@
    "style": "quiet",
    "width": "medium",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "any"
     ],
@@ -2608,7 +2607,7 @@
    "style": "editorial",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "consumer",
     "industries": [
      "any"
     ],
@@ -4055,7 +4054,7 @@
    "style": "quiet",
    "width": "medium",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "productivity",
      "saas",
@@ -5127,7 +5126,7 @@
    "style": "editorial",
    "width": "medium",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "productivity",
      "education",
@@ -5774,7 +5773,7 @@
    "style": "quiet",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "saas",
      "security",
@@ -7005,7 +7004,7 @@
    "style": "quiet",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "saas",
      "finance",
@@ -7584,7 +7583,7 @@
    "style": "quiet",
    "width": "wide",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "any"
     ],
@@ -8579,7 +8578,7 @@
    "style": "quiet",
    "width": "medium",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "saas",
      "finance",
@@ -8819,7 +8818,7 @@
    "style": "friendly",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "any"
     ],
@@ -9365,7 +9364,7 @@
    "style": "quiet",
    "width": "medium",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "any"
     ],
@@ -9677,7 +9676,7 @@
    "style": "dense",
    "width": "wide",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "finance",
      "saas",
@@ -11229,7 +11228,7 @@
    "style": "quiet",
    "width": "medium",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "saas",
      "productivity",
@@ -12244,7 +12243,7 @@
    "style": "quiet",
    "width": "wide",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "finance",
      "saas",
@@ -13775,7 +13774,7 @@
    "style": "quiet",
    "width": "medium",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "saas",
      "security",
@@ -14475,7 +14474,7 @@
    "style": "friendly",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "consumer",
     "industries": [
      "any"
     ],
@@ -15097,7 +15096,7 @@
    "style": "quiet",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "retail",
      "home",
@@ -15452,7 +15451,7 @@
    "style": "quiet",
    "width": "wide",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "crm",
      "saas",
@@ -15787,7 +15786,7 @@
    "style": "dense",
    "width": "wide",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "any"
     ],
@@ -16021,7 +16020,7 @@
    "style": "friendly",
    "width": "wide",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "saas",
      "productivity",
@@ -16636,7 +16635,7 @@
    "style": "friendly",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "consumer",
     "industries": [
      "retail",
      "any"
@@ -17321,7 +17320,7 @@
    "style": "quiet",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "consumer",
     "industries": [
      "any"
     ],
@@ -20679,7 +20678,7 @@
    "style": "quiet",
    "width": "medium",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "any"
     ],
@@ -20908,7 +20907,7 @@
    "style": "friendly",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "saas",
      "finance",
@@ -21509,7 +21508,7 @@
    "style": "quiet",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "saas",
      "finance",
@@ -21842,7 +21841,7 @@
    "style": "quiet",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "saas",
      "any"
@@ -23894,7 +23893,7 @@
    "style": "quiet",
    "width": "narrow",
    "tags": {
-    "audience": "any",
+    "audience": "work",
     "industries": [
      "any"
     ],

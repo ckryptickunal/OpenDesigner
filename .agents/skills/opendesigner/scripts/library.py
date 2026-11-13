@@ -29,7 +29,8 @@ STYLES = ["quiet", "dense", "technical", "friendly", "editorial"]
 INDUSTRIES = ["finance", "saas", "devtools", "security", "crm", "logistics", "health", "education", "retail", "productivity",
               "social", "media", "travel", "food", "fitness", "events", "home", "money", "games", "any"]  # money: personal finance (finance is B2B)
 WIDTHS = ["narrow", "medium", "wide"]
-CONSUMER = {"retail", "health", "education", "social", "media", "travel", "food", "fitness", "events", "home", "money", "games"}  # site/library_page.py
+CONSUMER = {"retail", "health", "education", "social", "media", "travel", "food", "fitness", "events", "home", "money", "games"}
+CORE_WORK = {"finance", "saas", "devtools", "security", "crm"}
 EDGE = ["empty", "loading", "error", "disabled", "overflow", "long_text"]
 EDGE_STATUS = ["shown", "handled", "not_built"]
 SLOTS = ["text", "rich", "number", "media", "list", "action", "input", "none"]
@@ -119,6 +120,9 @@ def fetch(base, slug):
     url = f"{base.rstrip('/')}/library/{slug}.html"
     req = urllib.request.Request(url, headers={"User-Agent": "opendesigner-library"})
     with urllib.request.urlopen(req, timeout=20) as r:
+        final = urllib.parse.urlparse(r.geturl())
+        if final.scheme != "https" and final.hostname not in ("localhost", "127.0.0.1", "::1"):
+            raise ValueError(f"{url} redirected to {r.geturl()}, which is not https")
         body = r.read(512 * 1024 + 1)
     if len(body) > 512 * 1024 or f'class="odl-{slug}'.encode() not in body:
         raise ValueError(f"{url} is not an OpenDesigner component file")
@@ -298,11 +302,11 @@ def markup(src):
     return re.sub(r"<style>.*?</style>|<script>.*?</script>", "", src, flags=re.S)
 
 
-def audience(industries):
-    if "any" in industries:
-        return "any"
-    kinds = {"consumer" if i in CONSUMER else "work" for i in industries}
-    return kinds.pop() if len(kinds) == 1 else "any"
+def audience(c):
+    """work or consumer, the one rule the website's B2B and Consumer labels also use (site/library_page.py imports it):
+    content parts, and parts for consumer industries with no core work industry, are consumer; the rest are work tools."""
+    ind = set(c["industries"])
+    return "consumer" if c["type"] == "content" or (ind & CONSUMER and not ind & CORE_WORK) else "work"
 
 
 def roles(src):
@@ -322,7 +326,7 @@ def entry(c):
     return {
         "id": c["slug"], "name": c["name"], "purpose": c["summary"], "use_when": use, "avoid_when": sp.get("avoid_when", []),
         "type": c["type"], "style": c["style"], "width": c["width"],
-        "tags": {"audience": audience(c["industries"]), "industries": c["industries"], "keywords": c["tags"]},
+        "tags": {"audience": audience(c), "industries": c["industries"], "keywords": c["tags"]},
         "root": f".odl-{c['slug']}", "parts": sp.get("parts", []), "data": sp.get("data", {}),
         "states": {"shown": c["states"], "edge": {k: sp.get("edge", {}).get(k) for k in EDGE}},
         "tokens": sorted(used_vars(src)),
@@ -342,7 +346,7 @@ def version():
 
 def catalog():
     return {"format": FORMAT, "version": version(), "count": len(components()),
-            "vocab": {"types": TYPES, "styles": STYLES, "industries": INDUSTRIES, "audiences": ["work", "consumer", "any"],
+            "vocab": {"types": TYPES, "styles": STYLES, "industries": INDUSTRIES, "audiences": ["work", "consumer"],
                       "widths": WIDTHS, "slots": SLOTS, "edge_states": EDGE, "edge_status": EDGE_STATUS},
             "components": [entry(c) for c in components()]}
 
