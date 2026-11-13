@@ -436,7 +436,10 @@ def audit_data(eng, d, project=None):
     raw_total = sum(1 for f in findings if f["kind"] not in ("standard", "chart", "removed"))
     return {"name": state.get("name") or "Your product", "project": os.path.basename(os.path.abspath(proj).rstrip(os.sep)) or _short(proj),
             "scanned": col["filesScanned"], "tokenUses": col["tokenUses"], "raw": raw_total,
-            "standards": sum(1 for f in findings if f["kind"] == "standard"), "verdict": col["reasons"], "ok": col["ok"],
+            "standards": sum(1 for f in findings if f["kind"] == "standard"), "verdict": [y for x in col["reasons"] for y in (
+                ([f"{col['groups']} groups of hard-coded values ({col['rawValues']:,} values)"] if col.get("rawValues") else [])
+                + ([f"{col['otherFindings']:,} lines breaking a standard or a removal"] if col.get("otherFindings") else [])
+                if re.match(r"\d+ findings?$", x) else [x])], "ok": col["ok"],
             "tokens": col["tokens"], "notes": col["notes"], "families": families, "decisions": decisions, "dials": dials,
             "issues": issues, "exempt": col["exempt"],
             "kept": [{"file": k["file"], "line": k["line"], "reason": k["reason"]} for k in col["keptAll"][:200]],

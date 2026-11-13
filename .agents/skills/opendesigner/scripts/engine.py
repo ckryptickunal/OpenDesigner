@@ -6036,7 +6036,8 @@ def checkin_facts(d, state, scan=True, project=None):
         try:
             with contextlib.redirect_stdout(out):
                 cmd_review(d, project, collect=col)
-            review = {"toFix": col.get("toFix", 0), "reasons": col.get("reasons", [])}
+            review = {"toFix": col.get("toFix", 0), "reasons": col.get("reasons", []), "groups": col.get("groups", 0),
+                      "values": col.get("rawValues", 0), "other": col.get("otherFindings", 0)}
         except (Exception, SystemExit):
             review = None
     prev = last.get("toFix")
@@ -6078,7 +6079,12 @@ def checkin_lines(f):
     out.append("DESIGN.md: out of date in " + ", ".join(f["stale"]) + "." if f["stale"] else "DESIGN.md: matches the system.")
     if f["review"] is not None:
         was = f" (was {f['reviewBefore']})" if f["reviewBefore"] is not None and f["reviewBefore"] != f["review"]["toFix"] else ""
-        out.append(f"Review: {f['review']['toFix']} to fix{was}." if f["review"]["toFix"] else "Review: ok.")
+        rv = f["review"]
+        rest = [x for x in rv["reasons"] if not re.match(r"\d+ findings?$", x)]
+        out.append("Review: ok." if not rv["toFix"] else "Review: " + "; ".join(
+            ([f"{rv['groups']} group{'s' if rv['groups'] != 1 else ''} of hard-coded values ({rv['values']:,} values)"] if rv.get("values") else [])
+            + ([f"{rv['other']:,} line{'s' if rv['other'] != 1 else ''} breaking a standard or a removal"] if rv.get("other") else [])
+            + rest) + f"{was}.")
     elif f["reviewBefore"] is not None:
         out.append(f"Review at the last check-in: {f['reviewBefore']} to fix (run engine.py review for today's count).")
     out.append(f"Next: {f['next']}.")
@@ -16883,7 +16889,9 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
                    "validateErrors": [{"category": i_["category"], "message": i_["message"], "where": i_["where"]} for i_ in invalid[:500]],
                    "toFix": to_fix, "ok": not reasons, "reasons": reasons})
     if collect is not None:
-        collect.update(result, allFindings=findings, tokenUses_by={k: v for k, v in tok_by.items()}, base=base, prefix=prefix,
+        raw_ = [f_ for f_ in findings if f_["kind"] not in ("standard", "chart", "removed")]
+        collect.update(result, allFindings=findings, groups=len(group_findings(raw_)), rawValues=len(raw_),
+                       otherFindings=len(findings) - len(raw_), tokenUses_by={k: v for k, v in tok_by.items()}, base=base, prefix=prefix,
                        keptAll=kept, meta=meta, light=light, files=files, state=state, ladder=ladder, radii=radii, sizes=sizes)
         return 1 if broken or (strict and reasons) else 0
     if as_json:

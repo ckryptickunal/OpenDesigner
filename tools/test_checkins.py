@@ -74,6 +74,13 @@ class CheckIns(unittest.TestCase):
         self.assertFalse(any("Check-in" in o for o in self.decide(4, start=40)))
         self.assertIn("Check-in", self.decide(1, start=50)[0])
 
+    def test_review_count_matches_the_grouped_review(self):
+        out = json.loads(run("checkin", "--json", cwd=self.root).stdout)
+        self.assertGreaterEqual(out["review"]["groups"], 1)
+        text = run("checkin", cwd=self.root).stdout
+        self.assertRegex(text, r"Review: \d+ groups? of hard-coded values \([\d,]+ values\)")
+        self.assertNotRegex(text, r"Review: \d+ to fix")
+
     def test_the_hook_names_one_next_step(self):
         run("checkin", cwd=self.root)
         out = run("status", "--hook", "--dir", "opendesigner", cwd=self.root).stdout
