@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenDesigner · Your system, as built</title>
+<!--
+OpenDesigner visual template: Your system, as built (engine.py audit-page). The person's own code against their system:
+every token family and decision with where the code follows it, then every inconsistency with file:line evidence, a
+count, and two or three options previewed with the project's own values. Reports only: nothing in the code changes.
+Feed it JSON in one of three ways: replace the contents of <script id="od-data">, set window.OD_DATA before the
+last script runs, or open the file with #data=<url-encoded JSON>. The sample payload below documents every field.
+"Copy my choice" produces OD: lines (grammar in references/rules.md section 9): OD:fix <issue>=<option> to change the code,
+OD:waive <issue> --why "..." to keep it on purpose. The agent records each as a ledger item (engine.py ledger).
+No network requests, no dependencies. The shared chrome is repeated in every template on purpose so each file stands alone.
+-->
+<style>:root{--c-bg:#f6f6f7;--c-surface:#fff;--c-fg:#18181b;--c-muted:#585862;--c-border:#dcdce1;--c-strong:#18181b;--c-on-strong:#fff;--c-ok:#166534;--c-bad:#b42318;--r:8px;--font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--c-bg:#111113;--c-surface:#19191c;--c-fg:#ececef;--c-muted:#a3a3ad;--c-border:#303036;--c-strong:#ececef;--c-on-strong:#111113;--c-ok:#4ade80;--c-bad:#f97066;color-scheme:dark}}
+:root[data-theme=dark]{--c-bg:#111113;--c-surface:#19191c;--c-fg:#ececef;--c-muted:#a3a3ad;--c-border:#303036;--c-strong:#ececef;--c-on-strong:#111113;--c-ok:#4ade80;--c-bad:#f97066;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--c-bg);color:var(--c-fg);font:14px/1.5 var(--font)}
+h1{font-size:16px;margin:0;font-weight:600}h2{font-size:13px;margin:0 0 8px;font-weight:600;color:var(--c-muted);text-transform:uppercase;letter-spacing:.04em}
+h3{font-size:15px;margin:0;font-weight:600}
+.od-h{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--c-border);background:var(--c-surface)}
+.sub{color:var(--c-muted);font-size:13px;margin:4px 0 0;max-width:72ch}
+main{max-width:1120px;margin:0 auto;padding:20px;display:grid;gap:32px;min-width:0}
+section{min-width:0}
+.kv{font:12px/1.4 var(--mono);color:var(--c-muted)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button{font:inherit;min-height:44px;padding:0 14px;border-radius:var(--r);border:1px solid var(--c-border);background:var(--c-surface);color:var(--c-fg);cursor:pointer}
+button.primary{background:var(--c-strong);color:var(--c-on-strong);border-color:var(--c-strong);font-weight:600}
+:focus-visible{outline:2px solid var(--c-strong);outline-offset:2px}
+input[type=text]{font:inherit;min-height:44px;padding:0 10px;border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-surface);color:var(--c-fg);min-width:0}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden;background:var(--c-surface)}
+.seg button{border:0;border-radius:0;border-right:1px solid var(--c-border)}.seg button:last-child{border-right:0}
+.seg button[aria-pressed=true]{background:var(--c-strong);color:var(--c-on-strong)}
+.tbl{border-collapse:collapse;width:100%;font-size:13px}.tbl th,.tbl td{border-bottom:1px solid var(--c-border);padding:8px;text-align:left;vertical-align:top}.tbl th{color:var(--c-muted);font-weight:600}
+.ok{color:var(--c-ok);font-weight:600}.bad{color:var(--c-bad);font-weight:600}
+.od-f{position:sticky;bottom:0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 20px;background:var(--c-surface);border-top:1px solid var(--c-border);z-index:2}
+.od-out{flex:1 1 320px;min-height:44px;min-width:0;font:12px/1.4 var(--mono);padding:8px;border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-bg);color:var(--c-fg);resize:vertical}
+input[type=radio]{accent-color:var(--c-strong);width:18px;height:18px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* audit page */
+.nav{display:flex;flex-wrap:wrap;gap:8px}.nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border:1px solid var(--c-border);border-radius:99px;color:var(--c-fg);text-decoration:none;background:var(--c-surface);font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-surface);padding:12px}.stat b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.verdict{border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-surface);padding:12px;font-size:13px}
+.fam{border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-surface);margin-bottom:10px}
+.fam>summary{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between;padding:12px;cursor:pointer;min-height:44px;list-style:none}
+.fam>summary::-webkit-details-marker{display:none}.fam>summary::before{content:"▸";margin-right:4px;color:var(--c-muted)}.fam[open]>summary::before{content:"▾"}
+.fam .in{padding:0 12px 12px;overflow-x:auto}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.chip{border:1px solid var(--c-border);border-radius:var(--r);padding:8px;display:grid;gap:4px;font-size:12px;min-width:0}
+.chip i{display:block;height:28px;border-radius:4px;border:1px solid rgba(128,128,128,.3)}
+.chip .p{font:11px/1.3 var(--mono);word-break:break-all}
+.unused{opacity:.55}
+.tag{display:inline-block;font:600 11px var(--font);padding:1px 6px;border:1px solid var(--c-border);border-radius:99px;color:var(--c-muted);white-space:nowrap}
+.tag.bad{border-color:var(--c-bad);color:var(--c-bad)}.tag.ok{border-color:var(--c-ok);color:var(--c-ok)}
+.issue{border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-surface);padding:16px;display:grid;gap:12px;min-width:0}
+.issue.picked{border-color:var(--c-strong)}
+.ihead{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between}
+.ev{font:12px/1.5 var(--mono);margin:6px 0 0;padding:0;list-style:none;max-height:220px;overflow:auto;border:1px solid var(--c-border);border-radius:var(--r)}
+.ev li{padding:4px 8px;border-bottom:1px solid var(--c-border);overflow-wrap:anywhere}.ev li:last-child{border-bottom:0}
+.ev b{font-weight:600}
+details>summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;border:0;padding:0;margin:0;min-width:0}
+.opt{position:relative;display:flex;flex-direction:column;gap:4px;border:1px solid var(--c-border);border-radius:var(--r);padding:12px;cursor:pointer;min-height:44px;background:var(--c-bg)}
+.opt input{position:absolute;opacity:0;width:1px;height:1px}
+.opt:has(input:checked){border-color:var(--c-strong);box-shadow:inset 0 0 0 1px var(--c-strong)}
+.opt:has(input:focus-visible){outline:2px solid var(--c-strong);outline-offset:2px}
+.opt-t{font-weight:600}.opt-n{color:var(--c-muted);font-size:13px}
+.rec{display:inline-block;margin-left:6px;font:600 11px var(--font);padding:1px 6px;border:1px solid var(--c-border);border-radius:99px;color:var(--c-muted);vertical-align:1px}
+.ba{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.pane{position:relative;border:1px solid var(--c-border);border-radius:var(--r);background:var(--s-bg);color:var(--s-fg);font-family:var(--s-font);padding:30px 14px 14px;min-height:120px;overflow-x:auto;min-width:0}
+.pane::before{content:attr(data-label);position:absolute;top:8px;left:12px;font:11px var(--mono);opacity:.7}
+.pane .empty{font:13px var(--font);opacity:.7}
+.blk{display:flex;flex-wrap:wrap;gap:6px}.blk span{display:inline-flex;align-items:center;justify-content:center;min-width:64px;height:40px;padding:0 8px;border-radius:6px;font:11px var(--mono)}
+.specbox{border:1px dashed rgba(128,128,128,.7);background:var(--s-surface);display:grid}
+.specbox div{background:rgba(128,128,128,.22);height:14px;border-radius:2px}
+.cmp{display:inline-flex;align-items:center;justify-content:center;background:var(--s-accent);color:var(--s-on-accent);border:1px solid rgba(128,128,128,.4);max-width:100%}
+.cmps{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
+.cmps figure{margin:0;display:grid;gap:4px;justify-items:start;min-width:0}.cmps figcaption{font:10px/1.3 var(--mono);opacity:.75;max-width:180px;overflow-wrap:anywhere}
+.shadowbox{width:90px;height:56px;border-radius:8px;background:var(--s-surface)}
+.waivewhy{display:none;gap:6px}.issue.waive .waivewhy{display:grid}
+.empty-state{border:1px dashed var(--c-border);border-radius:var(--r);padding:16px;color:var(--c-muted)}
+@media (max-width:520px){main{padding:16px}.od-h,.od-f{padding:12px 16px}.issue{padding:12px}.tbl{font-size:12px}.tbl th,.tbl td{padding:6px}}
+</style>
+</head>
+<body>
+<header class="od-h"><div><h1 id="t"></h1><p class="sub" id="st"></p></div><div class="seg" id="theme" role="group" aria-label="Color mode"></div></header>
+<main>
+<section aria-labelledby="h-sum">
+<h2 id="h-sum">Summary</h2>
+<div class="stats" id="stats"></div>
+<p class="verdict" id="verdict"></p>
+<nav class="nav" aria-label="Sections"><a href="#h-sys">Your system</a><a href="#h-dec">Decisions</a><a href="#h-iss">What does not match</a><a href="#h-kept">Kept on purpose and the ledger</a></nav>
+</section>
+<section aria-labelledby="h-sys"><h2 id="h-sys">Your system, and where the code uses it</h2><p class="sub">Each token with the number of times the code uses it. A faded token is never used.</p><div id="fams"></div></section>
+<section aria-labelledby="h-dec"><h2 id="h-dec">Decisions</h2><p class="sub">Each answer, how it was set, and whether it changes the tokens or only adds a rule to DESIGN.md.</p><div id="decs" style="overflow-x:auto"></div></section>
+<section aria-labelledby="h-iss"><h2 id="h-iss">What does not match</h2><p class="sub" id="iss-sub"></p><div id="issues" style="display:grid;gap:14px"></div></section>
+<section aria-labelledby="h-kept"><h2 id="h-kept">Kept on purpose, and the ledger</h2><div id="kept" style="display:grid;gap:12px"></div></section>
+</main>
+<footer class="od-f">
+<textarea id="out" class="od-out" rows="2" readonly aria-label="Your choices as OD lines"></textarea>
+<button type="button" class="primary" id="copy">Copy my choice</button>
+<span id="live" class="kv" role="status" aria-live="polite"></span>
+</footer>
+<script type="application/json" id="od-data">
+{
+ "name": "Acme",
+ "project": "site",
+ "scanned": 3, "tokenUses": 12, "raw": 9, "standards": 0, "ok": false, "tokens": "losing",
+ "verdict": ["9 findings", "tokens are not in charge"],
+ "notes": [],
+ "families": [
+  {"name": "Colours", "plain": "The named colours.", "used": 1, "total": 2, "tokens": [
+   {"path": "color.text.primary", "var": "--ds-color-text-primary", "value": "#18181b", "uses": 8, "at": ["app.css:4"]},
+   {"path": "color.bg.action.primary", "var": "--ds-color-bg-action-primary", "value": "#2f5bea", "uses": 0, "at": []}]},
+  {"name": "Spacing", "plain": "The space ladder.", "used": 1, "total": 3, "tokens": [
+   {"path": "space.8", "var": "--ds-space-8", "value": 8, "uses": 4, "at": ["app.css:9"]},
+   {"path": "space.12", "var": "--ds-space-12", "value": 12, "uses": 0, "at": []},
+   {"path": "space.16", "var": "--ds-space-16", "value": 16, "uses": 0, "at": []}]}
+ ],
+ "decisions": [{"id": "Q-shape-01", "answer": "Subtle", "setBy": "chosen", "changesTokens": true, "family": "Corners", "follows": 3, "raw": 2}],
+ "dials": [{"id": "roundness", "value": 30, "setBy": "chosen"}],
+ "issues": [
+  {"id": "A-color-01", "kind": "color", "title": "2 colours that look the same", "plain": "One colour written two ways.", "count": 3, "files": 2,
+   "evidence": [{"file": "app.css", "line": 12, "value": "#f3f4f6"}, {"file": "card.css", "line": 3, "value": "#f4f4f5"}], "more": 0,
+   "preview": {"values": [{"value": "#f3f4f6", "count": 2}, {"value": "#f4f4f5", "count": 1}]},
+   "options": [{"id": "token", "label": "Use color.surface.sunken", "note": "Every one becomes the token.", "after": {"color": "#f4f4f5"}, "recommended": true},
+               {"id": "keep", "label": "Keep as it is, on purpose", "note": "Say why.", "after": null, "od": ["OD:waive A-color-01"]}]},
+  {"id": "A-space-01", "kind": "space", "title": "Spacing of 13px, 4 times", "plain": "Not on the ladder.", "count": 4, "files": 1,
+   "evidence": [{"file": "app.css", "line": 20, "value": "padding: 13px"}], "more": 0, "preview": {"value": 13, "steps": [8, 12, 16]},
+   "options": [{"id": "down", "label": "Round down to 12px", "note": "Use var(--ds-space-12).", "after": {"value": 12}, "recommended": true},
+               {"id": "up", "label": "Round up to 16px", "note": "Use var(--ds-space-16).", "after": {"value": 16}},
+               {"id": "keep", "label": "Keep as it is, on purpose", "note": "Say why.", "after": null, "od": ["OD:waive A-space-01"]}]}
+ ],
+ "exempt": [{"glob": "figures/*", "why": "demo figures show mistakes on purpose", "by": "owner", "date": "2026-11-13", "files": 4}],
+ "kept": [{"file": "app.css", "line": 40, "reason": "print stylesheet"}], "keptCount": 1,
+ "ledger": [{"id": "R1", "title": "Settings page", "started": "2026-11-13", "items": [{"id": "comp.action.button", "status": "done"}]}],
+ "ledgerOpen": [],
+ "look": {"shared": {"font": "system-ui", "size": "16px", "radius-control": "6px", "radius-container": "12px", "control-h": "40px", "pad-x": "16px"},
+          "light": {"bg": "#ffffff", "surface": "#f7f7f8", "fg": "#18181b", "fg-muted": "#585862", "border": "#e4e4e7", "accent": "#2f5bea", "on-accent": "#ffffff"},
+          "dark": {"bg": "#111113", "surface": "#19191c", "fg": "#ececef", "fg-muted": "#a3a3ad", "border": "#303036", "accent": "#7b9cff", "on-accent": "#111113"}},
+ "vars": {"--ds-color-text-primary": "#18181b", "--ds-space-8": "8px"},
+ "prefix": "ds"
+}
+</script>
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function loadData(){let d={};try{d=JSON.parse($('#od-data').textContent)}catch(e){}
+ if(window.OD_DATA)d=window.OD_DATA;const m=location.hash.match(/[#&]data=([^&]+)/);
+ if(m){try{d=JSON.parse(decodeURIComponent(m[1]))}catch(e){console.warn('OpenDesigner: #data is not valid JSON')}}return d}
+const D=loadData();
+const PICK={};   // issue id -> option index
+const WHY={};    // issue id -> reason for keeping it
+const n=(x,w,m)=>x+' '+(x===1?w:(m||w+'s'));
+function mode(){const t=document.documentElement.dataset.theme;return t==='light'||t==='dark'?t:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}
+function look(){const L=D.look||{};const v=Object.assign({},L.light||{},(mode()==='dark'?L.dark:{})||{});return {v,s:L.shared||{}}}
+function paneStyle(el){const {v,s}=look();const set=(k,x)=>{if(x)el.style.setProperty(k,x)};
+ for(const k in (D.vars||{}))if(/^--[\w-]+$/.test(k))el.style.setProperty(k,D.vars[k]); // code written with var(--ds-x) draws as in the app
+ set('--s-bg',v.bg);set('--s-fg',v.fg);set('--s-surface',v.surface||v.bg);set('--s-accent',v.accent);set('--s-on-accent',v['on-accent']);set('--s-font',s.font)}
+function px(x){return (typeof x==='number'?x:parseFloat(x))+'px'}
+function nearest(v,steps){return steps.reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a)}
+function cssval(raw){const m=String(raw||'').match(/^[\w-]+\s*:\s*(.*)$/);return (m?m[1]:String(raw||'')).replace(/;$/,'')}
+/* ---------- previews: built with the project's own values ---------- */
+function draw(kind,p,after,el){el.innerHTML='';
+ const add=h=>{const w=document.createElement('div');w.innerHTML=h;el.appendChild(w);return w};
+ if(after===undefined){add('<p class="empty">Pick an option to see it here.</p>');return}
+ if(after===null){add('<p class="empty">Nothing changes: this stays as it is, and the reason goes in the ledger.</p>');return}
+ if(kind==='color'){const vals=p.values||[];const w=add('<div class="blk"></div>').firstChild;
+  vals.forEach(x=>{const c=after&&after.color?after.color:x.value;const s=document.createElement('span');s.style.background=c;s.style.color=(lum(c)>.4?'#111':'#fff');s.textContent=(after&&after.color?c:x.value)+' ×'+x.count;w.appendChild(s)});
+  const card=add('<div class="specbox" style="padding:12px;gap:6px;margin-top:10px;border-radius:8px"><div></div><div style="width:60%"></div></div>').firstChild;
+  card.style.background=after&&after.color?after.color:(vals[0]||{}).value;return}
+ if(kind==='space'){const vals=p.values?p.values:[p.value];const w=add('<div style="display:grid;gap:10px"></div>').firstChild;
+  vals.slice(0,6).forEach(v0=>{const v=after&&after.value!=null?after.value:(after&&after.nearest?nearest(v0,p.steps):v0);
+   const f=document.createElement('div');f.innerHTML='<div class="kv">'+esc(v0)+'px'+(v!==v0?' → '+esc(v)+'px':'')+'</div>';
+   const b=document.createElement('div');b.className='specbox';b.style.padding=px(v);b.style.gap=px(v);b.innerHTML='<div></div><div style="width:70%"></div><div style="width:40%"></div>';f.appendChild(b);w.appendChild(f)});return}
+ if(kind==='type'){const vals=p.values?p.values:[p.value];const w=add('<div style="display:grid;gap:8px"></div>').firstChild;
+  vals.slice(0,6).forEach(v0=>{const v=after&&after.value!=null?after.value:(after&&after.nearest?nearest(v0,p.steps):v0);
+   const f=document.createElement('div');f.innerHTML='<div class="kv">'+esc(v0)+'px'+(v!==v0?' → '+esc(v)+'px':'')+'</div>';
+   const t=document.createElement('div');t.style.fontSize=px(v);t.style.lineHeight='1.3';t.textContent=(D.name||'Your product')+': settings saved';f.appendChild(t);w.appendChild(f)});
+  if(p.steps)add('<p class="kv" style="margin:8px 0 0">The scale: '+p.steps.map(esc).join(', ')+'</p>');return}
+ if(kind==='radius'){const vals=p.values?p.values:[p.value];const w=add('<div class="cmps"></div>').firstChild;
+  vals.slice(0,6).forEach(v0=>{const v=after&&after.value!=null?after.value:(after&&after.nearest?nearest(v0,p.steps):v0);
+   const f=document.createElement('figure');const b=document.createElement('span');b.className='cmp';b.style.cssText='height:40px;padding:0 16px';b.style.borderRadius=px(v);b.textContent='Save';
+   const c=document.createElement('div');c.className='specbox';c.style.cssText='width:120px;height:56px;padding:10px;gap:6px';c.style.borderRadius=px(v);c.innerHTML='<div></div>';
+   const cap=document.createElement('figcaption');cap.textContent=v0+'px'+(v!==v0?' → '+v+'px':'');f.append(b,c,cap);w.appendChild(f)});return}
+ if(kind==='shadow'){const w=add('<div class="cmps"></div>').firstChild;
+  const list=after&&after.steps?after.steps.map(s=>({value:s.value,label:s.path})):(p.values||[]).map(x=>({value:cssval(x.value),label:x.value+' ×'+x.count}));
+  list.forEach(x=>{const f=document.createElement('figure');const b=document.createElement('div');b.className='shadowbox';b.style.boxShadow=x.value;const cap=document.createElement('figcaption');cap.textContent=x.label;f.append(b,cap);w.appendChild(f)});return}
+ if(kind==='component'){const w=add('<div class="cmps"></div>').firstChild;
+  (p.variants||[]).forEach(x=>{const props=after&&after.props?after.props:x.props;const f=document.createElement('figure');const b=document.createElement('span');b.className='cmp';
+   b.style.padding='8px 14px';for(const k of ['border-radius','padding','font-size','height','min-height','background','font-weight']){if(props[k])b.style.setProperty(k,props[k])}
+   if(!after&&props.background){const h=(props.background.match(/#[0-9a-f]{6}\b|#[0-9a-f]{3}\b/i)||[])[0];b.style.color=h?(lum(h)>.4?'#111':'#fff'):'var(--s-fg)'}
+   b.textContent=p.kind||'item';const cap=document.createElement('figcaption');cap.textContent=x.selector+' ×'+x.count;f.append(b,cap);w.appendChild(f)});return}
+ if(kind==='bypass'){add('<p class="empty">'+(after&&after.same?'Looks exactly the same. The difference is in the code: these values now come from the tokens, so a change to the system reaches them.':'Each value is typed in by hand.')+'</p>');return}
+}
+function lum(h){h=String(h||'#888').replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');if(!/^[0-9a-f]{6}$/i.test(h))return .5;
+ const c=[0,2,4].map(i=>parseInt(h.substr(i,2),16)/255).map(v=>v<=0.04045?v/12.92:Math.pow((v+0.055)/1.055,2.4));return .2126*c[0]+.7152*c[1]+.0722*c[2]}
+/* ---------- sections ---------- */
+function summary(){$('#t').textContent=(D.name||'Your product')+': your system, as built';
+ $('#st').textContent='Read from '+(D.project||'your code')+'. This page only reports: nothing in your code changes until you pick an option and say yes.';
+ const s=[['Files read',D.scanned],['Token uses',D.tokenUses],['Values typed by hand',D.raw],['Things to decide',(D.issues||[]).length]];
+ $('#stats').innerHTML=s.map(x=>'<div class="stat"><b>'+esc(x[1])+'</b><span class="kv">'+esc(x[0])+'</span></div>').join('');
+ const w={ok:'The code follows the tokens more than it skips them.',losing:'The tokens are losing: the code types values by hand more often than it uses them.',none:'The code uses none of the tokens yet.'};
+ $('#verdict').innerHTML=(D.ok?'<span class="ok">Review: ok.</span> ':'<span class="bad">Review: not yet.</span> ')+esc(w[D.tokens]||'')+(D.verdict&&D.verdict.length?' What review says: '+esc(D.verdict.join('; '))+'.':'')
+  +((D.notes||[]).length?'<br><span class="kv">'+D.notes.map(esc).join('. ')+'</span>':'')}
+function families(){$('#fams').innerHTML=(D.families||[]).map((f,i)=>{const sw=f.name==='Colours';
+ const body=sw?'<div class="sw">'+f.tokens.map(t=>'<div class="chip'+(t.uses?'':' unused')+'" title="'+esc(t.at.join(', '))+'"><i style="background:'+esc(t.value)+'"></i><span class="p">'+esc(t.path)+'</span><span class="kv">'+esc(t.value)+' · '+n(t.uses,'use')+'</span></div>').join('')+'</div>'
+  :'<table class="tbl"><thead><tr><th>Token</th><th>Value</th><th>Uses</th><th>Where, first few</th></tr></thead><tbody>'+f.tokens.map(t=>'<tr class="'+(t.uses?'':'unused')+'"><td class="kv">'+esc(t.var)+'</td><td>'+esc(typeof t.value==='number'?t.value+(f.name==='Motion'?'ms':'px'):t.value)+'</td><td>'+esc(t.uses)+'</td><td class="kv">'+esc(t.at.join(', ')||'never used')+'</td></tr>').join('')+'</tbody></table>';
+ return '<details class="fam"'+(i<2?' open':'')+'><summary><h3>'+esc(f.name)+'</h3><span class="kv">'+esc(f.used)+' of '+esc(f.total)+' used · '+esc(f.plain)+'</span></summary><div class="in">'+body+'</div></details>'}).join('')||'<p class="empty-state">No tokens yet.</p>'}
+function decisions(){const ds=D.decisions||[];if(!ds.length){$('#decs').innerHTML='<p class="empty-state">No answers recorded yet. The system is still on its sketch defaults.</p>';return}
+ $('#decs').innerHTML='<table class="tbl"><thead><tr><th>Question</th><th>Answer</th><th>How it was set</th><th>Changes tokens?</th><th>In the code</th></tr></thead><tbody>'+ds.map(x=>'<tr><td class="kv">'+esc(x.id)+'</td><td>'+esc(x.answer)+'</td><td>'+esc(x.setBy)+'</td><td>'+(x.changesTokens?'<span class="tag ok">yes</span>':'<span class="tag">a rule in DESIGN.md</span>')+'</td><td>'+(x.family?esc(x.family)+': '+n(x.follows||0,'token use')+(x.raw?', '+n(x.raw,'value')+' by hand':''):'<span class="kv">not checked in code</span>')+'</td></tr>').join('')+'</tbody></table>'}
+function issues(){const is=D.issues||[];
+ $('#iss-sub').textContent=is.length?n(is.length,'thing')+' where the code and the system disagree. Each one shows where, how often, and two or three ways to settle it. Pick one to see the change; leave the rest as they are.':'';
+ if(!is.length){$('#issues').innerHTML='<p class="empty-state">Nothing to settle: the code and the system agree.</p>';return}
+ $('#issues').innerHTML=is.map(i=>{const led=i.ledger?'<span class="tag'+(i.ledger.status==='waived'||i.ledger.status==='done'?' ok':' bad')+'">ledger: '+esc(i.ledger.status)+'</span>':'';
+  return '<article class="issue" id="'+esc(i.id)+'" data-id="'+esc(i.id)+'"><div class="ihead"><h3>'+esc(i.title)+'</h3><span class="row"><span class="kv">'+esc(i.id)+'</span>'+led+'</span></div>'
+  +'<p class="sub" style="margin:0">'+esc(i.plain)+' <b>'+n(i.count,'time')+' in '+n(i.files,'file')+'.</b></p>'
+  +'<details><summary>Where: '+n(i.count,'place')+'</summary><ul class="ev">'+i.evidence.map(e=>'<li><b>'+esc(e.file)+':'+esc(e.line)+'</b> '+esc(e.value)+'</li>').join('')+(i.more?'<li>… and '+esc(i.more)+' more (engine.py audit-page --json)</li>':'')+'</ul></details>'
+  +'<fieldset class="opts"><legend class="vh">Options for '+esc(i.title)+'</legend>'+i.options.map((o,k)=>'<label class="opt"><input type="radio" name="o-'+esc(i.id)+'" value="'+k+'"><span class="opt-t">'+esc(o.label)+(o.recommended?'<span class="rec">Recommended</span>':'')+'</span><span class="opt-n">'+esc(o.note)+'</span></label>').join('')+'</fieldset>'
+  +'<label class="waivewhy"><span class="kv">Why keep it? (goes in the ledger)</span><input type="text" data-why="'+esc(i.id)+'" placeholder="for example: the print styles need exact points"></label>'
+  +'<div class="ba"><div class="pane" data-label="now, in your code" data-pane="now"></div><div class="pane" data-label="with this option" data-pane="after"></div></div></article>'}).join('');
+ is.forEach(i=>{const el=document.getElementById(i.id);el.querySelectorAll('.pane').forEach(paneStyle);
+  draw(i.kind,i.preview,false,el.querySelector('[data-pane=now]'));draw(i.kind,i.preview,undefined,el.querySelector('[data-pane=after]'));
+  el.querySelector('.opts').onchange=e=>{const k=+e.target.value;PICK[i.id]=k;const o=i.options[k];el.classList.add('picked');el.classList.toggle('waive',o.id==='keep');
+   draw(i.kind,i.preview,o.after,el.querySelector('[data-pane=after]'));update()};
+  el.querySelector('[data-why]').oninput=e=>{WHY[i.id]=e.target.value.trim();update()}})}
+function kept(){const parts=[];
+ const ex=D.exempt||[];parts.push('<div><h3>Left out of the check on purpose</h3>'+(ex.length?'<table class="tbl"><thead><tr><th>Files</th><th>Why</th><th>Who decided</th></tr></thead><tbody>'+ex.map(r=>'<tr><td class="kv">'+esc(r.glob)+' ('+n(r.files,'file')+')</td><td>'+esc(r.why)+'</td><td>'+esc(r.by)+', '+esc(r.date)+'</td></tr>').join('')+'</tbody></table>':'<p class="sub">Nothing. Files that break the system on purpose, such as a demo of mistakes, can be marked: <span class="kv">engine.py exempt &lt;folder&gt; --why "..."</span></p>')+'</div>');
+ const k=D.kept||[];parts.push('<div><h3>Lines kept on purpose (od-ignore with a reason)</h3>'+(k.length?'<details><summary>'+n(D.keptCount,'line')+'</summary><ul class="ev">'+k.map(x=>'<li><b>'+esc(x.file)+':'+esc(x.line)+'</b> '+esc(x.reason)+'</li>').join('')+'</ul></details>':'<p class="sub">None.</p>')+'</div>');
+ const L=D.ledger||[];const word={done:'done',broken:'broken',waived:'skipped on purpose',planned:'not done yet'};
+ parts.push('<div><h3>The ledger: what each round did</h3>'+(L.length?'<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Round</th><th>Item</th><th>Status</th><th>Note or reason</th></tr></thead><tbody>'+L.flatMap(r=>(r.items||[]).map(it=>'<tr><td>'+esc(r.id)+' '+esc(r.title)+(r.closed?'':' <span class="tag">open</span>')+'</td><td class="kv">'+esc(it.id)+'</td><td><span class="tag'+(it.status==='done'||it.status==='waived'?' ok':' bad')+'">'+esc(word[it.status]||it.status)+'</span></td><td>'+esc(it.status==='waived'?(it.why||'')+' ('+(it.by||'?')+')':(it.note||''))+'</td></tr>')).join('')+'</tbody></table></div>'
+  +((D.ledgerOpen||[]).length?'<p class="bad">'+n(D.ledgerOpen.length,'item')+' neither done nor skipped on purpose: review fails until each is settled.</p>':'<p class="ok">Every item is done or skipped on purpose.</p>'):'<p class="sub">Empty. Each implementation round starts one: <span class="kv">engine.py ledger start "what this round builds" --items a,b,c</span></p>')+'</div>');
+ $('#kept').innerHTML=parts.join('')}
+/* ---------- OD lines ---------- */
+function lines(){const L=[];(D.issues||[]).forEach(i=>{if(!(i.id in PICK))return;const o=i.options[PICK[i.id]];
+ if(o.id==='keep'){L.push('OD:waive '+i.id+' --why '+JSON.stringify(WHY[i.id]||'...'))}
+ else L.push(...(o.od||['OD:fix '+i.id+'='+o.id]))});return L}
+function update(){const L=lines();$('#out').value=L.join('\n')||'(nothing chosen yet)';
+ const missing=(D.issues||[]).filter(i=>i.id in PICK&&i.options[PICK[i.id]].id==='keep'&&!WHY[i.id]).length;
+ $('#live').textContent=missing?n(missing,'kept item needs','kept items need')+' a reason':''}
+async function copy(){const t=$('#out').value;let ok=false;
+ try{await navigator.clipboard.writeText(t);ok=true}catch(e){$('#out').select();try{ok=document.execCommand('copy')}catch(_){}}
+ $('#live').textContent=ok?'Copied. Paste it into the chat.':'Select the text and copy it by hand.'}
+function seg(el,values,cur,onPick,fmt=String){el.innerHTML=values.map(v=>'<button type="button" aria-pressed="'+(v==cur)+'" data-v="'+esc(v)+'">'+esc(fmt(v))+'</button>').join('');
+ el.onclick=e=>{const b=e.target.closest('button');if(!b)return;el.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));onPick(b.dataset.v)}}
+function repaint(){document.querySelectorAll('.pane').forEach(paneStyle)}
+function boot(){summary();families();decisions();issues();kept();
+ seg($('#theme'),['auto','light','dark'],'auto',v=>{if(v==='auto')delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=v;repaint()},v=>v[0].toUpperCase()+v.slice(1));
+ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',repaint);$('#copy').onclick=copy;update()}
+boot();
+</script>
+</body>
+</html>

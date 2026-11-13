@@ -6,8 +6,14 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ## [Unreleased]
 
+### Added
+
+- **See your system as your code builds it** (2026-11-13). `engine.py audit-page --open` writes one page: each token with how often the code uses it, then every place the code and the system disagree, with the file, line and count, and up to three ways to settle each, previewed with your own values. It changes nothing; your picks come back as `OD:fix` and `OD:waive` lines.
+- **Adapt your system to a site you like** (2026-11-13). `engine.py adapt <measurements.json> --open` puts your system beside the same system with a reference's corners, density, depth and type proportions. Your brand color, fonts and locked values stay yours, values you chose start unticked, and nothing is recorded until you tick what to take.
+- **A ledger for every round of building** (2026-11-13). `engine.py ledger start` lists what a round covers; each item ends done, broken or skipped on purpose, with the reason and who decided. `review --strict` fails while one is open, an agent's waiver needs the owner's words before the round closes, DESIGN.md shows the ledger, and building blocks named in it now fill the coverage check.
+- **Mark example files that break the rules on purpose** (2026-11-13). `engine.py exempt <folder> --why "..."` keeps a demo of mistakes out of review. Review still lists the folder and the reason, so nothing is hidden.
 - **The review catches text that gets cut off** (2026-11-13). It measures text that runs out of its box or is cut by the box around it, words hidden by an ellipsis on a heading or button, and one-word last lines, at 320 px, at 200% text and with every word 30% longer, as German makes it. Each finding names the element, the number and a cropped screenshot.
-- **The review measures breathing room, spacing and tracking** (2026-11-13). It flags text crowding its neighbour or its box's edge, padding smaller than the gap inside, body text under 1.4 line height or outside 45 to 75 characters a line, uneven gaps and tracking that does not fit the size. Fixes name your spacing and type tokens.
+- **The review measures breathing room and spacing** (2026-11-13). It flags text crowding its neighbour or its box's edge, padding smaller than the gap inside, body text under 1.4 line height or outside 45 to 75 characters a line, uneven gaps and tracking that does not fit the size. Fixes name your spacing and type tokens.
 - **The review and preflight read the words** (2026-11-13). Title Case where your system chose sentence case, one action with two names and leftover placeholder text are rules. Buttons that don't start with a verb and jargon on a page for everyone are marked as judgment calls to read.
 
 ## [0.3.1]: 2026-11-11

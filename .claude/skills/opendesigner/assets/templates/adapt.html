@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenDesigner · Adapt from a reference</title>
+<!--
+OpenDesigner visual template: Adapt from a reference (engine.py adapt). What a reference site or file would change in the
+person's current system, and what stays, side by side, drawn with both systems' own tokens. Structure and quality only:
+a reference's logo, brand hue, typeface, imagery and copy never carry over, except through a Taste Index the person follows.
+Feed it JSON in one of three ways: replace the contents of <script id="od-data">, set window.OD_DATA before the
+last script runs, or open the file with #data=<url-encoded JSON>. The sample payload below documents every field.
+"Copy my choice" produces OD:accept <ref-id>:<path> lines (references/rules.md section 9); nothing is recorded before that.
+No network requests, no dependencies. The shared chrome is repeated in every template on purpose so each file stands alone.
+-->
+<style>:root{--c-bg:#f6f6f7;--c-surface:#fff;--c-fg:#18181b;--c-muted:#585862;--c-border:#dcdce1;--c-strong:#18181b;--c-on-strong:#fff;--c-ok:#166534;--c-bad:#b42318;--r:8px;--font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--c-bg:#111113;--c-surface:#19191c;--c-fg:#ececef;--c-muted:#a3a3ad;--c-border:#303036;--c-strong:#ececef;--c-on-strong:#111113;--c-ok:#4ade80;--c-bad:#f97066;color-scheme:dark}}
+:root[data-theme=dark]{--c-bg:#111113;--c-surface:#19191c;--c-fg:#ececef;--c-muted:#a3a3ad;--c-border:#303036;--c-strong:#ececef;--c-on-strong:#111113;--c-ok:#4ade80;--c-bad:#f97066;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--c-bg);color:var(--c-fg);font:14px/1.5 var(--font)}
+h1{font-size:16px;margin:0;font-weight:600}h2{font-size:13px;margin:0 0 8px;font-weight:600;color:var(--c-muted);text-transform:uppercase;letter-spacing:.04em}
+h3{font-size:15px;margin:0;font-weight:600}
+.od-h{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--c-border);background:var(--c-surface)}
+.sub{color:var(--c-muted);font-size:13px;margin:4px 0 0;max-width:72ch}
+main{max-width:1120px;margin:0 auto;padding:20px;display:grid;gap:32px;min-width:0}
+section{min-width:0}
+.kv{font:12px/1.4 var(--mono);color:var(--c-muted)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+button{font:inherit;min-height:44px;padding:0 14px;border-radius:var(--r);border:1px solid var(--c-border);background:var(--c-surface);color:var(--c-fg);cursor:pointer}
+button.primary{background:var(--c-strong);color:var(--c-on-strong);border-color:var(--c-strong);font-weight:600}
+:focus-visible{outline:2px solid var(--c-strong);outline-offset:2px}
+input[type=text]{font:inherit;min-height:44px;padding:0 10px;border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-surface);color:var(--c-fg);min-width:0}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden;background:var(--c-surface)}
+.seg button{border:0;border-radius:0;border-right:1px solid var(--c-border)}.seg button:last-child{border-right:0}
+.seg button[aria-pressed=true]{background:var(--c-strong);color:var(--c-on-strong)}
+.tbl{border-collapse:collapse;width:100%;font-size:13px}.tbl th,.tbl td{border-bottom:1px solid var(--c-border);padding:8px;text-align:left;vertical-align:top}.tbl th{color:var(--c-muted);font-weight:600}
+.ok{color:var(--c-ok);font-weight:600}.bad{color:var(--c-bad);font-weight:600}
+.od-f{position:sticky;bottom:0;display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 20px;background:var(--c-surface);border-top:1px solid var(--c-border);z-index:2}
+.od-out{flex:1 1 320px;min-height:44px;min-width:0;font:12px/1.4 var(--mono);padding:8px;border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-bg);color:var(--c-fg);resize:vertical}
+input[type=radio]{accent-color:var(--c-strong);width:18px;height:18px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* adapt page */
+.ba{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.pane{position:relative;border:1px solid var(--c-border);border-radius:var(--r);background:var(--t-bg);color:var(--t-fg);font-family:var(--t-font);font-size:var(--t-size);padding:34px 18px 18px;display:grid;gap:var(--t-gap);align-content:start;min-width:0;overflow:hidden}
+.pane::before{content:attr(data-label);position:absolute;top:10px;left:14px;font:11px var(--mono);opacity:.7}
+.pane h3{font-size:calc(var(--t-size) * var(--t-ratio) * var(--t-ratio));font-weight:var(--t-hw);margin:0;line-height:1.2}
+.pane p{margin:0;color:var(--t-muted);line-height:1.5}
+.t-card{background:var(--t-surface);border:1px solid var(--t-border);border-radius:var(--t-rc);padding:var(--t-pad);box-shadow:var(--t-sh);display:grid;gap:var(--t-gap)}
+.t-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.t-btn{display:inline-flex;align-items:center;height:var(--t-h);padding:0 var(--t-pad);border-radius:var(--t-rb);background:var(--t-accent);color:var(--t-on);font-weight:600}
+.t-btn2{display:inline-flex;align-items:center;height:var(--t-h);padding:0 var(--t-pad);border-radius:var(--t-rb);border:1px solid var(--t-border-s);color:var(--t-fg)}
+.t-in{height:var(--t-h);border:1px solid var(--t-border-s);border-radius:var(--t-rb);padding:0 12px;display:flex;align-items:center;color:var(--t-muted);background:var(--t-bg)}
+.t-badge{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:var(--t-rb);background:var(--t-accent-sub);font-size:12px}
+.changed td{font-weight:600}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--c-border);border-radius:var(--r);padding:12px;background:var(--c-surface);min-height:44px;cursor:pointer}
+.opt input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-strong);flex:none}
+.list{display:grid;gap:8px}
+.stays li{margin:4px 0}
+.notice{border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-surface);padding:12px;font-size:13px}
+@media (max-width:520px){main{padding:16px}.od-h,.od-f{padding:12px 16px}.ba{grid-template-columns:1fr}.tbl{font-size:12px}}
+</style>
+</head>
+<body>
+<header class="od-h"><div><h1 id="t"></h1><p class="sub" id="st"></p></div><div class="seg" id="theme" role="group" aria-label="Color mode"></div></header>
+<main>
+<section aria-labelledby="h-ba"><h2 id="h-ba">Side by side</h2><p class="sub" id="ba-sub"></p><div class="ba"><div class="pane" data-label="your system now" id="now"></div><div class="pane" data-label="adapted" id="after"></div></div></section>
+<section aria-labelledby="h-tbl"><h2 id="h-tbl">What changes</h2><div style="overflow-x:auto" id="tbl"></div></section>
+<section aria-labelledby="h-ch"><h2 id="h-ch">Take these from the reference</h2><p class="sub">Tick what to take. Nothing is recorded until you copy your choice and say yes.</p><div class="list" id="changes"></div></section>
+<section aria-labelledby="h-st"><h2 id="h-st">What stays yours</h2><ul class="stays" id="stays"></ul><p class="notice" id="identity"></p></section>
+<section aria-labelledby="h-nt" id="nt-s"><h2 id="h-nt">Notes from the measurements</h2><ul id="notes"></ul></section>
+</main>
+<footer class="od-f">
+<textarea id="out" class="od-out" rows="2" readonly aria-label="Your choice as OD lines"></textarea>
+<button type="button" class="primary" id="copy">Copy my choice</button>
+<span id="live" class="kv" role="status" aria-live="polite"></span>
+</footer>
+<script type="application/json" id="od-data">
+{
+ "name": "Acme",
+ "ref": {"id": "calm-site", "tag": "inspiration", "kind": "url", "file": "calm-site.json"},
+ "changes": [{"path": "dials.roundness", "now": 30, "ref": 62, "confidence": "high", "basis": "most common control radius 12", "chosen": false, "od": "OD:accept calm-site:dials.roundness=62"}],
+ "stays": [{"path": "raw.brandColor", "now": "#2f5bea", "why": "yours: identity stays with you"}],
+ "notes": ["Accent #5469d4 is the reference's identity: carry its role and chroma level, not the hue; ask for the brand color."],
+ "table": [{"what": "Button and field corners", "key": "radius.control", "now": "6px", "adapted": "12px", "changed": true}],
+ "before": {"shared": {"font": "system-ui", "size": "16px", "radius-control": "6px", "radius-container": "12px", "control-h": "40px", "pad-x": "16px", "gap": "12px", "ratio": "1.25", "heading-weight": "600"},
+            "light": {"bg": "#ffffff", "surface": "#f7f7f8", "fg": "#18181b", "fg-muted": "#585862", "border": "#e4e4e7", "border-strong": "#a1a1aa", "accent": "#2f5bea", "on-accent": "#ffffff", "accent-subtle": "#e8eeff", "shadow-1": "0 1px 2px rgba(0,0,0,.08)"}},
+ "after": {"shared": {"font": "system-ui", "size": "16px", "radius-control": "12px", "radius-container": "20px", "control-h": "44px", "pad-x": "20px", "gap": "16px", "ratio": "1.25", "heading-weight": "600"},
+            "light": {"bg": "#ffffff", "surface": "#f7f7f8", "fg": "#18181b", "fg-muted": "#585862", "border": "#e4e4e7", "border-strong": "#a1a1aa", "accent": "#2f5bea", "on-accent": "#ffffff", "accent-subtle": "#e8eeff", "shadow-1": "0 2px 8px rgba(0,0,0,.08)"}},
+ "tasteIndex": false,
+ "intake": "engine.py intake calm-site.json"
+}
+</script>
+<script>
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function loadData(){let d={};try{d=JSON.parse($('#od-data').textContent)}catch(e){}
+ if(window.OD_DATA)d=window.OD_DATA;const m=location.hash.match(/[#&]data=([^&]+)/);
+ if(m){try{d=JSON.parse(decodeURIComponent(m[1]))}catch(e){console.warn('OpenDesigner: #data is not valid JSON')}}return d}
+const D=loadData();
+const fmt=v=>v===null||v===undefined?'not set':typeof v==='object'?JSON.stringify(v):String(v);
+function mode(){const t=document.documentElement.dataset.theme;return t==='light'||t==='dark'?t:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}
+function paint(el,sys){const s=sys.shared||{};const v=Object.assign({},sys.light||{},mode()==='dark'?(sys.dark||{}):{});const set=(k,x)=>{if(x)el.style.setProperty(k,x)};
+ set('--t-bg',v.bg);set('--t-surface',v.surface||v.bg);set('--t-fg',v.fg);set('--t-muted',v['fg-muted']);set('--t-border',v.border);set('--t-border-s',v['border-strong']||v.border);
+ set('--t-accent',v.accent);set('--t-on',v['on-accent']);set('--t-accent-sub',v['accent-subtle']||v.surface);set('--t-sh',v['shadow-1']||'none');
+ set('--t-font',s.font);set('--t-size',s.size);set('--t-rb',s['radius-control']);set('--t-rc',s['radius-container']);set('--t-h',s['control-h']);set('--t-pad',s['pad-x']);set('--t-gap',s.gap);set('--t-ratio',s.ratio);set('--t-hw',s['heading-weight'])}
+function ui(el){el.innerHTML='<h3>'+esc(D.name||'Your product')+'</h3><p>Plans start at the size of your team. Change it any time.</p>'
+ +'<div class="t-card"><div class="t-row"><span class="t-badge">New</span><strong>Team plan</strong></div><div class="t-in">Work email</div><div class="t-row"><span class="t-btn">Start free</span><span class="t-btn2">Talk to us</span></div></div>'}
+function boot(){$('#t').textContent=(D.name||'Your product')+': adapt from '+((D.ref||{}).id||'a reference');
+ $('#st').textContent='What '+((D.ref||{}).file||'the reference')+' would change in your current system, and what stays. Nothing is recorded yet.';
+ $('#ba-sub').textContent='Both are drawn with real tokens: yours now, and yours with every change below taken.';
+ ui($('#now'));ui($('#after'));
+ $('#tbl').innerHTML='<table class="tbl"><thead><tr><th>What</th><th>Now</th><th>Adapted</th></tr></thead><tbody>'+(D.table||[]).map(r=>'<tr class="'+(r.changed?'changed':'')+'"><td>'+esc(r.what)+'</td><td class="kv">'+esc(r.now)+'</td><td class="kv">'+esc(r.adapted)+(r.changed?'':' (same)')+'</td></tr>').join('')+'</tbody></table>';
+ const ch=D.changes||[];$('#changes').innerHTML=ch.length?ch.map((c,i)=>'<label class="opt"><input type="checkbox" data-i="'+i+'"'+(c.confidence!=='low'&&!c.chosen?' checked':'')+'><span><b>'+esc(c.path)+'</b>: '+esc(fmt(c.now))+' → '+esc(fmt(c.ref))+(c.chosen?' <span class="kv">(you chose '+esc(fmt(c.now))+' yourself; tick only to change it)</span>':'')+'<br><span class="kv">'+esc(c.confidence)+' confidence · '+esc(c.basis)+'</span></span></label>').join(''):'<p class="sub">Nothing to take: the reference measures the same as your system, or everything it would change stays yours.</p>';
+ $('#changes').onchange=update;
+ $('#stays').innerHTML=(D.stays||[]).map(s=>'<li><b>'+esc(s.path)+'</b>'+(s.now!=null?' ('+esc(fmt(s.now))+')':'')+': '+esc(s.why)+'</li>').join('')||'<li>Nothing special: every measured value can be taken.</li>';
+ $('#identity').textContent=D.tasteIndex?'You follow a Taste Index, so its exact colours and font names are yours to keep or change. Logos, brand names, imagery and copy never carry over, and font files are never downloaded.'
+  :'Only structure and quality carry over: corners, spacing, density, depth, type proportions and how much colour is used. The reference\'s logo, brand colour, typeface, imagery and copy never do. To keep a site\'s exact colours and font names, write a Taste Index of it and choose to follow it.';
+ const nt=D.notes||[];$('#notes').innerHTML=nt.map(x=>'<li>'+esc(x)+'</li>').join('');if(!nt.length)$('#nt-s').hidden=true;
+ const seg=$('#theme');seg.innerHTML=['auto','light','dark'].map(v=>'<button type="button" aria-pressed="'+(v==='auto')+'" data-v="'+v+'">'+v[0].toUpperCase()+v.slice(1)+'</button>').join('');
+ seg.onclick=e=>{const b=e.target.closest('button');if(!b)return;seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));if(b.dataset.v==='auto')delete document.documentElement.dataset.theme;else document.documentElement.dataset.theme=b.dataset.v;repaint()};
+ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',repaint);$('#copy').onclick=copy;repaint();update()}
+function repaint(){paint($('#now'),D.before||{});paint($('#after'),D.after||{})}
+function update(){const L=[...document.querySelectorAll('#changes input:checked')].map(x=>(D.changes[+x.dataset.i]||{}).od).filter(Boolean);$('#out').value=L.join('\n')||'(nothing chosen yet)'}
+async function copy(){const t=$('#out').value;let ok=false;
+ try{await navigator.clipboard.writeText(t);ok=true}catch(e){$('#out').select();try{ok=document.execCommand('copy')}catch(_){}}
+ $('#live').textContent=ok?'Copied. Paste it into the chat.':'Select the text and copy it by hand.'}
+boot();
+</script>
+</body>
+</html>
