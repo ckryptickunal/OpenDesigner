@@ -1536,6 +1536,81 @@
    "expect": [
     "type@/0/createSurface/components/0/title"
    ]
+  },
+  {
+   "name": "short-form-one-part",
+   "answer": {
+    "component": "Facts",
+    "title": "Plan",
+    "facts": [
+     {
+      "label": "Seats",
+      "value": "12"
+     }
+    ]
+   },
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "short-form-checked-too",
+   "answer": {
+    "component": "Facts",
+    "title": "<b>Plan</b>",
+    "facts": [
+     {
+      "label": "Seats",
+      "value": "12"
+     }
+    ],
+    "style": "x"
+   },
+   "opts": {},
+   "expect": [
+    "R4-html@/0/createSurface/components/0/title",
+    "R4-key@/0/createSurface/components/0/style"
+   ]
+  },
+  {
+   "name": "short-form-list",
+   "answer": [
+    {
+     "component": "Column",
+     "id": "root",
+     "children": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "component": "Facts",
+     "id": "a",
+     "title": "A",
+     "facts": [
+      {
+       "label": "x",
+       "value": "1"
+      }
+     ]
+    },
+    {
+     "component": "Facts",
+     "id": "b",
+     "title": "B",
+     "facts": [
+      {
+       "label": "y",
+       "value": "2"
+      }
+     ]
+    }
+   ],
+   "opts": {
+    "limits": {
+     "leaves": 2
+    }
+   },
+   "expect": []
   }
  ]
 }

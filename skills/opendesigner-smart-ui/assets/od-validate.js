@@ -118,8 +118,17 @@ export function numbersIn(obj, out = new Set()) {
   return out;
 }
 
+/** The short form a model writes (one part, or a list of parts) wrapped in the A2UI envelope. Same as wrap() in smartui.py. */
+export function wrap(components, surface = "s1") {
+  let comps = Array.isArray(components) ? components : [components];
+  if (comps.length === 1 && isObj(comps[0]) && !("id" in comps[0])) comps = [{ ...comps[0], id: "root" }];
+  return [{ version: A2UI_VERSION, createSurface: { surfaceId: surface, components: comps } }];
+}
+
 export function normalize(answer) {
   if (isObj(answer) && "messages" in answer) answer = answer.messages;
+  if (isObj(answer) && "component" in answer) return wrap(answer);
+  if (Array.isArray(answer) && answer.length && answer.every((x) => isObj(x) && "component" in x)) return wrap(answer);
   if (isObj(answer)) answer = [answer];
   return Array.isArray(answer) ? answer : null;
 }
@@ -277,6 +286,6 @@ export function toText(surfaces, cat) {
   return out.join("\n").trim() + "\n";
 }
 
-const api = { od, validate, extractAnswer, toText, numbersIn, normalize, hostAllowed, A2UI_VERSION };
+const api = { od, wrap, validate, extractAnswer, toText, numbersIn, normalize, hostAllowed, A2UI_VERSION };
 if (typeof globalThis !== "undefined") globalThis.ODSmartUI = Object.assign(globalThis.ODSmartUI || {}, api);
 export default api;

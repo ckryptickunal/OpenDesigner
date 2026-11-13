@@ -526,9 +526,9 @@ def build_prompt(msg, catalog, k=3, scope=None, data=None):
         "You can answer with interface parts from the person's own design system (OpenDesigner Smart UI).",
         catalog["instructions"],
         "",
-        "Output: your text answer. If a part helps, add ONE fenced block marked a2ui holding a JSON array of A2UI v1.0 messages:",
-        '```a2ui\n[{"version":"1.0","createSurface":{"surfaceId":"s1","catalogId":"' + catalog["catalogId"] + '",'
-        '"components":[{"id":"root","component":"<Name>", ...properties}]}}]\n```',
+        "Output: your text answer. If a part helps, add ONE fenced block marked a2ui holding the part as one JSON object:",
+        '```a2ui\n{"component": "<Name>", ...properties}\n```',
+        "It is wrapped in an A2UI v1.0 createSurface for you. (Full A2UI messages are accepted too.)",
         "Button and link actions are {label, event: {name, context?}}; event names are lower_snake_case. Images only from: "
         + (", ".join(od(catalog)["allow"]["images"]) or "nowhere (no images allowed)") + ".",
         "",
@@ -691,10 +691,23 @@ def numbers_in(obj, out=None):
     return out
 
 
+def wrap(components, surface="s1"):
+    """The short form a model writes: one part (or a list of parts) as plain objects. Wrapped here in the A2UI envelope,
+    so the model never has to close five levels of brackets (round 1 of the evals: 31 of 75 Claude replies closed them in the wrong order)."""
+    comps = components if isinstance(components, list) else [components]
+    if len(comps) == 1 and isinstance(comps[0], dict) and "id" not in comps[0]:
+        comps = [{**comps[0], "id": "root"}]
+    return [{"version": A2UI_VERSION, "createSurface": {"surfaceId": surface, "components": comps}}]
+
+
 def normalize(answer):
-    """Accept a list of A2UI messages, one message, or {"messages": [...]}."""
+    """Accept a list of A2UI messages, one message, {"messages": [...]}, or the short form: a part or a list of parts."""
     if isinstance(answer, dict) and "messages" in answer:
         answer = answer["messages"]
+    if isinstance(answer, dict) and "component" in answer:
+        return wrap(answer)
+    if isinstance(answer, list) and answer and all(isinstance(x, dict) and "component" in x for x in answer):
+        return wrap(answer)
     if isinstance(answer, dict):
         answer = [answer]
     return answer if isinstance(answer, list) else None

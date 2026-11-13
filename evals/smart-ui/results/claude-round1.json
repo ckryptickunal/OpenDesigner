@@ -1,0 +1,1596 @@
+{
+ "model": "claude-sonnet-5-5",
+ "date": "2026-11-13",
+ "runs_per_case": 3,
+ "summary": {
+  "runs": 75,
+  "picked_right_pct": 33.3,
+  "held_back_pct": 100.0,
+  "over_trigger_pct": 0.0,
+  "valid_first_pct": 37.3,
+  "no_ui_when_needed_pct": 15.0,
+  "floor_findings": 0,
+  "rendered": 19
+ },
+ "rows": [
+  {
+   "ui": true,
+   "parts": [
+    "AnswerSources"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "answer-policy",
+   "run": 1,
+   "expect": [
+    "AnswerSources",
+    "CitationList"
+   ],
+   "selector": [
+    "AnswerSources",
+    "ResultList",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "cost_usd": 0.391092
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "AnswerSources"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "answer-policy",
+   "run": 2,
+   "expect": [
+    "AnswerSources",
+    "CitationList"
+   ],
+   "selector": [
+    "AnswerSources",
+    "ResultList",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "cost_usd": 0.013314
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "AnswerSources"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "answer-policy",
+   "run": 3,
+   "expect": [
+    "AnswerSources",
+    "CitationList"
+   ],
+   "selector": [
+    "AnswerSources",
+    "ResultList",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "cost_usd": 0.17033600000000002
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 529 (char 528)"
+   ],
+   "right": false,
+   "id": "facts-hotel",
+   "run": 1,
+   "expect": [
+    "KeyFacts",
+    "Receipt"
+   ],
+   "selector": [
+    "KeyFacts",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.012206
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KeyFacts"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "facts-hotel",
+   "run": 2,
+   "expect": [
+    "KeyFacts",
+    "Receipt"
+   ],
+   "selector": [
+    "KeyFacts",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.006721899999999999
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 485 (char 484)"
+   ],
+   "right": false,
+   "id": "facts-hotel",
+   "run": 3,
+   "expect": [
+    "KeyFacts",
+    "Receipt"
+   ],
+   "selector": [
+    "KeyFacts",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.45496200000000003
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "SummaryCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "define-term",
+   "run": 1,
+   "expect": [
+    "SummaryCard",
+    "KeyFacts"
+   ],
+   "selector": [
+    "SummaryCard"
+   ],
+   "usage": {
+    "cost_usd": 0.008796
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "SummaryCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "define-term",
+   "run": 2,
+   "expect": [
+    "SummaryCard",
+    "KeyFacts"
+   ],
+   "selector": [
+    "SummaryCard"
+   ],
+   "usage": {
+    "cost_usd": 0.005619
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 575 (char 574)"
+   ],
+   "right": false,
+   "id": "define-term",
+   "run": 3,
+   "expect": [
+    "SummaryCard",
+    "KeyFacts"
+   ],
+   "selector": [
+    "SummaryCard"
+   ],
+   "usage": {
+    "cost_usd": 0.1809
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 970 (char 969)"
+   ],
+   "right": false,
+   "id": "table-bookings",
+   "run": 1,
+   "expect": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.0392883
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 976 (char 975)"
+   ],
+   "right": false,
+   "id": "table-bookings",
+   "run": 2,
+   "expect": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.015762
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 972 (char 971)"
+   ],
+   "right": false,
+   "id": "table-bookings",
+   "run": 3,
+   "expect": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.0329415
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "bars-spend",
+   "run": 1,
+   "expect": [
+    "BarChart",
+    "LineChart",
+    "DataTable"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.0282066
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "bars-spend",
+   "run": 2,
+   "expect": [
+    "BarChart",
+    "LineChart",
+    "DataTable"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.0244348
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "bars-spend",
+   "run": 3,
+   "expect": [
+    "BarChart",
+    "LineChart",
+    "DataTable"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.008538
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 582 (char 581)"
+   ],
+   "right": false,
+   "id": "line-fare",
+   "run": 1,
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "selector": [
+    "LineChart",
+    "Comparison"
+   ],
+   "usage": {
+    "cost_usd": 0.012365999999999999
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LineChart"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "line-fare",
+   "run": 2,
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "selector": [
+    "LineChart",
+    "Comparison"
+   ],
+   "usage": {
+    "cost_usd": 0.0370983
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LineChart"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "line-fare",
+   "run": 3,
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "selector": [
+    "LineChart",
+    "Comparison"
+   ],
+   "usage": {
+    "cost_usd": 0.032187099999999996
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "donut-categories",
+   "run": 1,
+   "expect": [
+    "DonutBreakdown",
+    "DataTable",
+    "BarChart"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.24488200000000002
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "donut-categories",
+   "run": 2,
+   "expect": [
+    "DonutBreakdown",
+    "DataTable",
+    "BarChart"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.0327603
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "donut-categories",
+   "run": 3,
+   "expect": [
+    "DonutBreakdown",
+    "DataTable",
+    "BarChart"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.028832700000000003
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 393 (char 392)"
+   ],
+   "right": false,
+   "id": "kpi-year",
+   "run": 1,
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "selector": [
+    "KpiStrip",
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.010481999999999998
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KpiStrip"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "kpi-year",
+   "run": 2,
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "selector": [
+    "KpiStrip",
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.0334283
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 393 (char 392)"
+   ],
+   "right": false,
+   "id": "kpi-year",
+   "run": 3,
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "selector": [
+    "KpiStrip",
+    "BarChart"
+   ],
+   "usage": {
+    "cost_usd": 0.006531199999999999
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 514 (char 513)"
+   ],
+   "right": false,
+   "id": "status-refund",
+   "run": 1,
+   "expect": [
+    "ProgressStatus"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "FlightResults"
+   ],
+   "usage": {
+    "cost_usd": 0.011925999999999999
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 516 (char 515)"
+   ],
+   "right": false,
+   "id": "status-refund",
+   "run": 2,
+   "expect": [
+    "ProgressStatus"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "FlightResults"
+   ],
+   "usage": {
+    "cost_usd": 0.0364443
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 515 (char 514)"
+   ],
+   "right": false,
+   "id": "status-refund",
+   "run": 3,
+   "expect": [
+    "ProgressStatus"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "FlightResults"
+   ],
+   "usage": {
+    "cost_usd": 0.0292752
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 1129 (char 1128)"
+   ],
+   "right": false,
+   "id": "compare-fares",
+   "run": 1,
+   "expect": [
+    "Comparison"
+   ],
+   "selector": [
+    "Comparison",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "cost_usd": 0.039890300000000004
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 1111 (char 1110)"
+   ],
+   "right": false,
+   "id": "compare-fares",
+   "run": 2,
+   "expect": [
+    "Comparison"
+   ],
+   "selector": [
+    "Comparison",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "cost_usd": 0.0336026
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 1194 (char 1193)"
+   ],
+   "right": false,
+   "id": "compare-fares",
+   "run": 3,
+   "expect": [
+    "Comparison"
+   ],
+   "selector": [
+    "Comparison",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "cost_usd": 0.0346628
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ResultList"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "results-hotels",
+   "run": 1,
+   "expect": [
+    "ResultList"
+   ],
+   "selector": [
+    "ResultList",
+    "LocationCard"
+   ],
+   "usage": {
+    "cost_usd": 0.0389943
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ResultList"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "results-hotels",
+   "run": 2,
+   "expect": [
+    "ResultList"
+   ],
+   "selector": [
+    "ResultList",
+    "LocationCard"
+   ],
+   "usage": {
+    "cost_usd": 0.013444
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ResultList"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "results-hotels",
+   "run": 3,
+   "expect": [
+    "ResultList"
+   ],
+   "selector": [
+    "ResultList",
+    "LocationCard"
+   ],
+   "usage": {
+    "cost_usd": 0.0338175
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FlightResults"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "flights-search",
+   "run": 1,
+   "expect": [
+    "FlightResults",
+    "ResultList"
+   ],
+   "selector": [
+    "FlightResults"
+   ],
+   "usage": {
+    "cost_usd": 0.017189999999999997
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 925 (char 924)"
+   ],
+   "right": false,
+   "id": "flights-search",
+   "run": 2,
+   "expect": [
+    "FlightResults",
+    "ResultList"
+   ],
+   "selector": [
+    "FlightResults"
+   ],
+   "usage": {
+    "cost_usd": 0.0100813
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 1074 (char 1073)"
+   ],
+   "right": false,
+   "id": "flights-search",
+   "run": 3,
+   "expect": [
+    "FlightResults",
+    "ResultList"
+   ],
+   "selector": [
+    "FlightResults"
+   ],
+   "usage": {
+    "cost_usd": 0.0402083
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "QuickReplies"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "chips-change",
+   "run": 1,
+   "expect": [
+    "QuickReplies"
+   ],
+   "selector": [
+    "QuickReplies",
+    "FormFields"
+   ],
+   "usage": {
+    "cost_usd": 0.011772
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 548 (char 547)"
+   ],
+   "right": false,
+   "id": "chips-change",
+   "run": 2,
+   "expect": [
+    "QuickReplies"
+   ],
+   "selector": [
+    "QuickReplies",
+    "FormFields"
+   ],
+   "usage": {
+    "cost_usd": 0.0077047999999999995
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "QuickReplies"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "chips-change",
+   "run": 3,
+   "expect": [
+    "QuickReplies"
+   ],
+   "selector": [
+    "QuickReplies",
+    "FormFields"
+   ],
+   "usage": {
+    "cost_usd": 0.0351123
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 819 (char 818)"
+   ],
+   "right": false,
+   "id": "form-passport",
+   "run": 1,
+   "expect": [
+    "FormFields"
+   ],
+   "selector": [
+    "FormFields",
+    "KeyFacts",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.028010300000000002
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 799 (char 798)"
+   ],
+   "right": false,
+   "id": "form-passport",
+   "run": 2,
+   "expect": [
+    "FormFields"
+   ],
+   "selector": [
+    "FormFields",
+    "KeyFacts",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.02563
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 802 (char 801)"
+   ],
+   "right": false,
+   "id": "form-passport",
+   "run": 3,
+   "expect": [
+    "FormFields"
+   ],
+   "selector": [
+    "FormFields",
+    "KeyFacts",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.030761999999999998
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 823 (char 822)"
+   ],
+   "right": false,
+   "id": "slots-transfer",
+   "run": 1,
+   "expect": [
+    "TimeSlots"
+   ],
+   "selector": [
+    "TimeSlots",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.0375023
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 835 (char 834)"
+   ],
+   "right": false,
+   "id": "slots-transfer",
+   "run": 2,
+   "expect": [
+    "TimeSlots"
+   ],
+   "selector": [
+    "TimeSlots",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.0326288
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 826 (char 825)"
+   ],
+   "right": false,
+   "id": "slots-transfer",
+   "run": 3,
+   "expect": [
+    "TimeSlots"
+   ],
+   "selector": [
+    "TimeSlots",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "cost_usd": 0.013413999999999999
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "approve-cancel",
+   "run": 1,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ResultList"
+   ],
+   "usage": {
+    "cost_usd": 0.014127999999999998
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "approve-cancel",
+   "run": 2,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ResultList"
+   ],
+   "usage": {
+    "cost_usd": 0.008078499999999999
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 789 (char 788)"
+   ],
+   "right": false,
+   "id": "approve-cancel",
+   "run": 3,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ResultList"
+   ],
+   "usage": {
+    "cost_usd": 0.0349463
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "receipt-seat",
+   "run": 1,
+   "expect": [
+    "Receipt",
+    "ProgressStatus"
+   ],
+   "selector": [
+    "Receipt",
+    "FormFields"
+   ],
+   "usage": {
+    "cost_usd": 0.49348
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 424 (char 423)"
+   ],
+   "right": false,
+   "id": "receipt-seat",
+   "run": 2,
+   "expect": [
+    "Receipt",
+    "ProgressStatus"
+   ],
+   "selector": [
+    "Receipt",
+    "FormFields"
+   ],
+   "usage": {
+    "cost_usd": 0.0340843
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "receipt-seat",
+   "run": 3,
+   "expect": [
+    "Receipt",
+    "ProgressStatus"
+   ],
+   "selector": [
+    "Receipt",
+    "FormFields"
+   ],
+   "usage": {
+    "cost_usd": 0.028019000000000002
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 441 (char 440)"
+   ],
+   "right": false,
+   "id": "error-search",
+   "run": 1,
+   "expect": [
+    "ErrorRetry"
+   ],
+   "selector": [
+    "FlightResults",
+    "ErrorRetry",
+    "ResultList"
+   ],
+   "usage": {
+    "cost_usd": 0.0191491
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "error-search",
+   "run": 2,
+   "expect": [
+    "ErrorRetry"
+   ],
+   "selector": [
+    "FlightResults",
+    "ErrorRetry",
+    "ResultList"
+   ],
+   "usage": {
+    "cost_usd": 0.034118300000000004
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 456 (char 455)"
+   ],
+   "right": false,
+   "id": "error-search",
+   "run": 3,
+   "expect": [
+    "ErrorRetry"
+   ],
+   "selector": [
+    "FlightResults",
+    "ErrorRetry",
+    "ResultList"
+   ],
+   "usage": {
+    "cost_usd": 0.022126600000000003
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LocationCard"
+   ],
+   "valid": false,
+   "errors": [
+    "length /0/createSurface/components/0/distance text is 48 characters, the most is 40"
+   ],
+   "warnings": 0,
+   "right": true,
+   "id": "location-hotel",
+   "run": 1,
+   "expect": [
+    "LocationCard"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "AnswerSources"
+   ],
+   "usage": {
+    "cost_usd": 0.0318203
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 482 (char 481)"
+   ],
+   "right": false,
+   "id": "location-hotel",
+   "run": 2,
+   "expect": [
+    "LocationCard"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "AnswerSources"
+   ],
+   "usage": {
+    "cost_usd": 0.0293659
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 473 (char 472)"
+   ],
+   "right": false,
+   "id": "location-hotel",
+   "run": 3,
+   "expect": [
+    "LocationCard"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "AnswerSources"
+   ],
+   "usage": {
+    "cost_usd": 0.0301966
+   }
+  },
+  {
+   "ui": true,
+   "parts": [],
+   "valid": false,
+   "errors": [
+    "json: Expecting ',' delimiter: line 1 column 520 (char 519)"
+   ],
+   "right": false,
+   "id": "file-invoice",
+   "run": 1,
+   "expect": [
+    "FileCard"
+   ],
+   "selector": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "usage": {
+    "cost_usd": 0.0364623
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FileCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "file-invoice",
+   "run": 2,
+   "expect": [
+    "FileCard"
+   ],
+   "selector": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "usage": {
+    "cost_usd": 0.027956
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FileCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "file-invoice",
+   "run": 3,
+   "expect": [
+    "FileCard"
+   ],
+   "selector": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "usage": {
+    "cost_usd": 0.010592
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-visa",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.00609
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-visa",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0032258
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-visa",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0032418
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-checkin",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.005988
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-checkin",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0310683
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-checkin",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0284477
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-breakfast",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.005444
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-breakfast",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.025112600000000002
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-breakfast",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0025889
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-bags",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0293743
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-bags",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.005578
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-bags",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0026832
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-thanks",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0292063
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-thanks",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0050880000000000005
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-thanks",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "cost_usd": 0.0024765
+   }
+  }
+ ]
+}
