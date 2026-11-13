@@ -1,6 +1,6 @@
 # Smart UI: a live walkthrough
 
-Four parts, about fifteen minutes. Run every command from the repository root. Screenshots are in `walkthrough/`.
+Six parts, about twenty-five minutes. Run every command from the repository root. Screenshots are in `walkthrough/`.
 
 ## 1. The demo, on two systems
 
@@ -107,3 +107,39 @@ cd ../..
 python3 server/mcp/test_smartui_view.py
 ```
 The test loads the view in a page that speaks the MCP Apps protocol: initialize, draw the tool result, report its size, and turn a pressed button into a chat message. It has not been tried in Claude Desktop, claude.ai or ChatGPT yet.
+
+## 5. Live: a real model answers
+
+The demo above replays recorded answers. The same page runs against a real model through Smart UI's reference server (`skills/opendesigner-smart-ui/scripts/live.py`). It needs one of: `ANTHROPIC_API_KEY` or `GEMINI_API_KEY` in `.env` (read in code, never printed), or the `claude` command signed in on this computer.
+
+```bash
+python3 skills/opendesigner-smart-ui/scripts/live.py providers
+python3 skills/opendesigner-smart-ui/scripts/live.py serve --app examples/smart-ui-chat/app.py --port 8000 --provider gemini
+```
+Open http://127.0.0.1:8000/. The header says which model is answering. Ask, in this order:
+1. "Flights from Bristol to Lisbon on 4 December?": the model calls the app's `search_flights` and answers with flight results.
+2. "Compare the fares on the 08:40": a follow-up. The model knows which flight from the conversation, calls `get_fares` and shows a comparison.
+3. Press **Choose** on Standard, then ask to book it: the answer is an approval prompt. Nothing is booked until you press the approve button; only then does the server run `book_flight` (the renderer adds the approval, never the model).
+4. "When does check-in open?": a sentence, no part.
+
+Each turn: the model may call only the app's read actions, then answers; the answer is validated against the data it got; a failure goes back once with the errors ("Repaired once" shows under the answer); a second failure shows the text only. Without a key the same page stays in recorded mode.
+
+## 6. Adapting to a developer's own repo
+
+`examples/smart-ui-support/` is a small billing app with an assistant, in its own system (Tallyhaus: dense, precise, blue), and an API in `server.py`: six read routes and three that change data (change plan, pay an invoice, add seats). Let Smart UI read it:
+```bash
+python3 skills/opendesigner-smart-ui/scripts/smartui.py scope --project examples/smart-ui-support
+```
+It reads the product from PRODUCT.md, finds `web/assistant.js`, and turns each route into an intent: `/api/invoices` becomes a table, `/api/invoices/<number>` a file card, `/api/usage` a line chart, `/api/plans` a comparison, `/api/subscription` key facts, `/api/refunds/<invoice>` a status, and each POST route an approval, a receipt and an error. The confirmed set and catalog are already in `examples/smart-ui-support/opendesigner/smart-ui/`.
+
+Run it live:
+```bash
+python3 examples/smart-ui-support/server.py --provider gemini
+```
+Open http://127.0.0.1:8010/ and try: "Show my open invoices", then "Pay the one that's due on the 20th" (an approval prompt with the invoice's number and amount; press Pay and the payment reference comes back), "How has our API usage changed this year?", "Compare the plans", then "OK, switch us to that top one".
+
+Check the whole loop in a browser at 1440 and 375 px:
+```bash
+python3 examples/smart-ui-support/check_live.py --provider gemini
+```
+The live evals (`python3 tools/smartui_evals.py --model gemini --live`) run 25 cases like these, three times each, and count how often the right part showed, how often the first answer passed, how often a short fact stayed text, and whether the model ever ran a change on its own (it can't: the router drops change actions).
