@@ -655,7 +655,7 @@ class Process(unittest.TestCase):
             self.assertIn(bit, r, bit)
         for role in research.ROLE_IDS:
             self.assertIn(role, r, role)
-        self.assertIn("research.py stakeholders", self.read("SKILL.md"))
+        self.assertIn("research.py stakeholders", self.read("references/zoom.md"))  # SKILL.md is at its size cap; it points to zoom.md
 
     def test_research_md_documents_positioning_and_directions(self):
         r = self.read("references/research.md")
