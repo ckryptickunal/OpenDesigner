@@ -429,6 +429,66 @@ class Live(unittest.TestCase):
         self.assertGreater(r["waited"], 400)
         self.assertLess(r["waited"], 2000)
 
+    # ---- craft and copy: one of every planted defect in craft-bad.html, none in craft-good.html ------------------
+    CRAFT_NEW = ("ST-12", "ST-13", "ST-14", "MS-21", "MS-22", "MS-23", "MS-24", "CP-01", "CP-02", "CP-03", "CP-04")
+
+    def craft_probe(self, name, w=1280, stress=None):
+        pg = _browser.new_page(viewport={"width": w, "height": 800})
+        self.addCleanup(pg.close)
+        pg.goto(f"http://localhost:{self.port}/{name}")
+        pg.wait_for_timeout(200)
+        pg.evaluate(PROBE)
+        if stress:
+            pg.evaluate(f"__od.stress('{stress}', true)")
+        return pg.evaluate("__od.probe()")
+
+    def test_craft_defects_are_measured_on_the_bad_page(self):          # ST-12, ST-13, MS-21 to MS-24
+        c = self.craft_probe("craft-bad.html")["craft"]
+        ids = lambda k: {x["sel"].split("#")[-1] for x in c[k]}
+        self.assertEqual(ids("spill"), {"spill"})
+        self.assertEqual(ids("hiddenByParent"), {"clipped-by-parent"})
+        self.assertEqual(ids("truncated"), {"ellipsis-h", "clamp-btn"})
+        self.assertEqual(ids("orphans"), {"orphan-h"})
+        self.assertEqual(c["orphans"][0]["word"], "system")
+        self.assertEqual(ids("tight"), {"tight-b"})
+        self.assertEqual(ids("touching"), {"touch"})
+        self.assertEqual(ids("insetVsGap"), {"inset-card"})
+        self.assertEqual(c["insetVsGap"][0]["inset"], 6)
+        self.assertEqual(ids("siblings"), {"uneven"})
+        self.assertEqual({m["sel"].split("#")[-1] for m in c["measure"] if m["ch"] < 45 or m["ch"] > 75}, {"wide", "narrow"})
+        for k in ("spill", "orphans", "touching"):
+            self.assertTrue(all(set(x["box"]) == {"x", "y", "w", "h"} for x in c[k]), k)
+
+    def test_craft_and_copy_findings_on_the_bad_page(self):             # every new case fires once
+        fs = rv.Findings()
+        rv.check_probe(self.craft_probe("craft-bad.html"), None, fs)
+        got = {f["case"] for f in fs.done()}
+        for case in set(self.CRAFT_NEW) - {"ST-14"}:
+            self.assertIn(case, got)
+        fs = rv.Findings()
+        rv.check_probe(self.craft_probe("craft-bad.html", 1280, "translate"), None, fs)
+        self.assertIn("ST-14", {f["case"] for f in fs.done()})
+
+    def test_the_good_page_has_no_craft_or_copy_finding(self):          # at 320 and 1280, 200% text, +30% words
+        for w, stress in ((1280, None), (320, None), (320, "text200"), (320, "translate"), (1280, "textSpacing")):
+            fs = rv.Findings()
+            rv.check_probe(self.craft_probe("craft-good.html", w, stress), None, fs)
+            bad = [(f["case"], f["title"], f["measured"]) for f in fs.done() if f["case"] in self.CRAFT_NEW
+                   or (f["case"] in ("MS-07", "MS-17") and f["severity"] != "info") or f["case"] == "ST-06"]
+            self.assertEqual(bad, [], f"{w} px {stress}")
+
+    def test_translate_stress_grows_words_without_spaces_and_puts_them_back(self):    # ST-14
+        pg = self.page()
+        pg.set_content("<p id=a>Save changes now</p>")
+        pg.evaluate(PROBE)
+        r = pg.evaluate("__od.stress('translate', true)")
+        grown = pg.evaluate("a.textContent")
+        self.assertEqual(r["changed"], 1)
+        self.assertEqual(grown.count(" "), 2)
+        self.assertGreaterEqual(len(grown), round(len("Save changes now") * 1.3))
+        pg.evaluate("__od.stress('translate', false)")
+        self.assertEqual(pg.evaluate("a.textContent"), "Save changes now")
+
 
 def png_size(data):
     import struct

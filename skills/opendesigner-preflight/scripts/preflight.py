@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """OpenDesigner preflight: catch the silly mistakes before an export. Read-only.
 
-  preflight.py html  <file.html> [--medium web|app|watch|video]   type and font checks from the page's CSS
+  preflight.py html  <file.html> [--medium web|app|watch|video] [--case sentence]   type, font, cut-off text, line
+                                                          height, measure and copy checks from the page's CSS and markup
   preflight.py video <file.mp4> [--ignore 0-17]         frozen time with timestamps, black frames, flashing, audio, length
                [--flash-field tablet|phone|PX] [--flash-where worst.png]
   preflight.py frames <file.mp4> [--every 0.5] [--out DIR]   full-size frames plus 390 px phone copies
@@ -309,7 +310,96 @@ PURE = {"white": re.compile(r"#(?:fff|ffffff)(?![0-9a-z])|\brgb\(\s*255\s*,\s*25
         "black": re.compile(r"#(?:000|000000)(?![0-9a-z])|\brgb\(\s*0\s*,\s*0\s*,\s*0\s*\)|\bblack\b", re.I)}
 
 
-def check_html(path: Path, medium: str) -> Report:
+BODY_SEL = re.compile(r"(^|[\s>+~,(])(p|li|dd|blockquote|article|body|main|td)(?![\w-])|\.(prose|lede|lead|body|copy|text|content|article)\b", re.I)
+NAMED_SEL = re.compile(r"(^|[\s>+~,(])(h[1-6]|button|label|legend|th|summary)(?![\w-])|\.(btn|button|chip|tag|badge|pill|label|title|heading|kicker|tab)s?\b", re.I)
+PLACEHOLDER_TEXT = re.compile(r"\bLorem\b|lorem ipsum|dolor sit amet|\bTODO\b|\bFIXME\b|\bTBD\b|\bXXX\b|\b[Cc]lick here\b|\b(Your|Insert) (text|title|heading|headline|copy|name|description) here\b")
+SYNONYM_SETS = [("sign in", "log in", "login"), ("sign up", "register", "create account"), ("sign out", "log out", "logout"),
+                ("delete", "remove"), ("settings", "preferences")]
+SMALL = {"a", "an", "the", "and", "but", "or", "for", "of", "on", "in", "to", "at", "by", "with", "from", "as", "vs", "via", "into", "is", "it"}
+
+
+def heading_case(text):
+    ws = re.findall(r"[A-Za-z][\w'-]*", text)
+    sig = [w for w in ws[1:] if w.lower() not in SMALL and not w.isupper() and not re.search(r"[a-z][A-Z]", w)]
+    if len(ws) < 3 or len(sig) < 2 or not ws[0][:1].isupper():
+        return None
+    up = sum(w[:1].isupper() for w in sig)
+    return "title" if up == len(sig) else "sentence" if up == 0 else None
+
+
+def craft_checks(r, craft_rules, rules, page, root_px, case=None):
+    """Text cut off, breathing room, tracking by role and copy, from the CSS and the markup [M67-M70, M5, M58].
+    The rendered page is measured by opendesigner-review (probe.js craft and copy); these are the parts a file shows."""
+    lh_low, trunc, fixed, measure, flat = [], [], [], [], []
+    for where, props in craft_rules:
+        size = None
+        if props.get("font-size"):
+            got = size_px(props["font-size"], root_px)
+            size = got[-1] if got else None
+        if props.get("font"):
+            sv, _ = parse_font(props["font"])
+            got = size_px(sv, root_px) if sv else None
+            size = got[-1] if got else size
+            lhm = re.search(r"/\s*(calc\(\s*)?([\d.]+)(px|rem|em|%)?", props["font"])
+            if lhm and "line-height" not in props:
+                props = dict(props, **{"line-height": lhm.group(2) + (lhm.group(3) or "")})
+        lh = props.get("line-height", "")
+        if lh and BODY_SEL.search(where) and not NAMED_SEL.search(where):
+            m = re.fullmatch(r"([\d.]+)(px|rem|em|%)?", lh.strip())
+            if m:
+                v, u = float(m.group(1)), m.group(2)
+                ratio = v if not u or u == "em" else v / 100 if u == "%" else (v * (root_px if u == "rem" else 1)) / (size or 16) if (size or u == "rem" or u == "px") else None
+                if ratio and ratio < 1.4 and (size or 16) <= 20:
+                    lh_low.append(f"{where} {lh}" + (f" at {size:g}px" if size else ""))
+        if NAMED_SEL.search(where):
+            if props.get("text-overflow") == "ellipsis" or re.fullmatch(r"\d+", props.get("-webkit-line-clamp", "") or props.get("line-clamp", "")):
+                trunc.append(where)
+            if re.fullmatch(r"[\d.]+(px|rem)", props.get("height", "")) and "nowrap" in props.get("white-space", "") and re.search(r"hidden|clip", props.get("overflow", "") + props.get("overflow-x", "")):
+                fixed.append(f"{where} height {props['height']}")
+        mw = re.fullmatch(r"([\d.]+)ch", props.get("max-width", "").strip())
+        if mw and BODY_SEL.search(where) and not (45 <= float(mw.group(1)) <= 75):
+            measure.append(f"{where} max-width {mw.group(1)}ch")
+    if lh_low:
+        r.warn(f"body text with line height under 1.4: {'; '.join(lh_low[:5])}; use 1.4 to 1.6 (1.5 is WCAG 1.4.8)  [M68]")
+    if trunc:
+        r.warn(f"ellipsis or line clamp on headings, buttons or labels: {', '.join(trunc[:5])}; it hides words; let them wrap  [M67]")
+    if fixed:
+        r.warn(f"a fixed height with nowrap and overflow hidden on a control: {'; '.join(fixed[:5])}; at 200% text or in a "
+               "longer language the label is cut off; use min-height and let it wrap  [M67]")
+    if measure:
+        r.warn(f"body text measure outside 45-75 characters: {'; '.join(measure[:5])}  [M68]")
+    # tracking by role (kerning.md): near 0 on body, never negative on small text, tightened at display sizes
+    body_open = [(s, em) for s, sz, em, c in rules if sz and 14 <= sz <= 20 and not c and em > 0.01 and BODY_SEL.search(s)]
+    small_tight = [(s, em) for s, sz, em, c in rules if sz and sz < 14 and not c and em < -0.005]
+    display_loose = [(s, em) for s, sz, em, c in rules if sz and sz >= 32 and not c and em >= 0]
+    if body_open:
+        r.warn("body text tracked open: " + ", ".join(f"{s} at {em:g}em" for s, em in body_open[:4]) + "; body text sits at about 0  [M5, M58]")
+    if small_tight:
+        r.warn("small text tracked tight: " + ", ".join(f"{s} at {em:g}em" for s, em in small_tight[:4]) + "; under 14 px track 0 or a little open  [M5, M58]")
+    if display_loose:
+        r.warn("display text not tightened: " + ", ".join(f"{s} at {em:g}em" for s, em in display_loose[:4]) + "; about -0.01 to -0.02em at 32 px and up, unless the face has a display cut  [M5, M58]")
+    # copy in the markup
+    body = re.sub(r"<(script|style)[^>]*>.*?</\1>|<!--.*?-->", "", page, flags=re.S | re.I)
+    text = htmllib.unescape(re.sub(r"<[^>]+>", " ", body))
+    ph = sorted({m.group(0) for m in PLACEHOLDER_TEXT.finditer(text)})
+    if ph:
+        r.warn(f"placeholder text left in: {', '.join(repr(x) for x in ph[:5])}  [M70]")
+    labels = {re.sub(r"\s+", " ", htmllib.unescape(re.sub(r"<[^>]+>", "", m))).strip().lower()
+              for m in re.findall(r"<(?:a|button)\b[^>]*>(.*?)</(?:a|button)>", body, flags=re.S | re.I)}
+    for group in SYNONYM_SETS:
+        hit = [g for g in group if g in labels]
+        if len(hit) >= 2:
+            r.warn(f"one action named two ways: {' / '.join(repr(h) for h in hit)}; pick one name  [M70]")
+    heads = [re.sub(r"\s+", " ", htmllib.unescape(re.sub(r"<[^>]+>", "", h))).strip() for h in re.findall(r"<h[1-6][^>]*>(.*?)</h[1-6]>", body, flags=re.S | re.I)]
+    cases = [(h, heading_case(h)) for h in heads]
+    titled = [h for h, c in cases if c == "title"]
+    if titled and case == "sentence":
+        r.warn(f"Title Case headings where the system says sentence case: {'; '.join(repr(h) for h in titled[:4])}  [M70]")
+    elif titled and sum(c == "sentence" for _, c in cases) > len(titled):
+        r.info(f"mixed heading case: {'; '.join(repr(h) for h in titled[:3])} in Title Case, most others in sentence case; pick one  [M70]")
+
+
+def check_html(path: Path, medium: str, case=None) -> Report:
     r = Report()
     page = path.read_text(encoding="utf-8", errors="replace")
     sheets = Sheets(path, page)
@@ -371,6 +461,7 @@ def check_html(path: Path, medium: str) -> Report:
     kern = {"off": [], "px": [], "pct": [], "wide": [], "caps": [], "speed": []}  # kerning.md, checklist 57 [M58]
     pure = {"white": [], "black": []}  # opaque #ffffff and #000000 as colours, checklist 58 [M59]
     rules, fluid = [], {}   # (selector, size at 1440 px, tracking, capitals) per rule; selector -> size at each width
+    craft_rules = []   # (selector, resolved properties) for the cut-text, room and copy checks [M67-M70]
     for sel, body, at in blocks:
         if sel.startswith("@") or not used(sel):
             continue
@@ -380,6 +471,7 @@ def check_html(path: Path, medium: str) -> Report:
         where = sel if sel != "[style]" else "a style attribute"
         ls = props.get("letter-spacing", "")
         caps = props.get("text-transform") == "uppercase" or "all-small-caps" in props.get("font-variant", "") + props.get("font-variant-caps", "")
+        craft_rules.append((where, props))
         for p_, v_ in props.items():
             if re.fullmatch(r"color|background(-color)?|fill|stroke|border(-[a-z]+)*|outline(-color)?|caret-color", p_):
                 for k_, rx_ in PURE.items():
@@ -396,7 +488,8 @@ def check_html(path: Path, medium: str) -> Report:
         ems = [float(x) for x in re.findall(r"(-?\d*\.?\d+)em\b", ls)]
         if not caps and any(abs(e) >= 0.5 for e in ems):
             kern["wide"].append(f"{where} {ls}")
-        if caps and (ems and max(ems) == 0 or ls in ("0", "normal")):  # below 0 is the [M5] error above
+        mono = re.search(r"mono|courier|consolas|menlo|code", props.get("font-family", "") + " " + props.get("font", "")) or re.search(r"(^|[\s>])(code|pre|kbd|samp)\b", where)
+        if caps and not mono and (ems and max(ems) == 0 or ls in ("0", "normal")):  # below 0 is the [M5] error above; code sits at 0
             kern["caps"].append(f"{where} {ls}")
         rule = {"size": None, "ls": None, "caps": False}
         for prop, raw in ds:
@@ -531,6 +624,7 @@ def check_html(path: Path, medium: str) -> Report:
     if pure["white"] and pure["black"]:
         r.warn(f"pure white ({pure['white'][0]}) and pure black ({pure['black'][0]}) on one page; use an off-black such as "
                "#111111 with white, or an off-white with black (house standard STD-visual-details-66)  [M59]")
+    craft_checks(r, craft_rules, rules, page, root_px, case)
     code = " ".join(re.findall(r"<script[^>]*>(.*?)</script>", page, flags=re.S | re.I))
     splits = re.search(r"SplitText\([^)]*chars|type\s*:\s*[\"'][^\"']*chars|\bSplitting\("
                        r"|(?:split\(\s*(?:\"\"|'')\s*\)|\[\s*\.\.\.\s*[\w.]+(?:textContent|innerText)\s*\]"
@@ -849,6 +943,7 @@ def main():
     sub = ap.add_subparsers(dest="cmd", required=True)
     h = sub.add_parser("html"); h.add_argument("file")
     h.add_argument("--medium", choices=list(MIN), default="web", help="where it is seen: web page, app or watch screen (laid out in points), or video frame")
+    h.add_argument("--case", choices=["sentence", "title-headings", "per-element"], help="the system's capitalisation (Q-voice-03); sentence makes Title Case headings a warning")
     v = sub.add_parser("video"); v.add_argument("file")
     v.add_argument("--ignore", action="append", default=[], metavar="START-END", help="seconds to leave out of the freeze measure, such as a deliberate 'before' act; repeatable")
     v.add_argument("--flash-field", default="tablet", metavar="tablet|phone|PX",
@@ -873,7 +968,7 @@ def main():
     if not p.exists():
         sys.exit(f"not found: {p}")
     if a.cmd == "html":
-        r = check_html(p, a.medium)
+        r = check_html(p, a.medium, a.case)
     elif a.cmd == "video":
         if a.flash_field not in VIEWS and not re.fullmatch(r"\d+(\.\d+)?", a.flash_field):
             ap.error("--flash-field takes tablet, phone or a size in px")

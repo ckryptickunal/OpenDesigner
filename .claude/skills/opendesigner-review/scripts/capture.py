@@ -9,10 +9,11 @@ it, by running probe.js and taking screenshots with whatever browser tool the ho
                [--out opendesigner/review] [--steps 12] [--tabs 40] [--full] [--channel chrome] [--headed]
 
 What it does, per route x viewport x theme: load the page, wait for fonts, run probe.js, scroll from top to bottom in viewport
-steps taking a screenshot at each (viewport shots, not a stitched full page). At the "anchor" cells (the narrowest phone and
+steps taking a screenshot at each (viewport shots, not a stitched full page), plus a crop of each
+cut-off, cramped or unevenly spaced element the probe found (shots/crops/). At the "anchor" cells (the narrowest phone and
 the widest desktop, first theme; every cell with --full) it also: walks the keyboard with Tab and records the focus ring
 and whether anything covers the focused control, hovers a sample of controls and records what changed, applies the text
-stress passes (WCAG 1.4.12 spacing, 200% text, long words, +40% pseudo-localized text, RTL), repeats the probe with reduced
+stress passes (WCAG 1.4.12 spacing, 200% text, long words, +40% pseudo-localized text, 30% longer words, RTL), repeats the probe with reduced
 motion on, samples animation frames, and records console errors and failed requests.
 
 It also waits for reveals to finish before each probe and screenshot, measures letter-split text against plain text, hides
@@ -43,7 +44,7 @@ import review  # noqa: E402  (same folder)
 
 PROBE_JS = (HERE / "probe.js").read_text(encoding="utf-8")
 WATCH_JS = PROBE_JS + "\n;window.__od && __od.watchKern();"   # an init script: logs letters that jump when a reveal ends
-STRESS = ["textSpacing", "text200", "longWords", "pseudoloc", "rtl"]
+STRESS = ["textSpacing", "text200", "longWords", "pseudoloc", "translate", "rtl"]
 
 
 def is_loopback(host):
@@ -186,6 +187,7 @@ def run_cell(browser, url, route, vp, theme, out, opts, anchor, log):
         page.wait_for_timeout(200)
 
         probe = page.evaluate(PROBE_JS)
+        evidence += crop_items(page, probe, out, tag)
         pf = out / "probes" / f"{tag}.json"
         review.write_json(pf, probe)
         evidence.append(str(pf))
@@ -238,6 +240,33 @@ def run_cell(browser, url, route, vp, theme, out, opts, anchor, log):
         return cell, None, set()
     ctx.close()
     return cell, evidence, done_tasks
+
+
+CROP_LISTS = ("spill", "hiddenByParent", "truncated", "orphans", "tight", "touching", "insetVsGap", "siblings")
+
+
+def crop_items(page, probe, out, tag, most=12):
+    """A screenshot of each craft finding's box (probe.craft), padded 16 px, saved beside the shots; the path goes into the
+    item as `crop`, which review.py lists as evidence. Returns the crop paths."""
+    craft, done = (probe or {}).get("craft") or {}, []
+    items = [x for k in CROP_LISTS for x in craft.get(k) or [] if x.get("box")]
+    items += [x for x in ((probe or {}).get("overflow") or {}).get("clipped") or [] if x.get("box")]
+    doc_w, doc_h = page.evaluate("[document.documentElement.scrollWidth, document.documentElement.scrollHeight]")
+    for i, x in enumerate(items[:most]):
+        b = x["box"]
+        x0, y0 = max(0, b["x"] - 16), max(0, b["y"] - 16)
+        w, h = min(doc_w - x0, b["w"] + 32), min(doc_h - y0, b["h"] + 32, 1200)
+        if w < 2 or h < 2:
+            continue
+        p = out / "shots" / "crops" / f"{tag}-{i:02d}.png"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            page.screenshot(path=str(p), full_page=True, clip={"x": x0, "y": y0, "width": w, "height": h})
+        except Exception:  # noqa: BLE001
+            continue
+        x["crop"] = str(p)
+        done.append(str(p))
+    return done
 
 
 def focus_walk(page, out, tag, probe, opts):
@@ -339,6 +368,7 @@ def stress_passes(page, out, tag, probe=None, opts=None):
             continue
         page.wait_for_timeout(250)
         pr = page.evaluate(PROBE_JS)
+        ev += crop_items(page, pr, out, f"{tag}.stress-{kind}", most=6)
         pf = out / "probes" / f"{tag}.stress-{kind}.json"
         review.write_json(pf, pr)
         sp = out / "shots" / f"{tag}-stress-{kind}.png"

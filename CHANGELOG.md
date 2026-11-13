@@ -6,7 +6,9 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ## [Unreleased]
 
-Nothing yet.
+- **The review catches text that gets cut off** (2026-11-13). It measures text that runs out of its box or is cut by the box around it, words hidden by an ellipsis on a heading or button, and one-word last lines, at 320 px, at 200% text and with every word 30% longer, as German makes it. Each finding names the element, the number and a cropped screenshot.
+- **The review measures breathing room, spacing and tracking** (2026-11-13). It flags text crowding its neighbour or its box's edge, padding smaller than the gap inside, body text under 1.4 line height or outside 45 to 75 characters a line, uneven gaps and tracking that does not fit the size. Fixes name your spacing and type tokens.
+- **The review and preflight read the words** (2026-11-13). Title Case where your system chose sentence case, one action with two names and leftover placeholder text are rules. Buttons that don't start with a verb and jargon on a page for everyone are marked as judgment calls to read.
 
 ## [0.3.1]: 2026-11-11
 
