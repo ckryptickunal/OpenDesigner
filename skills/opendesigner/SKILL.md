@@ -15,7 +15,7 @@ They hold in every round, after a context reset and in a new session. `engine.py
 1. **Tokens only.** Every colour, size, space, radius, shadow and duration comes from `opendesigner/tokens/` or `opendesigner/build/`. A value the system lacks becomes `engine.py set <path> <value> --why "..."`, never a literal. Never add `od-ignore` to make `review` pass: an exception is the person's to grant, so ask first.
 2. **One question per call.** One per message, and one per call of a question tool, even one that takes four. The log question is the only question in the first message, on its last line. It never replaces what they asked for: answer or do that first.
 3. **Show every round without being asked:** screenshots at desktop and phone, or an artifact, before and after, with each check and its result. Never only a local link.
-4. **Every implementation ends with `engine.py review`, then a re-read of DESIGN.md.** Fix what it reports before the next draft.
+4. **Every implementation is an `engine.py ledger` round that ends with `engine.py review`, then a re-read of DESIGN.md.** Fix what it reports first.
 5. **Owner corrections go to `engine.py feedback "<the rule>" --kind note`.** Said twice, a note is a rule in `opendesigner/RULES.md`.
 6. **Each round starts by reading `opendesigner/PROTOCOL.md`, `opendesigner/RULES.md` and `DESIGN.md`.** After a context reset or in a new session, run `engine.py status` first: the step, what waits for the owner, the next command.
 7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes` or `handoff no`. Right after, ask once whether commits should be checked: "Want each commit to run the design check first? It stops a commit with hard-coded values or a DESIGN.md that no longer matches the code; `git commit --no-verify` skips it once." Then `engine.py guard install` or `guard no`. Never install it without a yes.
@@ -43,8 +43,8 @@ Read `references/guardrails.md` before writing files or reading a reference. Its
 |---|---|
 | A new design system, tokens, theme, UI kit, DESIGN.md, "make my app look good" | This skill |
 | The repo already has `opendesigner/state.json` or an OpenDesigner DESIGN.md | **opendesigner-extend** |
-| They share a website, screenshot, Figma file, repo CSS or brand book to learn from | **opendesigner-extract**, then come back |
-| Their product is already built and they want it to look better ("make it look professional", "it looks messy") | **Audit before you change anything:** the fast path in `references/audit.md`. **opendesigner-extract** on the code, **opendesigner-review** on the rendered pages, the findings shown on the page (`review.py compare`), then the smallest change that fixes the most, on one page first |
+| They share a website, screenshot, Figma file, repo CSS or brand book to learn from | **opendesigner-extract**, then `engine.py adapt` |
+| Their product is already built and they want it to look better ("make it look professional", "it looks messy") | **Audit before changing anything:** `engine.py audit-page`, then the fast path in `references/audit.md`. **opendesigner-extract** on the code, **opendesigner-review** on the rendered pages, the findings shown on the page (`review.py compare`), then the smallest change that fixes the most, on one page first |
 | They want it in Figma, Paper, Tailwind, iOS or Android | **opendesigner-export** |
 | They want illustrations, or the app "more visual" (empty states, onboarding, errors, hero) | **opendesigner-illustrate** |
 | They want original painted art or a film in the brand's colours (hero, launch reel, celebration loop) | **opendesigner-paint** |
