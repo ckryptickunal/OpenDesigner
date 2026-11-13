@@ -1,0 +1,149 @@
+{
+  "kind": "agent",
+  "runner": "tools/gemini_evals.py",
+  "date": "2026-11-14",
+  "commit": "2e528063",
+  "skillsRef": "working tree",
+  "label": "after-fix",
+  "model": "gemini-3.1-pro-preview",
+  "judgeModel": "haiku",
+  "runsPerArm": 1,
+  "arms": "with only",
+  "overallScore": 0.869,
+  "casesTotal": 7,
+  "costUsd": 1.55,
+  "judgeCostUsd": 0.02,
+  "tokens": {
+    "prompt": 1876508,
+    "cached": 1442199,
+    "output": 32774
+  },
+  "calls": 78,
+  "durationSeconds": 652,
+  "partial": false,
+  "cases": [
+    {
+      "name": "export-tailwind",
+      "score": 0.667,
+      "runs": 1,
+      "runScores": [
+        0.667
+      ],
+      "graders": {
+        "how-to-use": "0/1",
+        "skill-used": "1/1",
+        "tailwind-file": "1/1"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "extend-rounder",
+      "score": 1.0,
+      "runs": 1,
+      "runScores": [
+        1.0
+      ],
+      "graders": {
+        "brand-kept": "1/1",
+        "decision-recorded": "1/1",
+        "says-what-changed": "1/1",
+        "skill-used": "1/1"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "one-question-first",
+      "score": 1.0,
+      "runs": 1,
+      "runScores": [
+        1.0
+      ],
+      "graders": {
+        "no-ui-code": "1/1",
+        "one-plain-question": "1/1",
+        "skill-used": "1/1"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "redesign-audits-first",
+      "score": 1.0,
+      "runs": 1,
+      "runScores": [
+        1.0
+      ],
+      "graders": {
+        "audit-with-evidence": "1/1",
+        "correct-is-not-finished": "1/1",
+        "skill-used": "1/1",
+        "smallest-change-first": "1/1"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "research-no-web",
+      "score": 1.0,
+      "runs": 1,
+      "runScores": [
+        1.0
+      ],
+      "graders": {
+        "no-invented-findings": "1/1",
+        "plan-written": "1/1",
+        "research-step-run": "1/1",
+        "skill-used": "1/1"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "taste-all-past",
+      "score": 0.667,
+      "runs": 1,
+      "runScores": [
+        0.667
+      ],
+      "graders": {
+        "shows-all-three": "1/1",
+        "skill-used": "1/1",
+        "warns-with-the-lines": "0/1"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "taste-leaves-out",
+      "score": 0.75,
+      "runs": 1,
+      "runScores": [
+        0.75
+      ],
+      "graders": {
+        "never-offers-left-out": "0/1",
+        "offers-tonal": "1/1",
+        "says-why-left-out": "1/1",
+        "skill-used": "1/1"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    }
+  ]
+}
