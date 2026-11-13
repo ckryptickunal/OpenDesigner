@@ -402,7 +402,7 @@ Sources: S-R5-112
 
 **Why it is missed.** The reviewer's own account has data and a fast connection, so these states never appear. ST-03 asks for them by hand.
 
-**How to catch it.** capture.py (network_states, at the anchor cells) loads each page on a throttled network (400 ms latency, 50 KB/s) and reads it 1 s in: no text and no loading sign is a warning. When the page makes fetch or XHR requests it then answers them empty (every list emptied), with a 500, and not at all (offline), and reads each: broken template text is an error, a loading sign that never ends is a warning, and no state words ("no ... yet", "try again" and the like) is a judgment, since the words are a list. A page with no data requests is noted as not applicable. Evidence: one screenshot per state (datastates/).
+**How to catch it.** capture.py (network_states, at the anchor cells) loads each page on a throttled network (400 ms latency, 50 KB/s) and reads it 1 s in: no text and no loading sign is a warning. When the page makes fetch or XHR requests it then leaves them unanswered for 3 s (no skeleton, spinner, progress bar, aria-busy or "Loading" is a warning), answers them empty (every list emptied) and with a 500, and aborts them with the browser set offline (navigator.onLine false), and reads each: broken template text is an error, a loading sign that never ends is a warning, and no new state words ("no ... yet", "try again" and the like, counted against the page with its data) is a judgment, since the words are a list. A page with no data requests is noted as not applicable. Evidence: one screenshot per state (datastates/).
 
 Sources: S-R5-033, S-R5-111, S-R5-112
 
@@ -413,7 +413,7 @@ Sources: S-R5-033, S-R5-111, S-R5-112
 
 **Why it is missed.** Layout shift happens while loading, and on a fast local server loading takes a few milliseconds.
 
-**How to catch it.** On the same throttled load, capture.py reads layout shift with __od.vitals() after the page settles: CLS over 0.1 is a warning (ST-17) naming the elements that moved. Fix: size each skeleton like its content, and give images width and height or aspect-ratio.
+**How to catch it.** On the same throttled load, capture.py reads layout shift with __od.vitals() after the load event and the network going quiet (data that lands late counts): CLS over 0.1 is a warning (ST-17) naming the elements that moved. Fix: size each skeleton like its content, and give images width and height or aspect-ratio. It reads the shift, not the skeleton's size: a skeleton the wrong size that shifts nothing passes.
 
 Sources: S-R5-034, S-R5-074, S-R5-112
 
@@ -435,7 +435,7 @@ Sources: S-R5-110, S-R5-111, S-R5-112
 
 **Why it is missed.** Sample data has short names and every image loads.
 
-**How to catch it.** __od.stress('longNames') puts a 200-character name in every heading, link, button, label and .name or .title, and __od.stress('noImages') makes every image fail; capture.py runs both with the other stresses and probes again. Anything that spills or is cut is reported as ST-19, and the no-images screenshot is a note to look at (cards should keep their size, with alt text or a placeholder). ST-04 and ST-14 cover long words and longer translations.
+**How to catch it.** __od.stress('longNames') puts a 200-character name in every heading, link, button, label and .name or .title, and __od.stress('noNames') empties each short name in a row, card or list item, and __od.stress('noImages') makes every image fail; capture.py runs both with the other stresses and probes again. Anything that spills or is cut is reported as ST-19, A picture drawn under 4 px wide or tall when it fails, and a name line in a repeated item that drops to no height when empty, are warnings (craft.collapsedImages, craft.collapsedNamed); the no-images screenshot is also a note to look at. ST-04 and ST-14 cover long words and longer translations.
 
 Sources: S-R5-112
 
@@ -1075,7 +1075,7 @@ Sources: S-R5-109
 
 **Why it is missed.** The people who build it know the words, so they do not hear them.
 
-**How to catch it.** When the page is marked for non-experts (data-audience or meta name=audience on the page, Q-aud-01 = large in the system, or review.py check --audience everyone), review.py looks for the glossary's acronyms, token terms and code names in the page's text (CP-04) and suggests the glossary's plain voice for each. A term may be explained nearby, so it is a judgment.
+**How to catch it.** When the page is marked for non-experts (data-audience or meta name=audience on the page, in the system Q-aud-02 = consumer or play, Q-aud-01 = large or the plain voice, or review.py check --audience everyone), review.py looks for the glossary's acronyms, token terms and code names in the page's text (CP-04) and suggests the glossary's plain voice for each. A term may be explained nearby, so it is a judgment.
 
 Sources: S-R5-109
 

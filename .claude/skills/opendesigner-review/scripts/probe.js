@@ -21,7 +21,8 @@
  *   __od.vitals()         a Promise: layout shift (CLS) and long animation frames since page load
  *   __od.stress(kind, on) reversible stress: textSpacing (WCAG 1.4.12), text200 (1.4.4), rtl, longWords, pseudoloc (+40% text),
  *                         translate (every word 30% longer with no new spaces, a German stand-in; {grow: 0.5} for more),
- *                         longNames (a 200-character name in every heading, link, button and label), noImages (every image fails)
+ *                         longNames (a 200-character name in every heading, link, button and label), noNames (each such
+ *                         name empty), noImages (every image fails)
  *   __od.craft()          text cut off, breathing room, spacing rhythm (also in probe() as craft; copy holds the page's words)
  *   __od.setMode(m)       {theme, density, motion} on <html>: the data-theme / data-density / data-motion switches OpenDesigner CSS reads
  *   __od.marks(list)      boxes for the issues you will draw: [{sel, title, gives, source}] in (a selector matching several elements,
@@ -719,6 +720,16 @@
         if (out.twins.length < CAP)
           out.twins.push({ kind: kind.split('@')[0], control: label, has: n, of: members.length, missing: without.slice(0, 4).map(sel), box: pageBox(without[0].getBoundingClientRect()), sel: sel(without[0]) });
       }
+    }
+    // under noImages: pictures drawn with no room; under noNames: named lines drawn with no height (ST-19)
+    out.collapsedImages = []; out.collapsedNamed = [];
+    if (active.noImages) for (const im of document.querySelectorAll('img')) {
+      const q = im.getBoundingClientRect(), c = getComputedStyle(im);
+      if (c.display !== 'none' && c.visibility !== 'hidden' && (q.width < 4 || q.height < 4) && out.collapsedImages.length < CAP) out.collapsedImages.push({ sel: sel(im), w: round(q.width), h: round(q.height), box: pageBox(q) });
+    }
+    if (active.noNames) for (const e of named) {
+      const q = e.getBoundingClientRect(), c = getComputedStyle(e);
+      if (c.display !== 'none' && q.height < 2 && out.collapsedNamed.length < CAP) out.collapsedNamed.push({ sel: sel(e), h: round(q.height), box: pageBox(q) });
     }
     out.measure = bodyStack.slice(0, 60);
     return out;
@@ -1654,6 +1665,8 @@
     return out;
   }
   const GERMAN = 'ungsverwaltungseinstellungsbereichsuebersicht';
+  const NAMED = 'h1,h2,h3,h4,h5,h6,a,button,label,th,dt,strong,figcaption,[class*=name],[class*=title]';
+  const named = (od.named = od.named || []);
   const LONG_NAME = 'Maximiliana Alexandrina Featherstonehaugh-Cholmondeley of the Northern Highlands Regional Procurement and Facilities Management Directorate, Building Seven, Floor Twelve, Desk Forty-Three, Westminster';
   od.stress = (kind, on = true, opts = {}) => {
     if (STRESS_CSS[kind]) {
@@ -1670,7 +1683,7 @@
         if (Object.keys(active).some((k) => /^(longWords|pseudoloc|translate)$/.test(k))) return { error: 'turn the other text stress off first' };
         let n = 0;
         for (const t of textNodes()) {
-          const host = t.parentElement.closest('h1,h2,h3,h4,h5,h6,a,button,label,th,dt,strong,figcaption,[class*=name],[class*=title]');
+          const host = t.parentElement.closest(NAMED);
           const v = t.nodeValue; if (!host || v.trim().length > 60) continue;
           originals.set(t, v); t.nodeValue = (v.trim() + ' ' + LONG_NAME).slice(0, 200); n++;
         }
@@ -1680,6 +1693,26 @@
       for (const [t, v] of originals) if (t && t.nodeType === 3) t.nodeValue = v;
       for (const k of Array.from(originals.keys())) if (k && k.nodeType === 3) originals.delete(k);
       delete active[kind];
+      return { kind, on: false };
+    } else if (kind === 'noNames') {
+      // every short name or title empty, as for a record with no name: what is left must keep its shape
+      if (on) {
+        if (active[kind]) return { kind, on: true, changed: 0, note: 'already on' };
+        if (Object.keys(active).some((k) => /^(longWords|pseudoloc|translate|longNames)$/.test(k))) return { error: 'turn the other text stress off first' };
+        let n = 0; named.length = 0;
+        for (const t of textNodes()) {
+          const host = t.parentElement.closest(NAMED);
+          if (!host || t.nodeValue.trim().length > 60) continue;
+          originals.set(t, t.nodeValue); t.nodeValue = ''; n++;
+          // a name inside a repeated item (a row, card or list item) is the one whose loss breaks a layout people scan
+          if (!named.includes(host) && host.closest('li,tr,article,[class*=card],[class*=item],[class*=row]')) named.push(host);
+        }
+        active[kind] = true;
+        return { kind, on: true, changed: n };
+      }
+      for (const [t, v] of originals) if (t && t.nodeType === 3) t.nodeValue = v;
+      for (const k of Array.from(originals.keys())) if (k && k.nodeType === 3) originals.delete(k);
+      named.length = 0; delete active[kind];
       return { kind, on: false };
     } else if (kind === 'noImages') {
       // every picture fails to load, as on a slow or blocked network: what is left must still hold its place and say what it was
@@ -1727,7 +1760,7 @@
       for (const k of Array.from(originals.keys())) if (k && k.nodeType === 3) originals.delete(k);
       delete active[kind];
       return { kind, on: false };
-    } else return { error: 'unknown stress ' + kind + '; use textSpacing, text200, rtl, longWords, pseudoloc, translate, longNames or noImages' };
+    } else return { error: 'unknown stress ' + kind + '; use textSpacing, text200, rtl, longWords, pseudoloc, translate, longNames, noNames or noImages' };
     if (on) active[kind] = true; else delete active[kind];
     return { kind, on };
   };

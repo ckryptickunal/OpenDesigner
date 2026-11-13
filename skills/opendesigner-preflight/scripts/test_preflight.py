@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Tests for preflight.py (standard library only; the video tests need ffmpeg and skip without it)."""
-import shutil, subprocess, sys, tempfile, unittest
+import json, shutil, subprocess, sys, tempfile, unittest
 from pathlib import Path
 
 SCRIPT = Path(__file__).with_name("preflight.py")
@@ -262,6 +262,10 @@ class TestCraft(unittest.TestCase):
         self.assertEqual(r.returncode, 0, r.stdout)
         for needle in ("[M67]", "[M68]", "[M70]", "[M71]", "tracked open", "tracked tight", "not tightened"):
             self.assertNotIn(needle, r.stdout, needle)
+
+    def test_the_systems_case_rule_is_read_from_state_json(self):
+        r = run(CRAFT_BAD, files={"opendesigner/state.json": json.dumps({"answers": {"Q-voice-03": {"value": "sentence"}}})})
+        self.assertIn("Title Case headings where the system says sentence case", r.stdout)
 
     def test_without_a_recorded_rule_mixed_case_is_only_a_note(self):
         r = run(CRAFT_BAD.replace("<h2>Design tokens for every team</h2>", "<h2>Design tokens for every team</h2><h3>Spacing that stays even</h3>"))

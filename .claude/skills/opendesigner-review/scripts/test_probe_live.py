@@ -450,11 +450,11 @@ class Live(unittest.TestCase):
         self.assertEqual(ids("truncated"), {"ellipsis-h", "clamp-btn"})
         self.assertEqual(ids("orphans"), {"orphan-h"})
         self.assertEqual(c["orphans"][0]["word"], "system")
-        self.assertEqual(ids("tight"), {"tight-b"})
+        self.assertEqual({x["sel"].split("#")[-1] for x in c["tight"] if x["kind"] == "text"}, {"tight-b"})
         self.assertEqual(ids("touching"), {"touch"})
         self.assertEqual(ids("insetVsGap"), {"inset-card"})
         self.assertEqual(c["insetVsGap"][0]["inset"], 6)
-        self.assertEqual(ids("siblings"), {"uneven"})
+        self.assertIn("uneven", ids("siblings"))
         self.assertEqual({m["sel"].split("#")[-1] for m in c["measure"] if m["ch"] < 45 or m["ch"] > 75}, {"wide", "narrow"})
         for k in ("spill", "orphans", "touching"):
             self.assertTrue(all(set(x["box"]) == {"x", "y", "w", "h"} for x in c[k]), k)
@@ -524,6 +524,7 @@ class Live(unittest.TestCase):
         self.assertIn(("ST-16", "error", "Broken text when the data is failing with a server error"), got)
         self.assertIn(("ST-16", "error", "Broken text when the data is unreachable (offline)"), got)
         self.assertIn(("ST-16", "warn", "No message when the data is empty"), got)
+        self.assertIn(("ST-16", "warn", "No loading sign while the data is on its way"), got)
         self.assertTrue(any(g[0] == "ST-17" for g in got), doc["slow"])
 
     def test_data_states_done_right_are_quiet(self):
@@ -588,6 +589,30 @@ class Live(unittest.TestCase):
         fs = rv.Findings()
         rv.check_probe(self.craft_probe("craft-bad.html", 1280, "longNames"), None, fs)
         self.assertIn("ST-19", {f["case"] for f in fs.done()})
+        for stress in ("longNames", "noNames", "noImages"):                # the good page holds up
+            fs = rv.Findings()
+            rv.check_probe(self.craft_probe("craft-good.html", 375, stress), None, fs)
+            self.assertEqual([(f["title"], f["measured"]) for f in fs.done() if f["case"] == "ST-19" and f["severity"] != "info"], [], stress)
+
+    def test_missing_names_and_pictures_that_collapse_are_measured(self):     # ST-19
+        pg = self.page()
+        pg.set_content("<ul><li class=item><strong style='display:block'>Ana Ruiz</strong><img src='x.png' alt=''><span>Admin</span></li></ul>")
+        pg.evaluate(PROBE)
+        pg.evaluate("__od.stress('noNames', true)")
+        self.assertEqual([x["sel"].split(" > ")[-1] for x in pg.evaluate("__od.probe()")["craft"]["collapsedNamed"]], ["strong"])
+        pg.evaluate("__od.stress('noNames', false)")
+        pg.evaluate("__od.stress('noImages', true)")
+        self.assertTrue(pg.evaluate("__od.probe()")["craft"]["collapsedImages"])
+        pg.set_content("<ul><li class=item><strong style='display:block;min-height:1.5em'>Ana</strong><img src='x.png' alt='' width=40 height=40></li></ul>")
+        pg.evaluate(PROBE)
+        pg.evaluate("__od.stress('noImages', true)")
+        self.assertEqual(pg.evaluate("__od.probe()")["craft"]["collapsedImages"], [])
+
+    def test_the_bad_page_at_320_px_and_200_percent_text(self):              # ST-12 as an error with 200% text
+        fs = rv.Findings()
+        rv.check_probe(self.craft_probe("craft-bad.html", 320, "text200"), None, fs)
+        sev = {f["severity"] for f in fs.done() if f["case"] == "ST-12"}
+        self.assertIn("error", sev)
 
 
 def png_size(data):

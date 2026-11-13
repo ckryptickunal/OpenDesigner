@@ -47,7 +47,7 @@ import review  # noqa: E402  (same folder)
 
 PROBE_JS = (HERE / "probe.js").read_text(encoding="utf-8")
 WATCH_JS = PROBE_JS + "\n;window.__od && __od.watchKern();"   # an init script: logs letters that jump when a reveal ends
-STRESS = ["textSpacing", "text200", "longWords", "pseudoloc", "translate", "longNames", "noImages", "rtl"]
+STRESS = ["textSpacing", "text200", "longWords", "pseudoloc", "translate", "longNames", "noNames", "noImages", "rtl"]
 
 
 def is_loopback(host):
@@ -275,7 +275,7 @@ def crop_items(page, probe, out, tag, most=12):
 
 # ---- states: slow network, data that is empty, fails or never arrives, and the not-found page (ST-16 to ST-18) ----
 LOADING_JS = """() => { const t = (document.body && document.body.innerText || '').trim();
-  const busy = document.querySelectorAll('[aria-busy=true],[role=progressbar],progress,[class*=skeleton],[class*=spinner],[class*=loading],[class*=shimmer],[class*=placeholder]').length;
+  const busy = document.querySelectorAll('[aria-busy=true],[role=progressbar],progress,[class*=skeleton],[class*=spinner],[class*=loading],[class*=shimmer]').length;
   return { chars: t.length, busy, loadingWords: /\\b(loading|fetching|please wait|one moment)\\b/i.test(t), text: t.slice(0, 4000) }; }"""
 EMPTY_WORDS = r"\b(no \w+( \w+)? (yet|found|here)|nothing (here|yet|to show|found)|empty|no results|no items|no data|get started|add your first|create your first)\b"
 ERROR_WORDS = r"\b(error|went wrong|couldn.t|could not|can.t load|cannot load|failed|try again|retry|unavailable|offline|no connection|not connected)\b"
@@ -313,6 +313,10 @@ def network_states(page, out, tag, probe, opts=None):
         page.screenshot(path=str(sp), scale="css")
         ev.append(str(sp))
         page.wait_for_load_state("load", timeout=60000)
+        try:   # data that lands after the load event moves the layout too
+            page.wait_for_load_state("networkidle", timeout=15000)
+        except Exception:  # noqa: BLE001
+            pass
         page.evaluate(PROBE_JS)
         page.wait_for_timeout(300)
         vit = page.evaluate("__od.vitals()")
@@ -326,10 +330,12 @@ def network_states(page, out, tag, probe, opts=None):
     doc["requests"] = len(set(seen))
     base_text = page.evaluate(LOADING_JS)["text"]
     if doc["requests"]:
-        for mode in ("empty", "error", "offline"):
+        for mode in ("hang", "empty", "error", "offline"):
             def handler(route, *_, mode=mode):   # Playwright passes the request as a second argument
                 if route.request.resource_type not in DATA_TYPES:
                     return route.continue_()
+                if mode == "hang":
+                    return None          # never answered: the view should show that data is on its way
                 if mode == "offline":
                     return route.abort("internetdisconnected")
                 if mode == "error":
@@ -343,17 +349,30 @@ def network_states(page, out, tag, probe, opts=None):
             page.route("**/*", handler)
             try:
                 page.reload(wait_until="load")
+                if mode == "hang":
+                    page.wait_for_timeout(3000)
+                    r = page.evaluate(LOADING_JS)
+                    sp = out / "shots" / f"{tag}-data-hang.png"
+                    page.screenshot(path=str(sp), scale="css")
+                    ev.append(str(sp))
+                    doc["modes"]["hang"] = {"chars": r["chars"], "busy": r["busy"] > 0 or r["loadingWords"], "shot": str(sp)}
+                    continue
                 settle(page)
+                if mode == "offline":          # the browser's own signal too: navigator.onLine and the offline event
+                    page.context.set_offline(True)
+                    page.wait_for_timeout(500)
                 r = page.evaluate(LOADING_JS)
                 pr = page.evaluate(PROBE_JS)
                 sp = out / "shots" / f"{tag}-data-{mode}.png"
                 page.screenshot(path=str(sp), scale="css")
                 ev.append(str(sp))
                 words = EMPTY_WORDS if mode == "empty" else ERROR_WORDS
-                doc["modes"][mode] = {"chars": r["chars"], "message": bool(re.search(words, r["text"], re.I)) and not re.search(words, base_text, re.I),
+                # a message is new state words: more matches than the page shows with its data
+                doc["modes"][mode] = {"chars": r["chars"], "message": len(re.findall(words, r["text"], re.I)) > len(re.findall(words, base_text, re.I)),
                                       "busyStill": r["busy"] > 0 or r["loadingWords"], "placeholders": ((pr.get("content") or {}).get("placeholders") or [])[:4],
                                       "shot": str(sp)}
             finally:
+                page.context.set_offline(False)
                 page.unroute("**/*", handler)
         page.reload(wait_until="load")
         settle(page)

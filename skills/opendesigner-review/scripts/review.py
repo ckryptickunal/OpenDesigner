@@ -178,7 +178,10 @@ def load_system(project):
     st = read_json(base / "state.json", {}) or {}
     ans = st.get("answers") or {}
     sysm["case"] = (ans.get("Q-voice-03") or {}).get("value")
-    sysm["audience"] = (ans.get("Q-aud-01") or {}).get("value")
+    # who the words are for: Q-aud-02 consumer or play (the stakes and state of users), Q-aud-01 large (everyone, big
+    # targets) or the plain voice mark a system for non-experts; Q-aud-01 dense marks a work tool for experts
+    aud = [(ans.get("Q-aud-02") or {}).get("value"), (ans.get("Q-aud-01") or {}).get("value"), ((st.get("profile") or {}).get("voice") == "plain") and "plain"]
+    sysm["audience"] = " ".join(a for a in aud if a in ("consumer", "play", "large", "plain")) or None
     # faces reference each other ("=textFace"); keep the real names only
     sysm["faces"] = [f for f in sysm["faces"] if f and not f.startswith("=")]
     return sysm
@@ -642,14 +645,26 @@ def check_craft(p, sysm, w, F):
     wcag = bool(stress & {"textSpacing", "text200"})
     translate = "translate" in stress
     sfx = (" when every word is 30% longer (a German stand-in)" if translate else " under " + "+".join(sorted(stress))) if stress else ""
-    cut_case = "ST-14" if translate else "ST-19" if stress & {"longNames", "noImages"} else "ST-12"
+    cut_case = "ST-14" if translate else "ST-19" if stress & {"longNames", "noImages", "noNames"} else "ST-12"
     if "longNames" in stress:
         sfx = " with a 200-character name"
     if "noImages" in stress:
         sfx = " with every image missing"
+        col = cr.get("collapsedImages") or []
+        if col:
+            F.add("ST-19", "warn", "Pictures that fail leave no space", w, "; ".join(f"{x['sel']} drawn {fmt(x['w'])}x{fmt(x['h'])} px" for x in col[:4]),
+                  "a failed picture keeps its box, so the card or row keeps its shape", [x["sel"] for x in col[:4]] + crops(col[:4]),
+                  "give every img width and height attributes or aspect-ratio, and a background colour token behind it", None, key="no-images-collapse")
         F.add("ST-19", "info", "Look at the page with every image missing", w, f"{fmt(((p.get('images') or {}).get('total')))} image(s) made to fail",
               "cards and rows keep their size, and alt text or a placeholder says what was there", [], "reserve the box (width and height or aspect-ratio) and give it a background", None,
               key="no-images", basis="seen", decided="judgment")
+    if "noNames" in stress:
+        sfx = " with every name missing"
+        col = cr.get("collapsedNamed") or []
+        if col:
+            F.add("ST-19", "warn", "A missing name collapses its box", w, "; ".join(f"{x['sel']} is {fmt(x['h'])} px tall with no text" for x in col[:4]),
+                  "an empty name keeps the row or card the same height, or the product shows a fallback (\"Untitled\")", [x["sel"] for x in col[:4]] + crops(col[:4]),
+                  "show a fallback name, or give the line a min-height of one line", None, key="no-names-collapse")
     std = "WCAG 1.4.12" if "textSpacing" in stress else "WCAG 1.4.4" if "text200" in stress else None
     vw = (p.get("viewport") or {}).get("w") or 0
 
@@ -1553,9 +1568,16 @@ def check_datastates(d, F):
         F.add("ST-16", "info", "No data requests: empty, error and offline states not tried", w, "the page made no fetch or XHR request while loading",
               "for a page with data, each state shows a message people can act on", [], "if data arrives another way (server-rendered, a socket), set each state by hand and look", None, key="no-data", basis="operated")
         return
+    hang = (d.get("modes") or {}).get("hang")
+    if hang and not hang.get("busy"):
+        F.add("ST-16", "warn", "No loading sign while the data is on its way", w, f"3 s into a request that has not answered: no skeleton, spinner, progress bar, aria-busy or \"Loading\" ({fmt(hang.get('chars'))} characters on screen)",
+              "a skeleton the size of the content, or a loading sign, until the data arrives", [hang.get("shot")],
+              "render a skeleton for the view and set aria-busy on it until the data lands", None, key="state-hang", basis="operated")
     names = {"empty": ("empty", "an empty state that says there is nothing yet and what to do"), "error": ("failing with a server error", "an error that says what failed and offers a retry"),
              "offline": ("unreachable (offline)", "a message that the connection is down, with a retry")}
     for mode, m in (d.get("modes") or {}).items():
+        if mode == "hang":
+            continue
         said, want = names.get(mode, (mode, "a message"))
         if m.get("placeholders"):
             F.add("ST-16", "error", f"Broken text when the data is {said}", w, "; ".join(f"{x['sel']}: {x['match']!r}" for x in m["placeholders"][:3]),

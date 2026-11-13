@@ -979,7 +979,17 @@ def main():
     if not p.exists():
         sys.exit(f"not found: {p}")
     if a.cmd == "html":
-        r = check_html(p, a.medium, a.case)
+        case = a.case
+        if case is None:   # the system's own rule (Q-voice-03), from the nearest opendesigner/state.json above the page
+            for d in [p.resolve().parent, *p.resolve().parents]:
+                st = d / "opendesigner" / "state.json"
+                if st.exists():
+                    try:
+                        case = ((json.loads(st.read_text()).get("answers") or {}).get("Q-voice-03") or {}).get("value")
+                    except (OSError, ValueError):
+                        pass
+                    break
+        r = check_html(p, a.medium, case)
     elif a.cmd == "video":
         if a.flash_field not in VIEWS and not re.fullmatch(r"\d+(\.\d+)?", a.flash_field):
             ap.error("--flash-field takes tablet, phone or a size in px")
