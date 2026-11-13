@@ -1,6 +1,6 @@
 ---
 title: Empty, loading and error states
-seo_title: Empty, loading and error states: 404, skeletons, toasts
+seo_title: Empty, loading and error states: a checklist and parts
 description: What a screen shows before, between and after its data: 404 and error pages, empty states, skeletons that don't jump, spinners, progress, banners and toasts.
 section: Craft
 order: 5
@@ -10,6 +10,22 @@ updated: 2026-11-13
 Most screens spend part of their life without their data. They're empty before the first item, loading while it arrives, or broken when a request fails. These in-between states are where people get stuck, so each one needs a design of its own.
 
 The [component library](/library/) has 22 finished parts for them, in its **States** aisle. Like every library part, they use only your design tokens, so they take your colours, type and spacing.
+
+**Skeleton or spinner?** Use a skeleton when a whole area is loading, so the page keeps its shape. Use a small spinner only inside the button or field the person just used, and only for waits of a few seconds.
+
+## The checklist
+
+Every screen that shows data needs a plan for each of these:
+
+- **First use**: nothing has been made yet
+- **No results**: a search found nothing
+- **Filtered to nothing**: filters hide every item
+- **All done**: the person cleared their queue
+- **Loading**: a skeleton for an area, a spinner for a control, progress for a long task
+- **A failed save**: put the change back and say why (optimistic update)
+- **A field that can't be accepted**: a message under the field
+- **Not found (404)**, **something went wrong (500)**, **offline**, **maintenance**, **no access (403)** and **session expired**
+- **Done**: a toast for small changes, a success screen for ones people want proof of
 
 ## Every state answers three questions
 
