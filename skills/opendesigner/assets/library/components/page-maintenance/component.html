@@ -1,0 +1,54 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-page-maintenance { box-sizing: border-box; inline-size: 100%; max-inline-size: 45rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-page-maintenance *, .odl-page-maintenance *::before, .odl-page-maintenance *::after { box-sizing: border-box; }
+.odl-page-maintenance svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-page-maintenance h2, .odl-page-maintenance h3, .odl-page-maintenance p, .odl-page-maintenance ul, .odl-page-maintenance ol, .odl-page-maintenance dl, .odl-page-maintenance dd { margin: 0; }
+.odl-page-maintenance h2, .odl-page-maintenance h3 { text-wrap: balance; }
+.odl-page-maintenance .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-page-maintenance .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-page-maintenance .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-page-maintenance .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-page-maintenance .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-page-maintenance .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-page-maintenance .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-page-maintenance .odl-btn[disabled], .odl-page-maintenance .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-page-maintenance button:focus-visible, .odl-page-maintenance a:focus-visible, .odl-page-maintenance input:focus-visible, .odl-page-maintenance textarea:focus-visible, .odl-page-maintenance [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-page-maintenance .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-page-maintenance { display: grid; justify-items: center; align-content: center; min-block-size: 32rem; padding: var(--ds-space-section-md) var(--ds-space-inset-xl); text-align: center;
+  background: var(--ds-color-surface-base); border-radius: var(--ds-radius-container); }
+.odl-page-maintenance .odl-art { display: grid; place-items: center; inline-size: calc(var(--ds-size-control-lg) * 1.5); aspect-ratio: 1; margin-block-end: var(--ds-space-stack-lg);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-sunken); color: var(--ds-color-icon-default); }
+.odl-page-maintenance .odl-art svg { inline-size: var(--ds-size-icon-lg); block-size: var(--ds-size-icon-lg); stroke-width: var(--ds-icon-stroke-sm); }
+.odl-page-maintenance .odl-code { margin-block-end: var(--ds-space-stack-xs); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
+.odl-page-maintenance h2 { font: var(--ds-text-headline-sm); font-weight: var(--ds-font-weight-heading); }
+.odl-page-maintenance .odl-lead { max-inline-size: 44ch; margin-block-start: var(--ds-space-stack-sm); color: var(--ds-color-text-secondary); }
+.odl-page-maintenance .odl-acts { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-xl); }
+.odl-page-maintenance .odl-box { inline-size: 100%; max-inline-size: 30rem; margin-block-start: var(--ds-space-stack-xl); padding: var(--ds-space-inset-lg); text-align: start;
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+.odl-page-maintenance .odl-box + .odl-acts { margin-block-start: var(--ds-space-stack-lg); }
+.odl-page-maintenance .odl-box h3 { font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); }
+.odl-page-maintenance .odl-box p { color: var(--ds-color-text-secondary); }
+.odl-page-maintenance .odl-live { min-block-size: 1lh; margin-block-start: var(--ds-space-stack-md); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+@container (max-width: 30rem) {
+  .odl-page-maintenance { padding: var(--ds-space-section-sm) var(--ds-space-inset-lg); }
+  .odl-page-maintenance .odl-acts { flex-direction: column; align-self: stretch; inline-size: 100%; }
+  .odl-page-maintenance .odl-acts > * { inline-size: 100%; }
+}
+
+.odl-page-maintenance .odl-when { display: grid; grid-template-columns: var(--ds-size-icon-md) minmax(0, 1fr); gap: var(--ds-space-inline-md); align-items: center; }
+.odl-page-maintenance .odl-when svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); color: var(--ds-color-icon-accent); }
+.odl-page-maintenance .odl-when strong { display: block; font: var(--ds-text-title-sm); font-weight: var(--ds-font-weight-heading); font-variant-numeric: tabular-nums; }
+.odl-page-maintenance .odl-when span { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+@media (prefers-reduced-motion: reduce) { .odl-page-maintenance, .odl-page-maintenance *, .odl-page-maintenance *::before, .odl-page-maintenance *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-page-maintenance" aria-label="Planned maintenance">
+  <span class="odl-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+  <h2 data-od-slot="title">Invoices are paused for planned maintenance</h2>
+  <p class="odl-lead" data-od-slot="message">We're upgrading the payments database. Everything you saved is safe, and scheduled payments will go out once we're done.</p>
+  <div class="odl-box odl-when"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h5"/><path d="M17.5 17.5 16 16.3V14"/><circle cx="16" cy="16" r="6"/></svg><p><strong>Back by <time datetime="2026-11-14T15:00Z" data-od-slot="until">3:00 PM</time></strong><span data-od-slot="detail">Saturday, Nov 14 · your time · about 40 minutes from now</span></p></div>
+  <div class="odl-acts"><a class="odl-btn" href="#" data-od-action="status">See live status</a><button type="button" class="odl-btn is-quiet" data-od-action="notify"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>Email me when it's back</button></div>
+</section>

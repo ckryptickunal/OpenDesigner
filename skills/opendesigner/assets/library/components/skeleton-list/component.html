@@ -1,0 +1,64 @@
+<style>
+.odl-skeleton-list { box-sizing: border-box; inline-size: 100%; max-inline-size: 40rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-skeleton-list *, .odl-skeleton-list *::before, .odl-skeleton-list *::after { box-sizing: border-box; }
+.odl-skeleton-list svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-skeleton-list h2, .odl-skeleton-list h3, .odl-skeleton-list p, .odl-skeleton-list ul, .odl-skeleton-list ol, .odl-skeleton-list dl, .odl-skeleton-list dd { margin: 0; }
+.odl-skeleton-list h2, .odl-skeleton-list h3 { text-wrap: balance; }
+.odl-skeleton-list .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-skeleton-list .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-skeleton-list .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-skeleton-list .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-skeleton-list .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-skeleton-list .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-skeleton-list .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-skeleton-list .odl-btn[disabled], .odl-skeleton-list .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-skeleton-list button:focus-visible, .odl-skeleton-list a:focus-visible, .odl-skeleton-list input:focus-visible, .odl-skeleton-list textarea:focus-visible, .odl-skeleton-list [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-skeleton-list .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-skeleton-list .odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-skeleton-list .odl-card { padding: var(--ds-space-inset-lg); } }
+
+.odl-skeleton-list .odl-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-inline-sm); margin-block-end: var(--ds-space-stack-md); }
+.odl-skeleton-list .odl-bar h2 { font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }
+.odl-skeleton-list .odl-demo { min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); }
+.odl-skeleton-list .odl-one { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.odl-skeleton-list [aria-busy="true"] .odl-t { color: transparent; border-radius: var(--ds-radius-detail); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.odl-skeleton-list [aria-busy="true"] .odl-t, .odl-skeleton-list [aria-busy="true"] .odl-pic, .odl-skeleton-list [aria-busy="true"] .odl-ctl {
+  background: linear-gradient(90deg, var(--ds-color-bg-neutral-subtle) 30%, var(--ds-color-surface-sunken) 50%, var(--ds-color-bg-neutral-subtle) 70%) 0 0 / 300% 100%;
+  animation: odl-sweep calc(var(--ds-motion-duration-extra) * 4) var(--ds-motion-easing-linear) infinite; }
+.odl-skeleton-list [aria-busy="true"] .odl-pic > *, .odl-skeleton-list [aria-busy="true"] .odl-ctl > * { visibility: hidden; }
+.odl-skeleton-list [aria-busy="true"] .odl-ctl { border-color: transparent; color: transparent; }
+@keyframes odl-sweep { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+.odl-skeleton-list .odl-body { display: grid; padding: 0; list-style: none; }
+.odl-skeleton-list .odl-body li { display: grid; grid-template-columns: var(--ds-size-control-md) minmax(0, 1fr) auto; gap: var(--ds-space-inline-md); align-items: center; min-block-size: var(--ds-size-row-two-line);
+  padding-block: var(--ds-space-stack-sm); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-skeleton-list .odl-body li:first-child { border-block-start: 0; }
+.odl-skeleton-list .odl-av { display: grid; place-items: center; inline-size: var(--ds-size-control-md); aspect-ratio: 1; border-radius: var(--ds-radius-person); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); }
+.odl-skeleton-list .odl-txt { display: grid; min-inline-size: 0; }
+.odl-skeleton-list .odl-n { font-weight: var(--ds-font-weight-label); }
+.odl-skeleton-list .odl-s { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-skeleton-list .odl-when { color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { .odl-skeleton-list, .odl-skeleton-list *, .odl-skeleton-list *::before, .odl-skeleton-list *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-skeleton-list odl-card" aria-label="Activity">
+  <div class="odl-bar"><h2>Activity</h2><button type="button" class="odl-btn is-quiet odl-demo" data-odl-demo aria-pressed="false">Show loaded</button></div><p class="odl-live odl-sr" role="status" data-odl-busy="Loading activity" data-odl-done="Activity loaded">Loading activity</p>
+  <ul class="odl-body" aria-busy="true" data-od-list="rows"><li data-od-item><span class="odl-av odl-ctl" aria-hidden="true"><span>MT</span></span><p class="odl-txt"><span class="odl-one"><span class="odl-t odl-n" data-od-slot="name">Maya Thornquist</span></span><span class="odl-one odl-s"><span class="odl-t" data-od-slot="detail">Approved the Q4 vendor budget</span></span></p><span class="odl-when"><span class="odl-t" data-od-slot="when">2m</span></span></li><li data-od-item><span class="odl-av odl-ctl" aria-hidden="true"><span>OB</span></span><p class="odl-txt"><span class="odl-one"><span class="odl-t odl-n" data-od-slot="name">Oren Balliwick</span></span><span class="odl-one odl-s"><span class="odl-t" data-od-slot="detail">Commented on Invoice 2041</span></span></p><span class="odl-when"><span class="odl-t" data-od-slot="when">14m</span></span></li><li data-od-item><span class="odl-av odl-ctl" aria-hidden="true"><span>SE</span></span><p class="odl-txt"><span class="odl-one"><span class="odl-t odl-n" data-od-slot="name">Sunniva Eckhart</span></span><span class="odl-one odl-s"><span class="odl-t" data-od-slot="detail">Uploaded statement-oct.pdf</span></span></p><span class="odl-when"><span class="odl-t" data-od-slot="when">1h</span></span></li><li data-od-item><span class="odl-av odl-ctl" aria-hidden="true"><span>JK</span></span><p class="odl-txt"><span class="odl-one"><span class="odl-t odl-n" data-od-slot="name">Jun Kessaly</span></span><span class="odl-one odl-s"><span class="odl-t" data-od-slot="detail">Asked for access to Payroll</span></span></p><span class="odl-when"><span class="odl-t" data-od-slot="when">3h</span></span></li><li data-od-item><span class="odl-av odl-ctl" aria-hidden="true"><span>RA</span></span><p class="odl-txt"><span class="odl-one"><span class="odl-t odl-n" data-od-slot="name">Rafe Ambersole</span></span><span class="odl-one odl-s"><span class="odl-t" data-od-slot="detail">Closed September books</span></span></p><span class="odl-when"><span class="odl-t" data-od-slot="when">Yesterday</span></span></li></ul>
+</section>
+<script>
+document.querySelectorAll(".odl-skeleton-list").forEach(function (root) {
+  if (root.hasAttribute("data-odl-wired")) return;
+  root.setAttribute("data-odl-wired", "");
+  var body = root.querySelector(".odl-body"), live = root.querySelector(".odl-live"), demo = root.querySelector("[data-odl-demo]");
+  function set(busy) {
+    body.setAttribute("aria-busy", busy ? "true" : "false");
+    body.toggleAttribute("inert", busy);
+    live.textContent = busy ? live.getAttribute("data-odl-busy") : live.getAttribute("data-odl-done");
+    if (demo) { demo.setAttribute("aria-pressed", busy ? "false" : "true"); demo.textContent = busy ? "Show loaded" : "Show loading"; }
+  }
+  if (demo) demo.addEventListener("click", function () { set(body.getAttribute("aria-busy") !== "true"); });
+  set(body.getAttribute("aria-busy") === "true");
+});
+</script>

@@ -1,0 +1,75 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-optimistic-update { box-sizing: border-box; inline-size: 100%; max-inline-size: 36rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-optimistic-update *, .odl-optimistic-update *::before, .odl-optimistic-update *::after { box-sizing: border-box; }
+.odl-optimistic-update svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-optimistic-update h2, .odl-optimistic-update h3, .odl-optimistic-update p, .odl-optimistic-update ul, .odl-optimistic-update ol, .odl-optimistic-update dl, .odl-optimistic-update dd { margin: 0; }
+.odl-optimistic-update h2, .odl-optimistic-update h3 { text-wrap: balance; }
+.odl-optimistic-update .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-optimistic-update .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-optimistic-update .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-optimistic-update .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-optimistic-update .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-optimistic-update .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-optimistic-update .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-optimistic-update .odl-btn[disabled], .odl-optimistic-update .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-optimistic-update button:focus-visible, .odl-optimistic-update a:focus-visible, .odl-optimistic-update input:focus-visible, .odl-optimistic-update textarea:focus-visible, .odl-optimistic-update [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-optimistic-update .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-optimistic-update .odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-optimistic-update .odl-card { padding: var(--ds-space-inset-lg); } }
+
+.odl-optimistic-update h2 { font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }
+.odl-optimistic-update .odl-sub { margin-block-start: var(--ds-space-stack-xs); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-optimistic-update ul { display: grid; margin-block-start: var(--ds-space-stack-md); padding: 0; list-style: none; }
+.odl-optimistic-update li { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-optimistic-update li:first-child { border-block-start: 0; }
+.odl-optimistic-update label { display: flex; align-items: center; gap: var(--ds-space-inline-md); min-block-size: max(var(--ds-size-row-md), var(--ds-size-target-min)); cursor: pointer; }
+.odl-optimistic-update input { flex: none; inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); margin: 0; accent-color: var(--ds-color-bg-action-primary); }
+.odl-optimistic-update input:checked + .odl-name { color: var(--ds-color-text-secondary); text-decoration: line-through; }
+.odl-optimistic-update .is-pending .odl-name { opacity: var(--ds-opacity-disabled-content); }
+.odl-optimistic-update .odl-name { transition: opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-optimistic-update .odl-err { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-inline-xs) var(--ds-space-inline-sm); padding-block-end: var(--ds-space-stack-sm); padding-inline-start: calc(var(--ds-size-icon-md) + var(--ds-space-inline-md));
+  color: var(--ds-color-text-danger); font: var(--ds-text-body-sm); }
+.odl-optimistic-update .odl-err[hidden] { display: none; }
+.odl-optimistic-update .odl-err .odl-btn { min-block-size: var(--ds-size-target-min); }
+@media (prefers-reduced-motion: reduce) { .odl-optimistic-update, .odl-optimistic-update *, .odl-optimistic-update *::before, .odl-optimistic-update *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-optimistic-update odl-card" aria-label="This week">
+  <h2>This week</h2>
+  <p class="odl-sub">Tick a task. The second one fails once, to show the rollback.</p>
+  <ul data-od-list="tasks"><li data-od-item><label><input type="checkbox" name="done" data-od-input="done"><span class="odl-name" data-od-slot="task">Send Q4 invoices to Halvard & Pike</span></label><p class="odl-err" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span>Couldn't save. It's back as it was.</span><button type="button" class="odl-btn is-text" data-od-action="retry">Try again</button></p></li><li data-odl-fail data-od-item><label><input type="checkbox" name="done" data-od-input="done"><span class="odl-name" data-od-slot="task">Approve Quillmere Studio expenses</span></label><p class="odl-err" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span>Couldn't save. It's back as it was.</span><button type="button" class="odl-btn is-text" data-od-action="retry">Try again</button></p></li><li data-od-item><label><input type="checkbox" name="done" data-od-input="done" checked><span class="odl-name" data-od-slot="task">Book the year-end audit</span></label><p class="odl-err" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span>Couldn't save. It's back as it was.</span><button type="button" class="odl-btn is-text" data-od-action="retry">Try again</button></p></li></ul>
+  <p class="odl-sr odl-live" role="status"></p>
+</section>
+<script>
+document.querySelectorAll(".odl-optimistic-update").forEach(function (root) {
+  if (root.hasAttribute("data-odl-wired")) return;
+  root.setAttribute("data-odl-wired", "");
+  var live = root.querySelector(".odl-live");
+  root.addEventListener("change", function (e) {
+    var box = e.target, li = box.closest("li");
+    if (!li || box.type !== "checkbox") return;
+    var name = li.querySelector(".odl-name").textContent, want = box.checked, err = li.querySelector(".odl-err");
+    err.hidden = true;
+    li.classList.add("is-pending");  // shown at once: the change is on screen before the server answers
+    live.textContent = (want ? "Marked done: " : "Marked not done: ") + name;
+    setTimeout(function () {  // demo only: rows marked data-odl-fail act as if the save failed
+      li.classList.remove("is-pending");
+      if (li.hasAttribute("data-odl-fail")) {
+        box.checked = !want;  // roll back to what the server still has
+        err.hidden = false;
+        live.textContent = "Couldn't save " + name + ". It's back as it was. Try again.";
+        li.removeAttribute("data-odl-fail");  // the retry succeeds
+      }
+    }, 900);
+  });
+  root.addEventListener("click", function (e) {
+    var r = e.target.closest("[data-od-action='retry']");
+    if (!r) return;
+    var li = r.closest("li"), box = li.querySelector("input");
+    box.checked = !box.checked; box.dispatchEvent(new Event("change", { bubbles: true })); box.focus();
+  });
+});
+</script>

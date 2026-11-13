@@ -1,0 +1,117 @@
+{
+  "name": "Page banners",
+  "summary": "Four banners for the top of a page or section (info, success, warning and error), each with a bold first phrase, one sentence and one action.",
+  "use": "for news about the whole page or account that should stay until it's handled or dismissed",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "banner",
+    "alert",
+    "info",
+    "warning",
+    "error"
+  ],
+  "states": [
+    "info",
+    "success",
+    "warning",
+    "error",
+    "dismissed",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "Info, success and warning are polite status regions; the error is an alert and can't be dismissed until it's fixed; dismiss buttons are named after their banner, and focus moves to the next banner.",
+  "width": "wide",
+  "live_region": "polite and assertive",
+  "spec": {
+    "use_when": [
+      "something affects the whole page or account and stays true until it's handled"
+    ],
+    "avoid_when": [
+      "a quick confirmation of something the person just did: use toast-undo",
+      "a problem with one field: use field-error",
+      "the whole page can't load: use page-error"
+    ],
+    "keyboard": [
+      "Tab reaches each banner's action, then its dismiss button",
+      "Dismissing moves focus to the next banner"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "banners": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "properties": {
+              "tone": {
+                "enum": [
+                  "danger",
+                  "info",
+                  "success",
+                  "warning"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 64
+              }
+            },
+            "required": [
+              "tone",
+              "title",
+              "message"
+            ]
+          }
+        }
+      },
+      "required": [
+        "banners"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "With no notices, render nothing: the region has no frame of its own.",
+        "evidence": "display: grid"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "Not applicable: banners report a state; they aren't loaded."
+      },
+      "error": {
+        "status": "shown",
+        "how": "The error banner is an alert and stays until the problem is fixed.",
+        "evidence": "role=\"alert\""
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "No control here is ever disabled; each one always does something."
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Text wraps beside the icon; the action follows the sentence.",
+        "evidence": "minmax(0, 1fr)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "title": "New: approval rules.",
+  "message": "Bills over $5,000 now need a second approver.",
+  "banners": [
+    {
+      "tone": "info",
+      "title": "New: approval rules.",
+      "message": "Bills over $5,000 now need a second approver."
+    },
+    {
+      "tone": "success",
+      "title": "Payroll sent.",
+      "message": "142 people get paid on Friday, Nov 14."
+    },
+    {
+      "tone": "warning",
+      "title": "Your card expires in 6 days.",
+      "message": "Update it to keep paying for 18 seats."
+    },
+    {
+      "tone": "danger",
+      "title": "The bank feed stopped syncing.",
+      "message": "Transactions after 9:12 AM aren't in yet. Reconnect to fetch them."
+    }
+  ]
+}

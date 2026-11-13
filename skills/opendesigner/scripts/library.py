@@ -20,7 +20,7 @@ import tempfile
 HERE = pathlib.Path(__file__).resolve().parent
 LIB = HERE.parent / "assets" / "library" / "components"
 ENGINE = HERE / "engine.py"
-TYPES = ["data", "chart", "form", "feedback", "navigation", "overlay", "ai", "commerce", "content"]
+TYPES = ["data", "chart", "form", "feedback", "states", "navigation", "overlay", "ai", "commerce", "content"]  # states: empty, loading, error and system pages
 STYLES = ["quiet", "dense", "technical", "friendly", "editorial"]
 INDUSTRIES = ["finance", "saas", "devtools", "security", "crm", "logistics", "health", "education", "retail", "productivity",
               "social", "media", "travel", "food", "fitness", "events", "home", "money", "games", "any"]  # money: personal finance (finance is B2B)

@@ -1,0 +1,56 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-progress-steps { box-sizing: border-box; inline-size: 100%; max-inline-size: 40rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-progress-steps *, .odl-progress-steps *::before, .odl-progress-steps *::after { box-sizing: border-box; }
+.odl-progress-steps svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-progress-steps h2, .odl-progress-steps h3, .odl-progress-steps p, .odl-progress-steps ul, .odl-progress-steps ol, .odl-progress-steps dl, .odl-progress-steps dd { margin: 0; }
+.odl-progress-steps h2, .odl-progress-steps h3 { text-wrap: balance; }
+.odl-progress-steps .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-progress-steps .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-progress-steps .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-progress-steps .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-progress-steps .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-progress-steps .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-progress-steps .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-progress-steps .odl-btn[disabled], .odl-progress-steps .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-progress-steps button:focus-visible, .odl-progress-steps a:focus-visible, .odl-progress-steps input:focus-visible, .odl-progress-steps textarea:focus-visible, .odl-progress-steps [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-progress-steps .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-progress-steps .odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-progress-steps .odl-card { padding: var(--ds-space-inset-lg); } }
+
+.odl-progress-steps .odl-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--ds-space-inline-sm); }
+.odl-progress-steps .odl-head h2 { font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }
+.odl-progress-steps .odl-pct { font: var(--ds-text-numeric-md); font-variant-numeric: tabular-nums; }
+.odl-progress-steps .odl-track { block-size: var(--ds-space-8); margin-block-start: var(--ds-space-stack-md); overflow: hidden; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); }
+.odl-progress-steps .odl-fill { display: block; inline-size: calc(var(--od-ratio, 0) * 100%); block-size: 100%; border-radius: inherit; background: var(--ds-color-bg-action-primary);
+  transition: inline-size var(--ds-motion-duration-medium) var(--ds-motion-easing-standard); }
+.odl-progress-steps .odl-left { margin-block-start: var(--ds-space-stack-xs); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
+.odl-progress-steps ol { display: grid; gap: var(--ds-space-stack-md); margin-block-start: var(--ds-space-stack-lg); padding: 0; list-style: none; }
+.odl-progress-steps ol li { display: grid; grid-template-columns: var(--ds-size-icon-md) minmax(0, 1fr); gap: var(--ds-space-inline-md); align-items: start; }
+.odl-progress-steps .odl-dot { display: grid; place-items: center; inline-size: var(--ds-size-icon-md); aspect-ratio: 1; margin-block-start: calc((1lh - var(--ds-size-icon-md)) / 2); border-radius: var(--ds-radius-full);
+  border: var(--ds-border-width-emphasis) solid var(--ds-color-border-default); }
+.odl-progress-steps .odl-dot svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); stroke-width: var(--ds-icon-stroke-lg); }
+.odl-progress-steps .odl-dot svg { display: none; }
+.odl-progress-steps .odl-dot[data-state="done"] svg { display: block; }
+.odl-progress-steps .odl-dot[data-state="done"] { border-color: transparent; background: var(--ds-color-bg-success-bold); color: var(--ds-color-text-on-success); }
+.odl-progress-steps .odl-dot[data-state="now"] { border-color: var(--ds-color-border-accent); }
+.odl-progress-steps .odl-dot[data-state="now"]::after { content: ""; inline-size: 40%; aspect-ratio: 1; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-bold); }
+.odl-progress-steps li p { display: grid; }
+.odl-progress-steps li:has(> [data-state="now"]) p > span:first-child { font-weight: var(--ds-font-weight-label); }
+.odl-progress-steps li:has(> [data-state="next"]) { color: var(--ds-color-text-secondary); }
+.odl-progress-steps .odl-sub { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
+.odl-progress-steps .odl-acts { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-xl); }
+@container (max-width: 26rem) { .odl-progress-steps .odl-acts { flex-direction: column-reverse; } }
+@media (prefers-reduced-motion: reduce) { .odl-progress-steps, .odl-progress-steps *, .odl-progress-steps *::before, .odl-progress-steps *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-progress-steps odl-card" aria-label="Contact import">
+  <div class="odl-head"><h2 data-od-slot="title">Importing 4,812 contacts</h2><span class="odl-pct" aria-hidden="true">62%</span></div>
+  <div class="odl-track" role="progressbar" aria-label="Import progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62" aria-valuetext="62%, about 2 minutes left"><span class="odl-fill" data-od-measure="progress" style="--od-ratio: .62"></span></div>
+  <p class="odl-left" data-od-slot="left">About 2 minutes left. You can close this page; we'll keep going.</p>
+  <ol aria-label="Steps" data-od-list="steps"><li data-od-item><span class="odl-dot" aria-hidden="true" data-od-var="state" data-state="done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><p><span data-od-slot="label">Upload file</span><span class="odl-sub"><span class="odl-sr">Done. </span>contacts-nov.csv · 1.2 MB</span></p></li><li data-od-item><span class="odl-dot" aria-hidden="true" data-od-var="state" data-state="done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><p><span data-od-slot="label">Check columns</span><span class="odl-sub"><span class="odl-sr">Done. </span>6 columns matched</span></p></li><li data-od-item aria-current="step"><span class="odl-dot" aria-hidden="true" data-od-var="state" data-state="now"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><p><span data-od-slot="label">Import contacts</span><span class="odl-sub"><span class="odl-sr">In progress. </span>2,983 of 4,812</span></p></li><li data-od-item><span class="odl-dot" aria-hidden="true" data-od-var="state" data-state="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span><p><span data-od-slot="label">Email you a summary</span><span class="odl-sub"><span class="odl-sr">Next. </span></span></p></li></ol>
+  <p class="odl-sr" role="status">Step 3 of 4: Import contacts.</p>
+  <div class="odl-acts"><button type="button" class="odl-btn is-text" data-od-action="cancel" data-od-effect="change">Cancel import</button><button type="button" class="odl-btn is-quiet" data-od-action="background">Keep working</button></div>
+</section>

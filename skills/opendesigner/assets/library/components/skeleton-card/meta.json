@@ -1,0 +1,144 @@
+{
+  "name": "Card skeleton",
+  "summary": "A grid of cards that holds each photo, title, detail and price in place while it loads, so the grid never jumps when they arrive.",
+  "use": "for a grid of cards with photos (stays, products, posts) that loads after the page",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "skeleton",
+    "loading",
+    "cards",
+    "grid",
+    "no layout shift"
+  ],
+  "states": [
+    "loading",
+    "loaded",
+    "reduced motion"
+  ],
+  "source": null,
+  "a11y": "While loading, the content area is aria-busy and inert, so nobody can tab into placeholders; a polite status says when loading starts and when it is done. Under reduced motion the bones stay still.",
+  "width": "wide",
+  "live_region": "polite",
+  "notes": "Delete the button marked data-odl-demo; set aria-busy on .odl-body from your own request.",
+  "photos": [
+    {
+      "img": "photo-1618773928121-c32242e63f39",
+      "author": "Vojtech Bruzek",
+      "page": "Yrxr3bsPdS0"
+    },
+    {
+      "img": "photo-1611892440504-42a792e24d32",
+      "author": "visualsofdana",
+      "page": "T5pL6ciEn-I"
+    },
+    {
+      "img": "photo-1566665797739-1674de7a421a",
+      "author": "mark champs",
+      "page": "Id2IIl1jOB0"
+    }
+  ],
+  "spec": {
+    "use_when": [
+      "a grid of cards loads after the page frame and the count is known or capped"
+    ],
+    "avoid_when": [
+      "one card or a short wait: show nothing or a spinner",
+      "an unknown number of items: show one row of bones, not a full page"
+    ],
+    "keyboard": [
+      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "properties": {
+              "photo": {
+                "type": "object",
+                "required": [
+                  "src",
+                  "alt"
+                ],
+                "properties": {
+                  "src": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "alt": {
+                    "type": "string",
+                    "maxLength": 120
+                  }
+                }
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "detail": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "price": {
+                "type": "string",
+                "maxLength": 24
+              }
+            },
+            "required": [
+              "photo",
+              "name",
+              "detail",
+              "price"
+            ]
+          }
+        }
+      },
+      "required": [
+        "items"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "When the request returns nothing, replace the bones with an empty state (empty-first-use or empty-no-results)."
+      },
+      "loading": {
+        "status": "shown",
+        "how": "aria-busy turns each text run, picture and control into a bone of its own size; nothing moves when data arrives.",
+        "evidence": "aria-busy=\"true\""
+      },
+      "error": {
+        "status": "not_built",
+        "how": "When the request fails, keep the frame and show an error banner with a retry (page-banners) in place of the rows."
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "While loading, the content is inert, so placeholders can't be focused or clicked.",
+        "evidence": "inert"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Cards fill as many columns as fit, at least 13rem each; names end in an ellipsis.",
+        "evidence": "auto-fill"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Each line is clamped to one line with an ellipsis, so the skeleton and the loaded layout keep one height.",
+        "evidence": "text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "handled",
+        "how": "Each picture sits in a fixed 4:3 frame with a sunken fill, so a missing photo leaves the frame, not a hole.",
+        "evidence": "aspect-ratio: 4 / 3"
+      }
+    }
+  }
+}

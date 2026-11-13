@@ -1,0 +1,101 @@
+{
+  "name": "No access page",
+  "summary": "A 403 page that says who owns the page and lets the person ask for access with an optional note, without blaming them.",
+  "use": "when a signed-in person opens something they don't have permission to see",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "403",
+    "no access",
+    "permission",
+    "request access",
+    "sharing"
+  ],
+  "states": [
+    "no access",
+    "request sent",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "The note is a labelled text area; after the request is sent, the confirmation is a polite status that takes focus, so keyboard and screen-reader users hear it.",
+  "width": "wide",
+  "live_region": "polite",
+  "spec": {
+    "use_when": [
+      "the person is signed in and the item exists, but they lack permission",
+      "a shared link points to a workspace they're not in"
+    ],
+    "avoid_when": [
+      "the item doesn't exist: use page-not-found (also when revealing that it exists would leak information)",
+      "the person is signed out: use session-expired or the sign-in page"
+    ],
+    "keyboard": [
+      "Tab reaches the note, Request access, then Switch account",
+      "After the request is sent, focus moves to the confirmation"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 56
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 112
+        },
+        "owner": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "account": {
+          "type": "string",
+          "maxLength": 32
+        }
+      },
+      "required": [
+        "title",
+        "message",
+        "owner",
+        "account"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "Not applicable: this state screen shows no list of records."
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "Not applicable: shown instead of content, after loading has failed or been refused."
+      },
+      "error": {
+        "status": "shown",
+        "how": "The part is itself an error or system state, written in plain words with a next step.",
+        "evidence": "class=\"odl-lead\""
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "No control here is ever disabled; each one always does something."
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Actions stack full width under 30rem; the panel caps its width.",
+        "evidence": "@container"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "tasks": [
+    {
+      "task": "Send Q4 invoices to Halvard & Pike",
+      "done": false
+    },
+    {
+      "task": "Approve Quillmere Studio expenses",
+      "done": false
+    },
+    {
+      "task": "Book the year-end audit",
+      "done": true
+    }
+  ]
+}

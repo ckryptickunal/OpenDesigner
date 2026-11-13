@@ -1,0 +1,96 @@
+{
+  "name": "Text skeleton",
+  "summary": "An article that shows grey lines of its own shape while it loads, then fills in with no jump: title, byline and paragraphs keep their size.",
+  "use": "for reading content (an article, a note, a help page) that takes longer than about a second to load",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "skeleton",
+    "loading",
+    "placeholder",
+    "article",
+    "no layout shift"
+  ],
+  "states": [
+    "loading",
+    "loaded",
+    "reduced motion"
+  ],
+  "source": null,
+  "a11y": "While loading, the content area is aria-busy and inert, so nobody can tab into placeholders; a polite status says when loading starts and when it is done. Under reduced motion the bones stay still.",
+  "width": "medium",
+  "live_region": "polite",
+  "notes": "Delete the button marked data-odl-demo; set aria-busy on .odl-body from your own request.",
+  "spec": {
+    "use_when": [
+      "text content loads after the page frame, and the wait is usually over 1 second"
+    ],
+    "avoid_when": [
+      "the wait is under about 300 ms: show nothing",
+      "an action the person started (saving, sending): use inline-spinner",
+      "a long task with steps: use progress-steps"
+    ],
+    "keyboard": [
+      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 48
+        },
+        "byline": {
+          "type": "string",
+          "maxLength": 48
+        },
+        "body": {
+          "type": "string",
+          "maxLength": 240
+        }
+      },
+      "required": [
+        "title",
+        "byline",
+        "body"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "When the request returns nothing, replace the bones with an empty state (empty-first-use or empty-no-results)."
+      },
+      "loading": {
+        "status": "shown",
+        "how": "aria-busy turns each text run, picture and control into a bone of its own size; nothing moves when data arrives.",
+        "evidence": "aria-busy=\"true\""
+      },
+      "error": {
+        "status": "not_built",
+        "how": "When the request fails, keep the frame and show an error banner with a retry (page-banners) in place of the rows."
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "While loading, the content is inert, so placeholders can't be focused or clicked.",
+        "evidence": "inert"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Single lines end in an ellipsis, so a long value never adds a line or moves the next row.",
+        "evidence": "text-overflow: ellipsis"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Each line is clamped to one line with an ellipsis, so the skeleton and the loaded layout keep one height.",
+        "evidence": "text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}

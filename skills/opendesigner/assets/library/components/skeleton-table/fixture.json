@@ -1,0 +1,39 @@
+{
+  "rows": [
+    {
+      "number": "INV-2041",
+      "customer": "Halvard & Pike",
+      "date": "Nov 12",
+      "amount": "$4,280.00",
+      "status": "success"
+    },
+    {
+      "number": "INV-2040",
+      "customer": "Quillmere Studio",
+      "date": "Nov 11",
+      "amount": "$912.50",
+      "status": "warning"
+    },
+    {
+      "number": "INV-2039",
+      "customer": "Tessaline Foods",
+      "date": "Nov 9",
+      "amount": "$12,604.20",
+      "status": "success"
+    },
+    {
+      "number": "INV-2038",
+      "customer": "Brackwater Supply",
+      "date": "Nov 6",
+      "amount": "$2,145.00",
+      "status": "danger"
+    },
+    {
+      "number": "INV-2037",
+      "customer": "Orrin & Daughters",
+      "date": "Nov 4",
+      "amount": "$688.00",
+      "status": "success"
+    }
+  ]
+}

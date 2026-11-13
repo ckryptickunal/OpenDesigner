@@ -1,0 +1,106 @@
+{
+  "name": "Optimistic update",
+  "summary": "A to-do list that shows a change the moment it's made, then quietly puts it back with a reason and a retry if the save fails.",
+  "use": "for quick, likely-to-work changes such as ticking a task, liking or starring, where waiting for the server would feel slow",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "optimistic",
+    "rollback",
+    "undo",
+    "checkbox",
+    "save error"
+  ],
+  "states": [
+    "saving",
+    "saved",
+    "rolled back",
+    "retry",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "Each task is a real checkbox; the polite status reads each change, and a failed save is read with what happened; the error line sits in the row it belongs to and its Try again button is a real button.",
+  "width": "medium",
+  "live_region": "polite",
+  "notes": "The second row is set to fail once (data-odl-fail) so the rollback can be seen; remove that attribute in a real app.",
+  "spec": {
+    "use_when": [
+      "the change is small, reversible and almost always succeeds",
+      "the server answer takes long enough to feel slow (over about 100 ms)"
+    ],
+    "avoid_when": [
+      "payments, sends and deletes: wait for the server and show inline-spinner",
+      "changes that other people see at once: confirm before showing them as done"
+    ],
+    "keyboard": [
+      "Tab moves through the checkboxes; Space ticks one",
+      "After a failed save, Tab reaches Try again in that row"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "tasks": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "properties": {
+              "done": {
+                "type": "boolean"
+              },
+              "task": {
+                "type": "string",
+                "maxLength": 48
+              }
+            },
+            "required": [
+              "task"
+            ]
+          }
+        }
+      },
+      "required": [
+        "tasks"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "With no tasks, show empty-first-use or empty-all-done instead of the list."
+      },
+      "loading": {
+        "status": "shown",
+        "how": "A pending change is shown at once and dimmed until the save answers.",
+        "evidence": "is-pending"
+      },
+      "error": {
+        "status": "shown",
+        "how": "A failed save rolls the checkbox back and says so in its row, with Try again.",
+        "evidence": "odl-err"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "No control here is ever disabled; each one always does something."
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Long task names wrap inside their row.",
+        "evidence": "text-wrap"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}

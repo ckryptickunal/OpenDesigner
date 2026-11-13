@@ -1,0 +1,44 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-session-expired { box-sizing: border-box; inline-size: 100%; max-inline-size: 26rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-session-expired *, .odl-session-expired *::before, .odl-session-expired *::after { box-sizing: border-box; }
+.odl-session-expired svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-session-expired h2, .odl-session-expired h3, .odl-session-expired p, .odl-session-expired ul, .odl-session-expired ol, .odl-session-expired dl, .odl-session-expired dd { margin: 0; }
+.odl-session-expired h2, .odl-session-expired h3 { text-wrap: balance; }
+.odl-session-expired .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-session-expired .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-session-expired .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-session-expired .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-session-expired .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-session-expired .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-session-expired .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-session-expired .odl-btn[disabled], .odl-session-expired .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-session-expired button:focus-visible, .odl-session-expired a:focus-visible, .odl-session-expired input:focus-visible, .odl-session-expired textarea:focus-visible, .odl-session-expired [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-session-expired .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-session-expired .odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-session-expired .odl-card { padding: var(--ds-space-inset-lg); } }
+
+.odl-session-expired { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-overlay); background: var(--ds-color-surface-overlay); box-shadow: var(--ds-elevation-overlay); }
+.odl-session-expired .odl-art { display: grid; place-items: center; inline-size: var(--ds-size-control-lg); aspect-ratio: 1; margin-block-end: var(--ds-space-stack-md); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-warning-subtle); color: var(--ds-color-text-warning); }
+.odl-session-expired .odl-art svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); }
+.odl-session-expired h2 { font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }
+.odl-session-expired .odl-lead { margin-block-start: var(--ds-space-stack-sm); color: var(--ds-color-text-secondary); }
+.odl-session-expired .odl-kept { display: grid; grid-template-columns: var(--ds-size-icon-md) minmax(0, 1fr); gap: var(--ds-space-inline-md); align-items: center; margin-block-start: var(--ds-space-stack-lg);
+  padding: var(--ds-space-inset-md); border-radius: var(--ds-radius-nested); background: var(--ds-color-surface-sunken); }
+.odl-session-expired .odl-kept svg { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); color: var(--ds-color-text-success); }
+.odl-session-expired .odl-kept strong { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); }
+.odl-session-expired .odl-kept span { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-session-expired .odl-acts { display: grid; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-xl); }
+@container (max-width: 26rem) { .odl-session-expired { padding: var(--ds-space-inset-lg); } }
+@media (prefers-reduced-motion: reduce) { .odl-session-expired, .odl-session-expired *, .odl-session-expired *::before, .odl-session-expired *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-session-expired" role="alertdialog" aria-label="Your session ended">
+  <span class="odl-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+  <h2 data-od-slot="title">Your session ended</h2>
+  <p class="odl-lead" data-od-slot="message">For your security, we signed you out after 30 minutes without activity. Sign in again to pick up where you left off.</p>
+  <div class="odl-kept"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"/><path d="M7 3v4a1 1 0 0 0 1 1h7"/></svg><p><strong data-od-slot="draft">Draft: Q4 vendor review</strong><span data-od-slot="saved">Kept on this device · saved 2 minutes ago</span></p></div>
+  <div class="odl-acts"><a class="odl-btn" href="#" data-od-action="sign_in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>Sign in again</a><a class="odl-btn is-text" href="#" data-od-action="switch">Use another account</a></div>
+</section>

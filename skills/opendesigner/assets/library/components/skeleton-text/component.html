@@ -1,0 +1,65 @@
+<style>
+.odl-skeleton-text { box-sizing: border-box; inline-size: 100%; max-inline-size: 45rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-skeleton-text *, .odl-skeleton-text *::before, .odl-skeleton-text *::after { box-sizing: border-box; }
+.odl-skeleton-text svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-skeleton-text h2, .odl-skeleton-text h3, .odl-skeleton-text p, .odl-skeleton-text ul, .odl-skeleton-text ol, .odl-skeleton-text dl, .odl-skeleton-text dd { margin: 0; }
+.odl-skeleton-text h2, .odl-skeleton-text h3 { text-wrap: balance; }
+.odl-skeleton-text .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-skeleton-text .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-skeleton-text .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-skeleton-text .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-skeleton-text .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-skeleton-text .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-skeleton-text .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-skeleton-text .odl-btn[disabled], .odl-skeleton-text .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-skeleton-text button:focus-visible, .odl-skeleton-text a:focus-visible, .odl-skeleton-text input:focus-visible, .odl-skeleton-text textarea:focus-visible, .odl-skeleton-text [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-skeleton-text .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-skeleton-text .odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-skeleton-text .odl-card { padding: var(--ds-space-inset-lg); } }
+
+.odl-skeleton-text .odl-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-inline-sm); margin-block-end: var(--ds-space-stack-md); }
+.odl-skeleton-text .odl-bar h2 { font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }
+.odl-skeleton-text .odl-demo { min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); }
+.odl-skeleton-text .odl-one { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.odl-skeleton-text [aria-busy="true"] .odl-t { color: transparent; border-radius: var(--ds-radius-detail); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.odl-skeleton-text [aria-busy="true"] .odl-t, .odl-skeleton-text [aria-busy="true"] .odl-pic, .odl-skeleton-text [aria-busy="true"] .odl-ctl {
+  background: linear-gradient(90deg, var(--ds-color-bg-neutral-subtle) 30%, var(--ds-color-surface-sunken) 50%, var(--ds-color-bg-neutral-subtle) 70%) 0 0 / 300% 100%;
+  animation: odl-sweep calc(var(--ds-motion-duration-extra) * 4) var(--ds-motion-easing-linear) infinite; }
+.odl-skeleton-text [aria-busy="true"] .odl-pic > *, .odl-skeleton-text [aria-busy="true"] .odl-ctl > * { visibility: hidden; }
+.odl-skeleton-text [aria-busy="true"] .odl-ctl { border-color: transparent; color: transparent; }
+@keyframes odl-sweep { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+.odl-skeleton-text .odl-body { display: grid; gap: var(--ds-space-stack-sm); }
+.odl-skeleton-text .odl-body h3 { font: var(--ds-text-title-lg); font-weight: var(--ds-font-weight-heading); }
+.odl-skeleton-text .odl-by { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-skeleton-text .odl-body p:not(.odl-by) { color: var(--ds-color-text-primary); }
+.odl-skeleton-text .odl-by + p { margin-block-start: var(--ds-space-stack-sm); }
+@media (prefers-reduced-motion: reduce) { .odl-skeleton-text, .odl-skeleton-text *, .odl-skeleton-text *::before, .odl-skeleton-text *::after { transition: none !important; animation: none !important; } }
+</style>
+<article class="odl-skeleton-text odl-card">
+  <div class="odl-bar"><h2>Help center</h2><button type="button" class="odl-btn is-quiet odl-demo" data-odl-demo aria-pressed="false">Show loaded</button></div><p class="odl-live odl-sr" role="status" data-odl-busy="Loading the article" data-odl-done="Article loaded">Loading the article</p>
+  <div class="odl-body" aria-busy="true">
+    <h3 class="odl-one"><span class="odl-t" data-od-slot="title">Set up approval rules for bills</span></h3>
+    <p class="odl-by odl-one"><span class="odl-t" data-od-slot="byline">Updated Nov 10 · 4 minute read</span></p>
+    <p><span class="odl-t" data-od-slot="body">Approval rules decide who signs off on a bill before it's paid. Start with one rule for every bill over an amount, then add rules for single vendors or teams.</span></p>
+    <p><span class="odl-t">Each rule runs in order. The first one that matches picks the approvers, and the bill waits until each of them says yes.</span></p>
+  </div>
+</article>
+<script>
+document.querySelectorAll(".odl-skeleton-text").forEach(function (root) {
+  if (root.hasAttribute("data-odl-wired")) return;
+  root.setAttribute("data-odl-wired", "");
+  var body = root.querySelector(".odl-body"), live = root.querySelector(".odl-live"), demo = root.querySelector("[data-odl-demo]");
+  function set(busy) {
+    body.setAttribute("aria-busy", busy ? "true" : "false");
+    body.toggleAttribute("inert", busy);
+    live.textContent = busy ? live.getAttribute("data-odl-busy") : live.getAttribute("data-odl-done");
+    if (demo) { demo.setAttribute("aria-pressed", busy ? "false" : "true"); demo.textContent = busy ? "Show loaded" : "Show loading"; }
+  }
+  if (demo) demo.addEventListener("click", function () { set(body.getAttribute("aria-busy") !== "true"); });
+  set(body.getAttribute("aria-busy") === "true");
+});
+</script>
