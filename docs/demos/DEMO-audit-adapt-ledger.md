@@ -27,7 +27,7 @@ What you should see: about 111 files, 2,776 token uses against 3,747 raw values,
 ## 2. Mark the demo figures as deliberate mistakes
 
 ```bash
-python3 "$E" exempt site/figures --why "demo figures show mistakes on purpose" --dir "$DEMO/brand"
+python3 "$E" exempt site/figures --why "demo figures show mistakes on purpose" --by owner --dir "$DEMO/brand"
 ```
 
 ```bash
@@ -88,4 +88,4 @@ python3 "$REPO/skills/opendesigner-extract/scripts/css_scan.py" "$REPO/examples/
 python3 "$E" adapt "$DEMO/ref.json" --open
 ```
 
-What you should see: your system and the adapted one side by side, a table of what changes (corners, control height, body size), and what stays (brand colour and fonts). Values you chose yourself start unticked. `state.json` is unchanged until you copy the `OD:accept` lines back.
+What you should see: your system and the adapted one side by side, a table of what changes (here: corners, control height and body size, from the roundness, density, depth, colorfulness and warmth dials), and what stays (brand colour and fonts). Values you chose yourself start unticked. `state.json` is unchanged until you copy the `OD:accept` lines back.

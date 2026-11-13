@@ -13526,7 +13526,7 @@ def _main(argv=None):
     p = sub.add_parser("exempt", parents=[common], help="keep example files that break the system on purpose out of review, with why")
     p.add_argument("glob", nargs="?", help="a folder, file or glob, from the repository's top folder (site/figures/*)")
     p.add_argument("--why", default=None)
-    p.add_argument("--by", default="owner", choices=["owner", "agent"])
+    p.add_argument("--by", default=None, choices=["owner", "agent"], help="who decided: the owner, or an agent (then ask the owner)")
     p.add_argument("--remove", action="store_true")
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("ledger", parents=[common], help="the audit ledger: what each implementation round did, broke and skipped on purpose")
@@ -15903,7 +15903,7 @@ def exempt_match(rules, path, root):
     return None
 
 
-def cmd_exempt(d, glob=None, why=None, by="owner", remove=False, as_json=False):
+def cmd_exempt(d, glob=None, why=None, by=None, remove=False, as_json=False):
     """Mark files as examples that break the system on purpose (a demo of mistakes), so review leaves them out and says so.
     Without a glob: list them. A reason of at least two words is required; nothing is exempt silently."""
     sp = os.path.join(d, STATE_FILE)
@@ -15923,7 +15923,7 @@ def cmd_exempt(d, glob=None, why=None, by="owner", remove=False, as_json=False):
         if not why or len(why.split()) < 2:
             raise SystemExit("Say why these files break the system on purpose, in at least two words: --why \"demo figures show mistakes\".")
         if by not in LEDGER_BY:
-            raise SystemExit(f"--by is owner or agent, not {by}.")
+            raise SystemExit("Say who decided: --by owner (the person said these files break the system on purpose) or --by agent.")
         rules[:] = [r for r in rules if r.get("glob") != glob] + [{"glob": glob, "why": why, "by": by, "date": _dt.date.today().isoformat()}]
         dump_json(sp, state)
         root = exempt_root(d)
@@ -15946,8 +15946,10 @@ def ledger_rounds(state):
 
 def ledger_open(state):
     """Ledger items that are neither done nor waived (planned, or broken and not yet fixed), in every round."""
-    return [{"round": r["id"], "item": it["id"], "status": it.get("status", "planned"), "note": it.get("note") or ""}
-            for r in ledger_rounds(state) for it in r.get("items") or [] if it.get("status", "planned") in ("planned", "broken")]
+    return [{"round": r["id"], "item": it["id"], "status": "waived by an agent, not agreed by the owner" if it.get("status") == "waived"
+             else it.get("status", "planned"), "note": it.get("note") or ""}
+            for r in ledger_rounds(state) for it in r.get("items") or []
+            if it.get("status", "planned") in ("planned", "broken") or (it.get("status") == "waived" and it.get("by") == "agent")]
 
 
 def _ontology_ids():
@@ -16025,6 +16027,8 @@ def cmd_ledger(d, action, item=None, title=None, items=None, note=None, why=None
             raise SystemExit(f"Name the item: engine.py ledger {action} <id>")
         r, it = find(item)
         if action == "done":
+            if it.get("status") == "broken":  # what broke is history now; keep it apart from the note on the fix
+                it["fixed"] = it.pop("note", "")
             it.update(status="done", date=today, **({"note": note} if note else {}))
             it.pop("why", None)
         elif action == "broke":

@@ -129,7 +129,9 @@ class Exempt(unittest.TestCase):
         self.assertTrue(any(f["file"].startswith("demo") for f in before["findings"]))
         r = run("exempt", "demo", cwd=self.p.root, ok=False)
         self.assertNotEqual(r.returncode, 0, "a reason is required")
-        run("exempt", "demo", "--why", "a page of mistakes on purpose", cwd=self.p.root)
+        self.assertNotEqual(run("exempt", "demo", "--why", "a page of mistakes on purpose", cwd=self.p.root, ok=False).returncode, 0,
+                            "say who decided")
+        run("exempt", "demo", "--why", "a page of mistakes on purpose", "--by", "owner", cwd=self.p.root)
         after = json.loads(run("review", "--json", "--project", ".", cwd=self.p.root).stdout)
         self.assertFalse(any(f["file"].startswith("demo") for f in after["findings"]))
         self.assertEqual(after["exempt"][0]["glob"], "demo")
@@ -165,6 +167,8 @@ class Ledger(unittest.TestCase):
         self.assertNotEqual(run("ledger", "waive", "empty-state", "--why", "no empty lists on this page", "--by", "owner",
                                 cwd=root, ok=False).returncode, 0, "owner needs their words")
         run("ledger", "waive", "empty-state", "--why", "no empty lists on this page", "--by", "agent", cwd=root)
+        rev = json.loads(run("review", "--json", "--project", "src", cwd=root).stdout)
+        self.assertIn("empty-state", [o["item"] for o in rev["ledgerOpen"]], "an agent's waiver is open until the owner agrees")
         run("ledger", "done", "A-space-01", cwd=root)
         r = run("ledger", "close", cwd=root, ok=False)
         self.assertEqual(r.returncode, 1, "an agent's waiver waits for the owner")

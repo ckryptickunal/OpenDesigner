@@ -306,6 +306,9 @@ def audit_data(eng, d, project=None):
             opts.append(_opt("common", f"Merge into {top}, the one used most", f"{_plural(len(rows) - hex_count[top], 'use')} {'changes' if len(rows) - hex_count[top] == 1 else 'change'} to {top}. "
                              + ("It is not a token yet: add it as one first (engine.py set color.<role>.<name>)." if not (tok and dist < 0.01) else ""),
                              {"color": top}, recommended=not opts))
+        if len(opts) < 2 and tok and tokens_hex[tok] != top:
+            opts.append(_opt("token", f"Use {tok}, the nearest token", f"Every one becomes var({eng.css_var(prefix, tok)}), "
+                             f"{tokens_hex[tok]}; a visible change, so check it on the page.", {"color": tokens_hex[tok]}))
         opts.append(_keep(iid))
         issues.append(_issue(iid, "color", f"{len(c)} colours that look the same", "These raw colours are so close that nobody can tell "
                              "them apart, so they are one colour written several ways.", rows, opts,
@@ -338,6 +341,9 @@ def audit_data(eng, d, project=None):
             for s_, which in sorted(((s_, w) for s_, w in ((lo, "down"), (hi, "up")) if s_ is not None), key=lambda x: abs(x[0] - v)):
                 opts.append(_opt(f"{which}", f"Round {which} to {s_:g}{unit_word}", f"Use {token_of(s_)}.", {"value": s_},
                                  recommended=not opts))
+            if len(opts) < 2:
+                opts.append(_opt("add", f"Add {v:g}{unit_word} to the system", f"Record it as a token with a reason (engine.py set), "
+                                 f"then use the token: worth it only if {v:g}{unit_word} is a deliberate step.", {"value": v}))
             opts.append(_keep(iid))
             issues.append(_issue(iid, preview_kind, title_fn(v, len(rs)), plain, rs, opts, {"value": v, "steps": steps}))
         rest = [r for v, rs in off[TOP_VALUES:] for r in rs]
@@ -383,7 +389,10 @@ def audit_data(eng, d, project=None):
         issues.append(_issue(iid, "shadow", f"{_plural(len(distinct), 'shadow')} written by hand",
                              f"The system has {_plural(len(steps), 'shadow step')}; these {_plural(len(distinct), 'other')} make depth look uneven.",
                              shadows, [_opt("tokens", "Use the system's shadow steps", "Each becomes the raised, floating or overlay step.",
-                                            {"steps": steps}, recommended=True), _keep(iid)],
+                                            {"steps": steps}, recommended=True),
+                                       _opt("borders", "Borders instead of shadows", "Each becomes a 1px border in the border colour; flat "
+                                            "and quiet, like the borders depth model.", {"steps": [{"path": "border", "value": "0 0 0 1px rgba(128,128,128,.45)"}]}),
+                                       _keep(iid)],
                              {"values": [{"value": v, "count": n} for v, n in distinct.most_common(6)], "steps": steps}))
     comps = _components(eng, d, project or proj)
     tv = _look(eng, files, meta)
@@ -411,7 +420,10 @@ def audit_data(eng, d, project=None):
                                    "size; a variant you keep gets a name (primary, quiet...).", {"props": sysv}, recommended=True)]
                              + ([_opt("common", f"One {kind}, the one used most ({variants[0]['selector']})",
                                       f"Every variant takes the values of {variants[0]['selector']}, used {variants[0]['count']} times.",
-                                      {"props": variants[0]["props"]})] if variants[0]["count"] > 1 else []) + [_keep(iid)],
+                                      {"props": variants[0]["props"]})] if variants[0]["count"] > 1 else
+                                [_opt("named", f"Two {kind}s: a main one and a quiet one", "The system's look for the main one, and the same "
+                                      "shape with no fill for the rest; every variant becomes one of the two.", {"props": dict(sysv, background="transparent")})])
+                             + [_keep(iid)],
                              {"variants": variants[:8], "kind": kind}))
 
     order = {"component": 0, "color": 1, "space": 2, "type": 3, "radius": 4, "shadow": 5, "bypass": 6}
@@ -485,7 +497,7 @@ def adapt_data(eng, d, ref_path):
     state = eng.merge_defaults(eng.load_state(d))
     fit = eng.fit_reference(ref, state)
     rid = fit["id"] if fit["id"] != "ref" else eng.slug(os.path.splitext(os.path.basename(ref_path))[0])
-    follows = bool((state.get("tasteIndex") or {}).get("follows"))
+    follows = (state.get("tasteIndex") or {}).get("follows") == rid  # only the index the person follows may carry identity
     held = eng.std_held(state) if eng.std_has_records(state) else {}
     files0, meta0, _ = eng.generate_system(eng.load_state(d))
     s2 = copy.deepcopy(state)
