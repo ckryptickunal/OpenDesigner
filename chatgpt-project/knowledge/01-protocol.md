@@ -5,7 +5,7 @@ They hold in every round, after a context reset and in a new session. `engine.py
 1. **Tokens only.** Every colour, size, space, radius, shadow and duration comes from `opendesigner/tokens/` or `opendesigner/build/`. A value the system lacks becomes `engine.py set <path> <value> --why "..."`, never a literal.
 2. **One question per call.** One per message, and one per call of a question tool, even one that takes four. The log question goes alone, first.
 3. **Show every round without being asked:** screenshots at desktop and phone, or an artifact, before and after, with each check and its result. Never only a local link.
-4. **Every implementation ends with `engine.py review`, then a re-read of DESIGN.md.** Fix what it reports before the next draft.
+4. **Every implementation is an `engine.py ledger` round that ends with `engine.py review`, then a re-read of DESIGN.md.** Fix what it reports first.
 5. **Owner corrections go to `engine.py feedback "<the rule>" --kind note`.** Said twice, a note is a rule in `opendesigner/RULES.md`.
 6. **Each round starts by reading `opendesigner/PROTOCOL.md`, `opendesigner/RULES.md` and `DESIGN.md`.** After a context reset or in a new session, run `engine.py status` first: the step, what waits for the owner, the next command.
 7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes` or `handoff no`. Right after, ask once whether commits should be checked: "Want each commit to run the design check first? It stops a commit with hard-coded values or a DESIGN.md that no longer matches the code; `git commit --no-verify` skips it once." Then `engine.py guard install` or `guard no`. Never install it without a yes.
@@ -33,8 +33,8 @@ Read `references/guardrails.md` before writing files or reading a reference. Its
 |---|---|
 | A new design system, tokens, theme, UI kit, DESIGN.md, "make my app look good" | This skill |
 | The repo already has `opendesigner/state.json` or an OpenDesigner DESIGN.md | **opendesigner-extend** |
-| They share a website, screenshot, Figma file, repo CSS or brand book to learn from | **opendesigner-extract**, then come back |
-| Their product is already built and they want it to look better ("make it look professional", "it looks messy") | **Audit before you change anything:** the fast path in `references/audit.md`. **opendesigner-extract** on the code, **opendesigner-review** on the rendered pages, the findings shown on the page (`review.py compare`), then the smallest change that fixes the most, on one page first |
+| They share a website, screenshot, Figma file, repo CSS or brand book to learn from | **opendesigner-extract**, then `engine.py adapt` |
+| Their product is already built and they want it to look better ("make it look professional", "it looks messy") | **Audit before changing anything:** `engine.py audit-page`, then the fast path in `references/audit.md`. **opendesigner-extract** on the code, **opendesigner-review** on the rendered pages, the findings shown on the page (`review.py compare`), then the smallest change that fixes the most, on one page first |
 | They want it in Figma, Paper, Tailwind, iOS or Android | **opendesigner-export** |
 | They want illustrations, or the app "more visual" (empty states, onboarding, errors, hero) | **opendesigner-illustrate** |
 | They want original painted art or a film in the brand's colours (hero, launch reel, celebration loop) | **opendesigner-paint** |
@@ -443,14 +443,16 @@ One line per decision. A line looks the same whether it comes from a template bu
 |---|---|
 | `OD:set <path>=<json-value> [--why "reason"]` | `engine.py set '<path>=<json-value>' --why "reason"`. The path is a question id (Q-shape-01, which records an answer), `dials.<name>`, `raw.<input>`, `hooks.<H-id>.status`, or a token path |
 | `OD:lock <path>` / `OD:unlock <path>` | `engine.py lock <path>` / `engine.py unlock <path>`. Unlock only with consent |
-| `OD:accept <ref-id>:<path>` | `engine.py set <path> <value> --set-by reference --source-ref <ref-id>`, for a value pre-filled from a reference |
+| `OD:accept <ref-id>:<path>[=<json-value>]` | `engine.py set <path> <value> --set-by reference --source-ref <ref-id>`, for a value pre-filled from a reference; the adapt page writes the value after `=` |
 | `OD:ignore <ref-id>:<path>` | Nothing: the pre-filled value is dropped |
 | `OD:remix <dimension>=<option-value>` | Option gallery: take that dimension (color, type, shape or depth) from the named option, and `set` its values. Direction board: add `--remix <axis>=<id>` to the `OD:direction` line's command |
 | `OD:direction <id> [--why "reason"]` | `engine.py research directions pick <id> [--remix <axis>=<id>]... --why "reason"` (`research.md` section 9) |
+| `OD:fix <issue>=<option>` | From the audit page (`audit-page`). The copied line is the person's yes to that change in their code: `engine.py ledger add <issue> --note "<option>"`, make the change from tokens, then `engine.py ledger done <issue>` (or `ledger broke <issue> --note "..."`). An option that needs a new token records it first with `set` |
+| `OD:waive <issue> --why "reason"` | From the audit page: keep it as it is, on purpose. `engine.py ledger add <issue>`, then `engine.py ledger waive <issue> --why "reason" --by owner --quote "<their words>"` |
 
 - Values are JSON: strings in double quotes (`"subtle"`, `"#167874"`), numbers bare (`45`). The engine also accepts a bare word.
 - Parse defensively. Ignore text outside `OD:` lines, and apply lines in order. If a value is not a listed option, confirm it as a custom value before recording it.
-- Examples: `OD:set Q-depth-01="ring-shadow"` · `OD:set dials.roundness=65 --why "a bit softer"` · `OD:lock raw.brandColor` · `OD:remix color="soft"` · `OD:direction "A" --why "calm, like our office"`.
+- Examples: `OD:set Q-depth-01="ring-shadow"` · `OD:set dials.roundness=65 --why "a bit softer"` · `OD:lock raw.brandColor` · `OD:remix color="soft"` · `OD:direction "A" --why "calm, like our office"` · `OD:fix A-space-01=down` · `OD:waive A-color-02 --why "the chart needs both"`.
 
 ## 10. Avoiding the generic AI look
 Vendors and NN/g have documented that AI-made interfaces converge on the same few looks (L17 finding 4). Flag it once when a choice lands there. Don't ban anything.
@@ -583,6 +585,12 @@ python3 <skill>/scripts/engine.py preview [--open]           opendesigner/previe
 python3 <skill>/scripts/engine.py show <template> [--open]   one visual template filled with real values (opendesigner/preview/)
 python3 <skill>/scripts/engine.py build [--force]            generate and validate; exports, DESIGN.md, overview, filled templates and preview only if there are no errors
 python3 <skill>/scripts/engine.py review [--project src/] [--strict]   end-of-implementation check: hard-coded values, broken standards, removed things that came back, od-ignore without a reason, guard problems (tokens edited by hand, a locked decision undone), validate errors, stale DESIGN.md; runs without a system too. Last line "Review: ok" or what is left to fix; --strict exits 1 unless it is ok, and always when AGENTS.md, CLAUDE.md or DESIGN.md point at a missing opendesigner/
+python3 <skill>/scripts/engine.py audit-page [--project src/] [--open] [--json]   opendesigner/audit.html: the system as the code builds it. Each token with where the code uses it, each decision and whether it changes tokens, then every inconsistency (near-duplicate colours, spacing, type sizes and corners off the scale, values on the scale typed by hand, raw shadows, components drawn several ways) with file:line evidence, a count and options previewed with the project's own values. Builds on review's scan; reports only. Choices come back as OD:fix and OD:waive lines
+python3 <skill>/scripts/engine.py adapt <reference.json> [--open] [--json]   opendesigner/adapt.html: what a reference (css_scan.py --json output) would change in this system and what stays, side by side, drawn with both systems' tokens. Locked values, standards and identity (brand colour, typefaces) stay. Records nothing; choices come back as OD:accept lines
+python3 <skill>/scripts/engine.py exempt <folder or glob> --why "..." [--by owner|agent]   keep files that break the system on purpose (a demo of mistakes) out of review; review lists them. exempt (no glob) lists them; --remove undoes one
+python3 <skill>/scripts/engine.py ledger start "<what this round builds>" --items a,b,c   the audit ledger, one round per implementation: items are building blocks (comp.action.button fills block coverage), audit issues (A-space-01) or your own
+python3 <skill>/scripts/engine.py ledger add|done|broke|waive <item> [--note "..."] [--why "..." --by owner|agent --quote "..."] [--files a,b]   done; broke --note says what broke; waive says why and who decided (also in state.waivers)
+python3 <skill>/scripts/engine.py ledger close | show [--json]   close refuses while an item is neither done nor waived; review fails on such items too, and DESIGN.md shows the ledger
 python3 <skill>/scripts/engine.py removed add "<what>" --why "<their words>" [--instead "..."] [--pattern RE]   something the owner removed on purpose; removed list; removed restore <R-id> --why "<their words>"
 python3 <skill>/scripts/engine.py guard install|no|remove|status   after asking once: a pre-commit hook that runs review --strict (git commit --no-verify skips it once); no records the answer. Never writes over another hook or into a shared core.hooksPath
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
@@ -638,7 +646,7 @@ SKILL.md ("Show, then ask: the visual ladder") picks the surface. This file says
 **The overview** (`opendesigner/overview.html`, rebuilt by every `build`) is the person's own design-system page: cover, brand book, colors per theme, headings h1 to h6, spacing, corners, depth, motion, components, brand assets and how it grew. Each area says Chosen, Picked for you or Default, and anything only a person can give (a logo, a voice guide, what the product is for) shows as **Not enough information**, with the question that fills it. Show it after the sketch and after each zoom. In Claude Code, also offer to keep it as a Design System artifact: `build` writes its files to `opendesigner/build/artifact/project/`; create one with the Artifact tool (quickstart, the Design System type) and publish that folder as its `root`, uploading the logo files the README lists. Republish after later builds.
 
 ## The templates
-Templates: `palette` (color, light and dark), `type-scale` (text), `spacing-ruler` (spacing and density), `radius` (corners), `elevation` (depth), `motion`, `component-sheet` (components and states), `option-gallery` (3 to 8 directions side by side), `direction-board` (the project's three directions, with photos; `engine.py research directions board` fills it). `engine.py show <template>` fills one with real values, plus what-if options for its question, without changing any choice. It writes `opendesigner/preview/<template>.html` (`--open` opens it); `build` refreshes all of them, so the person always sees their own system, never sample data. Never fill a template with invented values.
+Templates: `palette` (color, light and dark), `type-scale` (text), `spacing-ruler` (spacing and density), `radius` (corners), `elevation` (depth), `motion`, `component-sheet` (components and states), `option-gallery` (3 to 8 directions side by side), `direction-board` (the project's three directions, with photos; `engine.py research directions board` fills it), `audit` (the system as the code builds it; `engine.py audit-page` fills it) and `adapt` (a reference's changes beside the current system; `engine.py adapt` fills it). `engine.py show <template>` fills one with real values, plus what-if options for its question, without changing any choice. It writes `opendesigner/preview/<template>.html` (`--open` opens it); `build` refreshes all of them, so the person always sees their own system, never sample data. Never fill a template with invented values.
 
 ## Copy my choice
 Each template has a **Copy my choice** button that produces `OD:` lines. When the person pastes them back, run each line with the engine (`rules.md` section 9) and confirm in one sentence. Record how each answer was set with `--set-by` (`rules.md` section 5).
@@ -1113,6 +1121,12 @@ The audit only reports. It never edits their code (AGENTS.md: checks report; STD
 3. Roll it out to the rest after they say yes.
 
 A person in a hurry still gets a finished page in the first reply. What they don't get is three rewritten pages they never saw. Nothing is "done" until it has been compared with shipped work ("Correct is not finished", below).
+
+## The audit page, when there is a system
+When the project has `opendesigner/state.json` (their own, or one `sketch` just made), run `engine.py audit-page --open` before the checklist below. It is the code-side half of the audit, on one page the person can read: every token with where the code uses it, every decision and whether it changes tokens, and every inconsistency with `file:line` evidence, a count and two or three options previewed with their own values. It reports only. Their picks come back as `OD:fix` and `OD:waive` lines (`rules.md` section 9); each becomes a ledger item.
+
+- **Examples that break the system on purpose** (a demo of mistakes, a style guide's "don't" figures) are not findings. Ask the owner, then `engine.py exempt <folder> --why "..."`; `review` and the audit page leave them out and list them.
+- **Every implementation round is a ledger round.** Before building: `engine.py ledger start "<what>" --items <the blocks and issues it covers>`. After: `ledger done` each item, `ledger broke <item> --note "..."` for what broke, and `ledger waive <item> --why "..." --by owner --quote "..."` for what was skipped on purpose. `review` fails while an item is neither done nor waived, so nothing is missed at the end; DESIGN.md shows the ledger. An agent may waive (`--by agent`); the round closes only after the owner agrees (`waive` again with `--by owner --quote`).
 
 ## 1. How to run it
 

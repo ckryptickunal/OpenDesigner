@@ -42,6 +42,8 @@ In a chat-only host, ask the person to upload `state.json`, `decisions.md` and D
 | "Make buttons a bit rounder", "denser tables" | One decision | Find the question in the stage file. Show the current value and the options (section 4, step 1), then `set` the one they pick |
 | "Let's define colors properly", "more detail on type" | Zoom in | Run the next zoom level for that area (`<opendesigner>/references/zoom.md`), then record it, for example `set zoom.color '"defined"'` |
 | "Build the landing page", "redo this section", "show me some options" | A page built with the system | Follow `<opendesigner>/references/making.md`: one round at a time, options on a review copy of the page with the current version kept, every value from the tokens, and a check of the rendered page before you show it |
+| "Show me what my system really does", "what's inconsistent?", "clean up the code to match the system" | The system as built | Run `engine.py audit-page --open` and show it. It reports only: each token with where the code uses it, then each inconsistency with `file:line` evidence and options previewed with their values. Act on the `OD:fix` and `OD:waive` lines they copy (`<opendesigner>/references/rules.md` section 9), each as a ledger item (section 5) |
+| "Make it more like this site", "adapt it to this reference" | Adapt from a reference | Ask for the site or file if they have not given one. Measure it with **opendesigner-extract** (`css_scan.py --json`), then `engine.py adapt <file> --open`: what would change and what stays, side by side. Identity never carries over (no logo, brand hue, typeface, imagery or copy) unless they follow a Taste Index of it. Record only the `OD:accept` lines they copy |
 | "These sections don't match", "it doesn't feel like one page" | A page that does not hang together | Change nothing yet. Run the cohesion audit (`<opendesigner>/references/making.md` section 4, with `<opendesigner>/assets/output/COHESION-AUDIT.md`), then build the directions they choose as options |
 | "New brand color", "dark mode", "add Android" | An area reopened | Ask that area's questions at its current zoom level |
 | "Make it feel more playful", a new direction | A challenge | It touches most decisions. Say what would move (`graph.json`), offer safe choices and risks, and change nothing without a clear yes |
@@ -90,6 +92,8 @@ engine.py set compact:space.inset.md 10 --why "tighter cards in compact mode"
 - Tell the person the token's name and where to use it, in one line. Then use the token in the code, never the raw value.
 
 ## 5. End of every implementation: review
+**Before building, open a ledger round:** `engine.py ledger start "<what this round builds>" --items <items>`. Items are the building blocks it covers (`comp.action.button`, from `ontology-slim.json`, fill block coverage), the audit issues they chose (`A-space-01`) or your own names. As you go: `ledger done <item>`, `ledger broke <item> --note "what broke"`, and `ledger waive <item> --why "..." --by owner --quote "<their words>"` for anything skipped on purpose. `review` fails while an item is neither done nor waived; `ledger close` ends the round, and DESIGN.md shows it. Files that break the system on purpose (a demo of mistakes) are marked once, after asking the owner: `engine.py exempt <folder> --why "..."`.
+
 After building anything with the system (a page, a component, a refactor). Review reads code and cannot see the page, so also check the page as rendered (`<opendesigner>/references/making.md` section 5):
 1. Run `engine.py review` (add `--project <folder>` to scan a specific folder; `--strict` makes findings fail the run).
 2. Re-read the DESIGN.md sections you touched.
@@ -110,6 +114,7 @@ Checked: <each command that ran and its result, for example "engine.py review --
 Not verified: <what nobody ran or looked at, riskiest first> | none
 Check by hand: <numbered, riskiest first: where, one action, what should happen, what must not> | none
 Skipped: <what, and why> | none
+Ledger: <round: done, broken, waived (who decided)> | no round
 Decision log: opendesigner/decisions.md, D-<nnnn>
 Open questions: <numbered, each with the default that holds until answered> | none
 ```

@@ -103,12 +103,16 @@ The export formats are `css`, `tailwind`, `figma`, `paper`, `swift`, `compose`, 
 | `engine.py overview --open` | Writes `opendesigner/overview.html`, your whole system on one page, and opens it. |
 | `engine.py preview --open` | Writes `opendesigner/preview.html`, with every token on one page. |
 | `engine.py show palette --open` | Fills one visual template with your real values. |
+| `engine.py audit-page --open` | Writes `opendesigner/audit.html`: your system as your code builds it. Each token with how often the code uses it, then each place the code and the system disagree, with the file and line, a count, and up to three ways to settle it that you can preview. |
+| `engine.py adapt site.json --open` | Writes `opendesigner/adapt.html`: what a reference would change in your system and what stays yours, side by side. It records nothing. |
 
 :::dev
-The templates `show` fills are `palette`, `type-scale`, `spacing-ruler`, `radius`, `elevation`, `motion`, `component-sheet` and `option-gallery`.
+The templates `show` fills are `palette`, `type-scale`, `spacing-ruler`, `radius`, `elevation`, `motion`, `component-sheet` and `option-gallery`. `audit-page` and `adapt` fill `audit` and `adapt`. Picks on the audit page come back as `OD:fix A-space-01=down` (change the code) or `OD:waive A-color-02 --why "..."` (keep it, with the reason); each becomes a ledger item. `audit-page --json` prints the page's data, every finding included.
 :::
 
 ## Learn from a reference
+
+`engine.py adapt opendesigner/references/site.json --open` shows the same fit as a page: your system now beside your system with the reference's changes, what changes, and what stays (anything you locked, your brand color and fonts). Tick what to take and copy it back. Nothing is recorded until then.
 
 `engine.py intake opendesigner/references/site.json` fits measurements from a reference to proposed dial positions, each with a confidence. `--accept` accepts them all. The extract skill makes the measurement file. See [Start from an existing app or brand](/docs/existing-product/).
 
@@ -144,6 +148,15 @@ Two more commands keep later sessions on the same system:
 
 `status --json` prints the same facts as JSON. `status --hook` is what the Claude Code plugin runs when a session starts: five short lines, and nothing in a project with no system.
 :::
+
+**What each round did.** Before an AI builds something, it opens a round in the ledger and lists what the round covers. Each item ends as done, broken (with what broke) or skipped on purpose (with the reason and who decided). `review` lists every open item and `review --strict` fails on one, so nothing is quietly dropped, and `DESIGN.md` shows the ledger.
+
+| Command | What it does |
+|---|---|
+| `engine.py ledger start "Settings page" --items comp.action.button,A-space-01` | Opens a round. An item can be a building block (it counts toward the system's coverage), something from the audit page, or your own name. |
+| `engine.py ledger done A-space-01` | Marks it done. `ledger broke <item> --note "..."` records what broke; `ledger waive <item> --why "..." --by owner --quote "your words"` skips it on purpose. An AI can waive with `--by agent`, but the round won't close until you agree. |
+| `engine.py ledger close` | Closes the round, and refuses while anything is open. `ledger show` lists every round. |
+| `engine.py exempt site/figures --why "demo figures show mistakes on purpose"` | Keeps files that break the system on purpose out of review. Review lists them, with the reason, so they are never hidden. |
 
 **Things removed on purpose.** Code keeps no record of what was taken out, so a later session tends to add it back. Record a removal the day it happens.
 
