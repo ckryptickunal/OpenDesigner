@@ -84,6 +84,9 @@ jobs:
       - name: Audit page, adapt page, exempt folders and the audit ledger
         run: python3 tools/test_audit_page.py
 
+      - name: Library states kit and the --ds-state-* fallback rule
+        run: python3 tools/test_library_states.py
+
       - name: Reference extraction tests (css_scan.py, read_page.js with the runner's Node)
         run: python3 skills/opendesigner-extract/scripts/test_extract.py
 

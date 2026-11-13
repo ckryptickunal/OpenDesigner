@@ -1,0 +1,94 @@
+{
+  "name": "No results",
+  "summary": "An empty search that repeats what was searched and where, then offers the ways to widen it: a spelling fix, a wider scope and a cleared date.",
+  "use": "when a search or lookup returns nothing",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "no results",
+    "search",
+    "zero results",
+    "did you mean",
+    "empty state"
+  ],
+  "states": [
+    "no results",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "A polite status repeats the outcome, so it is read when a search runs; each way to widen the search is a real button for your app to wire.",
+  "width": "medium",
+  "live_region": "polite",
+  "notes": "The three ways to widen the search are actions for your app to wire; write them from the search that ran (a spelling fix, a wider folder, any date).",
+  "tokens_planned": {
+    "--ds-state-empty-gap": "--ds-space-stack-md",
+    "--ds-state-empty-measure": "--ds-layout-measure-lead",
+    "--ds-state-empty-media": "--ds-size-icon-lg"
+  },
+  "spec": {
+    "use_when": [
+      "a search, lookup or query returns zero items"
+    ],
+    "avoid_when": [
+      "the list is empty because nothing exists yet: use empty-first-use",
+      "only filters removed the items: use empty-filtered"
+    ],
+    "keyboard": [
+      "Tab moves through the three ways to widen the search; Enter or Space picks one"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 104
+        }
+      },
+      "required": [
+        "query",
+        "message"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "shown",
+        "how": "This part is the empty state itself.",
+        "evidence": "class=\"odl-art\""
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "Not applicable: shown after the data has loaded and come back empty; while loading, show a skeleton."
+      },
+      "error": {
+        "status": "not_built",
+        "how": "Not applicable: an error isn't an empty list. Use page-banners or page-error."
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "No control here is ever disabled; each one always does something."
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Actions stack full width under 30rem; the panel caps its width.",
+        "evidence": "@container"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}

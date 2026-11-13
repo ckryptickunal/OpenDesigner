@@ -1,0 +1,79 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-page-no-access { box-sizing: border-box; inline-size: 100%; max-inline-size: 45rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-page-no-access *, .odl-page-no-access *::before, .odl-page-no-access *::after { box-sizing: border-box; }
+.odl-page-no-access svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-page-no-access h2, .odl-page-no-access h3, .odl-page-no-access p, .odl-page-no-access ul, .odl-page-no-access ol, .odl-page-no-access dl, .odl-page-no-access dd { margin: 0; }
+.odl-page-no-access h2, .odl-page-no-access h3 { text-wrap: balance; }
+.odl-page-no-access .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-page-no-access .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-page-no-access .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-page-no-access .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-page-no-access .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-page-no-access .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-page-no-access .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-page-no-access .odl-btn[disabled], .odl-page-no-access .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-page-no-access button:focus-visible, .odl-page-no-access a:focus-visible, .odl-page-no-access input:focus-visible, .odl-page-no-access textarea:focus-visible, .odl-page-no-access [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-page-no-access .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-page-no-access { display: grid; justify-items: center; align-content: center; min-block-size: 32rem; padding: var(--ds-space-section-md) var(--ds-space-inset-xl); text-align: center;
+  background: var(--ds-color-surface-base); border-radius: var(--ds-radius-container); }
+.odl-page-no-access .odl-art { display: grid; place-items: center; inline-size: calc(var(--ds-size-control-lg) * 1.5); aspect-ratio: 1; margin-block-end: var(--ds-space-stack-lg);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-sunken); color: var(--ds-color-icon-default); }
+.odl-page-no-access .odl-art svg { inline-size: var(--ds-size-icon-lg); block-size: var(--ds-size-icon-lg); stroke-width: var(--ds-icon-stroke-sm); }
+.odl-page-no-access .odl-code { margin-block-end: var(--ds-space-stack-xs); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
+.odl-page-no-access h2 { font: var(--ds-text-headline-sm); font-weight: var(--ds-font-weight-heading); }
+.odl-page-no-access .odl-lead { max-inline-size: 44ch; margin-block-start: var(--ds-space-stack-sm); color: var(--ds-color-text-secondary); }
+.odl-page-no-access .odl-acts { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-xl); }
+.odl-page-no-access .odl-box { inline-size: 100%; max-inline-size: 30rem; margin-block-start: var(--ds-space-stack-xl); padding: var(--ds-space-inset-lg); text-align: start;
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+.odl-page-no-access .odl-box + .odl-acts { margin-block-start: var(--ds-space-stack-lg); }
+.odl-page-no-access .odl-box h3 { font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); }
+.odl-page-no-access .odl-box p { color: var(--ds-color-text-secondary); }
+.odl-page-no-access .odl-live { min-block-size: 1lh; margin-block-start: var(--ds-space-stack-md); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+@container (max-width: 30rem) {
+  .odl-page-no-access { padding: var(--ds-space-section-sm) var(--ds-space-inset-lg); }
+  .odl-page-no-access .odl-acts { flex-direction: column; align-self: stretch; inline-size: 100%; }
+  .odl-page-no-access .odl-acts > * { inline-size: 100%; white-space: normal; text-align: center; }
+}
+
+.odl-page-no-access form { display: grid; gap: var(--ds-space-stack-md); }
+.odl-page-no-access label { display: grid; gap: var(--ds-space-stack-xs); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); }
+.odl-page-no-access textarea { inline-size: 100%; min-block-size: calc(var(--ds-size-control-md) * 2); padding: var(--ds-space-inset-sm); resize: vertical;
+  border: var(--ds-border-width-default) solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
+.odl-page-no-access .odl-who { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-page-no-access .odl-who strong { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
+.odl-page-no-access .odl-live:focus { outline: none; }
+.odl-page-no-access .odl-live:not(:empty) { color: var(--ds-color-text-success); font: var(--ds-text-body-md); }
+.odl-page-no-access .odl-box .odl-live:empty { min-block-size: 0; margin: 0; }
+.odl-page-no-access .odl-me a { color: var(--ds-color-text-link); }
+.odl-page-no-access .odl-me { margin-block-start: var(--ds-space-stack-lg); color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); }
+@media (prefers-reduced-motion: reduce) { .odl-page-no-access, .odl-page-no-access *, .odl-page-no-access *::before, .odl-page-no-access *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-page-no-access" aria-label="You don't have access">
+  <span class="odl-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+  <p class="odl-code">Error 403</p>
+  <h2 data-od-slot="title">You don't have access to this page yet</h2>
+  <p class="odl-lead" data-od-slot="message">“Q4 vendor budget” is shared with the Finance team. Ask its owner to add you.</p>
+  <div class="odl-box"><form action="#">
+    <p class="odl-who">Owner: <strong data-od-slot="owner">Wilhelmina Okoye</strong></p>
+    <label>Add a note (optional)<textarea name="note" placeholder="Say why you need it, so they can answer faster"></textarea></label>
+    <button type="submit" class="odl-btn" data-od-action="request" data-od-effect="change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg>Request access</button>
+  </form><p class="odl-live" role="status" tabindex="-1"></p></div>
+  <p class="odl-me">Signed in as <span data-od-slot="account">maya@larkspur.example</span> · <a href="#" class="odl-switch">Switch account</a></p>
+</section>
+<script>
+document.querySelectorAll(".odl-page-no-access").forEach(function (root) {
+  if (root.hasAttribute("data-odl-wired")) return;
+  root.setAttribute("data-odl-wired", "");
+  var form = root.querySelector("form"), live = root.querySelector(".odl-live"), owner = root.querySelector("[data-od-slot='owner']");
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();  // demo only: in an app, send the request, then show this
+    form.hidden = true;
+    live.textContent = "Request sent to " + owner.textContent + ". You'll get an email when they answer.";
+    live.focus();
+  });
+});
+</script>

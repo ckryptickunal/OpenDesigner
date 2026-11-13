@@ -1,0 +1,72 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-toast-undo { box-sizing: border-box; inline-size: 100%; max-inline-size: 36rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-toast-undo *, .odl-toast-undo *::before, .odl-toast-undo *::after { box-sizing: border-box; }
+.odl-toast-undo svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-toast-undo h2, .odl-toast-undo h3, .odl-toast-undo p, .odl-toast-undo ul, .odl-toast-undo ol, .odl-toast-undo dl, .odl-toast-undo dd { margin: 0; }
+.odl-toast-undo h2, .odl-toast-undo h3 { text-wrap: balance; }
+.odl-toast-undo .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-toast-undo .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-toast-undo .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-toast-undo .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-toast-undo .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-toast-undo .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-toast-undo .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-toast-undo .odl-btn[disabled], .odl-toast-undo .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-toast-undo button:focus-visible, .odl-toast-undo a:focus-visible, .odl-toast-undo input:focus-visible, .odl-toast-undo textarea:focus-visible, .odl-toast-undo [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-toast-undo .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-toast-undo.odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-toast-undo.odl-card { padding: var(--ds-space-inset-lg); } }
+
+.odl-toast-undo { position: relative; }
+.odl-toast-undo ul { display: grid; padding: 0; list-style: none; }
+.odl-toast-undo li { display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-inline-md); min-block-size: var(--ds-size-row-two-line); padding-block: var(--ds-space-stack-sm);
+  border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-toast-undo li:first-child { border-block-start: 0; }
+.odl-toast-undo li[hidden] { display: none; }
+.odl-toast-undo li p { display: grid; min-inline-size: 0; }
+.odl-toast-undo li strong { font-weight: var(--ds-font-weight-label); }
+.odl-toast-undo li p span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-toast-undo .odl-toast { display: flex; align-items: center; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xs) var(--ds-space-inset-xs) var(--ds-space-inset-xs) var(--ds-space-inset-lg);
+  border-radius: var(--ds-radius-container); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); box-shadow: var(--ds-elevation-floating);
+  transition: opacity var(--ds-motion-duration-toast) var(--ds-motion-easing-toast), translate var(--ds-motion-duration-toast) var(--ds-motion-easing-toast); }
+@starting-style { .odl-toast-undo .odl-toast { opacity: 0; translate: 0 var(--ds-space-8); } }
+.odl-toast-undo .odl-toast[hidden] { display: none; }
+.odl-toast-undo .odl-toast p { flex: 1; min-inline-size: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.odl-toast-undo .odl-toast .odl-btn { background: transparent; color: var(--ds-color-text-inverse); text-decoration: underline; text-underline-offset: 0.2em; }
+.odl-toast-undo .odl-toast .odl-btn:hover { background: transparent; text-decoration-thickness: var(--ds-border-width-emphasis); }
+.odl-toast-undo .odl-toast .odl-close { display: grid; place-items: center; inline-size: var(--ds-size-target-min); block-size: var(--ds-size-target-min); padding: 0; border: 0; border-radius: var(--ds-radius-control); background: transparent; color: var(--ds-color-text-inverse); cursor: pointer; }
+.odl-toast-undo .odl-toast button:focus-visible { outline-color: var(--ds-color-text-inverse); }
+@media (prefers-reduced-motion: reduce) { .odl-toast-undo, .odl-toast-undo *, .odl-toast-undo *::before, .odl-toast-undo *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-toast-undo odl-card" aria-label="Inbox">
+  <ul data-od-list="messages"><li data-od-item><p><strong class="odl-name" data-od-slot="from">Quorbin Studio</strong><span data-od-slot="subject">Revised quote for the spring catalogue</span></p><button type="button" class="odl-btn is-quiet" data-od-action="archive" data-od-effect="change">Archive</button></li><li data-od-item><p><strong class="odl-name" data-od-slot="from">Oren Balliwick</strong><span data-od-slot="subject">Re: approval for invoice 2041</span></p><button type="button" class="odl-btn is-quiet" data-od-action="archive" data-od-effect="change">Archive</button></li><li data-od-item><p><strong class="odl-name" data-od-slot="from">Tessaline Foods</strong><span data-od-slot="subject">Your November order is on its way</span></p><button type="button" class="odl-btn is-quiet" data-od-action="archive" data-od-effect="change">Archive</button></li></ul>
+  <div class="odl-toast" role="group" aria-label="Archived" hidden><p data-od-slot="message">Archived</p><button type="button" class="odl-btn" data-od-action="undo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>Undo</button><button type="button" class="odl-close" aria-label="Close" data-od-action="close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
+  <p class="odl-sr odl-live" role="status"></p>
+</section>
+<script>
+document.querySelectorAll(".odl-toast-undo").forEach(function (root) {
+  if (root.hasAttribute("data-odl-wired")) return;
+  root.setAttribute("data-odl-wired", "");
+  var list = root.querySelector("ul"), toast = root.querySelector(".odl-toast"), msg = toast.querySelector("[data-od-slot='message']"), last = null;
+  function hide() { toast.hidden = true; last = null; }
+  root.addEventListener("click", function (e) {
+    var arch = e.target.closest("[data-od-action='archive']"), undo = e.target.closest("[data-od-action='undo']"), close = e.target.closest("[data-od-action='close']");
+    if (arch) {
+      var li = arch.closest("li");
+      last = { li: li, next: li.nextElementSibling };
+      li.hidden = true;  // hidden, not deleted: Undo puts it back where it was
+      msg.textContent = "Archived “" + li.querySelector(".odl-name").textContent + "”";
+      toast.hidden = false;
+      root.querySelector(".odl-live").textContent = msg.textContent + ". Undo puts it back.";  // a live region that is always there, so it's read
+      toast.querySelector("[data-od-action='undo']").focus();
+    }
+    if (undo && last) { last.li.hidden = false; var b = last.li.querySelector("button"); hide(); b.focus(); root.querySelector(".odl-live").textContent = "Restored."; }
+    if (close) { var first = list.querySelector("li:not([hidden]) button"); hide(); if (first) first.focus(); }
+  });
+  toast.addEventListener("keydown", function (e) { if (e.key === "Escape") toast.querySelector("[data-od-action='close']").click(); });
+});
+</script>

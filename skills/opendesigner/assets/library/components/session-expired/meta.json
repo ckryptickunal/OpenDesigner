@@ -1,0 +1,101 @@
+{
+  "name": "Session expired",
+  "summary": "A sign-in-again card that says why the session ended and shows that the person's unsaved work is kept on this device.",
+  "use": "when a session times out while someone is working, before they lose what they typed",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "session",
+    "timeout",
+    "sign in",
+    "draft saved",
+    "security"
+  ],
+  "states": [
+    "expired",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "The title and reason sit in an alert, read as soon as the card appears. Move focus to Sign in again when you show it: the part never moves focus on its own, so a page that only displays it isn't hijacked. The saved draft is described in text, not only by an icon.",
+  "width": "narrow",
+  "live_region": "assertive",
+  "notes": "Keep the draft in the browser before the session ends, and move focus to Sign in again when you show the card.",
+  "spec": {
+    "use_when": [
+      "an idle or security timeout signs the person out mid-task",
+      "a token refresh fails while there is unsaved input"
+    ],
+    "avoid_when": [
+      "the person has no work in progress: send them to the sign-in page",
+      "they lack permission rather than a session: use page-no-access"
+    ],
+    "keyboard": [
+      "Sign in again is the first focusable control",
+      "Tab then reaches Use another account"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 176
+        },
+        "draft": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "saved": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "title",
+        "message",
+        "draft",
+        "saved"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "Not applicable: this state screen shows no list of records."
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "Not applicable: this page stands in for content; it isn't loaded data itself."
+      },
+      "error": {
+        "status": "shown",
+        "how": "The part is itself an error or system state, written in plain words with a next step.",
+        "evidence": "class=\"odl-lead\""
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "No control here is ever disabled; each one always does something."
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "A long draft name ends in an ellipsis on one line.",
+        "evidence": "text-overflow: ellipsis"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}
