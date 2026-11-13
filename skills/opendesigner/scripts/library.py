@@ -125,6 +125,21 @@ def cmd_add(a):
     return 0
 
 
+def fallbacks(text, name):
+    """The fallback of each var(name, ...) in text, with nested brackets ("" where a use has none)."""
+    out = []
+    for m in re.finditer(r"var\(" + re.escape(name) + r"\s*([,)])", text):
+        if m.group(1) == ")":
+            out.append("")
+            continue
+        depth, i = 1, m.end()
+        while i < len(text) and depth:
+            depth += {"(": 1, ")": -1}.get(text[i], 0)
+            i += 1
+        out.append(text[m.end():i - 1].strip())
+    return out
+
+
 def reserved_attrs(src):
     return sorted({m.group(1) for m in re.finditer(r"\sdata-([a-z-]+)(?=[\s=>])", src) if m.group(1) in RESERVED_ATTRS})
 
@@ -244,8 +259,12 @@ def check_one(c, known):
             errs.append("script finds elements by id or aria reference: copies of the part have no ids; find them by class, data attribute or order")
         if f'querySelectorAll(".odl-{slug}")' not in js:
             errs.append(f'script must start from document.querySelectorAll(".odl-{slug}")')
+    # a variable only some systems write (the state.* tokens exist only where their question was answered) is allowed when
+    # every use falls back to one that every system writes: var(--ds-state-skeleton-base, var(--ds-color-bg-neutral-subtle))
     for v in sorted(used_vars(html_) - known):
-        errs.append(f"{v} is not a variable every engine system writes")
+        if v.startswith("--ds-state-") and all(fb and used_vars(fb) and used_vars(fb) <= known for fb in fallbacks(html_, v)):
+            continue
+        errs.append(f"{v} is not a variable every engine system writes" + (" (a --ds-state-* one needs a fallback to one that is)" if v.startswith("--ds-state-") else ""))
     if f'class="odl-{slug}' not in rest:
         errs.append(f"the root element needs class odl-{slug}")
     return errs

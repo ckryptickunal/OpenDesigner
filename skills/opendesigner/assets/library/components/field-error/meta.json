@@ -25,6 +25,11 @@
   "a11y": "The input is aria-invalid while wrong and described by the message; the message is a polite live region and is checked on leaving the field and on submit, not on every key; on a failed submit, focus moves to the field.",
   "width": "narrow",
   "live_region": "polite",
+  "tokens_planned": {
+    "--ds-state-error-border": "--ds-color-border-danger",
+    "--ds-state-error-gap": "--ds-space-stack-xs",
+    "--ds-state-error-text": "--ds-color-text-danger"
+  },
   "spec": {
     "use_when": [
       "one field's value can be checked and fixed by the person"

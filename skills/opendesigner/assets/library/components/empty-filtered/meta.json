@@ -25,6 +25,11 @@
   "a11y": "Each filter chip has a remove button named after the filter; focus moves to the next chip when one is removed, and a polite status says what changed.",
   "width": "medium",
   "live_region": "polite",
+  "tokens_planned": {
+    "--ds-state-empty-gap": "--ds-space-stack-md",
+    "--ds-state-empty-measure": "--ds-layout-measure-lead",
+    "--ds-state-empty-media": "--ds-size-icon-lg"
+  },
   "spec": {
     "use_when": [
       "a list, table or board has items, but the current filters match none"

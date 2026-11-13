@@ -32,7 +32,7 @@
 .odl-optimistic-update .is-pending .odl-name { opacity: var(--ds-opacity-disabled-content); }
 .odl-optimistic-update .odl-name { transition: opacity var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
 .odl-optimistic-update .odl-err { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-inline-xs) var(--ds-space-inline-sm); padding-block-end: var(--ds-space-stack-sm); padding-inline-start: calc(var(--ds-size-icon-md) + var(--ds-space-inline-md));
-  color: var(--ds-color-text-danger); font: var(--ds-text-body-sm); }
+  color: var(--ds-state-error-text, var(--ds-color-text-danger)); font: var(--ds-text-body-sm); }
 .odl-optimistic-update .odl-err[hidden] { display: none; }
 .odl-optimistic-update .odl-err .odl-btn { min-block-size: var(--ds-size-target-min); }
 @media (prefers-reduced-motion: reduce) { .odl-optimistic-update, .odl-optimistic-update *, .odl-optimistic-update *::before, .odl-optimistic-update *::after { transition: none !important; animation: none !important; } }

@@ -24,6 +24,12 @@
   "width": "medium",
   "live_region": "polite",
   "notes": "Delete the button marked data-odl-demo; set aria-busy on .odl-body from your own request.",
+  "tokens_planned": {
+    "--ds-state-skeleton-base": "--ds-color-bg-neutral-subtle",
+    "--ds-state-skeleton-highlight": "--ds-color-surface-raised",
+    "--ds-state-skeleton-pulse": "1500ms (0ms when motion is reduced)",
+    "--ds-state-skeleton-radius": "--ds-radius-detail"
+  },
   "spec": {
     "use_when": [
       "text content loads after the page frame, and the wait is usually over 1 second"

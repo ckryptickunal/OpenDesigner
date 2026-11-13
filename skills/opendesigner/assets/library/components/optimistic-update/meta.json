@@ -27,6 +27,9 @@
   "width": "medium",
   "live_region": "polite",
   "notes": "The second row is set to fail once (data-odl-fail) so the rollback can be seen; remove that attribute in a real app.",
+  "tokens_planned": {
+    "--ds-state-error-text": "--ds-color-text-danger"
+  },
   "spec": {
     "use_when": [
       "the change is small, reversible and almost always succeeds",

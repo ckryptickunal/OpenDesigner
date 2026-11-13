@@ -23,6 +23,11 @@
   "a11y": "The drawing is decorative and hidden; the heading names the area, and the single action is a real button.",
   "width": "medium",
   "live_region": "none",
+  "tokens_planned": {
+    "--ds-state-empty-gap": "--ds-space-stack-md",
+    "--ds-state-empty-measure": "--ds-layout-measure-lead",
+    "--ds-state-empty-media": "--ds-size-icon-lg"
+  },
   "spec": {
     "use_when": [
       "a person opens a feature for the first time",

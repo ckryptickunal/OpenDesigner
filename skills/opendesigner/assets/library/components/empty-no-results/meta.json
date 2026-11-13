@@ -23,6 +23,11 @@
   "a11y": "The result count is a polite status, so it is read when the search runs; each way to widen the search is a real button.",
   "width": "medium",
   "live_region": "polite",
+  "tokens_planned": {
+    "--ds-state-empty-gap": "--ds-space-stack-md",
+    "--ds-state-empty-measure": "--ds-layout-measure-lead",
+    "--ds-state-empty-media": "--ds-size-icon-lg"
+  },
   "spec": {
     "use_when": [
       "a search, lookup or query returns zero items"

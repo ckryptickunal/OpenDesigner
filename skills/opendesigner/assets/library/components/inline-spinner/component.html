@@ -36,7 +36,7 @@
 .odl-inline-spinner .odl-check.is-busy .odl-spin { display: block; }
 .odl-inline-spinner .odl-check.is-ok { color: var(--ds-color-text-success); }
 .odl-inline-spinner .odl-check.is-ok .odl-yes { display: block; }
-.odl-inline-spinner .odl-check.is-bad { color: var(--ds-color-text-danger); }
+.odl-inline-spinner .odl-check.is-bad { color: var(--ds-state-error-text, var(--ds-color-text-danger)); }
 .odl-inline-spinner .odl-check.is-bad .odl-no { display: block; }
 .odl-inline-spinner .odl-hint { color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); font-weight: var(--ds-font-weight-body); }
 .odl-inline-spinner .odl-foot { display: flex; align-items: center; justify-content: flex-end; gap: var(--ds-space-inline-sm); }
@@ -54,19 +54,31 @@
 document.querySelectorAll(".odl-inline-spinner").forEach(function (root) {
   if (root.hasAttribute("data-odl-wired")) return;
   root.setAttribute("data-odl-wired", "");
+  function wait(name, fallback) {  // the system's wait thresholds (--ds-state-wait-*), in ms; older systems lack them
+    var v = getComputedStyle(root).getPropertyValue(name).trim(), n = parseFloat(v);
+    return isNaN(n) ? fallback : (/ms$/.test(v) || !/s$/.test(v) ? n : n * 1000);
+  }
   var save = root.querySelector("[data-od-action='save']"), label = save.querySelector(".odl-label"), live = root.querySelector(".odl-live");
-  var input = root.querySelector("input"), check = root.querySelector(".odl-check"), timer;
+  var input = root.querySelector("input"), check = root.querySelector(".odl-check"), timer, slow;
   save.addEventListener("click", function () {
     if (save.getAttribute("aria-disabled") === "true") return;
-    save.setAttribute("aria-disabled", "true"); save.classList.add("is-busy"); label.textContent = "Saving…"; live.textContent = "Saving";
-    setTimeout(function () { save.removeAttribute("aria-disabled"); save.classList.remove("is-busy"); label.textContent = "Save changes"; live.textContent = "Changes saved"; }, 1200);
+    save.setAttribute("aria-disabled", "true"); label.textContent = "Saving…"; live.textContent = "Saving";
+    slow = setTimeout(function () { save.classList.add("is-busy"); }, wait("--ds-state-wait-button-pending-after", 1000));  // no spinner for quick saves
+    setTimeout(function () {  // demo only: a save that takes 2.5 seconds
+      clearTimeout(slow); save.removeAttribute("aria-disabled"); save.classList.remove("is-busy"); label.textContent = "Save changes"; live.textContent = "Changes saved";
+    }, 2500);
   });
-  input.addEventListener("input", function () {  // a check that starts after the person stops typing, with the spinner beside the field
-    clearTimeout(timer); check.className = "odl-check"; check.querySelector("span").textContent = "";
+  input.addEventListener("input", function () {  // a check that starts after the person stops typing
+    clearTimeout(timer); clearTimeout(slow); check.className = "odl-check"; check.querySelector("span").textContent = "";
     if (!input.value.trim()) return;
     timer = setTimeout(function () {
-      check.className = "odl-check is-busy"; check.querySelector("span").textContent = "Checking…";
-      setTimeout(function () { var ok = !/^(team|admin)$/i.test(input.value.trim()); check.className = "odl-check " + (ok ? "is-ok" : "is-bad"); check.querySelector("span").textContent = ok ? "Available" : "Already taken"; }, 700);
+      check.querySelector("span").textContent = "Checking…";
+      slow = setTimeout(function () { check.className = "odl-check is-busy"; }, wait("--ds-state-wait-indicator-after", 1000));
+      setTimeout(function () {  // demo only: the check answers after 1.8 seconds
+        clearTimeout(slow);
+        var ok = !/^(team|admin)$/i.test(input.value.trim());
+        check.className = "odl-check " + (ok ? "is-ok" : "is-bad"); check.querySelector("span").textContent = ok ? "Available" : "Already taken";
+      }, 1800);
     }, 400);
   });
 });

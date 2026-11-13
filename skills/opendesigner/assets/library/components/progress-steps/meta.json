@@ -26,6 +26,7 @@
   "a11y": "The bar is a progressbar with a value and a text value; steps are an ordered list with the current one marked aria-current; a polite status announces each new step, not every percent.",
   "width": "medium",
   "live_region": "polite",
+  "notes": "Switch from inline-spinner to this once a task is expected to pass the system's --ds-state-wait-progress-after (10 seconds where the system has it).",
   "spec": {
     "use_when": [
       "a task takes longer than about 4 seconds",

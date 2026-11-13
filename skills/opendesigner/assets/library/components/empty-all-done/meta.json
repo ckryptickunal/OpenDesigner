@@ -23,6 +23,11 @@
   "a11y": "The heading says the state in words; the check drawing is decorative and hidden from screen readers.",
   "width": "medium",
   "live_region": "none",
+  "tokens_planned": {
+    "--ds-state-empty-gap": "--ds-space-stack-md",
+    "--ds-state-empty-measure": "--ds-layout-measure-lead",
+    "--ds-state-empty-media": "--ds-size-icon-lg"
+  },
   "spec": {
     "use_when": [
       "a queue, inbox or review list has been cleared by the person"

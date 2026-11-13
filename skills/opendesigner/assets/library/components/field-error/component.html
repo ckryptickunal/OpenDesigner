@@ -23,13 +23,13 @@
 
 .odl-field-error form { display: grid; gap: var(--ds-space-stack-lg); }
 .odl-field-error h2 { font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }
-.odl-field-error .odl-field { display: grid; gap: var(--ds-space-stack-xs); }
+.odl-field-error .odl-field { display: grid; gap: var(--ds-state-error-gap, var(--ds-space-stack-xs)); }
 .odl-field-error .odl-field label { font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); }
 .odl-field-error input { inline-size: 100%; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-sm);
   border: var(--ds-border-width-default) solid var(--ds-color-border-input); border-radius: var(--ds-radius-control); background: var(--ds-color-bg-field); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
-.odl-field-error .is-bad input { border-color: var(--ds-color-border-danger); border-width: var(--ds-border-width-emphasis); }
+.odl-field-error .is-bad input { border-color: var(--ds-state-error-border, var(--ds-color-border-danger)); border-width: var(--ds-border-width-emphasis); }
 .odl-field-error .odl-hint { color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); }
-.odl-field-error .odl-msg { display: flex; align-items: start; gap: var(--ds-space-inline-xs); min-block-size: 0; color: var(--ds-color-text-danger); font: var(--ds-text-body-sm); }
+.odl-field-error .odl-msg { display: flex; align-items: start; gap: var(--ds-space-inline-xs); min-block-size: 0; color: var(--ds-state-error-text, var(--ds-color-text-danger)); font: var(--ds-text-body-sm); }
 .odl-field-error .odl-msg svg { display: none; margin-block-start: calc((1lh - var(--ds-size-icon-sm)) / 2); }
 .odl-field-error .is-bad .odl-msg svg { display: block; }
 .odl-field-error .odl-done { color: var(--ds-color-text-success); font: var(--ds-text-body-sm); }

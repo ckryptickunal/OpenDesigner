@@ -27,6 +27,12 @@
   "a11y": "Info, success and warning are polite status regions; the error is an alert and can't be dismissed until it's fixed; dismiss buttons are named after their banner, and focus moves to the next banner.",
   "width": "wide",
   "live_region": "polite and assertive",
+  "tokens_planned": {
+    "--ds-state-error-bg": "--ds-color-bg-danger-subtle",
+    "--ds-state-error-border": "--ds-color-border-danger",
+    "--ds-state-error-inset": "--ds-space-inset-md",
+    "--ds-state-error-text": "--ds-color-text-danger"
+  },
   "spec": {
     "use_when": [
       "something affects the whole page or account and stays true until it's handled"

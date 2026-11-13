@@ -41,6 +41,12 @@
       "page": "Id2IIl1jOB0"
     }
   ],
+  "tokens_planned": {
+    "--ds-state-skeleton-base": "--ds-color-bg-neutral-subtle",
+    "--ds-state-skeleton-highlight": "--ds-color-surface-raised",
+    "--ds-state-skeleton-pulse": "1500ms (0ms when motion is reduced)",
+    "--ds-state-skeleton-radius": "--ds-radius-detail"
+  },
   "spec": {
     "use_when": [
       "a grid of cards loads after the page frame and the count is known or capped"

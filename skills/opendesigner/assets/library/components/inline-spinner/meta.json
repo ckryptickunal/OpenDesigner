@@ -27,6 +27,11 @@
   "a11y": "The button keeps its name and is aria-disabled while it works, so focus stays on it; a polite status says Saving and Changes saved, and the field check is read through its own status. Under reduced motion the spinner stops turning and the words still say what is happening.",
   "width": "narrow",
   "live_region": "polite",
+  "tokens_planned": {
+    "--ds-state-error-text": "--ds-color-text-danger",
+    "--ds-state-wait-button-pending-after": "1000ms",
+    "--ds-state-wait-indicator-after": "0 or 1000ms"
+  },
   "spec": {
     "use_when": [
       "an action the person started takes about 1 to 4 seconds",

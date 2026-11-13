@@ -32,8 +32,8 @@
 .odl-page-banners .odl-ic[data-tone="success"] { color: var(--ds-color-text-success); }
 .odl-page-banners .odl-msg:has(> [data-tone="warning"]) { border-color: var(--ds-color-border-warning); background: var(--ds-color-bg-warning-subtle); }
 .odl-page-banners .odl-ic[data-tone="warning"] { color: var(--ds-color-text-warning); }
-.odl-page-banners .odl-msg:has(> [data-tone="danger"]) { border-color: var(--ds-color-border-danger); background: var(--ds-color-bg-danger-subtle); }
-.odl-page-banners .odl-ic[data-tone="danger"] { color: var(--ds-color-text-danger); }
+.odl-page-banners .odl-msg:has(> [data-tone="danger"]) { padding-block: var(--ds-state-error-inset, var(--ds-space-inset-md)); border-color: var(--ds-state-error-border, var(--ds-color-border-danger)); background: var(--ds-state-error-bg, var(--ds-color-bg-danger-subtle)); }
+.odl-page-banners .odl-ic[data-tone="danger"] { color: var(--ds-state-error-text, var(--ds-color-text-danger)); }
 .odl-page-banners .odl-msg:has(> [data-tone="danger"]) { grid-template-columns: var(--ds-size-icon-md) minmax(0, 1fr); }
 .odl-page-banners .odl-act { display: inline-flex; align-items: center; min-block-size: var(--ds-size-target-min); margin-inline-start: var(--ds-space-inline-sm); padding: 0; border: 0; background: transparent; color: var(--ds-color-text-primary);
   font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
