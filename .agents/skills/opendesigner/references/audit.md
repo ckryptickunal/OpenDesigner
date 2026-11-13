@@ -12,6 +12,12 @@ The audit only reports. It never edits their code (AGENTS.md: checks report; STD
 
 A person in a hurry still gets a finished page in the first reply. What they don't get is three rewritten pages they never saw. Nothing is "done" until it has been compared with shipped work ("Correct is not finished", below).
 
+## The audit page, when there is a system
+When the project has `opendesigner/state.json` (their own, or one `sketch` just made), run `engine.py audit-page --open` before the checklist below. It is the code-side half of the audit, on one page the person can read: every token with where the code uses it, every decision and whether it changes tokens, and every inconsistency with `file:line` evidence, a count and two or three options previewed with their own values. It reports only. Their picks come back as `OD:fix` and `OD:waive` lines (`rules.md` section 9); each becomes a ledger item.
+
+- **Examples that break the system on purpose** (a demo of mistakes, a style guide's "don't" figures) are not findings. Ask the owner, then `engine.py exempt <folder> --why "..."`; `review` and the audit page leave them out and list them.
+- **Every implementation round is a ledger round.** Before building: `engine.py ledger start "<what>" --items <the blocks and issues it covers>`. After: `ledger done` each item, `ledger broke <item> --note "..."` for what broke, and `ledger waive <item> --why "..." --by owner --quote "..."` for what was skipped on purpose. `review` fails while an item is neither done nor waived, so nothing is missed at the end; DESIGN.md shows the ledger. An agent may waive (`--by agent`); the round closes only after the owner agrees (`waive` again with `--by owner --quote`).
+
 ## 1. How to run it
 
 1. **Read the code first.** Open the stylesheets, the components and any token or theme file. `opendesigner-extract/scripts/css_scan.py <repo>` lists the declared colours, accent, sizes, radii, shadows and motion by role, each with a count. Note the files and lines you will cite.

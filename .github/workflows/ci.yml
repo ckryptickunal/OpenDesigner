@@ -81,6 +81,9 @@ jobs:
       - name: Plugin start-of-session hook stays silent, read-only and fast
         run: python3 tools/test_plugin_hook.py
 
+      - name: Audit page, adapt page, exempt folders and the audit ledger
+        run: python3 tools/test_audit_page.py
+
       - name: Reference extraction tests (css_scan.py, read_page.js with the runner's Node)
         run: python3 skills/opendesigner-extract/scripts/test_extract.py
 
