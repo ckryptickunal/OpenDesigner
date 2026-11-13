@@ -32,14 +32,14 @@
 .odl-toast-undo li p span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
 .odl-toast-undo .odl-toast { display: flex; align-items: center; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xs) var(--ds-space-inset-xs) var(--ds-space-inset-xs) var(--ds-space-inset-lg);
   border-radius: var(--ds-radius-container); background: var(--ds-color-bg-inverse); color: var(--ds-color-text-inverse); box-shadow: var(--ds-elevation-floating);
-  animation: odl-toast-in var(--ds-motion-duration-toast) var(--ds-motion-easing-toast) both; }
+  transition: opacity var(--ds-motion-duration-toast) var(--ds-motion-easing-toast), translate var(--ds-motion-duration-toast) var(--ds-motion-easing-toast); }
+@starting-style { .odl-toast-undo .odl-toast { opacity: 0; translate: 0 var(--ds-space-8); } }
 .odl-toast-undo .odl-toast[hidden] { display: none; }
 .odl-toast-undo .odl-toast p { flex: 1; min-inline-size: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .odl-toast-undo .odl-toast .odl-btn { background: transparent; color: var(--ds-color-text-inverse); text-decoration: underline; text-underline-offset: 0.2em; }
 .odl-toast-undo .odl-toast .odl-btn:hover { background: transparent; text-decoration-thickness: var(--ds-border-width-emphasis); }
 .odl-toast-undo .odl-toast .odl-close { display: grid; place-items: center; inline-size: var(--ds-size-target-min); block-size: var(--ds-size-target-min); padding: 0; border: 0; border-radius: var(--ds-radius-control); background: transparent; color: var(--ds-color-text-inverse); cursor: pointer; }
 .odl-toast-undo .odl-toast button:focus-visible { outline-color: var(--ds-color-text-inverse); }
-@keyframes odl-toast-in { from { opacity: 0; transform: translateY(var(--ds-space-8)); } }
 @media (prefers-reduced-motion: reduce) { .odl-toast-undo, .odl-toast-undo *, .odl-toast-undo *::before, .odl-toast-undo *::after { transition: none !important; animation: none !important; } }
 </style>
 <section class="odl-toast-undo odl-card" aria-label="Inbox">
