@@ -66,7 +66,7 @@ class View(unittest.TestCase):
 
     def answer(self):
         sys.path.insert(0, str(SMART / "scripts"))
-        import audit
+        import surface_audit as audit
         fx = json.loads(audit.fixture_path("quick-replies").read_text())
         return [{"version": "1.0", "createSurface": {"surfaceId": "s1", "catalogId": self.catalog["catalogId"],
                                                      "components": [{**fx, "id": "root", "component": "QuickReplies"}]}}]

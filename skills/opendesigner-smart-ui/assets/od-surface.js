@@ -346,6 +346,8 @@ export class ODSurface extends (G.HTMLElement || class {}) {
       this.dispatchEvent(new CustomEvent("od-action", { bubbles: true, detail }));
     };
     if (effect !== "change") return send(false);
+    // a button inside an approval prompt the answer showed is itself the person's approval: don't ask twice
+    if (el.closest('[data-od-component="ApprovalPrompt"]')) { send(true); this.setActionState(el, "pending"); return; }
     this.askApproval(el, a, context, () => send(true));
   }
 

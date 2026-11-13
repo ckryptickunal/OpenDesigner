@@ -40,7 +40,7 @@ function show(turn, wrap) {
   }
   wrap.append(s);
   const r = s.process(turn.answer);
-  wrap.append(el("p", "checked", r.ok ? `Checked against the catalog: 0 errors, ${r.warnings.length} warnings.` : "Not shown: it failed the checks."));
+  wrap.append(el("p", "checked", r.ok ? "Checked before it showed: no errors." : "Not shown: it failed the checks."));
 }
 
 function play(i) {

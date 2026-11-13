@@ -395,7 +395,7 @@ def components_md():
                 meta = {"summary": "not in the library yet"}
             lines.append(f"| `{c['as']}` | `{c['slug']}` | {meta.get('summary', '').replace('|', '/')} |")
         lines.append("")
-    lines += ["Every part handles the states in `states.md`; its fixture is `assets/fixtures/components/<slug>.json`.", ""]
+    lines += ["Every part handles the states in `states.md`; its fixture is `fixture.json` beside the part in the library.", ""]
     return "\n".join(lines)
 
 
@@ -1123,9 +1123,9 @@ def cmd_confirm(a):
 
 def cmd_audit(a):
     try:
-        import audit  # noqa: F401  (scripts/audit.py: the Playwright driver)
+        import surface_audit as audit  # noqa: F401  (scripts/surface_audit.py: the Playwright driver)
     except ImportError as e:
-        print(f"Audit needs scripts/audit.py and Playwright for Python ({e}). Install Playwright yourself if you want this; the skill never installs it.")
+        print(f"Audit needs scripts/surface_audit.py and Playwright for Python ({e}). Install Playwright yourself if you want this; the skill never installs it.")
         return 2
     return audit.run(a)
 

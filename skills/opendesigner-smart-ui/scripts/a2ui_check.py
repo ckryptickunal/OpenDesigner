@@ -64,7 +64,7 @@ def main(argv=None):
 
     cat = json.loads(pathlib.Path(a.catalog).read_text())
     answers = []
-    import audit
+    import surface_audit as audit
     for name, comp in cat["components"].items():
         slug = smartui.od(comp).get("slug")
         f = audit.fixture_path(slug) if slug else None

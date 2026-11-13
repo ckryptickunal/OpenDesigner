@@ -1,6 +1,6 @@
 # States every part handles
 
-Each part has one good fixture (`assets/fixtures/components/<slug>.json`). `audit.py` makes the other states from it, so every part is checked the same way and a new part gets the whole matrix for free.
+Each part has one good fixture: `fixture.json` next to its `component.html` in the library. `surface_audit.py` makes the other states from it, so every part is checked the same way and a new part gets the whole matrix for free.
 
 ## Content
 | State | How the audit makes it | What a good part does |

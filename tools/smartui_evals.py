@@ -171,7 +171,7 @@ def run_selector(data, cs):
 def render(valid, cat_path, tokens):
     """Render each valid answer at desktop and phone and run the audit floors on it."""
     sys.path.insert(0, str(ROOT / "skills" / "opendesigner-smart-ui" / "scripts"))
-    import audit
+    import surface_audit as audit
     cases_ = [(k, ans, {}) for k, ans in valid]
     envs = {k: audit.ENVIRONMENTS[k] for k in ("desktop", "phone")}
     out = EV / "runs" / "render"

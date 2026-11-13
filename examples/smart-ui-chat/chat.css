@@ -20,13 +20,16 @@ body { background: var(--ds-color-bg-canvas, var(--ds-color-surface-default)); c
 .pick select:focus-visible, .tool:focus-visible, .ask:focus-visible, .link:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 
 .log { overflow-y: auto; padding: var(--ds-space-inset-lg); display: grid; align-content: start; gap: var(--ds-space-stack-lg); scroll-behavior: smooth; }
-.turn { display: grid; gap: var(--ds-space-stack-sm); }
+.turn { display: grid; gap: var(--ds-space-stack-sm); min-inline-size: 0; }
+.turn > * { min-inline-size: 0; }
 .me { justify-self: end; max-inline-size: 80%; margin: 0; padding: var(--ds-space-inset-sm) var(--ds-space-inset-md);
   color: var(--ds-color-text-on-accent, var(--ds-color-text-inverse)); background: var(--ds-color-bg-accent-bold); border-radius: var(--ds-radius-container); }
 .bot { margin: 0; max-inline-size: 42rem; }
-.turn od-surface { max-inline-size: 40rem; }
+.turn od-surface { inline-size: 100%; max-inline-size: 40rem; }
+/* in a chat, an answer lines up with the text above it instead of centring itself */
+.turn od-surface > [data-od-component], .turn od-surface > .od-stale, .turn .od-approval > * { margin-inline: 0; }
 .sys { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
-.sys code { font: var(--ds-text-label-md); font-family: var(--ds-font-family-mono, monospace); }
+.sys code { font: var(--ds-text-label-md); font-family: var(--ds-font-family-mono, monospace); overflow-wrap: anywhere; }
 .checked { margin: 0; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); }
 .errors { margin: 0; padding: var(--ds-space-inset-md); background: var(--ds-color-bg-danger-subtle); border-radius: var(--ds-radius-container);
   font: var(--ds-text-label-md); }
