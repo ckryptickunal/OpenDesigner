@@ -239,6 +239,8 @@ def check_marks(src, css=None):
             errs.append(f"line {el.line}: data-od-item must be a direct child of a data-od-list")
         if "data-od-template" in a and ("data-od-item" not in a or "hidden" not in a):
             errs.append(f"line {el.line}: data-od-template goes on a data-od-item that is also hidden")
+        if "data-od-template" in a and not re.search(r"\[hidden\]\s*\{[^}]*display:\s*none", css):
+            errs.append(f"line {el.line}: a hidden template item needs a scoped [hidden] {{ display: none; }} rule, or a display rule shows it in the static file")
         if "data-od-list" in a and sum("data-od-template" in c.attrs for c in el.children) > 1:
             errs.append(f"line {el.line}: list {a['data-od-list']} has more than one data-od-template")
         if "data-od-list" in a and not any("data-od-item" in c.attrs for c in el.children):

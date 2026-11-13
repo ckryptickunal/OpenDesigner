@@ -148,7 +148,9 @@ def _strings(obj, fn, schema=None):
         return [_strings(x, fn, it) for x in obj]
     if isinstance(obj, dict):
         props = (schema or {}).get("properties", {})
-        return {k: (v if k in ("component", "id") or k.startswith("@") or (isinstance(v, str) and ("enum" in props.get(k, {}) or props.get(k, {}).get("format") == "uri"))
+        # event names, enums and URLs are not prose: leave them as they are
+        return {k: (v if k in ("component", "id", "event") or k.startswith("@") or "$ref" in props.get(k, {})
+                    or (isinstance(v, str) and ("enum" in props.get(k, {}) or props.get(k, {}).get("format") == "uri" or "pattern" in props.get(k, {})))
                     else _strings(v, fn, props.get(k))) for k, v in obj.items()}
     return obj
 
@@ -173,6 +175,25 @@ def lists(comp, schema, fn):
     return out
 
 
+def fill_to_max(xs, p):
+    """Repeat the items up to maxItems, each copy named apart (a list of identical names is its own error, R5)."""
+    n = p.get("maxItems", 12)
+    if not xs:
+        return xs
+    out = []
+    nf = p.get("items", {}).get("x-od-name-from")
+    for i in range(n):
+        it = copy.deepcopy(xs[i % len(xs)])
+        if i >= len(xs) and isinstance(it, dict):
+            key = nf if nf and isinstance(it.get(nf), str) else next((k for k, v in it.items() if isinstance(v, str)), None)
+            if key:
+                mx = p.get("items", {}).get("properties", {}).get(key, {}).get("maxLength", 200)
+                suffix = f" {i + 1}"
+                it[key] = it[key][: max(1, mx - len(suffix))] + suffix
+        out.append(it)
+    return out
+
+
 def variants(base, schema):
     """The content and load states of section 5, made from one good fixture of the component."""
     c = base
@@ -181,7 +202,7 @@ def variants(base, schema):
     if has_list:
         v["empty"] = {"comp": lists(c, schema, lambda xs, p: []), "relax": True}
         v["one-item"] = {"comp": lists(c, schema, lambda xs, p: xs[:1]), "relax": True}
-        v["max-items"] = {"comp": lists(c, schema, lambda xs, p: (xs * (p.get("maxItems", 12) // max(1, len(xs)) + 1))[: p.get("maxItems", 12)] if xs else xs)}
+        v["max-items"] = {"comp": lists(c, schema, fill_to_max)}
     v["long-text"] = {"comp": _strings(c, longest, schema)}
     v["translate-30"] = {"comp": _strings(c, longer, schema)}
     v["partial"] = {"comp": {k: x for i, (k, x) in enumerate(c.items()) if k in ("component", "id") or i % 2 == 0}, "partial": True}
