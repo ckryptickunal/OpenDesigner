@@ -1,0 +1,82 @@
+<style>
+.odl-skeleton-table { box-sizing: border-box; inline-size: 100%; max-inline-size: 60rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-skeleton-table *, .odl-skeleton-table *::before, .odl-skeleton-table *::after { box-sizing: border-box; }
+.odl-skeleton-table svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-skeleton-table h2, .odl-skeleton-table h3, .odl-skeleton-table p, .odl-skeleton-table ul, .odl-skeleton-table ol, .odl-skeleton-table dl, .odl-skeleton-table dd { margin: 0; }
+.odl-skeleton-table h2, .odl-skeleton-table h3 { text-wrap: balance; }
+.odl-skeleton-table .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-skeleton-table .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-skeleton-table .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-skeleton-table .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-skeleton-table .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-skeleton-table .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-skeleton-table .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-skeleton-table .odl-btn[disabled], .odl-skeleton-table .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-skeleton-table button:focus-visible, .odl-skeleton-table a:focus-visible, .odl-skeleton-table input:focus-visible, .odl-skeleton-table textarea:focus-visible, .odl-skeleton-table [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-skeleton-table .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-skeleton-table.odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-skeleton-table.odl-card { padding: var(--ds-space-inset-lg); } }
+
+.odl-skeleton-table .odl-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-inline-sm); margin-block-end: var(--ds-space-stack-md); }
+.odl-skeleton-table .odl-bar h2 { font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }
+.odl-skeleton-table .odl-demo { min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); }
+.odl-skeleton-table .odl-one { display: block; white-space: nowrap; }
+.odl-skeleton-table .odl-one > .odl-t { display: inline-block; max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis; vertical-align: top; }
+.odl-skeleton-table [aria-busy="true"] .odl-t { color: transparent; border-radius: var(--ds-state-skeleton-radius, var(--ds-radius-detail)); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.odl-skeleton-table [aria-busy="true"] .odl-t, .odl-skeleton-table [aria-busy="true"] .odl-pic, .odl-skeleton-table [aria-busy="true"] .odl-ctl.odl-ctl {
+  background: linear-gradient(90deg, var(--ds-state-skeleton-base, var(--ds-color-bg-neutral-subtle)) 30%, var(--ds-state-skeleton-highlight, var(--ds-color-surface-raised)) 50%, var(--ds-state-skeleton-base, var(--ds-color-bg-neutral-subtle)) 70%) 0 0 / 300% 100%;
+  animation: odl-sweep var(--ds-state-skeleton-pulse, calc(var(--ds-motion-duration-extra) * 2.5)) var(--ds-motion-easing-linear) infinite; }
+.odl-skeleton-table [aria-busy="true"] .odl-pic > *, .odl-skeleton-table [aria-busy="true"] .odl-ctl > * { visibility: hidden; }
+.odl-skeleton-table [aria-busy="true"] .odl-ctl.odl-ctl { border-color: transparent; color: transparent; }
+@keyframes odl-sweep { from { background-position: 100% 0; } to { background-position: 0 0; } }
+
+.odl-skeleton-table table { inline-size: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.odl-skeleton-table th { padding: var(--ds-space-inset-xs) var(--ds-space-inset-sm); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); text-align: start; white-space: nowrap;
+  border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-default); }
+.odl-skeleton-table td { block-size: var(--ds-size-row-md); padding: 0 var(--ds-space-inset-sm); white-space: nowrap; border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-skeleton-table .odl-num { text-align: end; }
+.odl-skeleton-table th.odl-num { text-align: end; }
+.odl-skeleton-table .odl-cust { inline-size: 40%; }
+.odl-skeleton-table .odl-pill { display: inline-flex; padding: 0 var(--ds-space-inset-xs); border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-full); font: var(--ds-text-label-sm); font-weight: var(--ds-font-weight-label); }
+.odl-skeleton-table .odl-pill[data-status="success"] { background: var(--ds-color-bg-success-subtle); color: var(--ds-color-text-success); }
+.odl-skeleton-table .odl-pill[data-status="warning"] { background: var(--ds-color-bg-warning-subtle); color: var(--ds-color-text-warning); }
+.odl-skeleton-table .odl-pill[data-status="danger"] { background: var(--ds-color-bg-danger-subtle); color: var(--ds-color-text-danger); }
+@container (max-width: 36rem) {
+  .odl-skeleton-table thead { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); }
+  .odl-skeleton-table tbody, .odl-skeleton-table tr, .odl-skeleton-table td { display: block; }
+  .odl-skeleton-table tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--ds-space-inline-md); row-gap: var(--ds-space-stack-xs); padding-block: var(--ds-space-stack-sm); border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+  .odl-skeleton-table td { block-size: auto; padding: 0; border: 0; overflow: hidden; text-overflow: ellipsis; }
+  .odl-skeleton-table td:nth-child(1) { grid-area: 2 / 1; color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+  .odl-skeleton-table td:nth-child(2) { grid-area: 1 / 1; inline-size: auto; font-weight: var(--ds-font-weight-label); }
+  .odl-skeleton-table [aria-busy="true"] td { text-overflow: clip; }
+  .odl-skeleton-table td:nth-child(3) { display: none; }
+  .odl-skeleton-table td:nth-child(4) { grid-area: 1 / 2; }
+  .odl-skeleton-table td:nth-child(5) { grid-area: 2 / 2; justify-self: end; }
+}
+@media (prefers-reduced-motion: reduce) { .odl-skeleton-table, .odl-skeleton-table *, .odl-skeleton-table *::before, .odl-skeleton-table *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-skeleton-table odl-card" aria-label="Invoices">
+  <div class="odl-bar"><h2>Invoices</h2><button type="button" class="odl-btn is-quiet odl-demo" data-odl-demo aria-pressed="false">Show loaded</button></div><p class="odl-live odl-sr" role="status" data-odl-busy="Loading invoices" data-odl-done="5 invoices loaded">Loading invoices</p>
+  <div class="odl-scroll"><table>
+    <thead><tr><th scope="col">Invoice</th><th scope="col">Customer</th><th scope="col">Date</th><th scope="col" class="odl-num">Amount</th><th scope="col">Status</th></tr></thead>
+    <tbody class="odl-body" aria-busy="true" data-od-list="rows"><tr data-od-item><td><span class="odl-t" data-od-slot="number">INV-2041</span></td><td class="odl-cust"><span class="odl-t" data-od-slot="customer">Gorsedown Print</span></td><td><span class="odl-t" data-od-slot="date">Nov 12</span></td><td class="odl-num"><span class="odl-t" data-od-slot="amount">$4,280.00</span></td><td><span class="odl-pill odl-ctl is-success" data-od-var="status" data-status="success"><span>Paid</span></span></td></tr><tr data-od-item><td><span class="odl-t" data-od-slot="number">INV-2040</span></td><td class="odl-cust"><span class="odl-t" data-od-slot="customer">Quorbin Studio</span></td><td><span class="odl-t" data-od-slot="date">Nov 11</span></td><td class="odl-num"><span class="odl-t" data-od-slot="amount">$912.50</span></td><td><span class="odl-pill odl-ctl is-warning" data-od-var="status" data-status="warning"><span>Due</span></span></td></tr><tr data-od-item><td><span class="odl-t" data-od-slot="number">INV-2039</span></td><td class="odl-cust"><span class="odl-t" data-od-slot="customer">Tessaline Foods</span></td><td><span class="odl-t" data-od-slot="date">Nov 9</span></td><td class="odl-num"><span class="odl-t" data-od-slot="amount">$12,604.20</span></td><td><span class="odl-pill odl-ctl is-success" data-od-var="status" data-status="success"><span>Paid</span></span></td></tr><tr data-od-item><td><span class="odl-t" data-od-slot="number">INV-2038</span></td><td class="odl-cust"><span class="odl-t" data-od-slot="customer">Brackwater Co</span></td><td><span class="odl-t" data-od-slot="date">Nov 6</span></td><td class="odl-num"><span class="odl-t" data-od-slot="amount">$2,145.00</span></td><td><span class="odl-pill odl-ctl is-danger" data-od-var="status" data-status="danger"><span>Overdue</span></span></td></tr><tr data-od-item><td><span class="odl-t" data-od-slot="number">INV-2037</span></td><td class="odl-cust"><span class="odl-t" data-od-slot="customer">Orrin & Daughters</span></td><td><span class="odl-t" data-od-slot="date">Nov 4</span></td><td class="odl-num"><span class="odl-t" data-od-slot="amount">$688.00</span></td><td><span class="odl-pill odl-ctl is-success" data-od-var="status" data-status="success"><span>Paid</span></span></td></tr></tbody>
+  </table></div>
+</section>
+<script>
+document.querySelectorAll(".odl-skeleton-table").forEach(function (root) {
+  if (root.hasAttribute("data-odl-wired")) return;
+  root.setAttribute("data-odl-wired", "");
+  var body = root.querySelector(".odl-body"), live = root.querySelector(".odl-live"), demo = root.querySelector("[data-odl-demo]");
+  function set(busy) {
+    body.setAttribute("aria-busy", busy ? "true" : "false");
+    body.toggleAttribute("inert", busy);
+    live.textContent = busy ? live.getAttribute("data-odl-busy") : live.getAttribute("data-odl-done");
+    if (demo) { demo.setAttribute("aria-pressed", busy ? "false" : "true"); demo.textContent = busy ? "Show loaded" : "Show loading"; }
+  }
+  if (demo) demo.addEventListener("click", function () { set(body.getAttribute("aria-busy") !== "true"); });
+  set(body.getAttribute("aria-busy") === "true");
+});
+</script>

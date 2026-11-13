@@ -133,7 +133,7 @@
       "overflow": {
         "status": "handled",
         "how": "Cards fill as many columns as fit, at least 13rem each; names end in an ellipsis.",
-        "evidence": "auto-fill"
+        "evidence": "auto-fit"
       },
       "long_text": {
         "status": "handled",

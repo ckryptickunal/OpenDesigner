@@ -18,8 +18,8 @@
 .odl-field-error button:focus-visible, .odl-field-error a:focus-visible, .odl-field-error input:focus-visible, .odl-field-error textarea:focus-visible, .odl-field-error [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 .odl-field-error .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-.odl-field-error .odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
-@container (max-width: 30rem) { .odl-field-error .odl-card { padding: var(--ds-space-inset-lg); } }
+.odl-field-error.odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-field-error.odl-card { padding: var(--ds-space-inset-lg); } }
 
 .odl-field-error form { display: grid; gap: var(--ds-space-stack-lg); }
 .odl-field-error h2 { font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }

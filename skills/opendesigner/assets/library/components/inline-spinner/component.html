@@ -18,8 +18,8 @@
 .odl-inline-spinner button:focus-visible, .odl-inline-spinner a:focus-visible, .odl-inline-spinner input:focus-visible, .odl-inline-spinner textarea:focus-visible, .odl-inline-spinner [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 .odl-inline-spinner .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-.odl-inline-spinner .odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
-@container (max-width: 30rem) { .odl-inline-spinner .odl-card { padding: var(--ds-space-inset-lg); } }
+.odl-inline-spinner.odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-inline-spinner.odl-card { padding: var(--ds-space-inset-lg); } }
 
 .odl-inline-spinner .odl-spin { display: none; animation: odl-spin calc(var(--ds-motion-duration-long) * 3) var(--ds-motion-easing-linear) infinite; }
 .odl-inline-spinner .is-busy .odl-spin { display: block; }
@@ -46,8 +46,8 @@
 </style>
 <form class="odl-inline-spinner odl-card" action="#" aria-label="Workspace settings">
   <label>Workspace address<span class="odl-row"><input name="slug" value="larkspur-finance" autocomplete="off" spellcheck="false"></span>
-    <span class="odl-check" role="status"><svg class="odl-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><svg class="odl-yes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><svg class="odl-no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span></span></span>
-    <span class="odl-hint">Type a new address to see the check. “team” is taken.</span></label>
+    <span class="odl-hint">Type a new address to see the check. “team” is taken.</span>
+    <span class="odl-check" role="status"><svg class="odl-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><svg class="odl-yes" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><svg class="odl-no" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg><span></span></span></label>
   <div class="odl-foot"><p class="odl-live" role="status"></p><button type="button" class="odl-btn" data-od-action="save" data-od-effect="change"><svg class="odl-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg><span class="odl-label" data-od-slot="label">Save changes</span></button></div>
 </form>
 <script>

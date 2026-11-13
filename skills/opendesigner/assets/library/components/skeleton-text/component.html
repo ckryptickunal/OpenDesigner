@@ -17,19 +17,20 @@
 .odl-skeleton-text button:focus-visible, .odl-skeleton-text a:focus-visible, .odl-skeleton-text input:focus-visible, .odl-skeleton-text textarea:focus-visible, .odl-skeleton-text [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 .odl-skeleton-text .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-.odl-skeleton-text .odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
-@container (max-width: 30rem) { .odl-skeleton-text .odl-card { padding: var(--ds-space-inset-lg); } }
+.odl-skeleton-text.odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-skeleton-text.odl-card { padding: var(--ds-space-inset-lg); } }
 
 .odl-skeleton-text .odl-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-inline-sm); margin-block-end: var(--ds-space-stack-md); }
 .odl-skeleton-text .odl-bar h2 { font: var(--ds-text-title-md); font-weight: var(--ds-font-weight-heading); }
 .odl-skeleton-text .odl-demo { min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); }
-.odl-skeleton-text .odl-one { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.odl-skeleton-text .odl-one { display: block; white-space: nowrap; }
+.odl-skeleton-text .odl-one > .odl-t { display: inline-block; max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis; vertical-align: top; }
 .odl-skeleton-text [aria-busy="true"] .odl-t { color: transparent; border-radius: var(--ds-state-skeleton-radius, var(--ds-radius-detail)); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-.odl-skeleton-text [aria-busy="true"] .odl-t, .odl-skeleton-text [aria-busy="true"] .odl-pic, .odl-skeleton-text [aria-busy="true"] .odl-ctl {
+.odl-skeleton-text [aria-busy="true"] .odl-t, .odl-skeleton-text [aria-busy="true"] .odl-pic, .odl-skeleton-text [aria-busy="true"] .odl-ctl.odl-ctl {
   background: linear-gradient(90deg, var(--ds-state-skeleton-base, var(--ds-color-bg-neutral-subtle)) 30%, var(--ds-state-skeleton-highlight, var(--ds-color-surface-raised)) 50%, var(--ds-state-skeleton-base, var(--ds-color-bg-neutral-subtle)) 70%) 0 0 / 300% 100%;
   animation: odl-sweep var(--ds-state-skeleton-pulse, calc(var(--ds-motion-duration-extra) * 2.5)) var(--ds-motion-easing-linear) infinite; }
 .odl-skeleton-text [aria-busy="true"] .odl-pic > *, .odl-skeleton-text [aria-busy="true"] .odl-ctl > * { visibility: hidden; }
-.odl-skeleton-text [aria-busy="true"] .odl-ctl { border-color: transparent; color: transparent; }
+.odl-skeleton-text [aria-busy="true"] .odl-ctl.odl-ctl { border-color: transparent; color: transparent; }
 @keyframes odl-sweep { from { background-position: 100% 0; } to { background-position: 0 0; } }
 
 .odl-skeleton-text .odl-body { display: grid; gap: var(--ds-space-stack-sm); }
@@ -42,7 +43,7 @@
 <article class="odl-skeleton-text odl-card">
   <div class="odl-bar"><h2>Help center</h2><button type="button" class="odl-btn is-quiet odl-demo" data-odl-demo aria-pressed="false">Show loaded</button></div><p class="odl-live odl-sr" role="status" data-odl-busy="Loading the article" data-odl-done="Article loaded">Loading the article</p>
   <div class="odl-body" aria-busy="true">
-    <h3 class="odl-one"><span class="odl-t" data-od-slot="title">Set up approval rules for bills</span></h3>
+    <h3 class="odl-one"><span class="odl-t" data-od-slot="title">Set up approval rules</span></h3>
     <p class="odl-by odl-one"><span class="odl-t" data-od-slot="byline">Updated Nov 10 · 4 minute read</span></p>
     <p><span class="odl-t" data-od-slot="body">Approval rules decide who signs off on a bill before it's paid. Start with one rule for every bill over an amount, then add rules for single vendors or teams.</span></p>
     <p><span class="odl-t">Each rule runs in order. The first one that matches picks the approvers, and the bill waits until each of them says yes.</span></p>

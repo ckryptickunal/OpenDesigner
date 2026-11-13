@@ -50,7 +50,7 @@
         },
         "owner": {
           "type": "string",
-          "maxLength": 32
+          "maxLength": 24
         },
         "account": {
           "type": "string",

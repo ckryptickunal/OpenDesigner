@@ -831,7 +831,7 @@ FOOT_SHORT = {
     "brand-assets": "Brand assets", "design-styles": "Design styles", "motion": "Motion", "ux-patterns": "UX patterns",
     "ui-details": "Interface details", "resources": "Sources we learn from", "engine": "Engine commands",
     "files": "Files it writes", "dials": "The eight dials", "evals": "Evals", "contribute": "Contribute",
-    "install": "Install", "quickstart": "Quickstart", "search": "Search and AI answers",
+    "install": "Install", "quickstart": "Quickstart", "search": "Search and AI answers", "states": "Empty, loading, errors",
 }
 FOOT_MAX = 23
 

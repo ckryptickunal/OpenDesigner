@@ -47,7 +47,7 @@
       "properties": {
         "title": {
           "type": "string",
-          "maxLength": 48
+          "maxLength": 32
         },
         "byline": {
           "type": "string",

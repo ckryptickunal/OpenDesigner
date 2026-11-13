@@ -1,7 +1,7 @@
 {
   "items": [
     {
-      "name": "Linen room, Aldermoor",
+      "name": "Linen room, Old Town",
       "detail": "2 guests · 1 bed",
       "price": "$148 night",
       "photo": {
@@ -10,7 +10,7 @@
       }
     },
     {
-      "name": "Garden suite, Pellwick",
+      "name": "Garden suite, Harbourside",
       "detail": "4 guests · 2 beds",
       "price": "$212 night",
       "photo": {
@@ -19,7 +19,7 @@
       }
     },
     {
-      "name": "Blue room, Marrowgate",
+      "name": "Blue room, Riverside",
       "detail": "2 guests · 1 bed",
       "price": "$119 night",
       "photo": {

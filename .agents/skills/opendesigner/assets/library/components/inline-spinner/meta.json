@@ -1,0 +1,90 @@
+{
+  "name": "Inline spinner",
+  "summary": "A small spinner inside the control that is working, for waits of one to a few seconds: a Save button and a name check beside its field.",
+  "use": "for short waits the person started, such as saving a form or checking a name",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "spinner",
+    "loading",
+    "button",
+    "saving",
+    "short wait"
+  ],
+  "states": [
+    "idle",
+    "saving",
+    "saved",
+    "checking",
+    "available",
+    "taken",
+    "reduced motion"
+  ],
+  "source": null,
+  "a11y": "The button keeps its name and is aria-disabled while it works, so focus stays on it; a polite status says Saving and Changes saved, and the field check is read through its own status. Under reduced motion the spinner stops turning and the words still say what is happening.",
+  "width": "narrow",
+  "live_region": "polite",
+  "tokens_planned": {
+    "--ds-state-error-text": "--ds-color-text-danger",
+    "--ds-state-wait-button-pending-after": "1000ms",
+    "--ds-state-wait-indicator-after": "0 or 1000ms"
+  },
+  "spec": {
+    "use_when": [
+      "an action the person started takes about 1 to 4 seconds",
+      "a background check on one field"
+    ],
+    "avoid_when": [
+      "waits under about 300 ms: show nothing",
+      "waits over about 4 seconds or with steps: use progress-steps",
+      "a whole area loading: use a skeleton"
+    ],
+    "keyboard": [
+      "Tab reaches the address field, then Save changes",
+      "Focus stays on Save changes while it saves"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {}
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "An empty address shows no check and no message.",
+        "evidence": "if (!input.value.trim()) return"
+      },
+      "loading": {
+        "status": "shown",
+        "how": "The spinner sits inside the button or beside the field that is working.",
+        "evidence": "odl-spin"
+      },
+      "error": {
+        "status": "shown",
+        "how": "A taken address says so beside the field in the danger colour, with a cross.",
+        "evidence": "is-bad"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "Save changes is aria-disabled while saving, so it can't be pressed twice.",
+        "evidence": "aria-disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "The field shrinks before the row overflows.",
+        "evidence": "min-inline-size: 0"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}

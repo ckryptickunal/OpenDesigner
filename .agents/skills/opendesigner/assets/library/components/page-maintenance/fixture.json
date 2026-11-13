@@ -1,0 +1,6 @@
+{
+  "title": "Invoices are paused for an upgrade",
+  "message": "We're upgrading the payments database. Everything you saved is safe, and scheduled payments will go out once we're done.",
+  "until": "3:00 PM",
+  "detail": "Saturday, Nov 14 · your time · about 40 minutes from now"
+}

@@ -18,8 +18,8 @@
 .odl-session-expired button:focus-visible, .odl-session-expired a:focus-visible, .odl-session-expired input:focus-visible, .odl-session-expired textarea:focus-visible, .odl-session-expired [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 .odl-session-expired .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-.odl-session-expired .odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
-@container (max-width: 30rem) { .odl-session-expired .odl-card { padding: var(--ds-space-inset-lg); } }
+.odl-session-expired.odl-card { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+@container (max-width: 30rem) { .odl-session-expired.odl-card { padding: var(--ds-space-inset-lg); } }
 
 .odl-session-expired { padding: var(--ds-space-inset-xl); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-overlay); background: var(--ds-color-surface-overlay); box-shadow: var(--ds-elevation-overlay); }
 .odl-session-expired .odl-art { display: grid; place-items: center; inline-size: var(--ds-size-control-lg); aspect-ratio: 1; margin-block-end: var(--ds-space-stack-md); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-warning-subtle); color: var(--ds-color-text-warning); }

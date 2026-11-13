@@ -1,0 +1,125 @@
+{
+  "name": "Progress with steps",
+  "summary": "Progress for a long task: a bar with a percentage, the time left, each step done, now and next, and a way to keep working while it runs.",
+  "use": "for long tasks (imports, exports, uploads, migrations) that take more than a few seconds",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "progress",
+    "steps",
+    "import",
+    "long task",
+    "background"
+  ],
+  "states": [
+    "step done",
+    "current step",
+    "next step",
+    "in progress",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "The bar is a progressbar with a value and a text value; steps are an ordered list with the current one marked aria-current; a polite status announces each new step, not every percent.",
+  "width": "medium",
+  "live_region": "polite",
+  "notes": "Switch from inline-spinner to this once a task is expected to pass the system's --ds-state-wait-progress-after (10 seconds where the system has it).",
+  "spec": {
+    "use_when": [
+      "a task takes longer than about 4 seconds",
+      "the task has steps the person would recognise"
+    ],
+    "avoid_when": [
+      "waits of a few seconds: use inline-spinner",
+      "unknown length with no steps: say what is happening and show an indeterminate bar"
+    ],
+    "keyboard": [
+      "Tab reaches Cancel import, then Keep working"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "progress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "left": {
+          "type": "string",
+          "maxLength": 96
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "done",
+                  "next",
+                  "now"
+                ]
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 24
+              }
+            },
+            "required": [
+              "state",
+              "label"
+            ]
+          }
+        }
+      },
+      "required": [
+        "title",
+        "progress",
+        "left",
+        "steps"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "Not applicable: this state screen shows no list of records."
+      },
+      "loading": {
+        "status": "shown",
+        "how": "This part is the long-wait state: a bar, a percentage and the steps.",
+        "evidence": "role=\"progressbar\""
+      },
+      "error": {
+        "status": "not_built",
+        "how": "A failed step should turn its dot to the danger colour, say what failed and offer Retry from that step; not drawn here."
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "No control here is ever disabled; each one always does something."
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Buttons stack under 26rem.",
+        "evidence": "column-reverse"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}

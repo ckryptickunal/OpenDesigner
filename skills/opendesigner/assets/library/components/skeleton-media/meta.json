@@ -71,7 +71,7 @@
         },
         "title": {
           "type": "string",
-          "maxLength": 64
+          "maxLength": 24
         },
         "detail": {
           "type": "string",

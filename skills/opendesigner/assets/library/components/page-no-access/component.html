@@ -36,7 +36,7 @@
 @container (max-width: 30rem) {
   .odl-page-no-access { padding: var(--ds-space-section-sm) var(--ds-space-inset-lg); }
   .odl-page-no-access .odl-acts { flex-direction: column; align-self: stretch; inline-size: 100%; }
-  .odl-page-no-access .odl-acts > * { inline-size: 100%; }
+  .odl-page-no-access .odl-acts > * { inline-size: 100%; white-space: normal; text-align: center; }
 }
 
 .odl-page-no-access form { display: grid; gap: var(--ds-space-stack-md); }
@@ -47,6 +47,8 @@
 .odl-page-no-access .odl-who strong { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
 .odl-page-no-access .odl-live:focus { outline: none; }
 .odl-page-no-access .odl-live:not(:empty) { color: var(--ds-color-text-success); font: var(--ds-text-body-md); }
+.odl-page-no-access .odl-box .odl-live:empty { min-block-size: 0; margin: 0; }
+.odl-page-no-access .odl-me a { color: var(--ds-color-text-link); }
 .odl-page-no-access .odl-me { margin-block-start: var(--ds-space-stack-lg); color: var(--ds-color-text-tertiary); font: var(--ds-text-body-sm); }
 @media (prefers-reduced-motion: reduce) { .odl-page-no-access, .odl-page-no-access *, .odl-page-no-access *::before, .odl-page-no-access *::after { transition: none !important; animation: none !important; } }
 </style>
@@ -56,7 +58,7 @@
   <h2 data-od-slot="title">You don't have access to this page yet</h2>
   <p class="odl-lead" data-od-slot="message">“Q4 vendor budget” is shared with the Finance team. Ask its owner to add you.</p>
   <div class="odl-box"><form action="#">
-    <p class="odl-who">Owner: <strong data-od-slot="owner">Ingrid Vasquez-Ollen</strong></p>
+    <p class="odl-who">Owner: <strong data-od-slot="owner">Wilhelmina Okoye</strong></p>
     <label>Add a note (optional)<textarea name="note" placeholder="Say why you need it, so they can answer faster"></textarea></label>
     <button type="submit" class="odl-btn" data-od-action="request" data-od-effect="change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg>Request access</button>
   </form><p class="odl-live" role="status" tabindex="-1"></p></div>

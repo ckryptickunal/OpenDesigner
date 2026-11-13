@@ -43,8 +43,7 @@
       "the header itself is unknown: show a text skeleton"
     ],
     "keyboard": [
-      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading",
-      "The table scrolls sideways in its own box; it takes focus so arrow keys scroll it"
+      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
     ],
     "data": {
       "type": "object",
@@ -115,8 +114,8 @@
       },
       "overflow": {
         "status": "handled",
-        "how": "Under 36rem the table scrolls sideways in its own focusable box; the page never scrolls sideways.",
-        "evidence": "overflow-x: auto"
+        "how": "Under 36rem each row stacks into two lines (customer and amount, then invoice number and status) and the date hides; nothing scrolls sideways.",
+        "evidence": "@container (max-width: 36rem)"
       },
       "long_text": {
         "status": "handled",

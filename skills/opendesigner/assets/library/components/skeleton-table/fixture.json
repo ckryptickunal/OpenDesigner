@@ -2,14 +2,14 @@
   "rows": [
     {
       "number": "INV-2041",
-      "customer": "Halvard & Pike",
+      "customer": "Gorsedown Print",
       "date": "Nov 12",
       "amount": "$4,280.00",
       "status": "success"
     },
     {
       "number": "INV-2040",
-      "customer": "Quillmere Studio",
+      "customer": "Quorbin Studio",
       "date": "Nov 11",
       "amount": "$912.50",
       "status": "warning"
@@ -23,7 +23,7 @@
     },
     {
       "number": "INV-2038",
-      "customer": "Brackwater Supply",
+      "customer": "Brackwater Co",
       "date": "Nov 6",
       "amount": "$2,145.00",
       "status": "danger"

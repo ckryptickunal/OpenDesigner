@@ -1,0 +1,96 @@
+{
+  "name": "Page not found",
+  "summary": "A 404 page that says what happened in plain words, offers a search, and gives a way home.",
+  "use": "when someone opens a link to a page that does not exist or has moved",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "404",
+    "not found",
+    "error page",
+    "broken link",
+    "search"
+  ],
+  "states": [
+    "not found",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "One heading says what happened; the search is a labelled form; Go home is a real link and Go back a button, both reachable by Tab.",
+  "width": "wide",
+  "live_region": "none",
+  "spec": {
+    "use_when": [
+      "a URL matches no page or record",
+      "a record was deleted and its link is still shared"
+    ],
+    "avoid_when": [
+      "the page exists but the person can't see it: use page-no-access",
+      "the server failed: use page-error",
+      "a search inside the app found nothing: use empty-no-results"
+    ],
+    "keyboard": [
+      "Tab reaches the search field, Search, Go to home, Go back, then the popular links",
+      "Enter in the field runs the search"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "message": {
+          "type": "string",
+          "maxLength": 144
+        }
+      },
+      "required": [
+        "code",
+        "title",
+        "message"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "Not applicable: this state screen shows no list of records."
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "Not applicable: shown instead of content, after loading has failed or been refused."
+      },
+      "error": {
+        "status": "shown",
+        "how": "The part is itself an error or system state, written in plain words with a next step.",
+        "evidence": "class=\"odl-lead\""
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "No control here is ever disabled; each one always does something."
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Actions stack full width under 30rem; the panel caps its width.",
+        "evidence": "@container"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}

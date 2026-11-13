@@ -1,6 +1,6 @@
 {
   "title": "Invoice sent",
-  "message": "Halvard & Pike will get INV-2042 by email in a minute.",
+  "message": "Gorsedown Print will get INV-2042 by email in a minute.",
   "next": "We'll email you when they open it and when they pay.",
   "details": [
     {
@@ -13,7 +13,7 @@
     },
     {
       "label": "Sent to",
-      "value": "billing@halvardpike.example"
+      "value": "billing@gorsedown.example"
     }
   ]
 }

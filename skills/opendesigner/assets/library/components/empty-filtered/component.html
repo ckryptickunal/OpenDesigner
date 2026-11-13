@@ -36,7 +36,8 @@
   border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-full); background: var(--ds-color-surface-raised); font: var(--ds-text-label-md); }
 .odl-empty-filtered .odl-chips button { display: grid; place-items: center; inline-size: var(--ds-size-target-min); block-size: var(--ds-size-target-min); padding: 0; border: 0; border-radius: var(--ds-radius-full); background: transparent; color: var(--ds-color-icon-subtle); cursor: pointer; }
 .odl-empty-filtered .odl-chips button:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
-.odl-empty-filtered .odl-live { min-block-size: 1lh; margin-block-start: var(--ds-space-stack-sm); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-empty-filtered .odl-live { margin-block-start: var(--ds-space-stack-sm); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.odl-empty-filtered .odl-live:empty { margin: 0; }
 @media (prefers-reduced-motion: reduce) { .odl-empty-filtered, .odl-empty-filtered *, .odl-empty-filtered *::before, .odl-empty-filtered *::after { transition: none !important; animation: none !important; } }
 </style>
 <section class="odl-empty-filtered" aria-label="Invoices">

@@ -41,7 +41,7 @@
       "properties": {
         "title": {
           "type": "string",
-          "maxLength": 64
+          "maxLength": 48
         },
         "message": {
           "type": "string",

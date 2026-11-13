@@ -1,0 +1,97 @@
+{
+  "name": "Inline field error",
+  "summary": "A form field that says what is wrong right under it and how to fix it, keeps what the person typed, and clears the message once it's right.",
+  "use": "for a value in a form that can't be accepted as typed",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "form",
+    "validation",
+    "error message",
+    "input",
+    "inline error"
+  ],
+  "states": [
+    "error",
+    "fixed",
+    "submitted",
+    "hover",
+    "focus"
+  ],
+  "source": null,
+  "a11y": "The input is aria-invalid while wrong and described by the message; the message is a polite live region and is checked on leaving the field and on submit, not on every key; on a failed submit, focus moves to the field.",
+  "width": "narrow",
+  "live_region": "polite",
+  "tokens_planned": {
+    "--ds-state-error-border": "--ds-color-border-danger",
+    "--ds-state-error-gap": "--ds-space-stack-xs",
+    "--ds-state-error-text": "--ds-color-text-danger"
+  },
+  "spec": {
+    "use_when": [
+      "one field's value can be checked and fixed by the person"
+    ],
+    "avoid_when": [
+      "the server refused the whole form: show an error banner above the form (page-banners) and keep every value",
+      "a warning, not an error: say it as a hint, not in the error colour"
+    ],
+    "keyboard": [
+      "Tab reaches the email field, then Send invite",
+      "On a failed send, focus returns to the field and its message is read"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "error": {
+          "type": "string",
+          "maxLength": 24
+        }
+      },
+      "required": [
+        "value",
+        "error"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "shown",
+        "how": "An empty field says what to enter, on submit.",
+        "evidence": "Enter your work email."
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "Sending would use inline-spinner's pattern inside Send invite."
+      },
+      "error": {
+        "status": "shown",
+        "how": "The message sits under the field, with an icon and a thicker danger border.",
+        "evidence": "aria-invalid"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "No control here is ever disabled; each one always does something."
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "The message wraps under the field.",
+        "evidence": "align-items: start"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+        "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "The part has no picture; its drawing is an inline icon."
+      }
+    }
+  }
+}
