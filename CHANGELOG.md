@@ -6,7 +6,10 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ## [Unreleased]
 
-Nothing yet.
+### Added
+
+- **Stakeholder research** (2026-11-13). `research.py stakeholders` finds who has a say from your repo, drafts at most five questions for each role, and keeps every answer with who said it. Where people agree, it becomes a decision with its source; where they differ, both views stay until you settle it. Nobody's view is filled in for them.
+- **Research coverage and a summary page** (2026-11-13). `research.py coverage` checks the research against a full list (users and tasks, competitors' design systems, accessibility, platform conventions, voice, analytics, stakeholders) and names any missing tool. `research.py summary` writes one page to share with your team.
 
 ## [0.3.1]: 2026-11-11
 

@@ -17,9 +17,21 @@ Then, run as its own script (research before any colour or direction; references
     research.py positioning draft | show | confirm [--for ".."] [--problem ".."] [--claim ".."] --proof ".." [--proof ".."]
     research.py directions check | board [file] [--open] | pick <id> [--remix <axis>=<id>] [--why ".."]
 
+Stakeholders and the rest of the design research (references/research.md sections 3 and 11 to 13):
+
+    research.py stakeholders scan [--root .] [--issues issues.json]   who has a say, from what the repo shows (evidence, never a view)
+    research.py stakeholders interview [--role legal ...]           at most five questions per role, to send or answer
+    research.py stakeholders sent|none <role> ...                   asked and waiting; or nobody holds the role (the person's words)
+    research.py stakeholders answer <role> <n> --said-by ".." --text ".." [--value <option>] [--how interview|email|...]
+    research.py stakeholders show | decide <key> [--value <option> --quote "<the owner's words>"]
+    research.py coverage [--json]                    the complete list: users and tasks, competitors' systems, accessibility,
+                                                     platform conventions, content and voice, analytics, stakeholders
+    research.py summary [--open]                     research/summary.html: one page to share with the team
+
 Files (in the state folder): research/plan.json, research/users.json (the findings, canonical) and research/users.md (the
 same findings for people, rendered); research/positioning.json, research/directions.json and research/directions.html (the
-board); research/photos/ (licensed stock photos, with ledger.json, from opendesigner-illustrate's `photos` commands). state.json keeps a short summary under "research". Values it sets carry
+board); research/stakeholders.json (roles, evidence, answers with who said them, decisions), research/interviews.md and
+research/summary.html; research/photos/ (licensed stock photos, with ledger.json, from opendesigner-illustrate's `photos` commands). state.json keeps a short summary under "research". Values it sets carry
 set_by "research" and source_ref "research/users.json". The method: references/research.md.
 """
 from __future__ import annotations
@@ -37,15 +49,18 @@ PLAN = "research/plan.json"
 DOC = "research/users.md"
 STALE_DAYS = 180  # findings about people change; review asks for a refresh after about six months [inferred]
 
-# The seven things the research answers (references/research.md section 3). Each topic gets at least one search.
+# The ten things the research answers (references/research.md section 3). Each topic gets at least one search.
 TOPICS = {
     "who": "Who they are: age range, region, languages, reading level, devices and network",
     "context": "Where and how they use it: how often, how long, one hand or two, light, noise, interruptions",
+    "tasks": "The jobs they come to do, in their own words, and which ones matter most",
     "apps": "The apps they already use every day, and the patterns those apps have taught them",
     "expectations": "What they expect and what frustrates them: reviews, forums, complaints, published studies",
     "preferences": "Preferences that touch design: text size, dark mode, density, colour meanings in their culture",
     "accessibility": "Access needs common in the group: vision, motor, hearing, cognitive, situational",
     "market": "The market: the analogous product, what people would use instead, what those products all do, and the gap",
+    "platform": "Platform conventions: what the platform's own guidelines and its best apps teach (navigation, controls, gestures)",
+    "voice": "Content and voice: the words the users use, their reading level, and how products in the category talk to them",
 }
 QUERY_TEMPLATES = {  # starting points; the agent rewrites them in the users' own words and adds the industry's terms
     "who": ["{users} demographics survey", "{users} devices smartphone usage statistics"],
@@ -55,8 +70,11 @@ QUERY_TEMPLATES = {  # starting points; the agent rewrites them in the users' ow
     "preferences": ["{users} preferences font size dark mode", "{users} design preferences study"],
     "accessibility": ["{users} accessibility needs", "{users} vision OR dexterity OR literacy statistics"],
     "market": ["{product} alternatives", "apps like {product} for {users}"],
+    "tasks": ["{users} most common tasks {product}", "{users} jobs to be done workflow study"],
+    "platform": ["{platforms} design guidelines {product}", "{platforms} navigation patterns {product} apps"],
+    "voice": ["words {users} use for {product}", "{users} reading level plain language"],
 }
-MARKET_LISTS = ("competitors", "benchmark")         # market entries with a name, a why and sources, like apps
+MARKET_LISTS = ("competitors", "benchmark", "systems")  # entries with a name, a why and sources; systems: published design systems
 MARKET_ONE = ("analogous",)                          # one such entry
 MARKET_TEXT = ("pattern", "gap")                     # a sentence, or {text, sources}
 MARKET_WORDS = ("conventions",)                      # short lines: the words and habits the industry's users know
@@ -168,11 +186,16 @@ def draft_brief(eng, state):
     return "" if who.lower() in generic else who  # the sketch's plain words for an option are not a users line
 
 
-def queries(brief, product):
+PLATFORM_WORDS = {"web": "web", "ios": "Apple Human Interface Guidelines", "android": "Material Design", "desktop": "desktop app"}
+
+
+def queries(brief, product, platforms=None):
     users = brief.split(",")[0].strip() if brief else "<the users>"
     users = re.sub(r"\s+(who|that|using|on)\s.*$", "", users).strip() or users
     product = product or "<the product>"
-    return [{"topic": topic, "query": t.format(users=users, product=product)} for topic, ts in QUERY_TEMPLATES.items() for t in ts]
+    plats = " OR ".join(PLATFORM_WORDS[p] for p in platforms or [] if p in PLATFORM_WORDS) or "<the platform>"
+    return [{"topic": topic, "query": t.format(users=users, product=product, platforms=plats)}
+            for topic, ts in QUERY_TEMPLATES.items() for t in ts]
 
 
 def parse_tools(text):
@@ -190,7 +213,7 @@ def plan(eng, d, brief=None, tools=None, as_json=False):
     product = (eng.product_words(state) or "").strip() or (state.get("name") or "").strip()
     rec = {
         "v": 1, "date": _today(), "brief": b, "brief_confirmed": bool(brief),
-        "topics": TOPICS, "queries": queries(b, product),
+        "topics": TOPICS, "queries": queries(b, product, eng.answer_value((state.get("answers") or {}).get("Q-plat-01")) or []),
         "tools": {"have": have if have is not None else [], "missing": [t["id"] for t in TOOLS if have is not None and t["id"] not in have],
                   "reported": have is not None},
         "file": FILE,
@@ -227,6 +250,8 @@ def plan(eng, d, brief=None, tools=None, as_json=False):
     print("Next: one message to the person: the users line, the searches and the kinds of sites (studies, statistics, reviews, "
           "forums). One yes covers the whole run. Then research without stopping, save the findings as research/users.json, "
           "and run: engine.py research add <file>.")
+    print("Then: research.py coverage (what is still missing from the complete list), research.py stakeholders scan (who has a "
+          "say, from the repo) and research.py summary (one page for the team).")
     return rec
 
 
@@ -659,6 +684,27 @@ def review(d, state):
         notes.append(f"{POSITIONING} is not readable ({ex}).")
     if pos and pos.get("status") != "confirmed":
         notes.append(f"The positioning is a draft ({POSITIONING}): show it to the person, then research.py positioning confirm.")
+    try:
+        stake = load_stake(d)
+    except (ValueError, OSError) as ex:
+        stake = None
+        notes.append(f"{STAKE} is not readable ({ex}).")
+    if stake:
+        pts = points(stake)
+        open_ = [p["key"] for p in pts if p["status"] == "conflict" and not p.get("resolved")]
+        if open_:
+            notes.append(f"Stakeholders disagree on {', '.join(open_)}: show both views; only the owner settles it "
+                         "(research.py stakeholders decide <key> --value ... --quote ...).")
+        not_asked = [ROLES[k][0] for k, x in stake["roles"].items() if k in ROLES and x.get("status") == NOT_ASKED]
+        if not_asked:
+            notes.append("Stakeholders not asked yet: " + ", ".join(not_asked) + " (research.py stakeholders interview, or "
+                         "stakeholders none <role> --why ...).")
+    page = r.get("summary_page") or {}
+    if page:
+        newest = max((os.path.getmtime(os.path.join(d, f)) for f in (FILE, STAKE, POSITIONING) if os.path.isfile(os.path.join(d, f))), default=0)
+        fp = os.path.join(d, page.get("file") or SUMMARY)
+        if not os.path.isfile(fp) or os.path.getmtime(fp) < newest:
+            notes.append(f"{SUMMARY} is older than the research it shows: research.py summary.")
     if os.path.isfile(os.path.join(d, DIRECTIONS)):
         try:
             rec = _read(os.path.join(d, DIRECTIONS))
@@ -766,6 +812,10 @@ def entry_problems(kind, x):
     url = str(x.get("url") or "").strip()
     if url and not re.match(r"^https?://\S+$", url):
         err(f"url must be the page you opened (https://...), not {url!r}")
+    if kind == "systems":
+        if not url:
+            err("needs the url of the published design system or guideline you read")
+        return out
     if kind == "benchmark":
         if not url:
             err("needs the url of the page or section you looked at (the live page or its Mobbin link)")
@@ -1349,6 +1399,13 @@ def product_section(state):
 
 
 def _users_section(r):
+    extra = [x for x in (stake_lines(r), (f"Research summary to share with the team: `opendesigner/{r['summary_page']['file']}` "
+                                          f"(written {r['summary_page']['date']}).") if r.get("summary_page") else "") if x]
+    body = _users_body(r)
+    return body + ("\n\n" + "\n\n".join(extra) if extra else "")
+
+
+def _users_body(r):
     st = r.get("status")
     if st == "done":
         lines = [f"Researched {r.get('date')}: {r.get('brief', '').strip()}", ""]
@@ -1400,6 +1457,784 @@ def reminder(state):
             "engine.py research plan. Or skip it: engine.py research skip --why \"...\".")
 
 
+# ------------------------------------------------------------------------------------------------ stakeholder research
+
+STAKE = "research/stakeholders.json"
+INTERVIEWS = "research/interviews.md"
+SUMMARY = "research/summary.html"
+NOT_ASKED = "not asked"
+ROLE_STATUS = (NOT_ASKED, "sent", "answered", "no one")  # no one: the person says nobody holds this role
+MULTI = {"Q-plat-01", "Q-scope-01", "Q-scope-03", "Q-aud-04"}  # multi-select questions: a view is a set of options
+HOW = ("interview", "email", "chat", "document", "person")  # how the answer reached us; person: the owner, in this session
+
+# Who usually has a say in a design system, and at most five questions each. A question with a key that two roles share is
+# where their views can agree or conflict; one with a Q-id can become a decision once they agree. Plain words, so the person
+# can paste them into an email or a chat (references/research.md section 11).
+ROLES = {
+    "owner": ("Owner", "the person who decides when others disagree", [
+        ("users", "Who are the users, in one line? (role, setting, device)", None),
+        ("scope", "What must the system cover first: the product app, a marketing site, internal tools, docs, emails?", "Q-scope-01"),
+        ("fixed", "What is already fixed and not open to change: a logo, colours, fonts, a deadline, a framework?", None),
+        ("contribution", "When a team needs a new component, how should it get in: only the core team, open with checks, or two lanes?", "Q-gov-03"),
+        ("success", "In six months, what would tell you the design system worked?", None)]),
+    "product": ("Product", "product managers or whoever sets what gets built", [
+        ("tasks", "What are the three jobs users come to do, and which matters most?", None),
+        ("use", "How do they use it: all day in a dense tool, regularly, or now and then on a phone?", "Q-aud-01"),
+        ("kind", "Which is closest: money, health or government; a work tool; an everyday app; a game or learning?", "Q-aud-02"),
+        ("platforms", "Where must it run first: web, iOS, Android, desktop?", "Q-plat-01"),
+        ("complaints", "What do users complain about most today?", None)]),
+    "engineering": ("Engineering", "the people who build and keep the UI code", [
+        ("stack", "What is the stack, and where does the UI code live?", None),
+        ("platforms", "Which platforms do you ship to now, and which next?", "Q-plat-01"),
+        ("consumers", "Who will use the system day to day: engineers, designers, content people, partners, AI agents?", "Q-scope-03"),
+        ("contribution", "How should a change to the system get in: core team only, open with checks, or two lanes?", "Q-gov-03"),
+        ("constraints", "What must not break: existing components, a browser or OS version, performance budgets?", None)]),
+    "marketing": ("Marketing", "the people who sell it and own the public site", [
+        ("claim", "In one sentence, why do people pick this product over the others?", None),
+        ("competitors", "Which competitors should it look clearly different from?", None),
+        ("voice", "How should it sound: your existing guide, plainspoken, warm and crisp, or bold and optimistic?", "Q-voice-01"),
+        ("brand-assets", "Which brand assets exist today (logo, colours, fonts, photos), and where are they?", None),
+        ("channels", "Where do people first meet the product: search, social, app stores, sales?", None)]),
+    "legal": ("Legal and compliance", "whoever approves claims, licences and regulated words", [
+        ("kind", "Is the product regulated (money, health, government, children)?", "Q-aud-02"),
+        ("a11y-level", "Which accessibility level must it meet by law or contract: WCAG 2.2 AA, or AA plus some AAA?", "Q-aud-03"),
+        ("claims", "Which words or claims need your approval before they ship?", None),
+        ("licences", "Are there rules for font, image and icon licences?", None),
+        ("required-text", "What must always appear: disclaimers, privacy or consent text?", None)]),
+    "accessibility": ("Accessibility", "an accessibility lead, auditor or champion", [
+        ("a11y-level", "Which level is the target: WCAG 2.2 AA, or AA plus some AAA (like 7:1 body text)?", "Q-aud-03"),
+        ("needs", "Which needs come up most: larger text, contrast, reduced motion, density switch, tough conditions?", "Q-aud-04"),
+        ("tested-with", "Which screen readers and assistive tech do you test with?", None),
+        ("audit", "Is there a past audit or a list of known issues?", None),
+        ("sign-off", "Who signs off that a release is accessible?", None)]),
+    "support": ("Support", "the people who answer users' questions", [
+        ("complaints", "What are the three things users ask or complain about most?", None),
+        ("stuck", "Where do users get stuck or give up?", None),
+        ("words", "Which words do users use for things, where they differ from ours?", None),
+        ("devices", "Which devices and browsers show up in tickets?", None),
+        ("first-fix", "If you could change one screen tomorrow, which would it be?", None)]),
+    "brand": ("Brand and design", "the brand owner or design lead", [
+        ("guide", "Is there a brand guide? Where is it?", None),
+        ("brand-color", "Must the brand colours stay exact, or may the system tune the shades?", "Q-color-01"),
+        ("fonts", "Which fonts are licensed for the product, and for which platforms?", None),
+        ("voice", "How should it sound: your existing guide, plainspoken, warm and crisp, or bold and optimistic?", "Q-voice-01"),
+        ("never", "What must never be done with the brand?", None)]),
+}
+ROLE_IDS = list(ROLES)
+
+# What in a repo shows that a role has a say (evidence, never a view). Paths are matched case-insensitively.
+ROLE_FILES = {
+    "owner": (r"(^|/)governance(\.md)?$", r"(^|/)maintainers(\.md)?$", r"(^|/)owners(\.md)?$"),
+    "product": (r"(^|/)roadmap(\.md)?$", r"(^|/)(prd|product)[^/]*\.md$", r"(^|/)specs?/", r"(^|/)requirements[^/]*\.md$"),
+    "engineering": (r"(^|/)contributing(\.md)?$", r"(^|/)security(\.md)?$", r"(^|/)package\.json$", r"(^|/)pyproject\.toml$",
+                    r"(^|/)\.github/workflows/"),
+    "marketing": (r"(^|/)marketing/", r"(^|/)(landing|press|press-kit)/", r"(^|/)blog/"),
+    "legal": (r"(^|/)(licen[cs]e|notice|terms|privacy|cookies?|legal)([.\-_][^/]*)?$", r"(^|/)legal/", r"(^|/)third[-_]party[^/]*$"),
+    "accessibility": (r"(^|/)(accessibility|a11y)[^/]*$", r"(^|/)vpat[^/]*$", r"(^|/)(accessibility|a11y)/"),
+    "support": (r"(^|/)support(\.md)?$", r"(^|/)faq[^/]*$", r"(^|/)(help|support)/", r"(^|/)\.github/issue_template"),
+    "brand": (r"(^|/)brand[^/]*/", r"(^|/)brand[^/]*\.(md|pdf)$", r"(^|/)logo[^/]*\.(svg|png|pdf)$", r"\.(woff2?|otf|ttf)$",
+              r"(^|/)(style-?guide|design-?guide)[^/]*$"),
+}
+ROLE_WORDS = {  # words in README headings, CODEOWNERS teams and issue labels
+    "product": r"\b(product|pm|roadmap|feature request)\b", "engineering": r"\b(eng|engineering|dev|frontend|platform|infra)\b",
+    "marketing": r"\b(marketing|growth|seo|launch)\b", "legal": r"\b(legal|licen[cs]e|compliance|privacy|gdpr)\b",
+    "accessibility": r"\b(a11y|accessib\w*|wcag|screen reader)\b", "support": r"\b(support|help|faq|cx|customer)\b",
+    "brand": r"\b(brand|design|ui|ux|logo)\b",
+}
+OWN_FILES = {"DESIGN.md", "PRODUCT.md", "AGENTS.md", "CLAUDE.md"}  # written by OpenDesigner and the agent: not a sign of anyone
+SKIP_DIRS = {".git", "node_modules", "opendesigner", "dist", "build", ".next", ".venv", "venv", "vendor", "__pycache__", ".cache",
+             ".turbo", "coverage", ".claude", ".agents", "target", "Pods"}
+SECRET = re.compile(r"(^|/)(\.env[^/]*|.*\.(pem|key|p12)|id_rsa[^/]*|.*secret[^/]*)$", re.I)
+
+
+def _v(v):
+    """An option, or a list of options, in plain words for people."""
+    return ", ".join(map(str, v)) if isinstance(v, list) else str(v)
+
+
+def _same(a, b):
+    """One option and a one-item list of it are the same answer; lists compare as sets."""
+    norm = lambda v: sorted(map(str, v)) if isinstance(v, list) else ([] if v in (None, "") else [str(v)])
+    return norm(a) == norm(b)
+
+
+def _private(text):
+    return bool(RX_EMAIL.search(text or "") or RX_PHONE.search(text or ""))
+
+
+def load_stake(d):
+    p = os.path.join(d, STAKE)
+    return _read(p) if os.path.isfile(p) else None
+
+
+def blank_stake():
+    return {"v": 1, "date": _today(), "roles": {r: {"status": NOT_ASKED, "who": "", "evidence": [], "answers": []} for r in ROLE_IDS},
+            "decisions": []}
+
+
+def _walk(root, limit=6000):
+    n = 0
+    for base, dirs, files in os.walk(root):
+        rel = os.path.relpath(base, root)
+        depth = 0 if rel == "." else rel.count(os.sep) + 1
+        dirs[:] = sorted(x for x in dirs if x not in SKIP_DIRS and not (x.startswith(".") and x not in (".github",)) and depth < 4)
+        for f in sorted(files):
+            p = f if rel == "." else os.path.join(rel, f).replace(os.sep, "/")
+            if SECRET.search(p):
+                continue  # never open a secret, not even to list it
+            yield p
+            n += 1
+            if n >= limit:
+                return
+
+
+def _codeowners(root):
+    for p in (".github/CODEOWNERS", "CODEOWNERS", "docs/CODEOWNERS", ".gitlab/CODEOWNERS"):
+        fp = os.path.join(root, p)
+        if os.path.isfile(fp):
+            with open(fp, encoding="utf-8", errors="replace") as f:
+                rows = [ln.split() for ln in f if ln.strip() and not ln.lstrip().startswith("#")]
+            return p, [(r[0], [o for o in r[1:] if not RX_EMAIL.search(o)]) for r in rows if len(r) > 1]
+    return None, []
+
+
+def _git_people(root):
+    """How many people committed, a count only: names and emails stay in git."""
+    import subprocess
+    try:
+        out = subprocess.run(["git", "-C", root, "shortlog", "-sn", "--all", "--no-merges"], capture_output=True, text=True,
+                             timeout=20, stdin=subprocess.DEVNULL).stdout
+    except (OSError, subprocess.SubprocessError):
+        return None
+    rows = [ln for ln in out.splitlines() if ln.strip()]
+    return len(rows) if rows else None
+
+
+def scan_repo(root, issues=None):
+    """Evidence of who has a say, read from the repo: CODEOWNERS, the README, docs, brand files, licences, package metadata,
+    the commit history (a count) and, when the agent exported them, the issues. Evidence says a role exists; it is never
+    a view."""
+    ev = {r: [] for r in ROLE_IDS}
+    add = lambda r, what, where: ev[r].append({"what": what, "where": where}) if len(ev[r]) < 8 else None
+    paths = [p for p in _walk(root) if p not in OWN_FILES]
+    for r, pats in ROLE_FILES.items():
+        hits = [p for p in paths if any(re.search(x, p, re.I) for x in pats)]
+        if hits:
+            shown = ", ".join(hits[:4]) + (f" and {len(hits) - 4} more" if len(hits) > 4 else "")
+            add(r, f"{len(hits)} file(s) that this role usually owns", shown)
+    where, rows = _codeowners(root)
+    if rows:
+        owners = sorted({o for _, os_ in rows for o in os_})
+        add("owner", f"CODEOWNERS names {len(owners)} owner(s) for {len(rows)} path rule(s): {', '.join(owners[:6])}", where)
+        for pat, os_ in rows:
+            for o in os_:
+                for r, rx in ROLE_WORDS.items():
+                    if re.search(rx, o.replace("-", " ").replace("_", " "), re.I) or re.search(rx, pat.replace("/", " "), re.I):
+                        add(r, f"CODEOWNERS: {pat} is owned by {o}", where)
+                        break
+    for name in ("README.md", "readme.md", "README"):
+        fp = os.path.join(root, name)
+        if os.path.isfile(fp):
+            with open(fp, encoding="utf-8", errors="replace") as f:
+                for i, ln in enumerate(f, 1):
+                    if not ln.startswith("#") and not re.search(r"\b(wcag|licen[cs]e|accessib\w*)\b", ln, re.I):
+                        continue
+                    for r, rx in ROLE_WORDS.items():
+                        if r in ("brand", "engineering"):
+                            continue  # every README talks about design and code
+                        if re.search(rx, ln, re.I):
+                            add(r, "the README mentions it: " + re.sub(r"\s+", " ", ln.strip("# \n"))[:90], f"{name}:{i}")
+            break
+    pj = os.path.join(root, "package.json")
+    if os.path.isfile(pj):
+        try:
+            meta = _read(pj)
+        except ValueError:
+            meta = {}
+        a = meta.get("author")
+        a = (a.get("name") if isinstance(a, dict) else str(a or "")).strip()
+        a = RX_EMAIL.sub("", re.sub(r"<[^>]*>|\([^)]*\)", "", a)).strip()
+        if a:
+            add("owner", f"package.json names the author: {a}", "package.json")
+        if meta.get("license"):
+            add("legal", f"package.json declares the licence {meta['license']}", "package.json")
+    people = _git_people(root)
+    if people:
+        add("engineering", (f"{people} people have" if people > 1 else "1 person has") + " committed (a count; names stay in git)",
+            "git history")
+    if issues:
+        try:
+            items = _read(issues)
+        except (ValueError, OSError) as ex:
+            raise SystemExit(f"--issues {issues} is not readable JSON ({ex}). Export it with: "
+                             "gh issue list --state all --limit 300 --json number,title,labels > issues.json")
+        counts = Counter()
+        for it in items if isinstance(items, list) else []:
+            words = " ".join([str(it.get("title") or "")] + [str((l or {}).get("name") if isinstance(l, dict) else l)
+                                                              for l in it.get("labels") or []])
+            for r, rx in ROLE_WORDS.items():
+                if re.search(rx, words, re.I):
+                    counts[r] += 1
+        for r, n in counts.items():
+            add(r, f"{n} issue(s) about it, by title or label", os.path.basename(issues))
+    return ev
+
+
+def stake_scan(eng, d, root=None, issues=None):
+    root = root or (os.path.dirname(os.path.abspath(d)) if os.path.basename(os.path.abspath(d)) == eng.DEFAULT_DIR else ".")
+    rec = load_stake(d) or blank_stake()
+    for r in ROLE_IDS:
+        rec["roles"].setdefault(r, {"status": NOT_ASKED, "who": "", "evidence": [], "answers": []})
+    ev = scan_repo(root, issues)
+    for r in ROLE_IDS:
+        rec["roles"][r]["evidence"] = ev[r]
+    rec["scanned"] = _today()
+    rec["issues_read"] = bool(issues)
+    _save_stake(eng, d, rec)
+    print(f"Stakeholders, read from the repo at {os.path.abspath(root)}; saved to {os.path.join(d, STAKE)}")
+    for r in ROLE_IDS:
+        x = rec["roles"][r]
+        sign = f"{len(x['evidence'])} sign(s)" if x["evidence"] else "no sign in the repo"
+        print(f"  {ROLES[r][0]:22s} {x['status']:10s} {sign}")
+        for e_ in x["evidence"][:3]:
+            print(f"      {e_['what']} ({e_['where']})")
+    if not issues:
+        print("Issues were not read. With the GitHub CLI or a GitHub tool, export them and scan again: "
+              "gh issue list --state all --limit 300 --json number,title,labels > issues.json, then "
+              "research.py stakeholders scan --issues issues.json")
+    print("A sign says a role exists, never what it thinks. Next: ask the person who holds each role (or that nobody does), "
+          "then research.py stakeholders interview.")
+    return 0
+
+
+def _save_stake(eng, d, rec):
+    rec["date"] = _today()
+    _write(os.path.join(d, STAKE), rec)
+    state = eng.merge_defaults(eng.load_state(d))
+    r = summary(state)
+    pts = points(rec)
+    r["stakeholders"] = {"file": STAKE, "date": rec["date"],
+                         "roles": {k: v.get("status") for k, v in rec["roles"].items()},
+                         "agreed": [p["key"] for p in pts if p["status"] == "agreed"],
+                         "conflicts": [p["key"] for p in pts if p["status"] == "conflict" and not p.get("resolved")],
+                         "decided": [x["key"] for x in rec.get("decisions") or []]}
+    state["research"] = r
+    eng.dump_json(os.path.join(d, eng.STATE_FILE), state)
+
+
+def _role(rec, role):
+    if role not in ROLES:
+        raise SystemExit(f"{role!r} is not a role; use one of {', '.join(ROLE_IDS)}")
+    return rec["roles"].setdefault(role, {"status": NOT_ASKED, "who": "", "evidence": [], "answers": []})
+
+
+def interview_md(rec, roles=None, name=""):
+    out = [f"# {name or 'This product'}: questions for the people who have a say", "",
+           "> Drafted by OpenDesigner for the person to send or answer. Five questions at most per role, in plain words. "
+           "Send each block as it is (email, chat or a call), and record every answer with who said it: "
+           "`research.py stakeholders answer <role> <n> --said-by \"...\" --text \"...\"`.", ""]
+    for r in roles or ROLE_IDS:
+        title, who, qs = ROLES[r]
+        x = rec["roles"].get(r) or {}
+        if x.get("status") == "no one":
+            continue
+        out += [f"## {title}" + (f" ({x['who']})" if x.get("who") else ""), "", f"For {who}.", ""]
+        out += [f"{i}. {q}" for i, (_k, q, _qid) in enumerate(qs, 1)] + [""]
+    return "\n".join(out).rstrip() + "\n"
+
+
+def stake_interview(eng, d, roles=None):
+    rec = load_stake(d) or blank_stake()
+    for r in roles or []:
+        _role(rec, r)
+    state = eng.merge_defaults(eng.load_state(d))
+    text = interview_md(rec, roles, state.get("name") or "")
+    _write_text(os.path.join(d, INTERVIEWS), text)
+    if not os.path.isfile(os.path.join(d, STAKE)):
+        _save_stake(eng, d, rec)
+    print(text)
+    print(f"Saved to {os.path.join(d, INTERVIEWS)}. When a block is sent: research.py stakeholders sent <role> --who \"<their role "
+          "or name>\". When nobody holds a role: research.py stakeholders none <role> --why \"<the person's words>\".")
+    return 0
+
+
+def stake_sent(eng, d, role, who=None):
+    rec = load_stake(d) or blank_stake()
+    x = _role(rec, role)
+    if who and _private(who):
+        raise SystemExit("--who takes a role or a name, never an email or a phone number.")
+    if who:
+        x["who"] = who.strip()
+    if x["status"] != "answered":
+        x["status"] = "sent"
+    x["sent"] = _today()
+    _save_stake(eng, d, rec)
+    print(f"{ROLES[role][0]}: sent {x['sent']}" + (f" to {x['who']}" if x.get("who") else "") + ". Their view stays 'not given' until they answer.")
+    return 0
+
+
+def stake_none(eng, d, role, why):
+    if not (why or "").strip():
+        raise SystemExit("Say why, in the person's words: research.py stakeholders none <role> --why \"...\"")
+    rec = load_stake(d) or blank_stake()
+    x = _role(rec, role)
+    if x.get("answers"):
+        raise SystemExit(f"{ROLES[role][0]} has answers recorded; nothing was changed.")
+    x.update({"status": "no one", "why_none": why.strip()})
+    _save_stake(eng, d, rec)
+    print(f"{ROLES[role][0]}: nobody holds this role ({why.strip()}). Its questions are left out of the interviews.")
+    return 0
+
+
+def _parse_value(eng, qid, value):
+    if value is None or not str(value).strip():
+        return None
+    opts = eng.option_values(eng.questions()[qid])
+    vals = [v.strip() for v in str(value).split(",") if v.strip()]
+    bad = [v for v in vals if v not in opts]
+    if bad:
+        raise SystemExit(f"{', '.join(bad)} is not an option of {qid}; use one of {', '.join(opts)}, or leave --value out and keep their words only.")
+    if qid not in MULTI and len(vals) > 1:
+        raise SystemExit(f"{qid} takes one option.")
+    return sorted(vals) if qid in MULTI else vals[0]
+
+
+def stake_answer(eng, d, role, n, said_by, text, value=None, how="interview", date=None):
+    if not (said_by or "").strip():
+        raise SystemExit("--said-by is required: the role or name of the person who said it. A view nobody gave is never recorded.")
+    if not (text or "").strip():
+        raise SystemExit("--text is required: what they said, in their words.")
+    if _private(said_by) or _private(text):
+        raise SystemExit("Leave emails and phone numbers out of stakeholder answers.")
+    if how not in HOW:
+        raise SystemExit(f"--how must be one of {', '.join(HOW)}")
+    rec = load_stake(d) or blank_stake()
+    x = _role(rec, role)
+    qs = ROLES[role][2]
+    if not 1 <= int(n) <= len(qs):
+        raise SystemExit(f"{ROLES[role][0]} has questions 1 to {len(qs)}.")
+    key, ask, qid = qs[int(n) - 1]
+    v = _parse_value(eng, qid, value) if qid else None
+    if value and not qid:
+        raise SystemExit(f"Question {n} for {role} is open text; it has no options, so leave --value out.")
+    day = date or _today()
+    try:
+        _dt.date.fromisoformat(day)
+    except ValueError:
+        raise SystemExit(f"--date must be YYYY-MM-DD (got {day!r})")
+    x["answers"] = [a for a in x.get("answers") or [] if not (a.get("n") == int(n) and a.get("said_by") == said_by.strip())]
+    x["answers"].append({"n": int(n), "key": key, "question": qid, "text": text.strip(), "value": v, "said_by": said_by.strip(),
+                         "how": how, "date": day})
+    x["status"] = "answered"
+    if not x.get("who"):
+        x["who"] = said_by.strip()
+    _save_stake(eng, d, rec)
+    p = next(p for p in points(rec) if p["key"] == key)
+    print(f"Recorded {ROLES[role][0]} question {n} ({key}) from {said_by.strip()}, {day}" + (f": {qid} = {_v(v)}" if v else "") + ".")
+    print(f"  {key}: {p['status']}" + (f" ({p['note']})" if p.get("note") else ""))
+    return 0
+
+
+def points(rec):
+    """Every question key with the views given on it, side by side. agreed: two or more roles gave the same option and
+    none differs; one view: one role answered; conflict: the options differ (both kept, never averaged); views: open-text
+    answers to read; not asked: nobody answered yet."""
+    keys = {}
+    for r, (_t, _w, qs) in ROLES.items():
+        for k, _q, qid in qs:
+            keys.setdefault(k, {"key": k, "question": qid, "roles": [], "views": []})["roles"].append(r)
+    for r, x in (rec.get("roles") or {}).items():
+        for a in x.get("answers") or []:
+            if a.get("key") in keys:
+                keys[a["key"]]["views"].append({"role": r, **{k: a.get(k) for k in ("said_by", "date", "text", "value", "how")}})
+    done = {x["key"]: x for x in rec.get("decisions") or []}
+    out = []
+    for k, p in keys.items():
+        vals = [json.dumps(v["value"]) for v in p["views"] if v.get("value") is not None]
+        roles = {v["role"] for v in p["views"]}
+        nobody = {r for r, x in (rec.get("roles") or {}).items() if x.get("status") == "no one"}
+        p["roles"] = [r for r in p["roles"] if r not in nobody]
+        if not p["views"] and not p["roles"]:
+            continue  # nobody holds the roles this question is for
+        if not p["views"]:
+            p["status"], p["note"] = NOT_ASKED, "ask " + ", ".join(ROLES[r][0] for r in p["roles"])
+        elif not p["question"]:
+            p["status"] = "views"
+        elif len(set(vals)) > 1:
+            p["status"] = "conflict"
+            p["note"] = "; ".join(f"{ROLES[v['role']][0]} ({v['said_by']}): {_v(v['value'])}" for v in p["views"] if v.get("value") is not None)
+        elif vals and len({v["role"] for v in p["views"] if v.get("value") is not None}) >= 2:
+            p["status"] = "agreed"
+        elif vals:
+            p["status"] = "one view"
+            missing = [ROLES[r][0] for r in p["roles"] if r not in roles]
+            p["note"] = ("also ask " + ", ".join(missing)) if missing else "only one role answers this"
+        else:
+            p["status"] = "views"
+        if k in done:
+            p["resolved"] = done[k]
+        out.append(p)
+    return out
+
+
+def stake_decide(eng, d, key, value=None, quote=None):
+    """An agreed point becomes a decision with set_by research and the stakeholders as its source. A conflict or a single
+    view becomes one only when the owner picks, in their own words (set_by chosen); the views stay on record."""
+    rec = load_stake(d)
+    if not rec:
+        raise SystemExit("No stakeholder research yet: research.py stakeholders scan.")
+    p = next((p for p in points(rec) if p["key"] == key), None)
+    if not p:
+        raise SystemExit(f"{key!r} is not a question key; research.py stakeholders show lists them.")
+    if not p["question"]:
+        raise SystemExit(f"{key} is open text, not a question the engine asks. Use what they said where it fits, citing {STAKE}.")
+    qid = p["question"]
+    who = "; ".join(f"{ROLES[v['role']][0]} ({v['said_by']}, {v['date']})" for v in p["views"] if v.get("value") is not None)
+    state = eng.merge_defaults(eng.load_state(d))
+    cur = (state.get("answers") or {}).get(qid) or {}
+    if p["status"] == "agreed" and not quote:
+        agreed = next(v["value"] for v in p["views"] if v.get("value") is not None)
+        val = agreed if value is None else _parse_value(eng, qid, value)
+        if json.dumps(val) != json.dumps(agreed):
+            raise SystemExit(f"The stakeholders agreed on another value; to pick {value}, the owner decides with --quote \"<their words>\".")
+        own = cur.get("set_by") in PERSON_OWN
+        if own and not _same(eng.answer_value(cur), val):
+            raise SystemExit(f"{qid} already holds the person's own answer ({_v(eng.answer_value(cur))}, {cur.get('set_by')}). The "
+                             f"stakeholders agreed on {_v(val)}: show both, and if the owner changes it, run this again with --value and --quote.")
+        if own:  # the same as the person's own answer: keep theirs as it was set, and note that the stakeholders agree
+            set_by = cur.get("set_by")
+        else:
+            eng.cmd_set(d, "answers." + qid, val, why=f"stakeholders agreed ({who})", set_by="research", source_ref=f"{STAKE}#{key}",
+                        quiet=True)
+            set_by = "research"
+    else:
+        if p["status"] == NOT_ASKED:
+            raise SystemExit(f"Nobody has answered {key} yet; ask {p.get('note', '')[4:]} first.")
+        if value is None or not (quote or "").strip():
+            raise SystemExit(f"{key}: {p['status']} ({p.get('note') or who}). Only the owner settles it: --value <option> --quote "
+                             "\"<the owner's words>\". The other views stay on record.")
+        val = _parse_value(eng, qid, value)
+        eng.cmd_set(d, "answers." + qid, val, why=f"the owner settled it after the stakeholder views ({who})", set_by="chosen",
+                    quote=quote.strip(), source_ref=f"{STAKE}#{key}", quiet=True)
+        set_by = "chosen"
+    rec.setdefault("decisions", [])
+    rec["decisions"] = [x for x in rec["decisions"] if x.get("key") != key] + [
+        {"key": key, "question": qid, "value": val, "set_by": set_by, "date": _today(), "from": who, "was": p["status"],
+         **({"quote": quote.strip()} if quote else {})}]
+    _save_stake(eng, d, rec)
+    eng.refresh_docs(d)
+    if p["status"] == "agreed" and not quote and set_by != "research":
+        print(f"{qid} is already {_v(val)}, the person's own answer ({set_by}); kept as it was. The stakeholders agree with it.")
+        return 0
+    print(f"{qid} = {_v(val)} (set_by {set_by}, source {STAKE}#{key}); from {who}." + (" The conflict stays on record." if p["status"] == "conflict" else ""))
+    return 0
+
+
+def stake_show(eng, d, as_json=False):
+    rec = load_stake(d)
+    if not rec:
+        print("No stakeholder research yet: research.py stakeholders scan.")
+        return 0
+    pts = points(rec)
+    if as_json:
+        print(json.dumps({"roles": rec["roles"], "points": pts, "decisions": rec.get("decisions") or []}, indent=2, ensure_ascii=False))
+        return 0
+    print(f"Stakeholders ({os.path.join(d, STAKE)}, {rec.get('date')}):")
+    for r in ROLE_IDS:
+        x = rec["roles"].get(r) or {}
+        print(f"  {ROLES[r][0]:22s} {x.get('status', NOT_ASKED):10s} {x.get('who') or ''}"
+              + (f" ({len(x.get('answers') or [])} answer(s))" if x.get("answers") else ""))
+    for st in ("conflict", "agreed", "one view", "views", NOT_ASKED):
+        rows = [p for p in pts if p["status"] == st]
+        if rows:
+            print(f"{st.capitalize()}:")
+            for p in rows:
+                tag = f"; decided {_v(p['resolved']['value'])} ({p['resolved']['set_by']})" if p.get("resolved") else ""
+                print(f"  {p['key']:14s} {p['question'] or '':11s} {p.get('note') or ''}{tag}")
+    return 0
+
+
+def stake_lines(r):
+    """PRODUCT.md and the summary: one line on where the stakeholder research stands, from state only. '' when none."""
+    s = (r or {}).get("stakeholders") or {}
+    if not s:
+        return ""
+    roles = s.get("roles") or {}
+    n = lambda st: sum(1 for v in roles.values() if v == st)
+    line = (f"Stakeholders ({s.get('date')}): {n('answered')} answered, {n('sent')} asked and waiting, {n(NOT_ASKED)} not asked"
+            + (f", {n('no one')} with nobody in the role" if n("no one") else "") + ".")
+    if s.get("conflicts"):
+        line += " Open conflicts: " + ", ".join(s["conflicts"]) + "."
+    return line + f" `opendesigner/{STAKE}`"
+
+
+# ------------------------------------------------------------------------------------------------ design research coverage
+
+# The complete list of design research the repo does itself, and how each is known to be covered. A missing tool is said
+# plainly; nothing is marked covered without a finding or a source behind it.
+COVERAGE = [
+    ("users", "Users and their tasks", ("who", "context", "tasks"), "web-search"),  # findings on these topics; all are needed
+    ("systems", "The competitors' design systems", (), "browser"),
+    ("accessibility", "Accessibility needs of the audience", ("accessibility",), "web-search"),
+    ("platform", "Platform conventions", ("platform",), "web-search"),
+    ("voice", "Content and voice", ("voice",), "web-search"),
+    ("analytics", "The product's own analytics", (), "analytics"),
+    ("stakeholders", "Stakeholders", (), None),
+]
+
+
+def coverage(d, state):
+    users = _users(d) or {}
+    plan_ = _read(os.path.join(d, PLAN)) if os.path.isfile(os.path.join(d, PLAN)) else {}
+    have = set((plan_.get("tools") or {}).get("have") or []) | set((users.get("tools") or {}).get("used") or [])
+    reported = (plan_.get("tools") or {}).get("reported") or bool(users.get("tools"))
+    fs = [f for f in users.get("findings") or [] if isinstance(f, dict)]
+    src = {s.get("id"): s for s in users.get("sources") or [] if isinstance(s, dict)}
+    mk = users.get("market") or {}
+    rows = []
+    for cid, title, topics, tool in COVERAGE:
+        row = {"id": cid, "title": title, "status": "missing", "evidence": "", "next": ""}
+        if topics:
+            hit = [f for f in fs if f.get("topic") in topics]
+            seen = sorted({f["topic"] for f in hit})
+            row["evidence"] = f"{len(hit)} finding(s)" + (f" on {', '.join(seen)}" if seen else "")
+            gaps = [t for t in topics if t not in seen]
+            row["status"] = "covered" if hit and not gaps else ("partial" if hit else "missing")
+            if gaps and hit:
+                row["next"] = "search for " + ", ".join(gaps)
+        if cid == "systems":
+            comps = [x for x in mk.get("competitors") or [] if isinstance(x, dict)]
+            ready = [x for x in comps if table_ready(x)]
+            systems = [x for x in mk.get("systems") or [] if isinstance(x, dict)]
+            row["evidence"] = f"{len(ready)} of {len(comps)} competitors measured; {len(systems)} published system(s) read"
+            row["status"] = "covered" if len(ready) >= TABLE_MIN and systems else ("partial" if ready or systems else "missing")
+            if len(ready) < TABLE_MIN:
+                row["next"] = f"measure {TABLE_MIN - len(ready)} more competitor page(s): colours, type, CTA shape (opendesigner-extract)"
+            if not systems:
+                row["next"] = (row["next"] + "; " if row["next"] else "") + \
+                    "read the design systems the competitors or the platform publish (market.systems), or note that none is public"
+        if cid == "analytics":
+            ana = [s for s in src.values() if s.get("kind") == "analytics" or str(s.get("url") or "").lower().startswith("analytics")]
+            phase = ((state.get("answers") or {}).get("Q-scope-07") or {})
+            phase = phase.get("value") if isinstance(phase, dict) else phase
+            row["evidence"] = f"{len(ana)} analytics source(s)"
+            if ana:
+                row["status"] = "covered"
+            elif phase in ("idea", "building"):
+                row["status"], row["next"] = "not yet", "the product is not live, so there are no analytics to read"
+            elif "analytics" not in have:
+                row["status"] = "blocked"
+                row["next"] = ("no analytics tool here" + ("" if reported else " (or the tools were not reported)") +
+                               ": ask the person for an export of devices, screen sizes, languages and dark-mode share")
+            else:
+                row["next"] = "read devices, screen sizes, languages and dark-mode share from the analytics tool"
+        if cid == "stakeholders":
+            rec = load_stake(d)
+            if not rec:
+                row["next"] = "research.py stakeholders scan, then interview"
+            else:
+                sts = [x.get("status") for x in rec["roles"].values()]
+                ans, none_, asked = sts.count("answered"), sts.count("no one"), sts.count("sent")
+                row["evidence"] = f"{ans} role(s) answered, {asked} waiting, {sts.count(NOT_ASKED)} not asked"
+                row["status"] = "covered" if ans and sts.count(NOT_ASKED) == 0 and asked == 0 else ("partial" if ans or asked or none_ else "missing")
+                if sts.count(NOT_ASKED):
+                    row["next"] = "ask " + ", ".join(ROLES[r][0] for r, x in rec["roles"].items() if x.get("status") == NOT_ASKED)
+        if tool and row["status"] in ("missing", "partial") and reported and tool not in have and cid != "analytics":
+            t = next(x for x in TOOLS if x["id"] == tool)
+            row["next"] = (row["next"] + "; " if row["next"] else "") + f"missing tool: {t['name']} ({t['look_for']})"
+        rows.append(row)
+    return rows
+
+
+def cmd_coverage(d, state, as_json=False):
+    rows = coverage(d, state)
+    if as_json:
+        print(json.dumps(rows, indent=2, ensure_ascii=False))
+        return 0
+    print("Design research, against the complete list:")
+    for r in rows:
+        print(f"  {r['status']:8s} {r['title']}" + (f": {r['evidence']}" if r["evidence"] else "") + (f". Next: {r['next']}" if r["next"] else ""))
+    gaps = [r for r in rows if r["status"] in ("missing", "partial", "blocked")]
+    if gaps:
+        print("Fill the gaps with the tools you have, cite each finding, and say plainly which tool is missing.")
+    return 0
+
+
+# ------------------------------------------------------------------------------------------------ the research summary page
+
+def _e(s):
+    import html
+    return html.escape(str(s if s is not None else ""), quote=True)
+
+
+def _link(url, text=None):
+    url = str(url or "")
+    return f'<a href="{_e(url)}" rel="noopener">{_e(text or url)}</a>' if re.match(r"^https?://\S+$", url) else _e(text or url)
+
+
+def _template_style():
+    tpl = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "templates", "direction-board.html")
+    with open(tpl, encoding="utf-8") as f:
+        m = re.search(r"<style>(.*?)</style>", f.read(), re.S)
+    return m.group(1) if m else ""
+
+
+SUMMARY_CSS = """
+body{font-size:14px}h1{font-size:17px}h2{font-size:12px}b,strong,th{font-weight:600}
+.od-h>div:first-child{min-width:0;flex:1 1 240px}.od-h h1,.od-h .sub{overflow-wrap:anywhere}
+.tbl td{max-width:60ch}
+.sub,.dim,.lede,.box p,.box li{max-width:72ch}.sub,.dim{font-size:14px}
+main{gap:24px;padding:24px 16px}.box{padding:16px}.od-h{padding:16px}
+section{display:grid;gap:12px;min-width:0}section *{overflow-wrap:anywhere}.tbl td,.tbl th{overflow-wrap:break-word}
+.tbl{border-collapse:collapse;width:100%;font-size:14px}.tbl th,.tbl td{border-bottom:1px solid var(--c-border);padding:8px;text-align:left;vertical-align:top}
+.tbl th{color:var(--c-muted)}.wrap{overflow-x:auto}
+.st{display:inline-block;font:600 12px/1.5 var(--font);padding:0 8px;border:1px solid var(--c-border);border-radius:6px;white-space:nowrap}
+.st.covered,.st.agreed,.st.answered{border-color:var(--c-strong)}.st.conflict,.st.blocked,.st.missing{border-style:dashed}
+.side{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),520px));gap:8px;margin:8px 0 0}
+.side div{border:1px solid var(--c-border);border-radius:4px;padding:8px 12px;min-width:0}section>p{margin:0}
+.lede{margin:0 0 4px}.dim{color:var(--c-muted)}.kv{font-size:12px}
+.refs li{margin:4px 0}.sw span{font-size:12px}
+@media (max-width:600px){.tbl thead{display:none}.tbl,.tbl tbody,.tbl tr,.tbl td{display:block;width:auto;max-width:none}
+.tbl tr{padding:8px 0;border-bottom:1px solid var(--c-border)}.tbl tr:last-child{border-bottom:0}
+.tbl td{border:0;padding:4px 0;overflow-wrap:anywhere}.tbl td::before{content:attr(data-l);display:block;color:var(--c-muted);font-size:12px;font-weight:600}}
+@media print{.od-h .seg{display:none}body{background:#fff}}
+"""
+
+
+def _label_cells(page):
+    """Give every table cell its column's name (data-l), so a phone shows each row as a labelled card."""
+    def one(m):
+        heads = re.findall(r"<th>(.*?)</th>", m.group(1))
+        def row(r):
+            cells = iter(heads)
+            return re.sub(r"<td>", lambda _c: f'<td data-l="{next(cells, "")}">', r.group(0))
+        return m.group(1) + re.sub(r"<tr>.*?</tr>", row, m.group(2), flags=re.S)
+    return re.sub(r"(<thead>.*?</thead>)(<tbody>.*?</tbody>)", one, page, flags=re.S)
+
+
+def summary_html(eng, d, state):
+    name = state.get("name") or "This product"
+    r = summary(state)
+    users = _users(d) or {}
+    stake = load_stake(d)
+    pos = load_positioning(d) or {}
+    cov = coverage(d, state)
+    src = [s for s in users.get("sources") or [] if isinstance(s, dict)]
+    ids = {s.get("id") for s in src}
+    cite = lambda refs: " ".join(f'<a href="#src-{_e(x)}">[{_e(x)}]</a>' if x in ids else f"[{_e(x)}]" for x in refs or [])
+    sec = []
+    status = r.get("status") or "none"
+    lead = {"done": f"Researched {users.get('date') or r.get('date')}: {users.get('brief') or r.get('brief') or ''}",
+            "skipped": f"User research was skipped: {r.get('skipped_why')}", "planned": "User research is planned; no findings are saved yet."}
+    sec.append(f'<section class="box"><p class="lede">{_e(lead.get(status, "The users have not been researched yet."))}</p>'
+               '<p class="dim">Desk research by an AI agent with OpenDesigner, from public sources it opened, plus what the people '
+               'named below said. It describes a group, not this product&#8217;s own users. Every line cites its source; a view '
+               'nobody gave says &#8220;not asked&#8221;.</p></section>')
+    if pos:
+        rows = "".join(f"<li><b>{_e(label)}</b>{_e(_text(pos.get(k)) if k != 'proof' else '; '.join(_text(x) for x in pos.get('proof') or []) or 'Only the owner has it')}</li>"
+                       for k, label in POS_PARTS)
+        sec.append(f'<section><h2>Positioning ({_e(pos.get("status") or "draft")})</h2><ul class="pos box">{rows}</ul></section>')
+    body = "".join(f"<tr><td><span class='st {_e(c['status'].replace(' ', '-'))}'>{_e(c['status'])}</span></td><td>{_e(c['title'])}</td>"
+                   f"<td>{_e(c['evidence'])}</td><td>{_e(c['next'])}</td></tr>" for c in cov)
+    sec.append('<section><h2>What was researched</h2><div class="box wrap"><table class="tbl"><thead><tr><th>Status</th><th>Area</th>'
+               f'<th>Found</th><th>Still to do</th></tr></thead><tbody>{body}</tbody></table></div></section>')
+    fs = [f for f in users.get("findings") or [] if isinstance(f, dict)]
+    if fs:
+        body = "".join(f"<tr><td>{_e(f['id'])}</td><td>{_e(TOPICS.get(f.get('topic'), f.get('topic', '')).split(':')[0])}</td>"
+                       f"<td>{_e(f.get('text'))}</td><td>{_e(f.get('confidence'))}</td><td>{cite(f.get('sources'))}</td></tr>" for f in fs)
+        sec.append('<section><h2>Users: findings</h2><div class="box wrap"><table class="tbl"><thead><tr><th>Id</th><th>Topic</th>'
+                   f'<th>Finding</th><th>Confidence</th><th>Sources</th></tr></thead><tbody>{body}</tbody></table></div></section>')
+    comps = [x for x in (users.get("market") or {}).get("competitors") or [] if isinstance(x, dict)]
+    if comps:
+        def sw(x):
+            return '<span class="sw">' + "".join(f'<span><i style="background:{_e(h)}"></i>{_e(role)} {_e(h)}</span>' for role, h in _colors(x)) + "</span>"
+        body = "".join(f"<tr><td>{_link(x.get('url'), x.get('name'))}</td><td>{_e(x.get('why'))}</td><td>{sw(x)}</td>"
+                       f"<td>{_e(' / '.join(str(v) for v in ((x.get('type') or {}).get('display'), (x.get('type') or {}).get('text')) if v))}</td>"
+                       f"<td>{_e((x.get('cta') or {}).get('shape'))}</td><td>{cite(x.get('sources'))}</td></tr>" for x in comps)
+        sec.append('<section><h2>Competitors, measured</h2><div class="box wrap"><table class="tbl"><thead><tr><th>Name</th><th>Why</th>'
+                   f'<th>Colours</th><th>Type</th><th>CTA</th><th>Sources</th></tr></thead><tbody>{body}</tbody></table></div></section>')
+    systems = [x for x in (users.get("market") or {}).get("systems") or [] if isinstance(x, dict)]
+    if systems:
+        sec.append('<section><h2>Design systems they publish</h2><ul class="box refs">' + "".join(
+            f"<li>{_link(x.get('url'), x.get('name'))}: {_e(x.get('why'))} {cite(x.get('sources'))}</li>" for x in systems) + "</ul></section>")
+    if stake:
+        body = ""
+        for rid in ROLE_IDS:
+            x = stake["roles"].get(rid) or {}
+            st = x.get("status") or NOT_ASKED
+            ev = "; ".join(e_["what"] for e_ in (x.get("evidence") or [])[:2]) or "no sign in the repo"
+            body += (f"<tr><td>{_e(ROLES[rid][0])}</td><td><span class='st {_e(st.replace(' ', '-'))}'>{_e(st)}</span></td>"
+                     f"<td>{_e(x.get('who') or '')}</td><td>{len(x.get('answers') or [])}</td><td>{_e(ev)}</td></tr>")
+        sec.append('<section><h2>Stakeholders</h2><div class="box wrap"><table class="tbl"><thead><tr><th>Role</th><th>Status</th>'
+                   f'<th>Who</th><th>Answers</th><th>Seen in the repo</th></tr></thead><tbody>{body}</tbody></table></div></section>')
+        rows = ""
+        order = ("conflict", "one view", "agreed", "views")
+        for p in sorted(points(stake), key=lambda p: order.index(p["status"]) if p["status"] in order else 9):
+            if p["status"] == NOT_ASKED:
+                continue
+            views = "".join(f"<div><b>{_e(ROLES[v['role']][0])}</b> &middot; {_e(v['said_by'])}, {_e(v['date'])}<br>{_e(v['text'])}"
+                            + (f"<br><span class='kv'>{_e(p['question'])} = {_e(_v(v['value']))}</span>" if v.get("value") is not None else "")
+                            + "</div>" for v in p["views"])
+            dec = p.get("resolved")
+            dec_t = (f"<p class='dim'>Decided {_e(dec['date'])}: {_e(dec['question'])} = {_e(_v(dec['value']))} (set_by {_e(dec['set_by'])}"
+                     + (f", the owner: &#8220;{_e(dec['quote'])}&#8221;" if dec.get("quote") else "") + ")</p>") if dec else ""
+            rows += (f"<div class='box'><p class='lede'><b>{_e(p['key'])}</b> <span class='st {_e(p['status'].replace(' ', '-'))}'>"
+                     f"{_e(p['status'])}</span>" + (f" <span class='dim'>{_e(p.get('note'))}</span>" if p.get("note") and p["status"] != "conflict" else "")
+                     + f"</p><div class='side'>{views}</div>{dec_t}</div>")
+        if rows:
+            sec.append(f"<section><h2>What they said, side by side</h2><p class='dim'>Conflicts stay as they are until the owner settles them; "
+                       f"nothing is averaged.</p>{rows}</section>")
+        asked = [p["key"] for p in points(stake) if p["status"] == NOT_ASKED]
+        if asked:
+            sec.append(f"<section><h2>Not asked yet</h2><div class='box'><p class='dim'>{_e(', '.join(asked))}</p></div></section>")
+    oq = users.get("open_questions") or []
+    if oq:
+        sec.append('<section><h2>Open questions</h2><ul class="box refs">' + "".join(f"<li>{_e(q)}</li>" for q in oq) + "</ul></section>")
+    if src:
+        sec.append('<section><h2>Sources</h2><ol class="box refs">' + "".join(
+            f'<li id="src-{_e(s.get("id"))}">[{_e(s.get("id"))}] {_link(s.get("url"), s.get("title") or s.get("url"))}'
+            f'<span class="dim"> &middot; {_e(", ".join(x for x in (s.get("kind"), s.get("date") and "published " + str(s["date"]), s.get("accessed") and "opened " + str(s["accessed"])) if x))}</span></li>'
+            for s in src) + "</ol></section>")
+    theme = ('<div class="seg" role="group" aria-label="Color mode">' + "".join(
+        f'<button type="button" data-t="{t}" aria-pressed="false">{t.capitalize()}</button>' for t in ("light", "dark")) + "</div>")
+    js = ("<script>document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{document.documentElement.dataset.theme=b.dataset.t;"
+          "document.querySelectorAll('[data-t]').forEach(x=>x.setAttribute('aria-pressed',x===b))})</script>")
+    return ("<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n"
+            f"<title>{_e(name)} · Research summary</title>\n<!-- Written by research.py summary from research/users.json, research/"
+            "stakeholders.json and research/positioning.json. Rebuild it after any change; edit those files, not this page. -->\n"
+            f"<style>{_template_style()}{SUMMARY_CSS}</style>\n</head>\n<body>\n"
+            f'<header class="od-h"><div><h1>{_e(name)}: research summary</h1><p class="sub">Who the users are, what the market does, '
+            f'what the people with a say said, and what is still open. Written {_today()}.</p></div>{theme}</header>\n'
+            f"<main>{_label_cells(''.join(sec))}</main>\n{js}\n</body>\n</html>\n")
+
+
+def cmd_summary(eng, d, open_=False):
+    state = eng.merge_defaults(eng.load_state(d))
+    dest = os.path.join(d, SUMMARY)
+    _write_text(dest, summary_html(eng, d, state))
+    state = eng.merge_defaults(eng.load_state(d))
+    r = summary(state)
+    r["summary_page"] = {"file": SUMMARY, "date": _today()}
+    state["research"] = r
+    eng.dump_json(os.path.join(d, eng.STATE_FILE), state)
+    eng.refresh_docs(d)
+    print(f"wrote {dest}: one page to share with the team (an artifact, a screenshot or the file). PRODUCT.md links to it.")
+    if open_:
+        import webbrowser
+        webbrowser.open("file://" + os.path.abspath(dest))
+    return 0
+
+
+def design_md_note(state):
+    """One line for DESIGN.md (the engine's render_design_md calls it when present): where the research summary is."""
+    r = summary(state)
+    page = r.get("summary_page") or {}
+    if not page:
+        return ""
+    return (f"Research behind these decisions (users, market, stakeholders), on one page to share: `opendesigner/{page['file']}` "
+            f"(written {page['date']}).")
+
+
 # ------------------------------------------------------------------------------------------------ command line
 
 def main(argv=None):
@@ -1438,8 +2273,59 @@ def main(argv=None):
     c.add_argument("--remix", action="append", help="take one axis from another direction: <axis>=<id>")
     c.add_argument("--why")
     c.add_argument("--file")
+    q = sub.add_parser("coverage", help="design research against the complete list: what is covered, missing, or blocked by a missing tool")
+    q.add_argument("--json", action="store_true")
+    q = sub.add_parser("summary", help=f"write {SUMMARY}: users, market, stakeholders and what is open, on one page to share")
+    q.add_argument("--open", action="store_true")
+    q = sub.add_parser("stakeholders", help="who has a say: read the repo, draft the interviews, record answers, settle agreed points")
+    ss = q.add_subparsers(dest="sub", required=True)
+    c = ss.add_parser("scan", help="read CODEOWNERS, the README, docs, brand and legal files, the commit count and exported issues")
+    c.add_argument("--root", help="the project folder (default: the folder that holds opendesigner/)")
+    c.add_argument("--issues", help="issues exported as JSON: gh issue list --state all --limit 300 --json number,title,labels")
+    c = ss.add_parser("interview", help=f"draft at most five questions per role into {INTERVIEWS}")
+    c.add_argument("--role", action="append", choices=ROLE_IDS)
+    c = ss.add_parser("sent", help="the interview went out to this role")
+    c.add_argument("role", choices=ROLE_IDS)
+    c.add_argument("--who", help="their role or name (never an email)")
+    c = ss.add_parser("none", help="nobody holds this role, in the person's words")
+    c.add_argument("role", choices=ROLE_IDS)
+    c.add_argument("--why", required=True)
+    c = ss.add_parser("answer", help="record one answer with who said it")
+    c.add_argument("role", choices=ROLE_IDS)
+    c.add_argument("n", type=int, help="the question number in the interview (1 to 5)")
+    c.add_argument("--said-by", dest="said_by", required=True)
+    c.add_argument("--text", required=True, help="what they said, in their words")
+    c.add_argument("--value", help="the option their words match, for a question the engine asks (comma list for a multi-select)")
+    c.add_argument("--how", default="interview", choices=HOW)
+    c.add_argument("--date", help="the day they said it (default today)")
+    c = ss.add_parser("show")
+    c.add_argument("--json", action="store_true")
+    c = ss.add_parser("decide", help="turn an agreed point into a decision (set_by research), or record the owner settling a conflict")
+    c.add_argument("key")
+    c.add_argument("--value")
+    c.add_argument("--quote", help="the owner's words, when they settle a conflict or a single view")
     a = ap.parse_args(argv)
     d = a.dir or eng.DEFAULT_DIR
+    if a.cmd in ("coverage", "summary", "stakeholders") and not os.path.exists(os.path.join(d, eng.STATE_FILE)):
+        raise SystemExit(f"no state at {os.path.join(d, eng.STATE_FILE)}; run the sketch first (engine.py sketch ...).")
+    if a.cmd == "coverage":
+        return cmd_coverage(d, eng.merge_defaults(eng.load_state(d)), a.json)
+    if a.cmd == "summary":
+        return cmd_summary(eng, d, a.open)
+    if a.cmd == "stakeholders":
+        if a.sub == "scan":
+            return stake_scan(eng, d, a.root, a.issues)
+        if a.sub == "interview":
+            return stake_interview(eng, d, a.role)
+        if a.sub == "sent":
+            return stake_sent(eng, d, a.role, a.who)
+        if a.sub == "none":
+            return stake_none(eng, d, a.role, a.why)
+        if a.sub == "answer":
+            return stake_answer(eng, d, a.role, a.n, a.said_by, a.text, a.value, a.how, a.date)
+        if a.sub == "show":
+            return stake_show(eng, d, a.json)
+        return stake_decide(eng, d, a.key, a.value, a.quote)
     if a.cmd == "market":
         return cmd_market(d, a.json)
     if a.cmd == "positioning":
