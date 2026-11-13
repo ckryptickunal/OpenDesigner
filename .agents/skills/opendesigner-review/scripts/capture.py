@@ -284,6 +284,18 @@ ERROR_WORDS = r"\b(error|went wrong|couldn.t|could not|can.t load|cannot load|fa
 DATA_TYPES = ("fetch", "xhr")
 
 
+def site_of(url):
+    """The last two labels of the host (app.example.com and api.example.com are one site); an IP or localhost stands alone."""
+    h = urlparse(url).hostname or ""
+    return h if re.fullmatch(r"[\d.:]+|localhost", h) else ".".join(h.split(".")[-2:])
+
+
+def is_data(req, page_url):
+    """A request for the page's own data: fetch or XHR to the same site. Cross-site calls (a star counter, analytics,
+    a widget) are listed but not answered empty or with errors, and nothing goes to another site on their account."""
+    return req.resource_type in DATA_TYPES and site_of(req.url) == site_of(page_url)
+
+
 def empty_like(v):
     """The same JSON shape with every list emptied: what an account with no data returns."""
     if isinstance(v, list):
@@ -300,8 +312,8 @@ def network_states(page, out, tag, probe, opts=None):
     url, ev = page.url, []
     vp = page.viewport_size or {"width": 0, "height": 0}
     doc = {"kind": "datastates", "url": url, "viewport": {"w": vp["width"], "h": vp["height"]}, "media": {"colorScheme": "light"}, "slow": None, "requests": 0, "modes": {}}
-    seen = []
-    page.on("request", lambda r: seen.append(r.url) if r.resource_type in DATA_TYPES else None)
+    seen, other = [], []
+    page.on("request", lambda r: (seen if is_data(r, url) else other).append(r.url) if r.resource_type in DATA_TYPES else None)
     try:
         cdp = page.context.new_cdp_session(page)
         cdp.send("Network.enable")
@@ -330,12 +342,15 @@ def network_states(page, out, tag, probe, opts=None):
     page.goto(url, wait_until="load")
     settle(page)
     doc["requests"] = len(set(seen))
-    base_text = page.evaluate(LOADING_JS)["text"]
+    doc["requestUrls"] = sorted(set(seen))[:5]
+    doc["otherSites"] = sorted(set(other))[:5]
+    base = page.evaluate(LOADING_JS)
+    base_text = base["text"]   # the page with its data: state signs and words already there do not count
     if doc["requests"]:
         held = []
         for mode in ("hang", "empty", "error", "offline"):
             def handler(route, *_, mode=mode):   # Playwright passes the request as a second argument
-                if route.request.resource_type not in DATA_TYPES:
+                if not is_data(route.request, url):
                     return route.continue_()
                 if mode == "hang":
                     held.append(route)   # not answered while we look: the view should show that data is on its way
@@ -379,7 +394,7 @@ def network_states(page, out, tag, probe, opts=None):
                 words = EMPTY_WORDS if mode == "empty" else ERROR_WORDS
                 # a message is new state words: more matches than the page shows with its data
                 doc["modes"][mode] = {"chars": r["chars"], "message": len(re.findall(words, r["text"], re.I)) > len(re.findall(words, base_text, re.I)),
-                                      "busyStill": r["busy"] > 0 or r["loadingWords"], "placeholders": ((pr.get("content") or {}).get("placeholders") or [])[:4],
+                                      "busyStill": r["busy"] > base["busy"] or (r["loadingWords"] and not base["loadingWords"]), "placeholders": ((pr.get("content") or {}).get("placeholders") or [])[:4],
                                       "shot": str(sp)}
             finally:
                 page.context.set_offline(False)

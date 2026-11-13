@@ -1565,7 +1565,8 @@ def check_datastates(d, F):
               "CLS 0.1 or less on a slow load: a skeleton or reserved box the size of what replaces it", [n for s in sl.get("shifts", [])[:3] for n in s.get("nodes", []) if n],
               "give images width and height (or aspect-ratio), and make each skeleton the size and shape of the content it stands for", "Core Web Vitals (CLS)", key="arrival-shift", basis="operated")
     if not d.get("requests"):
-        F.add("ST-16", "info", "No data requests: empty, error and offline states not tried", w, "the page made no fetch or XHR request while loading",
+        F.add("ST-16", "info", "No data requests: empty, error and offline states not tried", w, "the page made no fetch or XHR request to its own site while loading"
+              + (f" (calls to other sites, left alone: {', '.join(d['otherSites'][:3])})" if d.get("otherSites") else ""),
               "for a page with data, each state shows a message people can act on", [], "if data arrives another way (server-rendered, a socket), set each state by hand and look", None, key="no-data", basis="operated")
         return
     hang = (d.get("modes") or {}).get("hang")
@@ -1579,6 +1580,7 @@ def check_datastates(d, F):
         if mode == "hang":
             continue
         said, want = names.get(mode, (mode, "a message"))
+        reqs = ", ".join(d.get("requestUrls") or [])
         if m.get("placeholders"):
             F.add("ST-16", "error", f"Broken text when the data is {said}", w, "; ".join(f"{x['sel']}: {x['match']!r}" for x in m["placeholders"][:3]),
                   "no undefined, NaN or empty template text in any state", [x["sel"] for x in m["placeholders"][:3]] + [m.get("shot")],
@@ -1587,7 +1589,7 @@ def check_datastates(d, F):
             F.add("ST-16", "warn", f"Still loading forever when the data is {said}", w, "a loading sign is still on screen after the request ended", "the loading sign gives way to a message",
                   [m.get("shot")], "end the loading state on failure as well as on success", None, key="state-stuck-" + mode, basis="operated")
         elif not m.get("message"):
-            F.add("ST-16", "warn", f"No message when the data is {said}", w, f"{fmt(m.get('chars'))} characters on screen and none of the usual words for this state",
+            F.add("ST-16", "warn", f"No message when the data is {said}", w, f"{fmt(m.get('chars'))} characters on screen and no new words for this state" + (f" (requests answered this way: {reqs})" if reqs else ""),
                   want, [m.get("shot")], "write the state into the view: say what happened and offer the next step", None, key="state-silent-" + mode, basis="operated", decided="judgment")
 
 
