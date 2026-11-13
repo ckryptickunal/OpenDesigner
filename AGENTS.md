@@ -79,7 +79,7 @@ python3 skills/opendesigner/scripts/engine.py review    (end of every implementa
 python3 skills/opendesigner/scripts/engine.py checkin   (what changed since the last check-in, what is open, the one next step; also at session start, every 5 decisions and each closed round; --every N, --off, --offers off)
 python3 skills/opendesigner/scripts/engine.py version   (this copy's release, and whether the system was made or built with an older one; never checks online)
 python3 skills/opendesigner/scripts/engine.py status    (the Now line: the step, what waits for the owner, the next command; first after a context reset or in a new session)
-python3 skills/opendesigner/scripts/engine.py handoff yes|no   (after asking once: the AGENTS.md snippet and a CLAUDE.md that imports it, or nothing; recorded either way)
+python3 skills/opendesigner/scripts/engine.py handoff yes --quote "<their words>"|no   (after asking once; yes needs the owner's words: the AGENTS.md snippet and a CLAUDE.md that imports it, or nothing; recorded either way)
 python3 skills/opendesigner/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea   (--kind note: the owner's note on the work, counted in opendesigner/RULES.md)
 python3 skills/opendesigner/scripts/engine.py research plan --brief "..." --tools web-search,browser,last30days   (then research add <findings.json> [--accept], or research skip --why "...")
 ```
@@ -171,6 +171,7 @@ python3 tools/wiki.py proposals --check  the pending-proposals table in synthesi
 python3 tools/test_wiki.py               learning wiki tests (.venv-wiki/bin/python also runs the OpenWiki ones)
 python3 tools/test_plugin_hook.py        the plugin's start-of-session hook: read-only and fast, one offer per project, silent otherwise
 python3 tools/test_checkins.py           check-ins: every N decisions, closed rounds, settings, none before the first result
+python3 tools/test_review_drift.py       review flags unknown token names, typed fonts, off-system weights and unapproved od-ignore
 python3 tools/design_evals.py --check --no-save   the engine on 20 fixed briefs: every required check passes (evals/README.md)
 python3 skills/opendesigner/scripts/library.py check   every library component uses only tokens every engine system writes, is scoped, and has complete tags
 python3 site/post_change_audit.py          after changing the website or the library: every automatic check, then walk skills/opendesigner/references/post-change-audit.md by eye

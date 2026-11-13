@@ -84,10 +84,12 @@ class StartOfSessionHook(unittest.TestCase):
             p, took = run_hook(project)
             self.assertEqual(p.returncode, 0)
             lines = p.stdout.strip().splitlines()
-            self.assertLessEqual(len(lines), 8)
+            self.assertLessEqual(len(lines), 12)
             text = p.stdout
-            for bit in ("opendesigner/", "Now: step 1 Discover", "Next:", "RULES.md", "engine.py review", "DESIGN.md", "engine.py here is"):
-                self.assertIn(bit, text, bit)
+            for bit in ("opendesigner/", "Now: step 1 Discover", "Next:", "RULES.md", "engine.py review", "DESIGN.md", "engine.py here is",
+                        "engine.py ledger start", "opendesigner-review", "screenshots", str(ROOT / "skills" / "opendesigner" / "references" / "rules.md")):
+                self.assertIn(bit, text, bit)  # S4 #7, #8, #13: the build loop and the full path of rules.md
+            self.assertTrue(all(ln.count("Waiting for the owner:") <= 1 for ln in lines), "one wait per line (S4 #4)")
             self.assertEqual(snapshot(project), before)  # read-only in the project
             self.assertEqual(set(SCRIPTS.rglob("*.pyc")), caches)  # and no bytecode written next to the plugin
             self.assertLess(took, 5)  # about 0.3 s on a laptop; generous for slow machines

@@ -722,15 +722,41 @@ Your own decisions first (the newest value per path), then your changes to stand
 3. Do not change a locked decision without asking the owner. Keep new screens inside the taste card at the top of the Overview, and never add anything on its Never list without asking.
 4. To change the system: `engine.py set <path> <value> --why "..."`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.
 5. To extend: add a decision (never hand-edit tokens or this file). Keep semantic names the same across modes. Deprecate instead of deleting.
-6. After any implementation, run `engine.py review` and re-read this file.
+6. Every build: open a round (`engine.py ledger start "<what>" --items ...`), build from the tokens, run `engine.py review`, check the rendered page with opendesigner-review and show screenshots at phone and desktop width, mark each ledger item done or waived (with the owner's words), then re-read this file.
 
-**Tailwind v4 classes** (one import: `@import "tailwindcss"; @import "<path>/opendesigner/build/tailwind/theme.css";`; Tailwind's default colors, text sizes, radii and shadows are switched off, so only these exist):
+**Tailwind v4 classes** (one import: `@import "tailwindcss"; @import "<path>/opendesigner/build/tailwind/theme.css";`; Tailwind's default colors, text sizes, radii and shadows are switched off, so only these exist). They need a Tailwind build that imports that file. In plain HTML with no build step, use the CSS name beside each class from `build/css/tokens.css`; never load Tailwind from a CDN script. Each row is one token under its two names:
 
-| Area | Classes |
-|---|---|
-| Color | `bg-action-primary`, `hover:bg-action-primary-hover`, `active:bg-action-primary-pressed`, `text-on-action`, `bg-surface-base`, `bg-surface-raised`, `text-fg-primary`, `text-fg-secondary`, `text-fg-link`, `border-line-subtle`, `border-line-input`, `outline-line-focus`, `bg-danger-bold` |
-| Layout | `p-inset-md`, `gap-stack-md`, `gap-inline-sm`, `h-control-md`, `size-icon-md`, `min-h-target-min` |
-| Shape | `rounded-control`, `rounded-container`, `rounded-overlay`, `rounded-full` |
-| Elevation | `shadow-raised`, `shadow-floating`, `shadow-overlay` |
-| Type | `text-body-md`, `text-label-lg`, `text-title-md` |
-| Motion | `transition-feedback`, `ease-enter`, `ease-exit` |
+| Area | Tailwind class | Plain CSS (no build step) |
+|---|---|---|
+| Color | `bg-action-primary` | `var(--ds-color-bg-action-primary)` |
+| Color | `hover:bg-action-primary-hover` | `var(--ds-color-bg-action-primary-hover)` |
+| Color | `active:bg-action-primary-pressed` | `var(--ds-color-bg-action-primary-pressed)` |
+| Color | `text-on-action` | `var(--ds-color-text-on-action)` |
+| Color | `bg-surface-base` | `var(--ds-color-surface-base)` |
+| Color | `bg-surface-raised` | `var(--ds-color-surface-raised)` |
+| Color | `text-fg-primary` | `var(--ds-color-text-primary)` |
+| Color | `text-fg-secondary` | `var(--ds-color-text-secondary)` |
+| Color | `text-fg-link` | `var(--ds-color-text-link)` |
+| Color | `border-line-subtle` | `var(--ds-color-border-subtle)` |
+| Color | `border-line-input` | `var(--ds-color-border-input)` |
+| Color | `outline-line-focus` | `var(--ds-color-border-focus)` |
+| Color | `bg-danger-bold` | `var(--ds-color-bg-danger-bold)` |
+| Layout | `p-inset-md` | `var(--ds-space-inset-md)` |
+| Layout | `gap-stack-md` | `var(--ds-space-stack-md)` |
+| Layout | `gap-inline-sm` | `var(--ds-space-inline-sm)` |
+| Layout | `h-control-md` | `var(--ds-size-control-md)` |
+| Layout | `size-icon-md` | `var(--ds-size-icon-md)` |
+| Layout | `min-h-target-min` | `var(--ds-size-target-min)` |
+| Shape | `rounded-control` | `var(--ds-radius-control)` |
+| Shape | `rounded-container` | `var(--ds-radius-container)` |
+| Shape | `rounded-overlay` | `var(--ds-radius-overlay)` |
+| Shape | `rounded-full` | `var(--ds-radius-full)` |
+| Elevation | `shadow-raised` | `var(--ds-elevation-raised)` |
+| Elevation | `shadow-floating` | `var(--ds-elevation-floating)` |
+| Elevation | `shadow-overlay` | `var(--ds-elevation-overlay)` |
+| Type | `text-body-md` | `.ds-text-body-md` (a text style class) |
+| Type | `text-label-lg` | `.ds-text-label-lg` (a text style class) |
+| Type | `text-title-md` | `.ds-text-title-md` (a text style class) |
+| Motion | `transition-feedback` | `var(--ds-motion-transition-feedback)` |
+| Motion | `ease-enter` | `var(--ds-motion-easing-enter)` |
+| Motion | `ease-exit` | `var(--ds-motion-easing-exit)` |
