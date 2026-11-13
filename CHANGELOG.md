@@ -6,7 +6,11 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ## [Unreleased]
 
-Nothing yet.
+### Added
+
+- **A catalog of every library component** (2026-11-13). `library.json` says what each of the 82 parts is for and when not to use it, its parts, how much text and how many items it holds, its six hard states (289 of them left for you to build, and it says so), its tokens and its keyboard use. `library.py check` keeps it true to the files.
+- **Fetch a component by its address** (2026-11-13). Each part now has `/library/<id>.html` and `/library/<id>.json` on the website, and `/library/index.json` is the whole catalog. `library.py add <id> --from https://opendesigner.dev` or one `curl` brings a part into any project. The new docs page, Use the component library, explains all three ways.
+- **The library over MCP** (2026-11-13). A small server in `server/mcp/` lets Claude Desktop, Claude Code and other MCP apps list, suggest and fetch parts, and get a tokens file. It only reads and never goes online. In Claude a gallery opens, and Use this puts `OD:add library.<id>` in the chat. It runs on your computer; a hosted copy is planned.
 
 ## [0.3.1]: 2026-11-11
 

@@ -9,5 +9,206 @@
   "states": ["above objective", "missing data", "deploy marker"],
   "source": "brand/showcase/product/04-sounding-observability",
   "a11y": "The chart is one image with a sentence that says what it shows; the key spells out each line style, so colour is never the only cue.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": ["in an incident or alert view, to show when a metric crossed its objective and whether a deploy came just before"],
+    "avoid_when": ["comparing amounts across categories: use bar-chart", "several headline numbers side by side: use kpi-strip"],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the metric's name",
+        "slot": "text"
+      },
+      {
+        "name": "meta",
+        "selector": ".odl-meta",
+        "what": "the service and the time window",
+        "slot": "text"
+      },
+      {
+        "name": "now",
+        "selector": ".odl-now",
+        "what": "the latest value, in the warning colour when above objective",
+        "slot": "number"
+      },
+      {
+        "name": "status",
+        "selector": ".odl-status",
+        "what": "a one-line warning and a View alert link",
+        "slot": "rich"
+      },
+      {
+        "name": "plot",
+        "selector": ".odl-plot svg",
+        "what": "the chart: today's line, yesterday dotted, the objective dashed, a no-data band and a deploy line",
+        "slot": "media"
+      },
+      {
+        "name": "pins",
+        "selector": ".odl-pin",
+        "what": "labels on the chart for the top of the scale and the objective",
+        "slot": "text"
+      },
+      {
+        "name": "axis",
+        "selector": ".odl-axis span",
+        "what": "time labels under the chart",
+        "slot": "list"
+      },
+      {
+        "name": "key",
+        "selector": "figcaption span",
+        "what": "one line style and what it means",
+        "slot": "list"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "unit", "series", "objective"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "title"
+        },
+        "service": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "meta"
+        },
+        "window": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "meta"
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 6,
+          "part": "now"
+        },
+        "now": {
+          "type": "number",
+          "part": "now"
+        },
+        "objective": {
+          "type": "number",
+          "part": "pins"
+        },
+        "scale_max": {
+          "type": "number",
+          "part": "pins"
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 56,
+          "part": "status"
+        },
+        "alert_href": {
+          "type": "string",
+          "maxLength": 400,
+          "part": "status"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 200,
+          "part": "plot"
+        },
+        "series": {
+          "type": "array",
+          "minItems": 12,
+          "maxItems": 120,
+          "part": "plot",
+          "items": {
+            "type": "number"
+          }
+        },
+        "previous": {
+          "type": "array",
+          "minItems": 12,
+          "maxItems": 120,
+          "part": "plot",
+          "items": {
+            "type": "number"
+          }
+        },
+        "deploy": {
+          "type": "object",
+          "part": "plot",
+          "properties": {
+            "at": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "label": {
+              "type": "string",
+              "maxLength": 16
+            }
+          }
+        },
+        "axis": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "part": "axis",
+          "items": {
+            "type": "string",
+            "maxLength": 6
+          }
+        },
+        "gaps": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 3,
+          "part": "plot",
+          "items": {
+            "type": "object",
+            "required": ["from", "to"],
+            "properties": {
+              "from": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "to": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no data for the window, keep the header and replace the plot with empty-state ('No data in the last 24 hours')"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the header and draw a muted band the height of the plot until the series arrives"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the metric cannot be read, swap the warning line for an alert-banners error and leave the plot empty"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "nothing here is disabled; leave out View alert when there is no alert to open"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrow box the plot gets shorter, the value moves under the title and the key becomes a three-column grid",
+        "evidence": "@container (max-width: 30rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the value, pins, axis labels and link never wrap; the header and warning line wrap their pieces onto new rows",
+        "evidence": "white-space: nowrap"
+      }
+    },
+    "keyboard": ["Tab reaches the View alert link; Enter follows it"]
+  }
 }

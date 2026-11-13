@@ -43,5 +43,226 @@
       "author": "Zoltan Tasi",
       "page": "_snNw0rqRVs"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["any booking that needs a place, a date range and a head count in one form, such as a holiday rental or a hotel"],
+    "avoid_when": ["showing flights already found: use flight-results", "picking only a date range inside a work tool: use date-range-picker", "narrowing a list of results that is already on screen: use filter-bar"],
+    "parts": [
+      {
+        "name": "mode",
+        "selector": ".odl-mode label",
+        "what": "a two-way switch: Stays or Flights",
+        "slot": "list"
+      },
+      {
+        "name": "where_label",
+        "selector": ".odl-where-label",
+        "what": "the destination question; reads Flying to in Flights",
+        "slot": "text"
+      },
+      {
+        "name": "destination",
+        "selector": "#odl-ts-where",
+        "what": "the destination field, a combobox",
+        "slot": "input"
+      },
+      {
+        "name": "suggestions",
+        "selector": ".odl-sugg li",
+        "what": "one suggestion: a photo, the place with the typed part marked, and its kind and count",
+        "slot": "list"
+      },
+      {
+        "name": "range",
+        "selector": ".odl-range",
+        "what": "the chosen dates and number of nights, announced as it changes",
+        "slot": "text"
+      },
+      {
+        "name": "months",
+        "selector": ".odl-month",
+        "what": "one month: its name, weekday letters and a grid of day buttons",
+        "slot": "list"
+      },
+      {
+        "name": "days",
+        "selector": ".odl-days button",
+        "what": "one day; check-in and check-out are filled, the nights between are banded",
+        "slot": "action"
+      },
+      {
+        "name": "guests",
+        "selector": ".odl-who li",
+        "what": "one guest kind with a hint and a minus, count, plus stepper; Pets hides in Flights",
+        "slot": "list"
+      },
+      {
+        "name": "steppers",
+        "selector": ".odl-step button",
+        "what": "fewer and more buttons, disabled at their limits",
+        "slot": "action"
+      },
+      {
+        "name": "search",
+        "selector": ".odl-go",
+        "what": "the submit button, which repeats the guest count",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["months", "guests"],
+      "properties": {
+        "mode": {
+          "enum": ["stays", "flights"],
+          "part": "mode"
+        },
+        "where_label": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "where_label"
+        },
+        "destination": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "destination"
+        },
+        "placeholder": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "destination"
+        },
+        "suggestions": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 5,
+          "part": "suggestions",
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 36
+              },
+              "detail": {
+                "type": "string",
+                "maxLength": 28
+              },
+              "photo": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "alt": {
+                "type": "string",
+                "maxLength": 60
+              }
+            }
+          }
+        },
+        "months": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "part": "months",
+          "items": {
+            "type": "object",
+            "required": ["name", "first_weekday", "days"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "first_weekday": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 6
+              },
+              "days": {
+                "type": "integer",
+                "minimum": 28,
+                "maximum": 31
+              }
+            }
+          }
+        },
+        "check_in": {
+          "type": "string",
+          "maxLength": 10,
+          "format": "date",
+          "part": "days"
+        },
+        "check_out": {
+          "type": "string",
+          "maxLength": 10,
+          "format": "date",
+          "part": "days"
+        },
+        "guests": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "part": "guests",
+          "items": {
+            "type": "object",
+            "required": ["label", "count"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 12
+              },
+              "hint": {
+                "type": "string",
+                "maxLength": 28
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 10
+              },
+              "min": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "search_label": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "search"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "when nothing matches the typed text the suggestions list closes; there is no 'No matches' line",
+        "evidence": "list.hidden = !open"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "while suggestions load, show two suggestion rows with a muted photo box and muted text lines under the field"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if search fails or no place was picked, mark the field invalid with a message under it, or put an alert-banners line above Search"
+      },
+      "disabled": {
+        "status": "handled",
+        "how": "steppers disable at their limits (one adult, zero children or pets, ten of each) in the disabled colours",
+        "evidence": ".odl-trip-search .odl-step button:disabled"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the suggestions list grows with every match; cap it at five rows or give it its own max height with overflow-y: auto"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "suggestion text wraps in a column beside the photo, and the When line wraps under its heading",
+        "evidence": ".odl-trip-search .odl-sugg li { display: grid; grid-template-columns: auto minmax(0, 1fr);"
+      }
+    },
+    "keyboard": ["Tab reaches the Stays and Flights switch as one radio group; the arrow keys change it", "In the destination field, typing filters the suggestions, Down and Up arrows move through them, Enter picks the highlighted one and Escape closes the list", "Tab reaches every day button; Enter or Space on the first sets check-in and on a later day sets check-out", "Tab then reaches each Fewer and More button and Search; Enter or Space presses them"]
+  }
 }

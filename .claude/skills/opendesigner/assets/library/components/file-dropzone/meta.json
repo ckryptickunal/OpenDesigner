@@ -9,5 +9,176 @@
   "states": ["hover", "focus", "drag over", "uploaded", "uploading", "failed", "queued"],
   "source": "brand/showcase/components/04-upload-brutal",
   "a11y": "A real file input sits inside the browse label, so keyboard users can pick files; the list is a polite live region, the progress bar has role progressbar with a value, and every remove and retry button names its file.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": ["a form step that needs several documents, where people must see which ones failed and retry them"],
+    "avoid_when": ["attaching a source to a message for an assistant: use ai-composer, which has its own attach button", "a long list of uploaded files to search and manage later: use receipts-table"],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-head h3",
+        "what": "what to upload",
+        "slot": "text"
+      },
+      {
+        "name": "intro",
+        "selector": ".odl-head p",
+        "what": "what happens to the files and where they are kept",
+        "slot": "text"
+      },
+      {
+        "name": "drop",
+        "selector": ".odl-drop",
+        "what": "the dashed drop area; its text changes to 'Drop to upload' while a file is dragged over",
+        "slot": "none"
+      },
+      {
+        "name": "browse",
+        "selector": ".odl-browse",
+        "what": "a link-styled label holding the real file input",
+        "slot": "input"
+      },
+      {
+        "name": "types",
+        "selector": ".odl-types",
+        "what": "accepted file types and the size limit",
+        "slot": "text"
+      },
+      {
+        "name": "files",
+        "selector": "ul > li",
+        "what": "one file: type tile, name, size or status, progress bar while uploading, and its buttons",
+        "slot": "list"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-name",
+        "what": "the file name",
+        "slot": "text"
+      },
+      {
+        "name": "meta",
+        "selector": ".odl-meta",
+        "what": "size and result, progress left, or why it failed",
+        "slot": "text"
+      },
+      {
+        "name": "progress",
+        "selector": ".odl-bar",
+        "what": "upload progress for one file",
+        "slot": "number"
+      },
+      {
+        "name": "retry",
+        "selector": ".odl-retry",
+        "what": "tries a failed upload again",
+        "slot": "action"
+      },
+      {
+        "name": "remove",
+        "selector": ".odl-icon-btn",
+        "what": "removes a file or cancels its upload",
+        "slot": "action"
+      },
+      {
+        "name": "total",
+        "selector": ".odl-foot",
+        "what": "how many files are uploaded and their total size",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "accept"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "title"
+        },
+        "intro": {
+          "type": "string",
+          "maxLength": 140,
+          "part": "intro"
+        },
+        "accept": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "browse"
+        },
+        "types": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "types"
+        },
+        "files": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 8,
+          "part": "files",
+          "items": {
+            "type": "object",
+            "required": ["name", "state"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 120,
+                "part": "name"
+              },
+              "state": {
+                "enum": ["done", "uploading", "failed", "queued"]
+              },
+              "meta": {
+                "type": "string",
+                "maxLength": 70,
+                "part": "meta"
+              },
+              "progress": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "part": "progress"
+              }
+            }
+          }
+        },
+        "total": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "total"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "when the last file is removed the footer says there are no files and focus goes back to the file input",
+        "evidence": "No files yet"
+      },
+      "loading": {
+        "status": "shown",
+        "how": "a file being uploaded shows a progress bar with its value and the time left",
+        "evidence": "role=\"progressbar\""
+      },
+      "error": {
+        "status": "shown",
+        "how": "a failed file gets a red border and tile, the reason in its status line, and a Retry button",
+        "evidence": "li.is-failed { border-color: var(--ds-color-border-danger); }"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "set disabled on the file input and dim the drop area, for example once the file limit is reached"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the file list grows with every file; past about eight, give the list a max height and its own scroll"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long file name ends in an ellipsis on wider boxes and wraps in a narrow one",
+        "evidence": ".odl-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+      }
+    },
+    "keyboard": ["Tab reaches the browse link, which holds the real file input, then each file's Retry and Remove buttons", "Enter or Space on browse opens the system file picker", "After a file is removed, focus moves to the next file's first button, or back to the file input when none are left"]
+  }
 }

@@ -33,5 +33,177 @@
       "author": "Kara Eads",
       "page": "EbLX7oRo4vI"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a short check at the end of a lesson or onboarding, where a wrong answer should explain the right one"],
+    "avoid_when": ["a survey or form with no right answer: use settings-toggles or a plain form", "showing a streak or score after the quiz: use lesson-streak or leaderboard", "picking a plan or option to buy: use plan-picker"],
+    "parts": [
+      {
+        "name": "close",
+        "selector": ".odl-close",
+        "what": "leave the quiz",
+        "slot": "action"
+      },
+      {
+        "name": "progress",
+        "selector": ".odl-progress",
+        "what": "a bar of how many questions are answered",
+        "slot": "number"
+      },
+      {
+        "name": "lives",
+        "selector": ".odl-lives",
+        "what": "a heart and the lives left",
+        "slot": "number"
+      },
+      {
+        "name": "eyebrow",
+        "selector": ".odl-eyebrow",
+        "what": "the question number and the topic",
+        "slot": "text"
+      },
+      {
+        "name": "question",
+        "selector": "h3",
+        "what": "the question",
+        "slot": "text"
+      },
+      {
+        "name": "picture",
+        "selector": ".odl-pic",
+        "what": "a photo for the question",
+        "slot": "media"
+      },
+      {
+        "name": "choices",
+        "selector": ".odl-choice",
+        "what": "one answer with a letter key; one is marked right",
+        "slot": "list"
+      },
+      {
+        "name": "feedback",
+        "selector": ".odl-say",
+        "what": "Correct or Not quite, with a short explanation, shown after Check",
+        "slot": "rich"
+      },
+      {
+        "name": "check",
+        "selector": ".odl-go",
+        "what": "Check, then Continue or Got it",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["question", "choices", "correct", "explain_right", "explain_wrong"],
+      "properties": {
+        "answered": {
+          "type": "integer",
+          "minimum": 0,
+          "part": "progress"
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 1,
+          "part": "progress"
+        },
+        "lives": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 99,
+          "part": "lives"
+        },
+        "eyebrow": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "eyebrow"
+        },
+        "question": {
+          "type": "string",
+          "maxLength": 110,
+          "part": "question"
+        },
+        "picture": {
+          "type": "object",
+          "required": ["src", "alt"],
+          "part": "picture",
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 400
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        },
+        "choices": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 4,
+          "part": "choices",
+          "items": {
+            "type": "object",
+            "required": ["value", "label"],
+            "properties": {
+              "value": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 48
+              }
+            }
+          }
+        },
+        "correct": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "choices"
+        },
+        "explain_right": {
+          "type": "string",
+          "maxLength": 160,
+          "part": "feedback"
+        },
+        "explain_wrong": {
+          "type": "string",
+          "maxLength": 160,
+          "part": "feedback"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no questions left, replace the card with empty-state or a result screen"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the bar, and show muted blocks for the question and four answer rows with Check disabled"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the answer cannot be checked, keep the pick, re-enable Check and say so in alert-banners above the footer"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "Check is grey and cannot be pressed until an answer is picked; after Check, the answers are disabled",
+        "evidence": ".odl-go:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrow box the padding shrinks and the question uses a smaller size",
+        "evidence": "@container (max-width: 26rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long answer wraps between its letter key and its mark; the question and explanation wrap with no line limit",
+        "evidence": ".odl-choice { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto"
+      }
+    },
+    "keyboard": ["Tab reaches Leave quiz, the answer group, then Check once it is enabled", "Arrow keys move between answers and pick one, as in any native radio group", "Enter or Space on Check marks the answer and shows the feedback; pressing it again resets the demo to the same question"]
+  }
 }

@@ -9,5 +9,188 @@
   "states": ["hover", "pressed", "focus", "step done", "current step", "next step"],
   "source": "brand/showcase/product/02-fennick-approvals",
   "a11y": "The steps are an ordered list with the current one marked aria-current; both actions are real buttons with visible focus.",
-  "width": "narrow"
+  "width": "narrow",
+  "spec": {
+    "use_when": ["one request at a time, where the approver needs the policy and the cash effect before deciding"],
+    "avoid_when": ["several bills to approve in one go: use receipts-table with a bulk action", "a request with no money or balance effect: confirm-dialog says enough"],
+    "parts": [
+      {
+        "name": "vendor",
+        "selector": ".odl-vendor",
+        "what": "who the bill is from, the panel's one heading",
+        "slot": "text"
+      },
+      {
+        "name": "status",
+        "selector": ".odl-badge",
+        "what": "how many approvals are in",
+        "slot": "text"
+      },
+      {
+        "name": "amount",
+        "selector": ".odl-amount",
+        "what": "the bill amount, with cents and currency set smaller",
+        "slot": "number"
+      },
+      {
+        "name": "due",
+        "selector": ".odl-due",
+        "what": "due date, days left and payment terms",
+        "slot": "text"
+      },
+      {
+        "name": "policy",
+        "selector": ".odl-policy",
+        "what": "the rule that applies, after a warning icon",
+        "slot": "rich"
+      },
+      {
+        "name": "steps",
+        "selector": "ol > li",
+        "what": "one approval step: done, now or next",
+        "slot": "list"
+      },
+      {
+        "name": "effect",
+        "selector": "dl > div",
+        "what": "one line of the balance after paying; the last is the total",
+        "slot": "list"
+      },
+      {
+        "name": "reject",
+        "selector": ".odl-reject",
+        "what": "the secondary action",
+        "slot": "action"
+      },
+      {
+        "name": "approve",
+        "selector": ".odl-approve",
+        "what": "the main action",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["vendor", "amount", "currency", "steps", "actions"],
+      "properties": {
+        "vendor": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "vendor"
+        },
+        "status": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "status"
+        },
+        "amount": {
+          "type": "number",
+          "part": "amount"
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 3,
+          "part": "amount"
+        },
+        "due": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "due"
+        },
+        "policy": {
+          "type": "string",
+          "maxLength": 140,
+          "part": "policy"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "part": "steps",
+          "items": {
+            "type": "object",
+            "required": ["label", "state"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 48
+              },
+              "when": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "state": {
+                "enum": ["done", "now", "next"]
+              }
+            }
+          }
+        },
+        "effect": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "part": "effect",
+          "items": {
+            "type": "object",
+            "required": ["label", "value"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 28
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 16
+              }
+            }
+          }
+        },
+        "actions": {
+          "type": "object",
+          "required": ["approve"],
+          "properties": {
+            "approve": {
+              "type": "string",
+              "maxLength": 16,
+              "part": "approve"
+            },
+            "reject": {
+              "type": "string",
+              "maxLength": 16,
+              "part": "reject"
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with nothing waiting, show empty-state ('No bills to approve') in place of the panel"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the card and fill each line with a muted block the height of its text; disable both buttons"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if approving fails, keep the panel, re-enable the buttons and put an alert-banners line above the actions"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "after the person approves, set disabled on both buttons and mark the current step done"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrow box the side column moves under the main one",
+        "evidence": "@container (max-width: 30rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "vendor and step labels wrap; dates, amounts and the badge never wrap",
+        "evidence": "white-space: nowrap"
+      }
+    },
+    "keyboard": ["Tab reaches Reject, then Approve", "Enter or Space presses the focused button"]
+  }
 }

@@ -89,5 +89,191 @@
       "author": "Alex Suprun",
       "page": "ZHvM3XIOHoE"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a time-boxed contest or class challenge where people want to see their own place even when far from the top"],
+    "avoid_when": ["a ranked table of work data such as sales by account: use receipts-table or bar-chart", "a single person's own streak or progress: use lesson-streak or daily-goals", "people to follow rather than to compare: use follow-suggestions"],
+    "parts": [
+      {
+        "name": "eyebrow",
+        "selector": ".odl-eyebrow",
+        "what": "the contest name and time left",
+        "slot": "text"
+      },
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the board's heading",
+        "slot": "text"
+      },
+      {
+        "name": "period",
+        "selector": ".odl-seg label",
+        "what": "one period in the This week or All time switch",
+        "slot": "list"
+      },
+      {
+        "name": "podium",
+        "selector": ".odl-podium > li",
+        "what": "one of the top three: photo, rank badge, name and points; first is larger with a crown",
+        "slot": "list"
+      },
+      {
+        "name": "rows",
+        "selector": ".odl-row",
+        "what": "one ranked row: rank, photo, name, how far it moved, points",
+        "slot": "list"
+      },
+      {
+        "name": "gap",
+        "selector": ".odl-gap",
+        "what": "three dots for the ranks left out",
+        "slot": "none"
+      },
+      {
+        "name": "you",
+        "selector": ".odl-row.is-you",
+        "what": "your own row, highlighted, with a You tag",
+        "slot": "rich"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "periods"],
+      "properties": {
+        "eyebrow": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "eyebrow"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "title"
+        },
+        "periods": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "part": "period",
+          "items": {
+            "type": "object",
+            "required": ["label", "podium", "rows"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 12
+              },
+              "podium": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 3,
+                "items": {
+                  "type": "object",
+                  "required": ["name", "points"],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "maxLength": 24
+                    },
+                    "photo": {
+                      "type": "string",
+                      "maxLength": 300
+                    },
+                    "points": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "rows": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 10,
+                "items": {
+                  "type": "object",
+                  "required": ["rank", "name", "points"],
+                  "properties": {
+                    "rank": {
+                      "type": "integer",
+                      "minimum": 4,
+                      "maximum": 999
+                    },
+                    "name": {
+                      "type": "string",
+                      "maxLength": 28
+                    },
+                    "photo": {
+                      "type": "string",
+                      "maxLength": 300
+                    },
+                    "change": {
+                      "type": "integer"
+                    },
+                    "points": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "you": {
+                "type": "object",
+                "part": "you",
+                "required": ["rank", "name", "points"],
+                "properties": {
+                  "rank": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 999
+                  },
+                  "name": {
+                    "type": "string",
+                    "maxLength": 24
+                  },
+                  "photo": {
+                    "type": "string",
+                    "maxLength": 300
+                  },
+                  "change": {
+                    "type": "integer"
+                  },
+                  "points": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "before anyone scores, hide the podium and rows and show empty-state ('No scores yet this week')"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "show three muted circles on the podium and muted bars in each row while scores load"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if scores fail to load, replace the panel with an alert-banners line and keep the period switch"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "for a period with no data yet, set disabled on its radio and grey its label"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the list does not scroll; show only the top rows, a gap and your row, and send the rest to a full page or pagination"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "row names are cut with an ellipsis; podium names wrap and break long words",
+        "evidence": "text-overflow: ellipsis; white-space: nowrap"
+      }
+    },
+    "keyboard": ["Tab reaches the period switch", "Arrow keys move between This week and All time, as in any native radio group, and the board below changes with it"]
+  }
 }

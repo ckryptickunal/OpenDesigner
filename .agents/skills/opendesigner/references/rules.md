@@ -133,6 +133,7 @@ One line per decision. A line looks the same whether it comes from a template bu
 | `OD:ignore <ref-id>:<path>` | Nothing: the pre-filled value is dropped |
 | `OD:remix <dimension>=<option-value>` | Option gallery: take that dimension (color, type, shape or depth) from the named option, and `set` its values. Direction board: add `--remix <axis>=<id>` to the `OD:direction` line's command |
 | `OD:direction <id> [--why "reason"]` | `engine.py research directions pick <id> [--remix <axis>=<id>]... --why "reason"` (`research.md` section 9) |
+| `OD:add library.<id>` | A pick from the component gallery (the MCP server or the website). Confirm with the person, then `library.py add <id>` (`library.md`, "Adding one after a yes"). It records no decision |
 
 - Values are JSON: strings in double quotes (`"subtle"`, `"#167874"`), numbers bare (`45`). The engine also accepts a bare word.
 - Parse defensively. Ignore text outside `OD:` lines, and apply lines in order. If a value is not a listed option, confirm it as a custom value before recording it.

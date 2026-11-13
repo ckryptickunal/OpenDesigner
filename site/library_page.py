@@ -5,10 +5,13 @@ from site/library_systems.py (site/static/library-systems.css, site/library-look
 to a kit; the kit turns into one prompt for their coding agent.
 
 build.py calls add(); it writes the shop, the component pages, their Markdown copies, /library.css, /library.js, the raw
-component files at /library/r/<slug>.html (what the prompts point to) and /library/index.json.
+component files at /library/<slug>.html (what the prompts point to; /library/r/<slug>.html is the older address and stays),
+each component's catalog entry at /library/<slug>.json, and the whole catalog at /library/index.json (library.json from
+skills/opendesigner/scripts/library.py, with the web addresses added).
 """
 import html
 import hashlib
+import importlib.util
 import json
 import pathlib
 import re
@@ -18,6 +21,9 @@ LIB = ROOT / "skills/opendesigner/assets/library/components"
 STATIC = ROOT / "site/static"
 LOOKS = json.loads((ROOT / "site/library-looks.json").read_text())
 esc = html.escape
+_spec = importlib.util.spec_from_file_location("od_library", ROOT / "skills/opendesigner/scripts/library.py")
+od_library = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(od_library)  # the catalog generator: one source for the repo's library.json and the website's
 TYPES = {"data": "Data", "chart": "Charts", "form": "Forms", "overlay": "Overlays", "navigation": "Navigation", "feedback": "Feedback",
          "ai": "AI", "commerce": "Commerce", "content": "Content"}
 BLURB = {"data": "Tables, feeds, records", "chart": "Meters, bars, trends", "form": "Inputs and pickers",
@@ -100,8 +106,21 @@ def page_title(c):
 
 
 def prompt(b, c):
-    return (f'Add the OpenDesigner component {c["slug"]} to this project: {b.SITE_URL}/library/r/{c["slug"]}.html. '
+    return (f'Add the OpenDesigner component {c["slug"]} to this project: {b.SITE_URL}/library/{c["slug"]}.html. '
             f"Keep its markup and states; map its --ds-* variables to my tokens.")
+
+
+def curl(b, c):
+    return f'curl -fsSLo {c["slug"]}.html {b.SITE_URL}/library/{c["slug"]}.html'
+
+
+def web_entry(b, e):
+    """A catalog entry as the website serves it: the entry plus where to fetch everything."""
+    c = {"slug": e["id"]}
+    return {**e, "urls": {"html": f"{b.SITE_URL}/library/{e['id']}.html", "json": f"{b.SITE_URL}/library/{e['id']}.json",
+                          "page": f"{b.SITE_URL}/library/{e['id']}/"},
+            "get": {"curl": curl(b, c), "opendesigner": f"python3 <skill>/scripts/library.py add {e['id']} --from {b.SITE_URL}",
+                    "prompt": prompt(b, c)}}
 
 
 def ind(x):
@@ -371,9 +390,11 @@ def detail(b, c, cs):
 <div class="part-prompt"><p class="kicker">Prompt for your coding agent</p><p class="part-prompt-text">{esc(prompt(b, c)).replace("/", "/<wbr>")}</p></div>
 <div class="cmd"><code>python3 &lt;skill&gt;/scripts/library.py add {c["slug"]}</code><button class="copy" type="button">Copy</button></div>
 <p class="part-cmd-note">With OpenDesigner installed: copies the file and lists any token your project lacks.</p>
+<div class="cmd"><code>{esc(curl(b, c))}</code><button class="copy" type="button">Copy</button></div>
+<p class="part-cmd-note">Without it: downloads the one file. Its <a href="/library/{c["slug"]}.json">catalog entry</a> lists its parts, the data it holds, its states and tokens.</p>
 <dl class="part-facts">
 <div><dt>Accessibility</dt><dd>{esc(c["a11y"])}</dd></div>
-{photo_credits(c)}<div><dt>File</dt><dd><a href="/library/r/{c["slug"]}.html">{c["slug"]}.html</a>, {c["kb"]} KB, MIT{"" if not c["js"].strip() else ", with a short script"}</dd></div>
+{photo_credits(c)}<div><dt>File</dt><dd><a href="/library/{c["slug"]}.html">{c["slug"]}.html</a>, {c["kb"]} KB, MIT{"" if not c["js"].strip() else ", with a short script"}</dd></div>
 <div><dt>From</dt><dd>{src_link}</dd></div>
 </dl>
 </details>
@@ -393,7 +414,7 @@ def detail(b, c, cs):
            "license": "https://opensource.org/license/mit", "codeRepository": b.GH,
            "isPartOf": {"@type": "CollectionPage", "name": "OpenDesigner component library", "url": f"{b.SITE_URL}/library/"},
            "keywords": ", ".join(c["tags"])}]
-    md = f"# {c['name']}\n\n{lead(c)} {c['summary']}\n\nPrompt: {prompt(b, c)}\n\nStates: {', '.join(c['states'])}.\n\nAccessibility: {c['a11y']}\n\nFile: {b.SITE_URL}/library/r/{c['slug']}.html\n"
+    md = f"# {c['name']}\n\n{lead(c)} {c['summary']}\n\nPrompt: {prompt(b, c)}\n\nStates: {', '.join(c['states'])}.\n\nAccessibility: {c['a11y']}\n\nFile: {b.SITE_URL}/library/{c['slug']}.html\n\nCatalog entry (parts, data limits, states, tokens): {b.SITE_URL}/library/{c['slug']}.json\n\nDownload: `{curl(b, c)}`\n"
     return b.shell(f"/library/{c['slug']}/", page_title(c), page_desc(c), body, b.load_docs(), ld, home=True), md
 
 
@@ -404,7 +425,12 @@ DESCRIPTION = (f"Free, optional parts built on your design tokens. Try them in {
 def llms_section(site_url):
     """The library's section of llms.txt: the shop and every part, each with its first sentence."""
     return ("## Component library\n\n" + f"- [Component library]({site_url}/library/index.md): {DESCRIPTION}\n"
-            + "\n".join(f"- [{c['name']}]({site_url}/library/{c['slug']}/index.md): {lead(c)}" for c in components()))
+            + f"- [Component catalog]({site_url}/library/index.json): every component as JSON: purpose, when to use it and when not, parts, "
+              "the data it holds with limits, states, the tokens it reads, accessibility and where to fetch it. One component: "
+              f"/library/<id>.json; its file: /library/<id>.html\n"
+            + f"- [Library over MCP]({site_url}/docs/library/index.md): the same catalog through a local, read-only MCP server\n"
+            + "\n".join(f"- [{c['name']}]({site_url}/library/{c['slug']}/index.md): {lead(c)} [File]({site_url}/library/{c['slug']}.html), "
+                         f"[JSON]({site_url}/library/{c['slug']}.json)" for c in components()))
 
 
 def add(b, files, mds, paths):
@@ -430,8 +456,11 @@ def add(b, files, mds, paths):
     (b.DIST / "library" / "r").mkdir(parents=True, exist_ok=True)
     for c in cs:
         (b.DIST / "library" / "r" / f"{c['slug']}.html").write_text(c["src"])
-    (b.DIST / "library" / "index.json").write_text(json.dumps(
-        [{k: c[k] for k in ("slug", "name", "summary", "type", "style", "industries", "tags", "states", "a11y", "width")}
-         | {"url": f"{b.SITE_URL}/library/r/{c['slug']}.html", "page": f"{b.SITE_URL}/library/{c['slug']}/", "prompt": prompt(b, c)} for c in cs], indent=1) + "\n")
+        (b.DIST / "library" / f"{c['slug']}.html").write_text(c["src"])
+    cat = od_library.catalog()
+    cat["components"] = [web_entry(b, e) for e in cat["components"]]
+    for e in cat["components"]:
+        (b.DIST / "library" / f"{e['id']}.json").write_text(json.dumps(e, indent=1, ensure_ascii=False) + "\n")
+    (b.DIST / "library" / "index.json").write_text(json.dumps(cat, indent=1, ensure_ascii=False) + "\n")
     (b.DIST / "library.css").write_text(css_text)
     (b.DIST / "library.js").write_text(js_text)

@@ -44,5 +44,241 @@
       "author": "Dorrell Tibbs",
       "page": "gisFZKWpKQ4"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a community or club app where members share photos and react to each other's"],
+    "avoid_when": ["a blog post or changelog entry to read: use article-card", "a text conversation between people: use comment-thread or chat-thread", "a row of creators to follow: use follow-suggestions"],
+    "parts": [
+      {
+        "name": "avatar",
+        "selector": ".odl-ring .odl-av",
+        "what": "the author's photo in an accent ring",
+        "slot": "media"
+      },
+      {
+        "name": "author",
+        "selector": ".odl-who b",
+        "what": "the author's handle",
+        "slot": "text"
+      },
+      {
+        "name": "place",
+        "selector": ".odl-who span",
+        "what": "where the photo was taken",
+        "slot": "text"
+      },
+      {
+        "name": "follow",
+        "selector": ".odl-follow",
+        "what": "a Follow toggle that reads Following when on",
+        "slot": "action"
+      },
+      {
+        "name": "photo",
+        "selector": ".odl-pic",
+        "what": "the square photo; a double click likes it",
+        "slot": "media"
+      },
+      {
+        "name": "photo_count",
+        "selector": ".odl-count",
+        "what": "which photo of how many, with dots below",
+        "slot": "text"
+      },
+      {
+        "name": "actions",
+        "selector": ".odl-actions button",
+        "what": "Like, Comment, Share and Save",
+        "slot": "list"
+      },
+      {
+        "name": "likes",
+        "selector": ".odl-likes",
+        "what": "who liked it and how many others",
+        "slot": "rich"
+      },
+      {
+        "name": "caption",
+        "selector": ".odl-caption",
+        "what": "the handle and a shortened caption that opens with more",
+        "slot": "rich"
+      },
+      {
+        "name": "comments_link",
+        "selector": ".odl-text-btn",
+        "what": "a button to view all comments",
+        "slot": "action"
+      },
+      {
+        "name": "top_comment",
+        "selector": ".odl-top",
+        "what": "one comment with a small photo and its own like",
+        "slot": "rich"
+      },
+      {
+        "name": "time",
+        "selector": "time",
+        "what": "how long ago it was posted",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["author", "photo", "likes"],
+      "properties": {
+        "author": {
+          "type": "object",
+          "required": ["handle"],
+          "properties": {
+            "handle": {
+              "type": "string",
+              "maxLength": 30,
+              "part": "author"
+            },
+            "photo": {
+              "type": "string",
+              "maxLength": 400,
+              "part": "avatar"
+            },
+            "place": {
+              "type": "string",
+              "maxLength": 40,
+              "part": "place"
+            },
+            "following": {
+              "type": "boolean",
+              "part": "follow"
+            }
+          }
+        },
+        "photo": {
+          "type": "object",
+          "required": ["src", "alt"],
+          "part": "photo",
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 400
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 140
+            }
+          }
+        },
+        "photo_index": {
+          "type": "integer",
+          "minimum": 1,
+          "part": "photo_count"
+        },
+        "photo_total": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "part": "photo_count"
+        },
+        "liked": {
+          "type": "boolean",
+          "part": "actions"
+        },
+        "saved": {
+          "type": "boolean",
+          "part": "actions"
+        },
+        "liked_by": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "likes"
+        },
+        "likes": {
+          "type": "integer",
+          "minimum": 0,
+          "part": "likes"
+        },
+        "caption_short": {
+          "type": "string",
+          "maxLength": 90,
+          "part": "caption"
+        },
+        "caption_full": {
+          "type": "string",
+          "maxLength": 600,
+          "part": "caption"
+        },
+        "tags": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 5,
+          "part": "caption",
+          "items": {
+            "type": "string",
+            "maxLength": 24
+          }
+        },
+        "comment_count": {
+          "type": "integer",
+          "minimum": 0,
+          "part": "comments_link"
+        },
+        "top_comment": {
+          "type": "object",
+          "required": ["handle", "text"],
+          "part": "top_comment",
+          "properties": {
+            "handle": {
+              "type": "string",
+              "maxLength": 30
+            },
+            "photo": {
+              "type": "string",
+              "maxLength": 400
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 140
+            }
+          }
+        },
+        "time": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "time"
+        },
+        "time_iso": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "time"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no comments, leave out the comments button and the top comment; with no posts, show empty-state in the feed"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the card: the photo box already has a muted fill, so add muted blocks for the handle, likes and caption"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a like or follow fails, set the toggle back and say so with toast-stack"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "set disabled on Comment and Share when the author has turned them off"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrow box the header and body padding shrink",
+        "evidence": "@container (inline-size < 26rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long handle or place ends in an ellipsis; a long caption stays short until more opens it",
+        "evidence": ".odl-who b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
+      }
+    },
+    "keyboard": ["Tab reaches Follow, More options, Like, Comment, Share, Save, more, View all comments and the comment's like", "Enter or Space on Like, Save, Follow or the comment's like switches it on or off; the like count changes with Like", "Enter or Space on more opens the full caption and the button then reads less", "liking by double click on the photo has no keyboard version; the Like button does the same", "More options, Comment, Share and View all comments are buttons with no action in the file"]
+  }
 }

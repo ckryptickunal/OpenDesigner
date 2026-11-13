@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Component gallery</title>
+<!-- OpenDesigner library gallery, an MCP Apps view (ext-apps 2026-01-26). The host sends the list_components result;
+     "Use this" sends "OD:add library.<id>" to the chat with ui/message (DC-L18-07). No network: previews come through
+     the host's tools/call, and the only outside resource is the parts' sample photos from images.unsplash.com. -->
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: var(--color-background-primary, #ffffff);
+  --bg2: var(--color-background-secondary, #f5f5f3);
+  --fg: var(--color-text-primary, #141413);
+  --fg2: var(--color-text-secondary, #55554f);
+  --line: var(--color-border-primary, #d4d3cc);
+  --accent: var(--color-text-info, #1f4fbf);
+  --focus: var(--color-ring-primary, #1f4fbf);
+  --font: var(--font-sans, system-ui, -apple-system, "Segoe UI", sans-serif);
+  --r: var(--border-radius-md, 8px);
+  --r-lg: var(--border-radius-lg, 10px);
+  --bw: var(--border-width-regular, 1px);
+}
+:root[data-theme="dark"] {
+  --bg: var(--color-background-primary, #30302e); --bg2: var(--color-background-secondary, #262624);
+  --fg: var(--color-text-primary, #faf9f5); --fg2: var(--color-text-secondary, #c2c0b6); --line: var(--color-border-primary, #4a4945);
+  --accent: var(--color-text-info, #8fb3ff); --focus: var(--color-ring-primary, #8fb3ff);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: var(--color-background-primary, #30302e); --bg2: var(--color-background-secondary, #262624);
+    --fg: var(--color-text-primary, #faf9f5); --fg2: var(--color-text-secondary, #c2c0b6); --line: var(--color-border-primary, #4a4945);
+    --accent: var(--color-text-info, #8fb3ff); --focus: var(--color-ring-primary, #8fb3ff);
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding: 16px; background: var(--bg); color: var(--fg); font: 15px/1.45 var(--font); }
+h1 { font-size: 17px; font-weight: 600; margin: 0 0 4px; }
+.sub { color: var(--fg2); margin: 0 0 12px; font-size: 14px; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.search { flex: 1 1 220px; min-height: 44px; padding: 0 12px; border: var(--bw) solid var(--line); border-radius: var(--r); background: var(--bg); color: var(--fg); font: inherit; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; padding: 0; border: 0; }
+.chips legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+button, .chip { font: inherit; color: inherit; cursor: pointer; }
+.chip { min-height: 44px; min-width: 44px; padding: 0 14px; border: var(--bw) solid var(--line); border-radius: 999px; background: var(--bg); }
+.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; }
+.item { display: flex; flex-direction: column; gap: 6px; padding: 14px; border: var(--bw) solid var(--line); border-radius: var(--r-lg); background: var(--bg); }
+.item h2 { font-size: 15px; font-weight: 600; margin: 0; }
+.meta { color: var(--fg2); font-size: 13px; margin: 0; }
+.purpose { margin: 0; font-size: 14px; }
+.acts { display: flex; gap: 8px; margin-top: auto; padding-top: 6px; }
+.btn { min-height: 44px; padding: 0 14px; border-radius: var(--r); border: var(--bw) solid var(--line); background: var(--bg2); }
+.btn.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); font-weight: 600; }
+.more { margin-top: 12px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.status { min-height: 1.4em; margin: 10px 0 0; font-size: 14px; }
+.status code, .od { font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.od { display: block; margin-top: 6px; padding: 8px 10px; background: var(--bg2); border-radius: var(--r); user-select: all; overflow-wrap: anywhere; }
+.preview { margin-top: 14px; border: var(--bw) solid var(--line); border-radius: var(--r-lg); overflow: hidden; }
+.preview header { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 8px 8px 14px; background: var(--bg2); }
+.preview header p { margin: 0; font-size: 14px; }
+.stage-host { padding: 0; }
+.empty { color: var(--fg2); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<h1>Component library</h1>
+<p class="sub" id="sub">Waiting for the list from the server.</p>
+<div class="bar"><label class="visually-hidden" for="q" hidden>Search</label>
+  <input class="search" id="q" type="search" placeholder="Search: table, checkout, approval" aria-label="Search components" autocomplete="off"></div>
+<fieldset class="chips" id="types"><legend>Filter by type</legend></fieldset>
+<ul class="grid" id="grid" aria-live="off"></ul>
+<button type="button" class="btn more" id="more" hidden>Show all</button>
+<p class="status" id="status" role="status" aria-live="polite"></p>
+<section class="preview" id="preview" hidden aria-label="Preview">
+  <header><p id="pv-title">Preview</p><button type="button" class="btn" id="pv-close">Close preview</button></header>
+  <div class="stage-host" id="stage"></div>
+</section>
+<script>
+(function () {
+  "use strict";
+  var TYPES = { data: "Data", chart: "Charts", form: "Forms", feedback: "Feedback", navigation: "Navigation", overlay: "Overlays", ai: "AI", commerce: "Commerce", content: "Content" };
+  var INLINE = 6;
+  var all = [], type = "", query = "", expanded = false, nextId = 1, pending = {}, tokensCss = null, hostOk = false, modes = [];
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ---- the host bridge: JSON-RPC 2.0 over postMessage (MCP Apps)
+  function send(msg) { if (window.parent !== window) window.parent.postMessage(msg, "*"); }
+  function request(method, params) {
+    var id = nextId++;
+    return new Promise(function (resolve, reject) {
+      pending[id] = { resolve: resolve, reject: reject };
+      send({ jsonrpc: "2.0", id: id, method: method, params: params || {} });
+      setTimeout(function () { if (pending[id]) { delete pending[id]; reject(new Error("no answer from the host")); } }, 15000);
+    });
+  }
+  function notify(method, params) { send({ jsonrpc: "2.0", method: method, params: params || {} }); }
+  window.addEventListener("message", function (ev) {
+    if (ev.source !== window.parent) return;
+    var m = ev.data;
+    if (!m || m.jsonrpc !== "2.0") return;
+    if (m.id != null && pending[m.id] && !m.method) {
+      var p = pending[m.id]; delete pending[m.id];
+      if (m.error) p.reject(new Error(m.error.message || "error")); else p.resolve(m.result);
+      return;
+    }
+    if (m.method === "ui/notifications/tool-result") return onResult(m.params || {});
+    if (m.method === "ui/notifications/host-context-changed") return applyContext(m.params || {});
+    if (m.method === "ui/resource-teardown" && m.id != null) return send({ jsonrpc: "2.0", id: m.id, result: {} });
+    if (m.id != null && m.method) send({ jsonrpc: "2.0", id: m.id, error: { code: -32601, message: "Method not found" } });
+  });
+
+  function applyContext(c) {
+    if (c.theme) document.documentElement.setAttribute("data-theme", c.theme);
+    var v = c.styles && c.styles.variables;
+    if (v) Object.keys(v).forEach(function (k) { if (/^--[\w-]+$/.test(k) && v[k] != null) document.documentElement.style.setProperty(k, String(v[k])); });
+    if (c.availableDisplayModes) modes = c.availableDisplayModes;
+    if (c.displayMode === "fullscreen") { expanded = true; render(); }
+  }
+
+  function onResult(r) {
+    var sc = r.structuredContent || {};
+    if (!sc.components) return;
+    all = sc.components;
+    $("sub").textContent = sc.count + " of " + sc.of + " components. Each one uses only your design tokens. Pick one to add it to your project.";
+    chips(); render();
+  }
+
+  // ---- the gallery
+  function chips() {
+    var have = {}; all.forEach(function (c) { have[c.type] = 1; });
+    var box = $("types"); box.querySelectorAll("button").forEach(function (b) { b.remove(); });
+    [["", "All"]].concat(Object.keys(TYPES).filter(function (t) { return have[t]; }).map(function (t) { return [t, TYPES[t]]; })).forEach(function (t) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "chip"; b.textContent = t[1]; b.setAttribute("aria-pressed", String(type === t[0]));
+      b.addEventListener("click", function () { type = t[0]; box.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); render(); });
+      box.appendChild(b);
+    });
+  }
+  function matches(c) {
+    if (type && c.type !== type) return false;
+    if (!query) return true;
+    var hay = (c.name + " " + c.purpose + " " + c.keywords.join(" ") + " " + c.industries.join(" ")).toLowerCase();
+    return query.split(/\s+/).every(function (w) { return hay.indexOf(w) >= 0; });
+  }
+  function render() {
+    var rows = all.filter(matches), grid = $("grid");
+    var shown = expanded ? rows : rows.slice(0, INLINE);
+    grid.textContent = "";
+    if (!rows.length && all.length) { var li = document.createElement("li"); li.className = "empty"; li.textContent = "Nothing matches. Try another word."; grid.appendChild(li); }
+    shown.forEach(function (c) {
+      var li = document.createElement("li"); li.className = "item";
+      var h = document.createElement("h2"); h.textContent = c.name;
+      var meta = document.createElement("p"); meta.className = "meta";
+      meta.textContent = (TYPES[c.type] || c.type) + " · " + c.style + " · " + c.width + (c.audience !== "any" ? " · " + (c.audience === "work" ? "work tools" : "consumer") : "");
+      var pur = document.createElement("p"); pur.className = "purpose"; pur.textContent = c.purpose;
+      var acts = document.createElement("div"); acts.className = "acts";
+      var pv = document.createElement("button"); pv.type = "button"; pv.className = "btn"; pv.textContent = "Preview";
+      pv.setAttribute("aria-label", "Preview " + c.name); pv.addEventListener("click", function () { preview(c, pv); });
+      var use = document.createElement("button"); use.type = "button"; use.className = "btn primary"; use.textContent = "Use this";
+      use.setAttribute("aria-label", "Use " + c.name); use.addEventListener("click", function () { choose(c); });
+      acts.appendChild(pv); acts.appendChild(use);
+      li.appendChild(h); li.appendChild(meta); li.appendChild(pur); li.appendChild(acts); grid.appendChild(li);
+    });
+    var more = $("more");
+    more.hidden = expanded || rows.length <= INLINE;
+    more.textContent = "Show all " + rows.length;
+    sized();
+  }
+  $("q").addEventListener("input", function (e) { query = e.target.value.trim().toLowerCase(); render(); });
+  $("more").addEventListener("click", function () {
+    expanded = true; render();
+    var first = $("grid").querySelectorAll(".item")[INLINE]; if (first) first.querySelector("button").focus();
+    if (modes.indexOf("fullscreen") >= 0) request("ui/request-display-mode", { mode: "fullscreen" }).catch(function () {});
+  });
+
+  // ---- "Use this": one OD: line into the chat (DC-L18-07); the line stays on screen to copy where there is no bridge
+  function choose(c) {
+    var line = "OD:add library." + c.id;
+    var st = $("status");
+    st.textContent = "";
+    request("ui/message", { role: "user", content: [{ type: "text", text: line }] }).then(function (r) {
+      if (r && r.isError) throw new Error("refused");
+      st.textContent = "Sent to the chat: " + line;
+    }).catch(function () {
+      st.textContent = "Copy this line into the chat to add " + c.name + ":";
+      var code = document.createElement("code"); code.className = "od"; code.textContent = line; st.appendChild(code);
+    });
+  }
+
+  // ---- Preview: the real file, recoloured by a tokens template, in a shadow root so nothing leaks either way
+  function scopeTokens(css) {
+    return css.replace(/:root/g, ".od-stage").replace(/(^|\n)\[data-theme="dark"\]/g, "$1.od-stage[data-theme=\"dark\"]");
+  }
+  function call(name, args) {
+    return request("tools/call", { name: name, arguments: args }).then(function (r) {
+      if (!r || r.isError) throw new Error((r && r.content && r.content[0] && r.content[0].text) || "the tool failed");
+      return r.structuredContent;
+    });
+  }
+  function preview(c, opener) {
+    var st = $("status"); st.textContent = "Loading the preview of " + c.name + "…";
+    var tok = tokensCss ? Promise.resolve(tokensCss) : call("get_tokens_template", {}).then(function (t) { tokensCss = scopeTokens(t.css); return tokensCss; });
+    Promise.all([tok, call("get_component", { id: c.id })]).then(function (res) {
+      var host = $("stage"); host.textContent = "";
+      var box = document.createElement("div"); host.appendChild(box);
+      var root = box.attachShadow ? box.attachShadow({ mode: "open" }) : box;
+      var theme = document.documentElement.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      // the file's markup only: its script is left out of the preview (scripts do not run from innerHTML anyway)
+      root.innerHTML = "<style>" + res[0] + "\n.od-stage{background:var(--ds-color-bg-canvas,transparent);color:var(--ds-color-text-primary);padding:16px}</style>"
+        + "<style>" + res[1].css + "</style><div class=\"od-stage\" data-theme=\"" + theme + "\">" + res[1].markup + "</div>";
+      $("pv-title").textContent = "Preview: " + c.name + " (sample tokens; yours will differ)";
+      $("preview").hidden = false; $("preview").dataset.opener = c.id;
+      st.textContent = "Preview of " + c.name + " is below.";
+      $("pv-close").focus(); sized();
+    }).catch(function (e) { st.textContent = "No preview here (" + e.message + "). Use this still works."; });
+  }
+  $("pv-close").addEventListener("click", function () {
+    var id = $("preview").dataset.opener; $("preview").hidden = true; $("stage").textContent = ""; sized();
+    var b = $("grid").querySelector("[aria-label='Preview " + (all.filter(function (c) { return c.id === id; })[0] || {}).name + "']"); if (b) b.focus();
+  });
+
+  function sized() { notify("ui/notifications/size-changed", { height: Math.ceil(document.documentElement.scrollHeight) }); }
+
+  if (window.parent === window) {
+    $("sub").textContent = "Open this through the OpenDesigner MCP server: list_components fills it.";
+    return;
+  }
+  request("ui/initialize", { protocolVersion: "2026-01-26", appInfo: { name: "opendesigner-library-gallery", version: "0.3.1" },
+                             appCapabilities: { availableDisplayModes: ["inline", "fullscreen"] } })
+    .then(function (r) { hostOk = true; applyContext((r && r.hostContext) || {}); notify("ui/notifications/initialized", {}); })
+    .catch(function () { $("sub").textContent = "The host did not answer. Ask in the chat for list_components as text."; });
+})();
+</script>
+</body>
+</html>

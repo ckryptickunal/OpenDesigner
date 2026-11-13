@@ -85,5 +85,278 @@
       "author": "Joseph Gonzalez",
       "page": "iFgRcqHznqg"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a course or lecture series page where people resume where they left off and pick a lesson by module"],
+    "avoid_when": ["a row of titles to browse: use media-shelf", "playing the video itself: use video-player", "a list of audio episodes: use podcast-episodes"],
+    "parts": [
+      {
+        "name": "still",
+        "selector": ".odl-hero > .odl-pic",
+        "what": "a wide still behind the title",
+        "slot": "media"
+      },
+      {
+        "name": "kicker",
+        "selector": ".odl-kicker",
+        "what": "kind and genres",
+        "slot": "text"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-title-detail h3",
+        "what": "the title, the page's heading",
+        "slot": "text"
+      },
+      {
+        "name": "facts",
+        "selector": ".odl-facts > span",
+        "what": "one fact: year, age rating, seasons, episode length or score",
+        "slot": "list"
+      },
+      {
+        "name": "resume",
+        "selector": ".odl-play",
+        "what": "the main action, naming the episode to resume",
+        "slot": "action"
+      },
+      {
+        "name": "my_list",
+        "selector": ".odl-list",
+        "what": "add to or remove from My list",
+        "slot": "action"
+      },
+      {
+        "name": "like",
+        "selector": ".odl-rate",
+        "what": "a like toggle",
+        "slot": "action"
+      },
+      {
+        "name": "share",
+        "selector": ".odl-share",
+        "what": "share the title",
+        "slot": "action"
+      },
+      {
+        "name": "synopsis",
+        "selector": ".odl-synopsis",
+        "what": "a short synopsis",
+        "slot": "text"
+      },
+      {
+        "name": "cast",
+        "selector": ".odl-person",
+        "what": "one cast member: portrait, name and role",
+        "slot": "list"
+      },
+      {
+        "name": "details",
+        "selector": ".odl-cast div",
+        "what": "one detail line, such as audio or subtitles",
+        "slot": "list"
+      },
+      {
+        "name": "seasons",
+        "selector": ".odl-seg label",
+        "what": "a season choice in a two-way switch",
+        "slot": "list"
+      },
+      {
+        "name": "episodes",
+        "selector": ".odl-ep",
+        "what": "one episode: still with progress, number and title, length and a two-line summary",
+        "slot": "list"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "still", "seasons"],
+      "properties": {
+        "still": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "still"
+        },
+        "still_alt": {
+          "type": "string",
+          "maxLength": 100,
+          "part": "still"
+        },
+        "kicker": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "kicker"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "title"
+        },
+        "facts": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "part": "facts",
+          "items": {
+            "type": "string",
+            "maxLength": 18
+          }
+        },
+        "score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5,
+          "part": "facts"
+        },
+        "resume_label": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "resume"
+        },
+        "in_list": {
+          "type": "boolean",
+          "part": "my_list"
+        },
+        "liked": {
+          "type": "boolean",
+          "part": "like"
+        },
+        "synopsis": {
+          "type": "string",
+          "maxLength": 240,
+          "part": "synopsis"
+        },
+        "cast": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 3,
+          "part": "cast",
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "role": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "photo": {
+                "type": "string",
+                "maxLength": 300
+              }
+            }
+          }
+        },
+        "details": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 4,
+          "part": "details",
+          "items": {
+            "type": "object",
+            "required": ["label", "value"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 10
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 48
+              }
+            }
+          }
+        },
+        "seasons": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "part": "seasons",
+          "items": {
+            "type": "object",
+            "required": ["label", "episodes"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 10
+              },
+              "episodes": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 12,
+                "part": "episodes",
+                "items": {
+                  "type": "object",
+                  "required": ["number", "title"],
+                  "properties": {
+                    "number": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "title": {
+                      "type": "string",
+                      "maxLength": 32
+                    },
+                    "length": {
+                      "type": "string",
+                      "maxLength": 8
+                    },
+                    "summary": {
+                      "type": "string",
+                      "maxLength": 140
+                    },
+                    "still": {
+                      "type": "string",
+                      "maxLength": 300
+                    },
+                    "progress": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100
+                    },
+                    "watched": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "for a season with no episodes yet, show a sunken note under the switch ('Season 2 arrives in May')"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the hero colour band and show episode rows with grey 16 by 9 boxes and muted text blocks"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if episodes fail to load, show alert-banners in the episodes column with a retry"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "for an episode not out yet, disable its button, drop the play overlay and put the release date where the length is"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "on a phone the episode summary moves under the still; on a wide screen the info and episodes sit side by side",
+        "evidence": "@container (min-width: 56rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "cast names and episode summaries are clamped to two lines; the title balances its lines",
+        "evidence": "-webkit-line-clamp: 2"
+      }
+    },
+    "keyboard": ["Tab reaches Resume, My list, I like this, Share, the season switch, then each episode", "Enter or Space on My list or I like this toggles it", "Arrow keys in the season switch move between seasons and show that season's episodes", "Enter or Space on an episode presses it"]
+  }
 }

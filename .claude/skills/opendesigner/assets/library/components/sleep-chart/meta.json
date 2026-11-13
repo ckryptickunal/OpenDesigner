@@ -9,5 +9,246 @@
   "states": ["last night", "goal line"],
   "source": null,
   "a11y": "The hypnogram is one image with a written summary of the night; stage totals are a description list and each night's bar carries its date and hours as text for screen readers.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": ["any one-night timeline of a few levels, such as stages of rest, with totals per level and a week of nightly totals against a goal"],
+    "avoid_when": ["a workout or activity just finished: use workout-summary", "a general split of a total into categories: use donut-breakdown", "comparing values across many periods with axes and gridlines: use bar-chart"],
+    "parts": [
+      {
+        "name": "eyebrow",
+        "selector": ".odl-eyebrow",
+        "what": "a moon icon and which night this is",
+        "slot": "text"
+      },
+      {
+        "name": "asleep",
+        "selector": "h3",
+        "what": "time asleep, the section heading",
+        "slot": "text"
+      },
+      {
+        "name": "bed",
+        "selector": ".odl-bed span",
+        "what": "time in bed and time awake",
+        "slot": "list"
+      },
+      {
+        "name": "hypnogram",
+        "selector": ".odl-hyp",
+        "what": "one image of the night: four lanes (Awake, REM, Light, Deep), stage segments joined by thin lines, and an hour axis",
+        "slot": "none"
+      },
+      {
+        "name": "segments",
+        "selector": ".odl-seg",
+        "what": "one stretch of one stage, placed by start and width in percent of the night",
+        "slot": "list"
+      },
+      {
+        "name": "axis",
+        "selector": ".odl-axis span",
+        "what": "one hour mark under the plot",
+        "slot": "list"
+      },
+      {
+        "name": "totals",
+        "selector": ".odl-totals div",
+        "what": "one stage's total time and share, with its colour dot",
+        "slot": "list"
+      },
+      {
+        "name": "week_head",
+        "selector": ".odl-week header",
+        "what": "the week heading and the average",
+        "slot": "text"
+      },
+      {
+        "name": "nights",
+        "selector": ".odl-bars li",
+        "what": "one night's bar with its day letter; last night is darker",
+        "slot": "list"
+      },
+      {
+        "name": "goal",
+        "selector": ".odl-8",
+        "what": "the goal label beside the dashed goal line",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["asleep", "segments", "totals"],
+      "properties": {
+        "night": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "eyebrow"
+        },
+        "asleep": {
+          "type": "string",
+          "maxLength": 12,
+          "part": "asleep"
+        },
+        "in_bed": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "bed"
+        },
+        "awake": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "bed"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 240,
+          "part": "hypnogram"
+        },
+        "segments": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 60,
+          "part": "segments",
+          "items": {
+            "type": "object",
+            "required": ["stage", "start", "width"],
+            "properties": {
+              "stage": {
+                "enum": ["awake", "rem", "light", "deep"]
+              },
+              "start": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "width": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            }
+          }
+        },
+        "axis": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "part": "axis",
+          "items": {
+            "type": "object",
+            "required": ["label", "at"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 5
+              },
+              "at": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            }
+          }
+        },
+        "totals": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "part": "totals",
+          "items": {
+            "type": "object",
+            "required": ["stage", "time"],
+            "properties": {
+              "stage": {
+                "enum": ["awake", "rem", "light", "deep"]
+              },
+              "time": {
+                "type": "string",
+                "maxLength": 10
+              },
+              "share": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            }
+          }
+        },
+        "week": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "maxLength": 20,
+              "part": "week_head"
+            },
+            "average": {
+              "type": "string",
+              "maxLength": 24,
+              "part": "week_head"
+            },
+            "nights": {
+              "type": "array",
+              "minItems": 7,
+              "maxItems": 7,
+              "part": "nights",
+              "items": {
+                "type": "object",
+                "required": ["day", "label", "hours"],
+                "properties": {
+                  "day": {
+                    "type": "string",
+                    "maxLength": 1
+                  },
+                  "label": {
+                    "type": "string",
+                    "maxLength": 32
+                  },
+                  "hours": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10
+                  }
+                }
+              }
+            },
+            "goal_label": {
+              "type": "string",
+              "maxLength": 10,
+              "part": "goal"
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "for a night with no data, keep the header with 'No sleep recorded', leave out the plot and totals, and keep the week bars with that night at zero"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "show the lanes with an empty plot and the totals as muted boxes until the night is processed"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the wearable did not sync, put an alert-banners notice ('Last night did not sync') above the plot"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "the chart has no controls, so there is nothing to disable"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "segments are placed in percent of the plot, and each keeps a minimum width so a one-minute waking still shows",
+        "evidence": "inline-size: max(var(--w), var(--ds-border-width-emphasis))"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "durations and the headline never wrap; the in-bed line wraps between its two parts; totals go from two to four columns in a wider box",
+        "evidence": "font-variant-numeric: tabular-nums; white-space: nowrap; }"
+      }
+    },
+    "keyboard": []
+  }
 }

@@ -13,5 +13,210 @@
   "photos": [
     {"img": "photo-1438761681033-6461ffad8d80", "author": "Christopher Campbell", "page": "rDEOVtE7vOs"},
     {"img": "photo-1522529599102-193c0d76b5b6", "author": "Elizeu Dias", "page": "2EGNqazbAMk"}
-  ]
+  ],
+  "spec": {
+    "use_when": ["a side panel that shows the rest of today next to other work, with what is happening now marked"],
+    "avoid_when": ["a week or month at a glance: this day view does not stretch to it; build a week grid instead", "a short list of upcoming items without times on a rail: use activity-feed"],
+    "parts": [
+      {
+        "name": "day_num",
+        "selector": ".odl-day-num",
+        "what": "the day of the month in a tile; hidden in a narrow box",
+        "slot": "number"
+      },
+      {
+        "name": "date",
+        "selector": "h3",
+        "what": "the weekday and date, the one heading",
+        "slot": "text"
+      },
+      {
+        "name": "summary",
+        "selector": ".odl-date p",
+        "what": "how many events and how much time is booked",
+        "slot": "text"
+      },
+      {
+        "name": "nav",
+        "selector": ".odl-nav button",
+        "what": "previous day, Today and next day",
+        "slot": "action"
+      },
+      {
+        "name": "all_day",
+        "selector": ".odl-allday .odl-event",
+        "what": "the all-day event, a link with its title and a short note",
+        "slot": "list"
+      },
+      {
+        "name": "rail",
+        "selector": ".odl-rail li",
+        "what": "the hour labels down the left side",
+        "slot": "list"
+      },
+      {
+        "name": "events",
+        "selector": ".odl-grid .odl-event",
+        "what": "one timed event, a link with title, time, place and optional attendee photos; two overlapping events sit side by side",
+        "slot": "list"
+      },
+      {
+        "name": "attendees",
+        "selector": ".odl-people",
+        "what": "small photos and names of who is invited, inside an event",
+        "slot": "media"
+      },
+      {
+        "name": "now",
+        "selector": ".odl-now",
+        "what": "the line marking the current time, with its label",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["date", "events"],
+      "properties": {
+        "day_num": {
+          "type": "number",
+          "part": "day_num"
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "date"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "summary"
+        },
+        "all_day": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 1,
+          "part": "all_day",
+          "items": {
+            "type": "object",
+            "required": ["title"],
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 28
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "tone": {
+                "enum": ["accent", "info", "warn", "neutral"]
+              },
+              "href": {
+                "type": "string",
+                "maxLength": 200
+              }
+            }
+          }
+        },
+        "rail_start": {
+          "type": "string",
+          "maxLength": 5,
+          "part": "rail"
+        },
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "part": "events",
+          "items": {
+            "type": "object",
+            "required": ["title", "start", "end"],
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "start": {
+                "type": "string",
+                "maxLength": 5
+              },
+              "end": {
+                "type": "string",
+                "maxLength": 5
+              },
+              "place": {
+                "type": "string",
+                "maxLength": 28
+              },
+              "tone": {
+                "enum": ["accent", "info", "warn", "neutral"]
+              },
+              "past": {
+                "type": "boolean"
+              },
+              "column": {
+                "enum": ["full", "left", "right"]
+              },
+              "href": {
+                "type": "string",
+                "maxLength": 200
+              },
+              "people": {
+                "type": "object",
+                "part": "attendees",
+                "properties": {
+                  "photos": {
+                    "type": "array",
+                    "minItems": 0,
+                    "maxItems": 3,
+                    "items": {
+                      "type": "string",
+                      "maxLength": 300
+                    }
+                  },
+                  "names": {
+                    "type": "string",
+                    "maxLength": 48
+                  }
+                }
+              }
+            }
+          }
+        },
+        "now": {
+          "type": "string",
+          "maxLength": 5,
+          "part": "now"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no events, keep the header and put an empty-state line ('Nothing booked') over the hour rail"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the header and rail, and draw two or three muted event blocks in the grid until the day loads"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the day fails to load, keep the header and show an alert-banners line under it with a retry"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "set disabled on the previous and next buttons at the ends of the range the tool allows"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrow box the rail and padding shrink, and side-by-side events drop their place and use smaller titles",
+        "evidence": ".odl-event.is-half .odl-place { display: none; }"
+      },
+      "long_text": {
+        "status": "not_built",
+        "how": "the event box is a fixed number of quarter-hour rows, so clamp each event title to one or two lines with an ellipsis"
+      }
+    },
+    "keyboard": ["Tab reaches the previous day, Today and next day buttons, then the all-day event and each timed event in order", "Enter on an event follows its link", "Enter or Space presses a day button, but the file wires no action to them"]
+  }
 }

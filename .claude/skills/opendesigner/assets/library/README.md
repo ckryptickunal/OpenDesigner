@@ -10,11 +10,12 @@ An optional set of finished components. Each one is built only on the `--ds-*` t
 ```
 assets/library/
   README.md                 this file
+  library.json              the machine catalog, written by library.py catalog; never edit it
   components/<slug>/
     component.html          the component: one <style> block scoped to .odl-<slug>, then the markup (and, only when needed, one <script>)
     meta.json               name, summary, use, type, style, industries, tags, states, source piece, accessibility notes
 ```
-`scripts/library.py` reads these folders. There is no index file to keep in step: `library.py list --json` and the website build both read the folders.
+`scripts/library.py` reads these folders. `library.py catalog` writes `library.json` from them, and `library.py check` fails when it is out of date, so never edit it by hand.
 
 ### meta.json
 | Field | What it holds |
@@ -30,6 +31,20 @@ assets/library/
 | `source` | The showcase piece it comes from (a repo path), or `null` |
 | `a11y` | One sentence on keyboard and screen-reader behaviour |
 | `width` | The width it is designed for: `narrow` (up to 400 px), `medium` (up to 640 px) or `wide` |
+| `spec` | What agents, the MCP server and smart UI need to use it without reading the file: see "spec" below |
+
+### spec (in meta.json) and library.json
+`library.json` holds one entry per component. Some fields are derived from `component.html`, so they cannot drift: the `--ds-*` tokens it reads, ARIA roles, how many controls, whether it has `:focus-visible`, reduced motion and the target floor, its size and whether it has a script. The rest come from `spec`, written by whoever writes the component:
+| Field | What it holds |
+|---|---|
+| `use_when` | Up to two more situations beyond `use` |
+| `avoid_when` | One to three cases where it is the wrong part, naming the library part to use instead when one fits |
+| `parts` | The named pieces in reading order: `name`, a `selector` that exists in the file, `what` it is, and a `slot` kind (text, rich, number, media, list, action, input, none) |
+| `data` | A JSON Schema of the content: every string has `maxLength`, every list `minItems` and `maxItems`, fixed choices are an `enum`, `part` names the piece it fills. Limits are what the layout holds at its width, read from the layout, not measured |
+| `edge` | The six edge states, `empty`, `loading`, `error`, `disabled`, `overflow` and `long_text`, each `shown` (the file shows it), `handled` (its CSS or script copes) or `not_built`, with `how` (one sentence). `shown` and `handled` need `evidence`: a string found in the file |
+| `keyboard` | What the keyboard does, in plain sentences; only what the file really does |
+
+`library.py check` checks every selector, every `part` name, the six edge states and their evidence. The website serves the catalog at `/library/index.json`, each entry at `/library/<slug>.json`, and the MCP server (`server/mcp/`) returns it from `get_component`.
 
 **Types:** `data` (tables, rows, feeds, stats), `chart`, `form` (inputs, toggles, pickers), `feedback` (toasts, banners, empty states), `navigation` (command menus, steppers, tabs, sidebars), `overlay` (dialogs, drawers, menus), `ai` (composers, answers), `commerce` (plans, checkout, products), `content` (profiles, media, cards).
 **Styles:** `quiet` (calm, lots of space), `dense` (many rows, small type, work tools), `technical` (mono figures, status), `friendly` (rounder, warmer copy), `editorial` (reading first).
@@ -48,8 +63,10 @@ Every part also meets the craft standard in [CRAFT.md](CRAFT.md): generous spaci
 
 ## Pulling one into a project
 - **With OpenDesigner installed** (the person's agent has the skill): `python3 <skill>/scripts/library.py add <slug> [--into src/components/odl]`. It copies the file and lists any `--ds-*` variable the project's tokens lack.
+- **From the website:** `library.py add <slug> --from https://opendesigner.dev` takes the newest copy; with no OpenDesigner at all, `curl -fsSLo <slug>.html https://opendesigner.dev/library/<slug>.html`.
 - **Any agent:** paste the prompt shown on the website, for example:
-  `Add the OpenDesigner component approval-panel to this project: https://opendesigner.dev/library/r/approval-panel.html. Keep its markup and states; map its --ds-* variables to my tokens.`
+  `Add the OpenDesigner component approval-panel to this project: https://opendesigner.dev/library/approval-panel.html. Keep its markup and states; map its --ds-* variables to my tokens.`
+- **Over MCP:** the local server in `server/mcp/` (`list_components`, `get_component`, `get_tokens_template`, `suggest_components`, and a gallery view).
   The agent fetches one small file and maps variables; it does not redesign the component.
 
 In React, Vue or Svelte the agent turns the file into one component in the project's own style (the CSS block can stay as it is).

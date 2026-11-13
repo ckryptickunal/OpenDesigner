@@ -30,5 +30,235 @@
       "author": "Hugo ROUQUETTE",
       "page": "RhTXKh0UofQ"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a training log entry opened later, where the splits and heart-rate zones explain how the session went"],
+    "avoid_when": ["progress toward a daily target: use daily-goals", "a streak of days done: use habit-tracker or lesson-streak", "sleep stages over a night: use sleep-chart"],
+    "parts": [
+      {
+        "name": "athlete",
+        "selector": ".odl-who",
+        "what": "the person's photo, name, date, time and place",
+        "slot": "text"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-workout-summary h3",
+        "what": "the workout's name, the card's heading",
+        "slot": "text"
+      },
+      {
+        "name": "map",
+        "selector": ".odl-map",
+        "what": "a drawn route map, described in words for screen readers",
+        "slot": "media"
+      },
+      {
+        "name": "distance",
+        "selector": ".odl-dist",
+        "what": "the distance in large type with its unit",
+        "slot": "number"
+      },
+      {
+        "name": "badge",
+        "selector": ".odl-pr",
+        "what": "a personal record or highlight",
+        "slot": "text"
+      },
+      {
+        "name": "stats",
+        "selector": ".odl-stats div",
+        "what": "one stat: label, value and unit",
+        "slot": "list"
+      },
+      {
+        "name": "zone_bar",
+        "selector": ".odl-zbar",
+        "what": "one bar split by time in each heart-rate zone, decorative",
+        "slot": "none"
+      },
+      {
+        "name": "zones",
+        "selector": ".odl-zones li",
+        "what": "one zone: name, heart-rate range and minutes",
+        "slot": "list"
+      },
+      {
+        "name": "splits",
+        "selector": "tbody tr",
+        "what": "one split: distance, a relative pace bar, pace and heart rate; the fastest is marked",
+        "slot": "list"
+      },
+      {
+        "name": "save",
+        "selector": ".odl-save",
+        "what": "save the route toggle",
+        "slot": "action"
+      },
+      {
+        "name": "share",
+        "selector": ".odl-btn.is-primary",
+        "what": "share the workout",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "distance", "unit", "stats"],
+      "properties": {
+        "athlete": {
+          "type": "object",
+          "part": "athlete",
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 28
+            },
+            "photo": {
+              "type": "string",
+              "maxLength": 300
+            },
+            "when": {
+              "type": "string",
+              "maxLength": 44
+            }
+          }
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "title"
+        },
+        "map_label": {
+          "type": "string",
+          "maxLength": 140,
+          "part": "map"
+        },
+        "distance": {
+          "type": "number",
+          "minimum": 0,
+          "part": "distance"
+        },
+        "unit": {
+          "enum": ["km", "mi"],
+          "part": "distance"
+        },
+        "badge": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "badge"
+        },
+        "stats": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 6,
+          "part": "stats",
+          "items": {
+            "type": "object",
+            "required": ["label", "value"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 6
+              },
+              "unit": {
+                "type": "string",
+                "maxLength": 5
+              }
+            }
+          }
+        },
+        "zones": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "part": "zones",
+          "items": {
+            "type": "object",
+            "required": ["minutes"],
+            "properties": {
+              "range": {
+                "type": "string",
+                "maxLength": 18
+              },
+              "minutes": {
+                "type": "number",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "splits": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 30,
+          "part": "splits",
+          "items": {
+            "type": "object",
+            "required": ["label", "pace"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 5
+              },
+              "pace": {
+                "type": "string",
+                "maxLength": 6
+              },
+              "bpm": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 250
+              },
+              "relative": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "fastest": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "saved": {
+          "type": "boolean",
+          "part": "save"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "for a workout with no GPS or heart rate, hide the map and the zones section and keep the stats"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "while the workout syncs, show the card with a sunken map box and muted blocks for the numbers"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if saving or syncing fails, show toast-stack with the reason and set Save route back"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "disable Share while the route is still processing and style it with the disabled colours"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "on a phone the card padding and stat figures get smaller; wider, the map gets flatter",
+        "evidence": "@container (max-width: 26rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "stat values never wrap, so keep them short; labels, names and the place line wrap",
+        "evidence": ".odl-stats dd { margin: 0; font: var(--ds-text-title-md); font-variant-numeric: tabular-nums; white-space: nowrap; }"
+      }
+    },
+    "keyboard": ["Tab reaches Save route, then Share", "Enter or Space on Save route toggles it and changes its text to Route saved"]
+  }
 }

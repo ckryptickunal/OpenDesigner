@@ -78,5 +78,165 @@
       "author": "ARTO SURAJ",
       "page": "a26KbF2Mz1I"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a community or creator app suggesting accounts, groups or creators to follow, with a reason for each"],
+    "avoid_when": ["a full list of people to manage or search: use member-list", "inviting teammates by email to a workspace: use invite-members", "one person's own profile: use profile-card"],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the row's heading",
+        "slot": "text"
+      },
+      {
+        "name": "see_all",
+        "selector": ".odl-all",
+        "what": "link-style button to the full list",
+        "slot": "action"
+      },
+      {
+        "name": "cards",
+        "selector": ".odl-card",
+        "what": "one suggested person: remove button, photo, name, handle, reason and follow button",
+        "slot": "list"
+      },
+      {
+        "name": "photo",
+        "selector": ".odl-av img",
+        "what": "the person's photo",
+        "slot": "media"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-name",
+        "what": "the person's name, on one line",
+        "slot": "text"
+      },
+      {
+        "name": "handle",
+        "selector": ".odl-handle",
+        "what": "the @handle, on one line",
+        "slot": "text"
+      },
+      {
+        "name": "reason",
+        "selector": ".odl-why",
+        "what": "why they are suggested, with up to two small mutual-friend photos",
+        "slot": "rich"
+      },
+      {
+        "name": "follow",
+        "selector": ".odl-follow",
+        "what": "toggle that reads Follow, Follow back or Following",
+        "slot": "action"
+      },
+      {
+        "name": "remove",
+        "selector": ".odl-x",
+        "what": "removes the card from the row",
+        "slot": "action"
+      },
+      {
+        "name": "done",
+        "selector": ".odl-done",
+        "what": "the line shown once every card is removed",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "people"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "title"
+        },
+        "see_all": {
+          "type": "string",
+          "maxLength": 12,
+          "part": "see_all"
+        },
+        "people": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "part": "cards",
+          "items": {
+            "type": "object",
+            "required": ["name", "photo"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "handle": {
+                "type": "string",
+                "maxLength": 18
+              },
+              "photo": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "reason": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "mutual_photos": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 2,
+                "items": {
+                  "type": "string",
+                  "maxLength": 300
+                }
+              },
+              "follow_label": {
+                "enum": ["Follow", "Follow back"]
+              },
+              "following": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "done": {
+          "type": "string",
+          "maxLength": 90,
+          "part": "done"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "shown",
+        "how": "when the last card is removed the row hides and a caught-up line shows",
+        "evidence": ".odl-wrap.is-empty .odl-done { display: block; }"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "show three or four cards with a muted circle for the photo and muted bars for the name and button"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a follow fails, set the button back to Follow and announce the failure in the live region, or show a toast-stack message"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "while a follow request is pending, set disabled on that card's follow button"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the cards scroll sideways in their own row, with snap points and a fade at the right edge",
+        "evidence": "overflow-x: auto"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "long names and handles are cut with an ellipsis on one line; the reason wraps",
+        "evidence": "text-overflow: ellipsis; white-space: nowrap"
+      }
+    },
+    "keyboard": ["Tab moves through See all, then each card's remove button and follow button", "Enter or Space on a follow button switches it between Follow and Following", "Enter or Space on a remove button removes the card, announces it and moves focus to the next card's remove button"]
+  }
 }

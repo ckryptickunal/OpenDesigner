@@ -9,5 +9,141 @@
   "states": ["hover row highlights its segment"],
   "source": null,
   "a11y": "The drawing is hidden from screen readers; the legend list carries every category, amount and share, and its label gives the total.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": ["a billing or usage page that needs the total and each category's amount and share side by side"],
+    "avoid_when": ["more than four categories, or values to compare over time: use bar-chart", "a few headline numbers with no part-of-a-whole split: use kpi-strip", "spending against limits per category: use budget-meters"],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "what is being split, the one heading",
+        "slot": "text"
+      },
+      {
+        "name": "period",
+        "selector": ".odl-sub",
+        "what": "the date range",
+        "slot": "text"
+      },
+      {
+        "name": "ring",
+        "selector": "figure",
+        "what": "the donut, one segment per category, hidden from screen readers",
+        "slot": "none"
+      },
+      {
+        "name": "total",
+        "selector": ".odl-total",
+        "what": "the rounded total in the middle, with a short caption",
+        "slot": "number"
+      },
+      {
+        "name": "legend",
+        "selector": "ul > li",
+        "what": "one category: colour dot, name with a usage note, amount and share; hovering it lifts its segment",
+        "slot": "list"
+      },
+      {
+        "name": "foot",
+        "selector": ".odl-foot",
+        "what": "a note under the chart, such as credits or a trend",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "total", "categories"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "title"
+        },
+        "period": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "period"
+        },
+        "total": {
+          "type": "object",
+          "part": "total",
+          "required": ["value"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "maxLength": 10
+            },
+            "caption": {
+              "type": "string",
+              "maxLength": 20
+            }
+          }
+        },
+        "categories": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 4,
+          "part": "legend",
+          "items": {
+            "type": "object",
+            "required": ["name", "amount", "share"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "amount": {
+                "type": "string",
+                "maxLength": 12
+              },
+              "share": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            }
+          }
+        },
+        "foot": {
+          "type": "string",
+          "maxLength": 120,
+          "part": "foot"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no spend yet, draw the ring in the track colour only, show $0 in the middle and replace the legend with a one-line empty-state"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "show the ring as a single muted circle and the legend rows as muted blocks until numbers arrive"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the numbers fail to load, keep the heading and put an alert-banners line in place of the chart and legend"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "the chart has no controls; to mark stale data, lower the ring's opacity and say so in the foot"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "below about 480px the ring sits above the legend instead of beside it, and shrinks further on phones",
+        "evidence": "@container (min-width: 30rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long category name wraps in its own column while amount and share keep their width",
+        "evidence": "grid-template-columns: var(--ds-space-12) minmax(0, 1fr) auto 5ch"
+      }
+    },
+    "keyboard": []
+  }
 }

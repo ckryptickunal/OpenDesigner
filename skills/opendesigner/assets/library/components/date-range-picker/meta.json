@@ -9,5 +9,165 @@
   "states": ["hover", "focus", "selected start", "in range", "selected end", "today", "disabled future day", "picking end"],
   "source": "brand/showcase/components/03-date-range-picker",
   "a11y": "Every day is a button with its full date as its label and aria-pressed on the start and end; today has aria-current, future days are disabled, and the range length is announced in a polite live region.",
-  "width": "wide"
+  "width": "wide",
+  "spec": {
+    "use_when": ["a past period for analytics or billing, where days after today must not be picked"],
+    "avoid_when": ["picking one date or a travel date in the future: future days are disabled here; use trip-search", "choosing several filters at once, of which dates are only one: use filter-bar and open this from it", "seeing what happens on each day: use calendar-agenda"],
+    "parts": [
+      {
+        "name": "presets",
+        "selector": ".odl-presets button",
+        "what": "one quick range, such as Last 7 days; the last is Custom",
+        "slot": "list"
+      },
+      {
+        "name": "start",
+        "selector": ".odl-start",
+        "what": "the chosen start day, or a prompt to pick one",
+        "slot": "text"
+      },
+      {
+        "name": "end",
+        "selector": ".odl-end",
+        "what": "the chosen end day, or a prompt to pick one",
+        "slot": "text"
+      },
+      {
+        "name": "months",
+        "selector": ".odl-month",
+        "what": "one month: its name, previous and next buttons, and a grid of days; two side by side when wide",
+        "slot": "list"
+      },
+      {
+        "name": "month_title",
+        "selector": ".odl-mhead h3",
+        "what": "the month and year",
+        "slot": "text"
+      },
+      {
+        "name": "nav",
+        "selector": ".odl-nav",
+        "what": "previous and next month",
+        "slot": "action"
+      },
+      {
+        "name": "days",
+        "selector": ".odl-day",
+        "what": "one day button: start, end, in range, today or disabled",
+        "slot": "list"
+      },
+      {
+        "name": "summary",
+        "selector": ".odl-summary",
+        "what": "the range length and the time zone, or what to do next",
+        "slot": "rich"
+      },
+      {
+        "name": "cancel",
+        "selector": ".odl-cancel",
+        "what": "puts the first range back",
+        "slot": "action"
+      },
+      {
+        "name": "apply",
+        "selector": ".odl-apply",
+        "what": "the main action",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["today"],
+      "properties": {
+        "presets": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "part": "presets",
+          "items": {
+            "type": "object",
+            "required": ["label", "id"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "id": {
+                "enum": ["today", "7", "month", "quarter", "custom"]
+              }
+            }
+          }
+        },
+        "start": {
+          "type": "string",
+          "format": "date",
+          "maxLength": 10,
+          "part": "start"
+        },
+        "end": {
+          "type": "string",
+          "format": "date",
+          "maxLength": 10,
+          "part": "end"
+        },
+        "today": {
+          "type": "string",
+          "format": "date",
+          "maxLength": 10,
+          "part": "days"
+        },
+        "timezone_note": {
+          "type": "string",
+          "maxLength": 36,
+          "part": "summary"
+        },
+        "actions": {
+          "type": "object",
+          "properties": {
+            "apply": {
+              "type": "string",
+              "maxLength": 12,
+              "part": "apply"
+            },
+            "cancel": {
+              "type": "string",
+              "maxLength": 12,
+              "part": "cancel"
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "with only a start or no day picked, the open field shows 'Pick a day' in a muted colour with a focus border and the summary says what to do",
+        "evidence": "output.is-empty"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "not needed for the calendar itself; if presets come from a server, show the preset buttons as grey blocks until they arrive"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a range is too long for the report, put a warning line in the summary and set disabled on Apply"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "days after today and the next-month button past today are greyed out and cannot be pressed",
+        "evidence": ".odl-day:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "below 600 px one month shows instead of two, and the presets move from a side column to a wrapping row, then two columns",
+        "evidence": "@container (max-width: 599.98px)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the start and end fields cut a long date off with an ellipsis; preset labels never wrap",
+        "evidence": "white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
+      }
+    },
+    "keyboard": ["Tab moves through the preset buttons, previous and next month, every day that is not disabled, then Cancel and Apply", "Enter or Space on a day picks the start, then the end; focus stays on that day", "Enter or Space on a preset sets its range and shows its months", "The range length is read out by a polite live region after each pick"]
+  }
 }

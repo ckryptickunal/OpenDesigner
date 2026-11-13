@@ -9,5 +9,158 @@
   "states": ["hover", "focus", "filled", "error", "resend waiting", "resend ready", "disabled verify"],
   "source": null,
   "a11y": "The boxes are a labelled group, each input says which digit it is and points to the message, arrows and Backspace move between boxes, the first box offers one-time-code autofill, and the message is a polite live region.",
-  "width": "narrow"
+  "width": "narrow",
+  "spec": {
+    "use_when": ["a second sign-in step after a password, or confirming a new email or phone number"],
+    "avoid_when": ["the first sign-in screen with email and password: use sign-in-form", "a code longer or shorter than six digits: the six boxes are fixed in the markup, so a single text field fits better", "a confirmation with no code to type: use confirm-dialog"],
+    "parts": [
+      {
+        "name": "icon",
+        "selector": ".odl-mark",
+        "what": "an icon for where the code was sent",
+        "slot": "media"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-code-input h2",
+        "what": "the heading, such as 'Check your email'",
+        "slot": "text"
+      },
+      {
+        "name": "intro",
+        "selector": ".odl-head p",
+        "what": "where the code went and how long it works, with the masked address in bold",
+        "slot": "rich"
+      },
+      {
+        "name": "label",
+        "selector": "legend",
+        "what": "the name of the code field",
+        "slot": "text"
+      },
+      {
+        "name": "boxes",
+        "selector": ".odl-boxes input",
+        "what": "one box per digit, three, a dash, then three",
+        "slot": "input"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-msg",
+        "what": "help text, or the error when the code is wrong",
+        "slot": "text"
+      },
+      {
+        "name": "verify",
+        "selector": ".odl-verify",
+        "what": "the main action",
+        "slot": "action"
+      },
+      {
+        "name": "resend",
+        "selector": ".odl-resend",
+        "what": "resend link with a countdown before it can be used",
+        "slot": "action"
+      },
+      {
+        "name": "change",
+        "selector": ".odl-foot .odl-link:last-child",
+        "what": "go back and use another address",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "destination"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "title"
+        },
+        "destination": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "intro"
+        },
+        "intro": {
+          "type": "string",
+          "maxLength": 120,
+          "part": "intro"
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "label"
+        },
+        "length": {
+          "const": 6,
+          "part": "boxes"
+        },
+        "help": {
+          "type": "string",
+          "maxLength": 80,
+          "part": "message"
+        },
+        "error": {
+          "type": "string",
+          "maxLength": 90,
+          "part": "message"
+        },
+        "resend_seconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 600,
+          "part": "resend"
+        },
+        "actions": {
+          "type": "object",
+          "properties": {
+            "verify": {
+              "type": "string",
+              "maxLength": 20,
+              "part": "verify"
+            },
+            "change": {
+              "type": "string",
+              "maxLength": 28,
+              "part": "change"
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "when any box is empty the Verify button is disabled; after a resend the boxes clear and the message explains what to do",
+        "evidence": "verify.disabled = boxes.some((b) => !b.value)"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "while the code is checked, disable Verify and the boxes and change the button text to 'Checking'"
+      },
+      "error": {
+        "status": "shown",
+        "how": "a wrong code turns every box red and shows the message with an alert icon; typing clears it",
+        "evidence": "fieldset.is-invalid"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "Resend is disabled during the countdown; Verify is disabled until all six boxes have a digit",
+        "evidence": ".odl-link:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the six boxes shrink with the card, and the card's padding gets smaller on a phone",
+        "evidence": "repeat(3, minmax(0, 1fr)) auto repeat(3, minmax(0, 1fr))"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "intro and message wrap; the masked address never wraps, so keep it short",
+        "evidence": ".odl-head strong { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); white-space: nowrap; }"
+      }
+    },
+    "keyboard": ["Typing a digit fills the box and moves to the next one", "Pasting a code fills all the boxes at once", "Backspace in an empty box clears the box before it and moves there", "Left and Right arrows move between boxes", "Tab moves from the boxes to Verify, then Resend when it is ready, then Use a different email; Enter or Space presses the focused button"]
+  }
 }
