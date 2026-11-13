@@ -5,7 +5,7 @@ The site, the README and the files crawlers read (robots.txt, llms.txt, llms-ful
 It has two halves. A script checks what a rule can settle. A person (or an agent with a browser) does the rest: asking ChatGPT and Perplexity the questions people ask, and deciding the fixes. The method behind the second half is the search skill's: `skills/opendesigner-search/SKILL.md`, `references/probe.md` and `references/fixes.md`.
 
 ## When
-- **Every release:** after the version pull request merges and before the tag, once the site is built from that commit.
+- **Every release:** after the tag and the GitHub Release, once the site is built from that commit.
 - **Every month:** the whole routine, including the probe. Add a row to the trend table even when nothing changed.
 - **After a feature page lands:** steps 1 and 2 only, so its question shows up in llms.txt.
 
@@ -51,7 +51,7 @@ It warns when the README's opening never names the category ("design system", "C
 Keep the wording fixed so runs compare. A reworded question gets a new id.
 
 ## 4. By hand, at most one fetch per page
-- `/robots.txt`, `/llms.txt` and `/sitemap.xml` on the live site return 200, and `opendesigner.vercel.app` redirects to `opendesigner.dev` (ChatGPT still read a page at the old address on 2026-11-13). Never poll the live site: about 50 requests once got this Mac blocked.
+- `/robots.txt`, `/llms.txt` and `/sitemap.xml` on the live site return 200, and `opendesigner.vercel.app` redirects to `opendesigner.dev` (ChatGPT still read a page at the old address on 2026-11-13). Never poll the live site: one fetch per page.
 - Ask Kunal for Search Console and Bing Webmaster numbers (clicks, impressions, pages indexed) and add them to the trend row.
 - Off-site places the engines read (GitHub lists, skill and MCP directories, dev.to) are proposals only, each with Kunal's yes.
 
@@ -85,9 +85,9 @@ A question that moves from "no" to "yes" after a page went live is the evidence 
 | T3 | tokens with Claude or Cursor | How do I create a Tailwind v4 theme from design tokens with AI? |
 | T4 | tokens with Claude or Cursor | What is the DTCG design tokens format and which tools export it? |
 | T5 | tokens with Claude or Cursor | How do I keep UI consistent across AI coding sessions? |
-| G1 | smart / generative UI | How do I add generative UI to my chatbot that uses my own design system components? |
-| G2 | smart / generative UI | How can an AI assistant render UI components instead of text, using my brand's components? |
-| G3 | smart / generative UI | What is generative UI and how do I make it match my design system? |
+| G1 | generative UI | How do I add generative UI to my chatbot that uses my own design system components? |
+| G2 | generative UI | How can an AI assistant render UI components instead of text, using my brand's components? |
+| G3 | generative UI | What is generative UI and how do I make it match my design system? |
 | M1 | MCP component library | Is there an MCP server that gives my coding agent a component library? |
 | M2 | MCP component library | Free component library my AI agent can fetch and adapt to my design tokens |
 | M3 | MCP component library | Component library built on design tokens that works with Claude Code |

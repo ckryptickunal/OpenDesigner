@@ -74,7 +74,7 @@ It reads your Tailwind config before asking anything. When your platforms includ
 
 ### How do I keep the UI consistent across AI coding sessions?
 
-Give every session the same rules to read. OpenDesigner writes them into your project: `DESIGN.md`, the design tokens, and, once you say yes, a note in `AGENTS.md` and `CLAUDE.md` that tells the agent to read `DESIGN.md` first. When a piece of work is done, `engine.py review` lists hard-coded colors and sizes, and any part of `DESIGN.md` that has gone stale. See [How it works](/docs/how-it-works/).
+Give every session the same rules to read. OpenDesigner writes them into your project: `DESIGN.md`, the design tokens, and, once you say yes, a note in `AGENTS.md`, which `CLAUDE.md` imports, that tells the agent to read `DESIGN.md` first. When a piece of work is done, `engine.py review` lists hard-coded colors and sizes, and any part of `DESIGN.md` that has gone stale. See [How it works](/docs/how-it-works/).
 
 ### How do I find inconsistent spacing, colors and fonts in my app?
 

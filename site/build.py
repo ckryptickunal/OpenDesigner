@@ -2069,7 +2069,7 @@ def skill_names():
 
 
 # What people ask answer engines, in their words (the probe in docs/GROWTH-ROUTINE.md), and the pages that answer each.
-# A link appears only when its page is in this build, so a page that lands later joins without an edit here. A third item
+# A link appears only when its page is in this build, so a page that lands later joins without an edit here (Smart UI excepted: it is held out by hand). A third item
 # names a page the question needs: until it exists, the question stays out (a feature on its way is not claimed).
 LLMS_QUESTIONS = [
     ("How do I create a design system with AI?", ["/docs/quickstart/", "/docs/install/"]),
@@ -2084,12 +2084,11 @@ LLMS_QUESTIONS = [
     ("How do I audit an existing web app for inconsistent spacing, colors and fonts?", ["/docs/existing-product/", "/docs/faq/"]),
     ("Is there a tool that finds hard-coded colors and spacing in my code and moves them to design tokens?", ["/docs/engineers/", "/docs/faq/"]),
     ("How do I extract a design system from an existing website, or adapt mine to a site I like?", ["/docs/existing-product/"]),
-    ("How do I add generative UI to my chatbot with my own components?", ["/docs/smart-ui/", "/docs/smart-ui-quickstart/", "/docs/smart-ui-adapters/"]),
+    # Smart UI (generative UI with your own components, probe G1 to G3) is left out on purpose until Kunal approves its demo (2026-11-13).
     ("Is there a free component library built on design tokens?", ["/library/"]),
     ("Is there a component library my AI agent can fetch, or use over MCP?", ["/docs/library-mcp/", "/library/"], "/docs/library-mcp/"),
-    ("How do I design empty, loading and error states?", ["/docs/states/", "/library/empty-state/", "/docs/ux-patterns/"]),
+    ("How do I design empty, loading and error states?", ["/docs/states/", "/library/empty-state/", "/docs/ux-patterns/"], "/docs/states/"),
     ("Skeleton loader or spinner: which should I use, and which states does every screen need?", ["/docs/states/"], "/docs/states/"),
-    ("How do I research users before I design?", ["/docs/engine/"]),
     ("How do I research users and stakeholders before I design?", ["/docs/research/", "/docs/engine/"], "/docs/research/"),
     ("How does it compare with UI UX Pro Max, a shadcn theme generator or Figma's AI tools?", ["/docs/faq/", "/docs/ai-design-system-generator/"]),
     ("How do I get my site cited by ChatGPT and Perplexity?", ["/docs/search/"]),
@@ -2110,7 +2109,7 @@ def llms_questions(pages):
 
 
 def llms_txt(pages):
-    cards =sum(len(json.loads(f.read_text())["cards"]) for f in (ROOT / "skills/opendesigner/references/cards").glob("*.json"))
+    cards = sum(len(json.loads(f.read_text())["cards"]) for f in (ROOT / "skills/opendesigner/references/cards").glob("*.json"))
     secs = []
     for s in SECTIONS:
         ps = [p for p in pages if p["section"] == s]
