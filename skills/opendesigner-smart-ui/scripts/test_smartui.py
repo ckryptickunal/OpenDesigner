@@ -201,6 +201,51 @@ class Routes(unittest.TestCase):
         self.assertIn("web/assistant.js", s["chat_surface"])
 
 
+class Live(unittest.TestCase):
+    """The live loop with a scripted model: routing, the repair round, and approvals (R3)."""
+
+    def setUp(self):
+        import live
+        self.live = live
+        self.app = live.load_app(ROOT / "examples" / "smart-ui-support" / "server.py")
+        self.ran = []
+        a = self.app.ACTIONS["pay_invoice"]
+        a["fn"] = (lambda f: (lambda **kw: (self.ran.append(kw), f(**kw))[1]))(a["fn"])
+
+    def script(self, replies):
+        it = iter(replies)
+        self.live.ask = lambda provider, system, turns: next(it)
+
+    def test_route_answer_repair(self):
+        bad = '```a2ui\n{"component": "DataTable", "title": "<b>Open</b>", "columns": [], "rows": []}\n```'
+        good = 'Two are open.\n```a2ui\n{"component": "KeyFacts", "title": "Open invoices", "facts": [{"label": "TH-1047", "value": "€1,104.00"}, {"label": "TH-1043", "value": "€184.00"}]}\n```'
+        self.script(['{"calls": [{"action": "list_invoices", "args": {"status": "open"}}, {"action": "pay_invoice", "args": {"number": "TH-1047"}}]}', bad, good])
+        conv = self.live.Conversation(self.app, "scripted")
+        r = conv.answer("Show my open invoices")
+        self.assertEqual([c[0] for c in r["log"]["calls"]], ["list_invoices"])  # the change was dropped from the route (R3)
+        self.assertEqual(self.ran, [])
+        self.assertTrue(r["log"]["first_errors"])
+        self.assertTrue(r["log"]["repaired"])
+        self.assertEqual(r["log"]["part"], "KeyFacts")
+        self.assertIsNotNone(r["answer"])
+
+    def test_change_needs_the_renderers_approval(self):
+        self.script(["Done.", '{"calls": []}', "It's paid."])
+        conv = self.live.Conversation(self.app, "scripted")
+        r = conv.press({"name": "pay_invoice", "context": {"number": "TH-1043"}})
+        self.assertEqual(self.ran, [])
+        self.assertIn("confirmation", r["text"])
+        conv.press({"name": "pay_invoice", "context": {"number": "TH-1043", "approved": True}})
+        self.assertEqual(self.ran, [{"number": "TH-1043"}])
+
+    def test_still_wrong_after_repair_is_text_only(self):
+        bad = '```a2ui\n{"component": "Nope"}\n```'
+        self.script(['{"calls": []}', "Here.\n" + bad, "Here again.\n" + bad])
+        r = self.live.Conversation(self.app, "scripted").answer("Compare the plans")
+        self.assertIsNone(r["answer"])
+        self.assertTrue(r["log"]["final_errors"])
+
+
 class Offer(unittest.TestCase):
     def test_offer_on_a_chat_and_not_without(self):
         with tempfile.TemporaryDirectory() as t:

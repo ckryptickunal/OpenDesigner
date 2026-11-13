@@ -85,7 +85,7 @@ FLOORS_JS = r"""() => {
       }
     }
   }
-  const controls = [...surf.querySelectorAll("button, a[href], a[role=button], input:not([type=hidden]), select, textarea, [role=button], [role=option], [role=checkbox], [role=switch], [role=tab]")].filter(vis);
+  const controls = [...surf.querySelectorAll("button, a[href], a[role=button], input:not([type=hidden]), select, textarea, [role=button], [role=option], [role=checkbox], [role=switch], [role=tab]")].filter((e) => vis(e) && !e.closest("[aria-hidden=true]"));
   const names = new Map();
   for (const el of controls) {
     const r = el.getBoundingClientRect();
@@ -113,7 +113,7 @@ FLOORS_JS = r"""() => {
 
 FOCUS_JS = r"""async () => {
   const surf = document.querySelector("od-surface"), miss = [];
-  const els = [...surf.querySelectorAll("button:not([disabled]), a[href], [role=button][tabindex], input:not([type=hidden]):not([disabled]), select, textarea, [tabindex='0']")].filter((e) => e.getBoundingClientRect().width > 0);
+  const els = [...surf.querySelectorAll("button:not([disabled]), a[href], [role=button][tabindex], input:not([type=hidden]):not([disabled]), select, textarea, [tabindex='0']")].filter((e) => e.getBoundingClientRect().width > 0 && !e.closest("[aria-hidden=true], [inert]"));
   for (const el of els.slice(0, 30)) {
     el.focus({focusVisible: true});
     const cs = getComputedStyle(el), cw = getComputedStyle(el.closest("label") || el);
@@ -185,11 +185,16 @@ def fill_to_max(xs, p):
     for i in range(n):
         it = copy.deepcopy(xs[i % len(xs)])
         if i >= len(xs) and isinstance(it, dict):
-            key = nf if nf and isinstance(it.get(nf), str) else next((k for k, v in it.items() if isinstance(v, str)), None)
+            iprops = p.get("items", {}).get("properties", {})
+            free = lambda k: isinstance(it.get(k), str) and "enum" not in iprops.get(k, {}) and "pattern" not in iprops.get(k, {})
+            key = nf if nf and free(nf) else next((k for k in it if free(k)), None)
             if key:
                 mx = p.get("items", {}).get("properties", {}).get(key, {}).get("maxLength", 200)
                 suffix = f" {i + 1}"
                 it[key] = it[key][: max(1, mx - len(suffix))] + suffix
+            for v in it.values():  # a copied button would repeat its spoken name: number the copies
+                if isinstance(v, dict) and "event" in v and isinstance(v.get("label"), str):
+                    v["a11y_label"] = (v.get("a11y_label") or v["label"])[:110] + f" {i + 1}"
         out.append(it)
     return out
 
@@ -291,8 +296,8 @@ def run_matrix(catalog_dir, tokens, cases, out, envs=None, shots=True, craft=Tru
                             findings.append({"check": label, "detail": f[k][:5]})
                     if f.get("scroll"):
                         findings.append({"check": "sideways scroll", "detail": f["scroll"]})
-                    if f.get("live") != 1 or f.get("assertive"):
-                        findings.append({"check": "live region", "detail": f"{f.get('live')} polite, {f.get('assertive')} assertive (want 1 polite)"})
+                    if not f.get("live") or f.get("assertive"):  # parts may have their own polite status line; never assertive
+                        findings.append({"check": "live region", "detail": f"{f.get('live')} polite, {f.get('assertive')} assertive (want at least 1 polite, no assertive)"})
                     if focus.get("missing"):
                         findings.append({"check": "focus not visible", "detail": focus["missing"][:5]})
                     if moving:

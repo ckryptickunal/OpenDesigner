@@ -102,8 +102,9 @@ def props_for(nodes, spec, css, tokens, where=""):
         if k == "text":
             names_text.append(name)
             t = s.get("type")
-            p = s if (set(t) if isinstance(t, list) else {t}) & {"string", "number", "integer"} or "enum" in s else {"type": "string", "maxLength": 120}
-            if p.get("type") == "string" and "maxLength" not in p:
+            # without an authored type, a slot shows text or a number (the renderer formats numbers for the reader's locale)
+            p = s if (set(t) if isinstance(t, list) else {t}) & {"string", "number", "integer"} or "enum" in s else {"type": ["string", "number"], "maxLength": 120}
+            if "string" in (p.get("type") if isinstance(p.get("type"), list) else [p.get("type")]) and "maxLength" not in p:
                 p["maxLength"] = 120
             props.setdefault(name, p)
         elif k == "input":
@@ -119,7 +120,7 @@ def props_for(nodes, spec, css, tokens, where=""):
         elif k == "label":
             props.setdefault(name, {"type": "string", "maxLength": 120, **{x: y for x, y in s.items() if x in ("maxLength", "description")}})
         elif k == "measure":
-            if name in props and props[name].get("type") == "string":
+            if name in props and props[name].get("type") in ("string", ["string", "number"]):
                 props[name] = {"type": s.get("type") if s.get("type") in (["number", "null"], ["null", "number"]) else "number", **{x: y for x, y in s.items() if x in ("minimum", "maximum", "description")}}
             else:
                 props.setdefault(name, {"type": s.get("type") if isinstance(s.get("type"), list) else "number", **{x: y for x, y in s.items() if x in ("minimum", "maximum", "description")}})
@@ -154,9 +155,7 @@ def props_for(nodes, spec, css, tokens, where=""):
             props[name] = arr
     req = [r for r in (spec or {}).get("required", []) if r in props] if spec and "required" in spec else \
         [n["name"] for n in nodes if n["kind"] == "text" and not n.get("optional")]
-    for n in nodes:  # actions and media are required unless the authored spec says otherwise
-        if n["kind"] in ("action",) and not spec and n["name"] not in req:
-            req.append(n["name"])
+    # buttons are optional unless the part's spec says so: a step's Start exists only on the current step
     return {"properties": props, "required": sorted(set(req), key=list(props).index),
             "name_from": next((t for t in names_text if props.get(t, {}).get("type") == "string"), None)}
 
@@ -515,6 +514,8 @@ def compact(schema):
             return "{" + ", ".join(f"{k}{'' if k in req else '?'}: {one(v)}" for k, v in p.get("properties", {}).items()) + "}"
         if t == "string":
             return f"text<={p.get('maxLength', '')}" if "format" not in p else "url"
+        if isinstance(t, list):
+            return "|".join("text" if x == "string" else x for x in t if x != "null") + (" or null" if "null" in t else "")
         return str(t)
     req = set(schema.get("required", []))
     return ", ".join(f"{k}{'' if k in req else '?'}: {one(v)}" for k, v in schema["properties"].items()

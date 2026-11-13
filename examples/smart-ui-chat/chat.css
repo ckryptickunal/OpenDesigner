@@ -53,3 +53,8 @@ body { background: var(--ds-color-bg-canvas, var(--ds-color-surface-default)); c
   .ask { flex: none; }
 }
 @media (prefers-reduced-motion: reduce) { .log { scroll-behavior: auto; } }
+.ask-form { display: flex; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-sm); }
+.ask-form input { flex: 1; min-inline-size: 0; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  color: var(--ds-color-text-primary); font: var(--ds-text-body-md); background: var(--ds-color-surface-raised);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-control); }
+.ask-form input:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }

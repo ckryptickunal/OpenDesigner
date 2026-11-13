@@ -295,6 +295,15 @@ def serve(app_path, port, provider):
             if self.path.startswith("/api/info"):
                 return self._json(200, {"name": app.NAME, "provider": prov, "available": available(),
                                         "model": MODELS.get(prov), "suggestions": getattr(app, "SUGGESTIONS", [])})
+            for prefix, folder in getattr(app, "STATIC", {}).items():  # extra read-only folders the app names
+                if self.path.startswith(prefix):
+                    f = (pathlib.Path(folder) / self.path.split("?")[0][len(prefix):]).resolve()
+                    if f.is_file() and pathlib.Path(folder).resolve() in f.parents:
+                        b = f.read_bytes()
+                        self.send_response(200)
+                        self.send_header("content-type", "text/css" if f.suffix == ".css" else "application/octet-stream")
+                        self.end_headers()
+                        return self.wfile.write(b)
             if self.path.startswith("/system/"):  # the app's own system: tokens.css, smart-ui/catalog.json, od-components.js
                 base = pathlib.Path(app.CATALOG).resolve().parents[1]
                 rel = self.path.split("?")[0][len("/system/"):]
@@ -307,8 +316,8 @@ def serve(app_path, port, provider):
                     self.end_headers()
                     return self.wfile.write(b)
                 return self._json(404, {"error": "not found"})
-            if self.path.startswith("/opendesigner-smart-ui/"):  # the renderer files, from this skill
-                f = (HERE.parent / "assets" / self.path.split("/", 2)[2].split("?")[0]).resolve()
+            if self.path.startswith(("/opendesigner-smart-ui/", "/skills/opendesigner-smart-ui/assets/")):  # the renderer, from this skill
+                f = (HERE.parent / "assets" / self.path.split("?")[0].rsplit("/", 1)[1]).resolve()
                 if f.is_file() and f.parent == (HERE.parent / "assets").resolve():
                     b = f.read_bytes()
                     self.send_response(200)

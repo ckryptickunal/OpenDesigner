@@ -43,7 +43,39 @@ function show(turn, wrap) {
   wrap.append(el("p", "checked", r.ok ? "Checked before it showed: no errors." : "Not shown: it failed the checks."));
 }
 
+// Live mode: when the page is served by live.py with a model, questions go to the model instead of the recordings.
+let live = null;
+const SID = Math.random().toString(36).slice(2, 10);
+try {
+  const r = await fetch(new URL("api/info", base));
+  if (r.ok) { const info = await r.json(); if (info.provider && info.provider !== "recorded") live = info; }
+} catch { /* recorded mode */ }
+
+async function post(path, body) {
+  const r = await fetch(new URL(path, base), { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ session: SID, ...body }) });
+  const j = await r.json();
+  if (!r.ok) throw new Error(j.error || r.status);
+  return j;
+}
+
+async function liveTurn(userText, call) {
+  const wrap = el("section", "turn");
+  if (userText) wrap.append(el("p", "me", userText));
+  const wait = el("p", "sys", "Thinking…");
+  wrap.append(wait);
+  log.append(wrap);
+  scroll();
+  let r;
+  try { r = await call(); } catch (e) { wait.textContent = "The assistant couldn't answer: " + (e.message || e); return; }
+  wait.remove();
+  show({ text: r.text, answer: r.answer, data: r.data, live: true }, wrap);
+  const lg = r.log || {};
+  if (lg.first_errors && lg.first_errors.length) wrap.append(el("p", "checked", `Repaired once: the first answer failed ${lg.first_errors.length} check(s).`));
+  scroll();
+}
+
 function play(i) {
+  if (live) { played = Math.max(played, i + 1); offer(); return liveTurn(turns[i].user, () => post("api/chat", { message: turns[i].user })); }
   const turn = turns[i];
   const wrap = el("section", "turn");
   wrap.setAttribute("aria-label", `Turn ${i + 1}`);
@@ -68,6 +100,11 @@ function offer() {
 
 // A button the person pressed. Changes (book, pay, cancel) arrive here only after the approval prompt said yes.
 function pressed(surface, action, turn) {
+  if (live) {
+    const btn = surface.querySelector(`[data-od-event="${action.name}"]`);
+    if (btn) surface.setActionState(btn, "pending", "Sending");
+    return liveTurn(null, () => post("api/press", { action })).then(() => { if (btn) surface.setActionState(btn, "done", "Done"); });
+  }
   const wrap = surface.closest(".turn");
   const line = el("p", "sys");
   line.append("Sent to the assistant: ", el("code", "", action.name + (Object.keys(action.context).length ? " " + JSON.stringify(action.context) : "")));
@@ -120,4 +157,15 @@ document.getElementById("textonly").addEventListener("click", (e) => {
   for (let i = 0; i < upto; i++) if (!turns[i].after) play(i);
 });
 
-play(0);
+if (live) {
+  document.querySelector(".who p").textContent = `Live: ${live.model || live.provider}`;
+  document.querySelector(".note").firstChild.textContent = "Live answers from a real model. Each one is checked before it shows, and repaired once if it fails. ";
+  const form = el("form", "ask-form");
+  const input = el("input");
+  input.type = "text"; input.placeholder = "Ask about your trip"; input.setAttribute("aria-label", "Message");
+  const go = el("button", "ask", "Send"); go.type = "submit";
+  form.append(input, go);
+  form.addEventListener("submit", (e) => { e.preventDefault(); const m = input.value.trim(); if (m) { input.value = ""; liveTurn(m, () => post("api/chat", { message: m })); } });
+  next.after(form);
+  offer();
+} else play(0);
