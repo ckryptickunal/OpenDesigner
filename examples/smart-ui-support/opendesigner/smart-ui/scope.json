@@ -1,0 +1,366 @@
+{
+ "project": "/Users/Kunal/Desktop/Design-System/.claude/worktrees/bold-mayer-187bc2/examples/smart-ui-support",
+ "read": [
+  "PRODUCT.md",
+  "DESIGN.md",
+  "opendesigner/state.json"
+ ],
+ "not_known": [],
+ "product_type": "work-tool",
+ "product": "A billing and subscription tool for small teams: invoices, usage, plans and seats, with an assistant that answers billing questions in the app",
+ "audience": "dense",
+ "system": "Tallyhaus",
+ "framework": "plain HTML",
+ "ai_sdks": [],
+ "tokens": {
+  "file": "opendesigner/build/css/tokens.css",
+  "kind": "opendesigner",
+  "count": 551
+ },
+ "chat_surface": [
+  "web/assistant.js"
+ ],
+ "actions": [
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/invoices",
+   "file": "server.py",
+   "name": "list_invoices",
+   "doc": "The team's invoices, newest first, with number, date, amount, status and due date.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/invoices/<number>",
+   "file": "server.py",
+   "name": "get_invoice",
+   "doc": "One invoice with its lines and its PDF file name.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/usage",
+   "file": "server.py",
+   "name": "get_usage",
+   "doc": "API calls and active seats per month, most recent last.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/plans",
+   "file": "server.py",
+   "name": "list_plans",
+   "doc": "Every plan with its price per seat, included API calls, support level and features.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/subscription",
+   "file": "server.py",
+   "name": "get_subscription",
+   "doc": "What the team is on now: plan, seats, price, renewal date, payment card.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/refunds/<invoice>",
+   "file": "server.py",
+   "name": "refund_status",
+   "doc": "Where a refund is: its steps with dates, the amount, and when it should arrive.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "POST",
+   "path": "/api/subscription/plan",
+   "file": "server.py",
+   "name": "change_plan",
+   "doc": "Move the team to another plan from the next billing date. Changes the subscription.",
+   "changes_data": true
+  },
+  {
+   "kind": "route",
+   "method": "POST",
+   "path": "/api/invoices/<number>/pay",
+   "file": "server.py",
+   "name": "pay_invoice",
+   "doc": "Pay one open invoice now with the card on file. Charges the card.",
+   "changes_data": true
+  },
+  {
+   "kind": "route",
+   "method": "POST",
+   "path": "/api/seats",
+   "file": "server.py",
+   "name": "add_seats",
+   "doc": "Add seats to the plan now; the extra cost is prorated on the next invoice. Changes the subscription.",
+   "changes_data": true
+  }
+ ],
+ "intents": [
+  {
+   "intent": "headline numbers",
+   "phrases": [
+    "how are we doing",
+    "this week",
+    "totals"
+   ],
+   "components": [
+    "KpiStrip"
+   ],
+   "from": "product type work-tool"
+  },
+  {
+   "intent": "records as a table",
+   "phrases": [
+    "list all",
+    "show me the",
+    "invoices",
+    "tickets"
+   ],
+   "components": [
+    "DataTable"
+   ],
+   "from": "product type work-tool"
+  },
+  {
+   "intent": "numbers over time",
+   "phrases": [
+    "trend",
+    "by month",
+    "over time"
+   ],
+   "components": [
+    "LineChart",
+    "BarChart"
+   ],
+   "from": "product type work-tool"
+  },
+  {
+   "intent": "a breakdown",
+   "phrases": [
+    "breakdown",
+    "by category",
+    "split"
+   ],
+   "components": [
+    "DonutBreakdown"
+   ],
+   "from": "product type work-tool"
+  },
+  {
+   "intent": "the status of a job",
+   "phrases": [
+    "status",
+    "progress",
+    "is it done"
+   ],
+   "components": [
+    "ProgressStatus"
+   ],
+   "from": "product type work-tool"
+  },
+  {
+   "intent": "a request form",
+   "phrases": [
+    "request",
+    "fill in",
+    "update"
+   ],
+   "components": [
+    "FormFields"
+   ],
+   "from": "product type work-tool"
+  },
+  {
+   "intent": "a change that needs approval",
+   "phrases": [
+    "approve",
+    "delete",
+    "send"
+   ],
+   "components": [
+    "ApprovalPrompt"
+   ],
+   "from": "product type work-tool"
+  },
+  {
+   "intent": "an answer from documents",
+   "phrases": [
+    "policy",
+    "according to",
+    "what does"
+   ],
+   "components": [
+    "AnswerSources",
+    "CitationList"
+   ],
+   "from": "product type work-tool"
+  },
+  {
+   "intent": "a file",
+   "phrases": [
+    "export",
+    "download",
+    "file"
+   ],
+   "components": [
+    "FileCard"
+   ],
+   "from": "product type work-tool"
+  },
+  {
+   "intent": "plans side by side",
+   "phrases": [
+    "compare plans",
+    "which plan",
+    "upgrade"
+   ],
+   "components": [
+    "Comparison"
+   ],
+   "from": "product type work-tool"
+  },
+  {
+   "intent": "what the account is on now",
+   "phrases": [
+    "my plan",
+    "subscription",
+    "renewal"
+   ],
+   "components": [
+    "KeyFacts"
+   ],
+   "from": "product type work-tool"
+  },
+  {
+   "intent": "list_invoices: The team's invoices, newest first, with number, date, amount, status and du",
+   "phrases": [
+    "invoices"
+   ],
+   "components": [
+    "DataTable"
+   ],
+   "from": "GET /api/invoices in server.py"
+  },
+  {
+   "intent": "get_invoice: One invoice with its lines and its PDF file name.",
+   "phrases": [
+    "invoice"
+   ],
+   "components": [
+    "FileCard",
+    "KeyFacts"
+   ],
+   "from": "GET /api/invoices/<number> in server.py"
+  },
+  {
+   "intent": "get_usage: API calls and active seats per month, most recent last.",
+   "phrases": [
+    "usage"
+   ],
+   "components": [
+    "LineChart",
+    "BarChart"
+   ],
+   "from": "GET /api/usage in server.py"
+  },
+  {
+   "intent": "list_plans: Every plan with its price per seat, included API calls, support level and feat",
+   "phrases": [
+    "plans"
+   ],
+   "components": [
+    "Comparison"
+   ],
+   "from": "GET /api/plans in server.py"
+  },
+  {
+   "intent": "get_subscription: What the team is on now: plan, seats, price, renewal date, payment card.",
+   "phrases": [
+    "subscription"
+   ],
+   "components": [
+    "KeyFacts"
+   ],
+   "from": "GET /api/subscription in server.py"
+  },
+  {
+   "intent": "refund_status: Where a refund is: its steps with dates, the amount, and when it should arr",
+   "phrases": [
+    "refund status"
+   ],
+   "components": [
+    "ProgressStatus"
+   ],
+   "from": "GET /api/refunds/<invoice> in server.py"
+  },
+  {
+   "intent": "POST /api/subscription/plan",
+   "phrases": [],
+   "components": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ErrorRetry"
+   ],
+   "from": "route in server.py"
+  },
+  {
+   "intent": "POST /api/invoices/<number>/pay",
+   "phrases": [],
+   "components": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ErrorRetry"
+   ],
+   "from": "route in server.py"
+  },
+  {
+   "intent": "POST /api/seats",
+   "phrases": [],
+   "components": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ErrorRetry"
+   ],
+   "from": "route in server.py"
+  }
+ ],
+ "components_proposed": [
+  "AnswerSources",
+  "ApprovalPrompt",
+  "BarChart",
+  "CitationList",
+  "Comparison",
+  "DataTable",
+  "DonutBreakdown",
+  "ErrorRetry",
+  "FileCard",
+  "FormFields",
+  "KeyFacts",
+  "KpiStrip",
+  "LineChart",
+  "ProgressStatus",
+  "Receipt"
+ ],
+ "components_confirmed": [
+  "approval-prompt",
+  "bar-chart",
+  "comparison",
+  "data-table",
+  "error-retry",
+  "file-card",
+  "key-facts",
+  "kpi-strip",
+  "line-chart",
+  "progress-status",
+  "receipt"
+ ],
+ "confirmed_on": "2026-11-14"
+}

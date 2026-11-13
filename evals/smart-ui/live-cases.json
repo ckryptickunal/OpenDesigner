@@ -1,0 +1,236 @@
+{
+ "about": "Live-path Smart UI evals on the Tallyhaus example (examples/smart-ui-support): the model routes to the app's read actions, answers, and is validated against the data it got, with one repair round. Multi-turn cases test follow-ups. Change actions must end in an ApprovalPrompt. Invented data.",
+ "app": "examples/smart-ui-support/server.py",
+ "cases": [
+  {
+   "id": "invoices-open",
+   "turns": [
+    "Show my open invoices"
+   ],
+   "expect": [
+    "DataTable"
+   ]
+  },
+  {
+   "id": "invoices-all",
+   "turns": [
+    "List every invoice this year"
+   ],
+   "expect": [
+    "DataTable"
+   ]
+  },
+  {
+   "id": "invoice-one",
+   "turns": [
+    "Can I get invoice TH-1046?"
+   ],
+   "expect": [
+    "FileCard",
+    "KeyFacts"
+   ]
+  },
+  {
+   "id": "invoice-file-followup",
+   "turns": [
+    "Show my open invoices",
+    "Send me the PDF of the bigger one"
+   ],
+   "expect": [
+    "FileCard"
+   ]
+  },
+  {
+   "id": "usage-trend",
+   "turns": [
+    "How has our API usage changed this year?"
+   ],
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ]
+  },
+  {
+   "id": "usage-months",
+   "turns": [
+    "Show API calls for the last 6 months"
+   ],
+   "expect": [
+    "LineChart",
+    "BarChart",
+    "DataTable"
+   ]
+  },
+  {
+   "id": "usage-kpi",
+   "turns": [
+    "Give me the headline numbers for this month: calls, seats and spend"
+   ],
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ]
+  },
+  {
+   "id": "plans-compare",
+   "turns": [
+    "Compare the plans"
+   ],
+   "expect": [
+    "Comparison"
+   ]
+  },
+  {
+   "id": "plans-followup",
+   "turns": [
+    "What plan are we on?",
+    "How is Scale different from what we have?"
+   ],
+   "expect": [
+    "Comparison"
+   ]
+  },
+  {
+   "id": "subscription",
+   "turns": [
+    "What plan are we on and when does it renew?"
+   ],
+   "expect": [
+    "KeyFacts"
+   ]
+  },
+  {
+   "id": "refund",
+   "turns": [
+    "Where's the refund for invoice TH-1041?"
+   ],
+   "expect": [
+    "ProgressStatus"
+   ]
+  },
+  {
+   "id": "refund-followup",
+   "turns": [
+    "List every invoice this year",
+    "What happened to the refunded one?"
+   ],
+   "expect": [
+    "ProgressStatus",
+    "KeyFacts"
+   ]
+  },
+  {
+   "id": "pay-approve",
+   "turns": [
+    "Show my open invoices",
+    "Pay the one that's due on the 20th"
+   ],
+   "expect": [
+    "ApprovalPrompt"
+   ]
+  },
+  {
+   "id": "pay-direct",
+   "turns": [
+    "Pay invoice TH-1047 now"
+   ],
+   "expect": [
+    "ApprovalPrompt"
+   ]
+  },
+  {
+   "id": "upgrade-approve",
+   "turns": [
+    "Move us to the Scale plan"
+   ],
+   "expect": [
+    "ApprovalPrompt"
+   ]
+  },
+  {
+   "id": "upgrade-after-compare",
+   "turns": [
+    "Compare the plans",
+    "OK, switch us to that top one"
+   ],
+   "expect": [
+    "ApprovalPrompt"
+   ]
+  },
+  {
+   "id": "seats-approve",
+   "turns": [
+    "Add 3 seats"
+   ],
+   "expect": [
+    "ApprovalPrompt"
+   ]
+  },
+  {
+   "id": "missing-invoice",
+   "turns": [
+    "Show invoice TH-9999"
+   ],
+   "expect": [
+    "ErrorRetry",
+    "KeyFacts"
+   ]
+  },
+  {
+   "id": "usage-and-table",
+   "turns": [
+    "Show usage by month as a table"
+   ],
+   "expect": [
+    "DataTable",
+    "BarChart"
+   ]
+  },
+  {
+   "id": "seats-history",
+   "turns": [
+    "How many seats did we have each month?"
+   ],
+   "expect": [
+    "LineChart",
+    "BarChart",
+    "DataTable"
+   ]
+  },
+  {
+   "id": "noui-due",
+   "turns": [
+    "When is the next invoice due?"
+   ],
+   "expect": []
+  },
+  {
+   "id": "noui-card",
+   "turns": [
+    "Which card do you charge?"
+   ],
+   "expect": []
+  },
+  {
+   "id": "noui-sso",
+   "turns": [
+    "Does the Team plan include SSO?"
+   ],
+   "expect": []
+  },
+  {
+   "id": "noui-thanks",
+   "turns": [
+    "Thanks, that's all"
+   ],
+   "expect": []
+  },
+  {
+   "id": "noui-count",
+   "turns": [
+    "How many seats do we have?"
+   ],
+   "expect": []
+  }
+ ]
+}

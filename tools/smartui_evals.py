@@ -215,6 +215,76 @@ def run_model(model, data, cs, runs, do_render):
     return summary
 
 
+LIVE_PROVIDER = {"claude": "claude-cli", "gemini": "gemini"}
+
+
+def run_live(model, runs, pattern, do_render):
+    """The live path on the example billing app: route, answer, validate, one repair; several turns per case."""
+    import live
+    spec = json.loads((EV / "live-cases.json").read_text())
+    pats = [p for p in (pattern or "*").split(",") if p]
+    cs = [c for c in spec["cases"] if any(fnmatch.fnmatch(c["id"], p) for p in pats)]
+    provider = "anthropic" if model == "claude" and live.env_key("ANTHROPIC_API_KEY") else LIVE_PROVIDER[model]
+    rows, valid = [], []
+    raw = EV / "runs" / f"live-{model}"
+    raw.mkdir(parents=True, exist_ok=True)
+    for c in cs:
+        for n in range(1, runs + 1):
+            app = live.load_app(ROOT / spec["app"])
+            ran = []
+            for name, a in app.ACTIONS.items():  # count any change the model manages to run (it must be none: R3)
+                if a.get("changes"):
+                    a["fn"] = (lambda f, nm: (lambda **kw: (ran.append(nm), f(**kw))[1]))(a["fn"], name)
+            conv = live.Conversation(app, provider)
+            try:
+                for msg in c["turns"]:
+                    r = conv.answer(msg)
+            except RuntimeError as e:
+                rows.append({"id": c["id"], "run": n, "expect": c["expect"], "error": str(e), "ui": False, "right": False, "valid": None})
+                continue
+            log = r["log"]
+            (raw / f"{c['id']}.{n}.json").write_text(json.dumps({"turns": conv.turns, "log": conv.log}, indent=1, ensure_ascii=False))
+            part = log.get("part") if log.get("ui") else None
+            row = {"id": c["id"], "run": n, "expect": c["expect"], "ui": bool(part), "parts": [part] if part else [],
+                   "selector": log.get("selector", []), "first_errors": log.get("first_errors", []), "repaired": log.get("repaired"),
+                   "final_errors": log.get("final_errors", []), "changes_run": ran,
+                   "selector_hit": (not c["expect"] and not log.get("selector")) or any(x in log.get("selector", []) for x in c["expect"]),
+                   "right": (not c["expect"] and not part) or (bool(part) and part in c["expect"])}
+            row["valid"] = (not row["first_errors"]) if (part or row["first_errors"]) else None
+            rows.append(row)
+            if part and r.get("answer"):
+                valid.append((f"live-{model}.{c['id']}.{n}", r["answer"]))
+            print(f"live {model} {c['id']:<22} run {n}: {part or 'text'}  {'right' if row['right'] else 'WRONG'}"
+                  f"{'  repaired' if row['repaired'] else ''}{'  CHANGE RAN' if ran else ''}")
+    if do_render and valid:
+        app_dir = (ROOT / spec["app"]).parent
+        found = render(valid, app_dir / "opendesigner" / "smart-ui" / "catalog.json", app_dir / "opendesigner" / "build" / "css" / "tokens.css")
+        for r in rows:
+            k = f"live-{model}.{r['id']}.{r['run']}"
+            if k in found:
+                r["rendered"] = True
+                r["floor_findings"] = len(found[k])
+                r["floors"] = found[k][:6]
+    ui_cases = [r for r in rows if r["expect"]]
+    tx = [r for r in rows if not r["expect"]]
+    tried = [r for r in rows if r.get("valid") is not None]
+    pct = lambda a, b: round(100 * a / b, 1) if b else None
+    summary = {"runs": len(rows), "selector_recall_pct": pct(sum(r.get("selector_hit", False) for r in ui_cases), len(ui_cases)),
+               "picked_right_pct": pct(sum(r["right"] for r in ui_cases), len(ui_cases)),
+               "valid_first_pct": pct(sum(bool(r["valid"]) for r in tried), len(tried)),
+               "valid_after_repair_pct": pct(sum(not r.get("final_errors") for r in tried), len(tried)),
+               "held_back_pct": pct(sum(not r["ui"] for r in tx), len(tx)), "over_trigger_pct": pct(sum(r["ui"] for r in tx), len(tx)),
+               "changes_run_by_model": sum(len(r.get("changes_run", [])) for r in rows),
+               "approval_shown_pct": pct(sum(r["right"] for r in ui_cases if r["expect"] == ["ApprovalPrompt"]), sum(1 for r in ui_cases if r["expect"] == ["ApprovalPrompt"])),
+               "rendered": sum(1 for r in rows if r.get("rendered")), "floor_findings": sum(r.get("floor_findings", 0) for r in rows),
+               "errors": sum(1 for r in rows if r.get("error"))}
+    (EV / "results").mkdir(exist_ok=True)
+    (EV / "results" / f"live-{model}.json").write_text(json.dumps({"model": live.MODELS.get(provider, provider), "provider": provider,
+        "date": datetime.date.today().isoformat(), "runs_per_case": runs, "summary": summary, "rows": rows}, indent=1) + "\n")
+    print(json.dumps(summary))
+    return summary
+
+
 def report():
     lines = ["# Smart UI evals", "", "Made by `python3 tools/smartui_evals.py --report` from `evals/smart-ui/results/`. "
              "The cases: `cases.json` (20 that need a part, 5 that should stay text). The data in them is invented.", ""]
@@ -267,11 +337,14 @@ def main():
     ap.add_argument("--selector", action="store_true")
     ap.add_argument("--render", action="store_true")
     ap.add_argument("--report", action="store_true")
+    ap.add_argument("--live", action="store_true", help="the live path on examples/smart-ui-support (evals/smart-ui/live-cases.json)")
     a = ap.parse_args()
     data, cs = cases(a.case)
     if a.selector:
         run_selector(data, cs)
-    if a.model:
+    if a.model and a.live:
+        run_live(a.model, a.runs, a.case, a.render)
+    elif a.model:
         run_model(a.model, data, cs, a.runs, a.render)
     if a.report:
         report()

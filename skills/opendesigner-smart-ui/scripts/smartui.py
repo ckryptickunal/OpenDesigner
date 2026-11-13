@@ -1063,7 +1063,7 @@ def scope(root):
             pytext += (root / f).read_text(errors="ignore").lower()
     found["framework"] = next((label for key, label in FRAMEWORKS if key in deps), None) or \
         next((label for key, label in (("django", "Django"), ("flask", "Flask"), ("fastapi", "FastAPI"), ("rails", "Rails")) if key in pytext), None) or \
-        ("plain HTML" if list(root.glob("*.html")) else None)
+        ("plain HTML" if list(root.glob("*.html")) or list(root.glob("*/*.html")) else None)
     found["ai_sdks"] = sorted({label for key, label in AI_SDKS if key in deps or (label.endswith("(Python)") and re.search(rf"^{key}\b", pytext, re.M))})
     # tokens
     toks = [p for p in (root / "opendesigner/build/css/tokens.css", root / "build/css/tokens.css") if p.exists()]
@@ -1085,10 +1085,15 @@ def scope(root):
             t = p.read_text(errors="ignore")
         except OSError:
             continue
-        for m in re.finditer(r"""(?:app|router|api|bp)\.(get|post|put|patch|delete)\(\s*["'`]([^"'`]+)""", t):
-            actions.append({"kind": "route", "method": m.group(1).upper(), "path": m.group(2), "file": rel})
-        for m in re.finditer(r"""@(?:app|router|bp)\.(get|post|put|patch|delete|route)\(\s*["']([^"']+)""", t):
-            actions.append({"kind": "route", "method": m.group(1).upper(), "path": m.group(2), "file": rel})
+        for m in re.finditer(r"""(?:app|router|api|bp)\.(get|post|put|patch|delete|route)\(\s*["'`]([^"'`]+)""", t):
+            a = {"kind": "route", "method": m.group(1).upper(), "path": m.group(2), "file": rel}
+            after = t[m.end():m.end() + 800]   # the handler's name and first doc line, when it is right below
+            d = re.search(r"def\s+(\w+)\(", after)
+            if d:
+                a["name"] = d.group(1)
+                doc = re.match(r"[^:]*:\s*\n\s*[\"']{3}(.+)", after[d.start():])
+                a["doc"] = doc.group(1).split('"' * 3)[0].split("'" * 3)[0].strip() if doc else ""
+            actions.append(a)
         for m in re.finditer(r"""\btool\(\s*\{[^}]*?description|\bname:\s*["'`]([a-z][a-z0-9_]+)["'`],\s*description""", t):
             if m.group(1):
                 actions.append({"kind": "tool", "name": m.group(1), "file": rel})
@@ -1098,7 +1103,13 @@ def scope(root):
     found["chat_surface"] = sorted(set(chats))[:10]
     if not chats:
         found["not_known"].append("where the assistant lives (no chat or assistant file found)")
-    found["actions"] = actions[:60]
+    seen, uniq = set(), []
+    for a in actions:
+        key = (a.get("kind"), a.get("method"), a.get("path"), a.get("name"))
+        if key not in seen:
+            seen.add(key)
+            uniq.append(a)
+    found["actions"] = uniq[:60]
     for a in found["actions"]:
         a["changes_data"] = a.get("method") in ("POST", "PUT", "PATCH", "DELETE")
     if not product:
@@ -1109,6 +1120,38 @@ def scope(root):
     found["components_proposed"] = sorted({c for it in found["intents"] for c in it["components"]})
     found["components_confirmed"] = []
     return found
+
+
+ROUTE_HINTS = [  # words in a read route's path, handler name or doc line -> the parts that usually show that data
+    (r"\b(usage|history|trend|per month|monthly|over time|metrics|timeseries)\b", ["LineChart", "BarChart"]),
+    (r"\b(plans?|tiers?|pricing|compare)\b", ["Comparison"]),
+    (r"\b(refunds?|status|tracking|delivery|progress)\b", ["ProgressStatus"]),
+    (r"\b(pdf|file|download|attachment)\b", ["FileCard", "KeyFacts"]),
+    (r"\b(subscription|account|profile|settings|summary)\b", ["KeyFacts"]),
+    (r"\b(slots?|availability|times|calendar)\b", ["TimeSlots"]),
+    (r"\b(search|results|flights|hotels|products)\b", ["ResultList"]),
+    (r"\b(list|all|records|invoices|orders|transactions|tickets)\b", ["DataTable"]),
+]
+
+
+def route_parts(a):
+    """The route's path and handler name decide; its doc line only when they say nothing."""
+    first = " ".join([a.get("path", "").replace("/", " ").replace("_", " "), (a.get("name") or "").replace("_", " ")]).lower()
+    first = re.sub(r"<[^>]+>|\{[^}]+\}|:\w+", " ", first)
+    one = bool(re.search(r"(<[^>]+>|\{[^}]+\}|:\w+)/?$", a.get("path", "")))   # /invoices/<number>: one record, not a list
+    doc = (a.get("doc") or "").lower()
+    for text in (first, doc):
+        for pat, parts in ROUTE_HINTS:
+            if re.search(pat, text):
+                if one and parts == ["DataTable"]:
+                    return ["FileCard", "KeyFacts"] if re.search(r"\b(pdf|file|download)\b", doc) else ["KeyFacts"]
+                return parts
+    return []
+
+
+def route_phrases(a):
+    words = [w for w in re.findall(r"[a-z]+", (a.get("name") or "").replace("_", " ")) if w not in ("get", "list", "fetch", "show")]
+    return [" ".join(words)] if words else []
 
 
 def propose_intents(product, actions):
@@ -1122,6 +1165,12 @@ def propose_intents(product, actions):
     out = []
     for it in (PRODUCT_INTENTS.get(key, {}).get("intents", []) if key else []):
         out.append({**it, "from": f"product type {key}"})
+    for a in actions:
+        if a.get("kind") == "route" and not a.get("changes_data"):
+            parts = route_parts(a)
+            if parts:
+                out.append({"intent": f"{a.get('name') or a['path']}: {a.get('doc') or a['path']}"[:90], "phrases": route_phrases(a),
+                            "components": parts, "from": f"GET {a['path']} in {a['file']}"})
     for a in actions:
         if a.get("kind") == "route" and a.get("changes_data"):
             out.append({"intent": f"{a['method']} {a['path']}", "phrases": [], "components": ["ApprovalPrompt", "Receipt", "ErrorRetry"],

@@ -180,6 +180,27 @@ class Scope(unittest.TestCase):
             self.assertEqual(s["intents"][0]["intent"], "not known")
 
 
+class Routes(unittest.TestCase):
+    def test_read_routes_become_parts(self):
+        cases = [({"path": "/api/invoices", "name": "list_invoices", "doc": "with number, status and due date"}, ["DataTable"]),
+                 ({"path": "/api/invoices/<number>", "name": "get_invoice", "doc": "one invoice and its PDF file"}, ["FileCard", "KeyFacts"]),
+                 ({"path": "/api/usage", "name": "get_usage", "doc": "calls per month"}, ["LineChart", "BarChart"]),
+                 ({"path": "/api/plans", "name": "list_plans", "doc": ""}, ["Comparison"]),
+                 ({"path": "/api/subscription", "name": "get_subscription", "doc": "plan, seats"}, ["KeyFacts"]),
+                 ({"path": "/api/refunds/:id", "name": "refund_status", "doc": ""}, ["ProgressStatus"]),
+                 ({"path": "/api/ping", "name": "ping", "doc": ""}, [])]
+        for a, want in cases:
+            with self.subTest(a["path"]):
+                self.assertEqual(smartui.route_parts(a), want)
+
+    def test_example_app_scope(self):
+        s = smartui.scope(ROOT / "examples" / "smart-ui-support")
+        gets = {i["from"].split()[1]: i["components"] for i in s["intents"] if i["from"].startswith("GET")}
+        self.assertEqual(gets["/api/usage"], ["LineChart", "BarChart"])
+        self.assertEqual(sum(1 for a in s["actions"] if a.get("changes_data")), 3)
+        self.assertIn("web/assistant.js", s["chat_surface"])
+
+
 class Offer(unittest.TestCase):
     def test_offer_on_a_chat_and_not_without(self):
         with tempfile.TemporaryDirectory() as t:

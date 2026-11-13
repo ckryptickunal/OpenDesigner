@@ -1,0 +1,37 @@
+{
+ "model": "gemini-3.1-pro-preview",
+ "provider": "gemini",
+ "date": "2026-11-14",
+ "runs_per_case": 1,
+ "summary": {
+  "runs": 1,
+  "selector_recall_pct": null,
+  "picked_right_pct": null,
+  "valid_first_pct": null,
+  "valid_after_repair_pct": null,
+  "held_back_pct": 100.0,
+  "over_trigger_pct": 0.0,
+  "changes_run_by_model": 0,
+  "approval_shown_pct": null,
+  "rendered": 0,
+  "floor_findings": 0,
+  "errors": 0
+ },
+ "rows": [
+  {
+   "id": "noui-thanks",
+   "run": 1,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  }
+ ]
+}

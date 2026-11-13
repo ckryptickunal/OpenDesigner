@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tallyhaus: billing</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/system/build/css/tokens.css">
+<link rel="stylesheet" href="/opendesigner-smart-ui/od-surface.css">
+<link rel="stylesheet" href="assistant.css">
+<script src="/system/smart-ui/od-components.js"></script>
+</head>
+<body>
+<div class="app">
+  <nav class="side" aria-label="Main">
+    <p class="brand">Tallyhaus</p>
+    <a href="#" aria-current="page">Billing</a><a href="#">Usage</a><a href="#">Team</a><a href="#">Settings</a>
+  </nav>
+  <main class="main">
+    <header class="top"><h1>Billing</h1><p>Team plan · 12 seats · renews 1 Dec</p></header>
+    <section class="panel" aria-label="Assistant">
+      <h2>Ask about billing</h2>
+      <od-chat data-catalog="/system/smart-ui/catalog.json"></od-chat>
+    </section>
+  </main>
+</div>
+<script type="module" src="assistant.js"></script>
+</body>
+</html>
