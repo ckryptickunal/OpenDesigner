@@ -213,6 +213,29 @@
       ],
       "x-od-name-from": "label"
      }
+    },
+    "action": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "label",
+      "event"
+     ],
+     "properties": {
+      "label": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 40
+      },
+      "a11y_label": {
+       "type": "string",
+       "maxLength": 120
+      },
+      "event": {
+       "$ref": "#/$defs/Event"
+      }
+     },
+     "x-od-effect": "none"
     }
    },
    "required": [
@@ -634,43 +657,31 @@
     },
     "title": {
      "type": "string",
-     "maxLength": 120
+     "maxLength": 32
     },
     "subtitle": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 60
     },
     "stats": {
      "type": "array",
-     "minItems": 0,
-     "maxItems": 12,
+     "minItems": 1,
+     "maxItems": 3,
      "items": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
        "label": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 22
        },
        "value": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 12
        },
        "badge": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 5
        }
       },
       "required": [
@@ -681,30 +692,19 @@
      }
     },
     "currency": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 3
     },
     "axis_max": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "number"
     },
     "budget": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "number"
     },
     "months": {
      "type": "array",
-     "minItems": 0,
-     "maxItems": 12,
+     "minItems": 6,
+     "maxItems": 6,
      "items": {
       "type": "object",
       "additionalProperties": false,
@@ -718,18 +718,12 @@
         "x-od-measure": true
        },
        "label": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 30
        },
        "short": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 4
        }
       },
       "required": [
@@ -741,18 +735,17 @@
      }
     },
     "note": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 40
     }
    },
    "required": [
     "component",
     "id",
     "title",
-    "currency"
+    "currency",
+    "budget",
+    "months"
    ],
    "metadata": {
     "extensions": {
@@ -761,8 +754,14 @@
       "group": "data",
       "name": "Monthly spend chart",
       "use": "for monthly spend or usage against a budget, with a forecast",
-      "use_when": [],
-      "avoid_when": [],
+      "use_when": [
+       "a billing or usage page that must warn early when the month is heading over budget"
+      ],
+      "avoid_when": [
+       "a share of a whole, such as spend by team: use donut-breakdown",
+       "a few headline numbers with no monthly history: use kpi-strip or budget-meters",
+       "more or fewer than six periods: the columns are fixed at six"
+      ],
       "tags": [
        "bar chart",
        "spend",
@@ -926,14 +925,11 @@
     },
     "title": {
      "type": "string",
-     "maxLength": 120
+     "maxLength": 32
     },
     "period": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 32
     },
     "total": {
      "type": [
@@ -943,47 +939,33 @@
      "maxLength": 120
     },
     "total_caption": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 80
     },
     "categories": {
      "type": "array",
-     "minItems": 0,
-     "maxItems": 12,
+     "minItems": 2,
+     "maxItems": 4,
      "items": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
        "name": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 24
        },
        "note": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 20
        },
        "amount": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 12
        },
        "share": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "number",
+        "minimum": 0,
+        "maximum": 100
        }
       },
       "required": [
@@ -995,10 +977,7 @@
      }
     },
     "foot": {
-     "type": [
-      "string",
-      "number"
-     ],
+     "type": "string",
      "maxLength": 120
     }
    },
@@ -1006,7 +985,8 @@
     "component",
     "id",
     "title",
-    "total"
+    "total",
+    "categories"
    ],
    "metadata": {
     "extensions": {
@@ -1015,8 +995,14 @@
       "group": "data",
       "name": "Spend breakdown donut",
       "use": "for showing how a total splits into a few categories",
-      "use_when": [],
-      "avoid_when": [],
+      "use_when": [
+       "a billing or usage page that needs the total and each category's amount and share side by side"
+      ],
+      "avoid_when": [
+       "more than four categories, or values to compare over time: use bar-chart",
+       "a few headline numbers with no part-of-a-whole split: use kpi-strip",
+       "spending against limits per category: use budget-meters"
+      ],
       "tags": [
        "donut",
        "breakdown",
@@ -1059,47 +1045,37 @@
     },
     "label": {
      "type": "string",
-     "maxLength": 120
+     "maxLength": 40
     },
     "stats": {
      "type": "array",
-     "minItems": 0,
-     "maxItems": 12,
+     "minItems": 2,
+     "maxItems": 4,
      "items": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
        "label": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 24
        },
        "value": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 14
        },
        "share": {
         "type": "number",
+        "minimum": 0,
+        "maximum": 100,
         "x-od-measure": true
        },
        "warning": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 16
        },
        "note": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 44
        }
       },
       "required": [
@@ -1112,7 +1088,8 @@
    },
    "required": [
     "component",
-    "id"
+    "id",
+    "stats"
    ],
    "metadata": {
     "extensions": {
@@ -1121,8 +1098,14 @@
       "group": "data",
       "name": "Stat strip",
       "use": "at the top of a dashboard, for its headline numbers",
-      "use_when": [],
-      "avoid_when": [],
+      "use_when": [
+       "a report or account page that opens with two to four totals before the detail"
+      ],
+      "avoid_when": [
+       "one number tracked against a limit or goal: use budget-meters or savings-goal",
+       "numbers over time: use bar-chart",
+       "a share of a whole split into parts: use donut-breakdown"
+      ],
       "tags": [
        "kpi",
        "stats",
@@ -1626,7 +1609,7 @@
     },
     "name": {
      "type": "string",
-     "maxLength": 120
+     "maxLength": 40
     },
     "photo": {
      "type": "object",
@@ -1650,11 +1633,8 @@
      }
     },
     "tag": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 14
     },
     "save": {
      "type": "object",
@@ -1680,50 +1660,34 @@
      "x-od-effect": "none"
     },
     "category": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 32
     },
     "description": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 110
     },
     "rating": {
      "type": "number",
+     "minimum": 0,
+     "maximum": 5,
      "x-od-measure": true
     },
     "reviews": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "integer",
+     "minimum": 0
     },
     "price": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 10
     },
     "old_price": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 10
     },
     "saving": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 14
     },
     "add": {
      "type": "object",
@@ -1753,6 +1717,7 @@
     "component",
     "id",
     "name",
+    "photo",
     "price"
    ],
    "metadata": {
@@ -1762,8 +1727,14 @@
       "group": "choose",
       "name": "Product card",
       "use": "in a store or marketplace grid",
-      "use_when": [],
-      "avoid_when": [],
+      "use_when": [
+       "a featured product or add-on shown on its own, with a quick add and save"
+      ],
+      "avoid_when": [
+       "several saved items in a grid: use wishlist-grid",
+       "the full product page with several photos: use product-gallery",
+       "a dish on a menu: use menu-item"
+      ],
       "tags": [
        "product",
        "add-on",
@@ -2109,12 +2080,12 @@
     },
     "title": {
      "type": "string",
-     "maxLength": 120
+     "maxLength": 32
     },
     "steps": {
      "type": "array",
-     "minItems": 0,
-     "maxItems": 12,
+     "minItems": 2,
+     "maxItems": 6,
      "items": {
       "type": "object",
       "additionalProperties": false,
@@ -2128,25 +2099,16 @@
         ]
        },
        "title": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 32
        },
        "note": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 14
        },
        "detail": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 100
        },
        "action": {
         "type": "object",
@@ -2196,6 +2158,7 @@
        }
       },
       "required": [
+       "state",
        "title"
       ],
       "x-od-name-from": "title"
@@ -2205,7 +2168,8 @@
    "required": [
     "component",
     "id",
-    "title"
+    "title",
+    "steps"
    ],
    "metadata": {
     "extensions": {
@@ -2214,8 +2178,14 @@
       "group": "act",
       "name": "Setup checklist",
       "use": "for a new account's first steps",
-      "use_when": [],
-      "avoid_when": [],
+      "use_when": [
+       "a home-screen card that brings people back to an unfinished setup, one step at a time"
+      ],
+      "avoid_when": [
+       "steps an AI agent is running on its own: use agent-steps",
+       "a long form split into pages with back and next: build it from the form's own sections",
+       "a daily habit or goal: use daily-goals or habit-tracker"
+      ],
       "tags": [
        "onboarding",
        "checklist",
@@ -2830,20 +2800,14 @@
     },
     "label": {
      "type": "string",
-     "maxLength": 120
+     "maxLength": 32
     },
     "title": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 48
     },
     "body": {
-     "type": [
-      "string",
-      "number"
-     ],
+     "type": "string",
      "maxLength": 120
     },
     "primary": {
@@ -2905,8 +2869,14 @@
       "group": "confirm",
       "name": "Empty state",
       "use": "when a list or page has nothing in it yet",
-      "use_when": [],
-      "avoid_when": [],
+      "use_when": [
+       "a list someone has cleared, where the message should say all is done and when new items will arrive"
+      ],
+      "avoid_when": [
+       "something went wrong loading the list: use alert-banners with a retry action",
+       "a first-run checklist of several steps to get going: use setup-steps",
+       "a short notice above a list that still has items: use alert-banners"
+      ],
       "tags": [
        "empty state",
        "zero data",
@@ -3398,23 +3368,17 @@
      "$ref": "#/$defs/Metadata"
     },
     "title": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 40
     },
     "summary": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 64
     },
     "sorts": {
      "type": "array",
-     "minItems": 0,
-     "maxItems": 12,
+     "minItems": 2,
+     "maxItems": 3,
      "items": {
       "type": "object",
       "additionalProperties": false,
@@ -3428,62 +3392,44 @@
         ]
        },
        "label": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 10
        },
        "price": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 8
        },
        "duration": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 8
        }
       },
       "required": [
-       "label",
-       "price"
+       "key",
+       "label"
       ],
       "x-od-name-from": "label"
      }
     },
     "flights": {
      "type": "array",
-     "minItems": 0,
-     "maxItems": 12,
+     "minItems": 1,
+     "maxItems": 10,
      "items": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
        "depart": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 5
        },
        "from": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 3
        },
        "duration": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 8
        },
        "stops": {
         "type": [
@@ -3493,53 +3439,33 @@
         "maxLength": 120
        },
        "arrive": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 5
        },
        "day_offset": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 2
        },
        "to": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 3
        },
        "airline": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 24
        },
        "tag": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 12
        },
        "price": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 8
        },
        "per": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 12
        },
        "select": {
         "type": "object",
@@ -3569,7 +3495,6 @@
        "depart",
        "from",
        "duration",
-       "stops",
        "arrive",
        "to",
        "airline",
@@ -3582,7 +3507,8 @@
    "required": [
     "component",
     "id",
-    "title"
+    "title",
+    "flights"
    ],
    "metadata": {
     "extensions": {
@@ -3591,8 +3517,14 @@
       "group": "domain",
       "name": "Flight results",
       "use": "on a flight search results page, for comparing and choosing a flight",
-      "use_when": [],
-      "avoid_when": [],
+      "use_when": [
+       "a short list of journeys of any kind where time, stops and price decide the pick"
+      ],
+      "avoid_when": [
+       "the pass for a flight already booked: use boarding-pass",
+       "the search form before results: use trip-search",
+       "hotel or home results: use stay-card"
+      ],
       "tags": [
        "flights",
        "search results",

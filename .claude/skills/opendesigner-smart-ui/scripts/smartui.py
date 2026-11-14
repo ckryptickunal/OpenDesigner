@@ -50,7 +50,7 @@ HTML = re.compile(r"<\s*/?\s*[a-zA-Z!][^>]*>|<\s*[a-zA-Z]")
 WHOLE_STYLE = re.compile(r"^\s*(#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})|-?\d*\.?\d+(px|rem|em|vh|vw|pt)|(rgba?|hsla?|oklch|oklab|lab|lch|color-mix|var|calc|url|expression)\(.*)\s*$", re.I)
 NUM = re.compile(r"(?<![\w.])-?\d[\d,]*(?:\.\d+)?")
 # copy rules (docs/COPY.md, opendesigner-review CP-01 and CP-02), checked when opts["copy"]: the model's words follow the house voice
-BANNED_WORDS = re.compile(r"\b(successfully|seamless(ly)?|effortless(ly)?|leverag(e|es|ing)|utili[sz](e|es|ing)|robust|delve|unlock(s|ing)?|"
+BANNED_WORDS = re.compile(r"\b(successful(ly)?|seamless(ly)?|effortless(ly)?|leverag(e|es|ing)|utili[sz](e|es|ing)|robust|delve|unlock(s|ing)?|"
                           r"empower(s|ing)?|elevate(s|d)?|streamline(s|d)?|cutting-edge|hassle-free|please note)\b", re.I)
 WORD = re.compile(r"[A-Za-z][A-Za-z'’-]*")
 
@@ -810,6 +810,82 @@ def duplicate_rows(v, path, errs, sid):
                 seen[key] = row.get("label")
 
 
+STEP_STATE = {"current": "now", "now": "now", "active": "now", "in progress": "now", "done": "done", "complete": "done", "completed": "done"}
+
+
+def steps_from_data(comp, path, errs, sid, source):
+    """R6 for steps: when the data has steps (label and state), a part's steps use those labels and the same states, so a
+    status never says "Now: Decision" while the data waits for a document."""
+    known = {}
+
+    def collect(v):
+        if isinstance(v, dict):
+            if isinstance(v.get("label"), str) and isinstance(v.get("state"), str):
+                known[v["label"].strip().lower()] = STEP_STATE.get(v["state"].strip().lower(), "next")
+            for x in v.values():
+                collect(x)
+        elif isinstance(v, list):
+            for x in v:
+                collect(x)
+    collect(source)
+    if not known:
+        return
+
+    def walk(v, p):
+        if isinstance(v, dict):
+            if isinstance(v.get("label"), str) and isinstance(v.get("state"), str):
+                lab, st = v["label"].strip().lower(), STEP_STATE.get(v["state"].strip().lower(), "next")
+                if lab not in known:
+                    _err(errs, "R6-step", f"{p}/label", f"step '{v['label']}' is not in the data", sid, "use the steps from the data, with their labels")
+                elif known[lab] != st:
+                    _err(errs, "R6-step", f"{p}/state", f"step '{v['label']}' is {v['state']} here but {known[lab]} in the data", sid, "use the state the data gives")
+            for k, x in v.items():
+                walk(x, f"{p}/{k}")
+        elif isinstance(v, list):
+            for i, x in enumerate(v):
+                walk(x, f"{p}/{i}")
+    walk(comp, path)
+
+
+def consequences(comp, schema, path, errs, sid, said):
+    """R3: a part that asks the person to approve a change states what the change does before its button. said: {action
+    name: [sentences]} from the app (paying a fine closes it and ends the right to challenge it). Each must appear in the
+    part's words. Only buttons whose schema says they make the change count (x-od-effect: change): a "Pay this fine"
+    button on a record only asks for it."""
+    events, words = [], []
+
+    def changes(v, sch):
+        if isinstance(v, dict) and isinstance(sch, dict):
+            for k, x in v.items():
+                ps = (sch.get("properties") or {}).get(k) or {}
+                if ps.get("x-od-effect") == "change" and isinstance(x, dict) and isinstance((x.get("event") or {}).get("name"), str):
+                    events.append(x["event"]["name"])
+                changes(x, ps)
+        elif isinstance(v, list) and isinstance(sch, dict):
+            for x in v:
+                changes(x, sch.get("items") or {})
+    changes(comp, schema)
+
+    def walk(v):
+        if isinstance(v, dict):
+            for k, x in v.items():
+                if k != "event":
+                    walk(x)
+        elif isinstance(v, list):
+            for x in v:
+                walk(x)
+        elif isinstance(v, str):
+            words.append(v)
+    walk(comp)
+    norm_ = lambda t: re.sub(r"[^a-z0-9£$€%]+", " ", t.lower()).strip()
+    text = " " + norm_(" ".join(words)) + " "
+    for name in dict.fromkeys(events):
+        for line in said.get(name, []):
+            if " " + norm_(line) + " " not in text:
+                _err(errs, "R3-consequence", path, f"the prompt for {name} doesn't say: {line}", sid,
+                     f"put it on the part before the button, word for word (as its warning): {line}")
+
+
 def table_headers(v, path, errs, sid):
     """A table (columns plus rows of cells) names every column it shows: a header per cell, and no blank header."""
     cols, rows = v.get("columns"), v.get("rows")
@@ -1005,6 +1081,9 @@ def validate(answer, cat, opts=None):
                 continue
             ctx = {"data": surfaces[sid]["data"], "numbers": numbers, "warnings": warns, "names": names}
             checked = check_value(c, schema, cpath, errs, sid, cat, opts, ctx)
+            consequences(c, schema, cpath, errs, sid, opts.get("consequences") or {})
+            if opts.get("source") is not None:
+                steps_from_data(c, cpath, errs, sid, opts["source"])
             acc = c.get("@accessibility") or {}
             if isinstance(acc, dict) and acc.get("live") == "assertive":
                 pass  # the schema already refuses it (R5: polite only)

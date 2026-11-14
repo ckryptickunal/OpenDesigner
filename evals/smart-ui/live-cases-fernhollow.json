@@ -5,11 +5,19 @@
   {
    "id": "fh-fines",
    "turns": [
-    "Do I have any fines?"
+    "have I got any parking fines?"
    ],
    "expect": [
-    "DataTable",
-    "KeyFacts"
+    "KeyFacts",
+    "DataTable"
+   ],
+   "checks": [
+    {
+     "contains": "19 november"
+    },
+    {
+     "not": "approvalprompt"
+    }
    ]
   },
   {
@@ -39,6 +47,11 @@
    ],
    "expect": [
     "ApprovalPrompt"
+   ],
+   "checks": [
+    {
+     "contains": "you can no longer challenge it"
+    }
    ]
   },
   {
@@ -47,8 +60,12 @@
     "Renew my parking permit"
    ],
    "expect": [
-    "ApprovalPrompt",
-    "KeyFacts"
+    "ApprovalPrompt"
+   ],
+   "checks": [
+    {
+     "contains": "your card on file is charged today"
+    }
    ]
   },
   {
@@ -130,6 +147,11 @@
    ],
    "expect": [
     "ProgressStatus"
+   ],
+   "checks": [
+    {
+     "contains": "waiting for your document"
+    }
    ]
   },
   {
@@ -140,6 +162,11 @@
    "expect": [
     "DataTable",
     "KeyFacts"
+   ],
+   "checks": [
+    {
+     "not": "\\b\\d{4}-\\d{2}-\\d{2}\\b"
+    }
    ]
   },
   {

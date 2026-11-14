@@ -1983,6 +1983,342 @@
    "expect": [
     "table-headers@/0/createSurface/components/0/rows/0/cells"
    ]
+  },
+  {
+   "name": "ok-consequence-stated",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Confirm",
+        "title": "Pay fine FH40018273",
+        "approve": {
+         "label": "Pay £35.00",
+         "event": {
+          "name": "pay_fine",
+          "context": {
+           "reference": "FH40018273"
+          }
+         }
+        },
+        "warning": "Paying closes the notice. You can no longer challenge it."
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "consequences": {
+     "pay_fine": [
+      "Paying closes the notice. You can no longer challenge it."
+     ]
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "bad-consequence-left-out",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Confirm",
+        "title": "Pay fine FH40018273",
+        "approve": {
+         "label": "Pay £35.00",
+         "event": {
+          "name": "pay_fine",
+          "context": {
+           "reference": "FH40018273"
+          }
+         }
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "consequences": {
+     "pay_fine": [
+      "Paying closes the notice. You can no longer challenge it."
+     ]
+    }
+   },
+   "expect": [
+    "R3-consequence@/0/createSurface/components/0"
+   ]
+  },
+  {
+   "name": "ok-consequence-other-action",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Confirm",
+        "title": "Pay fine FH40018273",
+        "approve": {
+         "label": "Book",
+         "event": {
+          "name": "book_slot"
+         }
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "consequences": {
+     "pay_fine": [
+      "Paying closes the notice. You can no longer challenge it."
+     ]
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "ok-steps-from-data",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Steps",
+        "steps": [
+         {
+          "label": "Submitted",
+          "state": "done"
+         },
+         {
+          "label": "Waiting for your document",
+          "state": "now"
+         },
+         {
+          "label": "Decision",
+          "state": "next"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "source": {
+     "application": {
+      "steps": [
+       {
+        "label": "Submitted",
+        "state": "done"
+       },
+       {
+        "label": "Waiting for your document",
+        "state": "current"
+       },
+       {
+        "label": "Decision",
+        "state": "next"
+       }
+      ]
+     }
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "bad-step-state-not-the-data",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Steps",
+        "steps": [
+         {
+          "label": "Submitted",
+          "state": "done"
+         },
+         {
+          "label": "Decision",
+          "state": "now"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "source": {
+     "application": {
+      "steps": [
+       {
+        "label": "Submitted",
+        "state": "done"
+       },
+       {
+        "label": "Waiting for your document",
+        "state": "current"
+       },
+       {
+        "label": "Decision",
+        "state": "next"
+       }
+      ]
+     }
+    }
+   },
+   "expect": [
+    "R6-step@/0/createSurface/components/0/steps/1/state"
+   ]
+  },
+  {
+   "name": "bad-step-not-in-the-data",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Steps",
+        "steps": [
+         {
+          "label": "Submitted",
+          "state": "done"
+         },
+         {
+          "label": "Under review",
+          "state": "now"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "source": {
+     "application": {
+      "steps": [
+       {
+        "label": "Submitted",
+        "state": "done"
+       },
+       {
+        "label": "Waiting for your document",
+        "state": "current"
+       },
+       {
+        "label": "Decision",
+        "state": "next"
+       }
+      ]
+     }
+    }
+   },
+   "expect": [
+    "R6-step@/0/createSurface/components/0/steps/1/label"
+   ]
+  },
+  {
+   "name": "bad-copy-successful",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Payment successful",
+        "facts": [
+         {
+          "label": "Paid",
+          "value": "£35.00"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": [
+    "copy-word@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "ok-consequence-request-button",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Confirm",
+        "title": "Fine FH40018273",
+        "cancel": {
+         "label": "Pay this fine",
+         "event": {
+          "name": "pay_fine",
+          "context": {
+           "reference": "FH40018273"
+          }
+         }
+        },
+        "approve": {
+         "label": "Done",
+         "event": {
+          "name": "close"
+         }
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "consequences": {
+     "pay_fine": [
+      "Paying closes the notice. You can no longer challenge it."
+     ]
+    }
+   },
+   "expect": []
   }
  ]
 }

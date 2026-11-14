@@ -31,7 +31,7 @@ def keys(errors):
 
 
 def py_opts(o):
-    return {"partial": o.get("partial"), "source": o.get("source"), "limits": o.get("limits"), "allow_empty": o.get("allowEmpty"), "copy": o.get("copy")}
+    return {"partial": o.get("partial"), "source": o.get("source"), "limits": o.get("limits"), "allow_empty": o.get("allowEmpty"), "copy": o.get("copy"), "consequences": o.get("consequences")}
 
 
 class Validator(unittest.TestCase):
@@ -68,7 +68,7 @@ console.log(JSON.stringify(out));
         js = """
 globalThis.HTMLElement = class {};
 const { fmt, ODSurface } = await import(%s);
-const out = { dates: [fmt("2026-11-01", "en-GB"), fmt("2026-11-01", "en-US"), fmt("TH-1043", "en-GB"), fmt("2026-11-14T09:30", "en-GB")] };
+const out = { dates: [fmt("2026-11-01", "en-GB"), fmt("2026-11-01", "en-US"), fmt("TH-1043", "en-GB"), fmt("2026-11-14T09:30", "en-GB"), fmt("Uploaded on 2026-11-03", "en-GB"), fmt("Ref 2026-1104-77", "en-GB")] };
 const c = { component: "ApprovalPrompt", details: [{ label: "Invoice number", value: "TH-1043" }, { label: "Number", value: "TH-1043" }, { label: "Amount", value: "€184.00" }],
             approve: { label: "Pay", event: { name: "pay_invoice", context: { number: "TH-1043", amount: "€500.00" } } } };
 out.rows = ODSurface.prototype.approvalDetails.call({}, c).details;
@@ -77,7 +77,7 @@ console.log(JSON.stringify(out));
         r = subprocess.run([node, "--input-type=module", "-e", js], capture_output=True, text=True)
         self.assertEqual(r.returncode, 0, r.stderr)
         got = json.loads(r.stdout)
-        self.assertEqual(got["dates"], ["1 Nov 2026", "Nov 1, 2026", "TH-1043", "14 Nov 2026, 09:30"])
+        self.assertEqual(got["dates"], ["1 Nov 2026", "Nov 1, 2026", "TH-1043", "14 Nov 2026, 09:30", "Uploaded on 3 Nov 2026", "Ref 2026-1104-77"])
         rows = got["rows"]
         self.assertEqual([d["value"] for d in rows].count("TH-1043"), 1)  # one row per value
         self.assertEqual(rows[0], {"label": "Invoice number", "value": "TH-1043"})  # the answer's own label
@@ -324,9 +324,9 @@ class Live(unittest.TestCase):
     def test_change_needs_the_renderers_approval(self):
         self.script(["It's paid.", "It's paid."])
         conv = self.live.Conversation(self.app, "scripted")
-        r = conv.press({"name": "pay_invoice", "context": {"number": "TH-1043"}})  # no approval
-        self.assertEqual(self.ran, [])
-        self.assertIn("confirmation", r["text"])
+        r = conv.press({"name": "pay_invoice", "context": {"number": "TH-1043"}})  # a "Pay" button on a record: a request
+        self.assertEqual(self.ran, [])  # nothing is paid; the reply is the model's (its approval prompt in real use)
+        self.assertEqual(r["text"], "It's paid.")
         conv.press({"name": "pay_invoice", "context": {"number": "TH-1043", "approved": True}})  # approved, but never offered
         self.assertEqual(self.ran, [])
         conv._remember_offers([{"createSurface": {"components": [{"approve": {"label": "Pay", "event": {"name": "pay_invoice", "context": {"number": "TH-1043"}}}}]}}])

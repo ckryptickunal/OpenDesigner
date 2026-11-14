@@ -9526,6 +9526,7 @@
     "--ds-elevation-raised",
     "--ds-focus-ring-offset",
     "--ds-focus-ring-width",
+    "--ds-font-weight-body",
     "--ds-font-weight-label",
     "--ds-icon-stroke-md",
     "--ds-motion-duration-short",
@@ -9537,6 +9538,7 @@
     "--ds-size-icon-sm",
     "--ds-size-row-md",
     "--ds-size-target-min",
+    "--ds-space-inline-md",
     "--ds-space-inline-sm",
     "--ds-space-inline-xs",
     "--ds-space-inset-lg",
@@ -9578,7 +9580,7 @@
    },
    "files": {
     "html": "components/data-table/component.html",
-    "bytes": 20601,
+    "bytes": 23467,
     "script": true
    },
    "source": null,
@@ -16864,6 +16866,22 @@
         }
        }
       }
+     },
+     "action": {
+      "type": "object",
+      "required": [
+       "label",
+       "event"
+      ],
+      "properties": {
+       "label": {
+        "type": "string",
+        "maxLength": 40
+       },
+       "event": {
+        "type": "object"
+       }
+      }
      }
     }
    },
@@ -16910,19 +16928,29 @@
    },
    "tokens": [
     "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-border-focus",
     "--ds-color-border-subtle",
     "--ds-color-surface-raised",
     "--ds-color-text-accent",
     "--ds-color-text-danger",
     "--ds-color-text-info",
+    "--ds-color-text-on-action",
     "--ds-color-text-primary",
     "--ds-color-text-secondary",
     "--ds-color-text-success",
     "--ds-color-text-warning",
     "--ds-elevation-raised",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
     "--ds-font-weight-label",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
     "--ds-radius-container",
+    "--ds-radius-control",
     "--ds-radius-full",
+    "--ds-size-control-md",
     "--ds-size-row-md",
     "--ds-size-target-min",
     "--ds-space-2",
@@ -16932,6 +16960,7 @@
     "--ds-space-inset-lg",
     "--ds-space-inset-sm",
     "--ds-space-inset-xl",
+    "--ds-space-inset-xs",
     "--ds-space-stack-lg",
     "--ds-space-stack-md",
     "--ds-space-stack-xs",
@@ -16946,22 +16975,25 @@
      "banner",
      "region"
     ],
-    "keyboard": [],
+    "keyboard": [
+     "When the card has a next step, Tab reaches its button",
+     "Enter or Space presses it"
+    ],
     "controls": {
-     "button": 0,
+     "button": 1,
      "input": 0,
      "link": 0,
      "select": 0,
      "textarea": 0,
      "summary": 0
     },
-    "focus_visible": false,
-    "reduced_motion": false,
+    "focus_visible": true,
+    "reduced_motion": true,
     "min_target": true
    },
    "files": {
     "html": "components/key-facts/component.html",
-    "bytes": 4584,
+    "bytes": 6052,
     "script": false
    },
    "source": null,

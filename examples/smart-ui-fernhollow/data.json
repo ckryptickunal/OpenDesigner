@@ -21,8 +21,18 @@
  },
  "renewal": {
   "options": [
-   {"length": "12 months", "price": "£78.00", "from": "2026-12-01", "to": "2027-11-30"},
-   {"length": "6 months", "price": "£42.00", "from": "2026-12-01", "to": "2027-05-31"}
+   {
+    "length": "12 months",
+    "price": "£78.00",
+    "from": "2026-12-01",
+    "to": "2027-11-30"
+   },
+   {
+    "length": "6 months",
+    "price": "£42.00",
+    "from": "2026-12-01",
+    "to": "2027-05-31"
+   }
   ],
   "can_renew_from": "2026-10-31",
   "note": "Your permit stays the same: Zone C, vehicle AB12 CDE. The new permit is digital, so there is nothing to display in the car."
@@ -72,7 +82,11 @@
    "access": "Step-free entrance on Hollow Lane. Hearing loop at every counter. Accessible toilet. A quiet room you can ask for.",
    "closures": "Closed all day on Friday 27 November for staff training.",
    "phone": "0300 555 0142",
-   "services": ["Show documents for a parking permit", "Blue badge application", "Council tax question"]
+   "services": [
+    "Show documents for a parking permit",
+    "Blue badge application",
+    "Council tax question"
+   ]
   },
   {
    "id": "marsh-road",
@@ -83,7 +97,10 @@
    "access": "Step-free entrance from the car park. Hearing loop at the desk. No accessible toilet in the building.",
    "closures": "No closures planned.",
    "phone": "0300 555 0142",
-   "services": ["Show documents for a parking permit", "Council tax question"]
+   "services": [
+    "Show documents for a parking permit",
+    "Council tax question"
+   ]
   },
   {
    "id": "eastgate",
@@ -94,56 +111,163 @@
    "access": "Step-free entrance and a lift to the first floor. No hearing loop yet: ask at the desk for a written conversation.",
    "closures": "Closed on Monday 23 November in the morning, open from 13:00.",
    "phone": "0300 555 0142",
-   "services": ["Show documents for a parking permit", "Blue badge application"]
+   "services": [
+    "Show documents for a parking permit",
+    "Blue badge application"
+   ]
   }
  ],
  "slots": {
   "hollow-lane": [
-   {"id": "HL-1116-1000", "date": "2026-11-16", "day": "Monday 16 November", "time": "10:00"},
-   {"id": "HL-1116-1130", "date": "2026-11-16", "day": "Monday 16 November", "time": "11:30"},
-   {"id": "HL-1117-1400", "date": "2026-11-17", "day": "Tuesday 17 November", "time": "14:00"},
-   {"id": "HL-1119-0930", "date": "2026-11-19", "day": "Thursday 19 November", "time": "9:30"},
-   {"id": "HL-1120-1545", "date": "2026-11-20", "day": "Friday 20 November", "time": "15:45"}
+   {
+    "id": "HL-1116-1000",
+    "date": "2026-11-16",
+    "day": "Monday 16 November",
+    "time": "10:00"
+   },
+   {
+    "id": "HL-1116-1130",
+    "date": "2026-11-16",
+    "day": "Monday 16 November",
+    "time": "11:30"
+   },
+   {
+    "id": "HL-1117-1400",
+    "date": "2026-11-17",
+    "day": "Tuesday 17 November",
+    "time": "14:00"
+   },
+   {
+    "id": "HL-1119-0930",
+    "date": "2026-11-19",
+    "day": "Thursday 19 November",
+    "time": "9:30"
+   },
+   {
+    "id": "HL-1120-1545",
+    "date": "2026-11-20",
+    "day": "Friday 20 November",
+    "time": "15:45"
+   }
   ],
   "marsh-road": [],
   "eastgate": [
-   {"id": "EG-1118-1730", "date": "2026-11-18", "day": "Wednesday 18 November", "time": "17:30"},
-   {"id": "EG-1120-0900", "date": "2026-11-20", "day": "Friday 20 November", "time": "9:00"}
+   {
+    "id": "EG-1118-1730",
+    "date": "2026-11-18",
+    "day": "Wednesday 18 November",
+    "time": "17:30"
+   },
+   {
+    "id": "EG-1120-0900",
+    "date": "2026-11-20",
+    "day": "Friday 20 November",
+    "time": "9:00"
+   }
   ]
  },
- "next_free": {"marsh-road": "Tuesday 24 November at 10:30"},
+ "next_free": {
+  "marsh-road": "Tuesday 24 November at 10:30"
+ },
  "applications": [
   {
    "reference": "RP-2026-0418",
    "what": "Resident parking permit for a second vehicle, EV22 MNO (electric car)",
    "submitted": "2026-11-03",
-   "current_step": "Decision",
+   "current_step": "Waiting for your document",
    "waiting_for": "Your vehicle registration document (V5C) for EV22 MNO",
    "steps": [
-    {"label": "Submitted", "state": "done", "date": "2026-11-03"},
-    {"label": "Checked", "state": "done", "date": "2026-11-07"},
-    {"label": "Decision", "state": "current", "date": "Within 5 working days of getting your last document"},
-    {"label": "Permit sent", "state": "next", "date": "By email, the same day as the decision"}
+    {
+     "label": "Submitted",
+     "state": "done",
+     "date": "2026-11-03"
+    },
+    {
+     "label": "Checked",
+     "state": "done",
+     "date": "2026-11-07"
+    },
+    {
+     "label": "Waiting for your document",
+     "state": "current",
+     "date": "Upload your V5C, or show it at an office"
+    },
+    {
+     "label": "Decision",
+     "state": "next",
+     "date": "Within 5 working days of getting your document"
+    },
+    {
+     "label": "Permit sent",
+     "state": "next",
+     "date": "By email, the same day as the decision"
+    }
    ],
    "documents": [
-    {"document": "Proof of address", "examples": "A council tax bill or a tenancy agreement from the last 3 months", "status": "Uploaded on 2026-11-03", "file": "council-tax-bill-2026.pdf"},
-    {"document": "Vehicle registration document (V5C)", "examples": "The V5C showing your name and 14 Hollow Lane", "status": "Still needed", "file": null},
-    {"document": "Driving licence", "examples": "The photocard licence, front side", "status": "Uploaded on 2026-11-03", "file": "licence-front.jpg"}
+    {
+     "document": "Proof of address",
+     "examples": "A council tax bill or a tenancy agreement from the last 3 months",
+     "status": "Uploaded on 3 November 2026",
+     "file": "council-tax-bill-2026.pdf"
+    },
+    {
+     "document": "Vehicle registration document (V5C)",
+     "examples": "The V5C showing your name and 14 Hollow Lane",
+     "status": "Still needed",
+     "file": null
+    },
+    {
+     "document": "Driving licence",
+     "examples": "The photocard licence, front side",
+     "status": "Uploaded on 3 November 2026",
+     "file": "licence-front.jpg"
+    }
    ],
    "accepted_files": "PDF, JPG or PNG, up to 10 MB each. Or show the paper document at an office."
   }
  ],
  "permit_types": [
-  {"name": "Resident permit", "who": "Residents of Zones A to E, one per vehicle, up to 2 per household", "price": "£78 for 12 months, £42 for 6 months", "electric": "Half price: £39 for 12 months", "blue_badge": "Free", "how_long": "6 or 12 months"},
-  {"name": "Visitor permit", "who": "Any household in Zones A to E, for guests and carers", "price": "£1.50 a day, sold in books of 10 days (£15)", "electric": "Same price", "blue_badge": "Free, up to 60 days a year", "how_long": "Up to 60 days a year"},
-  {"name": "Carer permit", "who": "Professional carers visiting a resident in Zones A to E", "price": "Free", "electric": "Same price", "blue_badge": "Free", "how_long": "12 months"}
+  {
+   "name": "Resident permit",
+   "who": "Residents of Zones A to E, one per vehicle, up to 2 per household",
+   "price": "£78 for 12 months, £42 for 6 months",
+   "electric": "Half price: £39 for 12 months",
+   "blue_badge": "Free",
+   "how_long": "6 or 12 months"
+  },
+  {
+   "name": "Visitor permit",
+   "who": "Any household in Zones A to E, for guests and carers",
+   "price": "£1.50 a day, sold in books of 10 days (£15)",
+   "electric": "Same price",
+   "blue_badge": "Free, up to 60 days a year",
+   "how_long": "Up to 60 days a year"
+  },
+  {
+   "name": "Carer permit",
+   "who": "Professional carers visiting a resident in Zones A to E",
+   "price": "Free",
+   "electric": "Same price",
+   "blue_badge": "Free",
+   "how_long": "12 months"
+  }
  ],
  "rules": {
-  "zones": ["Zone A", "Zone B", "Zone C", "Zone D", "Zone E"],
+  "zones": [
+   "Zone A",
+   "Zone B",
+   "Zone C",
+   "Zone D",
+   "Zone E"
+  ],
   "resident": {
    "one_per_vehicle": true,
    "max_per_household": 2,
-   "not_eligible_vehicles": ["van over 3.5 tonnes", "lorry", "minibus"],
+   "not_eligible_vehicles": [
+    "van over 3.5 tonnes",
+    "lorry",
+    "minibus"
+   ],
    "price": "£78.00 for 12 months",
    "electric_price": "£39.00 for 12 months",
    "blue_badge_price": "Free"
@@ -152,7 +276,9 @@
    "days_per_year": 60,
    "price": "£1.50 a day (books of 10 days, £15.00)",
    "blue_badge_price": "Free",
-   "not_eligible_vehicles": ["lorry"]
+   "not_eligible_vehicles": [
+    "lorry"
+   ]
   }
  }
 }

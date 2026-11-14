@@ -9,7 +9,7 @@ const HTML = /<\s*\/?\s*[a-zA-Z!][^>]*>|<\s*[a-zA-Z]/;
 const WHOLE_STYLE = /^\s*(#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})|-?\d*\.?\d+(px|rem|em|vh|vw|pt)|(rgba?|hsla?|oklch|oklab|lab|lch|color-mix|var|calc|url|expression)\(.*)\s*$/i;
 const NUM = /(?<![\w.])-?\d[\d,]*(?:\.\d+)?/g;
 // copy rules (docs/COPY.md), checked when opts.copy; the same as smartui.py
-const BANNED_WORDS = /\b(successfully|seamless(ly)?|effortless(ly)?|leverag(e|es|ing)|utili[sz](e|es|ing)|robust|delve|unlock(s|ing)?|empower(s|ing)?|elevate(s|d)?|streamline(s|d)?|cutting-edge|hassle-free|please note)\b/i;
+const BANNED_WORDS = /\b(successful(ly)?|seamless(ly)?|effortless(ly)?|leverag(e|es|ing)|utili[sz](e|es|ing)|robust|delve|unlock(s|ing)?|empower(s|ing)?|elevate(s|d)?|streamline(s|d)?|cutting-edge|hassle-free|please note)\b/i;
 const WORD = /[A-Za-z][A-Za-z'’-]*/g;
 export const COPY_RULES = ["copy-word", "copy-case", "duplicate-row"];
 
@@ -33,6 +33,60 @@ function duplicateRows(v, path, errs, sid) {
       else seen.set(key, row.label);
     }
   });
+}
+
+const STEP_STATE = { current: "now", now: "now", active: "now", "in progress": "now", done: "done", complete: "done", completed: "done" };
+
+/** R6 for steps: when the data has steps (label and state), a part's steps use those labels and the same states. */
+function stepsFromData(comp, path, errs, sid, source) {
+  const known = new Map();
+  const collect = (v) => {
+    if (Array.isArray(v)) v.forEach(collect);
+    else if (isObj(v)) {
+      if (typeof v.label === "string" && typeof v.state === "string") known.set(v.label.trim().toLowerCase(), STEP_STATE[v.state.trim().toLowerCase()] || "next");
+      Object.values(v).forEach(collect);
+    }
+  };
+  collect(source);
+  if (!known.size) return;
+  const walk = (v, p) => {
+    if (Array.isArray(v)) v.forEach((x, i) => walk(x, `${p}/${i}`));
+    else if (isObj(v)) {
+      if (typeof v.label === "string" && typeof v.state === "string") {
+        const lab = v.label.trim().toLowerCase(), st = STEP_STATE[v.state.trim().toLowerCase()] || "next";
+        if (!known.has(lab)) err(errs, "R6-step", `${p}/label`, `step '${v.label}' is not in the data`, sid, "use the steps from the data, with their labels");
+        else if (known.get(lab) !== st) err(errs, "R6-step", `${p}/state`, `step '${v.label}' is ${v.state} here but ${known.get(lab)} in the data`, sid, "use the state the data gives");
+      }
+      for (const [k, x] of Object.entries(v)) walk(x, `${p}/${k}`);
+    }
+  };
+  walk(comp, path);
+}
+
+/** R3: a part that asks for a change states what the change does before its button. said: {action name: [sentences]}
+ *  from the app. Each must appear in the part's words. */
+function consequences(comp, schema, path, errs, sid, said) {
+  const events = [], words = [];
+  const changes = (v, sch) => {  // only buttons that make the change (x-od-effect: change); a "Pay" button on a record asks for it
+    if (Array.isArray(v) && isObj(sch)) v.forEach((x) => changes(x, sch.items || {}));
+    else if (isObj(v) && isObj(sch)) for (const [k, x] of Object.entries(v)) {
+      const ps = (sch.properties || {})[k] || {};
+      if (ps["x-od-effect"] === "change" && isObj(x) && isObj(x.event) && typeof x.event.name === "string") events.push(x.event.name);
+      changes(x, ps);
+    }
+  };
+  changes(comp, schema);
+  const walk = (v) => {
+    if (Array.isArray(v)) v.forEach(walk);
+    else if (isObj(v)) { for (const [k, x] of Object.entries(v)) if (k !== "event") walk(x); }
+    else if (typeof v === "string") words.push(v);
+  };
+  walk(comp);
+  const norm = (t) => t.toLowerCase().replace(/[^a-z0-9£$€%]+/g, " ").trim();
+  const text = " " + norm(words.join(" ")) + " ";
+  for (const name of new Set(events)) for (const line of said[name] || [])
+    if (!text.includes(" " + norm(line) + " ")) err(errs, "R3-consequence", path, `the prompt for ${name} doesn't say: ${line}`, sid,
+      `put it on the part before the button, word for word (as its warning): ${line}`);
 }
 
 /** A table (columns plus rows of cells) names every column it shows: a header per cell, and no blank header. */
@@ -275,6 +329,8 @@ export function validate(answer, cat, opts = {}) {
       if (!schema) { err(errs, "unknown-component", `${cpath}/component`, `unknown component '${c.component}'`, sid, "use one of: " + Object.keys(cat.components).join(", ")); return; }
       const ctx = { data: surfaces[sid].data, numbers, warnings: warns, names };
       const checked = checkValue(c, schema, cpath, errs, sid, cat, opts, ctx);
+      consequences(c, schema, cpath, errs, sid, opts.consequences || {});
+      if (opts.source !== undefined && opts.source !== null) stepsFromData(c, cpath, errs, sid, opts.source);
       if (typeof c.id === "string") surfaces[sid].components[c.id] = { c: isObj(checked) ? checked : c, path: cpath, schema };
     });
   });

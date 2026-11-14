@@ -29,6 +29,17 @@
 }
 /* The hidden full template item stays hidden, whatever display its row has. */
 .odl-key-facts [hidden] { display: none; }
+/* An optional next step under the facts ("Pay this fine"): absent from the static card, shown when an answer gives one. */
+.odl-key-facts .odl-acts { display: flex; flex-wrap: wrap; gap: var(--ds-space-inline-sm); }
+.odl-key-facts .odl-acts[hidden], .odl-key-facts .odl-acts button[hidden] { display: none; }
+.odl-key-facts .odl-act { display: inline-flex; align-items: center; justify-content: center; max-inline-size: 100%;
+  min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: var(--ds-space-inset-xs) var(--ds-space-inset-lg);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary);
+  color: var(--ds-color-text-on-action); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-align: center;
+  overflow-wrap: anywhere; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-key-facts .odl-act:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-key-facts .odl-act:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+@media (prefers-reduced-motion: reduce) { .odl-key-facts .odl-act { transition: none; } }
 </style>
 <section class="odl-key-facts" aria-label="Key facts">
   <div class="odl-card">
@@ -44,5 +55,6 @@
       <div data-od-item><dt>Seats left</dt><dd><span class="odl-value" data-tone="warning">12</span><span class="odl-note">Car deck is full</span></dd></div>
       <div data-od-item><dt>Fare</dt><dd><span class="odl-value" data-tone="neutral">€18.50</span><span class="odl-note">Foot passenger, one way</span></dd></div>
     </dl>
+    <div class="odl-acts" data-od-optional hidden><button type="button" class="odl-act" data-od-action="action">Book this sailing</button></div>
   </div>
 </section>

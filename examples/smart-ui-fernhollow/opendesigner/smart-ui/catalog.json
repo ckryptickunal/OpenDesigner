@@ -72,6 +72,29 @@
       ],
       "x-od-name-from": "label"
      }
+    },
+    "action": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "label",
+      "event"
+     ],
+     "properties": {
+      "label": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 40
+      },
+      "a11y_label": {
+       "type": "string",
+       "maxLength": 120
+      },
+      "event": {
+       "$ref": "#/$defs/Event"
+      }
+     },
+     "x-od-effect": "none"
     }
    },
    "required": [

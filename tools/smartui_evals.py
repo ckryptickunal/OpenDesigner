@@ -22,6 +22,7 @@ import fnmatch
 import json
 import os
 import pathlib
+import re
 import subprocess
 import sys
 import time
@@ -276,6 +277,14 @@ def run_live(model, runs, pattern, do_render, cases_file="live-cases.json"):
             if "headers" in c.get("checks", []):  # a table names every column it shows (check_live.py also checks the drawn <th>)
                 row["headers_ok"] = table_has_headers(r.get("answer"))
                 row["right"] = row["right"] and row["headers_ok"]
+            shown = json.dumps(r.get("answer") or [], ensure_ascii=False).lower()
+            for chk in c.get("checks", []):  # {"contains": "..."}: the part must say it; {"not": "..."}: never (text and part)
+                if isinstance(chk, dict) and "contains" in chk and chk["contains"].lower() not in shown:
+                    row["right"] = False
+                    row.setdefault("checks_failed", []).append("missing: " + chk["contains"])
+                if isinstance(chk, dict) and "not" in chk and re.search(chk["not"], shown + " " + str(r.get("text", "")).lower()):
+                    row["right"] = False
+                    row.setdefault("checks_failed", []).append("has: " + chk["not"])
             rows.append(row)
             if part and r.get("answer"):
                 valid.append((f"live-{label}.{c['id']}.{n}", r["answer"]))

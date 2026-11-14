@@ -263,7 +263,8 @@ def _choices(desc):
 
 def actions_text(actions, changes):
     return "\n".join(f"- {n}({', '.join(f'{k}: {v}' for k, v in a.get('params', {}).items())}): {a['description']}"
-                     for n, a in actions.items() if bool(a.get("changes")) == changes) or "- none"
+                      + (f" Its approval prompt must say, word for word: {' '.join(a['consequences'])}" if a.get("consequences") else "")
+                      for n, a in actions.items() if bool(a.get("changes")) == changes) or "- none"
 
 
 ROUTE = """You decide which of this app's read-only actions to call to answer the person's latest message.
@@ -424,6 +425,9 @@ class Conversation:
         # bigger schema is slower, and a small model mixes its buttons into other parts
         always = ["ApprovalPrompt"] if any(a.get("changes") for a in self.app.ACTIONS.values()) and self.names_a_change(message) else []
         sel = smartui.select(message, self.catalog, 3, self.scope, data, boost)
+        if not self.names_a_change(message):  # a question never gets an approval prompt (R3): the record answers it
+            sel["candidates"] = [c for c in sel["candidates"] if c != "ApprovalPrompt"]
+            sel["ui"] = sel["ui"] and bool(sel["candidates"])
         if sel["ui"] and sel["candidates"]:
             ms["skeleton"] = (time.perf_counter() - t0) * 1000
             emit({"type": "skeleton", "part": sel["candidates"][0]})
@@ -450,8 +454,16 @@ class Conversation:
                 emit({"type": "text", "text": t})
         if history:
             system += "\n\nThe conversation so far (for follow-up questions):\n" + history
-        system += ("\n\nActions that change data are buttons only. When the person wants one, show an ApprovalPrompt whose approve "
-                   "button carries the action as its event name, with the details from the data; never say it is done.")
+        asks = self.names_a_change(message)
+        system += ("\n\nActions that change data are buttons only. "
+                   + ("The person asks for a change: show an ApprovalPrompt whose approve button carries the action as its event name, "
+                      "with the details from the data (the amount, and any deadline such as the day a discount ends); never say it is done."
+                      if asks else
+                      "The person asked a question, not for a change: answer it and show the record. Never show an ApprovalPrompt "
+                      "for a question. When one record matters most (the one unpaid fine), show it in full as key facts: every detail "
+                      "the data gives, such as the amounts and the dates a price or a right ends. When it has a next step that changes "
+                      "data (pay, renew, book), make that the part's action button, with the change's name as the event name and its "
+                      "arguments in the context; pressing it only asks for the change."))
         if sel["ui"]:
             system += ("\nChange actions: use the exact name as the approve button's event name, and put every argument in "
                        "its event context, filled from the data (for example {\"name\": \"pay_invoice\", \"context\": {\"number\": \"TH-1047\"}}):\n"
@@ -523,7 +535,8 @@ class Conversation:
             for k in ("createSurface", "updateComponents", "updateDataModel", "deleteSurface"):
                 if isinstance(m, dict) and isinstance(m.get(k), dict):
                     m[k]["surfaceId"] = surface
-        opts = {"source": data, "limits": {"leaves": max_parts}, "copy": True}
+        opts = {"source": data, "limits": {"leaves": max_parts}, "copy": True,
+                "consequences": {n: a["consequences"] for n, a in self.app.ACTIONS.items() if a.get("changes") and a.get("consequences")}}
         r = smartui.validate(msgs, self.catalog, opts)
         self.case_fixed = 0
         if r["errors"] and any(e["rule"] == "copy-case" for e in r["errors"]):
@@ -561,6 +574,10 @@ class Conversation:
         if a and a.get("changes"):
             approved = ctx.pop("approved", None) is True
             offer = (name, json.dumps(ctx, sort_keys=True))
+            if not approved:
+                # a "Pay this fine" button on a record: a request for the change, answered with its approval prompt
+                said = ", ".join(f"{k.replace('_', ' ')} {v}" for k, v in ctx.items())
+                return self.answer(f"I want to {name.replace('_', ' ')}" + (f": {said}" if said else "") + ".", on_event=on_event)
             if not approved or offer not in self.offered:  # only a change this conversation showed, after the prompt said yes
                 return {"text": "That needs your confirmation first.", "answer": None, "log": {"refused": name}}
             self.offered.remove(offer)

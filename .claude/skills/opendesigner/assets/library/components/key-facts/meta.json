@@ -137,6 +137,22 @@
               }
             }
           }
+        },
+        "action": {
+          "type": "object",
+          "required": [
+            "label",
+            "event"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          }
         }
       }
     },
@@ -174,6 +190,9 @@
         "how": "the part has no photo"
       }
     },
-    "keyboard": []
+    "keyboard": [
+      "When the card has a next step, Tab reaches its button",
+      "Enter or Space presses it"
+    ]
   }
 }

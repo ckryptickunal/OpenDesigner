@@ -357,6 +357,147 @@
      }
     }
    }
+  },
+  "Confirm": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "component",
+    "id",
+    "title",
+    "approve"
+   ],
+   "properties": {
+    "component": {
+     "const": "Confirm"
+    },
+    "id": {
+     "type": "string",
+     "maxLength": 64
+    },
+    "@accessibility": {
+     "$ref": "#/$defs/Accessibility"
+    },
+    "@metadata": {
+     "$ref": "#/$defs/Metadata"
+    },
+    "title": {
+     "type": "string",
+     "maxLength": 60
+    },
+    "warning": {
+     "type": "string",
+     "maxLength": 160
+    },
+    "cancel": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "label",
+      "event"
+     ],
+     "x-od-effect": "none",
+     "properties": {
+      "label": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 40
+      },
+      "event": {
+       "$ref": "#/$defs/Event"
+      }
+     }
+    },
+    "approve": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "label",
+      "event"
+     ],
+     "x-od-effect": "change",
+     "properties": {
+      "label": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 40
+      },
+      "event": {
+       "$ref": "#/$defs/Event"
+      }
+     }
+    }
+   },
+   "metadata": {
+    "extensions": {
+     "opendesigner": {
+      "slug": "confirm",
+      "group": "act"
+     }
+    }
+   }
+  },
+  "Steps": {
+   "type": "object",
+   "additionalProperties": false,
+   "required": [
+    "component",
+    "id",
+    "steps"
+   ],
+   "properties": {
+    "component": {
+     "const": "Steps"
+    },
+    "id": {
+     "type": "string",
+     "maxLength": 64
+    },
+    "@accessibility": {
+     "$ref": "#/$defs/Accessibility"
+    },
+    "@metadata": {
+     "$ref": "#/$defs/Metadata"
+    },
+    "title": {
+     "type": "string",
+     "maxLength": 48
+    },
+    "steps": {
+     "type": "array",
+     "maxItems": 6,
+     "items": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+       "state",
+       "label"
+      ],
+      "properties": {
+       "state": {
+        "type": "string",
+        "enum": [
+         "done",
+         "next",
+         "now"
+        ]
+       },
+       "label": {
+        "type": "string",
+        "maxLength": 60
+       }
+      }
+     }
+    }
+   },
+   "metadata": {
+    "extensions": {
+     "opendesigner": {
+      "slug": "steps",
+      "group": "status"
+     }
+    }
+   }
   }
  },
  "functions": {},

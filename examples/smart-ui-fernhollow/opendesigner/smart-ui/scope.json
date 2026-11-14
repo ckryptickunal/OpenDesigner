@@ -260,6 +260,7 @@
     "fines"
    ],
    "components": [
+    "KeyFacts",
     "DataTable"
    ],
    "from": "GET /api/fines in server.py"

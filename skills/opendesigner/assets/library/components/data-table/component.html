@@ -78,6 +78,27 @@
   .odl-data-table .odl-pager .odl-word { display: none; }
   .odl-data-table .odl-pager button { min-inline-size: var(--ds-size-target-min); padding: 0; }
 }
+/* A table wider than its box says so, above it. */
+.odl-data-table .odl-hint { margin: 0; padding-inline: var(--ds-space-inset-xl); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-data-table .odl-hint[hidden] { display: none; }
+/* Phone: each row becomes a short list of label and value, so nothing scrolls sideways or gets cut off. The script copies
+   each column's name onto its cells and keeps the table roles, so a screen reader still hears a table. */
+@container (max-width: 34rem) {
+  .odl-data-table .odl-scroll { overflow-x: visible; }
+  .odl-data-table .odl-hint { display: none; }
+  .odl-data-table table, .odl-data-table tbody, .odl-data-table tr { display: block; }
+  .odl-data-table tbody[hidden] { display: none; }
+  .odl-data-table thead { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .odl-data-table tbody { padding: var(--ds-space-inset-sm) var(--ds-space-inset-lg); border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+  .odl-data-table tbody:last-of-type, .odl-data-table tbody:has(+ tbody[hidden]) { border-block-end: 0; }
+  .odl-data-table td, .odl-data-table td:first-child, .odl-data-table td:last-child { display: grid; grid-template-columns: minmax(5.5rem, 38%) minmax(0, 1fr); gap: var(--ds-space-inline-md);
+    position: static; block-size: auto; padding: var(--ds-space-inset-xs) 0; border: 0; text-align: start; background: transparent; }
+  .odl-data-table td::before { content: attr(data-label); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-body); }
+  .odl-data-table td > span, .odl-data-table td:first-child > span, .odl-data-table td[data-align="end"] > span { inline-size: auto; max-inline-size: none; margin: 0; }
+  .odl-data-table tbody.od-empty { display: block; }
+  .odl-data-table .od-empty td { display: block; text-align: center; }
+  .odl-data-table .od-empty td::before { content: none; }
+}
 @media (prefers-reduced-motion: reduce) { .odl-data-table, .odl-data-table *, .odl-data-table *::before { transition: none !important; animation: none !important; } }
 </style>
 <section class="odl-data-table" aria-label="Open invoices" data-od-label="title">
@@ -158,7 +179,13 @@ document.querySelectorAll(".odl-data-table").forEach((root) => {
   let head = table.querySelector("thead");
   if (!head) { head = document.createElement("thead"); table.prepend(head); }
   if (cols.length) head.replaceChildren(tr);
-  rows().forEach((b) => b.querySelectorAll("td").forEach((td, i) => td.setAttribute("data-align", (cols[i] || {}).align || "start")));
+  rows().forEach((b) => b.querySelectorAll("td").forEach((td, i) => { td.setAttribute("data-align", (cols[i] || {}).align || "start"); td.setAttribute("data-label", (cols[i] || {}).label || ""); }));
+  // on a phone the rows stack (CSS), which drops a table's built-in roles in some browsers: name them, so it is still a table
+  table.setAttribute("role", "table");
+  table.querySelectorAll("thead, tbody").forEach((g) => g.setAttribute("role", "rowgroup"));
+  table.querySelectorAll("tr").forEach((r) => r.setAttribute("role", "row"));
+  table.querySelectorAll("th").forEach((c) => c.setAttribute("role", "columnheader"));
+  table.querySelectorAll("td").forEach((c) => c.setAttribute("role", "cell"));
 
   const pager = root.querySelector(".odl-pager"), range = root.querySelector(".odl-range");
   const prev = root.querySelector(".odl-prev"), next = root.querySelector(".odl-next");
@@ -210,7 +237,9 @@ document.querySelectorAll(".odl-data-table").forEach((root) => {
     next.addEventListener("click", () => { root._odl.st.page += 1; root._odl.show(); });
   }
   const box = root.querySelector(".odl-scroll");
-  const wide = () => box.classList.toggle("is-wide", box.scrollWidth > box.clientWidth + 1);
+  let hint = root.querySelector(".odl-hint");
+  if (!hint) { hint = document.createElement("p"); hint.className = "odl-hint"; hint.hidden = true; hint.textContent = "Scroll sideways to see every column"; box.before(hint); }
+  const wide = () => { const w = box.scrollWidth > box.clientWidth + 1; box.classList.toggle("is-wide", w); hint.hidden = !w; };
   wide();
   if (!root._odlRO && typeof ResizeObserver !== "undefined") { root._odlRO = new ResizeObserver(wide); root._odlRO.observe(box); }
   show();

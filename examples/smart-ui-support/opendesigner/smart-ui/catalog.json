@@ -72,6 +72,29 @@
       ],
       "x-od-name-from": "label"
      }
+    },
+    "action": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "label",
+      "event"
+     ],
+     "properties": {
+      "label": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 40
+      },
+      "a11y_label": {
+       "type": "string",
+       "maxLength": 120
+      },
+      "event": {
+       "$ref": "#/$defs/Event"
+      }
+     },
+     "x-od-effect": "none"
     }
    },
    "required": [
@@ -275,43 +298,31 @@
     },
     "title": {
      "type": "string",
-     "maxLength": 120
+     "maxLength": 32
     },
     "subtitle": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 60
     },
     "stats": {
      "type": "array",
-     "minItems": 0,
-     "maxItems": 12,
+     "minItems": 1,
+     "maxItems": 3,
      "items": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
        "label": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 22
        },
        "value": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 12
        },
        "badge": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 5
        }
       },
       "required": [
@@ -322,30 +333,19 @@
      }
     },
     "currency": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 3
     },
     "axis_max": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "number"
     },
     "budget": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "number"
     },
     "months": {
      "type": "array",
-     "minItems": 0,
-     "maxItems": 12,
+     "minItems": 6,
+     "maxItems": 6,
      "items": {
       "type": "object",
       "additionalProperties": false,
@@ -359,18 +359,12 @@
         "x-od-measure": true
        },
        "label": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 30
        },
        "short": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 4
        }
       },
       "required": [
@@ -382,18 +376,17 @@
      }
     },
     "note": {
-     "type": [
-      "string",
-      "number"
-     ],
-     "maxLength": 120
+     "type": "string",
+     "maxLength": 40
     }
    },
    "required": [
     "component",
     "id",
     "title",
-    "currency"
+    "currency",
+    "budget",
+    "months"
    ],
    "metadata": {
     "extensions": {
@@ -402,8 +395,14 @@
       "group": "data",
       "name": "Monthly spend chart",
       "use": "for monthly spend or usage against a budget, with a forecast",
-      "use_when": [],
-      "avoid_when": [],
+      "use_when": [
+       "a billing or usage page that must warn early when the month is heading over budget"
+      ],
+      "avoid_when": [
+       "a share of a whole, such as spend by team: use donut-breakdown",
+       "a few headline numbers with no monthly history: use kpi-strip or budget-meters",
+       "more or fewer than six periods: the columns are fixed at six"
+      ],
       "tags": [
        "bar chart",
        "spend",
@@ -567,47 +566,37 @@
     },
     "label": {
      "type": "string",
-     "maxLength": 120
+     "maxLength": 40
     },
     "stats": {
      "type": "array",
-     "minItems": 0,
-     "maxItems": 12,
+     "minItems": 2,
+     "maxItems": 4,
      "items": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
        "label": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 24
        },
        "value": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 14
        },
        "share": {
         "type": "number",
+        "minimum": 0,
+        "maximum": 100,
         "x-od-measure": true
        },
        "warning": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 16
        },
        "note": {
-        "type": [
-         "string",
-         "number"
-        ],
-        "maxLength": 120
+        "type": "string",
+        "maxLength": 44
        }
       },
       "required": [
@@ -620,7 +609,8 @@
    },
    "required": [
     "component",
-    "id"
+    "id",
+    "stats"
    ],
    "metadata": {
     "extensions": {
@@ -629,8 +619,14 @@
       "group": "data",
       "name": "Stat strip",
       "use": "at the top of a dashboard, for its headline numbers",
-      "use_when": [],
-      "avoid_when": [],
+      "use_when": [
+       "a report or account page that opens with two to four totals before the detail"
+      ],
+      "avoid_when": [
+       "one number tracked against a limit or goal: use budget-meters or savings-goal",
+       "numbers over time: use bar-chart",
+       "a share of a whole split into parts: use donut-breakdown"
+      ],
       "tags": [
        "kpi",
        "stats",

@@ -8,7 +8,7 @@
 
    <od-chat data-catalog="/system/smart-ui/catalog.json" data-placeholder="Ask about your billing"></od-chat>
    (needs od-surface.js loaded) */
-import { announce } from "./od-surface.js";
+import { announce, datesInText } from "./od-surface.js";
 
 const SID = Math.random().toString(36).slice(2, 10);
 
@@ -131,7 +131,7 @@ class ODChat extends HTMLElement {
     }
     if (ev.type === "text") {
       if (!state.text) { state.text = el("p", "od-chat-bot"); state.turn.prepend(state.text); }
-      state.text.textContent = ev.text;
+      state.text.textContent = datesInText(ev.text, document.documentElement.lang);
     } else if (ev.type === "skeleton" && !state.surface) {
       const s = document.createElement("od-surface");
       s.catalog = this.catalog;
@@ -144,7 +144,7 @@ class ODChat extends HTMLElement {
 
   show(r, early) {
     const turn = el("div", "od-chat-turn");
-    if (r.text) turn.append(el("p", "od-chat-bot", r.text));
+    if (r.text) turn.append(el("p", "od-chat-bot", datesInText(r.text, document.documentElement.lang)));
     if (r.answer) {
       const s = document.createElement("od-surface");
       s.catalog = this.catalog;

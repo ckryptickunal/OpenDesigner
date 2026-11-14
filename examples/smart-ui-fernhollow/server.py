@@ -56,7 +56,8 @@ class App:
         def deco(fn):
             ACTIONS[fn.__name__] = {"description": (fn.__doc__ or "").strip(), "changes": changes, "fn": in_words(fn),
                                     "method": method, "path": path,
-                                    "params": {k: v for k, v in getattr(fn, "params", {}).items()}}
+                                    "params": {k: v for k, v in getattr(fn, "params", {}).items()},
+                                    "consequences": list(getattr(fn, "consequences", []))}
             return fn
         return deco
 
@@ -77,6 +78,15 @@ def params(**p):
     return deco
 
 
+def warns(*lines):
+    """What a change does that the person must read before saying yes. Smart UI's validator refuses an approval prompt
+    for this action that leaves any of these out (R3)."""
+    def deco(fn):
+        fn.consequences = lines
+        return fn
+    return deco
+
+
 def _reg(v):
     return str(v or "").replace(" ", "").upper()
 
@@ -88,6 +98,15 @@ def _office(office):
 
 def _application(reference):
     return next((x for x in DATA["applications"] if x["reference"].lower() == str(reference).lower()), None)
+
+
+def _terms(f):
+    """For an unpaid notice: what paying today costs, the discount's last day and the last day to challenge, in words."""
+    if f["status"] != "Unpaid":
+        return {"to_pay_now": "Nothing, it is paid"}
+    day = lambda iso: (lambda d: f"{d.strftime('%A')} {d.day} {d.strftime('%B %Y')}")(datetime.date.fromisoformat(iso))
+    return {"to_pay_now": _due(f), "discounted_amount": f["discounted_amount"], "discount_ends": day(f["discount_until"]),
+            "challenge_until": day(f["can_challenge_until"])}
 
 
 def _due(f):
@@ -118,6 +137,7 @@ def renewal_quote():
 
 
 @app.post("/api/account/permit/renew")
+@warns("Your card on file is charged today.")
 @params(length="12 months or 6 months")
 def renew_permit(length="12 months"):
     """Renew the resident's parking permit for 6 or 12 months and charge the card on file. Takes a payment."""
@@ -135,9 +155,9 @@ def renew_permit(length="12 months"):
 @app.get("/api/fines")
 @params(vehicle="a vehicle registration such as AB12 CDE (default: the resident's permit vehicle)")
 def list_fines(vehicle=""):
-    """Every penalty charge notice (parking fine) for one vehicle, newest first: reference, date, place, amount, whether it is paid, and what paying today would cost (the lower amount while the 14-day discount lasts)."""
+    """Every penalty charge notice (parking fine) for one vehicle, newest first: reference, date, place, reason, full amount, whether it is paid and, for an unpaid one, the lower amount and the day the discount ends, the last day to challenge it, and what paying today costs."""
     reg = _reg(vehicle or DATA["permit"]["vehicle"])
-    rows = [{**{k: f[k] for k in ("reference", "date", "location", "amount", "status")}, "to_pay_now": _due(f)}
+    rows = [{**{k: f[k] for k in ("reference", "date", "time", "location", "contravention", "amount", "status")}, **_terms(f)}
             for f in DATA["fines"] if _reg(f["vehicle"]) == reg]
     return {"vehicle": vehicle or DATA["permit"]["vehicle"], "fines": rows, "unpaid": sum(1 for f in rows if f["status"] == "Unpaid")}
 
@@ -150,10 +170,11 @@ def get_fine(reference, vehicle=""):
     if not f or (vehicle and _reg(vehicle) != _reg(f["vehicle"])):
         return _not_found("penalty charge notice", f"We can't find a penalty charge notice {reference}" + (f" for {vehicle}" if vehicle else "") + ".",
                           "Check the reference on the notice: it starts with FH and has 8 numbers. Then check the registration.")
-    return {"fine": f, "to_pay_now": _due(f)}
+    return {"fine": {**f, **_terms(f)}}
 
 
 @app.post("/api/fines/<reference>/pay")
+@warns("Paying closes the notice. You can no longer challenge it.")
 @params(reference="the penalty charge notice to pay now with the card on file")
 def pay_fine(reference):
     """Pay one unpaid penalty charge notice now with the card on file, at the lower amount while the 14-day discount lasts. Takes a payment."""
@@ -202,7 +223,7 @@ def book_appointment(office, slot, service="Show documents for a parking permit"
 @app.get("/api/applications/<reference>")
 @params(reference="an application reference such as RP-2026-0418 (the resident has one open)")
 def application_status(reference="RP-2026-0418"):
-    """Where an application is: its steps (submitted, checked, decision, permit sent) with dates, the current step and what it is waiting for."""
+    """Where an application is: its steps (submitted, checked, waiting for a document, decision, permit sent) with dates, the current step and what it is waiting for."""
     a = _application(reference)
     if not a:
         return _not_found("application", f"We can't find an application {reference}.", "The reference is on the email we sent when you applied. It starts with RP-.")

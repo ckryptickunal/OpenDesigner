@@ -81,7 +81,16 @@ export function fmt(v, locale) {
       return new Intl.DateTimeFormat(locale || undefined, opts).format(date);
     }
   }
-  return String(v);
+  return datesInText(String(v), locale);
+}
+
+/** "Uploaded on 2026-11-03" -> "Uploaded on 3 Nov 2026": a date inside a sentence or a cell reads like the rest of it. */
+export function datesInText(t, locale) {
+  return t.replace(/\b(\d{4})-(\d{2})-(\d{2})\b(?![T:\d])/g, (all, y, mo, d) => {
+    const date = new Date(Date.UTC(+y, +mo - 1, +d));
+    return isNaN(date) || date.getUTCMonth() !== +mo - 1 ? all
+      : new Intl.DateTimeFormat(locale || undefined, { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }).format(date);
+  });
 }
 
 export class ODSurface extends (G.HTMLElement || class {}) {
@@ -276,6 +285,7 @@ export class ODSurface extends (G.HTMLElement || class {}) {
         continue;
       }
       this.fillAction(el, a, p, compId, ctx.itemName, partial);
+      for (let n = el; n && n !== scope; n = n.parentElement) if (n.hidden && !n.hasAttribute("data-od-template")) n.hidden = false;  // an optional action, shown once filled
     }
     for (const el of marked(scope, "[data-od-list]")) {
       const name = el.dataset.odList, items = Array.isArray(data[name]) ? data[name] : [], p = props[name] || {};
