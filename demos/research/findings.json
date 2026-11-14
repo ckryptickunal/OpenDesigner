@@ -1,0 +1,25 @@
+{
+  "brief": "pharmacists in small chemist shops, 30 to 55, at a counter all day, on Android tablets",
+  "date": "2026-11-13",
+  "tools": {"used": ["web-search", "browser"], "missing": ["last30days", "mobbin", "deep-research", "analytics"]},
+  "sources": [
+    {"id": "S1", "title": "Use window size classes (Android Developers)", "url": "https://developer.android.com/develop/ui/compose/layouts/adaptive/use-window-size-classes", "kind": "article", "accessed": "2026-11-13"},
+    {"id": "S2", "title": "Build adaptive navigation (Android Developers)", "url": "https://developer.android.com/develop/ui/compose/layouts/adaptive/build-adaptive-navigation", "kind": "article", "accessed": "2026-11-13"},
+    {"id": "S3", "title": "Understanding SC 2.5.8 Target Size (Minimum), W3C WAI", "url": "https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html", "kind": "article", "accessed": "2026-11-13"},
+    {"id": "S4", "title": "Material Design 3 in Compose (Android Developers)", "url": "https://developer.android.com/develop/ui/compose/designsystems/material3", "kind": "article", "accessed": "2026-11-13"},
+    {"id": "S5", "title": "The owner, in the sketch", "url": "person, 2026-11-13", "kind": "person"}
+  ],
+  "findings": [
+    {"id": "F1", "topic": "who", "text": "The users are pharmacists aged about 30 to 55 working in small chemist shops.", "confidence": "reported", "sources": ["S5"]},
+    {"id": "F2", "topic": "context", "text": "They stand at a counter all day and use the app between customers.", "confidence": "reported", "sources": ["S5"], "signals": ["all-day-work"]},
+    {"id": "F3", "topic": "platform", "text": "Android groups 97% of tablets in landscape as expanded width (840 to 1200 dp), so the counter layout should be designed at that size first.", "confidence": "measured", "sources": ["S1"]},
+    {"id": "F4", "topic": "platform", "text": "On expanded windows Android recommends a navigation rail beside the content instead of a bottom bar, because it is easier to reach while holding the sides.", "confidence": "reported", "sources": ["S2"], "signals": ["familiar-patterns"]},
+    {"id": "F5", "topic": "accessibility", "text": "WCAG 2.2 asks for pointer targets of at least 24 by 24 CSS pixels, for people with physical impairments who cannot hit small, close buttons.", "confidence": "measured", "sources": ["S3"]}
+  ],
+  "apps": [],
+  "patterns": ["a navigation rail on tablets"],
+  "market": {
+    "systems": [{"name": "Material Design 3", "why": "the platform's own published system; Android users already know its components", "url": "https://developer.android.com/develop/ui/compose/designsystems/material3", "sources": ["S4"]}]
+  },
+  "open_questions": ["Which competitor products are on the counter today? Not searched in this example run."]
+}

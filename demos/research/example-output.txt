@@ -1,0 +1,102 @@
+
+== 1. Sketch
+This is a sketch: every part works, and most choices are still defaults. Zoom into any area later (see the Zoom lines in DESIGN.md).
+
+== 2. Plan the research
+Next: one message to the person: the users line, the searches and the kinds of sites (studies, statistics, reviews, forums). One yes covers the whole run. Then research without stopping, save the findings as research/users.json, and run: engine.py research add <file>.
+Then: research.py coverage (what is still missing from the complete list), research.py stakeholders scan (who has a say, from the repo) and research.py summary (one page for the team).
+
+== 3. Save findings
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+Saved 5 finding(s) from 5 source(s): opendesigner/research/users.json and opendesigner/research/users.md.
+  warning: no finding on tasks, apps, expectations, preferences, market, voice: say so in open_questions, or search again
+
+== 4. Coverage
+Design research, against the complete list:
+  partial  Users and their tasks: 2 finding(s) on context, who. Next: search for tasks
+  partial  The competitors' design systems: 0 of 0 competitors measured; 1 published system(s) read. Next: measure 3 more competitor page(s): colours, type, CTA shape (opendesigner-extract)
+  covered  Accessibility needs of the audience: 1 finding(s) on accessibility
+  covered  Platform conventions: 2 finding(s) on platform
+  missing  Content and voice: 0 finding(s)
+  not yet  The product's own analytics: 0 analytics source(s). Next: the product is not live, so there are no analytics to read
+  missing  Stakeholders. Next: research.py stakeholders scan (it says whether anyone else has a say)
+Fill the gaps with the tools you have, cite each finding, and say plainly which tool is missing.
+
+== 5. Who has a say
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+Stakeholders, read from the repo at <scratch>/proj; saved to opendesigner/research/stakeholders.json
+More than one decision-maker: CODEOWNERS names 3 owners (.github/CODEOWNERS).
+  Owner                  not asked  1 sign(s)
+      CODEOWNERS names 3 owner(s) for 3 path rule(s): @counterly/design, @counterly/eng, @counterly/legal (.github/CODEOWNERS)
+  Product                not asked  no sign in the repo
+  Engineering            not asked  3 sign(s)
+      1 file(s) that this role usually owns (package.json)
+      CODEOWNERS: * is owned by @counterly/eng (.github/CODEOWNERS)
+      1 person has committed (a count; names stay in git) (git history)
+  Marketing              not asked  no sign in the repo
+  Legal and compliance   not asked  3 sign(s)
+      1 file(s) that this role usually owns (docs/TERMS.md)
+      CODEOWNERS: /docs/legal/ is owned by @counterly/legal (.github/CODEOWNERS)
+      package.json declares the licence UNLICENSED (package.json)
+  Accessibility          not asked  3 sign(s)
+      the README mentions it: Accessibility (README.md:3)
+      the README mentions it: We aim for WCAG 2.2 AA. (README.md:4)
+      1 issue(s) about it, by title or label (issues.json)
+  Support                not asked  1 sign(s)
+      the README mentions it: Support (README.md:5)
+  Brand and design       not asked  2 sign(s)
+      1 file(s) that this role usually owns (brand/logo.svg)
+      CODEOWNERS: /src/ui/ is owned by @counterly/design (.github/CODEOWNERS)
+A sign says a role exists, never what it thinks. Next: ask the person who holds each role (or that nobody does), then research.py stakeholders interview.
+
+== 6. Interviews
+# Counterly: questions for the people who have a say
+
+> Drafted by OpenDesigner for the person to send or answer. Five questions at most per role, in plain words. Send each block as it is (email, chat or a call), and record every answer with who said it: `research.py stakeholders answer <role> <n> --said-by "..." --text "..."`.
+
+## Legal and compliance
+
+For whoever approves claims, licences and regulated words.
+
+1. Is the product regulated (money, health, government, children)?
+2. Which accessibility level must it meet by law or contract: WCAG 2.2 AA, or AA plus some AAA?
+3. Which words or claims need your approval before they ship?
+4. Are there rules for font, image and icon licences?
+
+== 7. Answers
+Marketing: nobody holds this role (no marketing team yet). Its questions are left out of the interviews.
+Recorded Product question 4 (platforms) from Head of product, 2026-11-14: Q-plat-01 = android, web.
+  platforms: one view (also ask Engineering)
+Recorded Engineering question 2 (platforms) from Lead engineer, 2026-11-14: Q-plat-01 = android.
+  platforms: conflict (Product (Head of product): android, web; Engineering (Lead engineer): android)
+Recorded Legal and compliance question 2 (a11y-level) from Compliance officer, 2026-11-14: Q-aud-03 = wcag22-aa.
+  a11y-level: one view (also ask Accessibility)
+Recorded Accessibility question 1 (a11y-level) from Accessibility champion, 2026-11-14: Q-aud-03 = wcag22-aa.
+  a11y-level: agreed
+
+== 8. Agree and differ
+Conflict:
+  platforms      Q-plat-01   Product (Head of product): android, web; Engineering (Lead engineer): android
+Agreed:
+  a11y-level     Q-aud-03    
+
+== 9. Decide
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+Q-aud-03 = wcag22-aa (set_by research, source research/stakeholders.json#a11y-level); from Legal and compliance (Compliance officer, 2026-11-14); Accessibility (Accessibility champion, 2026-11-14).
+platforms: conflict (Product (Head of product): android, web; Engineering (Lead engineer): android). Only the owner settles it: --value <option> --quote "<the owner's words>". The other views stay on record.
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+Q-plat-01 = android (set_by chosen, source research/stakeholders.json#platforms); from Product (Head of product, 2026-11-14); Engineering (Lead engineer, 2026-11-14). The conflict stays on record.
+
+== 10. Summary page
+  DESIGN.md and PRODUCT.md updated (tokens update on the next `generate`)
+wrote opendesigner/research/summary.html: one page to share with the team (an artifact, a screenshot or the file). PRODUCT.md links to it.
+
+== 11. Build, then review
+User research: Stakeholders not asked yet: Owner, Support, Brand and design (research.py stakeholders interview, or stakeholders none <role> --why ...).
+Review: ok
+
+== 12. A solo project skips the interviews
+Stakeholders: solo, not needed (one person commits, no CODEOWNERS with several owners or a team, no team in PRODUCT.md). Saved to opendesigner/research/stakeholders.json. If others do have a say, research.py stakeholders team --why "<the person's words>".
+  not needed Stakeholders: solo: one person commits, no CODEOWNERS with several owners or a team, no team in PRODUCT.md
+
+Open it: <scratch>/proj/opendesigner/research/summary.html

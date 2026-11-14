@@ -18,17 +18,18 @@ No network requests, no dependencies. The shared chrome is repeated in every tem
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]){--c-bg:#111113;--c-surface:#19191c;--c-fg:#ececef;--c-muted:#a3a3ad;--c-border:#303036;--c-strong:#ececef;--c-on-strong:#111113;--c-ok:#4ade80;--c-bad:#f97066;color-scheme:dark}}
 :root[data-theme=dark]{--c-bg:#111113;--c-surface:#19191c;--c-fg:#ececef;--c-muted:#a3a3ad;--c-border:#303036;--c-strong:#ececef;--c-on-strong:#111113;--c-ok:#4ade80;--c-bad:#f97066;color-scheme:dark}
 *{box-sizing:border-box}
+html{scroll-padding-bottom:160px}
 body{margin:0;background:var(--c-bg);color:var(--c-fg);font:14px/1.5 var(--font)}
 h1{font-size:16px;margin:0;font-weight:600}h2{font-size:13px;margin:0 0 8px;font-weight:600;color:var(--c-muted);text-transform:uppercase;letter-spacing:.04em}
 h3{font-size:15px;margin:0;font-weight:600}
 .od-h{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--c-border);background:var(--c-surface)}
-.sub{color:var(--c-muted);font-size:13px;margin:4px 0 0;max-width:72ch}
+.sub{color:var(--c-muted);font-size:13px;margin:4px 0 0;max-width:72ch;overflow-wrap:anywhere}
 main{max-width:1120px;margin:0 auto;padding:20px;display:grid;gap:32px;min-width:0}
 section{min-width:0}
 .kv{font:12px/1.4 var(--mono);color:var(--c-muted)}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 button{font:inherit;min-height:44px;padding:0 14px;border-radius:var(--r);border:1px solid var(--c-border);background:var(--c-surface);color:var(--c-fg);cursor:pointer}
-button.primary{background:var(--c-strong);color:var(--c-on-strong);border-color:var(--c-strong);font-weight:600}
+button.primary{background:var(--c-strong);color:var(--c-on-strong);border-color:var(--c-strong);font-weight:600;font-size:15px}
 :focus-visible{outline:2px solid var(--c-strong);outline-offset:2px}
 input[type=text]{font:inherit;min-height:44px;padding:0 10px;border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-surface);color:var(--c-fg);min-width:0}
 .seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden;background:var(--c-surface)}
@@ -49,12 +50,13 @@ input[type=radio]{accent-color:var(--c-strong);width:18px;height:18px}
 .fam>summary{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between;padding:12px;cursor:pointer;min-height:44px;list-style:none}
 .fam>summary::-webkit-details-marker{display:none}.fam>summary::before{content:"▸";margin-right:4px;color:var(--c-muted)}.fam[open]>summary::before{content:"▾"}
 .fam .in{padding:0 12px 12px;overflow-x:auto}
-.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.sw{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}
 .chip{border:1px solid var(--c-border);border-radius:var(--r);padding:8px;display:grid;gap:4px;font-size:12px;min-width:0}
+.chip.unused{border-style:dashed}
 .chip i{display:block;height:28px;border-radius:4px;border:1px solid rgba(128,128,128,.3)}
-.chip .p{font:11px/1.3 var(--mono);word-break:break-all}
-.unused{opacity:.55}
-.tag{display:inline-block;font:600 11px var(--font);padding:1px 6px;border:1px solid var(--c-border);border-radius:99px;color:var(--c-muted);white-space:nowrap}
+.chip .p{font:12px/1.3 var(--mono);white-space:nowrap}
+.unused .kv,.unused td{color:var(--c-muted)}
+.tag{display:inline-block;font:600 12px var(--font);padding:1px 6px;border:1px solid var(--c-border);border-radius:99px;color:var(--c-muted);white-space:nowrap}
 .tag.bad{border-color:var(--c-bad);color:var(--c-bad)}.tag.ok{border-color:var(--c-ok);color:var(--c-ok)}
 .issue{border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-surface);padding:16px;display:grid;gap:12px;min-width:0}
 .issue.picked{border-color:var(--c-strong)}
@@ -69,17 +71,17 @@ details>summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
 .opt:has(input:checked){border-color:var(--c-strong);box-shadow:inset 0 0 0 1px var(--c-strong)}
 .opt:has(input:focus-visible){outline:2px solid var(--c-strong);outline-offset:2px}
 .opt-t{font-weight:600}.opt-n{color:var(--c-muted);font-size:13px}
-.rec{display:inline-block;margin-left:6px;font:600 11px var(--font);padding:1px 6px;border:1px solid var(--c-border);border-radius:99px;color:var(--c-muted);vertical-align:1px}
+.rec{display:inline-block;margin-left:6px;font:600 12px var(--font);padding:1px 6px;border:1px solid var(--c-border);border-radius:99px;color:var(--c-muted);vertical-align:1px}
 .ba{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
 .pane{position:relative;border:1px solid var(--c-border);border-radius:var(--r);background:var(--s-bg);color:var(--s-fg);font-family:var(--s-font);padding:30px 14px 14px;min-height:120px;overflow-x:auto;min-width:0}
-.pane::before{content:attr(data-label);position:absolute;top:8px;left:12px;font:11px var(--mono);opacity:.7}
+.pane::before{content:attr(data-label);position:absolute;top:8px;left:12px;font:12px var(--mono)}
 .pane .empty{font:13px var(--font);opacity:.7}
-.blk{display:flex;flex-wrap:wrap;gap:6px}.blk span{display:inline-flex;align-items:center;justify-content:center;min-width:64px;height:40px;padding:0 8px;border-radius:6px;font:11px var(--mono)}
+.blk{display:flex;flex-wrap:wrap;gap:6px}.blk span{display:inline-flex;align-items:center;justify-content:center;min-width:64px;height:40px;padding:0 8px;border-radius:6px;font:12px var(--mono)}
 .specbox{border:1px dashed rgba(128,128,128,.7);background:var(--s-surface);display:grid}
 .specbox div{background:rgba(128,128,128,.22);height:14px;border-radius:2px}
 .cmp{display:inline-flex;align-items:center;justify-content:center;background:var(--s-accent);color:var(--s-on-accent);border:1px solid rgba(128,128,128,.4);max-width:100%}
 .cmps{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
-.cmps figure{margin:0;display:grid;gap:4px;justify-items:start;min-width:0}.cmps figcaption{font:10px/1.3 var(--mono);opacity:.75;max-width:180px;overflow-wrap:anywhere}
+.cmps figure{margin:0;display:grid;gap:4px;justify-items:start;min-width:0}.cmps figcaption{font:12px/1.3 var(--mono);max-width:180px;overflow-wrap:anywhere}
 .shadowbox{width:90px;height:56px;border-radius:8px;background:var(--s-surface)}
 .waivewhy{display:none;gap:6px}.issue.waive .waivewhy{display:grid}
 .empty-state{border:1px dashed var(--c-border);border-radius:var(--r);padding:16px;color:var(--c-muted)}
@@ -95,7 +97,7 @@ details>summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
 <p class="verdict" id="verdict"></p>
 <nav class="nav" aria-label="Sections"><a href="#h-sys">Your system</a><a href="#h-dec">Decisions</a><a href="#h-iss">What does not match</a><a href="#h-kept">Kept on purpose and the ledger</a></nav>
 </section>
-<section aria-labelledby="h-sys"><h2 id="h-sys">Your system, and where the code uses it</h2><p class="sub">Each token with the number of times the code uses it. A faded token is never used.</p><div id="fams"></div></section>
+<section aria-labelledby="h-sys"><h2 id="h-sys">Your system, and where the code uses it</h2><p class="sub">Each token with the number of times the code uses it. A token with a dashed border is never used.</p><div id="fams"></div></section>
 <section aria-labelledby="h-dec"><h2 id="h-dec">Decisions</h2><p class="sub">Each answer, how it was set, and whether it changes the tokens or only adds a rule to DESIGN.md.</p><div id="decs" style="overflow-x:auto"></div></section>
 <section aria-labelledby="h-iss"><h2 id="h-iss">What does not match</h2><p class="sub" id="iss-sub"></p><div id="issues" style="display:grid;gap:14px"></div></section>
 <section aria-labelledby="h-kept"><h2 id="h-kept">Kept on purpose, and the ledger</h2><div id="kept" style="display:grid;gap:12px"></div></section>
@@ -160,7 +162,7 @@ function mode(){const t=document.documentElement.dataset.theme;return t==='light
 function look(){const L=D.look||{};const v=Object.assign({},L.light||{},(mode()==='dark'?L.dark:{})||{});return {v,s:L.shared||{}}}
 function paneStyle(el){const {v,s}=look();const set=(k,x)=>{if(x)el.style.setProperty(k,x)};
  for(const k in (D.vars||{}))if(/^--[\w-]+$/.test(k))el.style.setProperty(k,D.vars[k]); // code written with var(--ds-x) draws as in the app
- set('--s-bg',v.bg);set('--s-fg',v.fg);set('--s-surface',v.surface||v.bg);set('--s-accent',v.accent);set('--s-on-accent',v['on-accent']);set('--s-font',s.font)}
+ set('--s-bg',v.bg);set('--s-fg',v.fg);set('--s-surface',v.surface||v.bg);set('--s-accent',v.accent);set('--s-on-accent',v['on-accent'])}
 function px(x){return (typeof x==='number'?x:parseFloat(x))+'px'}
 function nearest(v,steps){return steps.reduce((a,b)=>Math.abs(b-v)<Math.abs(a-v)?b:a)}
 function cssval(raw){const m=String(raw||'').match(/^[\w-]+\s*:\s*(.*)$/);return (m?m[1]:String(raw||'')).replace(/;$/,'')}
@@ -170,7 +172,7 @@ function draw(kind,p,after,el){el.innerHTML='';
  if(after===undefined){add('<p class="empty">Pick an option to see it here.</p>');return}
  if(after===null){add('<p class="empty">Nothing changes: this stays as it is, and the reason goes in the ledger.</p>');return}
  if(kind==='color'){const vals=p.values||[];const w=add('<div class="blk"></div>').firstChild;
-  vals.forEach(x=>{const c=after&&after.color?after.color:x.value;const s=document.createElement('span');s.style.background=c;s.style.color=(lum(c)>.4?'#111':'#fff');s.textContent=(after&&after.color?c:x.value)+' ×'+x.count;w.appendChild(s)});
+  vals.forEach(x=>{const c=after&&after.color?after.color:x.value;const s=document.createElement('span');s.style.background=c;s.style.color=ink(c);s.textContent=(after&&after.color?c:x.value)+' ×'+x.count;w.appendChild(s)});
   const card=add('<div class="specbox" style="padding:12px;gap:6px;margin-top:10px;border-radius:8px"><div></div><div style="width:60%"></div></div>').firstChild;
   card.style.background=after&&after.color?after.color:(vals[0]||{}).value;return}
  if(kind==='space'){const vals=p.values?p.values:[p.value];const w=add('<div style="display:grid;gap:10px"></div>').firstChild;
@@ -194,9 +196,11 @@ function draw(kind,p,after,el){el.innerHTML='';
   (p.variants||[]).forEach(x=>{const props=after&&after.props?after.props:x.props;const f=document.createElement('figure');const b=document.createElement('span');b.className='cmp';
    b.style.padding='8px 14px';for(const k of ['border-radius','padding','font-size','height','min-height','background','font-weight']){if(props[k])b.style.setProperty(k,props[k])}
    if(!after&&props.background){const h=(props.background.match(/#[0-9a-f]{6}\b|#[0-9a-f]{3}\b/i)||[])[0];b.style.color=h?(lum(h)>.4?'#111':'#fff'):'var(--s-fg)'}
-   b.textContent=p.kind||'item';const cap=document.createElement('figcaption');cap.textContent=x.selector+' ×'+x.count;f.append(b,cap);w.appendChild(f)});return}
+   b.textContent=p.kind||'item';const cap=document.createElement('figcaption');cap.textContent=x.selector+' ×'+x.count;f.append(b,cap);w.appendChild(f);
+   const bg=getComputedStyle(b).backgroundColor.match(/[\d.]+/g);if(bg&&(bg[3]===undefined||+bg[3]>.5))b.style.color=ink('#'+bg.slice(0,3).map(x=>(+x|0).toString(16).padStart(2,'0')).join(''))});return}
  if(kind==='bypass'){add('<p class="empty">'+(after&&after.same?'Looks exactly the same. The difference is in the code: these values now come from the tokens, so a change to the system reaches them.':'Each value is typed in by hand.')+'</p>');return}
 }
+function ink(bg){const x=lum(bg);return (x+.05)/.0566>1.05/(x+.05)?'#111111':'#ffffff'} // the text colour with more contrast on bg
 function lum(h){h=String(h||'#888').replace('#','');if(h.length===3)h=h.split('').map(c=>c+c).join('');if(!/^[0-9a-f]{6}$/i.test(h))return .5;
  const c=[0,2,4].map(i=>parseInt(h.substr(i,2),16)/255).map(v=>v<=0.04045?v/12.92:Math.pow((v+0.055)/1.055,2.4));return .2126*c[0]+.7152*c[1]+.0722*c[2]}
 /* ---------- sections ---------- */
