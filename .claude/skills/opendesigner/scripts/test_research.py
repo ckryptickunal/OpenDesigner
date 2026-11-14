@@ -675,8 +675,17 @@ class Process(unittest.TestCase):
             self.assertIn(f"`{sid}`", r, sid)
         for t in research.TOOL_IDS:
             self.assertIn(f"`{t}`", r, t)
-        self.assertEqual(len(re.findall(r"^\d\. \*\*(Who|Context|Apps|Expectations|Preferences that touch design|Accessibility|Market):\*\*", r,
-                                        flags=re.M)), len(research.TOPICS))
+        self.assertEqual(len(re.findall(r"^\d+\. \*\*(Who|Context|Tasks|Apps|Expectations|Preferences that touch design|Accessibility|Market|"
+                                        r"Platform|Voice):\*\*", r, flags=re.M)), len(research.TOPICS))
+
+    def test_research_md_documents_stakeholders_coverage_and_summary(self):
+        r = self.read("references/research.md")
+        for bit in ("research.py stakeholders scan", "stakeholders interview", "stakeholders answer", "stakeholders decide",
+                    "research.py coverage", "research.py summary", "not asked", "Never average", "--quote"):
+            self.assertIn(bit, r, bit)
+        for role in research.ROLE_IDS:
+            self.assertIn(role, r, role)
+        self.assertIn("research.py stakeholders", self.read("references/zoom.md"))  # SKILL.md is at its size cap; it points to zoom.md
 
     def test_research_md_documents_positioning_and_directions(self):
         r = self.read("references/research.md")
@@ -690,6 +699,218 @@ class Process(unittest.TestCase):
         self.assertIn("| `research` |", self.read("references/rules.md"))
         ext = (SKILL.parent / "opendesigner-extend/SKILL.md").read_text(encoding="utf-8")
         self.assertIn("research.md", ext)
+
+
+def rp(d, *args):
+    return subprocess.run([sys.executable, str(HERE / "research.py"), "--dir", str(d), *args], capture_output=True, text=True, timeout=300)
+
+
+class Stakeholders(unittest.TestCase):
+    """Who has a say: evidence from the repo is never a view; answers keep who said them; conflicts stay; only agreed points or
+    the owner's own words become decisions."""
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.root = tmp.name
+        Path(self.root, ".github").mkdir()
+        Path(self.root, ".github/CODEOWNERS").write_text("* @acme/eng\n/src/ui/ @acme/design\n", encoding="utf-8")
+        Path(self.root, "README.md").write_text("# Acme\n## Accessibility\nWe aim for WCAG 2.2 AA.\n", encoding="utf-8")
+        Path(self.root, "LICENSE").write_text("MIT", encoding="utf-8")
+        Path(self.root, ".env").write_text("SECRET=1", encoding="utf-8")
+        self.d = os.path.join(self.root, "opendesigner")
+        r = run(self.d, "sketch", "--name", "Acme", "--audience", "dense", "--platforms", "web", "--feel", "calm")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
+    def stake(self):
+        return json.loads(Path(self.d, research.STAKE).read_text(encoding="utf-8"))
+
+    def ok(self, *args):
+        r = rp(self.d, *args)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        return r.stdout
+
+    def test_every_interview_is_short_and_maps_to_real_questions(self):
+        qs = e.questions()
+        self.assertEqual(set(research.ROLE_IDS), {"owner", "product", "engineering", "marketing", "legal", "accessibility", "support", "brand"})
+        for role, (_t, _w, items) in research.ROLES.items():
+            self.assertLessEqual(len(items), 5, role)
+            for key, ask, qid in items:
+                if qid:
+                    self.assertIn(qid, qs, f"{role}/{key}")
+        self.assertTrue(research.MULTI <= set(qs))
+
+    def test_scan_reads_the_repo_and_records_no_view(self):
+        out = self.ok("stakeholders", "scan")
+        rec = self.stake()
+        self.assertTrue(rec["roles"]["legal"]["evidence"])
+        self.assertTrue(rec["roles"]["accessibility"]["evidence"])
+        self.assertTrue(any("@acme/design" in x["what"] for x in rec["roles"]["brand"]["evidence"]))
+        self.assertTrue(all(x["status"] == "not asked" and not x["answers"] for x in rec["roles"].values()))
+        self.assertNotIn(".env", json.dumps(rec))
+        self.assertIn("Issues were not read", out)
+        self.assertNotIn("PRODUCT.md", json.dumps(rec["roles"]["product"]))
+
+    def test_answers_need_who_said_them_and_no_contact_details(self):
+        self.ok("stakeholders", "scan")
+        self.assertNotEqual(rp(self.d, "stakeholders", "answer", "product", "4", "--said-by", "", "--text", "web").returncode, 0)
+        self.assertNotEqual(rp(self.d, "stakeholders", "answer", "product", "4", "--said-by", "pm@acme.example", "--text", "web").returncode, 0)
+        self.assertNotEqual(rp(self.d, "stakeholders", "answer", "product", "4", "--said-by", "PM", "--text", "web", "--value", "tv").returncode, 0)
+        self.assertNotEqual(rp(self.d, "stakeholders", "answer", "product", "1", "--said-by", "PM", "--text", "x", "--value", "web").returncode, 0)
+
+    def test_conflict_stays_until_the_owner_settles_it(self):
+        self.ok("stakeholders", "answer", "product", "4", "--said-by", "Head of product", "--text", "web and iOS", "--value", "web,ios")
+        self.ok("stakeholders", "answer", "engineering", "2", "--said-by", "Lead engineer", "--text", "web only", "--value", "web")
+        p = next(p for p in research.points(self.stake()) if p["key"] == "platforms")
+        self.assertEqual(p["status"], "conflict")
+        self.assertEqual(len(p["views"]), 2)
+        before = self.ok("stakeholders", "show")
+        self.assertIn("Head of product", before)
+        self.assertIn("Lead engineer", before)
+        r = rp(self.d, "stakeholders", "decide", "platforms")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("Only the owner settles it", r.stdout + r.stderr)
+        self.ok("stakeholders", "decide", "platforms", "--value", "web", "--quote", "web first, iOS next year")
+        rec = e.load_state(self.d)["answers"]["Q-plat-01"]
+        self.assertEqual(rec["set_by"], "chosen")
+        self.assertIn("stakeholders.json#platforms", Path(self.d, "decisions.md").read_text(encoding="utf-8"))
+        p = next(p for p in research.points(self.stake()) if p["key"] == "platforms")
+        self.assertEqual((p["status"], len(p["views"])), ("conflict", 2))  # the views stay on record
+        self.assertTrue(p["resolved"])
+
+    def test_agreed_point_becomes_a_research_decision_and_never_overrides_the_person(self):
+        self.ok("stakeholders", "answer", "legal", "2", "--said-by", "Compliance", "--text", "AA by contract", "--value", "wcag22-aa-plus")
+        p = next(p for p in research.points(self.stake()) if p["key"] == "a11y-level")
+        self.assertEqual(p["status"], "one view")
+        self.assertNotEqual(rp(self.d, "stakeholders", "decide", "a11y-level").returncode, 0)
+        self.ok("stakeholders", "answer", "accessibility", "1", "--said-by", "A11y lead", "--text", "AA plus", "--value", "wcag22-aa-plus")
+        self.ok("stakeholders", "decide", "a11y-level")
+        rec = e.load_state(self.d)["answers"]["Q-aud-03"]
+        self.assertEqual((rec["set_by"], e.answer_value(rec)), ("research", "wcag22-aa-plus"))
+        # the person's own different answer is never overwritten by agreement
+        self.assertEqual(run(self.d, "pick", "Q-aud-01", "regular", "--set-by", "chosen", "--quote", "regular please").returncode, 0)
+        self.ok("stakeholders", "answer", "product", "2", "--said-by", "PM", "--text", "all day", "--value", "dense")
+        st = research.load_stake(self.d)
+        # only product asks Q-aud-01: add a second role's view by hand, as if the owner had said it too
+        st["roles"]["owner"]["answers"].append({"n": 9, "key": "use", "question": "Q-aud-01", "text": "dense", "value": "dense",
+                                                "said_by": "Owner", "how": "person", "date": "2026-11-13"})
+        Path(self.d, research.STAKE).write_text(json.dumps(st), encoding="utf-8")
+        r = rp(self.d, "stakeholders", "decide", "use")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("already holds the person's own answer", r.stdout + r.stderr)
+
+    def test_agreement_with_the_persons_own_answer_keeps_it_as_theirs(self):
+        self.assertEqual(run(self.d, "pick", "Q-aud-03", "wcag22-aa", "--set-by", "chosen", "--quote", "AA is enough").returncode, 0)
+        self.assertEqual(run(self.d, "set", "answers.Q-plat-01", '["web"]', "--set-by", "chosen", "--quote", "web").returncode, 0)
+        for role, n, key, val in (("legal", "2", "a11y-level", "wcag22-aa"), ("accessibility", "1", "a11y-level", "wcag22-aa"),
+                                  ("product", "4", "platforms", "web"), ("engineering", "2", "platforms", "web")):
+            self.ok("stakeholders", "answer", role, n, "--said-by", role, "--text", val, "--value", val)
+        self.assertIn("kept as it was", self.ok("stakeholders", "decide", "a11y-level"))
+        self.assertIn("kept as it was", self.ok("stakeholders", "decide", "platforms"))  # ["web"] and "web" are the same answer
+        st = e.load_state(self.d)["answers"]
+        self.assertEqual(st["Q-aud-03"]["set_by"], "chosen")
+        self.assertEqual(st["Q-plat-01"]["set_by"], "chosen")
+
+    def test_design_md_links_the_summary_once_the_engine_calls_it(self):
+        if "design_md_note" not in ENGINE.read_text(encoding="utf-8"):
+            self.skipTest("engine.py does not call research.design_md_note yet (S1's PR 127 adds it)")
+        self.ok("summary")
+        self.assertEqual(run(self.d, "design-md").returncode, 0)
+        self.assertIn("research/summary.html", Path(self.root, "DESIGN.md").read_text(encoding="utf-8"))
+
+    def test_team_shown_in_the_repo_gets_interviews(self):
+        out = self.ok("stakeholders", "scan")
+        self.assertIn("More than one decision-maker: CODEOWNERS names 2 owners", out)
+        self.assertEqual(self.stake()["mode"]["mode"], "team")
+        self.assertIn("## Product", self.ok("stakeholders", "interview"))
+
+    def test_solo_project_records_not_needed_and_moves_on(self):
+        Path(self.root, ".github/CODEOWNERS").write_text("* @founder\n", encoding="utf-8")
+        out = self.ok("stakeholders", "scan")
+        self.assertIn("Stakeholders: solo, not needed", out)
+        self.assertEqual(len([ln for ln in out.splitlines() if "Stakeholders" in ln or "not asked" in ln]), 1)  # one line, no role table
+        self.assertEqual(self.stake()["mode"]["mode"], "solo")
+        r = rp(self.d, "stakeholders", "interview")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("solo, not needed", r.stdout + r.stderr)
+        self.assertNotEqual(rp(self.d, "stakeholders", "answer", "product", "4", "--said-by", "PM", "--text", "web").returncode, 0)
+        rows = {r["id"]: r for r in json.loads(self.ok("coverage", "--json"))}
+        self.assertEqual(rows["stakeholders"]["status"], "not needed")
+        self.assertNotIn("Stakeholders not asked yet", run(self.d, "review").stdout)
+        self.assertIn("solo, not needed", Path(self.root, "PRODUCT.md").read_text(encoding="utf-8"))
+        self.ok("summary")
+        self.assertIn("Solo: not needed", Path(self.d, research.SUMMARY).read_text(encoding="utf-8"))
+        # the person says others have a say: their word outranks the repo, and a later scan keeps it
+        self.ok("stakeholders", "team", "--why", "my co-founder decides with me")
+        self.ok("stakeholders", "scan")
+        self.assertEqual(self.stake()["mode"], {**self.stake()["mode"], "mode": "team", "set_by": "person"})
+        self.assertIn("## Owner", self.ok("stakeholders", "interview"))
+
+    def test_interview_before_scan_still_checks_for_solo(self):
+        Path(self.root, ".github/CODEOWNERS").write_text("* @founder\n", encoding="utf-8")
+        r = rp(self.d, "stakeholders", "interview")
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("solo, not needed", r.stdout + r.stderr)
+        self.assertNotIn("Stakeholders not asked yet", run(self.d, "review").stdout)
+
+    def test_person_says_solo_over_a_repo_team(self):
+        self.ok("stakeholders", "solo", "--why", "I decide alone; the others are contractors")
+        self.ok("stakeholders", "scan")  # CODEOWNERS names two owners, but the person's word stays
+        self.assertEqual((self.stake()["mode"]["mode"], self.stake()["mode"]["set_by"]), ("solo", "person"))
+        self.assertNotEqual(rp(self.d, "stakeholders", "interview").returncode, 0)
+
+    def test_a_team_in_product_md_or_a_team_size_counts(self):
+        Path(self.root, ".github/CODEOWNERS").write_text("* @acme/design-team\n", encoding="utf-8")
+        self.assertIn("names a team, @acme/design-team", research.team_signals(e, self.root, e.merge_defaults(e.load_state(self.d)))[0])
+        Path(self.root, ".github/CODEOWNERS").write_text("* @founder\n", encoding="utf-8")
+        prod = Path(self.root, "PRODUCT.md")
+        prod.write_text("# Acme\n\n## Team and Governance\n\nNot recorded yet (Q-scope-03, Q-scope-04, Q-gov-01).\n", encoding="utf-8")
+        self.assertEqual(research.team_signals(e, self.root, e.merge_defaults(e.load_state(self.d))), [])  # the engine's default line
+        prod.write_text("# Acme\n\n## Team and Governance\n\n<!-- od:keep -->Three designers and our CTO<!-- /od:keep -->\n", encoding="utf-8")
+        self.assertIn("PRODUCT.md names a team", research.team_signals(e, self.root, e.merge_defaults(e.load_state(self.d)))[0])
+        prod.unlink()
+        st = e.load_state(self.d)
+        st.setdefault("context", {})["team"] = "Two designers and four engineers"
+        e.dump_json(os.path.join(self.d, e.STATE_FILE), st)
+        self.assertEqual(research.team_signals(e, self.root, e.merge_defaults(e.load_state(self.d)))[0][:24], "PRODUCT.md names a team:")
+        st["context"]["team"] = ""
+        e.dump_json(os.path.join(self.d, e.STATE_FILE), st)
+        self.assertEqual(research.team_signals(e, self.root, e.merge_defaults(e.load_state(self.d))), [])
+        self.assertEqual(run(self.d, "pick", "Q-scope-04", "size-3-5", "--set-by", "chosen", "--quote", "five of us").returncode, 0)
+        self.assertTrue(research.team_signals(e, self.root, e.merge_defaults(e.load_state(self.d))))
+
+    def test_none_and_not_asked(self):
+        self.ok("stakeholders", "none", "marketing", "--why", "no marketing team")
+        pts = {p["key"]: p for p in research.points(self.stake())}
+        self.assertNotIn("claim", pts)  # only marketing asks it, and nobody holds that role
+        self.assertEqual(pts["voice"]["status"], "not asked")
+        self.assertEqual(pts["voice"]["roles"], ["brand"])
+        out = self.ok("stakeholders", "interview")
+        self.assertNotIn("## Marketing", out)
+        self.assertTrue(all(len(re.findall(r"^\d\. ", block, re.M)) <= 5 for block in out.split("## ")[1:]))
+
+    def test_coverage_summary_product_md_and_review(self):
+        out = self.ok("coverage")
+        self.assertIn("missing  Users and their tasks", out)
+        self.assertIn("missing  Stakeholders", out)
+        self.assertEqual(run(self.d, "research", "add", str(EXAMPLE)).returncode, 0)
+        rows = {r["id"]: r for r in json.loads(self.ok("coverage", "--json"))}
+        self.assertEqual(rows["users"]["status"], "partial")  # the example has no finding on tasks
+        self.assertIn("tasks", rows["users"]["next"])
+        self.assertEqual(rows["voice"]["status"], "missing")
+        self.assertIn(rows["analytics"]["status"], ("blocked", "not yet", "missing"))
+        self.ok("stakeholders", "scan")
+        self.ok("stakeholders", "answer", "legal", "2", "--said-by", "Compliance", "--text", "AA <b>", "--value", "wcag22-aa")
+        self.ok("summary")
+        page = Path(self.d, research.SUMMARY).read_text(encoding="utf-8")
+        self.assertIn("Compliance", page)
+        self.assertIn("AA &lt;b&gt;", page)  # escaped
+        self.assertNotIn("<script src", page)
+        self.assertIn("prefers-color-scheme:dark", page)
+        self.assertIn("research/summary.html", Path(self.root, "PRODUCT.md").read_text(encoding="utf-8"))
+        self.assertIn("summary.html", research.design_md_note(e.merge_defaults(e.load_state(self.d))))
+        rv = run(self.d, "review").stdout
+        self.assertIn("Stakeholders not asked yet", rv)
 
 
 if __name__ == "__main__":
