@@ -429,6 +429,201 @@ class Live(unittest.TestCase):
         self.assertGreater(r["waited"], 400)
         self.assertLess(r["waited"], 2000)
 
+    # ---- craft and copy: one of every planted defect in craft-bad.html, none in craft-good.html ------------------
+    CRAFT_NEW = ("ST-12", "ST-13", "ST-14", "MS-21", "MS-22", "MS-23", "MS-24", "CP-01", "CP-02", "CP-03", "CP-04")
+
+    def craft_probe(self, name, w=1280, stress=None):
+        pg = _browser.new_page(viewport={"width": w, "height": 800})
+        self.addCleanup(pg.close)
+        pg.goto(f"http://localhost:{self.port}/{name}")
+        pg.wait_for_timeout(200)
+        pg.evaluate(PROBE)
+        if stress:
+            pg.evaluate(f"__od.stress('{stress}', true)")
+        return pg.evaluate("__od.probe()")
+
+    def test_craft_defects_are_measured_on_the_bad_page(self):          # ST-12, ST-13, MS-21 to MS-24
+        c = self.craft_probe("craft-bad.html")["craft"]
+        ids = lambda k: {x["sel"].split("#")[-1] for x in c[k]}
+        self.assertEqual(ids("spill"), {"spill"})
+        self.assertEqual(ids("hiddenByParent"), {"clipped-by-parent"})
+        self.assertEqual(ids("truncated"), {"ellipsis-h", "clamp-btn"})
+        self.assertEqual(ids("orphans"), {"orphan-h"})
+        self.assertEqual(c["orphans"][0]["word"], "system")
+        self.assertEqual({x["sel"].split("#")[-1] for x in c["tight"] if x["kind"] == "text"}, {"tight-b"})
+        self.assertEqual(ids("touching"), {"touch"})
+        self.assertEqual(ids("insetVsGap"), {"inset-card"})
+        self.assertEqual(c["insetVsGap"][0]["inset"], 6)
+        self.assertIn("uneven", ids("siblings"))
+        self.assertEqual({m["sel"].split("#")[-1] for m in c["measure"] if m["ch"] < 45 or m["ch"] > 75}, {"wide", "narrow"})
+        for k in ("spill", "orphans", "touching"):
+            self.assertTrue(all(set(x["box"]) == {"x", "y", "w", "h"} for x in c[k]), k)
+
+    def test_craft_and_copy_findings_on_the_bad_page(self):             # every new case fires once
+        fs = rv.Findings()
+        rv.check_probe(self.craft_probe("craft-bad.html"), None, fs)
+        got = {f["case"] for f in fs.done()}
+        for case in set(self.CRAFT_NEW) - {"ST-14"}:
+            self.assertIn(case, got)
+        fs = rv.Findings()
+        rv.check_probe(self.craft_probe("craft-bad.html", 1280, "translate"), None, fs)
+        self.assertIn("ST-14", {f["case"] for f in fs.done()})
+
+    def test_the_good_page_has_no_craft_or_copy_finding(self):          # at 320 and 1280, 200% text, +30% words
+        for w, stress in ((1280, None), (320, None), (320, "text200"), (320, "translate"), (1280, "textSpacing")):
+            fs = rv.Findings()
+            rv.check_probe(self.craft_probe("craft-good.html", w, stress), None, fs)
+            bad = [(f["case"], f["title"], f["measured"]) for f in fs.done() if f["case"] in self.CRAFT_NEW
+                   or (f["case"] in ("MS-07", "MS-17") and f["severity"] != "info") or f["case"] == "ST-06"]
+            self.assertEqual(bad, [], f"{w} px {stress}")
+
+    def test_translate_stress_grows_words_without_spaces_and_puts_them_back(self):    # ST-14
+        pg = self.page()
+        pg.set_content("<p id=a>Save changes now</p>")
+        pg.evaluate(PROBE)
+        r = pg.evaluate("__od.stress('translate', true)")
+        grown = pg.evaluate("a.textContent")
+        self.assertEqual(r["changed"], 1)
+        self.assertEqual(grown.count(" "), 2)
+        self.assertGreaterEqual(len(grown), round(len("Save changes now") * 1.3))
+        pg.evaluate("__od.stress('translate', false)")
+        self.assertEqual(pg.evaluate("a.textContent"), "Save changes now")
+
+    # ---- the S5 library-page problems (MS-22, MS-25 to MS-27, ST-15) ----------------------------------------------------
+    def test_library_page_problems_are_measured(self):
+        c = self.craft_probe("craft-bad.html")["craft"]
+        touching = {x["sel"].split("#")[-1] for x in c["tight"] if x["kind"] == "boxes-touching"}
+        self.assertTrue({"gap0-b", "rad-a"} <= touching, touching)
+        self.assertIn("cap", {x["sel"].split("#")[-1] for x in c["tight"] if x["kind"] == "caption"})
+        self.assertTrue({10, 2} <= {i["radius"] for x in c["radii"] for i in x["items"]})
+        self.assertEqual([x["sel"] for x in c["monoProse"]], ["p#mono"])
+        self.assertEqual([x["sel"] for x in c["brokenUrls"]], ["p#url"])
+        self.assertEqual([(x["control"], x["sel"]) for x in c["twins"]], [("copy", "div#twin-missing")])
+        g = self.craft_probe("craft-good.html")["craft"]
+        for k in ("radii", "monoProse", "brokenUrls", "twins"):
+            self.assertEqual(g[k], [], k)
+        self.assertEqual([x for x in g["tight"] if x["kind"] != "text"], [])
+
+    # ---- states: slow network, empty, failing and offline data, the not-found page, long names, no images ---------------
+    def states_for(self, name):
+        import capture
+        pg = self.page()
+        pg.goto(f"http://localhost:{self.port}/{name}")
+        capture.settle(pg)
+        probe = pg.evaluate(PROBE)
+        with tempfile.TemporaryDirectory() as d:
+            capture.network_states(pg, Path(d), "t", probe)
+            doc = json.loads((Path(d) / "datastates" / "t.json").read_text())
+        F = rv.Findings()
+        rv.check_datastates(doc, F)
+        return doc, {(f["case"], f["severity"], f["title"]) for f in F.done()}
+
+    def test_data_states_done_badly_are_found(self):                       # ST-16, ST-17
+        doc, got = self.states_for("states-bad.html")
+        self.assertEqual(doc["requests"], 1)
+        self.assertIn(("ST-16", "error", "Broken text when the data is failing with a server error"), got)
+        self.assertIn(("ST-16", "error", "Broken text when the data is unreachable (offline)"), got)
+        self.assertIn(("ST-16", "warn", "No message when the data is empty"), got)
+        self.assertIn(("ST-16", "warn", "No loading sign while the data is on its way"), got)
+        self.assertTrue(any(g[0] == "ST-17" for g in got), doc["slow"])
+
+    def test_data_states_done_right_are_quiet(self):
+        doc, got = self.states_for("states-good.html")
+        self.assertEqual(doc["requests"], 1)
+        self.assertEqual({g for g in got if g[0] in ("ST-16", "ST-17") and g[1] != "info"}, set(), doc)
+
+    def test_the_not_found_page_is_read(self):                             # ST-18
+        import capture
+        with tempfile.TemporaryDirectory() as d:
+            log = []
+            capture.not_found(_browser, f"http://localhost:{self.port}/", Path(d), log)
+            bad = json.loads((Path(d) / "notfound" / "not-found.json").read_text())
+        F = rv.Findings()
+        rv.check_notfound(bad, F)
+        titles = {f["title"] for f in F.done()}
+        self.assertEqual(bad["status"], 404)
+        self.assertIn("The not-found page offers no way on", titles)        # the bare server page: "Error response", no links
+        self.assertIn("The not-found page says a code, not what happened", titles)
+        fixtures = HERE / "fixtures"
+
+        class Friendly(http.server.SimpleHTTPRequestHandler):
+            def __init__(self, *a, **k):
+                super().__init__(*a, directory=str(fixtures), **k)
+
+            def send_error(self, code, message=None, explain=None):
+                if code != 404:
+                    return super().send_error(code, message, explain)
+                body = (fixtures / "404.html").read_bytes()
+                self.send_response(404)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+            def log_message(self, *a):
+                pass
+        srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Friendly)
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+        self.addCleanup(srv.server_close)
+        self.addCleanup(srv.shutdown)
+        with tempfile.TemporaryDirectory() as d:
+            capture.not_found(_browser, f"http://localhost:{srv.server_address[1]}/", Path(d), [])
+            good = json.loads((Path(d) / "notfound" / "not-found.json").read_text())
+        F = rv.Findings()
+        rv.check_notfound(good, F)
+        self.assertEqual(F.done(), [], good)
+
+    def test_long_names_and_missing_images_stress_and_put_back(self):     # ST-19
+        pg = self.page()
+        pg.set_content("<div style='width:200px'><h3 id=n>Ana</h3><img id=i src='data:image/gif;base64,R0lGODlhAQABAAAAACw=' width=10 height=10 alt=''></div>")
+        pg.evaluate(PROBE)
+        self.assertEqual(pg.evaluate("__od.stress('longNames', true)")["changed"], 1)
+        self.assertEqual(len(pg.evaluate("n.textContent")), 200)
+        pg.evaluate("__od.stress('longNames', false)")
+        self.assertEqual(pg.evaluate("n.textContent"), "Ana")
+        before = pg.evaluate("i.getAttribute('src')")
+        pg.evaluate("__od.stress('noImages', true)")
+        self.assertNotEqual(pg.evaluate("i.getAttribute('src')"), before)
+        pg.evaluate("__od.stress('noImages', false)")
+        self.assertEqual(pg.evaluate("i.getAttribute('src')"), before)
+        fs = rv.Findings()
+        rv.check_probe(self.craft_probe("craft-bad.html", 1280, "longNames"), None, fs)
+        self.assertIn("ST-19", {f["case"] for f in fs.done()})
+        for stress in ("longNames", "noNames", "noImages"):                # the good page holds up
+            fs = rv.Findings()
+            rv.check_probe(self.craft_probe("craft-good.html", 375, stress), None, fs)
+            self.assertEqual([(f["title"], f["measured"]) for f in fs.done() if f["case"] == "ST-19" and f["severity"] != "info"], [], stress)
+
+    def test_screen_reader_text_and_faded_tooltips_are_not_judged(self):      # MS-15, MS-04 (S6 report)
+        pg = self.page()
+        pg.set_content("""<style>.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:normal}
+          .tip{opacity:0;background:#222428;color:#222428;position:absolute}</style>
+          <button style="width:40px"><svg width=16 height=16></svg><span class=sr>Save to favourites</span></button>
+          <div style="position:relative"><span class=tip>Revenue 4,200</span><p>Chart</p></div>""")
+        p = pg.evaluate(PROBE)
+        self.assertEqual(p["labels"]["broken"], [])
+        self.assertFalse([c for c in p["contrast"]["failing"] if c["fg"] == c["bg"]])
+
+    def test_missing_names_and_pictures_that_collapse_are_measured(self):     # ST-19
+        pg = self.page()
+        pg.set_content("<ul><li class=item><strong style='display:block'>Ana Ruiz</strong><img src='x.png' alt=''><span>Admin</span></li></ul>")
+        pg.evaluate(PROBE)
+        pg.evaluate("__od.stress('noNames', true)")
+        self.assertEqual([x["sel"].split(" > ")[-1] for x in pg.evaluate("__od.probe()")["craft"]["collapsedNamed"]], ["strong"])
+        pg.evaluate("__od.stress('noNames', false)")
+        pg.evaluate("__od.stress('noImages', true)")
+        self.assertTrue(pg.evaluate("__od.probe()")["craft"]["collapsedImages"])
+        pg.set_content("<ul><li class=item><strong style='display:block;min-height:1.5em'>Ana</strong><img src='x.png' alt='' width=40 height=40></li></ul>")
+        pg.evaluate(PROBE)
+        pg.evaluate("__od.stress('noImages', true)")
+        self.assertEqual(pg.evaluate("__od.probe()")["craft"]["collapsedImages"], [])
+
+    def test_the_bad_page_at_320_px_and_200_percent_text(self):              # ST-12 as an error with 200% text
+        fs = rv.Findings()
+        rv.check_probe(self.craft_probe("craft-bad.html", 320, "text200"), None, fs)
+        sev = {f["severity"] for f in fs.done() if f["case"] == "ST-12"}
+        self.assertIn("error", sev)
+
 
 def png_size(data):
     import struct

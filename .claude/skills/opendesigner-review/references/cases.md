@@ -2,7 +2,7 @@
 
 Generated from `synthesis/review-cases.json` by `tools/build_data.py`. Edit the source, not this file.
 
-78 cases in 7 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
+97 cases in 8 groups. **How known** is the strongest way a case can be checked: *measured* (a number read from the page), *operated* (you did it and saw the result) or *seen* (you looked). Cases marked *inferred* rest on reasoning more than on a cited source. `review.py cases` prints this list filtered to the page in front of you.
 
 ## You only looked at part of it
 
@@ -292,7 +292,7 @@ Sources: S-R5-035, S-R5-036, S-R5-097
 
 **Why it is missed.** A glance sees text and moves on.
 
-**How to catch it.** The probe scans visible text for undefined, NaN, [object Object] and lorem ipsum (as the ui-review skill does) plus its own patterns, null, {{ }} and TODO (content.placeholders). Read every hit: it usually means data did not arrive or a template did not render.
+**How to catch it.** The probe scans visible text for undefined, NaN, [object Object] and lorem ipsum (as the ui-review skill does) plus its own patterns, null, {{ }} and TODO (content.placeholders). Read every hit: it usually means data did not arrive or a template did not render. Since 2026-11-13 it also matches Lorem on its own, dolor sit amet, TBD, XXX, "Click here" and "Your text here".
 
 Sources: S-R5-029, S-R5-021
 
@@ -351,6 +351,94 @@ Sources: S-R5-104
 
 Sources: S-R5-104
 
+### ST-12 Text runs out of its box or is cut off by the box around it
+*How known: measured · default severity: error · applies to: always · WCAG 1.4.4, 1.4.10, 1.4.12*
+
+**What goes wrong.** A label, heading or line of copy is wider or taller than the box it sits in: with overflow visible it runs over its neighbours, and inside a parent with overflow: hidden the end of it is cut away. It fits on the designer's screen and breaks at 320 px, at 200% text, or with a longer word.
+
+**Why it is missed.** Nothing is clipped on the element itself, so overflow checks on the element find nothing, and a screenshot at one width shows the version that fits. A cut by a parent leaves no scrollbar and no ellipsis, just a missing end of a word.
+
+**How to catch it.** probe.js measures the line boxes of each element's own text against its box (craft.spill: sideways by more than 1 px, or down by more than half a line) and against the nearest parent that hides overflow (craft.hiddenByParent). Text that scrolls in its own box, sits in a carousel track, is visually hidden for screen readers, is hidden from assistive tech, or sits in a component preview inside a link is left out. review.py reports both as ST-12, an error for headings, buttons and labels and with 200% text or WCAG text spacing, a warning for other text and under the robustness stresses. capture.py saves a crop of each (shots/crops/). Run it at 320 px and with __od.stress('text200') as well as at the designer's width.
+
+Sources: S-R5-040, S-R5-041, S-R5-042, S-R5-109
+
+### ST-13 An ellipsis or line clamp hides words in a heading, button or label
+*How known: measured · default severity: warn · applies to: always · WCAG 1.4.4*
+
+**What goes wrong.** text-overflow: ellipsis or -webkit-line-clamp keeps a heading, button or tab label on one line by cutting off its end. The layout stays tidy and the words that tell people what the thing is are gone, often with the full text only in a title tooltip, which touch screens never show.
+
+**Why it is missed.** An ellipsis looks deliberate, so a reviewer reads it as design. ST-04 treats ellipsis as information, because it is fine on data people can open in full (a file name, a table cell).
+
+**How to catch it.** probe.js lists every element with an ellipsis or line clamp whose content is wider or taller than its box and whose role is a heading, a control or a label (craft.truncated, with how much it needs and how much it shows, and whether a title holds the full text). review.py warns (ST-13) on runs without stress. Fix: let it wrap (text-wrap: balance) or shorten the words.
+
+Sources: S-R5-040, S-R5-057, S-R5-109
+
+### ST-14 Copy that only fits in English
+*How known: measured · default severity: warn · applies to: always · WCAG 1.4.4*
+
+**What goes wrong.** Every label is sized to its English words. A translation or a longer product name makes buttons overflow, headings spill and chips cut off. German compounds are long and cannot wrap at spaces.
+
+**Why it is missed.** Nobody reviews in another language, and the +40% pseudo-localisation adds spaces, so text still wraps where real German would not.
+
+**How to catch it.** __od.stress('translate') makes every word 30% longer with no new spaces, a German stand-in ({grow: 0.5} for more; W3C's table has text over 70 characters growing about 30% and strings under 10 characters growing 200 to 300%). capture.py runs it with the other stress passes, then the probe again: anything that spills or is cut in that run is reported as ST-14. Fix with min-width: 0, overflow-wrap: anywhere, min-height instead of height, and rows that wrap.
+
+Sources: S-R5-035, S-R5-109
+
+### ST-15 One block lacks a control its twins have
+*How known: measured · default severity: warn · applies to: always*
+
+**What goes wrong.** Three code blocks on a page; two have a Copy button and the third does not, because it was written by hand instead of with the component. Or one card of a set has no Download link.
+
+**Why it is missed.** Each block looks finished on its own. Nobody compares them.
+
+**How to catch it.** probe.js groups code blocks (any pre, whatever wraps it) and blocks of the same tag and classes, collects the controls inside each (Copy, Download, Share, Expand, Open, Edit, Delete, Install, Run, View, Try), and lists a control that at least half the group and at least two members have but some lack (craft.twins). review.py warns (ST-15).
+
+Sources: S-R5-112
+
+### ST-16 No loading, empty, error or offline state
+*How known: operated · default severity: warn · applies to: always*
+
+**What goes wrong.** A view that loads data shows a blank screen while it loads, nothing when the account has no data, and "undefined" or a spinner forever when the request fails or the network is down. Only the happy path was ever built or reviewed.
+
+**Why it is missed.** The reviewer's own account has data and a fast connection, so these states never appear. ST-03 asks for them by hand.
+
+**How to catch it.** capture.py (network_states, at the anchor cells) loads each page on a throttled network (400 ms latency, 50 KB/s) and reads it 1 s in: no text and no loading sign is a warning. When the page makes fetch or XHR requests to its own site (the same last two host labels; calls to other sites such as a star counter or analytics are listed and left alone) it then leaves them unanswered for 3 s (no skeleton, spinner, progress bar, aria-busy or "Loading" is a warning), answers them empty (every list emptied) and with a 500, and aborts them with the browser set offline (navigator.onLine false), and reads each: broken template text is an error, a loading sign that never ends (more loading signs than the page shows with its data) is a warning, and no new state words ("no ... yet", "try again" and the like, counted against the page with its data) is a judgment, since the words are a list. A page with no data requests is noted as not applicable. Evidence: one screenshot per state (datastates/).
+
+Sources: S-R5-033, S-R5-111, S-R5-112
+
+### ST-17 Skeletons that do not match what replaces them
+*How known: operated · default severity: warn · applies to: always*
+
+**What goes wrong.** A skeleton or spinner holds a small box, then the real content arrives larger and pushes everything down. On a fast connection nobody sees it.
+
+**Why it is missed.** Layout shift happens while loading, and on a fast local server loading takes a few milliseconds.
+
+**How to catch it.** On the same throttled load, capture.py reads layout shift with __od.vitals() after the load event and the network going quiet (data that lands late counts): CLS over 0.1 is a warning (ST-17) naming the elements that moved. Fix: size each skeleton like its content, and give images width and height or aspect-ratio. It reads the shift, not the skeleton's size: a skeleton the wrong size that shifts nothing passes.
+
+Sources: S-R5-034, S-R5-074, S-R5-112
+
+### ST-18 The not-found page
+*How known: operated · default severity: warn · applies to: always*
+
+**What goes wrong.** A mistyped address shows the server's bare default, a page that answers 200 (a soft 404 to search engines), a heading that says only "404", or no link anywhere to carry on.
+
+**Why it is missed.** Nobody visits a page that does not exist while reviewing the pages that do.
+
+**How to catch it.** capture.py opens an address that cannot exist once per run and records the status, the first heading, the number of links and a screenshot (notfound/). review.py warns (ST-18) when the status is not 404, when there is no heading, when the heading is only a code ("404", "Not Found", "Error response"), and when there are no links. A local static server may not serve the site's own 404 page: run it against the real server too.
+
+Sources: S-R5-110, S-R5-111, S-R5-112
+
+### ST-19 Long names and missing pictures
+*How known: measured · default severity: warn · applies to: always*
+
+**What goes wrong.** A 200-character name, a name that is missing, or a picture that fails to load: the card breaks, the header wraps over the content, and an empty hole sits where the image was.
+
+**Why it is missed.** Sample data has short names and every image loads.
+
+**How to catch it.** __od.stress('longNames') puts a 200-character name in every heading, link, button, label and .name or .title, and __od.stress('noNames') empties each short name in a row, card or list item, and __od.stress('noImages') makes every image fail; capture.py runs both with the other stresses and probes again. Anything that spills or is cut is reported as ST-19, A picture drawn under 4 px wide or tall when it fails, and a name line in a repeated item that drops to no height when empty, are warnings (craft.collapsedImages, craft.collapsedNamed); the no-images screenshot is also a note to look at. ST-04 and ST-14 cover long words and longer translations.
+
+Sources: S-R5-112
+
 ## Eyes cannot read numbers off pixels
 
 ### MS-01 Spacing judged by eye
@@ -360,7 +448,7 @@ Sources: S-R5-104
 
 **Why it is missed.** Vision models make mistakes on simple geometry and their coordinates are approximate, so exact distances cannot be read from a picture [inferred from BlindTest and Anthropic's docs]. Large images are also shrunk before the model sees them.
 
-**How to catch it.** Do not judge spacing by looking. Read space.values from the probe and compare with the system's ladder: review.py check names each off-ladder value, how many times it is used, and the nearest step. To measure one gap exactly, call __od.measure(a, b).
+**How to catch it.** Do not judge spacing by looking. Read space.values from the probe and compare with the system's ladder: review.py check names each off-ladder value, how many times it is used, and the nearest step. To measure one gap exactly, call __od.measure(a, b). With a system, each finding's fix names the spacing token for the nearest step (var(--ds-space-16)). Values on the scale can still sit wrong together: MS-22, MS-23 and MS-24 measure that.
 
 Sources: S-R5-001, S-R5-003, S-R5-030, S-R5-031
 
@@ -426,9 +514,9 @@ Sources: S-R5-046, S-R5-030, S-R5-093, S-R5-094
 
 **Why it is missed.** On a wide screenshot it looks like a paragraph.
 
-**How to catch it.** Read type.longLines and type.lineHeightTight. WCAG 1.4.8 (AAA) says at most 80 characters per line; 45 to 75 is the usual target, without a primary source [inferred]. Body text must survive the WCAG 1.4.12 text-spacing override (line height 1.5). Use text-wrap: pretty on body copy to avoid short last lines, and balance on headings and captions (up to 6 lines in Chromium, 10 in Firefox).
+**How to catch it.** Read type.longLines and type.lineHeightTight. WCAG 1.4.8 (AAA) says at most 80 characters per line; 45 to 75 is the usual target, without a primary source [inferred]. Body text must survive the WCAG 1.4.12 text-spacing override (line height 1.5). Use text-wrap: pretty on body copy to avoid short last lines, and balance on headings and captions (up to 6 lines in Chromium, 10 in Firefox). Since 2026-11-13 the craft pass adds body text (14 to 20 px, wrapped) with a line height under 1.4 as a warning, and body paragraphs of three lines or more outside 45 to 75 characters a line (a short measure only in running text of five lines or more, at 600 px and up), with the system's prose measure and line-height tokens in the fix. Baymard puts the target at 50 to 75.
 
-Sources: S-R5-056, S-R5-057, S-R5-042
+Sources: S-R5-056, S-R5-057, S-R5-042, S-R5-108, S-R5-109
 
 ### MS-08 Color drift from the tokens
 *How known: measured · default severity: warn · applies to: always · tokens*
@@ -536,9 +624,9 @@ Sources: S-R5-103
 
 **Why it is missed.** Half a pixel per pair is invisible in a scaled-down screenshot, and the jump lasts one frame at the end of an animation. Asked to check the kerning, an agent looks and answers without measuring.
 
-**How to catch it.** The probe records tracking in em at every size (type.tracking) and every capital tracked below zero (type.capsTight). review.py reports capitals with negative tracking as an error, and warns when a bigger size is tracked looser than a smaller one or when there are more than four letter-spacing values. __od.kern() finds text split into one span per letter and measures each letter against the same text unsplit, drawn out of sight with the same font and width. capture.py also installs __od.watchKern() before the page loads, which logs the jump when a reveal puts plain text back; more than 0.5 px is reported. preflight.py html reads the same tracking from the CSS.
+**How to catch it.** The probe records tracking in em at every size (type.tracking) and every capital tracked below zero (type.capsTight). review.py reports capitals with negative tracking as an error, and warns when a bigger size is tracked looser than a smaller one or when there are more than four letter-spacing values. __od.kern() finds text split into one span per letter and measures each letter against the same text unsplit, drawn out of sight with the same font and width. capture.py also installs __od.watchKern() before the page loads, which logs the jump when a reveal puts plain text back; more than 0.5 px is reported. preflight.py html reads the same tracking from the CSS. review.py also judges tracking by role (kerning.md): body text (14 to 20 px) tracked open, small text (under 14 px) tracked tight, capitals left at 0 and display text (32 px and up) not tightened, each against the system's tracking when it has one, with the text style's tracking token in the fix. Monospace and code text is left out; it sits at 0.
 
-Sources: S-R5-104
+Sources: S-R5-104, S-R5-109
 
 ### MS-18 Headings that run long
 *How known: measured · default severity: warn · applies to: always*
@@ -572,6 +660,83 @@ Sources: S-R5-104
 **How to catch it.** Judge it by pixels. capture.py's text-pixels pass hides every glyph (__od.hideText), screenshots each scroll step and reads the pixels inside each line box (__od.textLines). Sharp edges inside a box on a plain backdrop mean something is drawn through the text: review.py warns at 0.2% of the box or more. A photo laid under text on purpose is left to the contrast check (MS-04).
 
 Sources: S-R5-104
+
+### MS-21 A heading, lede or label ends on one word
+*How known: measured · default severity: warn · applies to: always · preflight 39*
+
+**What goes wrong.** A heading, the line under it or a button label wraps and leaves one word alone on its last line. It reads as a mistake and it changes with every width.
+
+**Why it is missed.** It only happens at some widths, and a screenshot at the designer's width has no widow.
+
+**How to catch it.** probe.js groups the words of every h1 to h4, lede (the paragraph right after a heading) and label by the line they sit on (craft.orphans), leaving out visually hidden text and text inside an ellipsis or clamp. review.py warns (MS-21) when the last line holds one word, on runs without stress. Fix: text-wrap: balance on headings and labels, text-wrap: pretty on ledes, or rewrite the line.
+
+Sources: S-R5-057, S-R5-109
+
+### MS-22 No breathing room: text crowds its neighbours or its box
+*How known: measured · default severity: warn · applies to: always · tokens*
+
+**What goes wrong.** Text sits right against the text next to it, touches the edge of its own fill or border, or a card's padding is smaller than the gap between the things inside it, so the group does not read as a group. People call it cramped without being able to say why.
+
+**Why it is missed.** Each value is on the scale, so a spacing check passes; what is wrong is how the values relate. Screenshots are judged at a glance, and eyes cannot read a 2 px gap.
+
+**How to catch it.** probe.js measures from the text itself, as a reader sees it: the space between neighbouring text blocks (craft.tight, under 4 px), the inset of text in any box with a visible edge (craft.touching, under 4 px at the sides or under 1 px above and below), and a box's text inset against the median gap between the items inside it (craft.insetVsGap). review.py warns (MS-22) and suggests the system's spacing token for the fix. Since the library-page review (2026-11-13) it also flags boxes with rounded corners that touch with no gap (square corners where they meet are a joined group, as is a role=group, toolbar, tablist or table), and a caption or label under 4 px from the box it belongs to.
+
+Sources: S-R5-001, S-R5-109, S-R5-112
+
+### MS-23 Items of one kind spaced unevenly
+*How known: measured · default severity: warn · applies to: always · tokens*
+
+**What goes wrong.** A list, a row of buttons or a stack of cards has gaps of 8, 16 and 12 px between items of the same kind, because each was nudged on its own with a margin.
+
+**Why it is missed.** Each value can be on the scale. The difference is a few pixels, below what a look at a screenshot can see.
+
+**How to catch it.** probe.js finds runs of three or more siblings with the same tag, classes and font size in one column or one row and lists the gaps between them (craft.siblings). review.py warns (MS-23) when they take three or more values (3 px apart counts as one) and notes two values as a judgment: a larger gap may be a deliberate group break. Fix: one gap on the parent from the spacing tokens.
+
+Sources: S-R5-001, S-R5-109
+
+### MS-24 Uneven vertical rhythm between sections
+*How known: measured · default severity: warn · applies to: always · tokens · inferred*
+
+**What goes wrong.** The space between one section's content and the next is 64 px here, 120 px there and 40 px further down, so the page lurches as it scrolls.
+
+**Why it is missed.** It is only visible over the whole page, and screenshots are taken one screen at a time.
+
+**How to catch it.** probe.js measures, down the page, the space between the last thing drawn in one top-level section (text, images, boxes with an edge) and the first thing in the next (craft.sections). review.py warns (MS-24) when there are three or more breaks, the largest is 1.5 times the smallest or more, and they take three or more values; a gap taller than the screen is left out. It is a judgment: a bigger break before a new part can be on purpose, so read each one.
+
+Sources: S-R5-109
+
+### MS-25 Boxes that sit together with different corner radii
+*How known: measured · default severity: warn · applies to: always · preflight 45*
+
+**What goes wrong.** A code block, a card and a callout stacked in one column, or cards in one row, have corners of 10, 8 and 2 px. Each was styled on its own, so the set looks assembled from different kits.
+
+**Why it is missed.** Each radius is a token, so the radius check passes. The mismatch shows only when the boxes sit next to each other.
+
+**How to catch it.** probe.js groups the boxes with a visible edge under each parent that share a width (a column) or a top and a height (a row), and lists any set whose top-left radii differ by more than 1 px (craft.radii). review.py warns (MS-25) and names the radius tokens. Nested corners are preflight 45.
+
+Sources: S-R5-112
+
+### MS-26 Prose set in a monospace font
+*How known: measured · default severity: warn · applies to: always · DC-L02-03*
+
+**What goes wrong.** A paragraph or list of ordinary sentences is set in the code face, often because it sits inside a docs component styled for code. Running text in monospace reads slowly and unevenly.
+
+**Why it is missed.** The font is loaded and on the system's list, so the font checks pass.
+
+**How to catch it.** probe.js lists elements with more than 80 characters of their own text whose first font is a monospace face, outside pre, code, kbd, samp and editors (craft.monoProse). review.py warns (MS-26) and points to the text font token.
+
+Sources: S-R5-112
+
+### MS-27 A web address broken across lines
+*How known: measured · default severity: warn · applies to: always · preflight 8*
+
+**What goes wrong.** A long address in running text wraps, often right after "https://", because overflow-wrap: anywhere breaks it wherever it likes. The reader sees "https://" alone at the end of a line.
+
+**Why it is missed.** It happens only at some widths, and nothing overflows, so overflow checks are quiet.
+
+**How to catch it.** probe.js finds every http, https or www address in the page's text and counts the lines it sits on, and notes whether the break falls inside the scheme (craft.brokenUrls). review.py warns (MS-27), on runs without stress. Fix: make the link text words, or keep the scheme whole and allow breaks only after slashes.
+
+Sources: S-R5-112
 
 ## It works for a mouse and a good pair of eyes, not for everyone
 
@@ -868,6 +1033,52 @@ Sources: S-R5-007, S-R5-030
 
 Sources: S-R5-101
 
+## Nobody read the words
+
+### CP-01 Title Case where the system says sentence case
+*How known: measured · default severity: warn · applies to: always · Q-voice-03 (DC-L06-20)*
+
+**What goes wrong.** Headings and buttons are written "Plan Your Next Big Project" when the system chose sentence case, or the page mixes the two.
+
+**Why it is missed.** Nobody checks capitalisation against a rule, and AI tools write Title Case headings by habit.
+
+**How to catch it.** probe.js collects the headings and control labels (copy). review.py finds Title Case (every word after the first capitalised, small words, acronyms, words with an inner capital and names the page writes with a capital mid-sentence left out). With Q-voice-03 = sentence (or title-headings, for buttons) it warns (CP-01, a rule); without a recorded choice it notes Title Case items when most of the same kind are in sentence case (a judgment). Microsoft's style guide and the engine's default are sentence case. English pages only.
+
+Sources: S-R5-107, S-R5-109
+
+### CP-02 A button label that is not a verb
+*How known: inferred · default severity: info · applies to: always · DC-L06-22 · inferred*
+
+**What goes wrong.** A button says "Pricing details" or "Security and data", so people cannot tell what pressing it will do.
+
+**Why it is missed.** The words look fine on their own; the problem is the grammar of a control.
+
+**How to catch it.** review.py checks the first word of every button-shaped control against a word list of about 200 interface verbs plus Next, Back, Done and OK (CP-02). It is a word list, not grammar, so it is a note to read, a judgment. English pages only.
+
+Sources: S-R5-109
+
+### CP-03 One action named two ways, or placeholder copy left in
+*How known: measured · default severity: warn · applies to: always · DC-L06-22*
+
+**What goes wrong.** The same page says "Sign up" in the header and "Register" in the hero, or ships "Lorem ipsum", "TODO" or "Click here".
+
+**Why it is missed.** Each label is fine read on its own; the clash is only visible across the page. Placeholder text is skimmed over by a reviewer who knows what it should say.
+
+**How to catch it.** review.py warns (CP-03) when two labels from one group of synonyms (sign in and log in, sign up and register, delete and remove, settings and preferences, and others) are both on the page, a rule; and notes button-shaped controls that go to the same address under different names, a judgment. The probe's placeholder scan (ST-06) also matches Lorem, TBD, XXX, "Click here" and "Your text here". preflight.py html does both on the markup.
+
+Sources: S-R5-109
+
+### CP-04 Jargon on a page for non-experts
+*How known: measured · default severity: info · applies to: always · glossary.json (plain voice) · inferred*
+
+**What goes wrong.** A page written for everyone says DTCG, semantic token or WCAG with no explanation.
+
+**Why it is missed.** The people who build it know the words, so they do not hear them.
+
+**How to catch it.** When the page is marked for non-experts (data-audience or meta name=audience on the page, in the system Q-aud-02 = consumer or play, Q-aud-01 = large or the plain voice, or review.py check --audience everyone), review.py looks for the glossary's acronyms, token terms and code names in the page's text (CP-04) and suggests the glossary's plain voice for each. A term may be explained nearby, so it is a judgment.
+
+Sources: S-R5-109
+
 ## Sources
 
 | Id | Source | Status |
@@ -976,3 +1187,9 @@ Sources: S-R5-101
 | S-R5-102 | [OpenDesigner owner review of nested corners (2026-10-21)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: row 27: stages, bezels and frames whose corners did not nest |
 | S-R5-103 | [OpenDesigner owner review of the website (2026-10-15)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: row 10: three calls to action in one row were "very bad UX"; became preflight check 36 (mistake M37) |
 | S-R5-104 | [OpenDesigner owner review of a private B2B landing page (2026-11-03 to 2026-11-05)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: 2026-11-03 rows 22 and 23, 2026-11-04 rows 27 to 40, 2026-11-05 rows 4 and 6: the project had to hand-write eleven check scripts for what the review missed |
+| S-R5-107 | [Microsoft Style Guide: capitalization](https://learn.microsoft.com/en-us/style-guide/capitalization) | opened: "Microsoft style uses sentence-style capitalization", headings and titles included |
+| S-R5-108 | [Baymard Institute: readability, the optimal line length](https://baymard.com/blog/line-length-readability) | opened: 50 to 75 characters a line for body text; cites WCAG 1.4.8's 80 |
+| S-R5-109 | [OpenDesigner owner: problems people hit most in use (2026-11-13)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: kerning, spacing, breathing room, text cut off and copy; coverage before: 0 checks for cut-off text and copy, 1 for breathing room; asked for a 1.4 body line height and a 45 to 75 character measure |
+| S-R5-110 | [Google Search Central: how HTTP status codes affect Google's crawlers](https://developers.google.com/search/docs/crawling-indexing/http-network-errors) | opened: a 2xx page whose content suggests an error shows as a soft 404 in Search Console; a 4xx tells the crawler the content does not exist |
+| S-R5-111 | [NN/g: error-message guidelines](https://www.nngroup.com/articles/error-message-guidelines/) | opened: hide or minimize obscure error codes; offer potential remedies |
+| S-R5-112 | [OpenDesigner owner: design review of a library part page, and state coverage (2026-11-13)](https://github.com/ckryptickunal/OpenDesigner/blob/main/_coordination/OWNER-FEEDBACK.md) | opened: blocks with no gap, captions touching the box above, sibling radii that differ, prose in monospace, a copyable block missing its Copy button, https:// broken across lines; loading, empty, error, 404, offline, slow network, long and missing content |
