@@ -12,7 +12,7 @@ the bookkeeping and the arithmetic. Work goes in ./opendesigner/review/ (or --di
                                                    the coverage matrix (route x viewport x theme, plus the tasks that need a
                                                    real browser state), all "todo", in review/plan.json and review/ledger.json
     review.py mark CELL done|skipped|blocked [--evidence PATH ...] [--why "reason"]     (CELL from plan; "task:" cells too)
-    review.py check PROBE.json|DIR [...] [--project P] [--json]
+    review.py check PROBE.json|DIR [...] [--project P] [--json] [--audience everyone]   (also datastates/ and notfound/ from capture.py)
                                                    findings from probe runs (and focus-walk files) against the accessibility
                                                    floors, against practice any product can be judged on (primary buttons
                                                    per view, typefaces, weights, colors) and, when the project has an
@@ -68,7 +68,7 @@ TOUCH_TARGET = 44            # Apple's default control size in pt (its minimum i
 CONTRAST_TEXT, CONTRAST_LARGE = 4.5, 3.0
 MAX_MEASURE_CH = 80          # WCAG 1.4.8 (AAA) upper bound
 UI_MOTION_MS = 300           # STD-easing-duration-06: UI motion under 300 ms unless justified
-TIGHT_LINE_HEIGHT = 1.3
+TIGHT_LINE_HEIGHT = 1.3      # wrapped text over 20 px; body text has its own floor (BODY_LINE_HEIGHT)
 
 # Counts any built product can be judged on, with or without a design system (the audit, opendesigner references/audit.md).
 # Each is a practice with a source; they report, as warnings, and never decide.
@@ -154,6 +154,34 @@ def load_system(project):
         for name, hx in re.findall(r"--([a-z0-9-]+):\s*(#[0-9a-fA-F]{6})(?:[0-9a-fA-F]{2})?\s*;", text):
             sysm["palette"].setdefault(hx.lower(), name)
         sysm["radius_ladder"] = sorted({float(v) for v in re.findall(rf"--{re.escape(prefix)}-radius-(\d+):", text)})
+    tr = (m.get("type") or {}).get("tracking") or {}
+    sysm["tracking"] = {k: float(v) for k, v in tr.items() if isinstance(v, (int, float))}
+    sysm["measure"] = (((m.get("space") or {}).get("layout") or {}).get("measure") or {}).get("prose")
+    sysm["space_tokens"], sysm["tracking_tokens"], sysm["measure_token"] = {}, {}, None
+    if css.exists():
+        for name, num, unit in re.findall(rf"--({re.escape(prefix)}-space-\d+):\s*(-?[\d.]+)(px|rem)\s*;", text):
+            sysm["space_tokens"].setdefault(float(num) * (16 if unit == "rem" else 1), name)
+        styles = dict(re.findall(rf"--({re.escape(prefix)}-text-[a-z]+-[a-z]+)-tracking:\s*(-?[\d.]+)em\s*;", text))
+        sizes = {k: float(v) * (16 if u == "rem" else 1) for k, v, u in re.findall(rf"--({re.escape(prefix)}-font-size-[\d]+):\s*([\d.]+)(px|rem)", text)}
+        for role, val in sysm["tracking"].items():   # the first text style whose tracking is the role's value
+            pick = [st for st, em in styles.items() if abs(float(em) - val) < 1e-4]
+            if role in ("display", "heading"):
+                pick = [st for st in pick if re.search(r"headline|display|title", st)] or pick
+            elif role == "body":
+                pick = [st for st in pick if "body" in st] or pick
+            elif role.startswith("caps"):
+                pick = [st for st in pick if "label" in st] or pick
+            if pick:
+                sysm["tracking_tokens"][role] = (pick[-1] if role == "display" else pick[0]) + "-tracking"
+        mt = re.search(rf"--({re.escape(prefix)}-layout-measure-prose):", text)
+        sysm["measure_token"] = mt.group(1) if mt else None
+    st = read_json(base / "state.json", {}) or {}
+    ans = st.get("answers") or {}
+    sysm["case"] = (ans.get("Q-voice-03") or {}).get("value")
+    # who the words are for: Q-aud-02 consumer or play (the stakes and state of users), Q-aud-01 large (everyone, big
+    # targets) or the plain voice mark a system for non-experts; Q-aud-01 dense marks a work tool for experts
+    aud = [(ans.get("Q-aud-02") or {}).get("value"), (ans.get("Q-aud-01") or {}).get("value"), ((st.get("profile") or {}).get("voice") == "plain") and "plain"]
+    sysm["audience"] = " ".join(a for a in aud if a in ("consumer", "play", "large", "plain")) or None
     # faces reference each other ("=textFace"); keep the real names only
     sysm["faces"] = [f for f in sysm["faces"] if f and not f.startswith("=")]
     return sysm
@@ -188,12 +216,12 @@ class Findings:
         self.items = {}
         self.pixel_pass = {}   # where -> selectors whose text passed contrast on the real pixels (check_pixels)
 
-    def add(self, case, sev, title, where, measured=None, expected=None, evidence=None, fix=None, std=None, key=None, basis="measured"):
+    def add(self, case, sev, title, where, measured=None, expected=None, evidence=None, fix=None, std=None, key=None, basis="measured", decided="rule"):
         k = (case, key or title)
         f = self.items.get(k)
         if not f:
             f = self.items[k] = {"id": "", "case": case, "severity": sev, "basis": basis, "title": title, "where": [], "measured": measured,
-                                 "expected": expected, "evidence": [], "fix": fix, "standard": std, "status": "confirmed"}
+                                 "expected": expected, "evidence": [], "fix": fix, "standard": std, "status": "confirmed", "decided": decided}
         if where and where not in f["where"]:
             f["where"].append(where)
         for e in evidence or []:
@@ -256,6 +284,8 @@ def check_probe(p, sysm, F):
               f"{len(o)} element(s); the widest is {fmt(o[0]['over'])} px past the edge", "everything inside the viewport unless it scrolls in its own box",
               [x["sel"] for x in o[:4]], "content can be cut off with no way to reach it: remove overflow-x: hidden from html/body and fix the wide element", "WCAG 1.4.10", key="past-edge")
     for c in (p.get("overflow") or {}).get("clipped", []):
+        if (c.get("ellipsis") or c.get("clamp")) and c.get("role") in ("heading", "control", "label") and not stressed:
+            continue   # ST-13 reports an ellipsis or clamp on a heading, button or label (the craft checks)
         if c.get("ellipsis"):
             F.add("ST-04", "info", "Text is cut with an ellipsis", w, f"{c['sel']}: {c['text']!r} needs {fmt(c['sw'])} px, has {fmt(c['cw'])} px",
                   "intentional, with the full text reachable (title, tooltip, expand)", [c["sel"]], "confirm the full value can be read elsewhere", "WCAG 1.4.4", key="ellipsis:" + c["sel"])
@@ -381,11 +411,22 @@ def check_probe(p, sysm, F):
     if ty.get("longLines"):
         l = ty["longLines"][0]
         F.add("MS-07", "warn", f"Lines longer than {MAX_MEASURE_CH} characters", w, f"{l['sel']} is about {fmt(l['ch'])} characters wide", f"at most {MAX_MEASURE_CH} (WCAG 1.4.8, AAA); 45-75 is the usual target", [x["sel"] for x in ty["longLines"][:3]], "set max-width: 65ch on the text block", "WCAG 1.4.8 (AAA)", key="measure")
-    if ty.get("lineHeightTight"):
-        t = ty["lineHeightTight"][0]
-        F.add("MS-07", "info", "Wrapped text with tight line height", w, f"{t['sel']}: line height {t['ratio']}x its size over several lines", f"at least {TIGHT_LINE_HEIGHT}x for body text; 1.5x survives WCAG 1.4.12", [x["sel"] for x in ty["lineHeightTight"][:3]], None, "WCAG 1.4.12", key="tight-lh")
+    body_lh = [t for t in ty.get("lineHeightTight") or [] if 14 <= t.get("fs", 16) <= 20 and t["ratio"] < BODY_LINE_HEIGHT]   # captions under 14 px are not body text
+    big_lh = [t for t in ty.get("lineHeightTight") or [] if t.get("fs", 16) > 20 and t["ratio"] < TIGHT_LINE_HEIGHT]
+    if body_lh and not stressed:
+        t = body_lh[0]
+        lh_tok = f"var(--{(sysm or {}).get('prefix', 'ds')}-text-body-md-line-height)" if sysm else "1.5"
+        F.add("MS-07", "warn", f"Body text with line height under {BODY_LINE_HEIGHT}", w,
+              "; ".join(f"{x['sel']}: {fmt(x['ratio'])}x at {fmt(x['fs'])} px over several lines" for x in body_lh[:4]),
+              f"at least {BODY_LINE_HEIGHT}x for body text; 1.5x is WCAG 1.4.8 (AAA) and what 1.4.12 forces", [x["sel"] for x in body_lh[:4]],
+              f"line-height: {lh_tok}, or the body text style", "WCAG 1.4.8 (AAA)", key="tight-lh")
+    if big_lh and not stressed:
+        t = big_lh[0]
+        F.add("MS-07", "info", "Wrapped large text with tight line height", w, f"{t['sel']}: line height {t['ratio']}x its size over several lines", f"at least {TIGHT_LINE_HEIGHT}x for wrapped text over 20 px", [x["sel"] for x in big_lh[:3]], None, "WCAG 1.4.12", key="tight-lh-big")
     if judge_drift:
         check_round(p, w, F)
+    check_craft(p, sysm, w, F)
+    check_copy(p, sysm, w, F, getattr(F, "audience", None))
     fam = p.get("fonts") or {}
     used = ty.get("families") or {}
     for name, state in (fam.get("familyState") or {}).items():
@@ -516,6 +557,415 @@ def check_probe(p, sysm, F):
 
 
 # ------------------------------------------------------------------------- counts against practice (no system needed)
+# ------------------------------------------------------------------------- craft: cut text, room, rhythm, copy
+# Review cases ST-12 to ST-14, MS-21 to MS-24 and CP-01 to CP-04, plus the tracking rows of MS-17. Each finding names
+# the element, the measured value and, when capture.py saved one, a crop of it; each fix uses the project's tokens when
+# it has an OpenDesigner system. `decided` says whether a rule decides it (the same answer every time) or it is a
+# judgment the reader makes from the evidence (docs/HOW-IT-WORKS.md section 7).
+TOUCH_GAP = 4                # text closer than this to a neighbour or to its own box's edge reads as touching [owner, 2026-11-13]
+BODY_LINE_HEIGHT = 1.4       # body text under 1.4x its size [owner, 2026-11-13]; WCAG 1.4.8 (AAA) asks 1.5
+MEASURE = (45, 75)           # characters per line for body text (Baymard; WCAG 1.4.8 caps it at 80)
+RHYTHM_RATIO = 1.5           # the largest space between sections over the smallest, before it reads as uneven [inferred]
+GROW = 0.3                   # the translation stand-in: every word 30% longer (W3C, text size in translation)
+NON_EXPERT = {"everyone", "general", "public", "novice", "beginner", "beginners", "non-expert", "nonexpert", "consumer", "large", "plain"}
+
+VERBS = set("""accept access activate add adjust agree allow apply approve archive ask assign attach back begin book
+browse buy calculate call cancel change chat check choose claim clear click close collapse compare complete configure
+confirm connect contact continue copy create customise customize decline delete deny deploy describe disable discard
+discover dismiss display do donate download drag duplicate edit email enable end enter explore export filter find finish
+fix follow forgot forward generate get give go grant help hide import install invite join keep launch learn leave like
+list load log login logout make manage mark meet merge message move mute navigate open order pause pay pick pin place
+play post preview print proceed star fork clone publish purchase read redeem register renew reload remind remove rename reorder reply report request reserve
+reset resend restart restore resume retry return review run save schedule search see select send set setup share shop
+show sign skip sort start stop submit subscribe support swap switch sync take talk tell test track transfer translate try
+turn undo unlock unmute unpin unsubscribe update upgrade upload use verify view visit vote watch write zoom""".split())
+NOT_VERB_OK = {"next", "previous", "prev", "back", "done", "ok", "okay", "yes", "no", "more", "less", "menu", "close", "all", "new"}
+SMALL_WORDS = {"a", "an", "the", "and", "but", "or", "nor", "for", "so", "yet", "as", "at", "by", "in", "of", "off", "on",
+               "per", "to", "up", "via", "vs", "with", "from", "into", "onto", "over", "than", "that", "is", "it", "its", "be"}
+SYNONYMS = [("sign in", "log in", "login", "signin", "log on"), ("sign up", "register", "create account", "create an account", "join now"),
+            ("sign out", "log out", "logout", "signout"), ("delete", "remove", "erase"), ("settings", "preferences", "options"),
+            ("buy", "purchase", "order now"), ("contact us", "get in touch", "talk to us"), ("help", "support centre", "help center", "support center")]
+
+
+def first_up(w):
+    return w[:1].isupper()
+
+
+def proper_words(text):
+    """Words written with a capital in the middle of a sentence and never in lower case: names, which keep their capital."""
+    caps, low = Counter(), set()
+    for sent in re.split(r"(?<=[.!?:])\s+|\n", text or ""):
+        ws = re.findall(r"[A-Za-z][\w'’-]*", sent)
+        for w in ws[1:]:
+            (caps.update([w]) if first_up(w) else low.add(w.lower()))
+    return {w for w, n in caps.items() if w.lower() not in low}
+
+
+def case_of(text, proper):
+    """'title', 'sentence' or None (too short, all capitals, or nothing to tell them apart)."""
+    ws = re.findall(r"[A-Za-z][\w'’-]*", text)
+    if len(ws) < 2 or not first_up(ws[0]):
+        return None
+    sig = [w for w in ws[1:] if w.lower() not in SMALL_WORDS and not (w.isupper() and len(w) > 1) and not re.search(r"[a-z][A-Z]", w)
+           and w not in proper and not re.search(r"\d", w)]
+    if not sig:
+        return None
+    up = sum(first_up(w) for w in sig)
+    return "title" if up == len(sig) else "sentence" if up == 0 else None
+
+
+def tok_px(sysm, want, at_least=False, key="space_tokens"):
+    """The project's spacing token nearest to want px (or the smallest at or over it), as 'var(--x) (N px)'; None without a system."""
+    toks = (sysm or {}).get(key) or {}
+    vals = sorted(v for v in toks if v > 0)
+    if not vals:
+        return None
+    v = min((x for x in vals if x >= want), default=vals[-1]) if at_least else nearest(want, vals)
+    return f"var(--{toks[v]}) ({fmt(v)} px)"
+
+
+def space_hint(sysm, want, at_least=False):
+    t = tok_px(sysm, want, at_least)
+    if t:
+        return t
+    grid = (sysm or {}).get("unit") or 4
+    v = max(grid, math.ceil(want / grid) * grid) if at_least else max(grid, round(want / grid) * grid)
+    return f"{fmt(v)} px (a step of your spacing scale)"
+
+
+def crops(items):
+    return [x["crop"] for x in items if x.get("crop")]
+
+
+def check_craft(p, sysm, w, F):
+    cr = p.get("craft")
+    if not cr:
+        return
+    stress = set(p.get("stress") or [])
+    wcag = bool(stress & {"textSpacing", "text200"})
+    translate = "translate" in stress
+    sfx = (" when every word is 30% longer (a German stand-in)" if translate else " under " + "+".join(sorted(stress))) if stress else ""
+    cut_case = "ST-14" if translate else "ST-19" if stress & {"longNames", "noImages", "noNames"} else "ST-12"
+    if "longNames" in stress:
+        sfx = " with a 200-character name"
+    if "noImages" in stress:
+        sfx = " with every image missing"
+        col = cr.get("collapsedImages") or []
+        if col:
+            F.add("ST-19", "warn", "Pictures that fail leave no space", w, "; ".join(f"{x['sel']} drawn {fmt(x['w'])}x{fmt(x['h'])} px" for x in col[:4]),
+                  "a failed picture keeps its box, so the card or row keeps its shape", [x["sel"] for x in col[:4]] + crops(col[:4]),
+                  "give every img width and height attributes or aspect-ratio, and a background colour token behind it", None, key="no-images-collapse")
+        F.add("ST-19", "info", "Look at the page with every image missing", w, f"{fmt(((p.get('images') or {}).get('total')))} image(s) made to fail",
+              "cards and rows keep their size, and alt text or a placeholder says what was there", [], "reserve the box (width and height or aspect-ratio) and give it a background", None,
+              key="no-images", basis="seen", decided="judgment")
+    if "noNames" in stress:
+        sfx = " with every name missing"
+        col = cr.get("collapsedNamed") or []
+        if col:
+            F.add("ST-19", "warn", "A missing name collapses its box", w, "; ".join(f"{x['sel']} is {fmt(x['h'])} px tall with no text" for x in col[:4]),
+                  "an empty name keeps the row or card the same height, or the product shows a fallback (\"Untitled\")", [x["sel"] for x in col[:4]] + crops(col[:4]),
+                  "show a fallback name, or give the line a min-height of one line", None, key="no-names-collapse")
+    std = "WCAG 1.4.12" if "textSpacing" in stress else "WCAG 1.4.4" if "text200" in stress else None
+    vw = (p.get("viewport") or {}).get("w") or 0
+
+    def sev_for(items):
+        named = any(x.get("role") in ("heading", "control", "label") for x in items)
+        if stress and not wcag:
+            return "warn"
+        return "error" if named or wcag else "warn"
+
+    # --- text cut off ----------------------------------------------------------------------------------------
+    sp = cr.get("spill") or []
+    if sp:
+        F.add(cut_case, sev_for(sp), "Text runs out of its box" + sfx, w,
+              "; ".join(f"{x['sel']} ({x['role']}): \"{x['text']}\" goes {fmt(x['by'])} px "
+                        + (f"below a {fmt(x['h'])} px tall box" if x.get("dir") == "down" else f"past a {fmt(x['w'])} px wide box") for x in sp[:4]),
+              "every line of text inside its own box, at 320 px, at 200% text and with longer words",
+              [x["sel"] for x in sp[:4]] + crops(sp[:4]),
+              "let the text wrap: remove the fixed width or height and white-space: nowrap, set min-width: 0 on flex and grid children, "
+              "and overflow-wrap: anywhere for long words", std, key="spill" + ("-" + "+".join(sorted(stress)) if stress else ""))
+    hp = cr.get("hiddenByParent") or []
+    if hp:
+        F.add(cut_case, sev_for(hp), "Text cut off by the box around it" + sfx, w,
+              "; ".join(f"{x['sel']} ({x['role']}): \"{x['text']}\" loses {fmt(x['cut'])} px inside {x['parent']} (overflow: hidden)" for x in hp[:4]),
+              "no text cut by a parent's overflow: hidden; nobody can scroll to it",
+              [x["sel"] for x in hp[:4]] + crops(hp[:4]),
+              "remove the fixed height or overflow: hidden on the parent, or let it grow (min-height instead of height)", std,
+              key="parent-cut" + ("-" + "+".join(sorted(stress)) if stress else ""))
+    tr = [x for x in cr.get("truncated") or [] if x.get("role") in ("heading", "control", "label")]
+    if tr and not stress:
+        F.add("ST-13", "warn", "An ellipsis or line clamp hides words in a heading, button or label", w,
+              "; ".join(f"{x['sel']} ({x['role']}, {x['how']}): \"{x['text']}\" needs {fmt(x['needs'])} px {'tall' if x.get('axis') == 'height' else 'wide'}, shows {fmt(x['shown'])}"
+                        + (" (full text only in a title tooltip)" if x.get("title") else "") for x in tr[:4]),
+              "headings, buttons and labels show every word; truncate only data people can open in full (a file name, a table cell)",
+              [x["sel"] for x in tr[:4]] + crops(tr[:4]),
+              "let it wrap to two lines (text-wrap: balance) or shorten the words; a title tooltip does not show on touch screens", None, key="truncated")
+    orp = cr.get("orphans") or []
+    if orp and not stress:
+        F.add("MS-21", "warn", "A heading, lede or label ends on one word", w,
+              "; ".join(f"{x['sel']} ({x['role']}): \"{x['text']}\" leaves \"{x['word']}\" alone on line {x['lines']}" for x in orp[:4]),
+              "no last line of a single word in headings, ledes and labels, at every width (preflight 39)",
+              [x["sel"] for x in orp[:4]] + crops(orp[:4]),
+              "text-wrap: balance on headings and labels, text-wrap: pretty on ledes; or rewrite the line", "preflight 39", key="orphans")
+
+    # --- breathing room --------------------------------------------------------------------------------------
+    tg_all = cr.get("tight") or []
+    tg = [x for x in tg_all if x.get("kind", "text") == "text"]
+    if tg and not stress:
+        F.add("MS-22", "warn", f"Text blocks closer than {TOUCH_GAP} px to each other", w,
+              "; ".join((f"{x['sel']} overlaps the text of {x['after']} by {fmt(-x['seen'])} px" if x["seen"] < 0 else f"{x['sel']} sits {fmt(x['seen'])} px from the text of {x['after']}")
+                        + f" ({x['axis']}; the boxes are {fmt(x['gap'])} px apart)" for x in tg[:4]),
+              f"at least {TOUCH_GAP} px of visible space between neighbouring text, counting half the line height; usually a step of the scale",
+              [x["sel"] for x in tg[:4]] + crops(tg[:4]),
+              f"add a gap from the scale between them: gap or margin-block-start of {space_hint(sysm, 8, True)}", "tokens", key="tight")
+    bx = [x for x in tg_all if x.get("kind") == "boxes-touching" or (x.get("kind") == "boxes" and x["gap"] > 0)]
+    if bx and not stress:
+        F.add("MS-22", "warn", "Blocks with no gap between them", w,
+              "; ".join(f"{x['sel']} is {fmt(x['gap'])} px from {x['after']} ({x['axis']})" for x in bx[:4]),
+              "a step of the spacing scale between boxes with rounded corners; boxes that share an edge on purpose have square corners where they meet",
+              [x["sel"] for x in bx[:4]] + crops(bx[:4]), f"gap: {space_hint(sysm, 16)} on the parent", "tokens", key="boxes-touching")
+    cap = [x for x in tg_all if x.get("kind") == "caption"]
+    if cap and not stress:
+        F.add("MS-22", "warn", "Text touching the box next to it", w,
+              "; ".join(f"{x['sel']} is {fmt(x['seen'])} px from {x['after']} ({x['axis']})" for x in cap[:4]),
+              "a caption or label at least 8 px from the box it belongs to", [x["sel"] for x in cap[:4]] + crops(cap[:4]),
+              f"margin-block-start: {space_hint(sysm, 8, True)} on the caption", "tokens", key="caption-touching")
+    rd = cr.get("radii") or []
+    if rd and not stress:
+        F.add("MS-25", "warn", "Boxes side by side with different corner radii", w,
+              "; ".join(f"{x['sel']}: " + ", ".join(f"{i['sel'].split(' > ')[-1]} {fmt(i['radius'])} px" for i in x["items"][:4]) for x in rd[:3]),
+              "one radius for boxes that sit together as a set", [x["items"][0]["sel"] for x in rd[:3]] + crops(rd[:3]),
+              "use one radius token for the set" + (f" ({', '.join('var(--' + (sysm or {}).get('prefix', 'ds') + '-radius-' + fmt(v) + ')' for v in ((sysm or {}).get('radius_ladder') or [])[:3])})" if (sysm or {}).get("radius_ladder") else ""),
+              "preflight 45", key="radii")
+    mp = cr.get("monoProse") or []
+    if mp and not stress:
+        F.add("MS-26", "warn", "Prose set in a monospace font", w,
+              "; ".join(f"{x['sel']}: \"{x['text']}\" in {x['font']}" for x in mp[:4]),
+              "monospace for code, numbers in tables and file names; running text in the text face", [x["sel"] for x in mp[:4]] + crops(mp[:4]),
+              f"font-family: var(--{(sysm or {}).get('prefix', 'ds')}-font-family-text)" if sysm else "the text font-family token", "DC-L02-03", key="mono-prose")
+    bu = cr.get("brokenUrls") or []
+    if bu and not stress:
+        F.add("MS-27", "warn", "A web address broken across lines" + (", inside \"https://\"" if any(x.get("inScheme") for x in bu) else ""), w,
+              "; ".join(f"{x['sel']}: {x['url']} over {x['lines']} lines" + (" (the break is inside https://)" if x.get("inScheme") else "") for x in bu[:4]),
+              "an address on one line: show a short form as link text, or let it break only after a slash", [x["sel"] for x in bu[:4]] + crops(bu[:4]),
+              "make the link text words (\"install guide\") or drop https://; for an address that must show, overflow-wrap: anywhere breaks anywhere, so wrap the scheme in a nowrap span or insert <wbr> after slashes", "preflight 8", key="broken-url")
+    tw = cr.get("twins") or []
+    if tw and not stress:
+        F.add("ST-15", "warn", "One block lacks a control its twins have", w,
+              "; ".join(f"{x['has']} of {x['of']} {x['kind']}s have \"{x['control']}\"; missing on {', '.join(x['missing'][:3])}" for x in tw[:3]),
+              "blocks of one kind offer the same controls", [x["sel"] for x in tw[:3]] + crops(tw[:3]),
+              "render the control from the block's component, not per page; or say why this one differs", None, key="twins")
+    to = cr.get("touching") or []
+    if to and not stress:
+        F.add("MS-22", "warn", "Text touches the edge of its box", w,
+              "; ".join(f"{x['sel']}: \"{x['text']}\" is {fmt(x['inset'])} px from the {x['side']} edge of its {x['edge']}" for x in to[:4]),
+              f"text at least {TOUCH_GAP} px inside a box with a visible edge; a chip or button wants 8 px or more at the sides",
+              [x["sel"] for x in to[:4]] + crops(to[:4]),
+              f"padding of {space_hint(sysm, 8, True)} on the box", "tokens", key="touching")
+    ig = cr.get("insetVsGap") or []
+    if ig and not stress:
+        x0 = ig[0]
+        F.add("MS-22", "warn", "Padding smaller than the space between the items inside", w,
+              "; ".join(f"{x['sel']}: {fmt(x['inset'])} px padding around items {fmt(x['gap'])} px apart" for x in ig[:4]),
+              "the space inside a group at most the space around it (HOW-IT-WORKS section 7: inner spacing smaller than outer)",
+              [x["sel"] for x in ig[:4]] + crops(ig[:4]),
+              f"raise the padding to {space_hint(sysm, x0['gap'], True)} or lower the gap to {space_hint(sysm, max(x0['inset'], 4))}", "tokens", key="inset-gap")
+
+    # body line height and measure
+    meas = cr.get("measure") or []
+    prose = (sysm or {}).get("measure") or 65
+    lo, hi = MEASURE
+    # a short measure counts only in running text (five lines or more, wide screens): a card's blurb is short on purpose
+    out_m = [m for m in meas if (m["ch"] > hi and m["ch"] <= MAX_MEASURE_CH) or (m["ch"] < lo and vw >= 600 and m.get("lines", 0) >= 5)]
+    if out_m and not stress:
+        F.add("MS-07", "warn", f"Body text outside {lo}-{hi} characters a line", w,
+              "; ".join(f"{m['sel']}: about {fmt(m['ch'])} characters a line" for m in out_m[:4]),
+              f"{lo} to {hi} characters for body text" + (f"; the system's prose measure is {fmt(prose)}ch" if sysm and sysm.get("measure") else ""),
+              [m["sel"] for m in out_m[:4]] + crops(out_m[:4]),
+              f"max-width: {'var(--' + sysm['measure_token'] + ')' if sysm and sysm.get('measure_token') else str(prose) + 'ch'} on the text block, or a wider column",
+              "WCAG 1.4.8 (AAA)", key="measure-range")
+
+    # --- spacing ---------------------------------------------------------------------------------------------
+    sib_all = cr.get("siblings") or []
+    sib = [x for x in sib_all if x.get("distinct", 3) >= 3]
+    two = [x for x in sib_all if x.get("distinct", 3) == 2]
+    if two and not stress:
+        F.add("MS-23", "info", "Siblings of one kind with two different gaps", w,
+              "; ".join(f"{x['sel']}: {x['kind'].split('@')[0]} items {', '.join(fmt(g) for g in x['gaps'])} px apart" for x in two[:4]),
+              "one gap, or a larger one only where a new group starts", [x["sel"] for x in two[:4]] + crops(two[:4]),
+              f"if it is not a group break, one gap on the parent ({space_hint(sysm, Counter(two[0]['gaps']).most_common(1)[0][0])})", "tokens",
+              key="siblings-two", decided="judgment")
+    if sib and not stress:
+        def most(g):
+            return Counter(g).most_common(1)[0][0]
+        F.add("MS-23", "warn", "Items of one kind spaced unevenly", w,
+              "; ".join(f"{x['sel']}: {x['kind'].split('@')[0]} items {', '.join(fmt(g) for g in x['gaps'])} px apart ({x['axis']})" for x in sib[:4]),
+              "one gap between siblings of the same kind",
+              [x["sel"] for x in sib[:4]] + crops(sib[:4]),
+              f"set one gap on the parent ({space_hint(sysm, most(sib[0]['gaps']))}) and drop the margins on single items", "tokens", key="siblings")
+    vh = (p.get("viewport") or {}).get("h") or 800
+    secs = [s for s in cr.get("sections") or [] if 0 < s["space"] < vh]   # a gap taller than the screen is not rhythm: content the probe could not see
+    if len(secs) >= 3 and not stress:
+        vals = [s["space"] for s in secs]
+        steps = sorted({round(v / 8) * 8 for v in vals})
+        if max(vals) / max(min(vals), 1) >= RHYTHM_RATIO and len(steps) >= 3:
+            F.add("MS-24", "warn", "Uneven space between sections", w,
+                  "; ".join(f"{fmt(s['space'])} px before {s['sel']}" for s in secs[:6]),
+                  "the same space between sections down the page, or a bigger one only where a new part starts, on purpose",
+                  [s["sel"] for s in secs[:4]] + crops(secs[:4]),
+                  f"one section spacing token, for example padding-block: {space_hint(sysm, sorted(vals)[len(vals) // 2])}; check each larger break is meant",
+                  "tokens", key="rhythm", decided="judgment")
+
+    # --- tracking by role (kerning.md: tight on display sizes, near 0 on body, slightly positive on small text) --
+    rows = []
+    for k, v in ((p.get("type") or {}).get("tracking") or {}).items():
+        try:
+            fs, em, caps, *mono = k.split("|")
+            if mono:          # code and other monospace text sits at 0 (kerning.md)
+                continue
+            rows.append((float(fs), float(em), caps == "1", v))
+        except ValueError:
+            continue
+    tk = (sysm or {}).get("tracking") or {}
+    tok = (sysm or {}).get("tracking_tokens") or {}
+
+    def use(role, default):
+        want = tk.get(role, default)
+        name = tok.get(role)
+        return f"letter-spacing: var(--{name}) ({fmt(want)}em)" if name else f"letter-spacing: {fmt(want)}em"
+    if rows and not stress:
+        body_hi = tk.get("body", 0) + 0.01
+        small_lo = min(0, tk.get("small", 0)) - 0.005
+        has_disp = "display" in tk or "heading" in tk
+        disp_want = max(tk.get("display", -0.02), tk.get("heading", -0.02)) if has_disp else -0.01   # the looser of the system's two
+        disp_hi = disp_want + 0.005
+        caps_lo = min(0.02, tk.get("caps-label", 0.05))
+        checks = [
+            ("Body text tracked open", lambda fs, em, c, v: 14 <= fs <= 20 and not c and em > body_hi and v.get("chars", 0) >= 80 and v.get("chars", 0) / max(v.get("n", 1), 1) >= 40,
+             f"about {fmt(tk.get('body', 0))}em on body text", use("body", 0)),
+            ("Small text tracked tight", lambda fs, em, c, v: fs < 14 and not c and em < small_lo,
+             "0em or a little more under 14 px, never negative" + (f" (the system's small text: {fmt(tk['small'])}em)" if "small" in tk else ""), use("small", 0.01)),
+            ("Capitals with no tracking", lambda fs, em, c, v: c and 0 <= em < caps_lo and v.get("chars", 0) / max(v.get("n", 1), 1) >= 6,
+             f"capitals tracked open, about {fmt(tk.get('caps-label', 0.06))}em", use("caps-label", 0.06)),
+            ("Display text not tightened", lambda fs, em, c, v: fs >= 32 and not c and em > (disp_hi if has_disp else -0.001),
+             f"{fmt(disp_want)}em or tighter at display sizes" + (" (the system's heading and display tracking)" if has_disp else " (about -0.01 to -0.02em, unless the face has a display cut)"),
+             use("heading" if tk.get("heading", -1) >= tk.get("display", -1) and "heading" in tk else "display", disp_want)),
+        ]
+        for title, test, exp, fix in checks:
+            hit = [(fs, em, v) for fs, em, c, v in rows if test(fs, em, c, v)]
+            if hit:
+                F.add("MS-17", "warn", title, w, "; ".join(f"{fmt(fs)} px at {fmt(em)}em, e.g. {v['ex'][0] if v.get('ex') else '?'}" for fs, em, v in hit[:4]),
+                      exp, [v["ex"][0] for _, _, v in hit[:4] if v.get("ex")], fix, "kerning.md", key="track-" + title)
+
+
+def jargon_terms():
+    """Terms from the glossary a non-expert would not know: acronyms, token words and code names, each with its plain words."""
+    path = HERE.parent / "references" / "glossary.json"
+    try:
+        g = json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+    out = []
+    for t in g if isinstance(g, list) else g.get("terms", []):
+        term = t.get("term") or ""
+        if "(" in term and not re.match(r"^[A-Z]{2,}", term):
+            continue
+        base = re.sub(r"\s*\(.*\)$", "", term).strip()
+        names = [base] + [a for a in t.get("aliases") or [] if a]
+        jar = [n for n in names if re.fullmatch(r"[A-Z][A-Z0-9]{1,6}(\.md)?", n) or "token" in n.lower() or t.get("layer") == "tok"]
+        if t.get("code_name") and re.fullmatch(r"[a-z]+(\.[a-z0-9-]+){2,}", t["code_name"]):
+            jar.append(t["code_name"])
+        for n in dict.fromkeys(jar):
+            out.append((n, t.get("plain") or ""))
+    return out
+
+
+def check_copy(p, sysm, w, F, audience=None):
+    cp = p.get("copy")
+    if not cp or p.get("stress"):
+        return
+    lang = ((p.get("doc") or {}).get("lang") or "en").lower()
+    english = lang.startswith("en")
+    proper = proper_words(cp.get("text", ""))
+    heads = [h for h in cp.get("headings") or [] if not h.get("upper")]
+    btns = [c for c in cp.get("controls") or [] if c["kind"] == "button" and not c.get("menu") and not c.get("toggle") and not c.get("upper")]   # a toggle names a state, not an action
+
+    # CP-01 Title Case where the system says sentence case
+    rule = (sysm or {}).get("case")
+    if english:
+        kinds = [("heading", heads), ("button", btns)]
+        for kind, items in kinds:
+            cases = [(x, case_of(x["text"], proper)) for x in items]
+            titled = [x for x, c in cases if c == "title"]
+            sentence = [x for x, c in cases if c == "sentence"]
+            if not titled:
+                continue
+            wants = "sentence" if rule == "sentence" or (rule == "title-headings" and kind == "button") else None
+            if wants:
+                F.add("CP-01", "warn", f"Title Case {kind}s where the system says sentence case", w,
+                      "; ".join(f"{x['sel']}: \"{x['text']}\"" for x in titled[:4]), "sentence case: a capital on the first word and on names only (Q-voice-03)",
+                      [x["sel"] for x in titled[:4]] + crops(titled[:4]), "rewrite in sentence case; never fake case with text-transform", "Q-voice-03", key="case-" + kind)
+            elif rule != "title-headings" and len(sentence) > len(titled):
+                F.add("CP-01", "info", f"Mixed case in {kind}s: most are sentence case, some are Title Case", w,
+                      "; ".join(f"{x['sel']}: \"{x['text']}\"" for x in titled[:4]) + f" ({len(sentence)} in sentence case)",
+                      "one capitalisation rule per kind of text", [x["sel"] for x in titled[:4]] + crops(titled[:4]),
+                      "pick one (sentence case by default) and record it: engine.py pick Q-voice-03 sentence", "Q-voice-03", key="case-mix-" + kind, decided="judgment")
+
+    # CP-02 a button label that does not start with a verb
+    if english:
+        nv = []
+        for b in btns:
+            first = (re.findall(r"[A-Za-z][\w'’-]*", b["text"]) or [""])[0].lower()
+            if not first or first in VERBS or first in NOT_VERB_OK or first.rstrip("s") in VERBS:
+                continue
+            nv.append(b)
+        if nv:
+            F.add("CP-02", "info", "Button labels that do not start with a verb", w, "; ".join(f"{x['sel']}: \"{x['text']}\"" for x in nv[:5]),
+                  "a button says what it does: a verb first (\"Compare prices\", not \"Pricing details\")",
+                  [x["sel"] for x in nv[:5]] + crops(nv[:5]), "start with the action; a word list decided this, so read each one", "DC-L06-22", key="not-verb", decided="judgment")
+
+    # CP-03 one action, two names
+    labels = {}
+    for c in cp.get("controls") or []:
+        t = re.sub(r"[\s→↗>»›→]+$", "", c["text"].lower()).strip()
+        labels.setdefault(t, c)
+    dup = []
+    for group in SYNONYMS:
+        found = [labels[g] for g in group if g in labels]
+        if len(found) >= 2:
+            dup.append(found)
+    if dup and english:
+        F.add("CP-03", "warn", "One action named two ways on the page", w,
+              "; ".join(" and ".join(f"\"{x['text']}\" ({x['sel']})" for x in grp) for grp in dup[:3]),
+              "one name for each action, everywhere", [grp[0]["sel"] for grp in dup[:3]] + [grp[1]["sel"] for grp in dup[:3]],
+              "pick one name and use it on every button and link", "DC-L06-22", key="synonyms")
+    by_href = {}
+    for c in cp.get("controls") or []:
+        if c["kind"] == "button" and c.get("href") and not c["href"].startswith("#"):
+            by_href.setdefault(c["href"], {}).setdefault(re.sub(r"[\d,.]+[kmKM]?\b|\s+$", "", c["text"]).strip().lower(), c)   # a count is not a name
+    two = [(h, list(v.values())) for h, v in by_href.items() if len(v) >= 2 and not any(a in b for a in v for b in v if a != b)]
+    if two:
+        F.add("CP-03", "info", "Buttons to the same place with different names", w,
+              "; ".join(f"{h}: " + " / ".join(f"\"{x['text']}\"" for x in xs[:3]) for h, xs in two[:3]),
+              "one action, one name", [xs[0]["sel"] for _, xs in two[:3]], "use the same words, unless the two do different things", "DC-L06-22",
+              key="same-href", decided="judgment")
+
+    # CP-04 jargon on a page marked for non-experts
+    aud = (audience or cp.get("audience") or (sysm or {}).get("audience") or "").lower()
+    if english and aud and any(a in aud for a in NON_EXPERT):
+        text = "\n".join([cp.get("text", "")] + [h["text"] for h in cp.get("headings") or []] + [c["text"] for c in cp.get("controls") or []])
+        hits = []
+        for name, plain in jargon_terms():
+            rx = re.compile(r"(?<![\w.-])" + re.escape(name) + r"s?(?![\w-])", 0 if name[:2].isupper() or "." in name else re.I)
+            m = rx.search(text)
+            if m and name.lower().rstrip("s") not in {h[0].lower().rstrip("s") for h in hits} and m.group(0).lower().rstrip("s") not in {h[2].lower().rstrip("s") for h in hits}:
+                hits.append((name, plain, m.group(0)))
+        if hits:
+            F.add("CP-04", "info", f"Words a non-expert may not know ({len(hits)})", w,
+                  "; ".join(f"\"{h[2]}\"" for h in hits[:8]), f"plain words on a page marked for {aud}",
+                  [], "; ".join(f"{h[0]}: say \"{h[1][:90]}\"" for h in hits[:3]), "glossary.json (plain voice)", key="jargon", decided="judgment")
+
+
 def hsl(hx):
     r, g, b = (v / 255 for v in hex_rgb(hx))
     mx, mn = max(r, g, b), min(r, g, b)
@@ -1101,10 +1551,70 @@ def cmd_probe(args):
 
 
 
+def check_datastates(d, F):
+    """The page on a slow network and with its data empty, failing and offline (capture.py network_states): ST-16, ST-17."""
+    w = where_of(d)
+    sl = d.get("slow") or {}
+    a1 = sl.get("at1s") or {}
+    if a1 and not a1.get("chars") and not a1.get("busy") and not a1.get("loadingWords"):
+        F.add("ST-16", "warn", "A blank screen while the page loads on a slow network", w, f"1 s into a throttled load (400 ms latency, 50 KB/s): no text and no loading sign; full load took {fmt(sl.get('loadMs'))} ms",
+              "something on screen at once: the layout with a skeleton, or a loading sign", [], "render the page frame first, then a skeleton the size of the content that is coming", None, key="blank-load", basis="operated")
+    if (sl.get("cls") or 0) > 0.1:
+        F.add("ST-17", "warn", f"The layout moves as content arrives (CLS {sl['cls']})", w,
+              "; ".join(f"{s['value']} at {s['at']} ms in {', '.join(n for n in s.get('nodes', []) if n) or 'the page'}" for s in sl.get("shifts", [])[:3]) or f"CLS {sl['cls']}",
+              "CLS 0.1 or less on a slow load: a skeleton or reserved box the size of what replaces it", [n for s in sl.get("shifts", [])[:3] for n in s.get("nodes", []) if n],
+              "give images width and height (or aspect-ratio), and make each skeleton the size and shape of the content it stands for", "Core Web Vitals (CLS)", key="arrival-shift", basis="operated")
+    if not d.get("requests"):
+        F.add("ST-16", "info", "No data requests: empty, error and offline states not tried", w, "the page made no fetch or XHR request to its own site while loading"
+              + (f" (calls to other sites, left alone: {', '.join(d['otherSites'][:3])})" if d.get("otherSites") else ""),
+              "for a page with data, each state shows a message people can act on", [], "if data arrives another way (server-rendered, a socket), set each state by hand and look", None, key="no-data", basis="operated")
+        return
+    hang = (d.get("modes") or {}).get("hang")
+    if hang and not hang.get("busy"):
+        F.add("ST-16", "warn", "No loading sign while the data is on its way", w, f"3 s into a request that has not answered: no skeleton, spinner, progress bar, aria-busy or \"Loading\" ({fmt(hang.get('chars'))} characters on screen)",
+              "a skeleton the size of the content, or a loading sign, until the data arrives", [hang.get("shot")],
+              "render a skeleton for the view and set aria-busy on it until the data lands", None, key="state-hang", basis="operated")
+    names = {"empty": ("empty", "an empty state that says there is nothing yet and what to do"), "error": ("failing with a server error", "an error that says what failed and offers a retry"),
+             "offline": ("unreachable (offline)", "a message that the connection is down, with a retry")}
+    for mode, m in (d.get("modes") or {}).items():
+        if mode == "hang":
+            continue
+        said, want = names.get(mode, (mode, "a message"))
+        reqs = ", ".join(d.get("requestUrls") or [])
+        if m.get("placeholders"):
+            F.add("ST-16", "error", f"Broken text when the data is {said}", w, "; ".join(f"{x['sel']}: {x['match']!r}" for x in m["placeholders"][:3]),
+                  "no undefined, NaN or empty template text in any state", [x["sel"] for x in m["placeholders"][:3]] + [m.get("shot")],
+                  "handle the missing value before rendering it", None, key="state-broken-" + mode, basis="operated")
+        if m.get("busyStill") and mode != "empty":
+            F.add("ST-16", "warn", f"Still loading forever when the data is {said}", w, "a loading sign is still on screen after the request ended", "the loading sign gives way to a message",
+                  [m.get("shot")], "end the loading state on failure as well as on success", None, key="state-stuck-" + mode, basis="operated")
+        elif not m.get("message"):
+            F.add("ST-16", "warn", f"No message when the data is {said}", w, f"{fmt(m.get('chars'))} characters on screen and no new words for this state" + (f" (requests answered this way: {reqs})" if reqs else ""),
+                  want, [m.get("shot")], "write the state into the view: say what happened and offer the next step", None, key="state-silent-" + mode, basis="operated", decided="judgment")
+
+
+def check_notfound(d, F):
+    """What an address that cannot exist shows (capture.py not_found): ST-18."""
+    w = where_of(d)
+    st, h = d.get("status"), (d.get("heading") or "").strip()
+    if st != 404:
+        F.add("ST-18", "warn", f"A missing page answers {st}, not 404", w, f"{d.get('url')} returned {st}", "status 404, so search engines drop it and tools can tell",
+              [d.get("shot")], "serve the not-found page with status 404", None, key="nf-status", basis="operated")
+    if not h:
+        F.add("ST-18", "warn", "The not-found page has no heading", w, f"{fmt(d.get('chars'))} characters, no h1", "a heading that says the page is not here, in plain words",
+              [d.get("shot")], "an h1 such as \"We can't find that page\"", None, key="nf-heading", basis="operated")
+    elif re.fullmatch(r"(error\s*)?(404|not found|error response|page not found)[.!]?", h, re.I) or re.fullmatch(r"[\d\W]+", h):
+        F.add("ST-18", "warn", "The not-found page says a code, not what happened", w, f"heading: \"{h}\"", "plain words: what happened and what to do", [d.get("shot")],
+              "say it as a person would (\"We can't find that page\") and keep 404 as small print", None, key="nf-plain", basis="operated")
+    if not d.get("links"):
+        F.add("ST-18", "warn", "The not-found page offers no way on", w, "0 links on the page", "a link home, to search or to the main sections", [d.get("shot")],
+              "add the site header, or at least a link home", None, key="nf-links", basis="operated")
+
+
 CAPTURE_CHECKS = {"focus": check_focus, "console": check_console, "hover": check_hover, "vitals": check_vitals, "fonts": check_fonts,
-                  "states": check_states, "bars": check_bars, "kern": check_kern, "pixels": check_pixels}
+                  "states": check_states, "bars": check_bars, "kern": check_kern, "pixels": check_pixels, "datastates": check_datastates, "notfound": check_notfound}
 SAVE_KINDS = set(CAPTURE_CHECKS)
-CHECK_FOLDERS = ("probes", "focus", "hover", "console", "fonts", "vitals", "motion", "states", "bars", "kern", "pixels")   # where serve and capture.py write
+CHECK_FOLDERS = ("probes", "focus", "hover", "console", "fonts", "vitals", "motion", "states", "bars", "kern", "pixels", "datastates", "notfound")   # where serve and capture.py write
 MAX_POST = 4 * 1024 * 1024
 
 
@@ -1281,6 +1791,7 @@ def cmd_check(args):
     rd = review_dir(args)
     sysm = load_system(args.project or ".")
     F = Findings()
+    F.audience = getattr(args, "audience", None)
     n = 0
     files = check_inputs(args.probes)
     if not files:
@@ -1317,7 +1828,7 @@ def cmd_check(args):
     for f in findings:
         if f["severity"] == "info" and not args.all:
             continue
-        print(f"\n[{f['severity'].upper()}] {f['title']}  ({f['case']}, {f['basis']})")
+        print(f"\n[{f['severity'].upper()}] {f['title']}  ({f['case']}, {f['basis']}" + (", a judgment: read the evidence" if f.get("decided") == "judgment" else "") + ")")
         print(f"  where:    {'; '.join(f['where'][:3])}" + (f" (+{len(f['where']) - 3} more)" if len(f["where"]) > 3 else ""))
         if f["measured"]:
             print(f"  measured: {f['measured']}")
@@ -1657,7 +2168,8 @@ def main(argv=None):
     p = sub.add_parser("plan"); common(p); p.add_argument("--url", required=True); p.add_argument("--routes"); p.add_argument("--viewports", help="320,390x844,768")
     p.add_argument("--themes"); p.add_argument("--edges", action="store_true", help="also test one pixel below and at each breakpoint"); p.add_argument("--wide", action="store_true", help="add 1920x1080"); p.set_defaults(fn=cmd_plan)
     p = sub.add_parser("mark"); common(p); p.add_argument("cell"); p.add_argument("status", choices=["done", "todo", "skipped", "blocked"]); p.add_argument("--evidence", nargs="*"); p.add_argument("--why"); p.set_defaults(fn=cmd_mark)
-    p = sub.add_parser("check"); common(p); p.add_argument("probes", nargs="+"); p.add_argument("--json", action="store_true"); p.add_argument("--all", action="store_true", help="also print info notes"); p.set_defaults(fn=cmd_check)
+    p = sub.add_parser("check"); common(p); p.add_argument("probes", nargs="+"); p.add_argument("--json", action="store_true"); p.add_argument("--all", action="store_true", help="also print info notes")
+    p.add_argument("--audience", help="who the page is for (everyone, novice, expert): a non-expert audience turns on the jargon check (CP-04); the page's data-audience and the system's Q-aud-01 also set it"); p.set_defaults(fn=cmd_check)
     p = sub.add_parser("finding"); common(p); p.add_argument("text"); p.add_argument("--severity", choices=list(SEV), required=True); p.add_argument("--basis", choices=["seen", "operated", "inferred", "measured"], required=True)
     p.add_argument("--evidence", nargs="*"); p.add_argument("--where"); p.add_argument("--expected"); p.add_argument("--fix"); p.add_argument("--case"); p.set_defaults(fn=cmd_finding)
     p = sub.add_parser("report"); common(p); p.add_argument("--name"); p.set_defaults(fn=cmd_report)

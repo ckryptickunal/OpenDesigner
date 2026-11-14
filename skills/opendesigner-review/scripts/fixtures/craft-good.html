@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en" data-audience="everyone">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Craft checks: done right</title>
+<!-- craft-bad.html with every defect fixed. test_probe_live.py expects no craft or copy finding here, at 320 px and 1280 px,
+     with 200% text and with the +30% translation stress. -->
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1a1a1a; background: #fff; }
+  main { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  section { padding: 48px 0; }
+  p { margin: 0 0 16px; max-width: 65ch; overflow-wrap: break-word; }
+  h1, h2, h3 { margin: 0 0 16px; line-height: 1.2; text-wrap: balance; overflow-wrap: anywhere; }
+  h1 { font-size: clamp(28px, 7vw, 40px); letter-spacing: -0.02em; }
+  h2 { font-size: 28px; letter-spacing: -0.01em; }
+  h3 { font-size: 20px; }
+  .label { display: inline-block; padding: 4px 12px; background: #eee; border-radius: 6px; overflow-wrap: anywhere; }
+  .lede { font-size: 20px; text-wrap: balance; }
+  .small { font-size: 12px; letter-spacing: 0.02em; }
+  .caps { font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .display { font-size: clamp(36px, 10vw, 56px); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px; overflow-wrap: anywhere; }
+  .card { background: #f0f0f0; border-radius: 8px; padding: 24px; }
+  .card h3 { min-height: 1.2em; }
+  .card > * { margin: 0 0 12px; }
+  .card > *:last-child { margin-bottom: 0; }
+  .list { padding-left: 20px; }
+  .list > li { margin: 0 0 8px; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+  button, .btn { font: inherit; padding: 8px 16px; min-height: 40px; display: inline-flex; align-items: center; text-align: center;
+                 border: 1px solid #444; border-radius: 8px; background: #fff; color: #1a1a1a; text-decoration: none; overflow-wrap: anywhere; }
+  .blk { background: #f3f3f6; border: 1px solid #ccc; border-radius: 10px; padding: 16px; margin: 0 0 16px; }
+  .caption { margin: 8px 0 16px; font-size: 14px; }
+  .code { margin: 16px 0; background: #f6f6f6; border: 1px solid #ddd; border-radius: 10px; padding: 12px; display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+  .code pre { margin: 0; font-family: ui-monospace, Menlo, monospace; overflow-x: auto; min-width: 0; }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <h1>Plan your next big project today</h1>
+    <p class="lede">Everything here is real copy, written for the people who will read it.</p>
+    <p><span class="label">This label has room to grow</span></p>
+    <h2>Quarterly revenue by region and team</h2>
+    <div class="actions"><button>Download the annual report</button></div>
+  </section>
+  <section>
+    <p>Body text with a line height of 1.5 is easy to follow from the end of one line to the start of the next. This paragraph
+      is long enough to wrap onto several lines at most widths so the check can see it, and its measure stays near 65 characters.</p>
+    <p class="small">Small print tracked slightly open, so its letters do not touch at twelve pixels.</p>
+    <p class="caps">Capitals tracked open</p>
+    <p class="display">Display text tightened</p>
+  </section>
+  <section>
+    <div class="card"><h3>Card heading</h3><p>The card's padding is wider than the gap between the heading and this text.</p></div>
+  </section>
+  <section>
+    <ul class="list">
+      <li>First item</li><li>Second item</li><li>Third item</li><li>Fourth item</li>
+    </ul>
+  </section>
+  <section>
+    <div class="actions">
+      <a class="btn" href="/signup">Sign up</a>
+      <button>Compare prices</button>
+      <button>Continue to checkout</button>
+    </div>
+    <p>Pick a colour from the list to change how your buttons look.</p>
+  </section>
+  <section>
+    <div class="blk"><p>Block one</p></div>
+    <div class="blk"><p>Block two, with a gap above</p></div>
+    <div class="blk"><p>A figure</p></div>
+    <p class="caption">A caption with room above it.</p>
+    <div class="code"><pre>npm install one</pre><button class="copy">Copy</button></div>
+    <div class="code"><pre>npm install two</pre><button class="copy">Copy</button></div>
+    <p>Read the <a href="/docs/install">install steps</a> on example.com.</p>
+  </section>
+</main>
+</body>
+</html>

@@ -983,5 +983,155 @@ class Guarantees(unittest.TestCase):
         self.assertEqual(sorted(used - ids), [])
 
 
+CRAFT = json.loads((HERE / "fixtures" / "craft-bad-1280.probe.json").read_text())
+PUBLIC = REPO / "examples" / "public-service-accessible"
+
+
+class TestCraftAndCopy(unittest.TestCase):
+    """fixtures/craft-bad-1280.probe.json is what probe.js returned for fixtures/craft-bad.html at 1280 px (Chrome, 2026-11-13).
+    test_probe_live.py checks the probe itself on craft-bad.html and craft-good.html."""
+
+    def test_every_planted_craft_and_copy_defect_is_a_finding(self):
+        got = by_case(findings_for(CRAFT))
+        for case in ("ST-12", "ST-13", "MS-21", "MS-22", "MS-23", "MS-24", "CP-01", "CP-02", "CP-03", "CP-04"):
+            self.assertIn(case, got, case)
+        titles = {f["title"] for f in findings_for(CRAFT)}
+        for t in ("Text runs out of its box", "Text cut off by the box around it", "Text touches the edge of its box",
+                  "Padding smaller than the space between the items inside", f"Text blocks closer than {rv.TOUCH_GAP} px to each other",
+                  "Body text tracked open", "Small text tracked tight", "Capitals with no tracking", "Display text not tightened",
+                  "Body text with line height under 1.4", "Body text outside 45-75 characters a line", "One action named two ways on the page"):
+            self.assertIn(t, titles)
+
+    def test_rules_and_judgments_are_labelled(self):
+        fs = {f["title"]: f for f in findings_for(CRAFT)}
+        self.assertEqual(fs["Text runs out of its box"]["decided"], "rule")
+        self.assertEqual(fs["One action named two ways on the page"]["decided"], "rule")
+        self.assertEqual(fs["Button labels that do not start with a verb"]["decided"], "judgment")
+        self.assertEqual(fs["Uneven space between sections"]["decided"], "judgment")
+        self.assertTrue(next(f for f in fs.values() if f["case"] == "CP-04")["decided"] == "judgment")
+
+    def test_every_craft_finding_names_the_element_and_a_number(self):
+        for f in findings_for(CRAFT):
+            if f["case"] in ("ST-12", "ST-13", "MS-21", "MS-22", "MS-23", "MS-24"):
+                self.assertTrue(f["evidence"] and f["evidence"][0].startswith(("div", "span", "h2", "p", "ul", "section", "button")), f["title"])
+                self.assertRegex(f["measured"], r"\d", f["title"])
+
+    def test_a_crop_saved_by_capture_is_evidence(self):
+        p = copy.deepcopy(CRAFT)
+        p["craft"]["spill"][0]["crop"] = "review/shots/crops/x-00.png"
+        f = next(f for f in findings_for(p) if f["title"] == "Text runs out of its box")
+        self.assertIn("review/shots/crops/x-00.png", f["evidence"])
+
+    def test_fixes_use_the_systems_tokens(self):
+        sysm = rv.load_system(PUBLIC)
+        self.assertEqual(sysm["space_tokens"][10.0], "ds-space-10")
+        self.assertEqual(sysm["tracking_tokens"]["caps-label"], "ds-text-label-sm-tracking")
+        fs = {f["title"]: f for f in findings_for(CRAFT, sysm)}
+        self.assertIn("var(--ds-space-", fs["Text touches the edge of its box"]["fix"])
+        self.assertIn("var(--ds-text-label-sm-tracking)", fs["Capitals with no tracking"]["fix"])
+        self.assertIn("var(--ds-layout-measure-prose)", fs["Body text outside 45-75 characters a line"]["fix"])
+        self.assertIn("var(--ds-text-body-md-line-height)", fs["Body text with line height under 1.4"]["fix"])
+
+    def test_title_case_is_a_rule_once_the_system_chose_sentence_case(self):
+        sysm = rv.load_system(PUBLIC)
+        sysm["case"] = "sentence"
+        f = next(f for f in findings_for(CRAFT, sysm) if f["case"] == "CP-01")
+        self.assertEqual((f["severity"], f["decided"]), ("warn", "rule"))
+        self.assertIn("Plan Your Next Big Project Today", f["measured"])
+        sysm["case"] = None
+        f = next(f for f in findings_for(CRAFT, sysm) if f["case"] == "CP-01")
+        self.assertEqual((f["severity"], f["decided"]), ("info", "judgment"))
+
+    def test_title_case_detection_leaves_names_and_short_labels_alone(self):
+        self.assertEqual(rv.case_of("Plan Your Next Big Project", set()), "title")
+        self.assertEqual(rv.case_of("Plan your next big project", set()), "sentence")
+        self.assertEqual(rv.case_of("Install the plugin and skills in Claude Code", {"Claude", "Code"}), "sentence")
+        self.assertIsNone(rv.case_of("Sign up", set()))
+        self.assertEqual(rv.case_of("WCAG AA contrast", set()), "sentence")
+        self.assertEqual(rv.proper_words("We use Figma daily. Then Figma exports. The cat sat."), {"Figma"})
+
+    def test_jargon_only_on_a_page_for_non_experts(self):
+        p = copy.deepcopy(CRAFT)
+        p["copy"]["audience"] = None
+        self.assertNotIn("CP-04", by_case(findings_for(p)))
+        F = rv.Findings()
+        rv.check_copy(p, None, "w", F, audience="everyone")
+        f = next(f for f in F.done() if f["case"] == "CP-04")
+        self.assertIn("DTCG", f["measured"])
+        self.assertIn("say", f["fix"])
+
+    def test_stress_runs_report_cut_text_but_not_orphans_or_spacing(self):
+        p = copy.deepcopy(CRAFT)
+        p["stress"] = ["translate"]
+        got = by_case(findings_for(p))
+        self.assertIn("ST-14", got)
+        self.assertEqual(got["ST-14"][0]["severity"], "warn")
+        for case in ("ST-12", "MS-21", "MS-22", "MS-23", "MS-24", "CP-01", "CP-03"):
+            self.assertNotIn(case, got, case)
+        p["stress"] = ["text200"]
+        self.assertEqual(by_case(findings_for(p))["ST-12"][0]["severity"], "error")
+
+    def test_a_clean_page_has_no_craft_or_copy_finding(self):
+        p = clean_probe(craft={"spill": [], "hiddenByParent": [], "truncated": [], "orphans": [], "tight": [], "touching": [], "insetVsGap": [],
+                               "siblings": [], "sections": [{"sel": "s2", "space": 96}, {"sel": "s3", "space": 96}, {"sel": "s4", "space": 100}], "measure": [{"sel": "p", "ch": 64, "lines": 6}]},
+                        copy={"audience": "everyone", "headings": [{"sel": "h1", "text": "Plan your next project", "level": 1}],
+                              "controls": [{"sel": "a", "kind": "button", "text": "Sign up", "href": "/signup"}, {"sel": "b", "kind": "button", "text": "Compare prices", "href": None}],
+                              "text": "Pick a colour from the list."})
+        got = by_case(findings_for(p))
+        for case in ("ST-12", "ST-13", "ST-14", "MS-21", "MS-22", "MS-23", "MS-24", "CP-01", "CP-02", "CP-03", "CP-04"):
+            self.assertNotIn(case, got, case)
+
+    def test_two_gaps_in_a_run_is_a_judgment_three_is_a_warning(self):
+        p = clean_probe(craft={"siblings": [{"sel": "ul", "kind": "li@16.", "axis": "vertical", "gaps": [8, 8, 24, 8], "distinct": 2}]})
+        f = by_case(findings_for(p))["MS-23"][0]
+        self.assertEqual((f["severity"], f["decided"]), ("info", "judgment"))
+
+class TestLibraryAndStates(unittest.TestCase):
+    """The library-page problems (MS-22, MS-25 to MS-27, ST-15) from the stored craft-bad probe, and the state checks
+    (ST-16 to ST-18) from capture documents written by hand. test_probe_live.py runs both in a browser."""
+
+    def test_library_page_problems_are_findings(self):
+        titles = {f["title"] for f in findings_for(CRAFT)}
+        for t in ("Blocks with no gap between them", "Text touching the box next to it", "Boxes side by side with different corner radii",
+                  "Prose set in a monospace font", "One block lacks a control its twins have"):
+            self.assertIn(t, titles)
+        self.assertTrue(any(t.startswith("A web address broken across lines") for t in titles))
+
+    def test_states_findings(self):
+        doc = {"kind": "datastates", "url": "http://localhost:3000/", "viewport": {"w": 390, "h": 800},
+               "slow": {"at1s": {"chars": 0, "busy": 0, "loadingWords": False}, "loadMs": 2400, "cls": 0.31, "shifts": [{"value": 0.31, "at": 900, "nodes": ["main > p"]}]},
+               "requests": 2, "modes": {"empty": {"chars": 40, "message": False, "busyStill": False, "placeholders": []},
+                                         "error": {"chars": 40, "message": False, "busyStill": False, "placeholders": [{"sel": "li", "match": "undefined"}]},
+                                         "offline": {"chars": 40, "message": False, "busyStill": True, "placeholders": []}}}
+        F = rv.Findings()
+        rv.check_datastates(doc, F)
+        got = {(f["case"], f["severity"], f["title"]) for f in F.done()}
+        self.assertIn(("ST-16", "warn", "A blank screen while the page loads on a slow network"), got)
+        self.assertIn(("ST-17", "warn", "The layout moves as content arrives (CLS 0.31)"), got)
+        self.assertIn(("ST-16", "error", "Broken text when the data is failing with a server error"), got)
+        self.assertIn(("ST-16", "warn", "Still loading forever when the data is unreachable (offline)"), got)
+        self.assertIn(("ST-16", "warn", "No message when the data is empty"), got)
+        quiet = {"kind": "datastates", "url": "http://localhost:3000/", "viewport": {"w": 390, "h": 800},
+                 "slow": {"at1s": {"chars": 300, "busy": 2, "loadingWords": False}, "cls": 0.01}, "requests": 0, "modes": {}}
+        F = rv.Findings()
+        rv.check_datastates(quiet, F)
+        self.assertEqual([(f["case"], f["severity"]) for f in F.done()], [("ST-16", "info")])
+
+    def test_not_found_findings(self):
+        F = rv.Findings()
+        rv.check_notfound({"kind": "notfound", "url": "http://localhost:3000/x", "viewport": {"w": 1280, "h": 900}, "status": 200, "heading": "404", "links": 0, "chars": 3}, F)
+        self.assertEqual({f["title"] for f in F.done()}, {"A missing page answers 200, not 404", "The not-found page says a code, not what happened", "The not-found page offers no way on"})
+        F = rv.Findings()
+        rv.check_notfound({"kind": "notfound", "url": "http://localhost:3000/x", "viewport": {"w": 1280, "h": 900}, "status": 404, "heading": "We can't find that page", "links": 12, "chars": 300}, F)
+        self.assertEqual(F.done(), [])
+
+    def test_check_reads_the_new_capture_folders(self):
+        with tempfile.TemporaryDirectory() as d:
+            rd = Path(d)
+            (rd / "notfound").mkdir()
+            (rd / "notfound" / "nf.json").write_text(json.dumps({"kind": "notfound", "url": "http://localhost:3000/x", "viewport": {"w": 1280, "h": 900}, "status": 200, "heading": "", "links": 0}))
+            code, out = run(["check", str(rd), "--dir", str(rd)])
+            self.assertIn("A missing page answers 200", out)
+
 if __name__ == "__main__":
     unittest.main(verbosity=1)
