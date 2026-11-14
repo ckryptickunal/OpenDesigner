@@ -1,0 +1,184 @@
+{
+ "about": "Live-path Smart UI evals on the Fernhollow council example (examples/smart-ui-fernhollow): a public service people use now and then. The model routes to the app's read actions (by keywords first), answers in Fernhollow's own system, and is validated against the data it got. Changes (renew, pay, book, upload) must end in an ApprovalPrompt. Invented data.",
+ "app": "examples/smart-ui-fernhollow/server.py",
+ "cases": [
+  {
+   "id": "fh-fines",
+   "turns": [
+    "Do I have any fines?"
+   ],
+   "expect": [
+    "DataTable",
+    "KeyFacts"
+   ]
+  },
+  {
+   "id": "fh-fine-one",
+   "turns": [
+    "What is fine FH40018273 for?"
+   ],
+   "expect": [
+    "KeyFacts"
+   ]
+  },
+  {
+   "id": "fh-fine-unknown",
+   "turns": [
+    "Look up fine FH99999999"
+   ],
+   "expect": [
+    "ErrorRetry",
+    "KeyFacts"
+   ]
+  },
+  {
+   "id": "fh-fine-pay",
+   "turns": [
+    "Do I have any fines?",
+    "Pay the unpaid one"
+   ],
+   "expect": [
+    "ApprovalPrompt"
+   ]
+  },
+  {
+   "id": "fh-renew",
+   "turns": [
+    "Renew my parking permit"
+   ],
+   "expect": [
+    "ApprovalPrompt",
+    "KeyFacts"
+   ]
+  },
+  {
+   "id": "fh-permit",
+   "turns": [
+    "When does my permit run out?"
+   ],
+   "expect": []
+  },
+  {
+   "id": "fh-prices",
+   "turns": [
+    "What do the different permits cost?"
+   ],
+   "expect": [
+    "Comparison",
+    "DataTable"
+   ]
+  },
+  {
+   "id": "fh-visitor",
+   "turns": [
+    "Can I get a visitor permit?"
+   ],
+   "expect": [
+    "KeyFacts"
+   ]
+  },
+  {
+   "id": "noui-fh-office",
+   "turns": [
+    "When is the Hollow Lane office open?"
+   ],
+   "expect": []
+  },
+  {
+   "id": "fh-offices",
+   "turns": [
+    "Which offices can I go to?"
+   ],
+   "expect": [
+    "DataTable",
+    "KeyFacts"
+   ]
+  },
+  {
+   "id": "fh-slots",
+   "turns": [
+    "Are there any appointments at Hollow Lane this week?"
+   ],
+   "expect": [
+    "TimeSlots"
+   ]
+  },
+  {
+   "id": "fh-slots-empty",
+   "turns": [
+    "Can I book an appointment at Marsh Road this week?"
+   ],
+   "expect": [
+    "EmptyState",
+    "TimeSlots"
+   ]
+  },
+  {
+   "id": "fh-book",
+   "turns": [
+    "Are there any appointments at Hollow Lane this week?",
+    "Book the first one"
+   ],
+   "expect": [
+    "ApprovalPrompt"
+   ]
+  },
+  {
+   "id": "fh-status",
+   "turns": [
+    "Where is my application?"
+   ],
+   "expect": [
+    "ProgressStatus"
+   ]
+  },
+  {
+   "id": "fh-docs",
+   "turns": [
+    "What documents do I still need to send?"
+   ],
+   "expect": [
+    "DataTable",
+    "KeyFacts"
+   ]
+  },
+  {
+   "id": "fh-upload",
+   "turns": [
+    "Where is my application?",
+    "I want to upload the missing document"
+   ],
+   "expect": [
+    "ApprovalPrompt"
+   ]
+  },
+  {
+   "id": "noui-fh-thanks",
+   "turns": [
+    "Thank you"
+   ],
+   "expect": []
+  },
+  {
+   "id": "noui-fh-zone",
+   "turns": [
+    "Which zone am I in?"
+   ],
+   "expect": []
+  },
+  {
+   "id": "noui-fh-phone",
+   "turns": [
+    "What is the council's phone number?"
+   ],
+   "expect": []
+  },
+  {
+   "id": "noui-fh-step-free",
+   "turns": [
+    "Does Hollow Lane have step-free access?"
+   ],
+   "expect": []
+  }
+ ]
+}

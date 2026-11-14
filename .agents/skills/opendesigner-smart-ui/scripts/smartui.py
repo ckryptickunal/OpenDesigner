@@ -504,7 +504,10 @@ def select(msg, catalog, k=3, scope=None, data=None, boost=None):
     best_words = max((score(msg, c) for n, c in catalog["components"].items() if not od(c).get("container")), default=0)
     cue = bool(UI_CUES.search(norm(msg)))
     reason = cue or best >= 3
-    short_fact = (len(words(msg)) <= 6 and re.match(r"^\s*(what|when|who|how many|is|are|does|did|can|do)\b", norm(msg))
+    # a question about one attribute ("how many seats", "which zone", "does it include SSO") is a short fact; "do I have
+    # any fines", "can I get a visitor permit" and "what is fine FH40018273 for" ask for a whole record or a list
+    short_fact = (len(words(msg)) <= 6 and re.match(r"^\s*(what is|what's|when|who|which|how many|how much|is|are|does|did)\b", norm(msg))
+                  and not re.search(r"\b(any|all|every|each)\b|\b(can|could|should) (i|we)\b", norm(msg)) and not re.search(r"\b[A-Z]{1,5}-?\d{3,}", msg)
                   and not cue and best_words < 3
                   and not re.search(r"\band (when|what|how|who|where|which)\b", norm(msg)))  # two questions in one are not a short fact
     ui = bool(top) and reason and not short_fact
@@ -535,16 +538,20 @@ def compact(schema):
                      if k not in ("component", "id", "@accessibility", "@metadata"))
 
 
-def build_prompt(msg, catalog, k=3, scope=None, data=None, boost=None, always=()):
-    """always: parts whose properties are listed whenever there is UI (the approval prompt, when the app can change data)."""
-    sel = select(msg, catalog, k, scope, data, boost)
+def build_prompt(msg, catalog, k=3, scope=None, data=None, boost=None, always=(), structured=False, sel=None):
+    """always: parts whose properties are listed whenever there is UI (the approval prompt, when the app can change data).
+    structured: the reply is JSON {text, part} (constrained decoding); sel: a selection already made."""
+    sel = sel or select(msg, catalog, k, scope, data, boost)
     lines = [
         "You can answer with interface parts from the person's own design system (OpenDesigner Smart UI).",
         catalog["instructions"],
         "",
-        "Output: your text answer. If a part helps, add ONE fenced block marked a2ui holding the part as one JSON object:",
-        '```a2ui\n{"component": "<Name>", ...properties}\n```',
-        "It is wrapped in an A2UI v1.0 createSurface for you. (Full A2UI messages are accepted too.)",
+        *(['Output: JSON {"text": "<your answer in plain words>", "part": {"component": "<Name>", ...properties} or null}. '
+            "The text comes first and stands on its own; the part shows the details. It is wrapped in an A2UI v1.0 createSurface for you."]
+          if structured else
+          ["Output: your text answer. If a part helps, add ONE fenced block marked a2ui holding the part as one JSON object:",
+           '```a2ui\n{"component": "<Name>", ...properties}\n```',
+           "It is wrapped in an A2UI v1.0 createSurface for you. (Full A2UI messages are accepted too.)"]),
         "Button and link actions are {label, event: {name, context?}}; event names are lower_snake_case. Images only from: "
         + (", ".join(od(catalog)["allow"]["images"]) or "nowhere (no images allowed)") + ".",
         "",
@@ -560,6 +567,50 @@ def build_prompt(msg, catalog, k=3, scope=None, data=None, boost=None, always=()
     if data is not None:
         lines += ["", "Data you may use (every number you show must come from here):", json.dumps(data, ensure_ascii=False)[:6000]]
     return "\n".join(lines), sel
+
+
+def response_schema(catalog, names):
+    """The JSON a model must return in structured mode: {"text", "part"}, where part is one of these parts or null. Made for
+    constrained decoding (Gemini responseJsonSchema, Claude --json-schema): refs inlined, our x-od keys and the id dropped
+    (wrap() adds it), and nested list bounds loosened, because providers refuse schemas whose bounds multiply out too far.
+    The validator still checks every real limit afterwards."""
+    defs = catalog.get("$defs", {})
+
+    def clean(x, in_array=False):
+        if isinstance(x, list):
+            return [clean(v, in_array) for v in x]
+        if not isinstance(x, dict):
+            return x
+        if "$ref" in x:
+            return clean(defs.get(x["$ref"].split("/")[-1], {}), in_array)
+        out = {}
+        for k, v in x.items():
+            if k.startswith("x-od") or k in ("metadata", "description", "$schema", "$id"):
+                continue
+            if k == "properties":
+                out[k] = {n: clean(pv, in_array) for n, pv in v.items() if n not in ("id", "@accessibility", "@metadata")}
+            elif k == "items":
+                out[k] = clean(v, True)
+            else:
+                out[k] = clean(v, in_array)
+        if in_array:  # inside a list, keep the shape and let the validator hold lengths (and a number may come as text)
+            out.pop("maxLength", None)
+            out.pop("minLength", None)
+            if isinstance(out.get("type"), list) and set(out["type"]) <= {"string", "number", "integer"}:
+                out["type"] = "string"
+        if out.get("type") == "array":
+            if in_array:
+                out.pop("minItems", None)
+                out.pop("maxItems", None)
+            elif out.get("maxItems", 0) > 20:
+                out["maxItems"] = 20
+        if "required" in out:
+            out["required"] = [r for r in out["required"] if r != "id"]
+        return out
+
+    parts = [clean(catalog["components"][n]) for n in names if n in catalog["components"]]
+    return {"type": "object", "additionalProperties": False, "required": ["text", "part"],
+            "properties": {"text": {"type": "string"}, "part": {"anyOf": parts + [{"type": "null"}]} if parts else {"type": "null"}}}
 
 
 def cmd_prompt(a):
@@ -701,6 +752,42 @@ def copy_check(v, path, errs, sid, names):
             _err(errs, "copy-case", path, f"'{v}' is in Title Case", sid, "use sentence case: capitalise the first word and names only")
 
 
+def sentence_case(v, names=()):
+    """'Open Invoices Due' -> 'Open invoices due'. The first word, names (words the data or the person used capitalised)
+    and acronyms keep their capitals. Used to fix a copy-case error without another model call."""
+    first = [True]
+
+    def one(m):
+        w = m.group(0)
+        if first[0]:
+            first[0] = False
+            return w
+        if w.lower() in names or sum(c.isupper() for c in w) > 1:
+            return w
+        return w[0].lower() + w[1:]
+    return WORD.sub(one, v)
+
+
+def fix_case(msgs, errors, names=()):
+    """Apply sentence_case at every copy-case error's path (JSON pointer into the A2UI messages). Returns how many."""
+    n = 0
+    for e in errors:
+        if e.get("rule") != "copy-case":
+            continue
+        keys = [k.replace("~1", "/").replace("~0", "~") for k in e["path"].split("/")[1:]]
+        cur = msgs
+        try:
+            for k in keys[:-1]:
+                cur = cur[int(k)] if isinstance(cur, list) else cur[k]
+            last = int(keys[-1]) if isinstance(cur, list) else keys[-1]
+            if isinstance(cur[last], str):
+                cur[last] = sentence_case(cur[last], names)
+                n += 1
+        except (KeyError, IndexError, ValueError, TypeError):
+            continue
+    return n
+
+
 def duplicate_rows(v, path, errs, sid):
     """A list of label-value rows shows each value once ("Number TH-1043" and "Invoice number TH-1043" is one row)."""
     seen = {}
@@ -730,18 +817,30 @@ def table_headers(v, path, errs, sid):
 
 
 def names_in(obj, out=None):
-    """Capitalised words in the data the model was given: names (Lisbon, Tallyhaus, Casa do Rio)."""
-    out = set() if out is None else out
-    if isinstance(obj, str):
-        out.update(w.lower() for w in WORD.findall(obj) if w[0].isupper())
-    elif isinstance(obj, dict):
-        for k, x in obj.items():
-            names_in(x, out)
-    elif isinstance(obj, list):
-        for x in obj:
-            names_in(x, out)
-    return out
+    """Capitalised words in the data the model was given: names (Lisbon, Tallyhaus, Casa do Rio, the Team plan). A capital
+    at the start of a phrase ("Permit sent") counts only when the data never uses the word in lower case (a parking permit)."""
+    caps, first, lower = set(), set(), set()
 
+    def walk(v):
+        if isinstance(v, str):
+            ws = WORD.findall(v)
+            for i, w in enumerate(ws):
+                if not w[0].isupper():
+                    lower.add(w.lower())
+                elif i > 0 or len(ws) == 1:
+                    caps.add(w.lower())
+                else:
+                    first.add(w.lower())
+        elif isinstance(v, dict):
+            for x in v.values():
+                walk(x)
+        elif isinstance(v, list):
+            for x in v:
+                walk(x)
+    walk(obj)
+    out = set() if out is None else out
+    out.update(caps | (first - lower))
+    return out
 
 def _num(s):
     try:
@@ -1235,12 +1334,9 @@ def route_phrases(a):
 
 def propose_intents(product, actions):
     """Intents from the product type (assets/intents.json), plus one per action the assistant could take."""
-    key = None
     p = (product or "").lower()
-    for k, v in PRODUCT_INTENTS.items():
-        if k == p or any(w in p for w in v.get("match", [])):
-            key = k
-            break
+    hits = {k: (100 if k == p else sum(w in p for w in v.get("match", []))) for k, v in PRODUCT_INTENTS.items()}
+    key = max(hits, key=lambda k: hits[k]) if hits and max(hits.values()) else None  # the type the description fits best
     out = []
     for it in (PRODUCT_INTENTS.get(key, {}).get("intents", []) if key else []):
         out.append({**it, "from": f"product type {key}"})

@@ -254,25 +254,66 @@ class Live(unittest.TestCase):
         a = self.app.ACTIONS["pay_invoice"]
         a["fn"] = (lambda f: (lambda **kw: (self.ran.append(kw), f(**kw))[1]))(a["fn"])
 
-    def script(self, replies):
-        it = iter(replies)
-        self.live.ask = lambda provider, system, turns: next(it)
+    def script(self, replies, routes=()):
+        """A scripted model: routing calls (a schema with "calls") take from routes, answers from replies."""
+        it, rt = iter(replies), iter(routes)
+        self.asked = []
+
+        def ask(provider, system, turns, schema=None, on_text=None):
+            if schema and "calls" in schema.get("properties", {}):
+                return next(rt, '{"calls": []}')
+            self.asked.append(schema)
+            return next(it)
+        self.live.ask = ask
 
     def test_route_answer_repair(self):
         bad = '```a2ui\n{"component": "DataTable", "title": "<b>Open</b>", "columns": [], "rows": []}\n```'
         good = 'Two are open.\n```a2ui\n{"component": "KeyFacts", "title": "Open invoices", "facts": [{"label": "TH-1047", "value": "€1,104.00"}, {"label": "TH-1043", "value": "€184.00"}]}\n```'
-        self.script(['{"calls": [{"action": "list_invoices", "args": {"status": "open"}}, {"action": "pay_invoice", "args": {"number": "TH-1047"}}]}', bad, good])
+        self.script([bad, good])
         conv = self.live.Conversation(self.app, "scripted")
         r = conv.answer("Show my open invoices")
-        self.assertEqual([c[0] for c in r["log"]["calls"]], ["list_invoices"])  # the change was dropped from the route (R3)
+        self.assertEqual([c[0] for c in r["log"]["calls"]], ["list_invoices"])  # routed by its words, no model call
+        self.assertFalse(r["log"]["routed_by_model"])
         self.assertEqual(self.ran, [])
         self.assertTrue(r["log"]["first_errors"])
         self.assertTrue(r["log"]["repaired"])
         self.assertEqual(r["log"]["part"], "KeyFacts")
         self.assertIsNotNone(r["answer"])
 
+    def test_a_model_route_never_runs_a_change(self):
+        self.script(["It was refunded on 1 June."],
+                    ['{"calls": [{"action": "list_invoices", "args": {}}, {"action": "pay_invoice", "args": {"number": "TH-1047"}}]}'])
+        r = self.live.Conversation(self.app, "scripted").answer("What happened to the refunded one?")
+        self.assertTrue(r["log"]["routed_by_model"])  # refund_status needs an invoice the message doesn't name
+        self.assertEqual([c[0] for c in r["log"]["calls"]], ["list_invoices"])  # the change was dropped (R3)
+        self.assertEqual(self.ran, [])
+
+    def test_an_id_in_the_message_fills_the_action(self):
+        conv = self.live.Conversation(self.app, "scripted")
+        calls, sure = conv.fast_route("Can I get invoice TH-1046?")
+        self.assertTrue(sure)
+        self.assertEqual(calls[0], ("get_invoice", {"number": "TH-1046"}))
+        self.assertEqual(conv.fast_route("Compare the plans")[0][0][0], "list_plans")
+        self.assertEqual(conv.fast_route("Show my open invoices")[0][0], ("list_invoices", {"status": "open"}))  # a listed choice
+
+    def test_a_negation_never_fills_a_choice(self):
+        conv = self.live.Conversation(self.app, "scripted")
+        self.assertEqual(conv.fast_route("Which invoices haven't we paid yet?")[0][0], ("list_invoices", {}))  # not status=paid
+        self.assertEqual(conv.fast_route("Thanks, that's all"), ([], False))  # "all" is not a request
+
+    def test_structured_reply_and_skeleton(self):
+        reply = json.dumps({"text": "Two are open.", "part": {"component": "KeyFacts", "title": "Open invoices", "facts": [
+            {"label": "TH-1047", "value": "€1,104.00"}, {"label": "TH-1043", "value": "€184.00"}]}})
+        self.script([reply])
+        events = []
+        r = self.live.Conversation(self.app, "scripted").answer("Show my open invoices", on_event=events.append)
+        self.assertEqual(events[0]["type"], "skeleton")  # drawn before the model's answer
+        self.assertEqual(r["log"]["part"], "KeyFacts")
+        self.assertIn("KeyFacts", json.dumps(self.asked[0]))  # the reply was constrained to the chosen parts
+        self.assertIn("skeleton", r["log"]["ms"])
+
     def test_change_needs_the_renderers_approval(self):
-        self.script(['{"calls": []}', "It's paid."])
+        self.script(["It's paid.", "It's paid."])
         conv = self.live.Conversation(self.app, "scripted")
         r = conv.press({"name": "pay_invoice", "context": {"number": "TH-1043"}})  # no approval
         self.assertEqual(self.ran, [])
@@ -287,18 +328,18 @@ class Live(unittest.TestCase):
         conv.press({"name": "pay_invoice", "context": {"number": "TH-1043", "approved": True}})  # an offer is used once
         self.assertEqual(len(self.ran), 1)
 
-    def test_copy_rules_are_repair_errors(self):
-        title_case = 'All set.\n```a2ui\n{"component": "KeyFacts", "title": "Unpaid Invoices", "facts": [{"label": "TH-1047", "value": "€1,104.00"}, {"label": "TH-1043", "value": "€184.00"}]}\n```'
-        fixed = 'Two are open.\n```a2ui\n{"component": "KeyFacts", "title": "Unpaid invoices", "facts": [{"label": "TH-1047", "value": "€1,104.00"}, {"label": "TH-1043", "value": "€184.00"}]}\n```'
-        self.script(['{"calls": [{"action": "list_invoices", "args": {"status": "open"}}]}', title_case, fixed])
+    def test_title_case_is_fixed_without_a_model_call(self):
+        title_case = 'Two are open.\n```a2ui\n{"component": "KeyFacts", "title": "Unpaid Invoices On The Team Plan", "facts": [{"label": "TH-1047", "value": "€1,104.00"}, {"label": "TH-1043", "value": "€184.00"}]}\n```'
+        self.script([title_case])
         r = self.live.Conversation(self.app, "scripted").answer("Which invoices haven't we paid?")
         self.assertIn("copy-case /0/createSurface/components/0/title", r["log"]["first_errors"])
-        self.assertTrue(r["log"]["repaired"])
-        self.assertIsNotNone(r["answer"])
+        self.assertFalse(r["log"]["repaired"])
+        self.assertEqual(r["log"]["case_fixed"], 1)
+        self.assertEqual(r["answer"][0]["createSurface"]["components"][0]["title"], "Unpaid invoices on the Team plan")
 
     def test_only_wording_left_still_shows(self):
         filler = 'The invoice was successfully paid.\n```a2ui\n{"component": "KeyFacts", "title": "Paid", "facts": [{"label": "Invoice", "value": "TH-1043"}, {"label": "Amount", "value": "€184.00"}]}\n```'
-        self.script(['{"calls": []}', filler, filler])
+        self.script([filler, filler])
         r = self.live.Conversation(self.app, "scripted").answer("Did it go through?")
         self.assertTrue(r["log"]["repaired"])
         self.assertIsNotNone(r["answer"])  # wording alone never costs the person the part
@@ -306,7 +347,7 @@ class Live(unittest.TestCase):
 
     def test_still_wrong_after_repair_is_text_only(self):
         bad = '```a2ui\n{"component": "Nope"}\n```'
-        self.script(['{"calls": []}', "Here.\n" + bad, "Here again.\n" + bad])
+        self.script(["Here.\n" + bad, "Here again.\n" + bad])
         r = self.live.Conversation(self.app, "scripted").answer("Compare the plans")
         self.assertIsNone(r["answer"])
         self.assertTrue(r["log"]["final_errors"])

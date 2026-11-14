@@ -228,15 +228,18 @@ def run_model(model, data, cs, runs, do_render):
 LIVE_PROVIDER = {"claude": "claude-cli", "gemini": "gemini"}
 
 
-def run_live(model, runs, pattern, do_render):
+def run_live(model, runs, pattern, do_render, cases_file="live-cases.json"):
     """The live path on the example billing app: route, answer, validate, one repair; several turns per case."""
     import live
-    spec = json.loads((EV / "live-cases.json").read_text())
+    spec = json.loads((EV / cases_file).read_text())
     pats = [p for p in (pattern or "*").split(",") if p]
     cs = [c for c in spec["cases"] if any(fnmatch.fnmatch(c["id"], p) for p in pats)]
     provider = "anthropic" if model == "claude" and live.env_key("ANTHROPIC_API_KEY") else LIVE_PROVIDER[model]
     rows, valid = [], []
-    label = model if model != "gemini" or live.MODELS["gemini"] == "gemini-3.1-pro-preview" else live.MODELS["gemini"]  # OD_GEMINI_MODEL
+    label = live.MODELS[provider]  # the model id: OD_GEMINI_MODEL, OD_CLAUDE_MODEL
+    if cases_file != "live-cases.json":  # live-cases-fernhollow.json -> live-fernhollow-<model>.json
+        label = cases_file[len("live-cases-"):-len(".json")] + "-" + label
+    turns_t = []  # per turn: ms to the first thing on screen, ms to the full answer, model calls, tokens
     raw = EV / "runs" / f"live-{label}"
     raw.mkdir(parents=True, exist_ok=True)
     for c in cs:
@@ -249,7 +252,15 @@ def run_live(model, runs, pattern, do_render):
             conv = live.Conversation(app, provider)
             try:
                 for msg in c["turns"]:
+                    before = {k: dict(v) for k, v in live.USAGE.items()}
+                    t0 = time.perf_counter()
                     r = conv.answer(msg)
+                    full = (time.perf_counter() - t0) * 1000
+                    ms = (r.get("log") or {}).get("ms") or {}
+                    used = {k: {f: v[f] - before.get(k, {}).get(f, 0) for f in v} for k, v in live.USAGE.items()}
+                    turns_t.append({"id": c["id"], "skeleton": ms.get("skeleton", full), "first_text": ms.get("first_text", full), "full": full,
+                                    "calls": sum(u["calls"] for u in used.values()),
+                                    "tokens": sum(u["input"] + u["output"] for u in used.values())})
             except RuntimeError as e:
                 rows.append({"id": c["id"], "run": n, "expect": c["expect"], "error": str(e), "ui": False, "right": False, "valid": None})
                 continue
@@ -294,6 +305,12 @@ def run_live(model, runs, pattern, do_render):
                "errors": sum(1 for r in rows if r.get("error")),
                "copy_problems_first": sum(1 for r in rows for e in r.get("first_errors", []) if e.split()[0] in smartui.COPY_RULES),
                "copy_problems_left": sum(1 for r in rows for e in r.get("final_errors", []) if e.split()[0] in smartui.COPY_RULES)}
+    q = lambda xs, p: round(sorted(xs)[min(len(xs) - 1, int(round(p * (len(xs) - 1))))]) if xs else None
+    summary["speed"] = {"turns": len(turns_t),
+                        "skeleton_ms_p50": q([t["skeleton"] for t in turns_t], .5), "skeleton_ms_p95": q([t["skeleton"] for t in turns_t], .95),
+                        "full_ms_p50": q([t["full"] for t in turns_t], .5), "full_ms_p95": q([t["full"] for t in turns_t], .95),
+                        "calls_per_turn": round(sum(t["calls"] for t in turns_t) / max(1, len(turns_t)), 2),
+                        "tokens_per_turn": round(sum(t["tokens"] for t in turns_t) / max(1, len(turns_t)))}
     summary["tokens"] = live.USAGE.get(live.MODELS.get(provider, provider))  # API providers only; the claude CLI doesn't report them here
     (EV / "results").mkdir(exist_ok=True)
     (EV / "results" / f"live-{label}.json").write_text(json.dumps({"model": live.MODELS.get(provider, provider), "provider": provider,
@@ -383,12 +400,13 @@ def main():
     ap.add_argument("--render", action="store_true")
     ap.add_argument("--report", action="store_true")
     ap.add_argument("--live", action="store_true", help="the live path on examples/smart-ui-support (evals/smart-ui/live-cases.json)")
+    ap.add_argument("--cases", default="live-cases.json", help="with --live: another cases file in evals/smart-ui/ (live-cases-fernhollow.json)")
     a = ap.parse_args()
     data, cs = cases(a.case)
     if a.selector:
         run_selector(data, cs)
     if a.model and a.live:
-        run_live(a.model, a.runs, a.case, a.render)
+        run_live(a.model, a.runs, a.case, a.render, a.cases)
     elif a.model:
         run_model(a.model, data, cs, a.runs, a.render)
     if a.report:

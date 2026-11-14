@@ -22,6 +22,7 @@ Standard library only.
 """
 import argparse
 import importlib.util
+import inspect
 import json
 import os
 import pathlib
@@ -37,7 +38,13 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import smartui  # noqa: E402
 
-MODELS = {"anthropic": "claude-sonnet-5-5", "claude-cli": "claude-sonnet-5-5", "gemini": os.environ.get("OD_GEMINI_MODEL") or "gemini-3.1-pro-preview"}
+# Fast models by default (a turn should feel instant); a stronger one is a setting: OD_GEMINI_MODEL=gemini-3.1-pro-preview,
+# gemini-4-argon or gemini-4-hydrogen; OD_CLAUDE_MODEL=claude-sonnet-5-5. OD_THINKING: none (default for flash and lite
+# models), low (default for the others) or high (the model's own).
+CLAUDE = os.environ.get("OD_CLAUDE_MODEL") or "claude-haiku-5-5"
+MODELS = {"anthropic": CLAUDE, "claude-cli": CLAUDE, "gemini": os.environ.get("OD_GEMINI_MODEL") or "gemini-3.8-flash"}
+THINKING = os.environ.get("OD_THINKING") or ("none" if re.search(r"flash|lite|haiku", MODELS["gemini"]) else "low")
+_NO_THINKING, _LOOSE, _TRIED = set(), set(), set()  # models that refused a thinking setting; schemas a provider called too complex
 USAGE = {}  # model -> tokens used in this process: {"calls", "input", "output"} (output includes thinking)
 
 
@@ -83,35 +90,121 @@ def available():
     return out + ["recorded"]
 
 
-def ask(provider, system, turns):
-    """turns: [{"role": "user"|"assistant", "text": ...}]. Returns the model's text."""
+def ask(provider, system, turns, schema=None, on_text=None):
+    """turns: [{"role": "user"|"assistant", "text": ...}]. Returns the model's text (JSON text when schema is given).
+    schema: a JSON Schema the reply must follow (constrained decoding where the provider has it).
+    on_text: called with the reply so far while it streams (Gemini); otherwise once at the end."""
     if provider == "anthropic":
-        body = {"model": MODELS["anthropic"], "max_tokens": 2048, "system": system,
+        body = {"model": MODELS["anthropic"], "max_tokens": 600 if schema and "calls" in schema.get("properties", {}) else 3000, "system": system,
                 "messages": [{"role": t["role"], "content": t["text"]} for t in turns]}
+        if schema:  # a forced tool call: its input follows the schema
+            body["tools"] = [{"name": "answer", "description": "Your answer", "input_schema": schema}]
+            body["tool_choice"] = {"type": "tool", "name": "answer"}
         res = _post("https://api.anthropic.com/v1/messages", body,
                     {"x-api-key": env_key("ANTHROPIC_API_KEY"), "anthropic-version": "2023-06-01"})
         u = res.get("usage", {})
         _count(MODELS["anthropic"], u.get("input_tokens", 0) + u.get("cache_read_input_tokens", 0) + u.get("cache_creation_input_tokens", 0), u.get("output_tokens", 0))
-        return "".join(b.get("text", "") for b in res.get("content", []) if b.get("type") == "text")
+        if schema:
+            out = next((json.dumps(b.get("input")) for b in res.get("content", []) if b.get("type") == "tool_use"), "")
+        else:
+            out = "".join(b.get("text", "") for b in res.get("content", []) if b.get("type") == "text")
+        if on_text:
+            on_text(out)
+        return out
     if provider == "gemini":
+        model = MODELS["gemini"]
         body = {"systemInstruction": {"parts": [{"text": system}]},
-                "contents": [{"role": "model" if t["role"] == "assistant" else "user", "parts": [{"text": t["text"]}]} for t in turns]}
-        res = _post(f"https://generativelanguage.googleapis.com/v1beta/models/{MODELS['gemini']}:generateContent", body,
-                    {"x-goog-api-key": env_key("GEMINI_API_KEY")})
-        u = res.get("usageMetadata", {})
-        _count(MODELS["gemini"], u.get("promptTokenCount", 0), u.get("candidatesTokenCount", 0) + u.get("thoughtsTokenCount", 0))
-        parts = res["candidates"][0]["content"].get("parts", [])
-        return "".join(p.get("text", "") for p in parts if not p.get("thought"))
+                "contents": [{"role": "model" if t["role"] == "assistant" else "user", "parts": [{"text": t["text"]}]} for t in turns],
+                "generationConfig": {"maxOutputTokens": 600 if schema and "calls" in schema.get("properties", {}) else 3000}}
+        if THINKING != "high" and model not in _NO_THINKING:
+            body["generationConfig"]["thinkingConfig"] = {"thinkingLevel": "low"} if THINKING == "low" else {"thinkingBudget": 0}
+        if schema:
+            key = json.dumps(schema, sort_keys=True)
+            body["generationConfig"]["responseMimeType"] = "application/json"
+            body["generationConfig"]["responseJsonSchema"] = _loose(schema) if key in _LOOSE else schema
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:streamGenerateContent?alt=sse"
+        try:
+            return _gemini_stream(url, body, model, on_text)
+        except RuntimeError as e:
+            msg = str(e)
+            if "HTTP 400" not in msg:
+                raise
+            if "thinkingConfig" in body["generationConfig"] and ("thinking" in msg.lower() or not schema or key in _LOOSE
+                                                                   or "invalid argument" in msg.lower() and model not in _TRIED):
+                _TRIED.add(model)
+                _NO_THINKING.add(model)  # this model takes no thinking setting: ask again without one
+            elif schema and key not in _LOOSE:
+                _LOOSE.add(key)  # the provider found this schema too complex: JSON with text and part, checked afterwards
+            else:
+                raise
+            return ask(provider, system, turns, schema, on_text)
     if provider == "claude-cli":
         convo = "\n\n".join(f"{'Person' if t['role'] == 'user' else 'You (earlier)'}: {t['text']}" for t in turns[:-1])
         msg = (f"Conversation so far:\n{convo}\n\nPerson now: {turns[-1]['text']}" if convo else turns[-1]["text"])
-        r = subprocess.run(["claude", "-p", "--model", MODELS["claude-cli"], "--system-prompt", system, "--tools", "",
-                            "--setting-sources", "", "--output-format", "json", msg], capture_output=True, text=True, cwd="/tmp", timeout=600)
+        cmd = ["claude", "-p", "--model", MODELS["claude-cli"], "--system-prompt", system, "--tools", "",
+               "--setting-sources", "", "--output-format", "json"]
+        if schema:
+            cmd += ["--json-schema", json.dumps(schema)]
+        r = subprocess.run(cmd + [msg], capture_output=True, text=True, cwd="/tmp", timeout=600)
         try:
-            return json.loads(r.stdout).get("result") or ""
+            out = json.loads(r.stdout)
         except ValueError:
             raise RuntimeError("claude -p failed: " + (r.stderr or r.stdout)[:200])
+        u = out.get("usage") or {}
+        _count(MODELS["claude-cli"], u.get("input_tokens", 0) + u.get("cache_read_input_tokens", 0) + u.get("cache_creation_input_tokens", 0), u.get("output_tokens", 0))
+        so = out.get("structured_output")
+        text = json.dumps(so) if (schema and so is not None) else (out.get("result") or "")
+        if on_text:
+            on_text(text)
+        return text
     raise RuntimeError(f"unknown provider {provider}")
+
+
+def _loose(schema):
+    """The same reply shape without the parts' own schemas: JSON {text, part}, the part checked by the validator."""
+    return {"type": "object", "required": ["text", "part"],
+            "properties": {"text": {"type": "string"}, "part": {"type": ["object", "null"]}}}
+
+
+def _gemini_stream(url, body, model, on_text):
+    req = urllib.request.Request(url, data=json.dumps(body).encode(),
+                                 headers={"content-type": "application/json", "x-goog-api-key": env_key("GEMINI_API_KEY")})
+    wait, text, usage = 2, "", {}
+    for attempt in range(6):
+        try:
+            with urllib.request.urlopen(req, timeout=90) as r:
+                for raw in r:
+                    line = raw.decode("utf-8", "replace").strip()
+                    if not line.startswith("data:"):
+                        continue
+                    d = json.loads(line[5:])
+                    usage = d.get("usageMetadata") or usage
+                    for part in ((d.get("candidates") or [{}])[0].get("content") or {}).get("parts", []):
+                        if part.get("text") and not part.get("thought"):
+                            text += part["text"]
+                            if on_text:
+                                on_text(text)
+            break
+        except (TimeoutError, urllib.error.URLError) as e:
+            if isinstance(e, urllib.error.HTTPError):
+                pass
+            elif attempt < 2 and not text:
+                time.sleep(wait)
+                continue
+            else:
+                raise RuntimeError("generativelanguage.googleapis.com did not answer in time") from None
+            if e.code in (429, 500, 502, 503, 504) and attempt < 5 and not text:
+                time.sleep(wait)
+                wait = min(wait * 2, 30)
+                continue
+            detail = ""
+            try:
+                detail = json.loads(e.read()).get("error", {}).get("message", "")[:200]  # the provider's message, never the request
+            except Exception:
+                pass
+            raise RuntimeError(f"generativelanguage.googleapis.com returned HTTP {e.code}: {detail}") from None
+    _count(model, usage.get("promptTokenCount", 0), usage.get("candidatesTokenCount", 0) + usage.get("thoughtsTokenCount", 0))
+    return text
 
 
 def _post(url, body, headers):
@@ -136,6 +229,18 @@ def load_app(path):
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
+
+
+def _overlap(a, b):
+    """Words of a found in b; a word also matches a longer one it starts (renew, renewal) when it has 4 letters or more."""
+    return sum(1 for w in a if w in b or (len(w) >= 4 and any(x.startswith(w) or (len(x) >= 4 and w.startswith(x)) for x in b)))
+
+
+def _choices(desc):
+    """The values a parameter's description lists: "resident or visitor", "hollow-lane, marsh-road or eastgate"."""
+    head = re.split(r"\(|;|\bsuch as\b|\bfor example\b", desc or "")[0]
+    opts = [o.strip(" .") for o in re.split(r",\s*|\s+or\s+", head)]
+    return [o for o in opts if o and len(o.split()) <= 3 and len(opts) > 1] if " or " in head else []
 
 
 def actions_text(actions, changes):
@@ -163,23 +268,82 @@ class Conversation:
         sp = pathlib.Path(app.CATALOG).parent / "scope.json"
         self.scope = json.loads(sp.read_text()) if sp.exists() else None
         # action name -> the parts the scope step mapped to its route (GET /api/usage -> LineChart, BarChart)
-        self.route_parts = {}
+        self.route_parts, self.route_words = {}, {}
         for name, a in app.ACTIONS.items():
             for it in (self.scope or {}).get("intents", []):
                 if a.get("path") and it.get("from", "").startswith(f"{a.get('method', 'GET')} {a['path']} "):
                     self.route_parts[name] = it.get("components", [])
+                    self.route_words[name] = [smartui.words(ph) for ph in it.get("phrases", []) if smartui.words(ph)]
         self.turns = []        # [{"role", "text"}] as the model sees them
         self.data = {}         # action name -> its latest result
         self.surfaces = 0
         self.log = []          # per turn: calls, first errors, repaired, ui
         self.offered = []      # the changes an answer offered as buttons: (name, context); a press must match one (R3)
+        self.case_fixed, self.first_case_errors, self.routed_by_model = 0, [], False
 
     # -- routing: which read actions to run
+    def fast_route(self, message):
+        """Which read actions to run, without a model: the message's words against each action's name, description,
+        parameters and the phrases the scope step tied to its route; an id in the message (TH-1047) or one of a
+        parameter's listed choices ("Hollow Lane", "visitor") fills a parameter. Returns (calls, sure). Not sure when
+        nothing clearly matches before any data was fetched, or when the best match needs a value the message doesn't
+        give ("the refunded one"): then a model routes."""
+        msg = set(smartui.words(message))
+        ids = re.findall(r"\b[A-Z]{1,5}[- ]?\d{2,}[A-Z0-9]*\b", message)
+        negated = bool(re.search(r"\b(not|no|never|without)\b|n't\b|\bun[a-z]+", message.lower()))
+        verbs = {"get", "list", "check", "find", "fetch", "read", "show", "view", "load"}
+
+        def picks(desc):  # the parameter choices this message names; none when it says "not" (haven't paid != paid)
+            if negated:
+                return []
+            return [o for o in _choices(desc) if o.lower() not in {"all", "any", "none", "both", "default"}
+                    and set(smartui.words(o.replace("-", " "))) <= msg and smartui.words(o.replace("-", " "))]
+        # a change the message names ("book an appointment") points at the reads that share its values (office, slot)
+        wanted = {k for a in self.app.ACTIONS.values() if a.get("changes")
+                  if set(smartui.words(a["fn"].__name__.replace("_", " "))) - verbs <= msg for k in a.get("params", {})}
+        scored = []
+        for name, a in self.app.ACTIONS.items():
+            if a.get("changes"):
+                continue
+            own = set(smartui.words(name.replace("_", " "))) - verbs
+            doc = set(smartui.words(a.get("description", ""))) | {w for k in a.get("params", {}) for w in smartui.words(k.replace("_", " "))}
+            sc = 2 * _overlap(msg, own) + _overlap(msg, doc) + sum(3 if len(ws) > 1 else 1 for ws in self.route_words.get(name, []) if set(ws) <= msg)
+            sc += sum(2 for desc in a.get("params", {}).values() if picks(desc))
+            hint = 3 if wanted & set(a.get("params", {})) else 0
+            if sc + hint:
+                scored.append((sc + hint, hint, name))
+        scored.sort(reverse=True)
+        top = scored[0][0] if scored else 0
+        if not scored or top < 2 and (top < 1 or len([x for x in scored if x[0] == top]) > 1):
+            return [], bool(self.data) or not msg  # a follow-up or small talk answers from what is already here
+        calls = []
+        for i, (sc, _, name) in enumerate(scored[:3]):
+            if sc < max(1, 0.5 * top):
+                break
+            a = self.app.ACTIONS[name]
+            sig = inspect.signature(a["fn"]).parameters
+            args = {k: picks(desc)[0] for k, desc in a.get("params", {}).items() if k in sig and picks(desc)}
+            for k, v in sig.items():
+                if v.default is inspect.Parameter.empty and k not in args and len(ids) == 1:
+                    args[k] = ids[0]
+            if any(v.default is inspect.Parameter.empty and k not in args for k, v in sig.items()):
+                if i == 0:
+                    return [], False  # the best match needs a value the message doesn't give ("the refunded one")
+                continue
+            calls.append((name, args))
+        return calls[:2], bool(calls)
+
     def route(self, message):
         if self.provider == "recorded":
             return []
+        calls, sure = self.fast_route(message)
+        if sure:
+            return calls
+        self.routed_by_model = True
         system = ROUTE.format(reads=actions_text(self.app.ACTIONS, False), changes=actions_text(self.app.ACTIONS, True))
-        raw = ask(self.provider, system, self.turns[-6:] + [{"role": "user", "text": message}])
+        schema = {"type": "object", "required": ["calls"], "properties": {"calls": {"type": "array", "items": {
+            "type": "object", "required": ["action"], "properties": {"action": {"type": "string"}, "args": {"type": "object"}}}}}}
+        raw = ask(self.provider, system, self.turns[-4:] + [{"role": "user", "text": message}], schema)
         m = re.search(r"\{.*\}", raw, re.S)
         try:
             calls = json.loads(m.group(0)).get("calls", []) if m else []
@@ -205,9 +369,15 @@ class Conversation:
         return out
 
     # -- one turn
-    def answer(self, message, max_parts=None):
+    def answer(self, message, max_parts=None, on_event=None):
+        """One turn. on_event gets {"type": "skeleton", "part"} as soon as a part is chosen (before any model call when
+        routing needed none), {"type": "text", "text"} as the answer's words stream in, and the timings land in the log."""
         if self.provider == "recorded":
             return self._recorded(message)
+        t0 = time.perf_counter()
+        ms = {}
+        emit = on_event or (lambda e: None)
+        self.routed_by_model = False
         calls = self.route(message)
         fresh = self.run(calls)
         data = {**self.data, **fresh}
@@ -220,7 +390,29 @@ class Conversation:
         said = " ".join([t["text"] for t in self.turns if t["role"] == "user"] + [message])
         source = {**data, "_the_person_said": said}  # numbers the person typed count as given (R6)
         always = ["ApprovalPrompt"] if any(a.get("changes") for a in self.app.ACTIONS.values()) else []
-        system, sel = smartui.build_prompt(message, self.catalog, 3, self.scope, data, boost, always)
+        sel = smartui.select(message, self.catalog, 3, self.scope, data, boost)
+        if sel["ui"] and sel["candidates"]:
+            ms["skeleton"] = (time.perf_counter() - t0) * 1000
+            emit({"type": "skeleton", "part": sel["candidates"][0]})
+        system, sel = smartui.build_prompt(message, self.catalog, 3, self.scope, data, boost, always, structured=True, sel=sel)
+        names = (list(sel["candidates"]) + [a for a in always if a not in sel["candidates"] and a in self.catalog["components"]]) if sel["ui"] else []
+        schema = smartui.response_schema(self.catalog, names)
+        shown = [""]
+
+        def on_text(raw):
+            m = re.match(r'\s*\{\s*"text"\s*:\s*"((?:[^"\\]|\\.)*)', raw)
+            if not m:
+                return
+            try:
+                t = json.loads('"' + m.group(1).rstrip("\\") + '"')
+            except ValueError:
+                return
+            if t and t != shown[0]:
+                if "first_text" not in ms:
+                    ms["first_text"] = (time.perf_counter() - t0) * 1000
+                    ms.setdefault("skeleton", ms["first_text"])
+                shown[0] = t
+                emit({"type": "text", "text": t})
         if history:
             system += "\n\nThe conversation so far (for follow-up questions):\n" + history
         system += ("\n\nActions that change data are buttons only. When the person wants one, show an ApprovalPrompt whose approve "
@@ -229,15 +421,17 @@ class Conversation:
             system += ("\nChange actions: use the exact name as the approve button's event name, and put every argument in "
                        "its event context, filled from the data (for example {\"name\": \"pay_invoice\", \"context\": {\"number\": \"TH-1047\"}}):\n"
                        + actions_text(self.app.ACTIONS, True))
-        turns = self.turns[-8:] + [{"role": "user", "text": message}]
-        reply = ask(self.provider, system, turns)
+        turns = self.turns[-4:] + [{"role": "user", "text": message}]
+        reply = self._structured(ask(self.provider, system, turns, schema, on_text))
+        self.first_case_errors = []
         result = self._check(reply, source, surface, max_parts)
-        first_errors = result["errors"]
+        first_errors = self.first_case_errors + result["errors"]  # what the model's first answer got wrong, fixed here or not
+        case_fixed = self.case_fixed
         repaired = False
         if result["errors"]:
             fix = ("Your answer was not shown: it failed these checks. Send the corrected text and part, or text only.\n"
                    + "\n".join(f"- {e['rule']} at {e['path']}: {e['message']}" + (f" ({e['fix']})" if e.get("fix") else "") for e in result["errors"][:10]))
-            reply = ask(self.provider, system, turns + [{"role": "assistant", "text": reply}, {"role": "user", "text": fix}])
+            reply = self._structured(ask(self.provider, system, turns + [{"role": "assistant", "text": reply}, {"role": "user", "text": fix}], schema))
             result = self._check(reply, source, surface, max_parts)
             repaired = True
             if result["errors"] and all(e["rule"] in smartui.COPY_RULES for e in result["errors"]) and result.get("draft"):
@@ -250,11 +444,28 @@ class Conversation:
         if result["answer"]:
             self.surfaces += 1
             self._remember_offers(result["answer"])
-        entry = {"message": message, "calls": calls, "selector": sel["candidates"], "ui": bool(result["answer"]),
+        ms["full"] = (time.perf_counter() - t0) * 1000
+        ms.setdefault("skeleton", ms["full"])
+        ms.setdefault("first_text", ms["full"])
+        entry = {"message": message, "calls": calls, "routed_by_model": self.routed_by_model, "ms": {k: round(v) for k, v in ms.items()},
+                 "case_fixed": case_fixed, "selector": sel["candidates"], "ui": bool(result["answer"]),
                  "part": result["part"], "first_errors": [f"{e['rule']} {e['path']}" for e in first_errors], "repaired": repaired,
                  "final_errors": [f"{e['rule']} {e['path']}" for e in result["errors"]]}
         self.log.append(entry)
         return {"text": text, "answer": result["answer"], "data": data, "log": entry}
+
+    @staticmethod
+    def _structured(raw):
+        """A structured reply {"text", "part"} in the form _check reads: the text, then the part in an a2ui block."""
+        try:
+            obj = json.loads(raw)
+        except ValueError:
+            return raw  # not JSON after all: read it as free text
+        if not isinstance(obj, dict) or "text" not in obj:
+            return raw
+        text = str(obj.get("text") or "")
+        part = obj.get("part")
+        return text + (f"\n```a2ui\n{json.dumps(part, ensure_ascii=False)}\n```" if isinstance(part, dict) and part else "")
 
     def _check(self, reply, data, surface, max_parts):
         ans = smartui.extract_answer(reply)
@@ -274,7 +485,16 @@ class Conversation:
             for k in ("createSurface", "updateComponents", "updateDataModel", "deleteSurface"):
                 if isinstance(m, dict) and isinstance(m.get(k), dict):
                     m[k]["surfaceId"] = surface
-        r = smartui.validate(msgs, self.catalog, {"source": data, "limits": {"leaves": max_parts}, "copy": True})
+        opts = {"source": data, "limits": {"leaves": max_parts}, "copy": True}
+        r = smartui.validate(msgs, self.catalog, opts)
+        self.case_fixed = 0
+        if r["errors"] and any(e["rule"] == "copy-case" for e in r["errors"]):
+            # Title Case is fixed here, not by another model call: names the data or the person used keep their capitals
+            fixed = smartui.fix_case(msgs, r["errors"], smartui.names_in(data))
+            if fixed:
+                self.first_case_errors = [e for e in r["errors"] if e["rule"] == "copy-case"]
+                r = smartui.validate(msgs, self.catalog, opts)
+                self.case_fixed = fixed
         part = next((c.get("component") for m in msgs for c in (m.get("createSurface") or {}).get("components", []) if c.get("id") == "root"), None)
         # copy rules (sentence case, plain words, one row per value) are repair errors; "draft" keeps an answer whose only
         # problems are those, for after the repair round
@@ -297,7 +517,7 @@ class Conversation:
         walk(answer)
 
     # -- a button the person pressed
-    def press(self, action):
+    def press(self, action, on_event=None):
         name, ctx = action.get("name"), dict(action.get("context") or {})
         a = self.app.ACTIONS.get(name)
         if a and a.get("changes"):
@@ -312,10 +532,10 @@ class Conversation:
             except Exception as e:
                 result = {"error": {"message": str(e)[:200]}}
             self.data[name] = result
-            return self.answer(f"(I confirmed {name.replace('_', ' ')}. The app returned the result; tell me what happened.)")
+            return self.answer(f"(I confirmed {name.replace('_', ' ')}. The app returned the result; tell me what happened.)", on_event=on_event)
         # not a change: what the person picked becomes their next message
         said = ", ".join(f"{k.replace('_', ' ')} {v}" for k, v in ctx.items())
-        return self.answer(f"I picked {name.replace('_', ' ')}" + (f": {said}" if said else "") + ".")
+        return self.answer(f"I picked {name.replace('_', ' ')}" + (f": {said}" if said else "") + ".", on_event=on_event)
 
     def _recorded(self, message):
         rec = getattr(self.app, "RECORDED", None)
@@ -397,6 +617,26 @@ def serve(app_path, port, provider):
             return (self.headers.get("Host") in here and (origin is None or origin in {f"http://{h}" for h in here})
                     and (self.headers.get("Content-Type") or "").split(";")[0].strip() == "application/json")
 
+        def _stream(self, conv, body):
+            """One JSON object per line as the turn happens: {"type": "skeleton", "part"} as soon as a part is chosen,
+            {"type": "text", "text"} while the words arrive, then {"type": "done", ...the turn} or {"type": "error"}."""
+            self.send_response(200)
+            self.send_header("content-type", "application/x-ndjson")
+            self.send_header("cache-control", "no-store")
+            self.end_headers()
+
+            def line(obj):
+                self.wfile.write((json.dumps(obj, ensure_ascii=False) + "\n").encode())
+                self.wfile.flush()
+            try:
+                if self.path == "/api/chat":
+                    r = conv.answer(str(body.get("message") or "")[:2000], on_event=line)
+                else:
+                    r = conv.press(body.get("action") or {}, on_event=line)
+                line({"type": "done", **r})
+            except RuntimeError as e:
+                line({"type": "error", "error": str(e)})
+
         def do_POST(self):
             if not self._same_site():
                 return self._json(403, {"error": "only this page may talk to this server"})
@@ -409,6 +649,8 @@ def serve(app_path, port, provider):
                 return self._json(400, {"error": "not JSON"})
             sid = str(body.get("session") or "default")[:40]
             conv = sessions.setdefault(sid, Conversation(app, prov))
+            if body.get("stream") and self.path in ("/api/chat", "/api/press"):
+                return self._stream(conv, body)
             try:
                 if self.path == "/api/chat":
                     msg = str(body.get("message") or "")[:2000]

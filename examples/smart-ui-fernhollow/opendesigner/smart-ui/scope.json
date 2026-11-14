@@ -1,0 +1,409 @@
+{
+ "project": "/Users/Kunal/Desktop/Design-System/.claude/worktrees/bold-mayer-187bc2/examples/smart-ui-fernhollow",
+ "read": [
+  "PRODUCT.md",
+  "DESIGN.md",
+  "opendesigner/state.json"
+ ],
+ "not_known": [],
+ "product_type": "work-tool",
+ "product": "A council service for residents of Fernhollow: parking permits, penalty charge notices, appointments, documents and application progress, with an assistant that answers residents' questions on the page",
+ "audience": "large",
+ "system": "Fernhollow",
+ "framework": "plain HTML",
+ "ai_sdks": [],
+ "tokens": {
+  "file": "opendesigner/build/css/tokens.css",
+  "kind": "opendesigner",
+  "count": 551
+ },
+ "chat_surface": [
+  "web/assistant.js"
+ ],
+ "actions": [
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/account/permit",
+   "file": "server.py",
+   "name": "get_permit",
+   "doc": "The signed-in resident's current parking permit: permit number, zone, vehicle registration, start and expiry dates, and the price paid.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/account/permit/quote",
+   "file": "server.py",
+   "name": "renewal_quote",
+   "doc": "What renewing the resident's parking permit would cost: the lengths on offer with price and new dates, and what stays the same.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "POST",
+   "path": "/api/account/permit/renew",
+   "file": "server.py",
+   "name": "renew_permit",
+   "doc": "Renew the resident's parking permit for 6 or 12 months and charge the card on file. Takes a payment.",
+   "changes_data": true
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/fines",
+   "file": "server.py",
+   "name": "list_fines",
+   "doc": "Every penalty charge notice (parking fine) for one vehicle, newest first: reference, date, place, amount and whether it is paid.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/fines/<reference>",
+   "file": "server.py",
+   "name": "get_fine",
+   "doc": "A summary of one penalty charge notice (parking fine), found by its reference and the vehicle registration: what happened, when and where, the amount, the lower amount if paid within 14 days and its last day, and whether it is paid.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "POST",
+   "path": "/api/fines/<reference>/pay",
+   "file": "server.py",
+   "name": "pay_fine",
+   "doc": "Pay one unpaid penalty charge notice now with the card on file, at the lower amount while the 14-day discount lasts. Takes a payment.",
+   "changes_data": true
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/offices/<office>/slots",
+   "file": "server.py",
+   "name": "available_slots",
+   "doc": "Free appointment slots this week at one council office for one service: day, date and time of each, or none and the next free day.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "POST",
+   "path": "/api/appointments",
+   "file": "server.py",
+   "name": "book_appointment",
+   "doc": "Book one free slot at a council office for the resident. Makes a booking; a confirmation email follows.",
+   "changes_data": true
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/applications/<reference>",
+   "file": "server.py",
+   "name": "application_status",
+   "doc": "Where an application is: its steps (submitted, checked, decision, permit sent) with dates, the current step and what it is waiting for.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/applications/<reference>/documents",
+   "file": "server.py",
+   "name": "list_documents",
+   "doc": "The documents an application needs, which are already uploaded and which are still needed, with examples of what counts and the file types accepted.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "POST",
+   "path": "/api/applications/<reference>/documents",
+   "file": "server.py",
+   "name": "upload_document",
+   "doc": "Add a document the resident chose on their own device to an application. The assistant may offer this as a button; it never picks or sends a file itself. Changes the application.",
+   "changes_data": true
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/offices",
+   "file": "server.py",
+   "name": "list_offices",
+   "doc": "Every council office with its address, opening hours, whether it is open today, step-free access and hearing loop notes, and any closures.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/offices/<office>",
+   "file": "server.py",
+   "name": "office_details",
+   "doc": "A summary of one council office: address, opening hours, whether it is open today, access (step-free entrance, hearing loop, toilets), closures and phone.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/permits/pricing",
+   "file": "server.py",
+   "name": "permit_prices",
+   "doc": "The kinds of parking permit side by side: who can get each, the price, the electric vehicle and blue badge prices, and how long each lasts.",
+   "changes_data": false
+  },
+  {
+   "kind": "route",
+   "method": "GET",
+   "path": "/api/eligibility",
+   "file": "server.py",
+   "name": "check_eligibility",
+   "doc": "A summary of whether someone can get a resident or visitor parking permit, from their address zone and vehicle type, with the rules that decided it and the price.",
+   "changes_data": false
+  }
+ ],
+ "intents": [
+  {
+   "intent": "where an application is",
+   "phrases": [
+    "where is my application",
+    "status",
+    "what happens next"
+   ],
+   "components": [
+    "ProgressStatus"
+   ],
+   "from": "product type public-service"
+  },
+  {
+   "intent": "book an appointment",
+   "phrases": [
+    "appointment",
+    "book a time",
+    "available times"
+   ],
+   "components": [
+    "TimeSlots",
+    "ApprovalPrompt"
+   ],
+   "from": "product type public-service"
+  },
+  {
+   "intent": "pay a charge or fee",
+   "phrases": [
+    "pay",
+    "fine",
+    "penalty"
+   ],
+   "components": [
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "from": "product type public-service"
+  },
+  {
+   "intent": "opening hours and offices",
+   "phrases": [
+    "open",
+    "opening hours",
+    "office"
+   ],
+   "components": [
+    "KeyFacts",
+    "DataTable"
+   ],
+   "from": "product type public-service"
+  },
+  {
+   "intent": "can I get one",
+   "phrases": [
+    "can i get",
+    "am i eligible",
+    "do i qualify"
+   ],
+   "components": [
+    "KeyFacts"
+   ],
+   "from": "product type public-service"
+  },
+  {
+   "intent": "what it costs",
+   "phrases": [
+    "how much",
+    "price",
+    "cost"
+   ],
+   "components": [
+    "Comparison",
+    "KeyFacts"
+   ],
+   "from": "product type public-service"
+  },
+  {
+   "intent": "get_permit: The signed-in resident's current parking permit: permit number, zone, vehicle ",
+   "phrases": [
+    "permit"
+   ],
+   "components": [
+    "KeyFacts"
+   ],
+   "from": "GET /api/account/permit in server.py"
+  },
+  {
+   "intent": "renewal_quote: What renewing the resident's parking permit would cost: the lengths on offe",
+   "phrases": [
+    "renewal quote"
+   ],
+   "components": [
+    "KeyFacts"
+   ],
+   "from": "GET /api/account/permit/quote in server.py"
+  },
+  {
+   "intent": "list_fines: Every penalty charge notice (parking fine) for one vehicle, newest first: refe",
+   "phrases": [
+    "fines"
+   ],
+   "components": [
+    "DataTable"
+   ],
+   "from": "GET /api/fines in server.py"
+  },
+  {
+   "intent": "get_fine: A summary of one penalty charge notice (parking fine), found by its reference an",
+   "phrases": [
+    "fine"
+   ],
+   "components": [
+    "KeyFacts"
+   ],
+   "from": "GET /api/fines/<reference> in server.py"
+  },
+  {
+   "intent": "available_slots: Free appointment slots this week at one council office for one service: d",
+   "phrases": [
+    "available slots"
+   ],
+   "components": [
+    "TimeSlots"
+   ],
+   "from": "GET /api/offices/<office>/slots in server.py"
+  },
+  {
+   "intent": "application_status: Where an application is: its steps (submitted, checked, decision, perm",
+   "phrases": [
+    "application status"
+   ],
+   "components": [
+    "ProgressStatus"
+   ],
+   "from": "GET /api/applications/<reference> in server.py"
+  },
+  {
+   "intent": "list_documents: The documents an application needs, which are already uploaded and which a",
+   "phrases": [
+    "documents"
+   ],
+   "components": [
+    "DataTable"
+   ],
+   "from": "GET /api/applications/<reference>/documents in server.py"
+  },
+  {
+   "intent": "list_offices: Every council office with its address, opening hours, whether it is open tod",
+   "phrases": [
+    "offices"
+   ],
+   "components": [
+    "DataTable"
+   ],
+   "from": "GET /api/offices in server.py"
+  },
+  {
+   "intent": "office_details: A summary of one council office: address, opening hours, whether it is ope",
+   "phrases": [
+    "office details"
+   ],
+   "components": [
+    "KeyFacts"
+   ],
+   "from": "GET /api/offices/<office> in server.py"
+  },
+  {
+   "intent": "permit_prices: The kinds of parking permit side by side: who can get each, the price, the ",
+   "phrases": [
+    "permit prices"
+   ],
+   "components": [
+    "Comparison"
+   ],
+   "from": "GET /api/permits/pricing in server.py"
+  },
+  {
+   "intent": "check_eligibility: A summary of whether someone can get a resident or visitor parking perm",
+   "phrases": [
+    "check eligibility"
+   ],
+   "components": [
+    "KeyFacts"
+   ],
+   "from": "GET /api/eligibility in server.py"
+  },
+  {
+   "intent": "POST /api/account/permit/renew",
+   "phrases": [],
+   "components": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ErrorRetry"
+   ],
+   "from": "route in server.py"
+  },
+  {
+   "intent": "POST /api/fines/<reference>/pay",
+   "phrases": [],
+   "components": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ErrorRetry"
+   ],
+   "from": "route in server.py"
+  },
+  {
+   "intent": "POST /api/appointments",
+   "phrases": [],
+   "components": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ErrorRetry"
+   ],
+   "from": "route in server.py"
+  },
+  {
+   "intent": "POST /api/applications/<reference>/documents",
+   "phrases": [],
+   "components": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ErrorRetry"
+   ],
+   "from": "route in server.py"
+  }
+ ],
+ "components_proposed": [
+  "ApprovalPrompt",
+  "Comparison",
+  "DataTable",
+  "ErrorRetry",
+  "KeyFacts",
+  "ProgressStatus",
+  "Receipt",
+  "TimeSlots"
+ ],
+ "components_confirmed": [
+  "approval-prompt",
+  "comparison",
+  "data-table",
+  "empty-state",
+  "error-retry",
+  "key-facts",
+  "progress-status",
+  "receipt",
+  "time-slots"
+ ]
+}

@@ -553,5 +553,89 @@
     ]
    }
   ]
+ },
+ "public-service": {
+  "match": [
+   "council",
+   "public service",
+   "permit",
+   "resident",
+   "government",
+   "citizen",
+   "licence",
+   "benefit"
+  ],
+  "intents": [
+   {
+    "intent": "where an application is",
+    "phrases": [
+     "where is my application",
+     "status",
+     "what happens next"
+    ],
+    "components": [
+     "ProgressStatus"
+    ]
+   },
+   {
+    "intent": "book an appointment",
+    "phrases": [
+     "appointment",
+     "book a time",
+     "available times"
+    ],
+    "components": [
+     "TimeSlots",
+     "ApprovalPrompt"
+    ]
+   },
+   {
+    "intent": "pay a charge or fee",
+    "phrases": [
+     "pay",
+     "fine",
+     "penalty"
+    ],
+    "components": [
+     "ApprovalPrompt",
+     "Receipt"
+    ]
+   },
+   {
+    "intent": "opening hours and offices",
+    "phrases": [
+     "open",
+     "opening hours",
+     "office"
+    ],
+    "components": [
+     "KeyFacts",
+     "DataTable"
+    ]
+   },
+   {
+    "intent": "can I get one",
+    "phrases": [
+     "can i get",
+     "am i eligible",
+     "do i qualify"
+    ],
+    "components": [
+     "KeyFacts"
+    ]
+   },
+   {
+    "intent": "what it costs",
+    "phrases": [
+     "how much",
+     "price",
+     "cost"
+    ],
+    "components": [
+     "Comparison",
+     "KeyFacts"
+    ]
+   }
+  ]
  }
 }

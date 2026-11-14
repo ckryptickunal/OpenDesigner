@@ -224,8 +224,12 @@ export class ODSurface extends (G.HTMLElement || class {}) {
       const name = el.dataset.odSlot;
       if (scope.matches("[data-od-action]") && name === "label") continue;
       const v = data[name];
-      if (missing(v)) { el.textContent = ""; el.setAttribute(partial ? "data-od-pending" : "data-od-missing", ""); }
-      else el.textContent = fmt(v, locale);
+      if (missing(v)) {
+        el.textContent = "";
+        el.setAttribute(partial ? "data-od-pending" : "data-od-missing", "");
+        // a property the schema doesn't require, left out: the slot goes (no dash under a heading), like a marked optional one
+        if (!partial && schema && schema.properties && name in schema.properties && !(schema.required || []).includes(name)) el.setAttribute("data-od-optional", "");
+      } else el.textContent = fmt(v, locale);
     }
     for (const el of marked(scope, "[data-od-var]")) {
       const name = el.dataset.odVar, v = data[name];
