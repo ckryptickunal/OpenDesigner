@@ -216,7 +216,10 @@ def variants(base, schema):
     has_list = any(p.get("type") == "array" for p in schema.get("properties", {}).values())
     if has_list:
         v["empty"] = {"comp": lists(c, schema, lambda xs, p: []), "relax": True}
-        v["one-item"] = {"comp": lists(c, schema, lambda xs, p: xs[:1]), "relax": True}
+        one = lists(c, schema, lambda xs, p: xs[:1])
+        if "rows" in schema.get("properties", {}) and "columns" in c:
+            one["columns"] = copy.deepcopy(c["columns"])  # one row of a table still has every column, each with its header
+        v["one-item"] = {"comp": one, "relax": True}
         v["max-items"] = {"comp": lists(c, schema, fill_to_max)}
     v["long-text"] = {"comp": _strings(c, longest, schema)}
     v["translate-30"] = {"comp": _strings(c, longer, schema)}
