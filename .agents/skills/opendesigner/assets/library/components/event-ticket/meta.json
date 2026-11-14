@@ -29,5 +29,206 @@
       "author": "Yvette de Wit",
       "page": "NYrVisodQ2M"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a confirmation screen right after buying, to show the ticket the fan will scan"],
+    "avoid_when": ["a flight or train journey: use boarding-pass", "choosing a seat before buying: use seat-picker", "browsing upcoming events to buy: use media-shelf or calendar-agenda"],
+    "parts": [
+      {
+        "name": "photo",
+        "selector": ".odl-art img",
+        "what": "the event photo behind the title, under a dark scrim",
+        "slot": "media"
+      },
+      {
+        "name": "count",
+        "selector": ".odl-kind",
+        "what": "which ticket of how many",
+        "slot": "text"
+      },
+      {
+        "name": "tour",
+        "selector": ".odl-tour",
+        "what": "the tour or event series",
+        "slot": "text"
+      },
+      {
+        "name": "act",
+        "selector": "h3",
+        "what": "the act or match, the ticket's heading",
+        "slot": "text"
+      },
+      {
+        "name": "venue",
+        "selector": ".odl-venue",
+        "what": "venue and city after a pin icon",
+        "slot": "text"
+      },
+      {
+        "name": "when",
+        "selector": ".odl-when div",
+        "what": "date, doors and show time, three across",
+        "slot": "list"
+      },
+      {
+        "name": "seat",
+        "selector": ".odl-seat div",
+        "what": "section, row and seat, three across",
+        "slot": "list"
+      },
+      {
+        "name": "code",
+        "selector": ".odl-qr svg",
+        "what": "the entry code to scan",
+        "slot": "media"
+      },
+      {
+        "name": "code_note",
+        "selector": ".odl-qr p",
+        "what": "the ticket number and a short instruction",
+        "slot": "text"
+      },
+      {
+        "name": "wallet",
+        "selector": ".odl-wallet",
+        "what": "a toggle: Add to wallet, then In your wallet",
+        "slot": "action"
+      },
+      {
+        "name": "transfer",
+        "selector": ".odl-send",
+        "what": "send the ticket to someone else",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["act", "venue", "when", "ticket_number"],
+      "properties": {
+        "photo": {
+          "type": "object",
+          "required": ["src", "alt"],
+          "part": "photo",
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 400
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        },
+        "count": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "count"
+        },
+        "tour": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "tour"
+        },
+        "act": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "act"
+        },
+        "venue": {
+          "type": "string",
+          "maxLength": 36,
+          "part": "venue"
+        },
+        "when": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "part": "when",
+          "items": {
+            "type": "object",
+            "required": ["label", "value"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 10
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 9
+              }
+            }
+          }
+        },
+        "seat": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "part": "seat",
+          "items": {
+            "type": "object",
+            "required": ["label", "value"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 10
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 5
+              }
+            }
+          }
+        },
+        "ticket_number": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "code_note"
+        },
+        "code_note": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "code_note"
+        },
+        "in_wallet": {
+          "type": "boolean",
+          "part": "wallet"
+        },
+        "transfer_label": {
+          "type": "string",
+          "maxLength": 12,
+          "part": "transfer"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no tickets yet, show empty-state ('No tickets yet') with a link to browse events"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the card shape: the photo area already has a dark fill, so add muted blocks for the times, seat and code"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the code cannot be loaded, replace it with an alert-banners line saying to show the ticket number at the door"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "set disabled on Transfer once the ticket has been scanned or sent"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a very narrow box the two buttons stack full width",
+        "evidence": "@container (max-width: 21rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "times and seat values never wrap, so keep them short; the act and venue wrap onto more lines",
+        "evidence": "dd { margin: 0; font: var(--ds-text-title-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }"
+      }
+    },
+    "keyboard": ["Tab reaches Add to wallet, then Transfer", "Enter or Space on Add to wallet switches it to In your wallet and back", "Transfer is a button with no action in the file"]
+  }
 }

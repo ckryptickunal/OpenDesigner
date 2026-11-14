@@ -9,5 +9,172 @@
   "states": ["selected", "hover", "focus", "monthly", "yearly"],
   "source": "brand/showcase/components/01-pricing-glass",
   "a11y": "Native radio groups for the period and the plan; the whole card is the label, and the focus ring goes around the card.",
-  "width": "wide"
+  "width": "wide",
+  "spec": {
+    "use_when": ["an upgrade step inside a product, where the person picks a plan before going to checkout"],
+    "avoid_when": ["more than three plans, or a feature-by-feature comparison grid: the layout holds three cards side by side", "paying for the plan once chosen: use order-summary", "turning single add-ons on or off: use settings-toggles"],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the picker's heading",
+        "slot": "text"
+      },
+      {
+        "name": "period",
+        "selector": ".odl-period label",
+        "what": "one billing period choice, Monthly or Yearly, with an optional saving note",
+        "slot": "input"
+      },
+      {
+        "name": "plans",
+        "selector": ".odl-plan",
+        "what": "one plan as a selectable card: radio, name, price, who it is for and features",
+        "slot": "list"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-name",
+        "what": "the plan's name",
+        "slot": "text"
+      },
+      {
+        "name": "tag",
+        "selector": ".odl-tag",
+        "what": "a note on the plan most people choose",
+        "slot": "text"
+      },
+      {
+        "name": "price",
+        "selector": ".odl-price",
+        "what": "the price for the chosen period, its unit, and the yearly total",
+        "slot": "number"
+      },
+      {
+        "name": "for",
+        "selector": ".odl-for",
+        "what": "one line on who the plan suits",
+        "slot": "text"
+      },
+      {
+        "name": "features",
+        "selector": ".odl-plan li",
+        "what": "one included feature, after a check",
+        "slot": "list"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["plans"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "title"
+        },
+        "period": {
+          "enum": ["month", "year"],
+          "part": "period"
+        },
+        "yearly_note": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "period"
+        },
+        "plans": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 3,
+          "part": "plans",
+          "items": {
+            "type": "object",
+            "required": ["id", "name", "price_month"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 16,
+                "part": "name"
+              },
+              "tag": {
+                "type": "string",
+                "maxLength": 24,
+                "part": "tag"
+              },
+              "price_month": {
+                "type": "string",
+                "maxLength": 8,
+                "part": "price"
+              },
+              "price_year": {
+                "type": "string",
+                "maxLength": 8,
+                "part": "price"
+              },
+              "unit": {
+                "type": "string",
+                "maxLength": 24,
+                "part": "price"
+              },
+              "billed_yearly": {
+                "type": "string",
+                "maxLength": 36,
+                "part": "price"
+              },
+              "for": {
+                "type": "string",
+                "maxLength": 60,
+                "part": "for"
+              },
+              "features": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 6,
+                "part": "features",
+                "items": {
+                  "type": "string",
+                  "maxLength": 32
+                }
+              },
+              "selected": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no plans to offer, show empty-state in place of the cards"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the period switch and show three cards with muted bars for the name, price and features"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if prices cannot load, put an alert-banners line with a retry above the cards"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "for the plan the person is already on, set disabled on its radio, dim the card and add a 'Current plan' tag"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "three cards sit side by side in a wide box and stack in one column below that, with their rows lined up across cards",
+        "evidence": "@container (min-width: 52rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "plan names and features wrap, the name leaves room for the radio, and the tag and period labels never wrap",
+        "evidence": ".odl-plan-picker .odl-tag { white-space: nowrap;"
+      }
+    },
+    "keyboard": ["Tab moves to the billing period group, then to the plan group", "Left and Right or Up and Down arrows move between Monthly and Yearly, and the prices change at once", "Arrow keys move between the plan cards and select the one reached"]
+  }
 }

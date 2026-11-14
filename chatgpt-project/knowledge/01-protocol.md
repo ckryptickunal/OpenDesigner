@@ -53,7 +53,7 @@ Read `references/guardrails.md` before writing files or reading a reference. Its
 | Before you propose colours or directions | Mobbin, when connected, for shipped references (`practices.md` section 2). Then `engine.py research market` and a positioning the person confirms (`research.md` section 8) |
 
 ## Files in this skill
-Read at the start: `references/rules.md` (how to talk), `references/zoom.md` (the levels and the 5 sketch questions), `references/standards.md` (house standards, short) and `references/practices.md` (the tools to look for). Read `references/guardrails.md` before writing files or reading a reference, and `references/standards/<theme>.md` before you offer options in its area or build anything it covers. Zooming into an area: its file in `references/stages/`. A look in their own words: `references/styles.md` (`style-lab.md` when no named style fits). Taste: `references/taste.md`. Every other file, and when to read it: `references/files.md`.
+Read at the start: `references/rules.md` (how to talk), `references/zoom.md` (the levels and the 5 sketch questions), `references/standards.md` and `references/practices.md`. Read `references/guardrails.md` before writing files or reading a reference. Every other file, and when to read it: `references/files.md`.
 
 ## Start
 1. **Look before you ask.** Check for `opendesigner/`, `DESIGN.md`, `PRODUCT.md`, token files, `tailwind.config.*`, CSS custom properties, `package.json`, and logo or font files. Never ask something a file already answers. If `opendesigner/state.json` exists, switch to opendesigner-extend.
@@ -131,14 +131,14 @@ Once the system exists, people ask for pages, and then for changes to them. Foll
   A work tool used all day earns its look from real data shown well (`quality.md`, end of section 2).
 
 ## Designer hooks
-Some assets need a person to make them, such as a logo, app icon, illustration, photos, a brand typeface or exact brand colors. `references/hooks.md` lists all 14. It says when to ask, what to accept and how to record it. When they have no illustrations and want open-library art, hand off to **opendesigner-illustrate**: it finds, ranks, recolors and applies art with a licence ledger.
+Some assets need a person to make them, such as a logo, app icon, illustration, photos, a brand typeface or exact brand colors. `references/hooks.md` lists them all. It says when to ask, what to accept and how to record it. When they have no illustrations and want open-library art, hand off to **opendesigner-illustrate**: it finds, ranks, recolors and applies art with a licence ledger.
 
-When they name a brand font, ask where its licence lets them use it (websites, apps, hosting the files themselves), then say in one line what that means for each platform they build for. Record it as `hooks.md` says (H-type, "Brand font licence, per platform"). Never guess a licence.
+When they name a brand font, ask where its licence lets them use it and record it as `hooks.md` says (H-type, "Brand font licence, per platform"). Never guess a licence.
 
 ## References the person brings
 If they share a site, screenshot, Figma file, repo or brand book to copy a look from, hand off to **opendesigner-extract**.
 
-If they share a source to **follow** or **learn from** (a style guide, an article, a talk, their company's UI rules), follow `rules.md` section 12: ask how much weight it gets when they didn't say, read it with their OK, and record the rules they keep as project standards. When one clashes with a house standard, their words decide the route.
+If they share a source to **follow** or **learn from** (a style guide, an article, a talk, their company's UI rules), follow `rules.md` section 12: its weight, reading it with their OK, and clashes with house standards.
 
 ## Finish (at whatever level they stop)
 One question per message here, as everywhere.
@@ -449,6 +449,7 @@ One line per decision. A line looks the same whether it comes from a template bu
 | `OD:direction <id> [--why "reason"]` | `engine.py research directions pick <id> [--remix <axis>=<id>]... --why "reason"` (`research.md` section 9) |
 | `OD:fix <issue>=<option>` | From the audit page (`audit-page`). The copied line is the person's yes to that change in their code: `engine.py ledger add <issue> --note "<option>"`, make the change from tokens, then `engine.py ledger done <issue>` (or `ledger broke <issue> --note "..."`). An option that needs a new token records it first with `set` |
 | `OD:waive <issue> --why "reason"` | From the audit page: keep it as it is, on purpose. `engine.py ledger add <issue>`, then `engine.py ledger waive <issue> --why "reason" --by owner --quote "<their words>"` |
+| `OD:add library.<id>` | A pick from the component gallery (the MCP server or the website). Confirm with the person, then `library.py add <id>` (`library.md`, "Adding one after a yes"). It records no decision |
 
 - Values are JSON: strings in double quotes (`"subtle"`, `"#167874"`), numbers bare (`45`). The engine also accepts a bare word.
 - Parse defensively. Ignore text outside `OD:` lines, and apply lines in order. If a value is not a listed option, confirm it as a custom value before recording it.

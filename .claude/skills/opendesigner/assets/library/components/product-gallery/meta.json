@@ -38,5 +38,262 @@
       "author": "mockupbee",
       "page": "4rUYuwJ2vGw"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["any single item sold in variants, such as shoes, bags or homeware, where the buyer picks options before adding it"],
+    "avoid_when": ["many products in a grid or list: use product-card or wishlist-grid", "the bag or checkout after adding: use cart-drawer or order-summary", "a product with no options to pick: product-card with an add button is enough"],
+    "parts": [
+      {
+        "name": "photos",
+        "selector": ".odl-slide",
+        "what": "one product photo in the swipeable track",
+        "slot": "list"
+      },
+      {
+        "name": "dots",
+        "selector": ".odl-dot",
+        "what": "one dot per photo, shown on phones",
+        "slot": "list"
+      },
+      {
+        "name": "thumbs",
+        "selector": ".odl-thumb",
+        "what": "one thumbnail per photo, shown from tablet width up",
+        "slot": "list"
+      },
+      {
+        "name": "eyebrow",
+        "selector": ".odl-eyebrow",
+        "what": "the line and category",
+        "slot": "text"
+      },
+      {
+        "name": "name",
+        "selector": "h3",
+        "what": "the product name",
+        "slot": "text"
+      },
+      {
+        "name": "price",
+        "selector": ".odl-price",
+        "what": "the price now, the old price struck through and a sale tag",
+        "slot": "rich"
+      },
+      {
+        "name": "rating",
+        "selector": ".odl-rating",
+        "what": "stars, the average and the review count, as a button to the reviews",
+        "slot": "action"
+      },
+      {
+        "name": "colours",
+        "selector": ".odl-sw",
+        "what": "one colour swatch in a radio group; the picked name shows in the legend",
+        "slot": "list"
+      },
+      {
+        "name": "sizes",
+        "selector": ".odl-size",
+        "what": "one size chip in a radio group; a sold-out size is disabled and struck through",
+        "slot": "list"
+      },
+      {
+        "name": "stock",
+        "selector": ".odl-low",
+        "what": "a low-stock note under the sizes",
+        "slot": "text"
+      },
+      {
+        "name": "add",
+        "selector": ".odl-add",
+        "what": "the main action, which reads Added to bag for a moment",
+        "slot": "action"
+      },
+      {
+        "name": "save",
+        "selector": ".odl-fav",
+        "what": "heart toggle to save to a wishlist",
+        "slot": "action"
+      },
+      {
+        "name": "perks",
+        "selector": ".odl-perks li",
+        "what": "one delivery or returns line with an icon",
+        "slot": "list"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["name", "price", "photos"],
+      "properties": {
+        "photos": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "part": "photos",
+          "items": {
+            "type": "object",
+            "required": ["src", "alt"],
+            "properties": {
+              "src": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "alt": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 16
+              }
+            }
+          }
+        },
+        "eyebrow": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "eyebrow"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "name"
+        },
+        "price": {
+          "type": "number",
+          "part": "price"
+        },
+        "was_price": {
+          "type": "number",
+          "part": "price"
+        },
+        "sale_label": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "price"
+        },
+        "rating": {
+          "type": "object",
+          "part": "rating",
+          "required": ["average", "count"],
+          "properties": {
+            "average": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5
+            },
+            "count": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "colours": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "part": "colours",
+          "items": {
+            "type": "object",
+            "required": ["name", "value"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 40
+              }
+            }
+          }
+        },
+        "sizes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "part": "sizes",
+          "items": {
+            "type": "object",
+            "required": ["label"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 4
+              },
+              "sold_out": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "size_note": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "sizes"
+        },
+        "stock": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "stock"
+        },
+        "add_label": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "add"
+        },
+        "perks": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 3,
+          "part": "perks",
+          "items": {
+            "type": "object",
+            "required": ["title"],
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "detail": {
+                "type": "string",
+                "maxLength": 40
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no photos, show the sunken track at its 4 by 5 shape with a muted product icon and hide the dots and thumbnails"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the sunken photo box and fill the name, price and chips with muted blocks; disable Add to bag until loaded"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if adding fails, put the button label back and say so in the live region, or show a toast-stack message"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "a sold-out size is a disabled radio, greyed and struck through",
+        "evidence": ".odl-size input:disabled + span"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "photos sit side by side in their own swipeable track that snaps one photo at a time",
+        "evidence": "scroll-snap-type: x mandatory"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the name wraps; the price, old price and sale tag wrap onto a second line when tight",
+        "evidence": ".odl-price { display: flex; flex-wrap: wrap"
+      }
+    },
+    "keyboard": ["Tab reaches the photo track, the dots or thumbnails, the rating, the colour and size groups, Add to bag and Save", "Left and Right arrows on the focused photo track move one photo at a time", "Arrow keys move within the colour and size groups, as in any native radio group, and skip the sold-out size", "Enter or Space presses Add to bag, Save, the rating, a dot or a thumbnail"]
+  }
 }

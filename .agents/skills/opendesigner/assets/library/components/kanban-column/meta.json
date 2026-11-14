@@ -14,5 +14,213 @@
     {"img": "photo-1438761681033-6461ffad8d80", "author": "Christopher Campbell", "page": "rDEOVtE7vOs"},
     {"img": "photo-1522529599102-193c0d76b5b6", "author": "Elizeu Dias", "page": "2EGNqazbAMk"},
     {"img": "photo-1725033489648-a819750348eb", "author": "Arnab De", "page": "WYwNK-zW7u4"}
-  ]
+  ],
+  "spec": {
+    "use_when": ["any pipeline of items moving through a few named stages, such as hiring or support tickets"],
+    "avoid_when": ["many items compared by several fields at once: use receipts-table", "a single task's steps in order: use setup-steps or agent-steps", "a timeline of events: use activity-feed"],
+    "parts": [
+      {
+        "name": "status",
+        "selector": ".odl-status",
+        "what": "a coloured dot for the column's stage",
+        "slot": "none"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-head h3",
+        "what": "the column's name, followed by the card count",
+        "slot": "text"
+      },
+      {
+        "name": "count",
+        "selector": "h3 > span",
+        "what": "how many cards are in the column",
+        "slot": "number"
+      },
+      {
+        "name": "header_actions",
+        "selector": ".odl-icon-btn",
+        "what": "add a card and column options",
+        "slot": "action"
+      },
+      {
+        "name": "cards",
+        "selector": ".odl-card",
+        "what": "one task card; one can be lifted as if being dragged",
+        "slot": "list"
+      },
+      {
+        "name": "id",
+        "selector": ".odl-id",
+        "what": "the task's short code",
+        "slot": "text"
+      },
+      {
+        "name": "card_title",
+        "selector": ".odl-title",
+        "what": "what the task is",
+        "slot": "text"
+      },
+      {
+        "name": "labels",
+        "selector": ".odl-tag",
+        "what": "one label with a coloured dot",
+        "slot": "list"
+      },
+      {
+        "name": "progress",
+        "selector": ".odl-progress",
+        "what": "a bar and a count of subtasks done",
+        "slot": "number"
+      },
+      {
+        "name": "due",
+        "selector": ".odl-foot time",
+        "what": "the due date; red when overdue",
+        "slot": "text"
+      },
+      {
+        "name": "comments",
+        "selector": ".odl-foot > span:not(.odl-spacer)",
+        "what": "how many comments the card has",
+        "slot": "number"
+      },
+      {
+        "name": "assignee",
+        "selector": ".odl-avatar",
+        "what": "the photo of the person it is assigned to",
+        "slot": "media"
+      },
+      {
+        "name": "add",
+        "selector": ".odl-add",
+        "what": "adds a card at the bottom of the column",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "cards"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "title"
+        },
+        "status": {
+          "enum": ["warning", "info", "success", "neutral"],
+          "part": "status"
+        },
+        "count": {
+          "type": "number",
+          "part": "count"
+        },
+        "cards": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 8,
+          "part": "cards",
+          "items": {
+            "type": "object",
+            "required": ["title"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "maxLength": 10
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "labels": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 3,
+                "items": {
+                  "type": "object",
+                  "required": ["text"],
+                  "properties": {
+                    "text": {
+                      "type": "string",
+                      "maxLength": 14
+                    },
+                    "kind": {
+                      "enum": ["bug", "billing", "api", "design"]
+                    }
+                  }
+                }
+              },
+              "subtasks_done": {
+                "type": "number"
+              },
+              "subtasks_total": {
+                "type": "number"
+              },
+              "due": {
+                "type": "string",
+                "format": "date",
+                "maxLength": 10
+              },
+              "overdue": {
+                "type": "boolean"
+              },
+              "comments": {
+                "type": "number"
+              },
+              "assignee": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maxLength": 40
+                  },
+                  "photo": {
+                    "type": "string",
+                    "maxLength": 300
+                  }
+                }
+              },
+              "dragging": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "add_label": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "add"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no cards, show the header with a count of 0 and a dashed box above Add card saying 'Drop a card here'"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the header and show two cards with grey bars in place of the title and footer"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a move fails, put the card back where it was and show toast-stack with the reason"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "for a column the person cannot change, hide Add card and the add button and set the cards to cursor default"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "a long column grows the page; give the card list a max height and overflow-y: auto so it scrolls in its own box"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "card titles wrap inside the card; labels and footer items stay on one line each and wrap as a group",
+        "evidence": "odl-labels { display: flex; flex-wrap: wrap"
+      }
+    },
+    "keyboard": ["Tab moves through the add and options buttons, then each card, then Add card", "Enter or Space presses the focused button; a focused card has no action of its own"]
+  }
 }

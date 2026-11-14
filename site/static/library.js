@@ -327,7 +327,7 @@
   var fab = $(".kit-fab"), dlg = $("#kit"), out = "parts";
   var save = function () { store.set(KIT_KEY, kit); render(); };
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
-  var url = function (s) { return DATA.site + "/library/r/" + s + ".html"; };
+  var url = function (s) { return DATA.site + "/library/" + s + ".html"; };
   var prompt = function () {
     var parts = kit.items, look = kit.look && DATA.looks[kit.look];
     var list = parts.map(function (s) { return "- " + DATA.items[s].name + ": " + url(s); }).join("\n");

@@ -9,5 +9,172 @@
   "states": ["today", "past day selected", "goal met", "hover", "focus"],
   "source": null,
   "a11y": "Each goal's bar is a meter named after the goal, with its value and maximum; the count of goals met and the date are text; each day in the week strip is a button with its date as its name and aria-pressed for the day shown.",
-  "width": "narrow"
+  "width": "narrow",
+  "spec": {
+    "use_when": ["a wellness or habit screen with two to four daily targets that reset each day"],
+    "avoid_when": ["a streak of yes-or-no habits across days: use habit-tracker", "one big savings or long-term target: use savings-goal", "a single finished workout's stats: use workout-summary"],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the card's heading",
+        "slot": "text"
+      },
+      {
+        "name": "date",
+        "selector": ".odl-date",
+        "what": "the day shown; it changes when a past day is picked",
+        "slot": "text"
+      },
+      {
+        "name": "count",
+        "selector": ".odl-count",
+        "what": "how many goals are met that day",
+        "slot": "text"
+      },
+      {
+        "name": "goals",
+        "selector": ".odl-goal",
+        "what": "one goal: icon, name, value against the goal, a check when met, and a bar",
+        "slot": "list"
+      },
+      {
+        "name": "value",
+        "selector": ".odl-val",
+        "what": "the day's value and its goal with the unit",
+        "slot": "number"
+      },
+      {
+        "name": "bar",
+        "selector": ".odl-bar",
+        "what": "a meter of the value against the goal",
+        "slot": "none"
+      },
+      {
+        "name": "hint",
+        "selector": ".odl-note",
+        "what": "one line on the first goal: how far to go, or that it is met",
+        "slot": "text"
+      },
+      {
+        "name": "week",
+        "selector": ".odl-week button",
+        "what": "one day of the week: a small bar of that day's first goal and its initial; pressing it shows that day",
+        "slot": "list"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["date", "goals"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "title"
+        },
+        "date": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "date"
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "part": "goals",
+          "items": {
+            "type": "object",
+            "required": ["name", "value", "goal"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 18
+              },
+              "value": {
+                "type": "number",
+                "minimum": 0,
+                "part": "value"
+              },
+              "goal": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "part": "value"
+              },
+              "unit": {
+                "type": "string",
+                "maxLength": 8,
+                "part": "value"
+              },
+              "icon": {
+                "type": "string",
+                "maxLength": 32
+              }
+            }
+          }
+        },
+        "hint": {
+          "type": "string",
+          "maxLength": 80,
+          "part": "hint"
+        },
+        "week": {
+          "type": "array",
+          "minItems": 7,
+          "maxItems": 7,
+          "part": "week",
+          "items": {
+            "type": "object",
+            "required": ["label", "initial", "percent"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "initial": {
+                "type": "string",
+                "maxLength": 2
+              },
+              "percent": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "selected": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "on a day with no data, show each value as 0 with an empty bar and a hint such as 'Nothing logged yet today'"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the goal rows and fill the values with muted blocks and the bars empty until the numbers arrive"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the day cannot load, put the reason and a retry in the hint box, or an alert-banners line above the goals"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "set disabled on future days in the week strip and dim them"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "a bar never runs past its track, however far over the goal the value goes",
+        "evidence": "Math.min(100, Math.round((v / goals[k]) * 100))"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "goal names and the hint wrap; values and the met count never wrap",
+        "evidence": ".odl-daily-goals .odl-val { justify-self: end; font: var(--ds-text-title-md); font-variant-numeric: tabular-nums; white-space: nowrap; }"
+      }
+    },
+    "keyboard": ["Tab reaches each day in the week strip", "Enter or Space on a day shows that day's goals, date and hint, and marks the day as pressed"]
+  }
 }

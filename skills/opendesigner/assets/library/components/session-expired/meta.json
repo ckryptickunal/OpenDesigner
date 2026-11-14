@@ -33,28 +33,66 @@
       "the person has no work in progress: send them to the sign-in page",
       "they lack permission rather than a session: use page-no-access"
     ],
-    "keyboard": [
-      "Sign in again is the first focusable control",
-      "Tab then reaches Use another account"
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-session-expired [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “Your session ended”",
+        "slot": "text"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-session-expired [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in “For your security, we signed you out after 30 mi”",
+        "slot": "text"
+      },
+      {
+        "name": "draft",
+        "selector": ".odl-session-expired [data-od-slot=\"draft\"]",
+        "what": "the work that was kept, as in “Draft: Q4 vendor review”",
+        "slot": "text"
+      },
+      {
+        "name": "saved",
+        "selector": ".odl-session-expired [data-od-slot=\"saved\"]",
+        "what": "where and when the work was kept, as in “Kept on this device · saved 2 minutes ago”",
+        "slot": "text"
+      },
+      {
+        "name": "sign_in",
+        "selector": ".odl-session-expired [data-od-action=\"sign_in\"]",
+        "what": "the Sign in again action",
+        "slot": "action"
+      },
+      {
+        "name": "switch",
+        "selector": ".odl-session-expired [data-od-action=\"switch\"]",
+        "what": "the Use another account action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "title": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 24,
+          "part": "title"
         },
         "message": {
           "type": "string",
-          "maxLength": 176
+          "maxLength": 176,
+          "part": "message"
         },
         "draft": {
           "type": "string",
-          "maxLength": 32
+          "maxLength": 32,
+          "part": "draft"
         },
         "saved": {
           "type": "string",
-          "maxLength": 64
+          "maxLength": 64,
+          "part": "saved"
         }
       },
       "required": [
@@ -91,11 +129,11 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
-      },
-      "missing_image": {
-        "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
       }
-    }
+    },
+    "keyboard": [
+      "Sign in again is the first focusable control",
+      "Tab then reaches Use another account"
+    ]
   }
 }

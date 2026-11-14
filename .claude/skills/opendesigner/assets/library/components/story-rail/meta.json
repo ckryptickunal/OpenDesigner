@@ -74,5 +74,141 @@
       "author": "Vicky Hladynets",
       "page": "_gDoyVv5F4c"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a row of people or channels with something new, where opening one clears its ring"],
+    "avoid_when": ["suggesting people to follow: use follow-suggestions", "a row of shows, albums or products: use media-shelf", "a full list of members with roles: use member-list"],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-story-rail h3",
+        "what": "the rail's heading",
+        "slot": "text"
+      },
+      {
+        "name": "new_count",
+        "selector": ".odl-new",
+        "what": "how many stories are unseen, or All seen",
+        "slot": "text"
+      },
+      {
+        "name": "arrows",
+        "selector": ".odl-arrow",
+        "what": "scroll back and forward; hidden on phones",
+        "slot": "action"
+      },
+      {
+        "name": "stories",
+        "selector": ".odl-rail li",
+        "what": "one story ring with a photo and a name; the first is your own add ring",
+        "slot": "list"
+      },
+      {
+        "name": "photo",
+        "selector": ".odl-av",
+        "what": "the poster's photo inside its ring",
+        "slot": "media"
+      },
+      {
+        "name": "badge",
+        "selector": ".odl-plus",
+        "what": "a plus on your own ring or a star for close friends",
+        "slot": "none"
+      },
+      {
+        "name": "live",
+        "selector": ".odl-live",
+        "what": "a LIVE tag under the ring",
+        "slot": "text"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-name",
+        "what": "the poster's short name",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["stories"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "title"
+        },
+        "own": {
+          "type": "object",
+          "properties": {
+            "photo": {
+              "type": "string",
+              "maxLength": 300
+            },
+            "label": {
+              "type": "string",
+              "maxLength": 12
+            }
+          },
+          "part": "stories"
+        },
+        "stories": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 30,
+          "part": "stories",
+          "items": {
+            "type": "object",
+            "required": ["name", "full_name", "photo", "state"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 14
+              },
+              "full_name": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "photo": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "state": {
+                "enum": ["new", "seen", "live", "close"]
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no stories from others, show only your own add ring and change the count to a line such as 'No new stories'"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "show six grey circles with short grey bars under them in place of the rings"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if stories fail to load, keep your own ring and put a short retry line beside it"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "the back arrow is disabled at the start and the forward arrow at the end of the rail",
+        "evidence": ".odl-arrow:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the rail scrolls sideways in its own box with snap points, fading at the end until you reach it",
+        "evidence": "overflow-x: auto; overscroll-behavior-x: contain"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a name wider than its ring is cut off with an ellipsis",
+        "evidence": ".odl-name { max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis"
+      }
+    },
+    "keyboard": ["Tab moves through the back and forward arrows, then each story in order", "Enter or Space on an arrow scrolls the rail by most of its width", "Enter or Space on a story opens it and marks it seen; on your own ring it is the add action"]
+  }
 }

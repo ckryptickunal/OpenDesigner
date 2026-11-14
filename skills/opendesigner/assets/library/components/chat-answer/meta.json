@@ -9,5 +9,176 @@
   "states": ["streaming", "citation focused", "copied", "rated up", "rated down", "hover", "focus"],
   "source": "brand/showcase/components/07-ai-composer",
   "a11y": "The turn is aria-busy while writing and says so in a status; each citation link names its source and page and moves focus to it; every action button has a name and the ratings use aria-pressed.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": ["a research or support assistant whose claims must be checked against named documents and pages"],
+    "avoid_when": ["a whole conversation with many turns and a reply box: use chat-thread with ai-composer", "a short inline suggestion the person accepts or rejects: use ai-suggestion", "a multi-step agent run with progress per step: use agent-steps"],
+    "parts": [
+      {
+        "name": "question",
+        "selector": ".odl-ask",
+        "what": "what the person asked, right-aligned",
+        "slot": "text"
+      },
+      {
+        "name": "avatar",
+        "selector": ".odl-avatar",
+        "what": "the assistant's icon, hidden in a narrow box",
+        "slot": "none"
+      },
+      {
+        "name": "byline",
+        "selector": ".odl-who",
+        "what": "assistant name, mode and source count, and how long it took",
+        "slot": "text"
+      },
+      {
+        "name": "answer",
+        "selector": ".odl-text p",
+        "what": "one paragraph of the answer, with numbered citation links",
+        "slot": "rich"
+      },
+      {
+        "name": "citation",
+        "selector": ".odl-cite",
+        "what": "a numbered link that moves focus to its source",
+        "slot": "action"
+      },
+      {
+        "name": "sources",
+        "selector": ".odl-src",
+        "what": "one cited source: number, title, details and pages",
+        "slot": "list"
+      },
+      {
+        "name": "copy",
+        "selector": ".odl-copy",
+        "what": "copies the answer text",
+        "slot": "action"
+      },
+      {
+        "name": "retry",
+        "selector": ".odl-actions button",
+        "what": "asks for the answer again",
+        "slot": "action"
+      },
+      {
+        "name": "rating",
+        "selector": ".odl-vote",
+        "what": "good or bad answer, one at a time",
+        "slot": "action"
+      },
+      {
+        "name": "note",
+        "selector": "output",
+        "what": "a short status after copy or rating",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["question", "answer"],
+      "properties": {
+        "question": {
+          "type": "string",
+          "maxLength": 200,
+          "part": "question"
+        },
+        "assistant": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "byline"
+        },
+        "byline": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 2,
+          "part": "byline",
+          "items": {
+            "type": "string",
+            "maxLength": 28
+          }
+        },
+        "answer": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "part": "answer",
+          "items": {
+            "type": "object",
+            "required": ["text"],
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "cites": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 3,
+                "items": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "part": "citation"
+              }
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "part": "sources",
+          "items": {
+            "type": "object",
+            "required": ["title"],
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 48
+              },
+              "detail": {
+                "type": "string",
+                "maxLength": 56
+              },
+              "pages": {
+                "type": "string",
+                "maxLength": 16
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "before the first question, show empty-state with example questions instead of the thread"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "while the answer is written, set aria-busy on the turn, add a status line under the byline and disable copy, retry and the ratings"
+      },
+      "error": {
+        "status": "handled",
+        "how": "if the browser refuses to copy, the status line says so",
+        "evidence": "Could not copy"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "set disabled on the action buttons while the answer is still being written"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "a long answer and source list grow the card; past about six sources, show the first few and a 'Show all sources' button"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "paragraphs and source titles wrap, page numbers never wrap, and a citation stays on the line with the word before it",
+        "evidence": ".odl-chat-answer .odl-nw { white-space: nowrap; }"
+      }
+    },
+    "keyboard": ["Tab reaches each citation link, then Copy, Retry, Good answer and Bad answer", "Enter on a citation moves focus to its source, which lights up briefly", "Enter or Space presses the focused button; the two ratings act as toggles and only one can be on"]
+  }
 }

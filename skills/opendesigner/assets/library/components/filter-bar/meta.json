@@ -27,5 +27,142 @@
   ],
   "source": "brand/showcase/product/01-quoin-payments",
   "a11y": "The bar is a labelled search landmark; every chip and the sort control are buttons that say they open a popup, the remove button names the filter it clears, and the result count is a polite live region.",
-  "width": "wide"
+  "width": "wide",
+  "spec": {
+    "use_when": ["above a list of cards or search results that people narrow by a few fields"],
+    "avoid_when": ["searching across the whole app or running commands: use command-menu", "only picking dates: use date-range-picker", "switching between views of the same page: use page-header-tabs"],
+    "parts": [
+      {
+        "name": "search",
+        "selector": ".odl-search input",
+        "what": "the search field, with a shortcut hint",
+        "slot": "input"
+      },
+      {
+        "name": "applied",
+        "selector": ".odl-active",
+        "what": "an applied filter: its name and value, plus a remove button",
+        "slot": "list"
+      },
+      {
+        "name": "remove",
+        "selector": ".odl-x",
+        "what": "removes the applied filter it sits in",
+        "slot": "action"
+      },
+      {
+        "name": "filters",
+        "selector": ".odl-filters > .odl-chip",
+        "what": "one filter not yet applied, which opens its options",
+        "slot": "list"
+      },
+      {
+        "name": "add",
+        "selector": ".odl-ghost",
+        "what": "adds another kind of filter",
+        "slot": "action"
+      },
+      {
+        "name": "count",
+        "selector": ".odl-count",
+        "what": "how many results match",
+        "slot": "number"
+      },
+      {
+        "name": "sort",
+        "selector": ".odl-sort",
+        "what": "the current sort order, which opens a menu",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["count", "noun", "filters"],
+      "properties": {
+        "search_placeholder": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "search"
+        },
+        "applied": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 3,
+          "part": "applied",
+          "items": {
+            "type": "object",
+            "required": ["name", "value"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 16
+              }
+            }
+          }
+        },
+        "filters": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "part": "filters",
+          "items": {
+            "type": "string",
+            "maxLength": 18
+          }
+        },
+        "add_label": {
+          "type": "string",
+          "maxLength": 14,
+          "part": "add"
+        },
+        "count": {
+          "type": "number",
+          "part": "count"
+        },
+        "noun": {
+          "type": "string",
+          "maxLength": 14,
+          "part": "count"
+        },
+        "sort": {
+          "type": "string",
+          "maxLength": 18,
+          "part": "sort"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "when the count is 0, keep the bar as it is and put empty-state under it with a button that removes every applied filter"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "while results reload, replace the count with a short grey block and keep the chips usable"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if results fail to load, show 'Could not load' in place of the count and an alert-banners line under the bar"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "while the table loads, set disabled on the filter chips and Sort and dim them"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "chips wrap onto more rows at their natural width; under 900 px they move to their own row, and on a phone the search goes full width",
+        "evidence": "@container (max-width: 899.98px)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "chip, count and sort labels never wrap; a long chip drops to its own row, so keep each label short",
+        "evidence": "white-space: nowrap; cursor: pointer;"
+      }
+    },
+    "keyboard": ["Tab moves through the search field, each chip and its remove button, Add filter, then Sort", "Enter or Space on a remove button clears that filter, turns it back into a plain chip and moves focus to it; the new count is read out"]
+  }
 }

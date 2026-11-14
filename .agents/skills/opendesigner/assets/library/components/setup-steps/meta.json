@@ -9,5 +9,134 @@
   "states": ["done", "current", "upcoming", "hover", "focus"],
   "source": "brand/showcase/components/09-onboarding-stepper",
   "a11y": "An ordered list with the current step marked aria-current; progress is a native progress element with a label, and the count is also written out.",
-  "width": "narrow"
+  "width": "narrow",
+  "spec": {
+    "use_when": ["a home-screen card that brings people back to an unfinished setup, one step at a time"],
+    "avoid_when": ["steps an AI agent is running on its own: use agent-steps", "a long form split into pages with back and next: build it from the form's own sections", "a daily habit or goal: use daily-goals or habit-tracker"],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-setup-steps h3",
+        "what": "what is being set up",
+        "slot": "text"
+      },
+      {
+        "name": "progress",
+        "selector": ".odl-count",
+        "what": "a progress bar and how many steps are done",
+        "slot": "number"
+      },
+      {
+        "name": "steps",
+        "selector": "ol > li",
+        "what": "one step: done, now or next",
+        "slot": "list"
+      },
+      {
+        "name": "mark",
+        "selector": ".odl-mark",
+        "what": "a tick for done steps, the step number for the rest",
+        "slot": "none"
+      },
+      {
+        "name": "step_title",
+        "selector": ".odl-title",
+        "what": "the step's name, with a short note on the right such as the time it takes",
+        "slot": "text"
+      },
+      {
+        "name": "detail",
+        "selector": ".odl-detail",
+        "what": "one line about the current step",
+        "slot": "text"
+      },
+      {
+        "name": "primary",
+        "selector": ".odl-primary",
+        "what": "the action for the current step",
+        "slot": "action"
+      },
+      {
+        "name": "skip",
+        "selector": ".odl-quiet",
+        "what": "a quiet way to skip the current step",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "steps"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "title"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "part": "steps",
+          "items": {
+            "type": "object",
+            "required": ["title", "state"],
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 14
+              },
+              "state": {
+                "enum": ["done", "now", "next"]
+              },
+              "detail": {
+                "type": "string",
+                "maxLength": 100
+              },
+              "action": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "skip": {
+                "type": "string",
+                "maxLength": 16
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "when every step is done, replace the list with a short success line and a button to dismiss the card"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "show the card with a grey progress bar and three rows of grey circles and bars"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the current step fails, keep it current and put an alert-banners line above its buttons"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "while the current step is running, set disabled on its buttons and change the label to say it is working"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the current step's buttons wrap under each other in a narrow box; more steps make the card taller",
+        "evidence": ".odl-acts { display: flex; flex-wrap: wrap"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "step names and the detail line wrap beside the mark; the short note on the right never wraps",
+        "evidence": "grid-template-columns: var(--ds-size-control-sm) minmax(0, 1fr)"
+      }
+    },
+    "keyboard": ["Tab reaches the current step's main button, then Skip for now", "Enter or Space presses the focused button"]
+  }
 }
