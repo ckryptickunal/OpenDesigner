@@ -153,7 +153,7 @@ Two more commands keep later sessions on the same system:
 | `engine.py ledger start "Settings page" --items comp.action.button,A-space-01` | Opens a round. An item can be a building block (it counts toward the system's coverage), something from the audit page, or your own name. |
 | `engine.py ledger done A-space-01` | Marks it done. `ledger broke <item> --note "..."` records what broke; `ledger waive <item> --why "..." --by owner --quote "your words"` skips it on purpose. An AI can waive with `--by agent`, but the round won't close until you agree. |
 | `engine.py ledger close` | Closes the round, and refuses while anything is open. `ledger show` lists every round. |
-| `engine.py exempt site/figures --why "demo figures show mistakes on purpose"` | Keeps files that break the system on purpose out of review. Review lists them, with the reason, so they are never hidden. |
+| `engine.py exempt site/figures --why "demo figures show mistakes on purpose" --by owner` | Keeps files that break the system on purpose out of review. Review lists them, with the reason, so they are never hidden. |
 
 **Things removed on purpose.** Code keeps no record of what was taken out, so a later session tends to add it back. Record a removal the day it happens.
 

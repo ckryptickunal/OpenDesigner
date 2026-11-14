@@ -17,17 +17,18 @@ No network requests, no dependencies. The shared chrome is repeated in every tem
 @media (prefers-color-scheme:dark){:root:not([data-theme=light]){--c-bg:#111113;--c-surface:#19191c;--c-fg:#ececef;--c-muted:#a3a3ad;--c-border:#303036;--c-strong:#ececef;--c-on-strong:#111113;--c-ok:#4ade80;--c-bad:#f97066;color-scheme:dark}}
 :root[data-theme=dark]{--c-bg:#111113;--c-surface:#19191c;--c-fg:#ececef;--c-muted:#a3a3ad;--c-border:#303036;--c-strong:#ececef;--c-on-strong:#111113;--c-ok:#4ade80;--c-bad:#f97066;color-scheme:dark}
 *{box-sizing:border-box}
+html{scroll-padding-bottom:160px}
 body{margin:0;background:var(--c-bg);color:var(--c-fg);font:14px/1.5 var(--font)}
 h1{font-size:16px;margin:0;font-weight:600}h2{font-size:13px;margin:0 0 8px;font-weight:600;color:var(--c-muted);text-transform:uppercase;letter-spacing:.04em}
 h3{font-size:15px;margin:0;font-weight:600}
 .od-h{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--c-border);background:var(--c-surface)}
-.sub{color:var(--c-muted);font-size:13px;margin:4px 0 0;max-width:72ch}
+.sub{color:var(--c-muted);font-size:13px;margin:4px 0 0;max-width:72ch;overflow-wrap:anywhere}
 main{max-width:1120px;margin:0 auto;padding:20px;display:grid;gap:32px;min-width:0}
 section{min-width:0}
 .kv{font:12px/1.4 var(--mono);color:var(--c-muted)}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 button{font:inherit;min-height:44px;padding:0 14px;border-radius:var(--r);border:1px solid var(--c-border);background:var(--c-surface);color:var(--c-fg);cursor:pointer}
-button.primary{background:var(--c-strong);color:var(--c-on-strong);border-color:var(--c-strong);font-weight:600}
+button.primary{background:var(--c-strong);color:var(--c-on-strong);border-color:var(--c-strong);font-weight:600;font-size:15px}
 :focus-visible{outline:2px solid var(--c-strong);outline-offset:2px}
 input[type=text]{font:inherit;min-height:44px;padding:0 10px;border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-surface);color:var(--c-fg);min-width:0}
 .seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden;background:var(--c-surface)}
@@ -42,7 +43,7 @@ input[type=radio]{accent-color:var(--c-strong);width:18px;height:18px}
 /* adapt page */
 .ba{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
 .pane{position:relative;border:1px solid var(--c-border);border-radius:var(--r);background:var(--t-bg);color:var(--t-fg);font-family:var(--t-font);font-size:var(--t-size);padding:34px 18px 18px;display:grid;gap:var(--t-gap);align-content:start;min-width:0;overflow:hidden}
-.pane::before{content:attr(data-label);position:absolute;top:10px;left:14px;font:11px var(--mono);opacity:.7}
+.pane::before{content:attr(data-label);position:absolute;top:10px;left:14px;font:12px var(--mono)}
 .pane h3{font-size:calc(var(--t-size) * var(--t-ratio) * var(--t-ratio));font-weight:var(--t-hw);margin:0;line-height:1.2}
 .pane p{margin:0;color:var(--t-muted);line-height:1.5}
 .t-card{background:var(--t-surface);border:1px solid var(--t-border);border-radius:var(--t-rc);padding:var(--t-pad);box-shadow:var(--t-sh);display:grid;gap:var(--t-gap)}
@@ -53,7 +54,7 @@ input[type=radio]{accent-color:var(--c-strong);width:18px;height:18px}
 .t-badge{display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:var(--t-rb);background:var(--t-accent-sub);font-size:12px}
 .changed td{font-weight:600}
 .opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--c-border);border-radius:var(--r);padding:12px;background:var(--c-surface);min-height:44px;cursor:pointer}
-.opt input{width:18px;height:18px;margin-top:2px;accent-color:var(--c-strong);flex:none}
+.opt input{width:24px;height:24px;margin:0;accent-color:var(--c-strong);flex:none}
 .list{display:grid;gap:8px}
 .stays li{margin:4px 0}
 .notice{border:1px solid var(--c-border);border-radius:var(--r);background:var(--c-surface);padding:12px;font-size:13px}
@@ -102,7 +103,7 @@ function mode(){const t=document.documentElement.dataset.theme;return t==='light
 function paint(el,sys){const s=sys.shared||{};const v=Object.assign({},sys.light||{},mode()==='dark'?(sys.dark||{}):{});const set=(k,x)=>{if(x)el.style.setProperty(k,x)};
  set('--t-bg',v.bg);set('--t-surface',v.surface||v.bg);set('--t-fg',v.fg);set('--t-muted',v['fg-muted']);set('--t-border',v.border);set('--t-border-s',v['border-strong']||v.border);
  set('--t-accent',v.accent);set('--t-on',v['on-accent']);set('--t-accent-sub',v['accent-subtle']||v.surface);set('--t-sh',v['shadow-1']||'none');
- set('--t-font',s.font);set('--t-size',s.size);set('--t-rb',s['radius-control']);set('--t-rc',s['radius-container']);set('--t-h',s['control-h']);set('--t-pad',s['pad-x']);set('--t-gap',s.gap);set('--t-ratio',s.ratio);set('--t-hw',s['heading-weight'])}
+ set('--t-size',s.size);set('--t-rb',s['radius-control']);set('--t-rc',s['radius-container']);set('--t-h',s['control-h']);set('--t-pad',s['pad-x']);set('--t-gap',s.gap);set('--t-ratio',s.ratio);set('--t-hw',s['heading-weight'])}
 function ui(el){el.innerHTML='<h3>'+esc(D.name||'Your product')+'</h3><p>Plans start at the size of your team. Change it any time.</p>'
  +'<div class="t-card"><div class="t-row"><span class="t-badge">New</span><strong>Team plan</strong></div><div class="t-in">Work email</div><div class="t-row"><span class="t-btn">Start free</span><span class="t-btn2">Talk to us</span></div></div>'}
 function boot(){$('#t').textContent=(D.name||'Your product')+': adapt from '+((D.ref||{}).id||'a reference');
