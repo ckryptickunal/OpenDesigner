@@ -824,7 +824,7 @@ FOOT_COLS = [  # the top row: short labels that fit on one line down to 320 px
 # the build warns when a label is longer than FOOT_MAX characters.
 FOOT_SHORT = {
     "designers": "For designers", "enterprise": "For enterprise teams", "existing-product": "Existing app or brand",
-    "extend": "Change a system", "export": "Export to code", "good-practices": "Good practices",
+    "extend": "Change a system", "export": "Export to code", "library-mcp": "Library by fetch or MCP", "good-practices": "Good practices",
     "design-system-for-cursor": "Cursor design system", "design-tokens-for-claude-code": "Claude Code tokens",
     "improve-vibe-coded-ui": "Polish a vibe-coded app", "ai-design-system-generator": "AI system generators",
     "design-systems": "Design systems", "design-tokens": "Design tokens", "decisions": "Decisions and DESIGN.md",
@@ -2183,6 +2183,8 @@ def vercel_json():
                 {"source": "/fonts/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
                 {"source": "/img/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=604800"}]},
                 {"source": "/library/r/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex"}, {"key": "Content-Type", "value": "text/html; charset=utf-8"}, {"key": "Access-Control-Allow-Origin", "value": "*"}]},
+                {"source": "/library/([a-z0-9-]+)\\.html", "headers": [{"key": "X-Robots-Tag", "value": "noindex"}, {"key": "Content-Type", "value": "text/html; charset=utf-8"}, {"key": "Access-Control-Allow-Origin", "value": "*"}]},
+                {"source": "/library/([a-z0-9-]+)\\.json", "headers": [{"key": "Content-Type", "value": "application/json; charset=utf-8"}, {"key": "Access-Control-Allow-Origin", "value": "*"}]},
                 {"source": "/(.*)\\.md", "headers": [{"key": "Content-Type", "value": "text/markdown; charset=utf-8"}, {"key": "X-Robots-Tag", "value": "noindex"}]},
                 {"source": "/(llms.txt|llms-full.txt|robots.txt)", "headers": [{"key": "Content-Type", "value": "text/plain; charset=utf-8"}]},
                 {"source": "/changelog.xml", "headers": [{"key": "Content-Type", "value": "application/atom+xml; charset=utf-8"}]},

@@ -15,5 +15,219 @@
     {"img": "photo-1506794778202-cad84cf45f1d", "author": "Albert Dera", "page": "ILip77SbmOE"},
     {"img": "photo-1725033489648-a819750348eb", "author": "Arnab De", "page": "WYwNK-zW7u4"},
     {"img": "photo-1684598273404-2d94d7a7ce2f", "author": "Hugo ROUQUETTE", "page": "RhTXKh0UofQ"}
-  ]
+  ],
+  "spec": {
+    "use_when": ["a bell-icon popover or side panel where some notifications can be acted on in place, such as approving a request"],
+    "avoid_when": ["a short message about something that just happened: use toast-stack", "a running history of changes to one record: use activity-feed or audit-log", "a warning that applies to the whole page: use alert-banners"],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the panel heading",
+        "slot": "text"
+      },
+      {
+        "name": "mark_all",
+        "selector": ".odl-markall",
+        "what": "clears every unread dot",
+        "slot": "action"
+      },
+      {
+        "name": "tabs",
+        "selector": "[role=\"tab\"]",
+        "what": "one filter tab, with an optional unread count",
+        "slot": "list"
+      },
+      {
+        "name": "groups",
+        "selector": ".odl-group",
+        "what": "a time group heading such as Today or Earlier",
+        "slot": "list"
+      },
+      {
+        "name": "rows",
+        "selector": ".odl-row",
+        "what": "one notification: unread dot, avatar, line, optional quote, time and source, optional actions",
+        "slot": "list"
+      },
+      {
+        "name": "avatar",
+        "selector": ".odl-avatar",
+        "what": "the sender's photo, or an icon for system notices",
+        "slot": "media"
+      },
+      {
+        "name": "line",
+        "selector": ".odl-line",
+        "what": "what happened, with names and items in bold",
+        "slot": "rich"
+      },
+      {
+        "name": "quote",
+        "selector": ".odl-quote",
+        "what": "the quoted text of a mention",
+        "slot": "text"
+      },
+      {
+        "name": "meta",
+        "selector": ".odl-meta",
+        "what": "time and where it came from, separated by dots",
+        "slot": "text"
+      },
+      {
+        "name": "actions",
+        "selector": ".odl-actions button",
+        "what": "one or two inline buttons such as Approve or View",
+        "slot": "action"
+      },
+      {
+        "name": "done",
+        "selector": ".odl-done",
+        "what": "the result line that replaces the actions after approving",
+        "slot": "text"
+      },
+      {
+        "name": "footer",
+        "selector": ".odl-foot button",
+        "what": "a link-style button to notification settings",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["groups"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "title"
+        },
+        "tabs": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 3,
+          "part": "tabs",
+          "items": {
+            "type": "object",
+            "required": ["label", "filter"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 12
+              },
+              "filter": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 99
+              }
+            }
+          }
+        },
+        "groups": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "part": "groups",
+          "items": {
+            "type": "object",
+            "required": ["label", "items"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 6,
+                "items": {
+                  "type": "object",
+                  "required": ["line", "time"],
+                  "properties": {
+                    "kind": {
+                      "type": "string",
+                      "maxLength": 16
+                    },
+                    "unread": {
+                      "type": "boolean"
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "maxLength": 300
+                    },
+                    "line": {
+                      "type": "string",
+                      "maxLength": 110
+                    },
+                    "quote": {
+                      "type": "string",
+                      "maxLength": 120
+                    },
+                    "time": {
+                      "type": "string",
+                      "maxLength": 20
+                    },
+                    "source": {
+                      "type": "string",
+                      "maxLength": 40
+                    },
+                    "actions": {
+                      "type": "array",
+                      "minItems": 0,
+                      "maxItems": 2,
+                      "items": {
+                        "type": "string",
+                        "maxLength": 14
+                      }
+                    },
+                    "done": {
+                      "type": "string",
+                      "maxLength": 40
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "footer": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "footer"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "when a tab has nothing, the groups hide but no message shows; add an empty-state line ('No mentions yet') in the panel"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "show three rows with a muted circle for the avatar and two muted bars for the line and time"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if notifications fail to load, show an alert-banners line inside the panel with a retry button; if approving fails, put the actions back and show a toast-stack message"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "while an approval is sending, set disabled on that row's buttons"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the panel grows with its content; give the tab panel a max height and overflow-y: auto so the header and footer stay put"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the text column can shrink, so long lines and quotes wrap under each other beside the avatar",
+        "evidence": "grid-template-columns: var(--ds-space-8) var(--ds-size-control-sm) minmax(0, 1fr)"
+      }
+    },
+    "keyboard": ["Tab reaches Mark all read, the selected tab, each notification row, its buttons, and Notification settings", "Left and Right arrows move between the All and Mentions tabs and filter the list; only the selected tab is in the Tab order", "Enter or Space on Approve marks it approved and shows the result line; Enter on a row itself does nothing"]
+  }
 }

@@ -35,5 +35,220 @@
       "author": "Adam Vradenburg",
       "page": "GA09PKfRIQY"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a recorded talk or event replay, where captions and skipping back matter"],
+    "avoid_when": ["audio only, such as a song or podcast: use music-player or podcast-episodes", "choosing what to watch from many titles: use media-shelf", "a title's page with seasons and cast before playing: use title-detail"],
+    "parts": [
+      {
+        "name": "poster",
+        "selector": ".odl-poster",
+        "what": "the film's still behind the controls",
+        "slot": "media"
+      },
+      {
+        "name": "big_play",
+        "selector": ".odl-big",
+        "what": "the large play button in the middle, hidden while playing",
+        "slot": "action"
+      },
+      {
+        "name": "caption",
+        "selector": ".odl-caption span",
+        "what": "the current caption line over the picture",
+        "slot": "text"
+      },
+      {
+        "name": "seek",
+        "selector": ".odl-scrub",
+        "what": "a seek bar showing played and loaded parts",
+        "slot": "input"
+      },
+      {
+        "name": "play",
+        "selector": ".odl-play",
+        "what": "play or pause",
+        "slot": "action"
+      },
+      {
+        "name": "skip",
+        "selector": ".odl-skip",
+        "what": "back and forward 10 seconds, hidden on phones",
+        "slot": "action"
+      },
+      {
+        "name": "mute",
+        "selector": ".odl-mute",
+        "what": "mute toggle",
+        "slot": "action"
+      },
+      {
+        "name": "volume",
+        "selector": ".odl-vol",
+        "what": "volume slider, hidden on phones",
+        "slot": "input"
+      },
+      {
+        "name": "time",
+        "selector": ".odl-time",
+        "what": "elapsed and total time",
+        "slot": "text"
+      },
+      {
+        "name": "captions_toggle",
+        "selector": ".odl-cc",
+        "what": "captions on or off",
+        "slot": "action"
+      },
+      {
+        "name": "fullscreen",
+        "selector": ".odl-full",
+        "what": "full screen",
+        "slot": "action"
+      },
+      {
+        "name": "eyebrow",
+        "selector": ".odl-eyebrow",
+        "what": "the series and episode",
+        "slot": "text"
+      },
+      {
+        "name": "tag",
+        "selector": ".odl-tag",
+        "what": "a small label such as CC and the quality",
+        "slot": "text"
+      },
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the video's title",
+        "slot": "text"
+      },
+      {
+        "name": "summary",
+        "selector": ".odl-sub",
+        "what": "one or two sentences on the video",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "poster", "duration"],
+      "properties": {
+        "poster": {
+          "type": "object",
+          "required": ["src", "alt"],
+          "part": "poster",
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 400
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        },
+        "duration": {
+          "type": "integer",
+          "minimum": 1,
+          "part": "seek"
+        },
+        "position": {
+          "type": "integer",
+          "minimum": 0,
+          "part": "seek"
+        },
+        "buffered": {
+          "type": "integer",
+          "minimum": 0,
+          "part": "seek"
+        },
+        "volume": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "part": "volume"
+        },
+        "muted": {
+          "type": "boolean",
+          "part": "mute"
+        },
+        "captions_on": {
+          "type": "boolean",
+          "part": "captions_toggle"
+        },
+        "cues": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 2000,
+          "part": "caption",
+          "items": {
+            "type": "object",
+            "required": ["at", "text"],
+            "properties": {
+              "at": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 84
+              }
+            }
+          }
+        },
+        "eyebrow": {
+          "type": "string",
+          "maxLength": 56,
+          "part": "eyebrow"
+        },
+        "tag": {
+          "type": "string",
+          "maxLength": 12,
+          "part": "tag"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "title"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 180,
+          "part": "summary"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no video yet, keep the frame and poster and replace the big play button with a short line such as 'Available Friday'"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "the seek bar already shows what has loaded; while waiting for data, swap the big play button for a spinner and keep the controls"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the video cannot play, hide the controls and show an alert-banners line over the poster with a retry"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "set disabled on the skip buttons and the seek bar for a live stream that cannot be scrubbed"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrow box the frame becomes 4:3 and the skip buttons and volume slider go, leaving room for the rest",
+        "evidence": "@container (max-width: 34rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long caption wraps with each line on its own backing; the time and tag never wrap; the title wraps",
+        "evidence": "box-decoration-break: clone"
+      }
+    },
+    "keyboard": ["Tab reaches the big play button, the seek bar, Play, Back 10 seconds, Forward 10 seconds, Mute, Volume, Captions, then Full screen", "Enter or Space on Play or the big play button starts or pauses; the big button hands focus to Play", "Arrow keys on the seek bar move it one second at a time and on the volume slider one step at a time, as with any native range", "Enter or Space on Mute, Captions or Full screen switches them", "while focus is inside the player the controls stay visible; there are no single-key shortcuts"]
+  }
 }

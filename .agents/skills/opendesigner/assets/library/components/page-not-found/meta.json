@@ -34,24 +34,61 @@
       "the server failed: use page-error",
       "a search inside the app found nothing: use empty-no-results"
     ],
-    "keyboard": [
-      "Tab reaches the search field, Search, Go to home, Go back, then the popular links",
-      "Enter in the field runs the search"
+    "parts": [
+      {
+        "name": "code",
+        "selector": ".odl-page-not-found [data-od-slot=\"code\"]",
+        "what": "the error code, small, above the heading, as in “Error 404”",
+        "slot": "text"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-page-not-found [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “We can't find that page”",
+        "slot": "text"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-page-not-found [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in “The link may be old, or the page may have moved.”",
+        "slot": "text"
+      },
+      {
+        "name": "search",
+        "selector": ".odl-page-not-found [data-od-action=\"search\"]",
+        "what": "the Search action",
+        "slot": "action"
+      },
+      {
+        "name": "home",
+        "selector": ".odl-page-not-found [data-od-action=\"home\"]",
+        "what": "the Go to home action",
+        "slot": "action"
+      },
+      {
+        "name": "back",
+        "selector": ".odl-page-not-found [data-od-action=\"back\"]",
+        "what": "the Go back action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "code": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 24,
+          "part": "code"
         },
         "title": {
           "type": "string",
-          "maxLength": 32
+          "maxLength": 32,
+          "part": "title"
         },
         "message": {
           "type": "string",
-          "maxLength": 144
+          "maxLength": 144,
+          "part": "message"
         }
       },
       "required": [
@@ -87,11 +124,11 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
-      },
-      "missing_image": {
-        "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches the search field, Search, Go to home, Go back, then the popular links",
+      "Enter in the field runs the search"
+    ]
   }
 }

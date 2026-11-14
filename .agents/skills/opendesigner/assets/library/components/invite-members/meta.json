@@ -9,5 +9,174 @@
   "states": ["hover", "focus", "invalid email", "seats used", "over seat limit", "disabled send"],
   "source": null,
   "a11y": "The email field is a labelled input; each chip has a remove button that names the address, Backspace removes the last chip, the role is a native select described by its explanation, and errors are tied to the field.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": ["a plan with a seat limit, where people need to see what the invites will use before sending"],
+    "avoid_when": ["managing people who are already members: use member-list", "sharing one item by link or app: use share-sheet", "signing a single person in: use sign-in-form"],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-head h2",
+        "what": "who is being invited to what",
+        "slot": "text"
+      },
+      {
+        "name": "lede",
+        "selector": ".odl-head p",
+        "what": "what the invited person receives",
+        "slot": "text"
+      },
+      {
+        "name": "emails",
+        "selector": ".odl-chip",
+        "what": "one address as a removable chip; red when it is not a full address",
+        "slot": "list"
+      },
+      {
+        "name": "email_input",
+        "selector": ".odl-chips input",
+        "what": "where addresses are typed or pasted",
+        "slot": "input"
+      },
+      {
+        "name": "hint",
+        "selector": ".odl-hint",
+        "what": "how to add addresses, or which one is wrong",
+        "slot": "text"
+      },
+      {
+        "name": "role",
+        "selector": "select",
+        "what": "one role for everyone invited",
+        "slot": "input"
+      },
+      {
+        "name": "role_desc",
+        "selector": ".odl-role-desc",
+        "what": "what the chosen role can and cannot do",
+        "slot": "text"
+      },
+      {
+        "name": "seats",
+        "selector": ".odl-seats",
+        "what": "a bar of seats in use and seats these invites take, with a sentence",
+        "slot": "rich"
+      },
+      {
+        "name": "cancel",
+        "selector": ".odl-cancel",
+        "what": "close without sending",
+        "slot": "action"
+      },
+      {
+        "name": "send",
+        "selector": ".odl-send",
+        "what": "send the invites, with the count in the label",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "roles", "seats_used", "seats_total"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "title"
+        },
+        "lede": {
+          "type": "string",
+          "maxLength": 90,
+          "part": "lede"
+        },
+        "emails": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 12,
+          "part": "emails",
+          "items": {
+            "type": "string",
+            "maxLength": 254
+          }
+        },
+        "placeholder": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "email_input"
+        },
+        "roles": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "part": "role",
+          "items": {
+            "type": "object",
+            "required": ["value", "label", "description"],
+            "properties": {
+              "value": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 110,
+                "part": "role_desc"
+              }
+            }
+          }
+        },
+        "default_role": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "role"
+        },
+        "seats_used": {
+          "type": "integer",
+          "minimum": 0,
+          "part": "seats"
+        },
+        "seats_total": {
+          "type": "integer",
+          "minimum": 1,
+          "part": "seats"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "when every chip is removed the hint goes back to how to add addresses and Send is disabled",
+        "evidence": "send.disabled = !ok || over"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "after Send, disable both buttons and the field and change the label to 'Sending' until the result comes back"
+      },
+      "error": {
+        "status": "shown",
+        "how": "an address that is not a full email turns into a red chip and the hint names it; over the seat limit the seat line says how many to remove",
+        "evidence": ".odl-chip.is-invalid"
+      },
+      "disabled": {
+        "status": "handled",
+        "how": "Send turns grey and cannot be pressed with no valid address or too many for the seats left",
+        "evidence": ".odl-send:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "chips wrap onto new rows and the field grows; it has no height limit, so a long pasted list makes the dialog tall",
+        "evidence": "flex-wrap: wrap; align-items: center; gap: var(--ds-space-stack-md) var(--ds-space-inline-sm)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long address ends in an ellipsis inside its chip; the remove button stays visible",
+        "evidence": ".odl-chip > span { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis"
+      }
+    },
+    "keyboard": ["Tab reaches each chip's remove button, the email field, the role choice, Cancel, then Send", "Enter or comma in the email field turns what was typed into a chip; leaving the field does the same", "Backspace in an empty email field removes the last chip", "Enter or Space on a chip's remove button removes that address", "Arrow keys change the role, as in any native select, and the line under it updates"]
+  }
 }

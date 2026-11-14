@@ -9,5 +9,133 @@
   "states": ["current page", "hover", "focus", "disabled", "narrow"],
   "source": null,
   "a11y": "A navigation landmark named Pagination; the current page has aria-current, page buttons have full names, the ellipsis is hidden from screen readers and the row count is a polite live region.",
-  "width": "wide"
+  "width": "wide",
+  "spec": {
+    "use_when": ["under a list or search results long enough to split, where people need to know how many items there are and jump to a page"],
+    "avoid_when": ["a feed people scroll through without needing a page number: load more at the end instead", "moving between steps of one task: use setup-steps", "switching between views of one page: use page-header-tabs"],
+    "parts": [
+      {
+        "name": "count",
+        "selector": ".odl-count",
+        "what": "which rows are showing out of how many",
+        "slot": "text"
+      },
+      {
+        "name": "rows_per_page",
+        "selector": "select",
+        "what": "a choice of how many rows each page shows",
+        "slot": "input"
+      },
+      {
+        "name": "previous",
+        "selector": ".odl-step",
+        "what": "Previous and Next buttons either side of the pages",
+        "slot": "action"
+      },
+      {
+        "name": "pages",
+        "selector": ".odl-page",
+        "what": "one page number; the current one is marked",
+        "slot": "list"
+      },
+      {
+        "name": "gap",
+        "selector": ".odl-gap",
+        "what": "an ellipsis where page numbers are skipped",
+        "slot": "none"
+      },
+      {
+        "name": "page_of",
+        "selector": ".odl-of",
+        "what": "'Page 3 of 49', shown instead of the numbers when narrow",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["current_page", "total_pages"],
+      "properties": {
+        "first_row": {
+          "type": "integer",
+          "minimum": 1,
+          "part": "count"
+        },
+        "last_row": {
+          "type": "integer",
+          "minimum": 1,
+          "part": "count"
+        },
+        "total_rows": {
+          "type": "integer",
+          "minimum": 0,
+          "part": "count"
+        },
+        "page_sizes": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "part": "rows_per_page",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "page_size": {
+          "type": "integer",
+          "minimum": 1,
+          "part": "rows_per_page"
+        },
+        "current_page": {
+          "type": "integer",
+          "minimum": 1,
+          "part": "pages"
+        },
+        "total_pages": {
+          "type": "integer",
+          "minimum": 1,
+          "part": "page_of"
+        },
+        "visible_pages": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 7,
+          "part": "pages",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no rows, hide the pager and let the table show empty-state"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "while a page loads, disable Previous, Next and the page buttons and keep the old count"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a page fails to load, stay on the current page and show the reason in alert-banners above the table"
+      },
+      "disabled": {
+        "status": "handled",
+        "how": "a disabled Previous or Next turns grey with a not-allowed cursor, for the first and last page; the sample shows page 3, so neither is disabled",
+        "evidence": ".odl-step:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "under 900px the page numbers give way to 'Page 3 of 49'; under 520px the count and the pager each take a full row",
+        "evidence": "@container (max-width: 900px)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the count, the rows label and 'Page 3 of 49' never wrap; the bar wraps its groups instead",
+        "evidence": "white-space: nowrap"
+      }
+    },
+    "keyboard": ["Tab reaches the rows-per-page choice, Previous, each page number, then Next", "Arrow keys change the rows-per-page choice, as in any native select", "Enter or Space presses the focused button; the file has no script, so pages do not change until the project wires them"]
+  }
 }

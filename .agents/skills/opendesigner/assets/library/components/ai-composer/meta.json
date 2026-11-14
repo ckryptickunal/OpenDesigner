@@ -9,5 +9,157 @@
   "states": ["empty", "typing", "focus", "source uploading", "mode picked"],
   "source": "brand/showcase/components/07-ai-composer",
   "a11y": "A labelled form: the modes are a native radio group, every icon button has a name, and the focus ring wraps the whole box.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": ["a research or study tool where the answer must come from the person's own documents", "a chat screen that needs a few starter questions before the first message"],
+    "avoid_when": ["a plain search box with no assistant: use command-menu", "showing the assistant's answer: this is only the input side"],
+    "parts": [
+      {
+        "name": "sources",
+        "selector": ".odl-sources li",
+        "what": "one attached source: name, size or reading progress, and a remove button",
+        "slot": "list"
+      },
+      {
+        "name": "question",
+        "selector": "textarea",
+        "what": "where the person types; grows with the text",
+        "slot": "input"
+      },
+      {
+        "name": "attach",
+        "selector": ".odl-bar > button[type=\"button\"]",
+        "what": "icon button to attach another source",
+        "slot": "action"
+      },
+      {
+        "name": "modes",
+        "selector": ".odl-modes label",
+        "what": "one mode in a radio switch",
+        "slot": "list"
+      },
+      {
+        "name": "hint",
+        "selector": ".odl-hint",
+        "what": "the Enter-to-send shortcut, hidden on narrow screens",
+        "slot": "text"
+      },
+      {
+        "name": "send",
+        "selector": ".odl-send",
+        "what": "the send button, greyed while the box is empty",
+        "slot": "action"
+      },
+      {
+        "name": "starters",
+        "selector": ".odl-starters li",
+        "what": "one suggested question that fills the box",
+        "slot": "list"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["placeholder", "modes"],
+      "properties": {
+        "sources": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 6,
+          "part": "sources",
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "meta": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "uploading": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "placeholder": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "question"
+        },
+        "modes": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 3,
+          "part": "modes",
+          "items": {
+            "type": "object",
+            "required": ["label"],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 10
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "checked": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "hint": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "hint"
+        },
+        "starters": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 3,
+          "part": "starters",
+          "items": {
+            "type": "string",
+            "maxLength": 40
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "shown",
+        "how": "an empty box shows the placeholder and the send button turns grey",
+        "evidence": ":has(textarea:placeholder-shown) .odl-send"
+      },
+      "loading": {
+        "status": "shown",
+        "how": "a source still being read spins its icon and shows its progress",
+        "evidence": "is-uploading"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a source fails to read, mark its chip with a warning icon and text in place of the progress, or put an alert-banners line above the box"
+      },
+      "disabled": {
+        "status": "handled",
+        "how": "the send button looks disabled while the box is empty, and the script ignores an empty send",
+        "evidence": "if (box.value.trim())"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the text box grows to a limit and then scrolls; source chips wrap to more lines",
+        "evidence": "max-block-size: 14rem"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "long source names are cut with an ellipsis",
+        "evidence": "text-overflow: ellipsis"
+      }
+    },
+    "keyboard": ["Tab moves through the remove buttons, the question box, the attach button, the mode switch, Send and the starter questions", "Enter in the question box sends; Shift+Enter adds a new line", "Arrow keys move between the modes, as in any native radio group", "Enter or Space on a starter question puts its text in the box and moves focus there"]
+  }
 }

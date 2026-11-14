@@ -9,5 +9,168 @@
   "states": ["open", "closed", "hover", "focus", "disabled", "danger", "submenu"],
   "source": null,
   "a11y": "A menu button with aria-expanded; items are menuitems with roving focus (arrow keys, Home, End), Escape closes and returns focus to the button, and the disabled item is aria-disabled.",
-  "width": "narrow"
+  "width": "narrow",
+  "spec": {
+    "use_when": ["a toolbar or card header where rare or destructive actions should stay out of sight until asked for"],
+    "avoid_when": ["searching across many commands or pages by typing: use command-menu", "only one or two actions: show them as buttons", "an action that needs a reason or a second look before it runs: open confirm-dialog from the menu item"],
+    "parts": [
+      {
+        "name": "trigger",
+        "selector": ".odl-trigger",
+        "what": "the More button that opens and closes the menu",
+        "slot": "action"
+      },
+      {
+        "name": "group",
+        "selector": ".odl-group",
+        "what": "a small heading over a group of items",
+        "slot": "text"
+      },
+      {
+        "name": "items",
+        "selector": "[role=\"menuitem\"]",
+        "what": "one action: icon, label, then a shortcut, a submenu arrow or a note",
+        "slot": "list"
+      },
+      {
+        "name": "shortcut",
+        "selector": "kbd",
+        "what": "the key or keys shown for an item",
+        "slot": "text"
+      },
+      {
+        "name": "note",
+        "selector": "small",
+        "what": "why a disabled item is off",
+        "slot": "text"
+      },
+      {
+        "name": "danger",
+        "selector": ".odl-danger",
+        "what": "the destructive action, last and in red",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["trigger", "groups"],
+      "properties": {
+        "trigger": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "trigger"
+        },
+        "menu_label": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "groups": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "required": ["items"],
+            "properties": {
+              "heading": {
+                "type": "string",
+                "maxLength": 24,
+                "part": "group"
+              },
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 6,
+                "part": "items",
+                "items": {
+                  "type": "object",
+                  "required": ["label"],
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "maxLength": 22
+                    },
+                    "icon": {
+                      "type": "string",
+                      "maxLength": 32
+                    },
+                    "shortcut": {
+                      "type": "array",
+                      "minItems": 1,
+                      "maxItems": 3,
+                      "part": "shortcut",
+                      "items": {
+                        "type": "string",
+                        "maxLength": 3
+                      }
+                    },
+                    "submenu": {
+                      "type": "boolean"
+                    },
+                    "disabled": {
+                      "type": "boolean"
+                    },
+                    "disabled_note": {
+                      "type": "string",
+                      "maxLength": 18,
+                      "part": "note"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "danger": {
+          "type": "object",
+          "required": ["label"],
+          "part": "danger",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 22
+            },
+            "shortcut": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 3,
+              "items": {
+                "type": "string",
+                "maxLength": 3
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no actions for this record, hide the More button rather than open an empty menu"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "if items depend on a fetch, show one disabled item reading 'Loading' until they arrive"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if an action fails after the menu closes, report it with toast-stack"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "an item marked aria-disabled turns grey, shows a note on why, and clicking it does nothing",
+        "evidence": "[aria-disabled=\"true\"] { cursor: not-allowed"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the menu has no height limit; for long lists give the menu a max height with its own scroll"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long label wraps in its column while shortcuts and notes stay on one line",
+        "evidence": "minmax(0, 1fr) auto"
+      }
+    },
+    "keyboard": ["Enter or Space on More opens or closes the menu and focuses the first item", "Arrow Down or Arrow Up on More opens the menu at the first or last item", "Arrow Down and Arrow Up move between items and wrap around; Home and End jump to the first and last", "Enter or Space runs the focused item and closes the menu, except the disabled item and Move to", "Escape or Tab closes the menu and returns focus to More", "the shortcut keys shown are labels only; the file does not listen for them"]
+  }
 }

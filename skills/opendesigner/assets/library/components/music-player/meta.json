@@ -31,5 +31,158 @@
       "author": "Pawel Czerwinski",
       "page": "H8kzolaZjIM"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a now-playing card for one audio track, voice note or episode, docked beside other content"],
+    "avoid_when": ["a list of tracks to choose from: use track-list", "a list of podcast episodes: use podcast-episodes", "video playback: use video-player"],
+    "parts": [
+      {
+        "name": "art",
+        "selector": ".odl-art",
+        "what": "album art, decorative",
+        "slot": "media"
+      },
+      {
+        "name": "eyebrow",
+        "selector": ".odl-eyebrow",
+        "what": "where the track sits, such as side and track number",
+        "slot": "text"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-music-player h3",
+        "what": "the track title",
+        "slot": "text"
+      },
+      {
+        "name": "artist",
+        "selector": ".odl-by span:first-child",
+        "what": "the artist",
+        "slot": "text"
+      },
+      {
+        "name": "album",
+        "selector": ".odl-album",
+        "what": "the album",
+        "slot": "text"
+      },
+      {
+        "name": "like",
+        "selector": ".odl-like",
+        "what": "a like toggle",
+        "slot": "action"
+      },
+      {
+        "name": "seek",
+        "selector": ".odl-seek input",
+        "what": "a range input over a drawn waveform; the played part is filled",
+        "slot": "input"
+      },
+      {
+        "name": "times",
+        "selector": ".odl-times",
+        "what": "elapsed and total time",
+        "slot": "text"
+      },
+      {
+        "name": "transport",
+        "selector": ".odl-transport button",
+        "what": "previous, play or pause, and next",
+        "slot": "action"
+      },
+      {
+        "name": "volume",
+        "selector": ".odl-volume input",
+        "what": "volume slider, hidden on a phone",
+        "slot": "input"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "artist", "duration_seconds"],
+      "properties": {
+        "art": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "art"
+        },
+        "eyebrow": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "eyebrow"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "title"
+        },
+        "artist": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "artist"
+        },
+        "album": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "album"
+        },
+        "liked": {
+          "type": "boolean",
+          "part": "like"
+        },
+        "duration_seconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5999,
+          "part": "seek"
+        },
+        "position_seconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5999,
+          "part": "seek"
+        },
+        "next_title": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "transport"
+        },
+        "volume": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "part": "volume"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with nothing queued, show a muted art square, 'Nothing playing' as the title and disable the transport"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "while the track buffers, show the play button with a spinner and keep the seek bar at its place"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the track will not play, put a short message where the times are and offer Next"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "set disabled on Previous or Next at the start or end of the queue and style it with the muted text colour"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "on a phone the volume slider goes and the art gets smaller",
+        "evidence": "@container (max-width: 26rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "artist and album are cut with an ellipsis; the title wraps",
+        "evidence": ".odl-by span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }"
+      }
+    },
+    "keyboard": ["Tab reaches Like, Seek, Previous, Play, Next, then Volume", "Enter or Space presses the focused button; Play switches to Pause while playing", "Arrow keys on Seek move by one second and update the time", "Arrow keys on Volume change the level"]
+  }
 }

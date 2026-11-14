@@ -34,5 +34,201 @@
       "author": "Elizeu Dias",
       "page": "2EGNqazbAMk"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a desktop work app with several sections and more than one workspace or team"],
+    "avoid_when": ["fewer than five pages, or a consumer phone app: use a bottom tab bar or page-header-tabs", "finding any page or action by typing: use command-menu, opened from this rail's search button", "tabs inside one page: use page-header-tabs"],
+    "parts": [
+      {
+        "name": "switcher",
+        "selector": ".odl-switcher",
+        "what": "workspace button: a letter mark, the workspace name and its plan or size",
+        "slot": "action"
+      },
+      {
+        "name": "search",
+        "selector": ".odl-search",
+        "what": "search button with its shortcut keys",
+        "slot": "action"
+      },
+      {
+        "name": "headings",
+        "selector": ".odl-heading",
+        "what": "a section heading such as Payables",
+        "slot": "list"
+      },
+      {
+        "name": "items",
+        "selector": ".odl-item",
+        "what": "one page link: icon, label and an optional count; the current page is raised",
+        "slot": "list"
+      },
+      {
+        "name": "count",
+        "selector": ".odl-count",
+        "what": "a number beside a page; is-new makes it an accent pill",
+        "slot": "number"
+      },
+      {
+        "name": "group",
+        "selector": "details > summary",
+        "what": "a collapsible section heading",
+        "slot": "text"
+      },
+      {
+        "name": "person",
+        "selector": ".odl-person",
+        "what": "the signed-in person: photo with an online dot, name and role",
+        "slot": "action"
+      },
+      {
+        "name": "avatar",
+        "selector": ".odl-avatar img",
+        "what": "the person's photo",
+        "slot": "media"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["sections"],
+      "properties": {
+        "workspace": {
+          "type": "object",
+          "part": "switcher",
+          "required": ["name"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 32
+            },
+            "detail": {
+              "type": "string",
+              "maxLength": 28
+            },
+            "initial": {
+              "type": "string",
+              "maxLength": 2
+            }
+          }
+        },
+        "search_label": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "search"
+        },
+        "shortcut": {
+          "type": "string",
+          "maxLength": 6,
+          "part": "search"
+        },
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "part": "headings",
+          "items": {
+            "type": "object",
+            "required": ["items"],
+            "properties": {
+              "heading": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "collapsible": {
+                "type": "boolean"
+              },
+              "open": {
+                "type": "boolean"
+              },
+              "items": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 8,
+                "items": {
+                  "type": "object",
+                  "required": ["label", "href"],
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "maxLength": 22
+                    },
+                    "href": {
+                      "type": "string",
+                      "maxLength": 200
+                    },
+                    "icon": {
+                      "type": "string",
+                      "maxLength": 32
+                    },
+                    "count": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 999
+                    },
+                    "count_label": {
+                      "type": "string",
+                      "maxLength": 24
+                    },
+                    "new": {
+                      "type": "boolean"
+                    },
+                    "current": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "person": {
+          "type": "object",
+          "part": "person",
+          "required": ["name"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 28
+            },
+            "detail": {
+              "type": "string",
+              "maxLength": 28
+            },
+            "photo": {
+              "type": "string",
+              "maxLength": 300
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "a rail always has pages; for a new workspace with no sections yet, show only Home and Inbox"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the switcher and show muted bars in place of the item labels and counts"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if counts fail to load, hide the counts and leave the links working"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "for a page the person cannot open, drop the href, set aria-disabled and grey the item"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the rail grows with its items; give the nav a scroll box with overflow-y: auto between the search button and the person"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "long page labels and the workspace detail are cut with an ellipsis; the workspace name wraps",
+        "evidence": "text-overflow: ellipsis; white-space: nowrap; }"
+      }
+    },
+    "keyboard": ["Tab moves through the workspace switcher, Search, each page link, the collapsible group heading and the person button", "Enter follows a page link", "Enter or Space on the group heading opens or closes it, as a native details element", "The switcher, Search and person buttons open nothing yet, and Cmd+K is labelled but not wired"]
+  }
 }

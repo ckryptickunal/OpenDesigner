@@ -58,5 +58,203 @@
       "author": "Hà Nguyễn",
       "page": "OFSQ6bHjFjs"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a phone screen where comments must open over the post without leaving it"],
+    "avoid_when": ["comments in a work tool, beside a document or task: use comment-thread", "a short confirm or choice over a screen: use confirm-dialog"],
+    "parts": [
+      {
+        "name": "behind",
+        "selector": ".odl-behind-photo",
+        "what": "the post behind the sheet, dimmed",
+        "slot": "media"
+      },
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "'Comments' and the total count",
+        "slot": "text"
+      },
+      {
+        "name": "close",
+        "selector": ".odl-close",
+        "what": "closes the sheet",
+        "slot": "action"
+      },
+      {
+        "name": "comments",
+        "selector": ".odl-list > li",
+        "what": "one comment: photo, name, an Author tag if it is the poster, time, text, Reply, like count, and any replies under it",
+        "slot": "list"
+      },
+      {
+        "name": "replies",
+        "selector": ".odl-c > ul > li",
+        "what": "one reply under a comment, with a smaller photo",
+        "slot": "list"
+      },
+      {
+        "name": "more",
+        "selector": ".odl-more",
+        "what": "how many more replies there are",
+        "slot": "action"
+      },
+      {
+        "name": "like",
+        "selector": ".odl-like",
+        "what": "a heart with the like count, pressed or not",
+        "slot": "action"
+      },
+      {
+        "name": "reply",
+        "selector": ".odl-reply",
+        "what": "starts a reply to that person",
+        "slot": "action"
+      },
+      {
+        "name": "input",
+        "selector": ".odl-field input",
+        "what": "the comment box, next to the viewer's photo",
+        "slot": "input"
+      },
+      {
+        "name": "post",
+        "selector": ".odl-post",
+        "what": "sends the comment; off until there is text",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["comments"],
+      "properties": {
+        "post_photo": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "behind"
+        },
+        "count": {
+          "type": "number",
+          "part": "title"
+        },
+        "comments": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 30,
+          "part": "comments",
+          "items": {
+            "type": "object",
+            "required": ["name", "text"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "avatar": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "is_author": {
+                "type": "boolean"
+              },
+              "time": {
+                "type": "string",
+                "maxLength": 8
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "likes": {
+                "type": "number"
+              },
+              "liked": {
+                "type": "boolean"
+              },
+              "replies": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 3,
+                "items": {
+                  "type": "object",
+                  "required": ["name", "text"],
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "maxLength": 24
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "maxLength": 300
+                    },
+                    "is_author": {
+                      "type": "boolean"
+                    },
+                    "time": {
+                      "type": "string",
+                      "maxLength": 8
+                    },
+                    "text": {
+                      "type": "string",
+                      "maxLength": 300
+                    },
+                    "likes": {
+                      "type": "number"
+                    },
+                    "liked": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              },
+              "more_replies": {
+                "type": "number",
+                "part": "more"
+              }
+            }
+          }
+        },
+        "placeholder": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "input"
+        },
+        "viewer_avatar": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "input"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no comments, put an empty-state line ('No comments yet') in the list area and keep the comment box"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the sheet and fill the list with three muted rows the shape of a comment"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a comment fails to post, keep the text in the box and show a toast-stack message with a retry"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "Post is off while the box is empty and turns on as soon as there is text",
+        "evidence": ".odl-post:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the list scrolls in its own box between the header and the pinned comment box",
+        "evidence": "overflow-y: auto; overscroll-behavior: contain"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "comment text breaks anywhere so long words and links wrap; names and tags wrap onto a second line",
+        "evidence": "overflow-wrap: anywhere"
+      }
+    },
+    "keyboard": ["Tab reaches Close, the comment list, then each Reply and Like button, View more replies, the comment box and Post", "The comment list takes focus, so the arrow keys scroll it", "Enter or Space presses the focused button; Like toggles between liked and not", "Reply fills the box with @name and moves focus to it", "Enter in the comment box posts the comment when it has text; the new comment appears at the top of the list"]
+  }
 }

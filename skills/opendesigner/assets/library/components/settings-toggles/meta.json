@@ -23,5 +23,128 @@
   ],
   "source": "brand/showcase/product/06-ferrule-security",
   "a11y": "Native checkboxes with role switch inside their labels, so the whole row is the target; the switch is at least 24 px tall; a setting the organization locked shows its state in words with a lock and is read as \"On, locked\".",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": ["admin or security settings where some options are set by the organization and the person must see that they cannot change them"],
+    "avoid_when": ["a setting with more than two choices: use a select or radio group, as member-list does for roles", "choosing a paid plan: use plan-picker", "quick on and off controls for devices: use home-controls"],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "legend",
+        "what": "the group's name",
+        "slot": "text"
+      },
+      {
+        "name": "settings",
+        "selector": ".odl-row",
+        "what": "one setting: name, explanation and its switch or lock; the whole row is the target",
+        "slot": "list"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-text > span",
+        "what": "what the setting does",
+        "slot": "text"
+      },
+      {
+        "name": "help",
+        "selector": ".odl-text small",
+        "what": "a plain explanation of the effect",
+        "slot": "text"
+      },
+      {
+        "name": "switch",
+        "selector": "input",
+        "what": "a native checkbox shown as a switch",
+        "slot": "input"
+      },
+      {
+        "name": "locked_note",
+        "selector": ".odl-text em",
+        "what": "who set a locked setting",
+        "slot": "text"
+      },
+      {
+        "name": "locked",
+        "selector": ".odl-locked",
+        "what": "a locked setting's state in words with a lock, in place of the switch",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["title", "settings"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "title"
+        },
+        "settings": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "part": "settings",
+          "items": {
+            "type": "object",
+            "required": ["name", "on"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 40,
+                "part": "name"
+              },
+              "help": {
+                "type": "string",
+                "maxLength": 120,
+                "part": "help"
+              },
+              "on": {
+                "type": "boolean",
+                "part": "switch"
+              },
+              "locked": {
+                "type": "boolean",
+                "part": "locked"
+              },
+              "locked_by": {
+                "type": "string",
+                "maxLength": 40,
+                "part": "locked_note"
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no settings in the group, leave the group out rather than showing an empty box"
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the rows and set disabled on each switch until its saved value arrives"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a change fails to save, flip the switch back and show the reason in toast-stack"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "a setting the organization locked shows its state in words with a lock, read as 'On, locked'; a disabled switch is also styled faded",
+        "evidence": "<span class=\"odl-sr\">, locked</span>"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the group grows with every row; past about eight, split it into several groups with their own titles"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "names and explanations wrap beside the switch, the title breaks anywhere to fit, and the locked state never wraps",
+        "evidence": "overflow-wrap: anywhere"
+      }
+    },
+    "keyboard": ["Tab reaches each switch in turn; locked settings have no control and are skipped", "Space turns the focused switch on or off"]
+  }
 }

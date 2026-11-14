@@ -47,5 +47,305 @@
       "author": "Diana Simumpande",
       "page": "eGYRI-wDR2U"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": ["a clothing or shoe page where buyers need to know how it fits as well as how it rates"],
+    "avoid_when": ["one rating line inside a product card: product-card already shows stars and a count", "a discussion thread with replies: use comment-thread", "a ranked list of people or scores: use leaderboard"],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-review-summary h3",
+        "what": "the section heading",
+        "slot": "text"
+      },
+      {
+        "name": "average",
+        "selector": ".odl-score",
+        "what": "the average score, stars and rating and review counts",
+        "slot": "number"
+      },
+      {
+        "name": "distribution",
+        "selector": ".odl-dist li",
+        "what": "one bar per star level, 5 to 1, with its share",
+        "slot": "list"
+      },
+      {
+        "name": "fit",
+        "selector": ".odl-fit",
+        "what": "how it fits: a word, a dot on a small-to-large scale",
+        "slot": "text"
+      },
+      {
+        "name": "filters",
+        "selector": ".odl-chip",
+        "what": "a filter chip with its count",
+        "slot": "list"
+      },
+      {
+        "name": "reviews",
+        "selector": ".odl-review-summary article",
+        "what": "one review",
+        "slot": "list"
+      },
+      {
+        "name": "reviewer",
+        "selector": ".odl-who",
+        "what": "reviewer photo, name, verified or not, and date",
+        "slot": "text"
+      },
+      {
+        "name": "review_stars",
+        "selector": "article .odl-stars",
+        "what": "the reviewer's star rating",
+        "slot": "number"
+      },
+      {
+        "name": "review_title",
+        "selector": ".odl-review-summary h4",
+        "what": "the review's headline",
+        "slot": "text"
+      },
+      {
+        "name": "review_text",
+        "selector": ".odl-text",
+        "what": "the review body",
+        "slot": "text"
+      },
+      {
+        "name": "photos",
+        "selector": ".odl-photos button",
+        "what": "a buyer photo thumbnail",
+        "slot": "media"
+      },
+      {
+        "name": "facts",
+        "selector": ".odl-meta span",
+        "what": "a fact about the buyer, such as size bought",
+        "slot": "list"
+      },
+      {
+        "name": "votes",
+        "selector": ".odl-vote",
+        "what": "Yes and No helpful votes with counts",
+        "slot": "action"
+      },
+      {
+        "name": "no_match",
+        "selector": ".odl-none",
+        "what": "message when no review matches the filters",
+        "slot": "text"
+      },
+      {
+        "name": "more",
+        "selector": ".odl-more",
+        "what": "a button to see every review",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": ["average", "counts", "distribution", "reviews"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "title"
+        },
+        "average": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5,
+          "part": "average"
+        },
+        "counts": {
+          "type": "string",
+          "maxLength": 36,
+          "part": "average"
+        },
+        "distribution": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "part": "distribution",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          }
+        },
+        "fit": {
+          "type": "object",
+          "part": "fit",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 18
+            },
+            "position": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "low": {
+              "type": "string",
+              "maxLength": 8
+            },
+            "high": {
+              "type": "string",
+              "maxLength": 8
+            }
+          }
+        },
+        "filters": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 4,
+          "part": "filters",
+          "items": {
+            "type": "object",
+            "required": ["key", "label"],
+            "properties": {
+              "key": {
+                "enum": ["photos", "verified", "five", "low"]
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "count": {
+                "type": "string",
+                "maxLength": 6
+              }
+            }
+          }
+        },
+        "reviews": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "part": "reviews",
+          "items": {
+            "type": "object",
+            "required": ["name", "rating", "text"],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 24,
+                "part": "reviewer"
+              },
+              "avatar": {
+                "type": "string",
+                "maxLength": 300,
+                "part": "reviewer"
+              },
+              "verified": {
+                "type": "boolean",
+                "part": "reviewer"
+              },
+              "date": {
+                "type": "string",
+                "maxLength": 10,
+                "part": "reviewer"
+              },
+              "rating": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5,
+                "part": "review_stars"
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 48,
+                "part": "review_title"
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 400,
+                "part": "review_text"
+              },
+              "photos": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 3,
+                "part": "photos",
+                "items": {
+                  "type": "string",
+                  "maxLength": 300
+                }
+              },
+              "facts": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 3,
+                "part": "facts",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "maxLength": 14
+                    },
+                    "value": {
+                      "type": "string",
+                      "maxLength": 8
+                    }
+                  }
+                }
+              },
+              "helpful": {
+                "type": "object",
+                "part": "votes",
+                "properties": {
+                  "yes": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "no": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                }
+              }
+            }
+          }
+        },
+        "more_label": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "more"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "shown",
+        "how": "when the filters match no review, a sunken message says so in place of the list",
+        "evidence": "No reviews match these filters."
+      },
+      "loading": {
+        "status": "not_built",
+        "how": "keep the summary column and show two review rows with muted blocks for name, stars and text"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if reviews fail to load, keep the summary and put alert-banners with a retry in the list column"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "disable the helpful votes on the reader's own review and style them with the disabled colours"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "on a phone the filter chips scroll sideways with a fade at the end; wider, they wrap and the summary sits beside the list",
+        "evidence": "overscroll-behavior-x: contain"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "review text wraps and is kept to a readable line length; dates and chips never wrap",
+        "evidence": "max-inline-size: 60ch"
+      }
+    },
+    "keyboard": ["Tab reaches each filter chip, then in each review its photos and its Yes and No votes, then Show all reviews", "Enter or Space on a filter chip turns it on or off and filters the reviews; 5 stars and 1 to 3 stars turn each other off", "Enter or Space on a vote marks it and adds one to its count; pressing it again takes the vote back"]
+  }
 }
