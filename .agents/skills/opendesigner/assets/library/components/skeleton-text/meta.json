@@ -39,23 +39,43 @@
       "an action the person started (saving, sending): use inline-spinner",
       "a long task with steps: use progress-steps"
     ],
-    "keyboard": [
-      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-skeleton-text [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “Set up approval rules”",
+        "slot": "text"
+      },
+      {
+        "name": "byline",
+        "selector": ".odl-skeleton-text [data-od-slot=\"byline\"]",
+        "what": "the date and reading time, as in “Updated Nov 10 · 4 minute read”",
+        "slot": "text"
+      },
+      {
+        "name": "body",
+        "selector": ".odl-skeleton-text [data-od-slot=\"body\"]",
+        "what": "the article text, as in “Approval rules decide who signs off on a bill be”",
+        "slot": "text"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "title": {
           "type": "string",
-          "maxLength": 32
+          "maxLength": 32,
+          "part": "title"
         },
         "byline": {
           "type": "string",
-          "maxLength": 48
+          "maxLength": 48,
+          "part": "byline"
         },
         "body": {
           "type": "string",
-          "maxLength": 240
+          "maxLength": 240,
+          "part": "body"
         }
       },
       "required": [
@@ -92,11 +112,10 @@
         "status": "handled",
         "how": "Each line is clamped to one line with an ellipsis, so the skeleton and the loaded layout keep one height.",
         "evidence": "text-overflow: ellipsis"
-      },
-      "missing_image": {
-        "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    ]
   }
 }

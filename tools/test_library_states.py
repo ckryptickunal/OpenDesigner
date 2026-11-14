@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT / "skills/opendesigner/scripts"))
 import library as L  # noqa: E402
 
 KNOWN = {"--ds-color-bg-neutral-subtle", "--ds-motion-duration-extra", "--ds-radius-detail"}
-EDGES = {"empty", "loading", "error", "disabled", "overflow", "long_text", "missing_image"}
+EDGES = {"empty", "loading", "error", "disabled", "overflow", "long_text"}  # missing_image returns with S6's smart UI PR
 
 
 def part(css):
@@ -77,7 +77,7 @@ class AddReport(unittest.TestCase):
             tok.write_text("".join(f"{v}: 0;\n" for v in tokens))
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
-                L.cmd_add(argparse.Namespace(slug="skeleton-table", into=str(pathlib.Path(t) / "odl"), tokens=str(tok), force=False))
+                L.cmd_add(argparse.Namespace(slug="skeleton-table", into=str(pathlib.Path(t) / "odl"), tokens=str(tok), force=False, base=None))
             return out.getvalue()
 
     def test_state_tokens_are_optional(self):
@@ -110,7 +110,8 @@ class StatesKit(unittest.TestCase):
         for c in self.kit:
             s = c.get("spec", {})
             self.assertTrue(s.get("use_when") and s.get("avoid_when") and s.get("keyboard"), c["slug"])
-            self.assertEqual(set(s.get("edge", {})), EDGES, c["slug"])
+            self.assertTrue(EDGES <= set(s.get("edge", {})) <= EDGES | {"missing_image"}, c["slug"])
+            self.assertTrue(s.get("parts"), c["slug"])
             html = (L.LIB / c["slug"] / "component.html").read_text()
             for k, e in s["edge"].items():
                 self.assertIn(e["status"], ("shown", "handled", "not_built", "none"), (c["slug"], k))

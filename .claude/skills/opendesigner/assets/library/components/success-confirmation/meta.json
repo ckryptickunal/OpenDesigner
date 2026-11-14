@@ -33,20 +33,68 @@
       "a small, quick change: a toast is enough (toast-undo)",
       "nothing changed yet (the request is pending): say it's pending, not done"
     ],
-    "keyboard": [
-      "Focus moves to the heading when the screen appears",
-      "Tab then reaches View invoice and Send another"
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-success-confirmation [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “Invoice sent”",
+        "slot": "text"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-success-confirmation [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in “Gorsedown Print will get INV-2042 by email in a ”",
+        "slot": "text"
+      },
+      {
+        "name": "details",
+        "selector": ".odl-success-confirmation [data-od-list=\"details\"]",
+        "what": "the details, one item each",
+        "slot": "list"
+      },
+      {
+        "name": "details.label",
+        "selector": ".odl-success-confirmation [data-od-list=\"details\"] [data-od-slot=\"label\"]",
+        "what": "the visible label, as in “Amount”",
+        "slot": "text"
+      },
+      {
+        "name": "details.value",
+        "selector": ".odl-success-confirmation [data-od-list=\"details\"] [data-od-slot=\"value\"]",
+        "what": "what the person typed, as in “$4,280.00”",
+        "slot": "text"
+      },
+      {
+        "name": "next",
+        "selector": ".odl-success-confirmation [data-od-slot=\"next\"]",
+        "what": "what happens next, as in “We'll email you when they open it and when they ”",
+        "slot": "text"
+      },
+      {
+        "name": "view",
+        "selector": ".odl-success-confirmation [data-od-action=\"view\"]",
+        "what": "the View invoice action",
+        "slot": "action"
+      },
+      {
+        "name": "another",
+        "selector": ".odl-success-confirmation [data-od-action=\"another\"]",
+        "what": "the Send another action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "title": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 24,
+          "part": "title"
         },
         "message": {
           "type": "string",
-          "maxLength": 80
+          "maxLength": 80,
+          "part": "message"
         },
         "details": {
           "type": "array",
@@ -57,22 +105,26 @@
             "properties": {
               "label": {
                 "type": "string",
-                "maxLength": 24
+                "maxLength": 24,
+                "part": "details.label"
               },
               "value": {
                 "type": "string",
-                "maxLength": 24
+                "maxLength": 24,
+                "part": "details.value"
               }
             },
             "required": [
               "label",
               "value"
             ]
-          }
+          },
+          "part": "details"
         },
         "next": {
           "type": "string",
-          "maxLength": 80
+          "maxLength": 80,
+          "part": "next"
         }
       },
       "required": [
@@ -108,11 +160,11 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
-      },
-      "missing_image": {
-        "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
       }
-    }
+    },
+    "keyboard": [
+      "Focus moves to the heading when the screen appears",
+      "Tab then reaches View invoice and Send another"
+    ]
   }
 }
