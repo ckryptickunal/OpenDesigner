@@ -522,7 +522,7 @@
           const past = side > 1 ? side : down > fs * 0.5 ? down : 0, dir = side > 1 ? 'side' : 'down';
           const ownClip = /hidden|clip/.test(cs.overflowX + ' ' + cs.overflowY);
           const scrolls = /auto|scroll/.test(cs.overflowX + ' ' + cs.overflowY) || scrollerAbove(el);   // reachable by scrolling
-          if (block && !ownClip && !scrolls && past > 1 && out.spill.length < CAP)
+          if (block && !ownClip && !scrolls && past > 1 && !scaled(el) && out.spill.length < CAP)   // a scaled-down preview rounds a fit into a 1 to 2 px spill
             out.spill.push({ sel: sel(el), role, text: own.slice(0, 50), by: round(past), dir, box: pageBox(union([r, u])), w: round(r.width), h: round(r.height) });
           const P = past > 0 || ownClip || hiddenFromAT(el) ? null : clipperOf(el);
           if (P && !previewWindow(P)) {
