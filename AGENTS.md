@@ -77,6 +77,7 @@ python3 skills/opendesigner/scripts/engine.py adapt ref.json --open  (adapt.html
 python3 skills/opendesigner/scripts/engine.py ledger start "Settings page" --items comp.action.button,A-space-01   (then ledger done|broke|waive <item>; review --strict fails while an item is neither done nor waived (an agent's waiver counts as open until the owner agrees))
 python3 skills/opendesigner/scripts/engine.py exempt site/figures --why "demo figures show mistakes on purpose" --by owner   (review leaves them out and lists them)
 python3 skills/opendesigner/scripts/engine.py review    (end of every implementation: hard-coded values, whether tokens are in charge, a system behind the code, standards, stale DESIGN.md, a share image older than what it shows; reports only, edits nothing)
+python3 skills/opendesigner/scripts/engine.py checkin   (what changed since the last check-in, what is open, the one next step; also at session start, every 5 decisions and each closed round; --every N, --off, --offers off)
 python3 skills/opendesigner/scripts/engine.py version   (this copy's release, and whether the system was made or built with an older one; never checks online)
 python3 skills/opendesigner/scripts/engine.py status    (the Now line: the step, what waits for the owner, the next command; first after a context reset or in a new session)
 python3 skills/opendesigner/scripts/engine.py handoff yes|no   (after asking once: the AGENTS.md snippet and a CLAUDE.md that imports it, or nothing; recorded either way)
@@ -132,7 +133,7 @@ Use the skill's own folder path when it is installed elsewhere (for example a pl
 | `.agents/skills/`, `.claude/skills/` | Generated copies of `skills/`. Never edit them. Run `python3 tools/sync_skills.py` |
 | `data/`, `skills/*/references/*.json`, `references/stages/`, `references/cards/`, `chatgpt-project/knowledge/` | Generated from `synthesis/` (including `glossary.json`) by `python3 tools/build_data.py`. `chatgpt-project/knowledge/` also copies the main skill's `SKILL.md`, hand-written references, output templates and `engine.py`. Edit the source instead |
 | `.claude-plugin/`, `plugin.json` | Claude plugin and marketplace manifests, and the Agent Plugins 1.0 manifest. Keep `version` in step |
-| `hooks/` | `hooks.json`: the plugin's one Claude Code hook. At session start, on resume, after /clear and after compaction it runs `engine.py status --hook` when the project has `opendesigner/state.json`: read-only, offline, silent everywhere else (owner decision 2026-11-09). Other hosts ignore it |
+| `hooks/` | `hooks.json`: the plugin's one Claude Code hook. At session start, on resume, after /clear and after compaction it runs `engine.py status --hook` when the project has `opendesigner/state.json`: the Now line and a short check-in (`engine.py checkin`), read-only in the project and offline (owner decisions 2026-11-09 and 2026-11-13). In a project with UI code and no system it prints one note for the agent, once per project and at most once a week, remembered in `~/.opendesigner`; silent everywhere else. `engine.py checkin --offers off` or `OD_CHECKINS=off` silences it. Other hosts ignore it |
 | `design/` | Tokens and artboards written to Figma and Paper for review |
 | `tools/` | `od.py` (coordination), `jev_nav.py` (research navigation, Jev search, card export, decision graph, citation check), `wiki.py` (the learning wiki: add, remove, fetch, check, ingest, trace, cite-check, standards, map, next, upstream), `build_questionnaire.py`, `build_data.py`, `sync_skills.py`, `build_dist.py`, `build_examples.py` (rebuilds `examples/` with the engine; `--check` finds drift), `fit_corner.py` (measures Apple's continuous corner for the web export; macOS), `growth_check.py` (the automatic half of `docs/GROWTH-ROUTINE.md`) |
 | `.claude/workflows/` | Saved Claude Code workflows for the learning wiki: `learn-analyze`, `learn-standards`, `learn-synthesis`, `learn-escalate`, `learn-personas` |
@@ -169,7 +170,8 @@ python3 tools/wiki.py standards          house standards valid and versioned (el
 python3 tools/wiki.py map --check        learn/MAP.md is current (else: wiki.py map)
 python3 tools/wiki.py proposals --check  the pending-proposals table in synthesis/QUESTIONNAIRE.md is current
 python3 tools/test_wiki.py               learning wiki tests (.venv-wiki/bin/python also runs the OpenWiki ones)
-python3 tools/test_plugin_hook.py        the plugin's start-of-session hook stays silent without a system, read-only and fast
+python3 tools/test_plugin_hook.py        the plugin's start-of-session hook: read-only and fast, one offer per project, silent otherwise
+python3 tools/test_checkins.py           check-ins: every N decisions, closed rounds, settings, none before the first result
 python3 tools/design_evals.py --check --no-save   the engine on 20 fixed briefs: every required check passes (evals/README.md)
 python3 skills/opendesigner/scripts/library.py check   every library component uses only tokens every engine system writes, is scoped, and has complete tags, a complete spec, and library.json is current (else: library.py catalog)
 python3 server/mcp/test_server.py           the library MCP server over stdio: read-only tools, the gallery view, both protocol versions

@@ -9,6 +9,7 @@ exact command from hooks.json with `sh -c`, the way Claude Code runs a command h
 place of ${CLAUDE_PLUGIN_ROOT} as Claude Code does.
 """
 import json
+import shutil
 import os
 import pathlib
 import subprocess
@@ -28,10 +29,13 @@ def the_hook():
     return entries[0], entries[0]["hooks"][0]
 
 
-def run_hook(project, plugin_root=ROOT):
+OD_HOME = tempfile.mkdtemp(prefix="od-hook-home-")  # the offer's memory lives here, never in the real home folder
+
+
+def run_hook(project, plugin_root=ROOT, **extra):
     _, h = the_hook()
     cmd = h["command"].replace("${CLAUDE_PLUGIN_ROOT}", str(plugin_root))
-    env = dict(os.environ, CLAUDE_PLUGIN_ROOT=str(plugin_root), CLAUDE_PROJECT_DIR=str(project))
+    env = dict(os.environ, CLAUDE_PLUGIN_ROOT=str(plugin_root), CLAUDE_PROJECT_DIR=str(project), **dict({"OD_HOME": OD_HOME}, **extra))
     t = time.monotonic()
     p = subprocess.run(["sh", "-c", cmd], cwd=project, env=env, capture_output=True, text=True, timeout=30)
     return p, time.monotonic() - t
@@ -87,6 +91,34 @@ class StartOfSessionHook(unittest.TestCase):
             self.assertEqual(snapshot(project), before)  # read-only in the project
             self.assertEqual(set(SCRIPTS.rglob("*.pyc")), caches)  # and no bytecode written next to the plugin
             self.assertLess(took, 5)  # about 0.3 s on a laptop; generous for slow machines
+
+    def test_one_offer_in_a_ui_project_without_a_system(self):
+        """Installed but unused (owner, 2026-11-13): one short note, once per project, at most once a week, never in the
+        project's files; offers off or OD_CHECKINS=off keep it silent."""
+        home = tempfile.mkdtemp(prefix="od-offer-home-")
+        with tempfile.TemporaryDirectory() as t, tempfile.TemporaryDirectory() as t2:
+            project = pathlib.Path(t)
+            (project / "styles.css").write_text("body{margin:0}\n")
+            before = snapshot(project)
+            p, took = run_hook(project, OD_HOME=home)
+            self.assertEqual(p.returncode, 0)
+            self.assertIn("no design system yet", p.stdout)
+            self.assertEqual(len(p.stdout.strip().splitlines()), 1)
+            self.assertEqual(snapshot(project), before)  # nothing written in the project
+            p, _ = run_hook(project, OD_HOME=home)
+            self.assertEqual(p.stdout, "", "never twice for the same project")
+            other = pathlib.Path(t2)
+            (other / "app.tsx").write_text("export {}\n")
+            p, _ = run_hook(other, OD_HOME=home)
+            self.assertEqual(p.stdout, "", "at most one offer a week across projects")
+            p, _ = run_hook(other, OD_HOME=tempfile.mkdtemp(), OD_CHECKINS="off")
+            self.assertEqual(p.stdout, "")
+            fresh = tempfile.mkdtemp()
+            subprocess.run([sys.executable, str(ENGINE), "checkin", "--offers", "off"], env=dict(os.environ, OD_HOME=fresh),
+                           capture_output=True, check=True)
+            p, _ = run_hook(other, OD_HOME=fresh)
+            self.assertEqual(p.stdout, "")
+        shutil.rmtree(home, ignore_errors=True)
 
     def test_quiet_on_errors(self):
         with tempfile.TemporaryDirectory() as t:

@@ -141,6 +141,7 @@ Two more commands keep later sessions on the same system:
 | Command | What it does |
 |---|---|
 | `engine.py status` | Prints where the work stands: the step you're on, what waits for you and the next command. It changes nothing. Run it first in a new session. |
+| `engine.py checkin` | A check-in: what changed since the last one, ledger items still open, whether `DESIGN.md` is out of date, how many things review finds, and the one next step. It also runs on its own at the start of each session in Claude Code, after every 5 decisions and when a ledger round closes. `--every 10` changes the count, `--off` turns it off for the project. |
 | `engine.py handoff yes` | Writes a short note into your `AGENTS.md`, and a `CLAUDE.md` that imports it, so later AI sessions read the system first. `handoff no` writes nothing. Either answer is recorded, so you're asked once. |
 
 :::dev
