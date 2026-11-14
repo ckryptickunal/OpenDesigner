@@ -132,6 +132,13 @@ class ODChat extends HTMLElement {
     if (ev.type === "text") {
       if (!state.text) { state.text = el("p", "od-chat-bot"); state.turn.prepend(state.text); }
       state.text.textContent = datesInText(ev.text, document.documentElement.lang);
+    } else if (ev.type === "part") {  // built by the app from its data: the real part, before the words arrive
+      state.surface?.remove();
+      const s = document.createElement("od-surface");
+      s.catalog = this.catalog;
+      s.source = ev.data;
+      state.turn.append(s);
+      if (!s.process(ev.answer).ok) s.remove(); else state.surface = s;
     } else if (ev.type === "skeleton" && !state.surface) {
       const s = document.createElement("od-surface");
       s.catalog = this.catalog;

@@ -47,7 +47,7 @@
        },
        "value": {
         "type": "string",
-        "maxLength": 48
+        "maxLength": 120
        },
        "tone": {
         "type": "string",

@@ -249,9 +249,16 @@ def load_app(path):
     return mod
 
 
-def _overlap(a, b):
-    """Words of a found in b; a word also matches a longer one it starts (renew, renewal) when it has 4 letters or more."""
-    return sum(1 for w in a if w in b or (len(w) >= 4 and any(x.startswith(w) or (len(x) >= 4 and w.startswith(x)) for x in b)))
+def _overlap(a, b, n=4):
+    """Words of a found in b; a word also matches a longer one it starts (renew, renewal) when it has n letters or more."""
+    return sum(1 for w in a if w in b or (len(w) >= n and any(x.startswith(w) or (len(x) >= n and w.startswith(x)) for x in b)))
+
+
+def _fits(value, desc):
+    """An id fills a parameter only if it has the shape of the description's example (FH40018273, not AB12 from AB12 CDE)."""
+    m = re.search(r"\bsuch as ([A-Z0-9][A-Z0-9-]{2,})", desc or "")
+    shape = lambda t: re.sub(r"\d", "9", re.sub(r"[A-Z]", "A", t))  # per character: AB12 is not FH40018273
+    return not m or shape(value) == shape(m.group(1))
 
 
 def _choices(desc):
@@ -307,7 +314,8 @@ class Conversation:
         parameter's listed choices ("Hollow Lane", "visitor") fills a parameter. Returns (calls, sure). Not sure when
         nothing clearly matches before any data was fetched, or when the best match needs a value the message doesn't
         give ("the refunded one"): then a model routes."""
-        msg = set(smartui.words(message))
+        # words that say nothing about which data ("did I get", "do I need") don't count as a match
+        msg = set(smartui.words(message)) - {"get", "got", "did", "need", "have", "has", "want", "know", "see", "tell"}
         ids = re.findall(r"\b[A-Z]{1,5}[- ]?\d{2,}[A-Z0-9]*\b", message)
         negated = bool(re.search(r"\b(not|no|never|without)\b|n't\b|\bun[a-z]+", message.lower()))
         verbs = {"get", "list", "check", "find", "fetch", "read", "show", "view", "load"}
@@ -343,19 +351,29 @@ class Conversation:
             sig = inspect.signature(a["fn"]).parameters
             args = {k: picks(desc)[0] for k, desc in a.get("params", {}).items() if k in sig and picks(desc)}
             for k, v in sig.items():
-                if v.default is inspect.Parameter.empty and k not in args and len(ids) == 1:
+                if v.default is inspect.Parameter.empty and k not in args and len(ids) == 1 and _fits(ids[0], a.get("params", {}).get(k, "")):
                     args[k] = ids[0]
             if any(v.default is inspect.Parameter.empty and k not in args for k, v in sig.items()):
-                if i == 0:
+                points_back = re.search(r"\b(the \w+ one|that one|this one|it|them|those)\b", message.lower())
+                mine = set(smartui.words(name.replace("_", " "))) - verbs
+                # "show me my parking fine": get_fine needs a reference, list_fines (the same thing, no value needed) answers it
+                sibling = next((n2 for _, _, n2 in scored if n2 != name and _overlap(mine, set(smartui.words(n2.replace("_", " "))) - verbs, 3)
+                                and not any(v.default is inspect.Parameter.empty for v in inspect.signature(self.app.ACTIONS[n2]["fn"]).parameters.values())), None)
+                if i == 0 and (points_back or not sibling):
                     return [], False  # the best match needs a value the message doesn't give ("the refunded one")
+                if i == 0 and sibling not in [c[0] for c in calls]:
+                    calls.append((sibling, {}))
                 continue
             calls.append((name, args))
+        calls = [c for i, c in enumerate(calls) if c[0] not in [x[0] for x in calls[:i]]]
         return calls[:2], bool(calls)
 
     CHANGE_WORDS = re.compile(r"\b(pay|book|renew|switch|move|upgrade|downgrade|add|remove|cancel|upload|send|change|confirm|apply)\b", re.I)
 
     def names_a_change(self, message):
         """The person asks for something that changes data: a change action's own words, or a plain verb for one."""
+        if re.match(r"\s*(do|does|did|is|are|was|were|have|has|what|which|when|where|why|how|any)\b", message.lower()):
+            return False  # "do I need to pay a fine?" is a question; "pay it", "can I pay now?" ask for the change
         msg = set(smartui.words(message))
         verbs = {"get", "list", "check", "find", "fetch", "read", "show", "view", "load"}
         return bool(self.CHANGE_WORDS.search(message)) or any(
@@ -428,10 +446,20 @@ class Conversation:
         if not self.names_a_change(message):  # a question never gets an approval prompt (R3): the record answers it
             sel["candidates"] = [c for c in sel["candidates"] if c != "ApprovalPrompt"]
             sel["ui"] = sel["ui"] and bool(sel["candidates"])
-        if sel["ui"] and sel["candidates"]:
+        view = None if self.names_a_change(message) else self._view(calls, fresh, source, surface)
+        if view:  # the app builds this part from its data: shown now, checked; the model writes only the sentence
+            ms["skeleton"] = (time.perf_counter() - t0) * 1000
+            emit({"type": "part", "answer": view, "data": data})
+            sel = {"ui": False, "candidates": [], "scores": {}, "why": "the app's own view of the data"}
+        elif sel["ui"] and sel["candidates"]:
             ms["skeleton"] = (time.perf_counter() - t0) * 1000
             emit({"type": "skeleton", "part": sel["candidates"][0]})
         system, sel = smartui.build_prompt(message, self.catalog, 3, self.scope, data, boost, always, structured=True, sel=sel)
+        if view:
+            system += ("\n\nThe person already sees this part, built by the app from the data:\n"
+                       + json.dumps(view[0]["createSurface"]["components"][0], ensure_ascii=False)
+                       + "\nWrite only the text: one or two plain sentences with what matters most (for a fine: the amount to pay "
+                         "now and the day that ends). Don't list every detail and don't add a part.")
         names = (list(sel["candidates"]) + [a for a in always if a not in sel["candidates"] and a in self.catalog["components"]]) if sel["ui"] else []
         smaller = [names, names[:2] + [a for a in always if a in names[2:]], names[:1] + [a for a in always if a in names[1:]]]
         schema = [smartui.response_schema(self.catalog, n) for i, n in enumerate(smaller) if n and n not in smaller[:i]] \
@@ -485,6 +513,8 @@ class Conversation:
                 result["answer"] = result["draft"]  # only wording is left after the repair: show it, log what's left
             elif result["errors"] and not all(e["rule"] in smartui.COPY_RULES for e in result["errors"]):
                 result["answer"] = None  # still wrong after one repair: text only
+        if view:
+            result.update(answer=view, part=view[0]["createSurface"]["components"][0].get("component"))
         text = result["text"] or "Sorry, I couldn't show that. Here is what I found: " + json.dumps(fresh)[:300]
         self.turns += [{"role": "user", "text": message},
                        {"role": "assistant", "text": text + (f" [showed {result['part']}]" if result["answer"] else "")}]
@@ -495,11 +525,28 @@ class Conversation:
         ms.setdefault("skeleton", ms["full"])
         ms.setdefault("first_text", ms["full"])
         entry = {"message": message, "calls": calls, "routed_by_model": self.routed_by_model, "ms": {k: round(v) for k, v in ms.items()},
+                 "view": bool(view),
                  "case_fixed": case_fixed, "selector": sel["candidates"], "ui": bool(result["answer"]),
                  "part": result["part"], "first_errors": [f"{e['rule']} {e['path']}" for e in first_errors], "repaired": repaired,
                  "final_errors": [f"{e['rule']} {e['path']}" for e in result["errors"]]}
         self.log.append(entry)
         return {"text": text, "answer": result["answer"], "data": data, "log": entry}
+
+    def _view(self, calls, fresh, source, surface):
+        """The part an action's own view builds from its data (the app's @shows), when it passes every check; else None."""
+        for name, _ in calls:
+            make = self.app.ACTIONS.get(name, {}).get("view")
+            if not make or name not in fresh:
+                continue
+            try:
+                part = make(fresh[name])
+            except Exception:
+                continue
+            if part:
+                msgs = smartui.wrap(part, surface)
+                if smartui.validate(msgs, self.catalog, {"source": source, "copy": True})["ok"]:
+                    return msgs
+        return None
 
     @staticmethod
     def _structured(raw):

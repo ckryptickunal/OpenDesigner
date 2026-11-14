@@ -206,6 +206,206 @@
     "Does Hollow Lane have step-free access?"
    ],
    "expect": []
+  },
+  {
+   "id": "fh-fines-w01",
+   "turns": [
+    "have I got any parking fines?"
+   ],
+   "expect": [
+    "KeyFacts"
+   ],
+   "checks": [
+    {
+     "contains": "\"pay_fine\""
+    },
+    {
+     "contains": "19 november"
+    },
+    {
+     "not": "approvalprompt"
+    }
+   ]
+  },
+  {
+   "id": "fh-fines-w02",
+   "turns": [
+    "any fines on my car?"
+   ],
+   "expect": [
+    "KeyFacts"
+   ],
+   "checks": [
+    {
+     "contains": "\"pay_fine\""
+    },
+    {
+     "contains": "19 november"
+    },
+    {
+     "not": "approvalprompt"
+    }
+   ]
+  },
+  {
+   "id": "fh-fines-w03",
+   "turns": [
+    "show me my parking fine"
+   ],
+   "expect": [
+    "KeyFacts"
+   ],
+   "checks": [
+    {
+     "contains": "\"pay_fine\""
+    },
+    {
+     "contains": "19 november"
+    },
+    {
+     "not": "approvalprompt"
+    }
+   ]
+  },
+  {
+   "id": "fh-fines-w04",
+   "turns": [
+    "Do I have any fines?"
+   ],
+   "expect": [
+    "KeyFacts"
+   ],
+   "checks": [
+    {
+     "contains": "\"pay_fine\""
+    },
+    {
+     "contains": "19 november"
+    },
+    {
+     "not": "approvalprompt"
+    }
+   ]
+  },
+  {
+   "id": "fh-fines-w05",
+   "turns": [
+    "is there a fine on AB12 CDE?"
+   ],
+   "expect": [
+    "KeyFacts"
+   ],
+   "checks": [
+    {
+     "contains": "\"pay_fine\""
+    },
+    {
+     "contains": "19 november"
+    },
+    {
+     "not": "approvalprompt"
+    }
+   ]
+  },
+  {
+   "id": "fh-fines-w06",
+   "turns": [
+    "do I need to pay a fine?"
+   ],
+   "expect": [
+    "KeyFacts"
+   ],
+   "checks": [
+    {
+     "contains": "\"pay_fine\""
+    },
+    {
+     "contains": "19 november"
+    },
+    {
+     "not": "approvalprompt"
+    }
+   ]
+  },
+  {
+   "id": "fh-fines-w07",
+   "turns": [
+    "my penalty charge notice"
+   ],
+   "expect": [
+    "KeyFacts"
+   ],
+   "checks": [
+    {
+     "contains": "\"pay_fine\""
+    },
+    {
+     "contains": "19 november"
+    },
+    {
+     "not": "approvalprompt"
+    }
+   ]
+  },
+  {
+   "id": "fh-fines-w08",
+   "turns": [
+    "outstanding parking fines"
+   ],
+   "expect": [
+    "KeyFacts"
+   ],
+   "checks": [
+    {
+     "contains": "\"pay_fine\""
+    },
+    {
+     "contains": "19 november"
+    },
+    {
+     "not": "approvalprompt"
+    }
+   ]
+  },
+  {
+   "id": "fh-fines-w09",
+   "turns": [
+    "what parking fines do I have?"
+   ],
+   "expect": [
+    "KeyFacts"
+   ],
+   "checks": [
+    {
+     "contains": "\"pay_fine\""
+    },
+    {
+     "contains": "19 november"
+    },
+    {
+     "not": "approvalprompt"
+    }
+   ]
+  },
+  {
+   "id": "fh-fines-w10",
+   "turns": [
+    "did I get a parking ticket?"
+   ],
+   "expect": [
+    "KeyFacts"
+   ],
+   "checks": [
+    {
+     "contains": "\"pay_fine\""
+    },
+    {
+     "contains": "19 november"
+    },
+    {
+     "not": "approvalprompt"
+    }
+   ]
   }
  ]
 }

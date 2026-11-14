@@ -16844,7 +16844,7 @@
         },
         "value": {
          "type": "string",
-         "maxLength": 48,
+         "maxLength": 120,
          "part": "value"
         },
         "note": {

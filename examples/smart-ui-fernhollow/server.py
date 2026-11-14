@@ -57,7 +57,8 @@ class App:
             ACTIONS[fn.__name__] = {"description": (fn.__doc__ or "").strip(), "changes": changes, "fn": in_words(fn),
                                     "method": method, "path": path,
                                     "params": {k: v for k, v in getattr(fn, "params", {}).items()},
-                                    "consequences": list(getattr(fn, "consequences", []))}
+                                    "consequences": list(getattr(fn, "consequences", [])),
+                                    "view": getattr(fn, "view", None)}
             return fn
         return deco
 
@@ -76,6 +77,55 @@ def params(**p):
         fn.params = p
         return fn
     return deco
+
+
+def shows(view):
+    """How this read action's answer is shown, built from its data by code: a part (a Smart UI short-form object), or
+    None to let the model choose. The model then writes only the sentence, so the part is instant and always right."""
+    def deco(fn):
+        fn.view = view
+        return fn
+    return deco
+
+
+def fine_card(f):
+    """One penalty charge notice as key facts, with Pay as its next step while it is unpaid."""
+    unpaid = f["status"] == "Unpaid"
+    facts = [{"label": "Reference", "value": f["reference"]},
+             {"label": "Date", "value": f"{f.get('date_in_words', f['date'])}, {f['time']}" if f.get("time") else f.get("date_in_words", f["date"])},
+             {"label": "Place", "value": f["location"]},
+             {"label": "Reason", "value": f["contravention"]},
+             {"label": "Full amount", "value": f["amount"]}]
+    if unpaid:
+        facts += [{"label": "Pay by " + " ".join(f["discount_ends"].split()[1:3]), "value": f["discounted_amount"], "tone": "accent",
+                   "note": f"The lower amount ends on {f['discount_ends']}. After that it is {f['amount']}."},
+                  {"label": "Challenge by", "value": f["challenge_until"]}]
+    facts.append({"label": "Status", "value": "Unpaid" if unpaid else f["status"], "tone": "warning" if unpaid else "success"})
+    card = {"component": "KeyFacts", "title": "Unpaid parking fine" if unpaid else "Parking fine", "subtitle": f"Vehicle {f.get('vehicle', DATA['permit']['vehicle'])}",
+            "facts": facts}
+    if unpaid:
+        card["action"] = {"label": f"Pay {f['to_pay_now']}", "event": {"name": "pay_fine", "context": {"reference": f["reference"]}}}
+    return card
+
+
+def fines_view(r):
+    unpaid = [f for f in r.get("fines", []) if f["status"] == "Unpaid"]
+    return fine_card({**unpaid[0], "vehicle": r.get("vehicle")}) if len(unpaid) == 1 else None
+
+
+def fine_view(r):
+    return fine_card(r["fine"]) if "fine" in r else None
+
+
+def application_view(r):
+    a = r.get("application")
+    if not a:
+        return None
+    state = {"done": "done", "current": "now", "next": "next"}
+    return {"component": "ProgressStatus", "title": f"Application {a['reference']}", "tone": "warning" if a.get("waiting_for") else "info",
+            "status": a["current_step"],
+            "steps": [{"state": state[x["state"]], "label": x["label"], **({"time": x.get("date_in_words", x["date"]).split(" ", 1)[-1]} if x["state"] == "done" else {})}
+                      for x in a["steps"]]}
 
 
 def warns(*lines):
@@ -153,9 +203,10 @@ def renew_permit(length="12 months"):
 # ------------------------------------------------------------------------------------------------ fines
 
 @app.get("/api/fines")
+@shows(fines_view)
 @params(vehicle="a vehicle registration such as AB12 CDE (default: the resident's permit vehicle)")
 def list_fines(vehicle=""):
-    """Every penalty charge notice (parking fine) for one vehicle, newest first: reference, date, place, reason, full amount, whether it is paid and, for an unpaid one, the lower amount and the day the discount ends, the last day to challenge it, and what paying today costs."""
+    """Every penalty charge notice (a parking fine, also called a parking ticket) for one vehicle, newest first: reference, date, place, reason, full amount, whether it is paid and, for an unpaid one, the lower amount and the day the discount ends, the last day to challenge it, and what paying today costs."""
     reg = _reg(vehicle or DATA["permit"]["vehicle"])
     rows = [{**{k: f[k] for k in ("reference", "date", "time", "location", "contravention", "amount", "status")}, **_terms(f)}
             for f in DATA["fines"] if _reg(f["vehicle"]) == reg]
@@ -163,6 +214,7 @@ def list_fines(vehicle=""):
 
 
 @app.get("/api/fines/<reference>")
+@shows(fine_view)
 @params(reference="the 10-character reference on the notice, such as FH40018273", vehicle="the vehicle registration on the notice")
 def get_fine(reference, vehicle=""):
     """A summary of one penalty charge notice (parking fine), found by its reference and the vehicle registration: what happened, when and where, the amount, the lower amount if paid within 14 days and its last day, and whether it is paid."""
@@ -221,6 +273,7 @@ def book_appointment(office, slot, service="Show documents for a parking permit"
 # ------------------------------------------------------------------------------------------------ applications and documents
 
 @app.get("/api/applications/<reference>")
+@shows(application_view)
 @params(reference="an application reference such as RP-2026-0418 (the resident has one open)")
 def application_status(reference="RP-2026-0418"):
     """Where an application is: its steps (submitted, checked, waiting for a document, decision, permit sent) with dates, the current step and what it is waiting for."""

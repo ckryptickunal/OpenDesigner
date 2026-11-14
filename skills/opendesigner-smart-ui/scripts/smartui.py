@@ -594,6 +594,10 @@ def response_schema(catalog, names):
                 out[k] = clean(v, True)
             else:
                 out[k] = clean(v, in_array)
+        if out.get("type") == "string" and "enum" not in out and "pattern" not in out and "format" not in out:
+            # the limits in words too: a provider may drop a bound it finds too complex, but the model still reads this
+            out["description"] = ((f"At most {out['maxLength']} characters. " if out.get("maxLength") else "")
+                                  + "Sentence case: capitalise the first word and names only.")
         if in_array:  # inside a list, keep the shape and let the validator hold lengths (and a number may come as text)
             out.pop("maxLength", None)
             out.pop("minLength", None)
