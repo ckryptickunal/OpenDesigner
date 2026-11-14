@@ -236,7 +236,8 @@ def run_live(model, runs, pattern, do_render):
     cs = [c for c in spec["cases"] if any(fnmatch.fnmatch(c["id"], p) for p in pats)]
     provider = "anthropic" if model == "claude" and live.env_key("ANTHROPIC_API_KEY") else LIVE_PROVIDER[model]
     rows, valid = [], []
-    raw = EV / "runs" / f"live-{model}"
+    label = model if model != "gemini" or live.MODELS["gemini"] == "gemini-3.1-pro-preview" else live.MODELS["gemini"]  # OD_GEMINI_MODEL
+    raw = EV / "runs" / f"live-{label}"
     raw.mkdir(parents=True, exist_ok=True)
     for c in cs:
         for n in range(1, runs + 1):
@@ -266,14 +267,14 @@ def run_live(model, runs, pattern, do_render):
                 row["right"] = row["right"] and row["headers_ok"]
             rows.append(row)
             if part and r.get("answer"):
-                valid.append((f"live-{model}.{c['id']}.{n}", r["answer"]))
+                valid.append((f"live-{label}.{c['id']}.{n}", r["answer"]))
             print(f"live {model} {c['id']:<22} run {n}: {part or 'text'}  {'right' if row['right'] else 'WRONG'}"
                   f"{'  repaired' if row['repaired'] else ''}{'  CHANGE RAN' if ran else ''}")
     if do_render and valid:
         app_dir = (ROOT / spec["app"]).parent
         found = render(valid, app_dir / "opendesigner" / "smart-ui" / "catalog.json", app_dir / "opendesigner" / "build" / "css" / "tokens.css")
         for r in rows:
-            k = f"live-{model}.{r['id']}.{r['run']}"
+            k = f"live-{label}.{r['id']}.{r['run']}"
             if k in found:
                 r["rendered"] = True
                 r["floor_findings"] = len(found[k])
@@ -293,8 +294,9 @@ def run_live(model, runs, pattern, do_render):
                "errors": sum(1 for r in rows if r.get("error")),
                "copy_problems_first": sum(1 for r in rows for e in r.get("first_errors", []) if e.split()[0] in smartui.COPY_RULES),
                "copy_problems_left": sum(1 for r in rows for e in r.get("final_errors", []) if e.split()[0] in smartui.COPY_RULES)}
+    summary["tokens"] = live.USAGE.get(live.MODELS.get(provider, provider))  # API providers only; the claude CLI doesn't report them here
     (EV / "results").mkdir(exist_ok=True)
-    (EV / "results" / f"live-{model}.json").write_text(json.dumps({"model": live.MODELS.get(provider, provider), "provider": provider,
+    (EV / "results" / f"live-{label}.json").write_text(json.dumps({"model": live.MODELS.get(provider, provider), "provider": provider,
         "date": datetime.date.today().isoformat(), "runs_per_case": runs, "summary": summary, "rows": rows}, indent=1) + "\n")
     print(json.dumps(summary))
     return summary

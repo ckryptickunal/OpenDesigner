@@ -37,7 +37,15 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import smartui  # noqa: E402
 
-MODELS = {"anthropic": "claude-sonnet-5-5", "claude-cli": "claude-sonnet-5-5", "gemini": "gemini-3.1-pro-preview"}
+MODELS = {"anthropic": "claude-sonnet-5-5", "claude-cli": "claude-sonnet-5-5", "gemini": os.environ.get("OD_GEMINI_MODEL") or "gemini-3.1-pro-preview"}
+USAGE = {}  # model -> tokens used in this process: {"calls", "input", "output"} (output includes thinking)
+
+
+def _count(model, inp, out):
+    u = USAGE.setdefault(model, {"calls": 0, "input": 0, "output": 0})
+    u["calls"] += 1
+    u["input"] += inp or 0
+    u["output"] += out or 0
 
 
 # ----------------------------------------------------------------------------------------------- keys and providers
@@ -82,12 +90,16 @@ def ask(provider, system, turns):
                 "messages": [{"role": t["role"], "content": t["text"]} for t in turns]}
         res = _post("https://api.anthropic.com/v1/messages", body,
                     {"x-api-key": env_key("ANTHROPIC_API_KEY"), "anthropic-version": "2023-06-01"})
+        u = res.get("usage", {})
+        _count(MODELS["anthropic"], u.get("input_tokens", 0) + u.get("cache_read_input_tokens", 0) + u.get("cache_creation_input_tokens", 0), u.get("output_tokens", 0))
         return "".join(b.get("text", "") for b in res.get("content", []) if b.get("type") == "text")
     if provider == "gemini":
         body = {"systemInstruction": {"parts": [{"text": system}]},
                 "contents": [{"role": "model" if t["role"] == "assistant" else "user", "parts": [{"text": t["text"]}]} for t in turns]}
         res = _post(f"https://generativelanguage.googleapis.com/v1beta/models/{MODELS['gemini']}:generateContent", body,
                     {"x-goog-api-key": env_key("GEMINI_API_KEY")})
+        u = res.get("usageMetadata", {})
+        _count(MODELS["gemini"], u.get("promptTokenCount", 0), u.get("candidatesTokenCount", 0) + u.get("thoughtsTokenCount", 0))
         parts = res["candidates"][0]["content"].get("parts", [])
         return "".join(p.get("text", "") for p in parts if not p.get("thought"))
     if provider == "claude-cli":
