@@ -6,12 +6,6 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ## [Unreleased]
 
-### Changed
-
-- **The library's JSON has a new shape** (2026-11-13). `/library/index.json` was a list of parts; it is now the whole catalog, `{format, components}`, and each part's name is `id` instead of `slug`. The prompts on the website now point to `/library/<id>.html`; the old `/library/r/<id>.html` addresses still work.
-- **The approval panel keeps its amounts in view** (2026-11-14). With text at 200% on a phone, the balance amounts ran out of the panel. Each line now wraps, so an amount drops under its label, and "USD" can move to a new line.
-- **Calmer Details on each part page** (2026-11-13). The prompt and the two commands now share one box style, each with a Copy button, a label above and a note below, with even space between them. The prompt reads in the site's text font, and web addresses no longer break inside "https://".
-
 ### Added
 
 - **Stakeholder research** (2026-11-14). On a project with more than one decision-maker, `research.py stakeholders` finds who has a say from your repo, drafts at most five questions for each role, and keeps every answer with who said it. Where people agree, it becomes a decision with its source; where they differ, both views stay until you settle it. Nobody's view is filled in for them.
@@ -36,6 +30,9 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Changed
 
+- **The library's JSON has a new shape** (2026-11-13). `/library/index.json` was a list of parts; it is now the whole catalog, `{format, components}`, and each part's name is `id` instead of `slug`. The prompts on the website now point to `/library/<id>.html`; the old `/library/r/<id>.html` addresses still work.
+- **The approval panel keeps its amounts in view** (2026-11-14). With text at 200% on a phone, the balance amounts ran out of the panel. Each line now wraps, so an amount drops under its label, and "USD" can move to a new line.
+- **Calmer Details on each part page** (2026-11-13). The prompt and the two commands now share one box style, each with a Copy button, a label above and a note below, with even space between them. The prompt reads in the site's text font, and web addresses no longer break inside "https://".
 - **Fewer ways to drift from a system** (2026-11-13). The skills now say that only the person adds an `od-ignore`, that the log question never replaces what they asked for, which command lists style directions, and that research with no way to read the web stops at a plan instead of writing findings.
 
 ## [0.3.1]: 2026-11-11
