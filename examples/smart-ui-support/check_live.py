@@ -52,13 +52,13 @@ def main():
                 page.on("pageerror", lambda e: errors.append(str(e)))
                 page.goto(f"http://127.0.0.1:{port}/")
                 page.wait_for_selector(".od-chat-form")
-                turn = lambda: page.locator(".od-chat-turn").last
+                turn = lambda: page.locator(".od-chat-turn:not(.od-chat-pending)").last  # the checked answer, not its skeleton
 
                 def ask(q, timeout=240000):
-                    n = page.locator(".od-chat-turn").count()
+                    n = page.locator(".od-chat-turn:not(.od-chat-pending)").count()
                     page.fill(".od-chat-form input", q)
                     page.click(".od-chat-form button")
-                    page.wait_for_function(f"document.querySelectorAll('.od-chat-turn, .od-chat-error').length > {n}", timeout=timeout)
+                    page.wait_for_function(f"document.querySelectorAll('.od-chat-turn:not(.od-chat-pending), .od-chat-error').length > {n}", timeout=timeout)
                     page.wait_for_timeout(700)  # the scroll to the newest answer
                     top = page.evaluate("() => { const t = [...document.querySelectorAll('.od-chat-turn')].pop(); const r = t.getBoundingClientRect(); return [r.top, innerHeight]; }")
                     bottom = page.evaluate("() => [...document.querySelectorAll('.od-chat-turn')].pop().getBoundingClientRect().bottom")
@@ -78,9 +78,9 @@ def main():
                 page.screenshot(path=str(out / f"live-{width}-2-approve.png"))
                 approve = turn().locator('[data-od-component="ApprovalPrompt"] [data-od-effect="change"]')
                 if approve.count():
-                    n = page.locator(".od-chat-turn").count()
+                    n = page.locator(".od-chat-turn:not(.od-chat-pending)").count()
                     approve.first.click()
-                    page.wait_for_function(f"document.querySelectorAll('.od-chat-turn').length > {n}", timeout=240000)
+                    page.wait_for_function(f"document.querySelectorAll('.od-chat-turn:not(.od-chat-pending)').length > {n}", timeout=240000)
                     t = turn().inner_text().lower()
                     if not ("paid" in t or "py-55309" in t or turn().locator('[data-od-component="Receipt"]').count()):
                         problems.append(f"{width}: no confirmation after approving")
