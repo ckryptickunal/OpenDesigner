@@ -473,7 +473,7 @@
         "component": "ProgressStatus",
         "title": "Application RP-2026-0418",
         "tone": "warning",
-        "status": "Waiting for your V5C document",
+        "status": "Waiting for your document",
         "steps": [
          {
           "state": "done",
@@ -487,13 +487,15 @@
          },
          {
           "state": "now",
-          "label": "Decision",
-          "time": "After your last document"
+          "label": "Waiting for your document"
          },
          {
           "state": "next",
-          "label": "Permit sent by email",
-          "time": "Same day as the decision"
+          "label": "Decision"
+         },
+         {
+          "state": "next",
+          "label": "Permit sent"
          }
         ],
         "id": "root"
@@ -509,7 +511,7 @@
       "what": "Resident parking permit for a second vehicle, EV22 MNO (electric car)",
       "submitted": "2026-11-03",
       "submitted_in_words": "Tuesday 3 November 2026",
-      "current_step": "Decision",
+      "current_step": "Waiting for your document",
       "waiting_for": "Your vehicle registration document (V5C) for EV22 MNO",
       "steps": [
        {
@@ -525,9 +527,14 @@
         "date_in_words": "Saturday 7 November 2026"
        },
        {
-        "label": "Decision",
+        "label": "Waiting for your document",
         "state": "current",
-        "date": "Within 5 working days of getting your last document"
+        "date": "Upload your V5C, or show it at an office"
+       },
+       {
+        "label": "Decision",
+        "state": "next",
+        "date": "Within 5 working days of getting your document"
        },
        {
         "label": "Permit sent",
