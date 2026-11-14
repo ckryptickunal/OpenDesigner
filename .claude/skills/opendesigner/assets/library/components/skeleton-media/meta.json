@@ -1,0 +1,123 @@
+{
+  "name": "Media skeleton",
+  "summary": "A video or photo block that reserves its exact frame, title and caption while the media loads, so nothing below it moves.",
+  "use": "for a video, photo or embed whose file arrives after the page",
+  "type": "states",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "skeleton",
+    "loading",
+    "video",
+    "image",
+    "aspect ratio"
+  ],
+  "states": [
+    "loading",
+    "loaded",
+    "reduced motion"
+  ],
+  "source": null,
+  "a11y": "While loading, the content area is aria-busy and inert, so nobody can tab into placeholders; a polite status says when loading starts and when it is done. Under reduced motion the bones stay still.",
+  "width": "medium",
+  "live_region": "polite",
+  "notes": "Delete the button marked data-odl-demo; set aria-busy on .odl-body from your own request.",
+  "photos": [
+    {
+      "img": "photo-1578429827733-272eb6d7972e",
+      "author": "Keagan Henman",
+      "page": "Jfz6IdxMSuQ"
+    }
+  ],
+  "tokens_planned": {
+    "--ds-state-skeleton-base": "--ds-color-bg-neutral-subtle",
+    "--ds-state-skeleton-highlight": "--ds-color-surface-raised",
+    "--ds-state-skeleton-pulse": "1500ms (0ms when motion is reduced)",
+    "--ds-state-skeleton-radius": "--ds-radius-detail"
+  },
+  "spec": {
+    "use_when": [
+      "a picture or video loads after the text around it",
+      "an embed of known size loads late"
+    ],
+    "avoid_when": [
+      "the media size is unknown: reserve a common ratio (16:9) and crop, rather than letting it grow",
+      "the photo is small and cached: give it width and height and skip the bone"
+    ],
+    "keyboard": [
+      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    ],
+    "data": {
+      "type": "object",
+      "properties": {
+        "poster": {
+          "type": "object",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "format": "uri"
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 120
+            }
+          }
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 24
+        },
+        "detail": {
+          "type": "string",
+          "maxLength": 64
+        }
+      },
+      "required": [
+        "poster",
+        "title",
+        "detail"
+      ]
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "When the request returns nothing, replace the bones with an empty state (empty-first-use or empty-no-results)."
+      },
+      "loading": {
+        "status": "shown",
+        "how": "aria-busy turns each text run, picture and control into a bone of its own size; nothing moves when data arrives.",
+        "evidence": "aria-busy=\"true\""
+      },
+      "error": {
+        "status": "not_built",
+        "how": "When the request fails, keep the frame and show an error banner with a retry (page-banners) in place of the rows."
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "While loading, the content is inert, so placeholders can't be focused or clicked.",
+        "evidence": "inert"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "Single lines end in an ellipsis, so a long value never adds a line or moves the next row.",
+        "evidence": "text-overflow: ellipsis"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "Each line is clamped to one line with an ellipsis, so the skeleton and the loaded layout keep one height.",
+        "evidence": "text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "handled",
+        "how": "The poster sits in a fixed 16:9 frame with a sunken fill.",
+        "evidence": "aspect-ratio: 16 / 9"
+      }
+    }
+  }
+}

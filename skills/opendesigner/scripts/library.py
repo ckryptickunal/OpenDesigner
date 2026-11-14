@@ -24,7 +24,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 LIB = HERE.parent / "assets" / "library" / "components"
 CATALOG = LIB.parent / "library.json"
 ENGINE = HERE / "engine.py"
-TYPES = ["data", "chart", "form", "feedback", "navigation", "overlay", "ai", "commerce", "content"]
+TYPES = ["data", "chart", "form", "feedback", "states", "navigation", "overlay", "ai", "commerce", "content"]  # states: empty, loading, error and system pages
 STYLES = ["quiet", "dense", "technical", "friendly", "editorial"]
 INDUSTRIES = ["finance", "saas", "devtools", "security", "crm", "logistics", "health", "education", "retail", "productivity",
               "social", "media", "travel", "food", "fitness", "events", "home", "money", "games", "any"]  # money: personal finance (finance is B2B)
@@ -156,12 +156,32 @@ def cmd_add(a):
     tok = pathlib.Path(a.tokens)
     if tok.exists():
         have = set(re.findall(r"(--ds-[a-z0-9-]+)\s*:", tok.read_text()))
-        missing = sorted(used_vars(text) - have)
+        lacking = sorted(used_vars(text) - have)
+        # a --ds-state-* variable whose every use falls back to a token the project has is optional, not missing
+        optional = [v for v in lacking if v.startswith("--ds-state-") and all(fb and used_vars(fb) <= have for fb in fallbacks(text, v))]
+        missing = [v for v in lacking if v not in optional]
         print("Every variable it uses is in your tokens." if not missing else
               f"Your tokens lack {len(missing)} variable(s); map each to one of yours or run engine.py build: " + ", ".join(missing))
+        if optional:
+            print(f"It also reads {len(optional)} optional state token(s) your system doesn't set; each falls back to one of your tokens: " + ", ".join(optional))
     else:
         print(f"No {tok}: map its --ds-* variables to your own tokens ({len(used_vars(text))} used).")
     return 0
+
+
+def fallbacks(text, name):
+    """The fallback of each var(name, ...) in text, with nested brackets ("" where a use has none)."""
+    out = []
+    for m in re.finditer(r"var\(" + re.escape(name) + r"\s*([,)])", text):
+        if m.group(1) == ")":
+            out.append("")
+            continue
+        depth, i = 1, m.end()
+        while i < len(text) and depth:
+            depth += {"(": 1, ")": -1}.get(text[i], 0)
+            i += 1
+        out.append(text[m.end():i - 1].strip())
+    return out
 
 
 def reserved_attrs(src):
@@ -283,8 +303,12 @@ def check_one(c, known):
             errs.append("script finds elements by id or aria reference: copies of the part have no ids; find them by class, data attribute or order")
         if f'querySelectorAll(".odl-{slug}")' not in js:
             errs.append(f'script must start from document.querySelectorAll(".odl-{slug}")')
+    # a variable only some systems write (the state.* tokens exist only where their question was answered) is allowed when
+    # every use falls back to one that every system writes: var(--ds-state-skeleton-base, var(--ds-color-bg-neutral-subtle))
     for v in sorted(used_vars(html_) - known):
-        errs.append(f"{v} is not a variable every engine system writes")
+        if v.startswith("--ds-state-") and all(fb and used_vars(fb) and used_vars(fb) <= known for fb in fallbacks(html_, v)):
+            continue
+        errs.append(f"{v} is not a variable every engine system writes" + (" (a --ds-state-* one needs a fallback to one that is)" if v.startswith("--ds-state-") else ""))
     if f'class="odl-{slug}' not in rest:
         errs.append(f"the root element needs class odl-{slug}")
     return errs

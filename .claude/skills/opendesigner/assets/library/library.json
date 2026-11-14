@@ -1,13 +1,14 @@
 {
  "format": "opendesigner.library/1",
  "version": "0.3.1",
- "count": 82,
+ "count": 104,
  "vocab": {
   "types": [
    "data",
    "chart",
    "form",
    "feedback",
+   "states",
    "navigation",
    "overlay",
    "ai",
@@ -8802,6 +8803,694 @@
    "photos": 0
   },
   {
+   "id": "empty-all-done",
+   "name": "All done empty state",
+   "purpose": "Inbox zero: a calm note that everything is handled, when new items will show up, and a quiet way to see what's done.",
+   "use_when": [
+    "when a person has finished every item in a queue, inbox or to-do list",
+    "a queue, inbox or review list has been cleared by the person"
+   ],
+   "avoid_when": [
+    "the list has never had items: use empty-first-use",
+    "items are hidden by a filter: use empty-filtered"
+   ],
+   "type": "states",
+   "style": "friendly",
+   "width": "medium",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "inbox zero",
+     "all done",
+     "caught up",
+     "empty state",
+     "queue"
+    ]
+   },
+   "root": ".odl-empty-all-done",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string",
+      "maxLength": 32
+     },
+     "message": {
+      "type": "string",
+      "maxLength": 128
+     },
+     "checked": {
+      "type": "string",
+      "maxLength": 32
+     }
+    },
+    "required": [
+     "title",
+     "message",
+     "checked"
+    ]
+   },
+   "states": {
+    "shown": [
+     "all done",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "shown",
+      "how": "This part is the empty state itself.",
+      "evidence": "class=\"odl-art\""
+     },
+     "loading": {
+      "status": "not_built",
+      "how": "Not applicable: shown after the data has loaded and come back empty; while loading, show a skeleton."
+     },
+     "error": {
+      "status": "not_built",
+      "how": "Not applicable: an error isn't an empty list. Use page-banners or page-error."
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Actions stack full width under 30rem; the panel caps its width.",
+      "evidence": "@container"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-bg-success-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-subtle",
+    "--ds-color-icon-default",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-color-text-success",
+    "--ds-color-text-tertiary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-icon-stroke-sm",
+    "--ds-layout-measure-lead",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-radius-full",
+    "--ds-size-control-lg",
+    "--ds-size-control-md",
+    "--ds-size-icon-lg",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-section-sm",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xl",
+    "--ds-state-empty-gap",
+    "--ds-state-empty-measure",
+    "--ds-state-empty-media",
+    "--ds-text-body-md",
+    "--ds-text-label-lg",
+    "--ds-text-label-md",
+    "--ds-text-title-md"
+   ],
+   "a11y": {
+    "summary": "The heading says the state in words; the check drawing is decorative and hidden from screen readers.",
+    "roles": [
+     "region"
+    ],
+    "keyboard": [
+     "Tab reaches See what you approved"
+    ],
+    "controls": {
+     "button": 0,
+     "input": 0,
+     "link": 1,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/empty-all-done/component.html",
+    "bytes": 5611,
+    "script": false
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
+   "id": "empty-filtered",
+   "name": "Filtered to nothing",
+   "purpose": "What a list shows when its filters hide every item: which filters are on, how many items they hide, and one button to clear them.",
+   "use_when": [
+    "when filters, not a lack of data, leave a list or table empty",
+    "a list, table or board has items, but the current filters match none"
+   ],
+   "avoid_when": [
+    "the search text matched nothing: use empty-no-results",
+    "there are no items at all: use empty-first-use"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "medium",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "filters",
+     "no matches",
+     "clear filters",
+     "empty state",
+     "table"
+    ]
+   },
+   "root": ".odl-empty-filtered",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string",
+      "maxLength": 48
+     },
+     "message": {
+      "type": "string",
+      "maxLength": 96
+     },
+     "filters": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "properties": {
+        "label": {
+         "type": "string",
+         "maxLength": 24
+        }
+       },
+       "required": [
+        "label"
+       ]
+      }
+     }
+    },
+    "required": [
+     "title",
+     "message",
+     "filters"
+    ]
+   },
+   "states": {
+    "shown": [
+     "filtered empty",
+     "filter removed",
+     "filters cleared",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "shown",
+      "how": "This part is the empty state itself.",
+      "evidence": "class=\"odl-art\""
+     },
+     "loading": {
+      "status": "not_built",
+      "how": "Not applicable: shown after the data has loaded and come back empty; while loading, show a skeleton."
+     },
+     "error": {
+      "status": "not_built",
+      "how": "Not applicable: an error isn't an empty list. Use page-banners or page-error."
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Filter chips wrap onto more lines and stay centred.",
+      "evidence": "flex-wrap: wrap"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-subtle",
+    "--ds-color-icon-default",
+    "--ds-color-icon-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-icon-stroke-sm",
+    "--ds-layout-measure-lead",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-radius-full",
+    "--ds-size-control-lg",
+    "--ds-size-control-md",
+    "--ds-size-icon-lg",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-sm",
+    "--ds-space-inline-xs",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-section-sm",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xl",
+    "--ds-state-empty-gap",
+    "--ds-state-empty-measure",
+    "--ds-state-empty-media",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-label-lg",
+    "--ds-text-label-md",
+    "--ds-text-title-md"
+   ],
+   "a11y": {
+    "summary": "Each filter chip has a remove button named after the filter; focus moves to the next chip when one is removed, and a polite status says what changed.",
+    "roles": [
+     "list",
+     "region",
+     "status"
+    ],
+    "keyboard": [
+     "Tab reaches each filter's remove button, then Clear all filters",
+     "Removing a filter moves focus to the next filter, or to Clear all filters"
+    ],
+    "controls": {
+     "button": 4,
+     "input": 0,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/empty-filtered/component.html",
+    "bytes": 8558,
+    "script": true
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
+   "id": "empty-first-use",
+   "name": "First-use empty state",
+   "purpose": "What a new area shows before anything is in it: what it is for, in one sentence, and the one action that starts it.",
+   "use_when": [
+    "the first time someone opens a list, board or folder that has nothing in it yet",
+    "a person opens a feature for the first time",
+    "a new workspace has no items of this kind"
+   ],
+   "avoid_when": [
+    "a search found nothing: use empty-no-results",
+    "a filter hid everything: use empty-filtered",
+    "everything is finished: use empty-all-done"
+   ],
+   "type": "states",
+   "style": "friendly",
+   "width": "medium",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "empty state",
+     "first use",
+     "onboarding",
+     "zero data",
+     "call to action"
+    ]
+   },
+   "root": ".odl-empty-first-use",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string",
+      "maxLength": 32
+     },
+     "message": {
+      "type": "string",
+      "maxLength": 120
+     }
+    },
+    "required": [
+     "title",
+     "message"
+    ]
+   },
+   "states": {
+    "shown": [
+     "empty, first use",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "shown",
+      "how": "This part is the empty state itself.",
+      "evidence": "class=\"odl-art\""
+     },
+     "loading": {
+      "status": "not_built",
+      "how": "Not applicable: shown after the data has loaded and come back empty; while loading, show a skeleton."
+     },
+     "error": {
+      "status": "not_built",
+      "how": "Not applicable: an error isn't an empty list. Use page-banners or page-error."
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Actions stack full width under 30rem; the panel caps its width.",
+      "evidence": "@container"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-subtle",
+    "--ds-color-icon-default",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-icon-stroke-sm",
+    "--ds-layout-measure-lead",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-radius-full",
+    "--ds-size-control-lg",
+    "--ds-size-control-md",
+    "--ds-size-icon-lg",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-section-sm",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xl",
+    "--ds-state-empty-gap",
+    "--ds-state-empty-measure",
+    "--ds-state-empty-media",
+    "--ds-text-body-md",
+    "--ds-text-label-lg",
+    "--ds-text-title-md"
+   ],
+   "a11y": {
+    "summary": "The drawing is decorative and hidden; the heading names the area, and the single action is a real button.",
+    "roles": [
+     "region"
+    ],
+    "keyboard": [
+     "Tab reaches Create a project; Enter or Space presses it"
+    ],
+    "controls": {
+     "button": 1,
+     "input": 0,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/empty-first-use/component.html",
+    "bytes": 5527,
+    "script": false
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
+   "id": "empty-no-results",
+   "name": "No results",
+   "purpose": "An empty search that repeats what was searched and where, then offers the ways to widen it: a spelling fix, a wider scope and a cleared date.",
+   "use_when": [
+    "when a search or lookup returns nothing",
+    "a search, lookup or query returns zero items"
+   ],
+   "avoid_when": [
+    "the list is empty because nothing exists yet: use empty-first-use",
+    "only filters removed the items: use empty-filtered"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "medium",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "no results",
+     "search",
+     "zero results",
+     "did you mean",
+     "empty state"
+    ]
+   },
+   "root": ".odl-empty-no-results",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "query": {
+      "type": "string",
+      "maxLength": 24
+     },
+     "message": {
+      "type": "string",
+      "maxLength": 104
+     }
+    },
+    "required": [
+     "query",
+     "message"
+    ]
+   },
+   "states": {
+    "shown": [
+     "no results",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "shown",
+      "how": "This part is the empty state itself.",
+      "evidence": "class=\"odl-art\""
+     },
+     "loading": {
+      "status": "not_built",
+      "how": "Not applicable: shown after the data has loaded and come back empty; while loading, show a skeleton."
+     },
+     "error": {
+      "status": "not_built",
+      "how": "Not applicable: an error isn't an empty list. Use page-banners or page-error."
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Actions stack full width under 30rem; the panel caps its width.",
+      "evidence": "@container"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-subtle",
+    "--ds-color-icon-default",
+    "--ds-color-icon-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-icon-stroke-sm",
+    "--ds-layout-measure-lead",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-radius-full",
+    "--ds-size-control-lg",
+    "--ds-size-control-md",
+    "--ds-size-icon-lg",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-section-sm",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xl",
+    "--ds-state-empty-gap",
+    "--ds-state-empty-measure",
+    "--ds-state-empty-media",
+    "--ds-text-body-md",
+    "--ds-text-label-lg",
+    "--ds-text-title-md"
+   ],
+   "a11y": {
+    "summary": "A polite status repeats the outcome, so it is read when a search runs; each way to widen the search is a real button for your app to wire.",
+    "roles": [
+     "list",
+     "region",
+     "status"
+    ],
+    "keyboard": [
+     "Tab moves through the three ways to widen the search; Enter or Space picks one"
+    ],
+    "controls": {
+     "button": 3,
+     "input": 0,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/empty-no-results/component.html",
+    "bytes": 7744,
+    "script": false
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
    "id": "empty-state",
    "name": "Empty state",
    "purpose": "What a list shows when there is nothing in it: a small drawing in the system's own colours, what it means, when that changes, and one thing to do.",
@@ -9347,6 +10036,172 @@
    },
    "source": null,
    "photos": 1
+  },
+  {
+   "id": "field-error",
+   "name": "Inline field error",
+   "purpose": "A form field that says what is wrong right under it and how to fix it, keeps what the person typed, and clears the message once it's right.",
+   "use_when": [
+    "for a value in a form that can't be accepted as typed",
+    "one field's value can be checked and fixed by the person"
+   ],
+   "avoid_when": [
+    "the server refused the whole form: show an error banner above the form (page-banners) and keep every value",
+    "a warning, not an error: say it as a hint, not in the error colour"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "narrow",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "form",
+     "validation",
+     "error message",
+     "input",
+     "inline error"
+    ]
+   },
+   "root": ".odl-field-error",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "value": {
+      "type": "string",
+      "maxLength": 24
+     },
+     "error": {
+      "type": "string",
+      "maxLength": 96
+     }
+    },
+    "required": [
+     "value",
+     "error"
+    ]
+   },
+   "states": {
+    "shown": [
+     "error",
+     "fixed",
+     "submitted",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "shown",
+      "how": "An empty field says what to enter, on submit.",
+      "evidence": "Enter your work email."
+     },
+     "loading": {
+      "status": "not_built",
+      "how": "Sending would use inline-spinner's pattern inside Send invite."
+     },
+     "error": {
+      "status": "shown",
+      "how": "The message sits under the field, with an icon and a thicker danger border.",
+      "evidence": "aria-invalid"
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "The message wraps under the field.",
+      "evidence": "align-items: start"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-border-width-emphasis",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-field",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-danger",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-input",
+    "--ds-color-border-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-text-danger",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-success",
+    "--ds-color-text-tertiary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-size-control-md",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-sm",
+    "--ds-space-inline-xs",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-xs",
+    "--ds-state-error-border",
+    "--ds-state-error-gap",
+    "--ds-state-error-text",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-label-lg",
+    "--ds-text-label-md",
+    "--ds-text-title-md"
+   ],
+   "a11y": {
+    "summary": "The label wraps the input; the input is aria-invalid while wrong and described by the message and the hint (the script gives each copy its own ids). The message is a polite live region, checked on leaving the field and on submit, never on every key, and it clears as soon as the value is right; on a failed submit, focus moves to the field.",
+    "roles": [
+     "form",
+     "status"
+    ],
+    "keyboard": [
+     "Tab reaches the email field, then Send invite",
+     "On a failed send, focus returns to the field and its message is read"
+    ],
+    "controls": {
+     "button": 1,
+     "input": 1,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/field-error/component.html",
+    "bytes": 7800,
+    "script": true
+   },
+   "source": null,
+   "photos": 0
   },
   {
    "id": "file-dropzone",
@@ -11206,6 +12061,163 @@
    "files": {
     "html": "components/home-controls/component.html",
     "bytes": 18929,
+    "script": true
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
+   "id": "inline-spinner",
+   "name": "Inline spinner",
+   "purpose": "A small spinner inside the control that is working, for waits of one to a few seconds: a Save button and a name check beside its field.",
+   "use_when": [
+    "for short waits the person started, such as saving a form or checking a name",
+    "an action the person started takes about 1 to 10 seconds",
+    "a background check on one field"
+   ],
+   "avoid_when": [
+    "waits under about 300 ms: show nothing",
+    "waits over about 10 seconds or with steps: use progress-steps",
+    "a whole area loading: use a skeleton"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "narrow",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "spinner",
+     "loading",
+     "button",
+     "saving",
+     "short wait"
+    ]
+   },
+   "root": ".odl-inline-spinner",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {}
+   },
+   "states": {
+    "shown": [
+     "idle",
+     "saving",
+     "saved",
+     "checking",
+     "available",
+     "taken",
+     "reduced motion"
+    ],
+    "edge": {
+     "empty": {
+      "status": "handled",
+      "how": "An empty address shows no check and no message.",
+      "evidence": "if (!input.value.trim()) return"
+     },
+     "loading": {
+      "status": "shown",
+      "how": "The spinner sits inside the button or beside the field that is working.",
+      "evidence": "odl-spin"
+     },
+     "error": {
+      "status": "shown",
+      "how": "A taken address says so beside the field in the danger colour, with a cross.",
+      "evidence": "is-bad"
+     },
+     "disabled": {
+      "status": "shown",
+      "how": "Save changes is aria-disabled while saving, so it can't be pressed twice.",
+      "evidence": "aria-disabled"
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "The field shrinks before the row overflows.",
+      "evidence": "min-inline-size: 0"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-field",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-input",
+    "--ds-color-border-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-text-danger",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-color-text-success",
+    "--ds-color-text-tertiary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-body",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-long",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-linear",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-size-control-md",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-sm",
+    "--ds-space-inline-xs",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-xs",
+    "--ds-state-error-text",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-label-lg",
+    "--ds-text-label-md"
+   ],
+   "a11y": {
+    "summary": "The button stays in place and keeps focus, its label turns to Saving…, and it is aria-disabled while it works; a polite status says Saving and Changes saved, and the field check is read through its own status. Under reduced motion the spinner stops turning and the words still say what is happening.",
+    "roles": [
+     "form",
+     "status"
+    ],
+    "keyboard": [
+     "Tab reaches the address field, then Save changes",
+     "Focus stays on Save changes while it saves"
+    ],
+    "controls": {
+     "button": 1,
+     "input": 1,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/inline-spinner/component.html",
+    "bytes": 9245,
     "script": true
    },
    "source": null,
@@ -15080,6 +16092,184 @@
    "photos": 4
   },
   {
+   "id": "optimistic-update",
+   "name": "Optimistic update",
+   "purpose": "A to-do list that shows a change the moment it's made, then quietly puts it back with a reason and a retry if the save fails.",
+   "use_when": [
+    "for quick, likely-to-work changes such as ticking a task, liking or starring, where waiting for the server would feel slow",
+    "the change is small, reversible and almost always succeeds",
+    "the server answer takes long enough to feel slow (over about 100 ms)"
+   ],
+   "avoid_when": [
+    "payments, sends and deletes: wait for the server and show inline-spinner",
+    "changes that other people see at once: confirm before showing them as done"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "medium",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "optimistic",
+     "rollback",
+     "undo",
+     "checkbox",
+     "save error"
+    ]
+   },
+   "root": ".odl-optimistic-update",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "properties": {
+        "done": {
+         "type": "boolean"
+        },
+        "task": {
+         "type": "string",
+         "maxLength": 56
+        }
+       },
+       "required": [
+        "task"
+       ]
+      }
+     }
+    },
+    "required": [
+     "tasks"
+    ]
+   },
+   "states": {
+    "shown": [
+     "saving",
+     "saved",
+     "rolled back",
+     "retry",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "With no tasks, show empty-first-use or empty-all-done instead of the list."
+     },
+     "loading": {
+      "status": "shown",
+      "how": "A pending change is shown at once and dimmed until the save answers.",
+      "evidence": "is-pending"
+     },
+     "error": {
+      "status": "shown",
+      "how": "A failed save rolls the checkbox back and says so in its row, with Try again.",
+      "evidence": "odl-err"
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Long task names wrap inside their row.",
+      "evidence": "text-wrap"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-separator",
+    "--ds-color-border-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-text-danger",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-opacity-disabled-content",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-size-control-md",
+    "--ds-size-icon-md",
+    "--ds-size-icon-sm",
+    "--ds-size-row-md",
+    "--ds-size-target-min",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inline-xs",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xs",
+    "--ds-state-error-text",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-label-lg",
+    "--ds-text-title-md"
+   ],
+   "a11y": {
+    "summary": "Each task is a real checkbox; the polite status reads each change, and a failed save is read with what happened; the error line sits in the row it belongs to and its Try again button is a real button.",
+    "roles": [
+     "list",
+     "region",
+     "status"
+    ],
+    "keyboard": [
+     "Tab moves through the checkboxes; Space ticks one",
+     "After a failed save, Tab reaches Try again in that row"
+    ],
+    "controls": {
+     "button": 3,
+     "input": 3,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/optimistic-update/component.html",
+    "bytes": 8778,
+    "script": true
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
    "id": "order-summary",
    "name": "Order summary",
    "purpose": "A checkout summary: two products with their photos and quantity steppers, a promo code with the applied code shown as a chip, the totals and a Pay button that shows the amount.",
@@ -15435,6 +16625,384 @@
    "photos": 2
   },
   {
+   "id": "page-banners",
+   "name": "Page banners",
+   "purpose": "Four banners for the top of a page or section (info, success, warning and error), each with a bold first phrase, one sentence and one action.",
+   "use_when": [
+    "for news about the whole page or account that should stay until it's handled or dismissed",
+    "something affects the whole page or account and stays true until it's handled"
+   ],
+   "avoid_when": [
+    "a quick confirmation of something the person just did: use toast-undo",
+    "a problem with one field: use field-error",
+    "the whole page can't load: use page-error"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "wide",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "banner",
+     "alert",
+     "info",
+     "warning",
+     "error"
+    ]
+   },
+   "root": ".odl-page-banners",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "banners": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+       "type": "object",
+       "properties": {
+        "tone": {
+         "enum": [
+          "danger",
+          "info",
+          "success",
+          "warning"
+         ]
+        },
+        "title": {
+         "type": "string",
+         "maxLength": 32
+        },
+        "message": {
+         "type": "string",
+         "maxLength": 64
+        }
+       },
+       "required": [
+        "tone",
+        "title",
+        "message"
+       ]
+      }
+     }
+    },
+    "required": [
+     "banners"
+    ]
+   },
+   "states": {
+    "shown": [
+     "info",
+     "success",
+     "warning",
+     "error",
+     "dismissed",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "With no notices, render no banner: the region has no frame of its own, so nothing shows."
+     },
+     "loading": {
+      "status": "not_built",
+      "how": "Not applicable: banners report a state; they aren't loaded."
+     },
+     "error": {
+      "status": "shown",
+      "how": "The error banner is an alert and stays until the problem is fixed.",
+      "evidence": "role=\"alert\""
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Text wraps beside the icon; the action follows the sentence.",
+      "evidence": "minmax(0, 1fr)"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-danger-subtle",
+    "--ds-color-bg-info-subtle",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-bg-success-subtle",
+    "--ds-color-bg-warning-subtle",
+    "--ds-color-border-danger",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-info",
+    "--ds-color-border-subtle",
+    "--ds-color-border-success",
+    "--ds-color-border-warning",
+    "--ds-color-icon-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-text-danger",
+    "--ds-color-text-info",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-success",
+    "--ds-color-text-warning",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-size-control-md",
+    "--ds-size-icon-md",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-stack-sm",
+    "--ds-state-error-bg",
+    "--ds-state-error-border",
+    "--ds-state-error-inset",
+    "--ds-state-error-text",
+    "--ds-text-body-md",
+    "--ds-text-label-lg"
+   ],
+   "a11y": {
+    "summary": "Info, success and warning are polite status regions; the error is an alert and can't be dismissed until it's fixed; dismiss buttons are named after their banner, and focus moves to the next banner.",
+    "roles": [
+     "alert",
+     "region",
+     "status"
+    ],
+    "keyboard": [
+     "Tab reaches each banner's action, then its dismiss button",
+     "Dismissing moves focus to the next banner"
+    ],
+    "controls": {
+     "button": 7,
+     "input": 0,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/page-banners/component.html",
+    "bytes": 13358,
+    "script": true
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
+   "id": "page-error",
+   "name": "Something went wrong page",
+   "purpose": "A 500 page that says the problem is on our side, that the person's work is safe, and gives a retry and a reference code for support.",
+   "use_when": [
+    "when the server or a service fails and the page can't load",
+    "the server returned an error page could not recover from",
+    "a page-level request failed twice"
+   ],
+   "avoid_when": [
+    "one part of the page failed: show an error banner in that part (page-banners)",
+    "there is no connection: use page-offline",
+    "a planned outage: use page-maintenance"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "wide",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "500",
+     "server error",
+     "retry",
+     "reference code",
+     "error page"
+    ]
+   },
+   "root": ".odl-page-error",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "string",
+      "maxLength": 24
+     },
+     "title": {
+      "type": "string",
+      "maxLength": 48
+     },
+     "message": {
+      "type": "string",
+      "maxLength": 176
+     },
+     "reference": {
+      "type": "string",
+      "maxLength": 24
+     }
+    },
+    "required": [
+     "code",
+     "title",
+     "message",
+     "reference"
+    ]
+   },
+   "states": {
+    "shown": [
+     "error",
+     "retrying",
+     "copied",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "Not applicable: this state screen shows no list of records."
+     },
+     "loading": {
+      "status": "shown",
+      "how": "Try again shows a spinner and is aria-disabled while it retries.",
+      "evidence": "is-busy"
+     },
+     "error": {
+      "status": "shown",
+      "how": "The part is itself an error or system state, written in plain words with a next step.",
+      "evidence": "class=\"odl-lead\""
+     },
+     "disabled": {
+      "status": "shown",
+      "how": "Try again is aria-disabled during a retry, so it can't be pressed twice.",
+      "evidence": "aria-disabled"
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Actions stack full width under 30rem; the panel caps its width.",
+      "evidence": "@container"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-subtle",
+    "--ds-color-icon-default",
+    "--ds-color-surface-base",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-color-text-tertiary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-icon-stroke-sm",
+    "--ds-motion-duration-long",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-linear",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-size-control-lg",
+    "--ds-size-control-md",
+    "--ds-size-icon-lg",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-section-md",
+    "--ds-space-section-sm",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xl",
+    "--ds-space-stack-xs",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-code-md",
+    "--ds-text-headline-sm",
+    "--ds-text-label-lg",
+    "--ds-text-label-md"
+   ],
+   "a11y": {
+    "summary": "A polite status line under the buttons says when a retry starts, how it ended and when the code is copied; the reference code is plain text people can select.",
+    "roles": [
+     "region",
+     "status"
+    ],
+    "keyboard": [
+     "Tab reaches Copy code, Try again and Contact support",
+     "Enter or Space presses a button; focus stays on Try again while it retries"
+    ],
+    "controls": {
+     "button": 2,
+     "input": 0,
+     "link": 1,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/page-error/component.html",
+    "bytes": 9221,
+    "script": true
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
    "id": "page-header-tabs",
    "name": "Page header with tabs",
    "purpose": "The top of a record page: breadcrumb, title with a favourite star and summary chips, two actions, and an underline tab bar with counts that scrolls on its own when narrow.",
@@ -15768,6 +17336,762 @@
    },
    "source": "brand/showcase/product/03-corvane-record",
    "photos": 1
+  },
+  {
+   "id": "page-maintenance",
+   "name": "Maintenance page",
+   "purpose": "A planned-downtime page that says what is paused, that nothing is lost, and when it will be back, in the person's time zone.",
+   "use_when": [
+    "during planned maintenance, when part or all of the product is paused",
+    "planned work pauses the product or one area of it",
+    "a deploy needs the app read-only for a known time"
+   ],
+   "avoid_when": [
+    "an unplanned outage with no known end: use page-error with a status link",
+    "only a small feature is paused: use a warning banner (page-banners)"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "wide",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "maintenance",
+     "downtime",
+     "status",
+     "scheduled",
+     "back soon"
+    ]
+   },
+   "root": ".odl-page-maintenance",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string",
+      "maxLength": 48
+     },
+     "message": {
+      "type": "string",
+      "maxLength": 176
+     },
+     "until": {
+      "type": "string",
+      "maxLength": 24
+     },
+     "detail": {
+      "type": "string",
+      "maxLength": 64
+     }
+    },
+    "required": [
+     "title",
+     "message",
+     "until",
+     "detail"
+    ]
+   },
+   "states": {
+    "shown": [
+     "in maintenance",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "Not applicable: this state screen shows no list of records."
+     },
+     "loading": {
+      "status": "not_built",
+      "how": "Not applicable: this page stands in for content; it isn't loaded data itself."
+     },
+     "error": {
+      "status": "shown",
+      "how": "The part is itself an error or system state, written in plain words with a next step.",
+      "evidence": "class=\"odl-lead\""
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Actions stack full width under 30rem; the panel caps its width.",
+      "evidence": "@container"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-subtle",
+    "--ds-color-icon-accent",
+    "--ds-color-icon-default",
+    "--ds-color-surface-base",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-color-text-tertiary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-icon-stroke-sm",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-size-control-lg",
+    "--ds-size-control-md",
+    "--ds-size-icon-lg",
+    "--ds-size-icon-md",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-section-md",
+    "--ds-space-section-sm",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xl",
+    "--ds-space-stack-xs",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-headline-sm",
+    "--ds-text-label-lg",
+    "--ds-text-label-md",
+    "--ds-text-title-sm"
+   ],
+   "a11y": {
+    "summary": "The return time is a time element with a machine-readable datetime; the status link and email option are real links and buttons.",
+    "roles": [
+     "region"
+    ],
+    "keyboard": [
+     "Tab moves through the links and buttons in reading order",
+     "Enter follows a link; Enter or Space presses a button"
+    ],
+    "controls": {
+     "button": 1,
+     "input": 0,
+     "link": 1,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/page-maintenance/component.html",
+    "bytes": 7927,
+    "script": false
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
+   "id": "page-no-access",
+   "name": "No access page",
+   "purpose": "A 403 page that says who owns the page and lets the person ask for access with an optional note, without blaming them.",
+   "use_when": [
+    "when a signed-in person opens something they don't have permission to see",
+    "the person is signed in and the item exists, but they lack permission",
+    "a shared link points to a workspace they're not in"
+   ],
+   "avoid_when": [
+    "the item doesn't exist: use page-not-found (also when revealing that it exists would leak information)",
+    "the person is signed out: use session-expired or the sign-in page"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "wide",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "403",
+     "no access",
+     "permission",
+     "request access",
+     "sharing"
+    ]
+   },
+   "root": ".odl-page-no-access",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string",
+      "maxLength": 56
+     },
+     "message": {
+      "type": "string",
+      "maxLength": 112
+     },
+     "owner": {
+      "type": "string",
+      "maxLength": 24
+     },
+     "account": {
+      "type": "string",
+      "maxLength": 32
+     }
+    },
+    "required": [
+     "title",
+     "message",
+     "owner",
+     "account"
+    ]
+   },
+   "states": {
+    "shown": [
+     "no access",
+     "request sent",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "Not applicable: this state screen shows no list of records."
+     },
+     "loading": {
+      "status": "not_built",
+      "how": "Not applicable: this page stands in for content; it isn't loaded data itself."
+     },
+     "error": {
+      "status": "shown",
+      "how": "The part is itself an error or system state, written in plain words with a next step.",
+      "evidence": "class=\"odl-lead\""
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Actions stack full width under 30rem; the panel caps its width.",
+      "evidence": "@container"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-field",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-input",
+    "--ds-color-border-subtle",
+    "--ds-color-icon-default",
+    "--ds-color-surface-base",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-color-text-success",
+    "--ds-color-text-tertiary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-icon-stroke-sm",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-size-control-lg",
+    "--ds-size-control-md",
+    "--ds-size-icon-lg",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-section-md",
+    "--ds-space-section-sm",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xl",
+    "--ds-space-stack-xs",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-headline-sm",
+    "--ds-text-label-lg",
+    "--ds-text-label-md"
+   ],
+   "a11y": {
+    "summary": "The note is a labelled text area; after the request is sent, the confirmation is a polite status that takes focus, so keyboard and screen-reader users hear it.",
+    "roles": [
+     "form",
+     "region",
+     "status"
+    ],
+    "keyboard": [
+     "Tab reaches the note, Request access, then Switch account",
+     "After the request is sent, focus moves to the confirmation"
+    ],
+    "controls": {
+     "button": 1,
+     "input": 0,
+     "link": 1,
+     "select": 0,
+     "textarea": 1,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/page-no-access/component.html",
+    "bytes": 9045,
+    "script": true
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
+   "id": "page-not-found",
+   "name": "Page not found",
+   "purpose": "A 404 page that says what happened in plain words, offers a search, and gives a way home.",
+   "use_when": [
+    "when someone opens a link to a page that does not exist or has moved",
+    "a URL matches no page or record",
+    "a record was deleted and its link is still shared"
+   ],
+   "avoid_when": [
+    "the page exists but the person can't see it: use page-no-access",
+    "the server failed: use page-error",
+    "a search inside the app found nothing: use empty-no-results"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "wide",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "404",
+     "not found",
+     "error page",
+     "broken link",
+     "search"
+    ]
+   },
+   "root": ".odl-page-not-found",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "code": {
+      "type": "string",
+      "maxLength": 24
+     },
+     "title": {
+      "type": "string",
+      "maxLength": 32
+     },
+     "message": {
+      "type": "string",
+      "maxLength": 144
+     }
+    },
+    "required": [
+     "code",
+     "title",
+     "message"
+    ]
+   },
+   "states": {
+    "shown": [
+     "not found",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "Not applicable: this state screen shows no list of records."
+     },
+     "loading": {
+      "status": "not_built",
+      "how": "Not applicable: this page stands in for content; it isn't loaded data itself."
+     },
+     "error": {
+      "status": "shown",
+      "how": "The part is itself an error or system state, written in plain words with a next step.",
+      "evidence": "class=\"odl-lead\""
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Actions stack full width under 30rem; the panel caps its width.",
+      "evidence": "@container"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-field",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-input",
+    "--ds-color-border-subtle",
+    "--ds-color-icon-default",
+    "--ds-color-icon-subtle",
+    "--ds-color-surface-base",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-color-text-tertiary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-icon-stroke-sm",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-size-control-lg",
+    "--ds-size-control-md",
+    "--ds-size-icon-lg",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inline-xs",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-section-md",
+    "--ds-space-section-sm",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xl",
+    "--ds-space-stack-xs",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-headline-sm",
+    "--ds-text-label-lg",
+    "--ds-text-label-md"
+   ],
+   "a11y": {
+    "summary": "One heading says what happened; the search is a labelled form; Go home is a real link and Go back a button, both reachable by Tab.",
+    "roles": [
+     "form",
+     "list",
+     "region",
+     "search"
+    ],
+    "keyboard": [
+     "Tab reaches the search field, Search, Go to home, Go back, then the popular links",
+     "Enter in the field runs the search"
+    ],
+    "controls": {
+     "button": 2,
+     "input": 1,
+     "link": 4,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/page-not-found/component.html",
+    "bytes": 9165,
+    "script": false
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
+   "id": "page-offline",
+   "name": "Offline page",
+   "purpose": "What a person sees with no connection: that they are offline, what still works on this device, and what waits until they're back.",
+   "use_when": [
+    "when the app has no network connection and the next screen needs one",
+    "the browser or device reports no connection",
+    "requests time out repeatedly and cached data exists"
+   ],
+   "avoid_when": [
+    "the server is up but failing: use page-error",
+    "only one feature needs the network: show a warning banner in that place instead (page-banners)"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "wide",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "offline",
+     "no connection",
+     "network",
+     "sync",
+     "retry"
+    ]
+   },
+   "root": ".odl-page-offline",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string",
+      "maxLength": 24
+     },
+     "message": {
+      "type": "string",
+      "maxLength": 120
+     },
+     "works": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "properties": {
+        "text": {
+         "type": "string",
+         "maxLength": 56
+        }
+       },
+       "required": [
+        "text"
+       ]
+      }
+     },
+     "waits": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": {
+       "type": "object",
+       "properties": {
+        "text": {
+         "type": "string",
+         "maxLength": 72
+        }
+       },
+       "required": [
+        "text"
+       ]
+      }
+     },
+     "synced": {
+      "type": "string",
+      "maxLength": 40
+     }
+    },
+    "required": [
+     "title",
+     "message",
+     "works",
+     "waits",
+     "synced"
+    ]
+   },
+   "states": {
+    "shown": [
+     "offline",
+     "checking",
+     "back online",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "Not applicable: this state screen shows no list of records."
+     },
+     "loading": {
+      "status": "shown",
+      "how": "Try again now shows a spinner while it checks the connection.",
+      "evidence": "is-busy"
+     },
+     "error": {
+      "status": "shown",
+      "how": "The part is itself an error or system state, written in plain words with a next step.",
+      "evidence": "class=\"odl-lead\""
+     },
+     "disabled": {
+      "status": "shown",
+      "how": "The button is aria-disabled while it checks.",
+      "evidence": "aria-disabled"
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Actions stack full width under 30rem; the panel caps its width.",
+      "evidence": "@container"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-subtle",
+    "--ds-color-icon-default",
+    "--ds-color-icon-subtle",
+    "--ds-color-surface-base",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-color-text-success",
+    "--ds-color-text-tertiary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-icon-stroke-sm",
+    "--ds-motion-duration-long",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-linear",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-size-control-lg",
+    "--ds-size-control-md",
+    "--ds-size-icon-lg",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-section-md",
+    "--ds-space-section-sm",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xl",
+    "--ds-space-stack-xs",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-headline-sm",
+    "--ds-text-label-lg",
+    "--ds-text-label-md"
+   ],
+   "a11y": {
+    "summary": "The list of what still works is a real list; a polite status line reports each reconnect check and the last sync time.",
+    "roles": [
+     "list",
+     "region",
+     "status"
+    ],
+    "keyboard": [
+     "Tab moves through the links and buttons in reading order",
+     "Enter follows a link; Enter or Space presses a button"
+    ],
+    "controls": {
+     "button": 1,
+     "input": 0,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/page-offline/component.html",
+    "bytes": 9908,
+    "script": true
+   },
+   "source": null,
+   "photos": 0
   },
   {
    "id": "pagination",
@@ -17963,6 +20287,209 @@
    },
    "source": null,
    "photos": 6
+  },
+  {
+   "id": "progress-steps",
+   "name": "Progress with steps",
+   "purpose": "Progress for a long task: a bar with a percentage, the time left, each step done, now and next, and a way to keep working while it runs.",
+   "use_when": [
+    "for long tasks (imports, exports, uploads, migrations) that take more than a few seconds",
+    "a task takes longer than about 10 seconds",
+    "the task has steps the person would recognise"
+   ],
+   "avoid_when": [
+    "waits of a few seconds: use inline-spinner",
+    "unknown length with no steps: say what is happening and show an indeterminate bar"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "medium",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "progress",
+     "steps",
+     "import",
+     "long task",
+     "background"
+    ]
+   },
+   "root": ".odl-progress-steps",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string",
+      "maxLength": 32
+     },
+     "progress": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+     },
+     "left": {
+      "type": "string",
+      "maxLength": 96
+     },
+     "steps": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+       "type": "object",
+       "properties": {
+        "state": {
+         "enum": [
+          "done",
+          "next",
+          "now"
+         ]
+        },
+        "label": {
+         "type": "string",
+         "maxLength": 24
+        }
+       },
+       "required": [
+        "state",
+        "label"
+       ]
+      }
+     }
+    },
+    "required": [
+     "title",
+     "progress",
+     "left",
+     "steps"
+    ]
+   },
+   "states": {
+    "shown": [
+     "step done",
+     "current step",
+     "next step",
+     "in progress",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "Not applicable: this state screen shows no list of records."
+     },
+     "loading": {
+      "status": "shown",
+      "how": "This part is the long-wait state: a bar, a percentage and the steps.",
+      "evidence": "role=\"progressbar\""
+     },
+     "error": {
+      "status": "not_built",
+      "how": "A failed step should turn its dot to the danger colour, say what failed and offer Retry from that step; not drawn here."
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Buttons stack under 26rem.",
+      "evidence": "column-reverse"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-border-width-emphasis",
+    "--ds-color-bg-accent-bold",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-bg-success-bold",
+    "--ds-color-border-accent",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-on-success",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-lg",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-medium",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-radius-full",
+    "--ds-size-control-md",
+    "--ds-size-icon-md",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-8",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-md",
+    "--ds-space-stack-xl",
+    "--ds-space-stack-xs",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-label-lg",
+    "--ds-text-numeric-md",
+    "--ds-text-title-md"
+   ],
+   "a11y": {
+    "summary": "The bar is a progressbar with a value and a text value; steps are an ordered list with the current one marked aria-current; a polite status line names the current step; update it when the step changes, not on every percent.",
+    "roles": [
+     "list",
+     "progressbar",
+     "region",
+     "status"
+    ],
+    "keyboard": [
+     "Tab reaches Cancel import, then Keep working"
+    ],
+    "controls": {
+     "button": 2,
+     "input": 0,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/progress-steps/component.html",
+    "bytes": 8996,
+    "script": false
+   },
+   "source": null,
+   "photos": 0
   },
   {
    "id": "quiz-question",
@@ -20662,6 +23189,183 @@
    "photos": 0
   },
   {
+   "id": "session-expired",
+   "name": "Session expired",
+   "purpose": "A sign-in-again card that says why the session ended and shows that the person's unsaved work is kept on this device.",
+   "use_when": [
+    "when a session times out while someone is working, before they lose what they typed",
+    "an idle or security timeout signs the person out mid-task",
+    "a token refresh fails while there is unsaved input"
+   ],
+   "avoid_when": [
+    "the person has no work in progress: send them to the sign-in page",
+    "they lack permission rather than a session: use page-no-access"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "narrow",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "session",
+     "timeout",
+     "sign in",
+     "draft saved",
+     "security"
+    ]
+   },
+   "root": ".odl-session-expired",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string",
+      "maxLength": 24
+     },
+     "message": {
+      "type": "string",
+      "maxLength": 176
+     },
+     "draft": {
+      "type": "string",
+      "maxLength": 32
+     },
+     "saved": {
+      "type": "string",
+      "maxLength": 64
+     }
+    },
+    "required": [
+     "title",
+     "message",
+     "draft",
+     "saved"
+    ]
+   },
+   "states": {
+    "shown": [
+     "expired",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "Not applicable: this state screen shows no list of records."
+     },
+     "loading": {
+      "status": "not_built",
+      "how": "Not applicable: this page stands in for content; it isn't loaded data itself."
+     },
+     "error": {
+      "status": "shown",
+      "how": "The part is itself an error or system state, written in plain words with a next step.",
+      "evidence": "class=\"odl-lead\""
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "A long draft name ends in an ellipsis on one line.",
+      "evidence": "text-overflow: ellipsis"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-bg-warning-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-subtle",
+    "--ds-color-surface-overlay",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-color-text-success",
+    "--ds-color-text-warning",
+    "--ds-elevation-overlay",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-radius-full",
+    "--ds-radius-nested",
+    "--ds-radius-overlay",
+    "--ds-size-control-lg",
+    "--ds-size-control-md",
+    "--ds-size-icon-md",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xl",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-label-lg",
+    "--ds-text-title-md"
+   ],
+   "a11y": {
+    "summary": "The title and reason sit in an alert, read as soon as the card appears. Move focus to Sign in again when you show it: the part never moves focus on its own, so a page that only displays it isn't hijacked. The saved draft is described in text, not only by an icon.",
+    "roles": [
+     "alert",
+     "region"
+    ],
+    "keyboard": [
+     "Sign in again is the first focusable control",
+     "Tab then reaches Use another account"
+    ],
+    "controls": {
+     "button": 0,
+     "input": 0,
+     "link": 2,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/session-expired/component.html",
+    "bytes": 6830,
+    "script": false
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
    "id": "settings-toggles",
    "name": "Settings switches",
    "purpose": "A group of on and off settings, each with a plain explanation, including one that is locked by the organization.",
@@ -22131,6 +24835,954 @@
    "photos": 0
   },
   {
+   "id": "skeleton-card",
+   "name": "Card skeleton",
+   "purpose": "A grid of cards that holds each photo, title, detail and price in place while it loads, so the grid never jumps when they arrive.",
+   "use_when": [
+    "for a grid of cards with photos (stays, products, posts) that loads after the page",
+    "a grid of cards loads after the page frame and the count is known or capped"
+   ],
+   "avoid_when": [
+    "one card or a short wait: show nothing or a spinner",
+    "an unknown number of items: show one row of bones, not a full page"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "wide",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "skeleton",
+     "loading",
+     "cards",
+     "grid",
+     "no layout shift"
+    ]
+   },
+   "root": ".odl-skeleton-card",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "items": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "properties": {
+        "photo": {
+         "type": "object",
+         "required": [
+          "src",
+          "alt"
+         ],
+         "properties": {
+          "src": {
+           "type": "string",
+           "format": "uri"
+          },
+          "alt": {
+           "type": "string",
+           "maxLength": 120
+          }
+         }
+        },
+        "name": {
+         "type": "string",
+         "maxLength": 32
+        },
+        "detail": {
+         "type": "string",
+         "maxLength": 24
+        },
+        "price": {
+         "type": "string",
+         "maxLength": 24
+        }
+       },
+       "required": [
+        "photo",
+        "name",
+        "detail",
+        "price"
+       ]
+      }
+     }
+    },
+    "required": [
+     "items"
+    ]
+   },
+   "states": {
+    "shown": [
+     "loading",
+     "loaded",
+     "reduced motion"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "When the request returns nothing, replace the bones with an empty state (empty-first-use or empty-no-results)."
+     },
+     "loading": {
+      "status": "shown",
+      "how": "aria-busy turns each text run, picture and control into a bone of its own size; nothing moves when data arrives.",
+      "evidence": "aria-busy=\"true\""
+     },
+     "error": {
+      "status": "not_built",
+      "how": "When the request fails, keep the frame and show an error banner with a retry (page-banners) in place of the rows."
+     },
+     "disabled": {
+      "status": "shown",
+      "how": "While loading, the content is inert, so placeholders can't be focused or clicked.",
+      "evidence": "inert"
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Cards fill as many columns as fit, at least 13rem each; names end in an ellipsis.",
+      "evidence": "auto-fit"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Each line is clamped to one line with an ellipsis, so the skeleton and the loaded layout keep one height.",
+      "evidence": "text-overflow: ellipsis"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-extra",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-linear",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-radius-detail",
+    "--ds-size-control-md",
+    "--ds-size-control-sm",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-md",
+    "--ds-space-stack-xs",
+    "--ds-state-skeleton-base",
+    "--ds-state-skeleton-highlight",
+    "--ds-state-skeleton-pulse",
+    "--ds-state-skeleton-radius",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-label-lg",
+    "--ds-text-title-md",
+    "--ds-text-title-sm"
+   ],
+   "a11y": {
+    "summary": "While loading, the content area is aria-busy and inert, so nobody can tab into placeholders; a polite status says when loading starts and when it is done. Under reduced motion the bones stay still.",
+    "roles": [
+     "list",
+     "region",
+     "status"
+    ],
+    "keyboard": [
+     "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    ],
+    "controls": {
+     "button": 1,
+     "input": 0,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/skeleton-card/component.html",
+    "bytes": 8589,
+    "script": true
+   },
+   "source": null,
+   "photos": 3
+  },
+  {
+   "id": "skeleton-list",
+   "name": "List skeleton",
+   "purpose": "A list of activity rows that keeps each avatar, name, line and time in place while it loads, at the final row height.",
+   "use_when": [
+    "for a feed, inbox or member list that loads after the page",
+    "rows of a known shape load after the page frame"
+   ],
+   "avoid_when": [
+    "more rows arriving at the end of a long list: show a small spinner row instead",
+    "a wait under about 300 ms: show nothing"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "medium",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "skeleton",
+     "loading",
+     "list",
+     "rows",
+     "no layout shift"
+    ]
+   },
+   "root": ".odl-skeleton-list",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "rows": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+       "type": "object",
+       "properties": {
+        "name": {
+         "type": "string",
+         "maxLength": 24
+        },
+        "detail": {
+         "type": "string",
+         "maxLength": 40
+        },
+        "when": {
+         "type": "string",
+         "maxLength": 24
+        }
+       },
+       "required": [
+        "name",
+        "detail",
+        "when"
+       ]
+      }
+     }
+    },
+    "required": [
+     "rows"
+    ]
+   },
+   "states": {
+    "shown": [
+     "loading",
+     "loaded",
+     "reduced motion"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "When the request returns nothing, replace the bones with an empty state (empty-first-use or empty-no-results)."
+     },
+     "loading": {
+      "status": "shown",
+      "how": "aria-busy turns each text run, picture and control into a bone of its own size; nothing moves when data arrives.",
+      "evidence": "aria-busy=\"true\""
+     },
+     "error": {
+      "status": "not_built",
+      "how": "When the request fails, keep the frame and show an error banner with a retry (page-banners) in place of the rows."
+     },
+     "disabled": {
+      "status": "shown",
+      "how": "While loading, the content is inert, so placeholders can't be focused or clicked.",
+      "evidence": "inert"
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Single lines end in an ellipsis, so a long value never adds a line or moves the next row.",
+      "evidence": "text-overflow: ellipsis"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Each line is clamped to one line with an ellipsis, so the skeleton and the loaded layout keep one height.",
+      "evidence": "text-overflow: ellipsis"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-separator",
+    "--ds-color-border-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-color-text-tertiary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-extra",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-linear",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-radius-detail",
+    "--ds-radius-person",
+    "--ds-size-control-md",
+    "--ds-size-control-sm",
+    "--ds-size-icon-sm",
+    "--ds-size-row-two-line",
+    "--ds-size-target-min",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-state-skeleton-base",
+    "--ds-state-skeleton-highlight",
+    "--ds-state-skeleton-pulse",
+    "--ds-state-skeleton-radius",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-label-lg",
+    "--ds-text-label-md",
+    "--ds-text-label-sm",
+    "--ds-text-title-md"
+   ],
+   "a11y": {
+    "summary": "While loading, the content area is aria-busy and inert, so nobody can tab into placeholders; a polite status says when loading starts and when it is done. Under reduced motion the bones stay still.",
+    "roles": [
+     "list",
+     "region",
+     "status"
+    ],
+    "keyboard": [
+     "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    ],
+    "controls": {
+     "button": 1,
+     "input": 0,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/skeleton-list/component.html",
+    "bytes": 9438,
+    "script": true
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
+   "id": "skeleton-media",
+   "name": "Media skeleton",
+   "purpose": "A video or photo block that reserves its exact frame, title and caption while the media loads, so nothing below it moves.",
+   "use_when": [
+    "for a video, photo or embed whose file arrives after the page",
+    "a picture or video loads after the text around it",
+    "an embed of known size loads late"
+   ],
+   "avoid_when": [
+    "the media size is unknown: reserve a common ratio (16:9) and crop, rather than letting it grow",
+    "the photo is small and cached: give it width and height and skip the bone"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "medium",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "skeleton",
+     "loading",
+     "video",
+     "image",
+     "aspect ratio"
+    ]
+   },
+   "root": ".odl-skeleton-media",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "poster": {
+      "type": "object",
+      "required": [
+       "src",
+       "alt"
+      ],
+      "properties": {
+       "src": {
+        "type": "string",
+        "format": "uri"
+       },
+       "alt": {
+        "type": "string",
+        "maxLength": 120
+       }
+      }
+     },
+     "title": {
+      "type": "string",
+      "maxLength": 24
+     },
+     "detail": {
+      "type": "string",
+      "maxLength": 64
+     }
+    },
+    "required": [
+     "poster",
+     "title",
+     "detail"
+    ]
+   },
+   "states": {
+    "shown": [
+     "loading",
+     "loaded",
+     "reduced motion"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "When the request returns nothing, replace the bones with an empty state (empty-first-use or empty-no-results)."
+     },
+     "loading": {
+      "status": "shown",
+      "how": "aria-busy turns each text run, picture and control into a bone of its own size; nothing moves when data arrives.",
+      "evidence": "aria-busy=\"true\""
+     },
+     "error": {
+      "status": "not_built",
+      "how": "When the request fails, keep the frame and show an error banner with a retry (page-banners) in place of the rows."
+     },
+     "disabled": {
+      "status": "shown",
+      "how": "While loading, the content is inert, so placeholders can't be focused or clicked.",
+      "evidence": "inert"
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Single lines end in an ellipsis, so a long value never adds a line or moves the next row.",
+      "evidence": "text-overflow: ellipsis"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Each line is clamped to one line with an ellipsis, so the skeleton and the loaded layout keep one height.",
+      "evidence": "text-overflow: ellipsis"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-inverse",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-inverse",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-extra",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-linear",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-radius-detail",
+    "--ds-radius-nested",
+    "--ds-size-control-md",
+    "--ds-size-control-sm",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-inset-xs",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xs",
+    "--ds-state-skeleton-base",
+    "--ds-state-skeleton-highlight",
+    "--ds-state-skeleton-pulse",
+    "--ds-state-skeleton-radius",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-label-lg",
+    "--ds-text-label-sm",
+    "--ds-text-title-md",
+    "--ds-text-title-sm"
+   ],
+   "a11y": {
+    "summary": "While loading, the content area is aria-busy and inert, so nobody can tab into placeholders; a polite status says when loading starts and when it is done. Under reduced motion the bones stay still.",
+    "roles": [
+     "region",
+     "status"
+    ],
+    "keyboard": [
+     "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    ],
+    "controls": {
+     "button": 1,
+     "input": 0,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/skeleton-media/component.html",
+    "bytes": 7780,
+    "script": true
+   },
+   "source": null,
+   "photos": 1
+  },
+  {
+   "id": "skeleton-table",
+   "name": "Table skeleton",
+   "purpose": "A table that keeps its header, column widths and row height while rows load, so numbers and status pills land where the bones were.",
+   "use_when": [
+    "for a data table that loads, sorts or pages after the page frame",
+    "table rows load, re-sort or page from the server"
+   ],
+   "avoid_when": [
+    "a re-sort that finishes in under about 300 ms: keep the old rows until the new ones arrive",
+    "the header itself is unknown: show a text skeleton"
+   ],
+   "type": "states",
+   "style": "dense",
+   "width": "wide",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "finance",
+     "saas",
+     "crm",
+     "logistics",
+     "any"
+    ],
+    "keywords": [
+     "skeleton",
+     "loading",
+     "table",
+     "data",
+     "no layout shift"
+    ]
+   },
+   "root": ".odl-skeleton-table",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "rows": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+       "type": "object",
+       "properties": {
+        "number": {
+         "type": "string",
+         "maxLength": 24
+        },
+        "customer": {
+         "type": "string",
+         "maxLength": 24
+        },
+        "date": {
+         "type": "string",
+         "maxLength": 24
+        },
+        "amount": {
+         "type": "string",
+         "maxLength": 24
+        },
+        "status": {
+         "enum": [
+          "danger",
+          "success",
+          "warning"
+         ]
+        }
+       },
+       "required": [
+        "number",
+        "customer",
+        "date",
+        "amount",
+        "status"
+       ]
+      }
+     }
+    },
+    "required": [
+     "rows"
+    ]
+   },
+   "states": {
+    "shown": [
+     "loading",
+     "loaded",
+     "reduced motion"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "When the request returns nothing, replace the bones with an empty state (empty-first-use or empty-no-results)."
+     },
+     "loading": {
+      "status": "shown",
+      "how": "aria-busy turns each text run, picture and control into a bone of its own size; nothing moves when data arrives.",
+      "evidence": "aria-busy=\"true\""
+     },
+     "error": {
+      "status": "not_built",
+      "how": "When the request fails, keep the frame and show an error banner with a retry (page-banners) in place of the rows."
+     },
+     "disabled": {
+      "status": "shown",
+      "how": "While loading, the content is inert, so placeholders can't be focused or clicked.",
+      "evidence": "inert"
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Under 36rem each row stacks into two lines (customer and amount, then invoice number and status) and the date hides; nothing scrolls sideways.",
+      "evidence": "@container (max-width: 36rem)"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Each line is clamped to one line with an ellipsis, so the skeleton and the loaded layout keep one height.",
+      "evidence": "text-overflow: ellipsis"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-danger-subtle",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-bg-success-subtle",
+    "--ds-color-bg-warning-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-separator",
+    "--ds-color-border-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-text-danger",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-color-text-success",
+    "--ds-color-text-warning",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-extra",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-linear",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-radius-detail",
+    "--ds-radius-full",
+    "--ds-size-control-md",
+    "--ds-size-control-sm",
+    "--ds-size-icon-sm",
+    "--ds-size-row-md",
+    "--ds-size-target-min",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-inset-xs",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-space-stack-xs",
+    "--ds-state-skeleton-base",
+    "--ds-state-skeleton-highlight",
+    "--ds-state-skeleton-pulse",
+    "--ds-state-skeleton-radius",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-label-lg",
+    "--ds-text-label-md",
+    "--ds-text-label-sm",
+    "--ds-text-title-md"
+   ],
+   "a11y": {
+    "summary": "While loading, the content area is aria-busy and inert, so nobody can tab into placeholders; a polite status says when loading starts and when it is done. Under reduced motion the bones stay still.",
+    "roles": [
+     "region",
+     "status",
+     "table"
+    ],
+    "keyboard": [
+     "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    ],
+    "controls": {
+     "button": 1,
+     "input": 0,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/skeleton-table/component.html",
+    "bytes": 11378,
+    "script": true
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
+   "id": "skeleton-text",
+   "name": "Text skeleton",
+   "purpose": "An article that shows grey lines of its own shape while it loads, then fills in with no jump: title, byline and paragraphs keep their size.",
+   "use_when": [
+    "for reading content (an article, a note, a help page) that takes longer than about a second to load",
+    "text content loads after the page frame, and the wait is usually over 1 second"
+   ],
+   "avoid_when": [
+    "the wait is under about 300 ms: show nothing",
+    "an action the person started (saving, sending): use inline-spinner",
+    "a long task with steps: use progress-steps"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "medium",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "skeleton",
+     "loading",
+     "placeholder",
+     "article",
+     "no layout shift"
+    ]
+   },
+   "root": ".odl-skeleton-text",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string",
+      "maxLength": 32
+     },
+     "byline": {
+      "type": "string",
+      "maxLength": 48
+     },
+     "body": {
+      "type": "string",
+      "maxLength": 240
+     }
+    },
+    "required": [
+     "title",
+     "byline",
+     "body"
+    ]
+   },
+   "states": {
+    "shown": [
+     "loading",
+     "loaded",
+     "reduced motion"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "When the request returns nothing, replace the bones with an empty state (empty-first-use or empty-no-results)."
+     },
+     "loading": {
+      "status": "shown",
+      "how": "aria-busy turns each text run, picture and control into a bone of its own size; nothing moves when data arrives.",
+      "evidence": "aria-busy=\"true\""
+     },
+     "error": {
+      "status": "not_built",
+      "how": "When the request fails, keep the frame and show an error banner with a retry (page-banners) in place of the rows."
+     },
+     "disabled": {
+      "status": "shown",
+      "how": "While loading, the content is inert, so placeholders can't be focused or clicked.",
+      "evidence": "inert"
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Single lines end in an ellipsis, so a long value never adds a line or moves the next row.",
+      "evidence": "text-overflow: ellipsis"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Each line is clamped to one line with an ellipsis, so the skeleton and the loaded layout keep one height.",
+      "evidence": "text-overflow: ellipsis"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-extra",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-linear",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-radius-detail",
+    "--ds-size-control-md",
+    "--ds-size-control-sm",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-stack-md",
+    "--ds-space-stack-sm",
+    "--ds-state-skeleton-base",
+    "--ds-state-skeleton-highlight",
+    "--ds-state-skeleton-pulse",
+    "--ds-state-skeleton-radius",
+    "--ds-text-body-md",
+    "--ds-text-label-lg",
+    "--ds-text-label-md",
+    "--ds-text-title-lg",
+    "--ds-text-title-md"
+   ],
+   "a11y": {
+    "summary": "While loading, the content area is aria-busy and inert, so nobody can tab into placeholders; a polite status says when loading starts and when it is done. Under reduced motion the bones stay still.",
+    "roles": [
+     "article",
+     "status"
+    ],
+    "keyboard": [
+     "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    ],
+    "controls": {
+     "button": 1,
+     "input": 0,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/skeleton-text/component.html",
+    "bytes": 7234,
+    "script": true
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
    "id": "sleep-chart",
    "name": "Sleep chart",
    "purpose": "Last night's sleep as a hypnogram of awake, REM, light and deep sleep across the night, the time and share spent in each stage, and the last seven nights as bars against a goal line.",
@@ -23454,6 +27106,196 @@
    "photos": 9
   },
   {
+   "id": "success-confirmation",
+   "name": "Success confirmation",
+   "purpose": "The screen after a task is done: what happened in one line, the key details to keep, what happens next, and where to go from here.",
+   "use_when": [
+    "after a form or flow that someone will want proof of (a payment, an order, a sent invoice, a booking)",
+    "a multi-step flow or important form has finished",
+    "the person may need a reference or receipt"
+   ],
+   "avoid_when": [
+    "a small, quick change: a toast is enough (toast-undo)",
+    "nothing changed yet (the request is pending): say it's pending, not done"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "narrow",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "success",
+     "confirmation",
+     "receipt",
+     "done",
+     "next steps"
+    ]
+   },
+   "root": ".odl-success-confirmation",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "title": {
+      "type": "string",
+      "maxLength": 24
+     },
+     "message": {
+      "type": "string",
+      "maxLength": 80
+     },
+     "details": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "properties": {
+        "label": {
+         "type": "string",
+         "maxLength": 24
+        },
+        "value": {
+         "type": "string",
+         "maxLength": 24
+        }
+       },
+       "required": [
+        "label",
+        "value"
+       ]
+      }
+     },
+     "next": {
+      "type": "string",
+      "maxLength": 80
+     }
+    },
+    "required": [
+     "title",
+     "message",
+     "details",
+     "next"
+    ]
+   },
+   "states": {
+    "shown": [
+     "done",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "Not applicable: this state screen shows no list of records."
+     },
+     "loading": {
+      "status": "not_built",
+      "how": "Not applicable: shown only after the task is done."
+     },
+     "error": {
+      "status": "not_built",
+      "how": "If the task failed, don't show this; return to the form with page-banners and the person's values kept."
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Long values such as email addresses break anywhere instead of overflowing.",
+      "evidence": "overflow-wrap: anywhere"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-bg-success-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-surface-sunken",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-color-text-success",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-heading",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-lg",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-short",
+    "--ds-motion-easing-standard",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-radius-full",
+    "--ds-radius-nested",
+    "--ds-size-control-lg",
+    "--ds-size-control-md",
+    "--ds-size-icon-md",
+    "--ds-size-icon-sm",
+    "--ds-size-target-min",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-md",
+    "--ds-space-stack-xl",
+    "--ds-space-stack-xs",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-label-lg",
+    "--ds-text-title-lg"
+   ],
+   "a11y": {
+    "summary": "When this screen replaces the form, move focus to its heading (it has tabindex -1 for that), so it is read first; the part never moves focus on its own. Details are a description list.",
+    "roles": [
+     "region"
+    ],
+    "keyboard": [
+     "Focus moves to the heading when the screen appears",
+     "Tab then reaches View invoice and Send another"
+    ],
+    "controls": {
+     "button": 0,
+     "input": 0,
+     "link": 2,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/success-confirmation/component.html",
+    "bytes": 6605,
+    "script": false
+   },
+   "source": null,
+   "photos": 0
+  },
+  {
    "id": "title-detail",
    "name": "Title detail",
    "purpose": "A film or series page: a still with the title, year, age rating, seasons and score, then Resume, My list, rate and share, the synopsis, the cast with portraits, a season switch and episode rows with stills and progress.",
@@ -24106,6 +27948,189 @@
     "script": true
    },
    "source": "brand/showcase/components/05-toast-stack",
+   "photos": 0
+  },
+  {
+   "id": "toast-undo",
+   "name": "Toast with undo",
+   "purpose": "A toast that confirms an archive and offers Undo, which puts the item back where it was. It stays until it's used or closed.",
+   "use_when": [
+    "for reversible actions such as archive, move or remove, instead of asking 'Are you sure?' first",
+    "the action can be undone for a while",
+    "the person should keep working without a dialog"
+   ],
+   "avoid_when": [
+    "the action can't be undone (deleting for good, sending money): use confirm-dialog",
+    "news about the whole page: use page-banners"
+   ],
+   "type": "states",
+   "style": "quiet",
+   "width": "medium",
+   "tags": {
+    "audience": "work",
+    "industries": [
+     "any"
+    ],
+    "keywords": [
+     "toast",
+     "undo",
+     "snackbar",
+     "archive",
+     "confirmation"
+    ]
+   },
+   "root": ".odl-toast-undo",
+   "parts": [],
+   "data": {
+    "type": "object",
+    "properties": {
+     "messages": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "properties": {
+        "from": {
+         "type": "string",
+         "maxLength": 24
+        },
+        "subject": {
+         "type": "string",
+         "maxLength": 56
+        }
+       },
+       "required": [
+        "from",
+        "subject"
+       ]
+      }
+     },
+     "message": {
+      "type": "string",
+      "maxLength": 24
+     }
+    },
+    "required": [
+     "messages",
+     "message"
+    ]
+   },
+   "states": {
+    "shown": [
+     "archived",
+     "restored",
+     "closed",
+     "hover",
+     "focus"
+    ],
+    "edge": {
+     "empty": {
+      "status": "not_built",
+      "how": "When every message is archived, show empty-all-done in place of the list."
+     },
+     "loading": {
+      "status": "not_built",
+      "how": "Not applicable: archive is instant here; a slow server would use optimistic-update's rollback."
+     },
+     "error": {
+      "status": "not_built",
+      "how": "If the archive fails, put the row back and say so in the toast with Try again."
+     },
+     "disabled": {
+      "status": "not_built",
+      "how": "No control here is ever disabled; each one always does something."
+     },
+     "overflow": {
+      "status": "handled",
+      "how": "Long subjects and toast messages end in an ellipsis.",
+      "evidence": "text-overflow: ellipsis"
+     },
+     "long_text": {
+      "status": "handled",
+      "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
+      "evidence": "text-wrap"
+     }
+    }
+   },
+   "tokens": [
+    "--ds-border-width-default",
+    "--ds-border-width-emphasis",
+    "--ds-color-bg-action-primary",
+    "--ds-color-bg-action-primary-hover",
+    "--ds-color-bg-action-primary-pressed",
+    "--ds-color-bg-inverse",
+    "--ds-color-bg-neutral-subtle",
+    "--ds-color-border-default",
+    "--ds-color-border-focus",
+    "--ds-color-border-separator",
+    "--ds-color-border-subtle",
+    "--ds-color-surface-raised",
+    "--ds-color-text-inverse",
+    "--ds-color-text-link",
+    "--ds-color-text-on-action",
+    "--ds-color-text-primary",
+    "--ds-color-text-secondary",
+    "--ds-elevation-floating",
+    "--ds-focus-ring-offset",
+    "--ds-focus-ring-width",
+    "--ds-font-weight-label",
+    "--ds-icon-stroke-md",
+    "--ds-motion-duration-short",
+    "--ds-motion-duration-toast",
+    "--ds-motion-easing-standard",
+    "--ds-motion-easing-toast",
+    "--ds-opacity-disabled-container",
+    "--ds-radius-container",
+    "--ds-radius-control",
+    "--ds-size-control-md",
+    "--ds-size-icon-sm",
+    "--ds-size-row-two-line",
+    "--ds-size-target-min",
+    "--ds-space-8",
+    "--ds-space-inline-md",
+    "--ds-space-inline-sm",
+    "--ds-space-inset-lg",
+    "--ds-space-inset-md",
+    "--ds-space-inset-sm",
+    "--ds-space-inset-xl",
+    "--ds-space-inset-xs",
+    "--ds-space-stack-lg",
+    "--ds-space-stack-sm",
+    "--ds-text-body-md",
+    "--ds-text-body-sm",
+    "--ds-text-label-lg"
+   ],
+   "a11y": {
+    "summary": "A polite live region that is always on the page reads what was archived; after Archive, focus moves to Undo so keyboard users can reach it, and returns to the restored row or the list after Undo or close. Escape closes the toast. There is no timer, so nobody loses the chance to undo.",
+    "roles": [
+     "group",
+     "list",
+     "region",
+     "status"
+    ],
+    "keyboard": [
+     "Tab reaches each Archive button",
+     "After Archive, focus moves to Undo; after Undo, it returns to the restored row"
+    ],
+    "controls": {
+     "button": 5,
+     "input": 0,
+     "link": 0,
+     "select": 0,
+     "textarea": 0,
+     "summary": 0
+    },
+    "focus_visible": true,
+    "reduced_motion": true,
+    "min_target": true
+   },
+   "files": {
+    "html": "components/toast-undo/component.html",
+    "bytes": 8808,
+    "script": true
+   },
+   "source": null,
    "photos": 0
   },
   {

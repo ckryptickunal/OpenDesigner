@@ -1,0 +1,21 @@
+{
+  "title": "You're offline",
+  "message": "Check your Wi-Fi or mobile data. We'll reconnect on our own as soon as it's back.",
+  "synced": "Last synced today at 10:42 AM",
+  "works": [
+    {
+      "text": "Read the 24 notes you opened this week"
+    },
+    {
+      "text": "Write new notes. They sync when you're back"
+    },
+    {
+      "text": "Search everything saved here"
+    }
+  ],
+  "waits": [
+    {
+      "text": "Sharing, comments and new files from your team"
+    }
+  ]
+}

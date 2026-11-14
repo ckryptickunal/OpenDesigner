@@ -14,6 +14,7 @@ assets/library/
   components/<slug>/
     component.html          the component: one <style> block scoped to .odl-<slug>, then the markup (and, only when needed, one <script>)
     meta.json               name, summary, use, type, style, industries, tags, states, source piece, accessibility notes
+    fixture.json            optional: the part's sample data as an app would send it, keyed like meta.json spec.data
 ```
 `scripts/library.py` reads these folders. `library.py catalog` writes `library.json` from them, and `library.py check` fails when it is out of date, so never edit it by hand.
 
@@ -31,6 +32,8 @@ assets/library/
 | `source` | The showcase piece it comes from (a repo path), or `null` |
 | `a11y` | One sentence on keyboard and screen-reader behaviour |
 | `width` | The width it is designed for: `narrow` (up to 400 px), `medium` (up to 640 px) or `wide` |
+| `live_region` | Optional: `polite`, `assertive` or `none`, how the part tells screen readers that something changed |
+| `tokens_planned` | Optional: `--ds-state-*` variables it reads where a system has them, each with the token it falls back to |
 | `spec` | What agents, the MCP server and smart UI need to use it without reading the file: see "spec" below |
 
 ### spec (in meta.json) and library.json
@@ -46,7 +49,7 @@ assets/library/
 
 `library.py check` checks every selector, every `part` name and the six edge states, and that each piece of evidence is in the file (it cannot tell whether the state looks right). The website serves the catalog at `/library/index.json`, each entry at `/library/<slug>.json`, and the MCP server (`server/mcp/`) returns it from `get_component`.
 
-**Types:** `data` (tables, rows, feeds, stats), `chart`, `form` (inputs, toggles, pickers), `feedback` (toasts, banners, empty states), `navigation` (command menus, steppers, tabs, sidebars), `overlay` (dialogs, drawers, menus), `ai` (composers, answers), `commerce` (plans, checkout, products), `content` (profiles, media, cards).
+**Types:** `data` (tables, rows, feeds, stats), `chart`, `form` (inputs, toggles, pickers), `feedback` (toasts, banners, notices inside a part), `states` (system pages, empty states, skeletons, spinners, progress, and the banner, toast, field error and success screen that report what just happened), `navigation` (command menus, steppers, tabs, sidebars), `overlay` (dialogs, drawers, menus), `ai` (composers, answers), `commerce` (plans, checkout, products), `content` (profiles, media, cards).
 **Styles:** `quiet` (calm, lots of space), `dense` (many rows, small type, work tools), `technical` (mono figures, status), `friendly` (rounder, warmer copy), `editorial` (reading first).
 **Industries:** work tools: `finance`, `saas`, `devtools`, `security`, `crm`, `logistics`, `productivity`; consumer: `social`, `media`, `retail`, `food`, `travel`, `events`, `health`, `fitness`, `money` (personal finance), `education`, `home` (smart home), `games`; or `any`. The website labels a part Consumer when its industries are consumer ones.
 
@@ -54,7 +57,7 @@ assets/library/
 Every part also meets the craft standard in [CRAFT.md](CRAFT.md): generous spacing, one title, neutral colour with one accent, Lucide icons, real photos where a picture belongs.
 `library.py check` enforces the first five, and checks each meta.json.
 1. **Tokens only.** No colour literals (hex, `rgb()`, `hsl()`, `color-mix()`, any named colour), and no font sizes, families or weights, radii, shadows, durations (also inside `transition` and `animation`) or padding, margin and gap lengths outside `var(--ds-*)`. Layout numbers (`1fr`, `%`, `max-inline-size`) are fine.
-2. **Only variables every system writes.** Every `--ds-*` name must exist in three different engine systems (dense, regular and large audiences); some roles, such as `--ds-text-headline-md`, exist only in some.
+2. **Only variables every system writes.** Every `--ds-*` name must exist in three different engine systems (dense, regular and large audiences); some roles, such as `--ds-text-headline-md`, exist only in some. The one exception is a `--ds-state-*` variable, which only systems that answered its question write: every use must fall back to a variable every system writes, as in `var(--ds-state-skeleton-base, var(--ds-color-bg-neutral-subtle))`.
 3. **Scoped.** Every selector, also inside `@media` and `@container`, starts with `.odl-<slug>`, so the component never restyles the page around it.
 4. **Self-contained.** One file. No framework, no build step, no external font or script, and no image except free Unsplash photos hotlinked from `images.unsplash.com` (rule 7). A `<script>`, when present, starts from `document.querySelectorAll(".odl-<slug>")` and only wires behaviour inside that root: no network, storage, `eval`, `scrollIntoView` (it scrolls the whole page; scroll only your own box) or writes to the document outside it. Guard it so each root is wired once.
 5. **Floors.** Every clickable area is at least `--ds-size-target-min` (44 px on touch screens; a whole labelled row counts), focus uses `:focus-visible` with `--ds-color-border-focus`, and anything that moves has its own `@media (prefers-reduced-motion: reduce)` block that turns the motion off (the engine's raw duration tokens do not go to zero on their own).

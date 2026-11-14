@@ -1,0 +1,83 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-page-error { box-sizing: border-box; inline-size: 100%; max-inline-size: 45rem; margin-inline: auto; container-type: inline-size; font: var(--ds-text-body-md); color: var(--ds-color-text-primary); text-wrap: pretty; }
+.odl-page-error *, .odl-page-error *::before, .odl-page-error *::after { box-sizing: border-box; }
+.odl-page-error svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); fill: none; stroke: currentColor; stroke-width: var(--ds-icon-stroke-md); }
+.odl-page-error h2, .odl-page-error h3, .odl-page-error p, .odl-page-error ul, .odl-page-error ol, .odl-page-error dl, .odl-page-error dd { margin: 0; }
+.odl-page-error h2, .odl-page-error h3 { text-wrap: balance; }
+.odl-page-error .odl-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-page-error .odl-btn:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-page-error .odl-btn:active { background: var(--ds-color-bg-action-primary-pressed); }
+.odl-page-error .odl-btn.is-quiet { border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-page-error .odl-btn.is-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-page-error .odl-btn.is-text { padding-inline: var(--ds-space-inset-sm); background: transparent; color: var(--ds-color-text-link); }
+.odl-page-error .odl-btn.is-text:hover { background: var(--ds-color-bg-neutral-subtle); }
+.odl-page-error .odl-btn[disabled], .odl-page-error .odl-btn[aria-disabled="true"] { opacity: var(--ds-opacity-disabled-container); cursor: not-allowed; }
+.odl-page-error button:focus-visible, .odl-page-error a:focus-visible, .odl-page-error input:focus-visible, .odl-page-error textarea:focus-visible, .odl-page-error [tabindex]:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+.odl-page-error .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+.odl-page-error { display: grid; justify-items: center; align-content: center; min-block-size: 32rem; padding: var(--ds-space-section-md) var(--ds-space-inset-xl); text-align: center;
+  background: var(--ds-color-surface-base); border-radius: var(--ds-radius-container); }
+.odl-page-error .odl-art { display: grid; place-items: center; inline-size: calc(var(--ds-size-control-lg) * 1.5); aspect-ratio: 1; margin-block-end: var(--ds-space-stack-lg);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-sunken); color: var(--ds-color-icon-default); }
+.odl-page-error .odl-art svg { inline-size: var(--ds-size-icon-lg); block-size: var(--ds-size-icon-lg); stroke-width: var(--ds-icon-stroke-sm); }
+.odl-page-error .odl-code { margin-block-end: var(--ds-space-stack-xs); color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
+.odl-page-error h2 { font: var(--ds-text-headline-sm); font-weight: var(--ds-font-weight-heading); }
+.odl-page-error .odl-lead { max-inline-size: 44ch; margin-block-start: var(--ds-space-stack-sm); color: var(--ds-color-text-secondary); }
+.odl-page-error .odl-acts { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-xl); }
+.odl-page-error .odl-box { inline-size: 100%; max-inline-size: 30rem; margin-block-start: var(--ds-space-stack-xl); padding: var(--ds-space-inset-lg); text-align: start;
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+.odl-page-error .odl-box + .odl-acts { margin-block-start: var(--ds-space-stack-lg); }
+.odl-page-error .odl-box h3 { font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); }
+.odl-page-error .odl-box p { color: var(--ds-color-text-secondary); }
+.odl-page-error .odl-live { min-block-size: 1lh; margin-block-start: var(--ds-space-stack-md); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+@container (max-width: 30rem) {
+  .odl-page-error { padding: var(--ds-space-section-sm) var(--ds-space-inset-lg); }
+  .odl-page-error .odl-acts { flex-direction: column; align-self: stretch; inline-size: 100%; }
+  .odl-page-error .odl-acts > * { inline-size: 100%; white-space: normal; text-align: center; }
+}
+
+.odl-page-error .odl-spin { display: none; animation: odl-spin calc(var(--ds-motion-duration-long) * 3) var(--ds-motion-easing-linear) infinite; }
+.odl-page-error .is-busy .odl-spin { display: block; }
+.odl-page-error .is-busy .odl-idle { display: none; }
+@keyframes odl-spin { to { rotate: 1turn; } }
+
+.odl-page-error .odl-ref { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-inline-sm); }
+.odl-page-error .odl-ref p { font: var(--ds-text-label-md); }
+.odl-page-error .odl-ref code { display: block; margin-block-start: var(--ds-space-stack-xs); color: var(--ds-color-text-primary); font: var(--ds-text-code-md); user-select: all; }
+@media (prefers-reduced-motion: reduce) { .odl-page-error, .odl-page-error *, .odl-page-error *::before, .odl-page-error *::after { transition: none !important; animation: none !important; } }
+</style>
+<section class="odl-page-error" aria-label="Something went wrong">
+  <span class="odl-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg></span>
+  <p class="odl-code" data-od-slot="code">Error 500</p>
+  <h2 data-od-slot="title">Something went wrong on our side</h2>
+  <p class="odl-lead" data-od-slot="message">This page didn't load, but your work is saved. Try again in a moment. If it keeps happening, send us the code below.</p>
+  <div class="odl-box odl-ref"><p>Reference code<code data-od-slot="reference">LRK-500-7Q2K-91D</code></p><button type="button" class="odl-btn is-quiet" data-od-action="copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>Copy code</button></div>
+  <div class="odl-acts"><button type="button" class="odl-btn" data-od-action="retry"><svg class="odl-idle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg><svg class="odl-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>Try again</button><a class="odl-btn is-text" href="#" data-od-action="support">Contact support</a></div>
+  <p class="odl-live" role="status"></p>
+</section>
+<script>
+document.querySelectorAll(".odl-page-error").forEach(function (root) {
+  if (root.hasAttribute("data-odl-wired")) return;
+  root.setAttribute("data-odl-wired", "");
+  var retry = root.querySelector("[data-od-action='retry']"), copy = root.querySelector("[data-od-action='copy']"), live = root.querySelector(".odl-live"), code = root.querySelector(".odl-ref code");
+  retry.addEventListener("click", function () {
+    if (retry.getAttribute("aria-disabled") === "true") return;
+    retry.setAttribute("aria-disabled", "true");
+    retry.classList.add("is-busy");
+    live.textContent = "Trying again…";
+    setTimeout(function () {  // demo only: in an app, reload the request and keep this page only if it fails again
+      retry.removeAttribute("aria-disabled");
+      retry.classList.remove("is-busy");
+      live.textContent = "Still not working. Your work is saved; try again in a few minutes.";
+    }, 1400);
+  });
+  copy.addEventListener("click", function () {
+    var done = function () { live.textContent = "Reference code copied."; };
+    if (navigator.clipboard) navigator.clipboard.writeText(code.textContent).then(done, function () { live.textContent = "Select the code to copy it."; });
+    else live.textContent = "Select the code to copy it.";
+  });
+});
+</script>

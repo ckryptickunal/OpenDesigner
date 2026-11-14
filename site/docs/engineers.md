@@ -118,6 +118,6 @@ The engine is one Python file that needs Python 3.10 or newer. It uses only the 
 ## Not yet
 
 - No direct React Native or Flutter export.
-- The overview page draws only buttons, a text field and a card. The optional [component library](/library/) has 82 finished components built on the tokens.
+- The overview page draws only buttons, a text field and a card. The optional [component library](/library/) has 104 finished components built on the tokens, including empty, loading and error states.
 
 See [Engine commands](/docs/engine/) and [Export](/docs/export/) for more.
