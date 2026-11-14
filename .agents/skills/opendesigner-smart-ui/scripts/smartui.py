@@ -427,7 +427,7 @@ STOP = set("a an the of to in on for and or with my me i is are be it this that 
 UI_CUES = re.compile(r"\b(compare|vs\.?|versus|options|list|table|chart|graph|trend|breakdown|break down|split|book|schedule|pick|choose|form|fill|steps|"
                      r"show me|find|search|status|track|receipt|confirm|approve|pay|send|delete|cancel|upload|download|file|code|snippet|where is|"
                      r"map|photo|picture|each month|per month|by month|over time|changed|moved|how much|spend|spent|update|change|details|"
-                     r"explain|define|meaning|go through|went through|times?|slots?|available|invoice|refund|year)\b", re.I)
+                     r"explain|define|meaning|go through|went through|times?|slots?|available|invoice|refunds?|refunded|happened to|year)\b", re.I)
 CONTRACT = [(r"\bwhere's\b", "where is"), (r"\bwhat's\b", "what is"), (r"\bhow's\b", "how is"), (r"\bwhen's\b", "when is"),
             (r"\bit's\b", "it is"), (r"\bthat's\b", "that is"), (r"\bi'm\b", "i am"), (r"\bdidn't\b", "did not")]
 
@@ -505,7 +505,8 @@ def select(msg, catalog, k=3, scope=None, data=None, boost=None):
     cue = bool(UI_CUES.search(norm(msg)))
     reason = cue or best >= 3
     short_fact = (len(words(msg)) <= 6 and re.match(r"^\s*(what|when|who|how many|is|are|does|did|can|do)\b", norm(msg))
-                  and not cue and best_words < 3)
+                  and not cue and best_words < 3
+                  and not re.search(r"\band (when|what|how|who|where|which)\b", norm(msg)))  # two questions in one are not a short fact
     ui = bool(top) and reason and not short_fact
     return {"ui": ui, "candidates": top if ui else [], "scores": {n: round(s, 2) for s, n in ranked[:k + 2]},
             "why": ("a cue for UI and a part that fits" if ui else "no reason for UI: answer in text (R1)")}
@@ -704,7 +705,7 @@ def duplicate_rows(v, path, errs, sid):
     """A list of label-value rows shows each value once ("Number TH-1043" and "Invoice number TH-1043" is one row)."""
     seen = {}
     for i, row in enumerate(v):
-        if isinstance(row, dict) and "label" in row and isinstance(row.get("value"), (str, int, float)):
+        if isinstance(row, dict) and "label" in row and isinstance(row.get("value"), str):  # text facts; a chart's points repeat values on purpose
             key = str(row["value"]).strip().lower()
             if key in seen:
                 _err(errs, "duplicate-row", f"{path}/{i}", f"'{row['value']}' is already shown as '{seen[key]}'", sid, "keep one row for each value")

@@ -4,7 +4,7 @@ Made by `python3 tools/smartui_evals.py --report` from `evals/smart-ui/results/`
 
 ## The selector alone (no model)
 
-Run 2026-11-13. Recall at 3 (the expected part is among the three sent to the model): **100.0%**. Held back on text-only questions: **100.0%**.
+Run 2026-11-14. Recall at 3 (the expected part is among the three sent to the model): **100.0%**. Held back on text-only questions: **100.0%**.
 
 ## Models
 
@@ -41,14 +41,16 @@ Run 2026-11-13. Recall at 3 (the expected part is among the three sent to the mo
 
 ## The live path (examples/smart-ui-support)
 
-A real model routes to the app's read actions, answers, and the answer is validated against the data it got, with one repair round. Cases come from `live-cases.json`: 20 that need a part (some are follow-ups that need the conversation, five are changes that must end in an approval prompt) and 5 that should stay text.
+A real model routes to the app's read actions, answers, and the answer is validated against the data it got, with one repair round. Cases come from `live-cases.json`: 21 that need a part (some are follow-ups that need the conversation, five are changes that must end in an approval prompt) and 5 that should stay text. Round 3 added `invoices-unpaid` (a table must name every column) and counts wording problems (Title Case, filler, a value shown twice) as failures of the first answer, so its "valid first time" is not comparable with rounds 1 and 2.
 
 | Run | Model | Date | Runs | Selector recall | Right part | Valid first time | Valid after one repair | Held back (text-only) | Approval shown for changes | Changes the model ran | Rendered | Floor findings |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | live-claude-round1 | claude-sonnet-5-5 | 2026-11-14 | 75 | 60.0% | 68.3% | 75.6% | 100.0% | 100.0% | 100.0% | 0 | 41 | 0 |
 | live-claude-round2 | claude-sonnet-5-5 | 2026-11-14 | 75 | 85.0% | 80.0% | 93.9% | 98.0% | 100.0% | 80.0% | 0 | 48 | 0 |
+| live-claude-round3 | claude-sonnet-5-5 | 2026-11-14 | 78 | 85.7% | 85.7% | 94.4% | 100.0% | 100.0% | 100.0% | 0 | 54 | 0 |
 | live-gemini-round1 | gemini-3.1-pro-preview | 2026-11-14 | 75 | 60.0% | 65.0% | 79.5% | 100.0% | 100.0% | 86.7% | 0 | 39 | 0 |
 | live-gemini-round2 | gemini-3.1-pro-preview | 2026-11-14 | 75 | 80.0% | 88.3% | 84.9% | 100.0% | 100.0% | 93.3% | 0 | 53 | 0 |
+| live-gemini-round3 | gemini-3.1-pro-preview | 2026-11-14 | 78 | 85.7% | 84.1% | 34.0% | 98.1% | 100.0% | 93.3% | 0 | 53 | 0 |
 
 ## Earlier rounds of the recorded-data path
 
@@ -62,6 +64,7 @@ A real model routes to the app's read actions, answers, and the answer is valida
 
 - On the recorded-data path, a failed answer is not sent back to the model; the live path does one repair round.
 - Round 2 of the live path ran while the billing catalog was regenerated once (optional fields, list item names); later cases used the new one.
+- Round 3: both models answered `subscription` ("What plan are we on and when does it renew?") and `refund-followup` in text although the selector offered a part; it is not clear a part is better there.
 - The selector's 100% on the recorded-data cases is on the same cases used to tune it; the live cases were written before its last changes.
 - Streaming: every reply is scored whole.
 - Copy quality inside the parts, and whether a person would prefer the part to text.

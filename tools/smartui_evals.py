@@ -342,8 +342,10 @@ def report():
     if live:
         lines += ["## The live path (examples/smart-ui-support)", "",
                   "A real model routes to the app's read actions, answers, and the answer is validated against the data it got, with one "
-                  "repair round. Cases come from `live-cases.json`: 20 that need a part (some are follow-ups that need the conversation, five "
-                  "are changes that must end in an approval prompt) and 5 that should stay text.", "",
+                  "repair round. Cases come from `live-cases.json`: 21 that need a part (some are follow-ups that need the conversation, five "
+                  "are changes that must end in an approval prompt) and 5 that should stay text. Round 3 added `invoices-unpaid` (a table "
+                  "must name every column) and counts wording problems (Title Case, filler, a value shown twice) as failures of the first "
+                  "answer, so its \"valid first time\" is not comparable with rounds 1 and 2.", "",
                   "| Run | Model | Date | Runs | Selector recall | Right part | Valid first time | Valid after one repair | Held back (text-only) | Approval shown for changes | Changes the model ran | Rendered | Floor findings |",
                   "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
         for f in live:
@@ -363,6 +365,7 @@ def report():
         lines.append("")
     lines += ["## Not measured", "", "- On the recorded-data path, a failed answer is not sent back to the model; the live path does one repair round.",
               "- Round 2 of the live path ran while the billing catalog was regenerated once (optional fields, list item names); later cases used the new one.",
+              "- Round 3: both models answered `subscription` (\"What plan are we on and when does it renew?\") and `refund-followup` in text although the selector offered a part; it is not clear a part is better there.",
               "- The selector's 100% on the recorded-data cases is on the same cases used to tune it; the live cases were written before its last changes.",
               "- Streaming: every reply is scored whole.", "- Copy quality inside the parts, and whether a person would prefer the part to text.", ""]
     (EV / "REPORT.md").write_text("\n".join(lines))
