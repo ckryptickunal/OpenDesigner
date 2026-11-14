@@ -164,6 +164,21 @@ class Catalog(unittest.TestCase):
         walk(cat["components"])
 
 
+class CopyRules(unittest.TestCase):
+    def test_duplicate_rows_are_text_facts_only(self):
+        errs = []
+        smartui.duplicate_rows([{"label": "Number", "value": "TH-1043"}, {"label": "Invoice number", "value": "TH-1043"}], "/f", errs, "s1")
+        self.assertEqual([e["rule"] for e in errs], ["duplicate-row"])
+        errs = []  # a chart's months can have the same value
+        smartui.duplicate_rows([{"label": "Jan", "value": 12}, {"label": "Feb", "value": 12}], "/p", errs, "s1")
+        self.assertEqual(errs, [])
+
+    def test_two_questions_in_one_are_not_a_short_fact(self):
+        cat = json.loads((ROOT / "examples" / "smart-ui-support" / "opendesigner" / "smart-ui" / "catalog.json").read_text())
+        self.assertTrue(smartui.select("What plan are we on and when does it renew?", cat, 3, None, {}, {"KeyFacts": 3})["ui"])
+        self.assertFalse(smartui.select("How many seats do we have right now?", cat, 3, None, {}, {"KeyFacts": 3})["ui"])
+
+
 class Selector(unittest.TestCase):
     cat = None
 

@@ -27,7 +27,7 @@ function copyCheck(v, path, errs, sid, names) {
 function duplicateRows(v, path, errs, sid) {
   const seen = new Map();
   v.forEach((row, i) => {
-    if (isObj(row) && "label" in row && (typeof row.value === "string" || typeof row.value === "number")) {
+    if (isObj(row) && "label" in row && typeof row.value === "string") {  // text facts; a chart's points repeat values on purpose
       const key = String(row.value).trim().toLowerCase();
       if (seen.has(key)) err(errs, "duplicate-row", `${path}/${i}`, `'${row.value}' is already shown as '${seen.get(key)}'`, sid, "keep one row for each value");
       else seen.set(key, row.label);

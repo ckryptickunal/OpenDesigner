@@ -1,5 +1,5 @@
 {
- "date": "2026-11-13",
+ "date": "2026-11-14",
  "recall_at_3_pct": 100.0,
  "held_back_pct": 100.0,
  "cases": [
@@ -91,6 +91,7 @@
    ],
    "ui": true,
    "candidates": [
+    "DonutBreakdown",
     "BarChart"
    ],
    "hit": true
