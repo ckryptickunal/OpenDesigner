@@ -9,6 +9,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 ### Changed
 
 - **The library's JSON has a new shape** (2026-11-13). `/library/index.json` was a list of parts; it is now the whole catalog, `{format, components}`, and each part's name is `id` instead of `slug`. The prompts on the website now point to `/library/<id>.html`; the old `/library/r/<id>.html` addresses still work.
+- **The approval panel keeps its amounts in view** (2026-11-14). With text at 200% on a phone, the balance amounts ran out of the panel. Each line now wraps, so an amount drops under its label, and "USD" can move to a new line.
 - **Calmer Details on each part page** (2026-11-13). The prompt and the two commands now share one box style, each with a Copy button, a label above and a note below, with even space between them. The prompt reads in the site's text font, and web addresses no longer break inside "https://".
 
 ### Added

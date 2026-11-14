@@ -2540,7 +2540,6 @@
     "--ds-size-icon-sm",
     "--ds-size-target-min",
     "--ds-space-2",
-    "--ds-space-4",
     "--ds-space-inline-md",
     "--ds-space-inline-sm",
     "--ds-space-inline-xs",
@@ -2585,7 +2584,7 @@
    },
    "files": {
     "html": "components/approval-panel/component.html",
-    "bytes": 10739,
+    "bytes": 10777,
     "script": false
    },
    "source": "brand/showcase/product/02-fennick-approvals",
