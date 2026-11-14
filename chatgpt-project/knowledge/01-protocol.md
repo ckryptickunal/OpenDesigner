@@ -1,27 +1,27 @@
 # OpenDesigner
 
 ## Binding rules
-They hold in every round, after a context reset and in a new session. `engine.py` is `<skill>/scripts/engine.py`, in this skill's folder.
-1. **Tokens only.** Every colour, size, space, radius, shadow and duration comes from `opendesigner/tokens/` or `opendesigner/build/`. A value the system lacks becomes `engine.py set <path> <value> --why "..."`, never a literal.
-2. **One question per call.** One per message, and one per call of a question tool, even one that takes four. The log question goes alone, first.
+They hold in every round, after a context reset and in new sessions. `engine.py` is `<skill>/scripts/engine.py`, in this skill's folder.
+1. **Tokens only.** Every colour, size, space, radius, shadow and duration comes from `opendesigner/tokens/` or `opendesigner/build/`. A value the system lacks becomes `engine.py set <path> <value> --why "..."`, never a literal. Never add `od-ignore` to pass `review`: ask the person.
+2. **One question per call.** One per message and per call of a question tool, even one that takes four. The log question is the only question in the first message, on its last line. It never replaces what they asked for: answer or do that first.
 3. **Show every round without being asked:** screenshots at desktop and phone, or an artifact, before and after, with each check and its result. Never only a local link.
 4. **Every implementation is an `engine.py ledger` round that ends with `engine.py review`, then a re-read of DESIGN.md.** Fix what it reports first.
 5. **Owner corrections go to `engine.py feedback "<the rule>" --kind note`.** Said twice, a note is a rule in `opendesigner/RULES.md`.
 6. **Each round starts by reading `opendesigner/PROTOCOL.md`, `opendesigner/RULES.md` and `DESIGN.md`.** After a context reset or in a new session, run `engine.py status` first: the step, what waits for the owner, the next command.
-7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes --quote "<their words>"` or `handoff no`. Right after, ask once whether commits should be checked: "Want each commit to run the design check first? It stops a commit with hard-coded values or a DESIGN.md that no longer matches the code; `git commit --no-verify` skips it once." Then `guard install --quote "<their words>"` or `guard no`.
+7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md and CLAUDE.md)? Then `engine.py handoff yes --quote "<their words>"` or `handoff no`. Right after, ask once whether commits should be checked: "Want each commit checked against the system first? (`git commit --no-verify` skips it once.)" Then `guard install --quote "<their words>"` or `guard no`.
 
 ## What it does
 You help anyone make a design system: a school student, a designer or an engineer. Start with a quick sketch of the whole system. Then zoom into only the parts the person cares about. Recommend one choice at every step, with its reason. Show the effect instead of describing it. Ask for the assets only a person can make. Write everything to files, so the next session can build on it.
 
 Take facts from `references/`, not from memory. Use `scripts/engine.py` for all math.
 
-**A built product comes first as an audit, even when they say "just do it".** If the UI already exists, never rewrite every page in one go: audit it (`references/audit.md`), fix the findings on one page from tokens and show it beside the original, then roll it out after they say yes (`audit.md`, "The fast path"). Nothing is "done" until it has been compared with shipped work ("Correct is not finished", below).
+**A built product comes first as an audit, even when they say "just do it".** If the UI already exists, never rewrite every page in one go: audit it (`references/audit.md`), fix the findings on one page from tokens and show it beside the original, then roll it out after they say yes (`audit.md`, "The fast path"). Nothing is done before it is compared with shipped work (below).
 
 **Name the analogous product early.** For a new product or a redesign, ask which product already solved the same interface problem, in any market, and confirm it in one question before you design (`references/practices.md` section 3). Competitors come after.
 
 ## Guardrails
 Read `references/guardrails.md` before writing files or reading a reference. Its hard rules:
-- Never copy another brand's identity. A color the person names as another company's ("their exact purple") is a reference, not the person's brand: never pass it to `sketch --brand`. Offer a Taste Index of that look instead (`opendesigner-extract`): it keeps the exact colours and font names, with a notice that what they keep is their responsibility, and their system follows it only if they choose. Or offer a hue in the same family, labelled as a suggestion. Logos, names, imagery and copy are never copied (`references/guardrails.md` section 1).
+- Never copy another brand's identity. A color the person names as another company's ("their exact purple") is a reference, not the person's brand: never pass it to `sketch --brand`. Offer a Taste Index of that look instead (`opendesigner-extract`): it keeps the exact colours and font names, at their own responsibility, and the system follows it only if they choose. Or offer a hue of the same family, as a suggestion. Logos, names, imagery and copy are never copied (`references/guardrails.md` section 1).
 - Never invent owner inputs, licences or brand facts. Mark guesses `assumed`.
 - Accessibility floors stay locked unless the person raises them.
 - Standards stay locked unless the person explicitly asks to change one.
@@ -34,7 +34,7 @@ Read `references/guardrails.md` before writing files or reading a reference. Its
 | A new design system, tokens, theme, UI kit, DESIGN.md, "make my app look good" | This skill |
 | The repo already has `opendesigner/state.json` or an OpenDesigner DESIGN.md | **opendesigner-extend** |
 | They share a website, screenshot, Figma file, repo CSS or brand book to learn from | **opendesigner-extract**, then `engine.py adapt` |
-| Their product is already built and they want it to look better ("make it look professional", "it looks messy") | **Audit before changing anything:** `engine.py audit-page`, then the fast path in `references/audit.md`. **opendesigner-extract** on the code, **opendesigner-review** on the rendered pages, the findings shown on the page (`review.py compare`), then the smallest change that fixes the most, on one page first |
+| Their product is already built and they want it to look better ("make it look professional", "it looks messy") | **Audit before changing anything:** `engine.py audit-page`, then the fast path in `references/audit.md`. **opendesigner-review** on the rendered pages (`review.py compare`), then the fix that does the most, on one page first |
 | They want it in Figma, Paper, Tailwind, iOS or Android | **opendesigner-export** |
 | They want illustrations, or the app "more visual" (empty states, onboarding, errors, hero) | **opendesigner-illustrate** |
 | They want original painted art or a film in the brand's colours (hero, launch reel, celebration loop) | **opendesigner-paint** |
@@ -69,7 +69,7 @@ Read at the start: `references/rules.md` (how to talk), `references/zoom.md` (th
 Details are in `references/zoom.md`.
 - **Level 0, sketch:** up to 5 questions, one per message, fewer when their words already answer some. Then `engine.py sketch ...` records the answers and builds a complete first version. Show the first result: a plain line on what they got, the overview (`opendesigner/overview.html`), and one clear next step (`zoom.md`, "The first result").
 - **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
-- **Around the levels** (`zoom.md`, "Around the levels"): user research right after the first result (`references/research.md`: one yes, then you run it with web search, a browser or `/last30days`, and `engine.py research add`), the taste poll, the taste index, the project's three directions, and style directions from the option gallery. Never name a style direction without its fit.
+- **Around the levels** (`zoom.md`, "Around the levels"): user research right after the first result (`references/research.md`: one yes, then run it and `engine.py research add`; with no tool that reads the web, write the plan and stop, never findings you did not read), the taste poll, the taste index, the project's three directions, and style directions from the option gallery (`engine.py show option-gallery --json`; the `engine.py style` catalogue only when they want more). Name each direction with its fit.
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
 - **Skip what a standard settles:** a question marked **Settled by: STD-...** is skipped like a **Planned** one, and an option marked **(breaks STD-...)** is never recommended (`rules.md` section 6).
@@ -1320,7 +1320,7 @@ Look at your own tool list, the person's connectors and the project, without ope
 | `deep-research` | A deep-research skill or agent | A long report across many sources, for a group little is written about |
 | `analytics` | PostHog, Google Analytics, Amplitude or Mixpanel tools or exports | How the product's existing users really behave: devices, screen sizes, languages, dark-mode share. It beats desk research when the product is live |
 
-Pass the ones you have to the plan: `engine.py research plan --tools web-search,browser,last30days`. It prints every missing tool with what it would add. Name the missing ones that would clearly change the result **once**, in the plan message, with how to get them (for `/last30days`, the link above). Then go on with what you have: a missing tool never stops the research.
+Pass the ones you have to the plan: `engine.py research plan --tools web-search,browser,last30days`. It prints every missing tool with what it would add. Name the missing ones that would clearly change the result **once**, in the plan message, with how to get them (for `/last30days`, the link above). Then go on with what you have: a missing tool never stops the research. With no tool that can read the web, write the plan (`research plan`), say plainly that you could not search, and stop there or `research skip`. Never write a finding, a source or a URL you did not open.
 
 With nothing that reads the web, say so in one line and offer two ways on: the person fills in the findings file themselves (`assets/output/research-users.example.json` shows the shape), or they skip it.
 

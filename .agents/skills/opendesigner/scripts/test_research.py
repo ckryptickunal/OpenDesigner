@@ -893,7 +893,7 @@ class Stakeholders(unittest.TestCase):
         out = self.ok("coverage")
         self.assertIn("missing  Users and their tasks", out)
         self.assertIn("missing  Stakeholders", out)
-        self.assertEqual(run(self.d, "research", "add", str(EXAMPLE)).returncode, 0)
+        self.assertEqual(run(self.d, "research", "add", real_example(self.d)).returncode, 0)  # add refuses the shipped example
         rows = {r["id"]: r for r in json.loads(self.ok("coverage", "--json"))}
         self.assertEqual(rows["users"]["status"], "partial")  # the example has no finding on tasks
         self.assertIn("tasks", rows["users"]["next"])

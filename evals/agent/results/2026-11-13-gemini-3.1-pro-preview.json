@@ -1,0 +1,369 @@
+{
+  "kind": "agent",
+  "runner": "tools/gemini_evals.py",
+  "date": "2026-11-14",
+  "commit": "5b071ac2",
+  "skillsRef": "working tree",
+  "label": "gemini-3.1-pro-preview",
+  "model": "gemini-3.1-pro-preview",
+  "judgeModel": "haiku",
+  "runsPerArm": 3,
+  "arms": "with only",
+  "overallScore": 0.809,
+  "casesTotal": 17,
+  "costUsd": 5.78,
+  "judgeCostUsd": 0.14,
+  "tokens": {
+    "prompt": 6149441,
+    "cached": 4504559,
+    "output": 132454
+  },
+  "calls": 357,
+  "durationSeconds": 4563,
+  "partial": false,
+  "cases": [
+    {
+      "name": "contrast-floor",
+      "score": 1.0,
+      "runs": 3,
+      "runScores": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "graders": {
+        "names-the-floor": "3/3",
+        "says-it-fails": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "export-tailwind",
+      "score": 0.889,
+      "runs": 3,
+      "runScores": [
+        0.667,
+        1.0,
+        1.0
+      ],
+      "graders": {
+        "how-to-use": "2/3",
+        "skill-used": "3/3",
+        "tailwind-file": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "extend-rounder",
+      "score": 0.917,
+      "runs": 3,
+      "runScores": [
+        1.0,
+        1.0,
+        0.75
+      ],
+      "graders": {
+        "brand-kept": "3/3",
+        "decision-recorded": "3/3",
+        "says-what-changed": "2/3",
+        "skill-used": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "icons-extend-few",
+      "score": 0.667,
+      "runs": 3,
+      "runScores": [
+        0.75,
+        0.75,
+        0.5
+      ],
+      "graders": {
+        "licence-named": "0/3",
+        "line-read": "3/3",
+        "matched-and-shown": "2/3",
+        "skill-used": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "no-identity-copy",
+      "score": 1.0,
+      "runs": 3,
+      "runScores": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "graders": {
+        "declines-identity": "3/3",
+        "skill-used": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "one-question-first",
+      "score": 1.0,
+      "runs": 3,
+      "runScores": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "graders": {
+        "no-ui-code": "3/3",
+        "one-plain-question": "3/3",
+        "skill-used": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "one-question-per-call",
+      "score": 1.0,
+      "runs": 3,
+      "runScores": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "graders": {
+        "no-batched-call": "3/3",
+        "one-question-per-message": "3/3",
+        "skill-used": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "preflight-before-share",
+      "score": 0.417,
+      "runs": 3,
+      "runScores": [
+        0.5,
+        0.25,
+        0.5
+      ],
+      "graders": {
+        "clear-verdict": "1/3",
+        "total-wrong": "3/3",
+        "unsafe-install": "0/3",
+        "wrong-weekday": "1/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "redesign-audits-first",
+      "score": 0.833,
+      "runs": 3,
+      "runScores": [
+        0.75,
+        0.75,
+        1.0
+      ],
+      "graders": {
+        "audit-with-evidence": "1/3",
+        "correct-is-not-finished": "3/3",
+        "skill-used": "3/3",
+        "smallest-change-first": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "research-no-web",
+      "score": 0.583,
+      "runs": 3,
+      "runScores": [
+        0.25,
+        0.75,
+        0.75
+      ],
+      "graders": {
+        "no-invented-findings": "0/3",
+        "plan-written": "2/3",
+        "research-step-run": "2/3",
+        "skill-used": "3/3"
+      },
+      "stops": [
+        "STOP",
+        "max_turns"
+      ],
+      "errors": []
+    },
+    {
+      "name": "review-planted-page",
+      "score": 1.0,
+      "runs": 3,
+      "runScores": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "graders": {
+        "finds-low-contrast": "3/3",
+        "finds-removed-focus": "3/3",
+        "finds-small-target": "3/3",
+        "finds-three-fonts": "3/3",
+        "finds-tiny-text": "3/3",
+        "reports-not-rewrites": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "search-audit",
+      "score": 0.857,
+      "runs": 3,
+      "runScores": [
+        1.0,
+        1.0,
+        0.571
+      ],
+      "graders": {
+        "finds-blocked-searchbot": "3/3",
+        "finds-faq-mismatch": "3/3",
+        "finds-js-only-page": "2/3",
+        "finds-long-title": "3/3",
+        "finds-missing-canonical": "2/3",
+        "reports-not-rewrites": "2/3",
+        "skill-used": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "search-traps",
+      "score": 0.944,
+      "runs": 3,
+      "runScores": [
+        1.0,
+        1.0,
+        0.833
+      ],
+      "graders": {
+        "disallow-hides-noindex": "2/3",
+        "keeps-faq-markup": "3/3",
+        "no-invented-statistics": "3/3",
+        "noindex-in-sitemap": "3/3",
+        "skill-used": "3/3",
+        "training-bots-owners-choice": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "sketch-five-answers",
+      "score": 0.833,
+      "runs": 3,
+      "runScores": [
+        0.833,
+        0.833,
+        0.833
+      ],
+      "graders": {
+        "brand-exact-in-css": "3/3",
+        "css-written": "3/3",
+        "design-md": "3/3",
+        "reports-honestly": "0/3",
+        "skill-used": "3/3",
+        "tokens-written": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "taste-all-past",
+      "score": 0.556,
+      "runs": 3,
+      "runScores": [
+        0.333,
+        0.333,
+        1.0
+      ],
+      "graders": {
+        "shows-all-three": "1/3",
+        "skill-used": "3/3",
+        "warns-with-the-lines": "1/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "taste-index-asks",
+      "score": 1.0,
+      "runs": 3,
+      "runScores": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "graders": {
+        "index-built": "3/3",
+        "no-identity-assets": "3/3",
+        "notice-and-choice": "3/3",
+        "skill-used": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    },
+    {
+      "name": "taste-leaves-out",
+      "score": 0.25,
+      "runs": 3,
+      "runScores": [
+        0.25,
+        0.25,
+        0.25
+      ],
+      "graders": {
+        "never-offers-left-out": "0/3",
+        "offers-tonal": "0/3",
+        "says-why-left-out": "0/3",
+        "skill-used": "3/3"
+      },
+      "stops": [
+        "STOP"
+      ],
+      "errors": []
+    }
+  ],
+  "regraded": "2026-11-14"
+}
