@@ -73,8 +73,8 @@ python3 skills/opendesigner/scripts/engine.py build     (generate + validate; if
 python3 skills/opendesigner/scripts/engine.py overview --open   (overview.html: the person's whole system on one page; what is missing says "Not enough information")
 python3 skills/opendesigner/scripts/engine.py audit-page --open   (audit.html: the system as the code builds it; every inconsistency with file:line evidence and options to preview and copy; reports only)
 python3 skills/opendesigner/scripts/engine.py adapt ref.json --open  (adapt.html: what a reference measured by opendesigner-extract would change, and what stays; records nothing)
-python3 skills/opendesigner/scripts/engine.py ledger start "Settings page" --items comp.action.button,A-space-01   (then ledger done|broke|waive <item>; review fails while an item is neither done nor waived)
-python3 skills/opendesigner/scripts/engine.py exempt site/figures --why "demo figures show mistakes on purpose"   (review leaves them out and lists them)
+python3 skills/opendesigner/scripts/engine.py ledger start "Settings page" --items comp.action.button,A-space-01   (then ledger done|broke|waive <item>; review --strict fails while an item is neither done nor waived (an agent's waiver counts as open until the owner agrees))
+python3 skills/opendesigner/scripts/engine.py exempt site/figures --why "demo figures show mistakes on purpose" --by owner   (review leaves them out and lists them)
 python3 skills/opendesigner/scripts/engine.py review    (end of every implementation: hard-coded values, whether tokens are in charge, a system behind the code, standards, stale DESIGN.md, a share image older than what it shows; reports only, edits nothing)
 python3 skills/opendesigner/scripts/engine.py version   (this copy's release, and whether the system was made or built with an older one; never checks online)
 python3 skills/opendesigner/scripts/engine.py status    (the Now line: the step, what waits for the owner, the next command; first after a context reset or in a new session)
@@ -175,6 +175,7 @@ python3 site/post_change_audit.py          after changing the website or the lib
 python3 tools/changelog_check.py                  every CHANGELOG.md entry is short, dated and in the format the website reads; add one entry per change you push
 python3 tools/build_examples.py --check           the worked examples in examples/ are what the engine makes now (else: build_examples.py, which rebuilds them)
 python3 tools/check_links.py                      every relative Markdown link resolves; a /link in site/docs must be a page the website makes; the root llms.txt links only to files that exist
+python3 tools/test_audit_page.py                  the audit page, adapt page, exempt folders, the ledger and the state tokens
 python3 tools/check_glossary.py --check           every glossary term passes the three-voice rules against today's engine, and docs/GLOSSARY.md is current
                                                    (edit synthesis/glossary.json, then: check_glossary.py --build, build_data.py, sync_skills.py)
 ```
