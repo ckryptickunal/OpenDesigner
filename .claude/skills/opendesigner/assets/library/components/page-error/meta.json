@@ -35,28 +35,72 @@
       "there is no connection: use page-offline",
       "a planned outage: use page-maintenance"
     ],
-    "keyboard": [
-      "Tab reaches Copy code, Try again and Contact support",
-      "Enter or Space presses a button; focus stays on Try again while it retries"
+    "parts": [
+      {
+        "name": "code",
+        "selector": ".odl-page-error [data-od-slot=\"code\"]",
+        "what": "the error code, small, above the heading, as in “Error 500”",
+        "slot": "text"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-page-error [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “Something went wrong on our side”",
+        "slot": "text"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-page-error [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in “This page didn't load, but your work is saved. T”",
+        "slot": "text"
+      },
+      {
+        "name": "reference",
+        "selector": ".odl-page-error [data-od-slot=\"reference\"]",
+        "what": "the reference code a person gives support, as in “LRK-500-7Q2K-91D”",
+        "slot": "text"
+      },
+      {
+        "name": "copy",
+        "selector": ".odl-page-error [data-od-action=\"copy\"]",
+        "what": "the Copy code action",
+        "slot": "action"
+      },
+      {
+        "name": "retry",
+        "selector": ".odl-page-error [data-od-action=\"retry\"]",
+        "what": "the Try again action",
+        "slot": "action"
+      },
+      {
+        "name": "support",
+        "selector": ".odl-page-error [data-od-action=\"support\"]",
+        "what": "the Contact support action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "code": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 24,
+          "part": "code"
         },
         "title": {
           "type": "string",
-          "maxLength": 48
+          "maxLength": 48,
+          "part": "title"
         },
         "message": {
           "type": "string",
-          "maxLength": 176
+          "maxLength": 176,
+          "part": "message"
         },
         "reference": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 24,
+          "part": "reference"
         }
       },
       "required": [
@@ -95,11 +139,11 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
-      },
-      "missing_image": {
-        "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches Copy code, Try again and Contact support",
+      "Enter or Space presses a button; focus stays on Try again while it retries"
+    ]
   }
 }

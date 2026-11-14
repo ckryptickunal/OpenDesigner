@@ -39,9 +39,31 @@
       "payments, sends and deletes: wait for the server and show inline-spinner",
       "changes that other people see at once: confirm before showing them as done"
     ],
-    "keyboard": [
-      "Tab moves through the checkboxes; Space ticks one",
-      "After a failed save, Tab reaches Try again in that row"
+    "parts": [
+      {
+        "name": "tasks",
+        "selector": ".odl-optimistic-update [data-od-list=\"tasks\"]",
+        "what": "the tasks, one item each",
+        "slot": "list"
+      },
+      {
+        "name": "tasks.done",
+        "selector": ".odl-optimistic-update [data-od-list=\"tasks\"] [data-od-input=\"done\"]",
+        "what": "the done",
+        "slot": "input"
+      },
+      {
+        "name": "tasks.task",
+        "selector": ".odl-optimistic-update [data-od-list=\"tasks\"] [data-od-slot=\"task\"]",
+        "what": "the task, as in “Send Q4 invoices to Gorsedown Print”",
+        "slot": "text"
+      },
+      {
+        "name": "tasks.retry",
+        "selector": ".odl-optimistic-update [data-od-list=\"tasks\"] [data-od-action=\"retry\"]",
+        "what": "the Try again action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
@@ -54,17 +76,20 @@
             "type": "object",
             "properties": {
               "done": {
-                "type": "boolean"
+                "type": "boolean",
+                "part": "tasks.done"
               },
               "task": {
                 "type": "string",
-                "maxLength": 56
+                "maxLength": 56,
+                "part": "tasks.task"
               }
             },
             "required": [
               "task"
             ]
-          }
+          },
+          "part": "tasks"
         }
       },
       "required": [
@@ -99,11 +124,11 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
-      },
-      "missing_image": {
-        "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
       }
-    }
+    },
+    "keyboard": [
+      "Tab moves through the checkboxes; Space ticks one",
+      "After a failed save, Tab reaches Try again in that row"
+    ]
   }
 }

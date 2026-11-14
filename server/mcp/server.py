@@ -121,8 +121,11 @@ def t_tokens(a):
     css = _tokens_cache[key]
     have = set(re.findall(r"(--ds-[a-z0-9-]+)\s*:", css))
     used = set().union(*(e["tokens"] for e in entries()))
+    # --ds-state-* tokens exist only in systems that answered their question; every use falls back to a token every
+    # system writes (library.py check enforces it), so they are optional, not missing
+    optional = sorted(v for v in used - have if v.startswith("--ds-state-"))
     out = {"css": css, "brand": brand, "audience": audience, "feel": feel.split(","), "defines": len(have),
-           "library_reads": len(used), "missing": sorted(used - have)}
+           "library_reads": len(used), "missing": sorted(used - have - set(optional)), "optional": optional}
     note = ("A starting point, not the person's design system: run the opendesigner skill to make theirs. "
             f"Defines {len(have)} variables; the library reads {len(used)}, {len(out['missing'])} missing.")
     return out, f"{note}\n\ntokens.css:\n{css}"

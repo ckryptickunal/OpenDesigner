@@ -8830,21 +8830,49 @@
     ]
    },
    "root": ".odl-empty-all-done",
-   "parts": [],
+   "parts": [
+    {
+     "name": "title",
+     "selector": ".odl-empty-all-done [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “You're all caught up”",
+     "slot": "text"
+    },
+    {
+     "name": "message",
+     "selector": ".odl-empty-all-done [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in “You reviewed all 18 expense reports. New ones la”",
+     "slot": "text"
+    },
+    {
+     "name": "checked",
+     "selector": ".odl-empty-all-done [data-od-slot=\"checked\"]",
+     "what": "when the list was last checked, as in “Checked a minute ago”",
+     "slot": "text"
+    },
+    {
+     "name": "history",
+     "selector": ".odl-empty-all-done [data-od-action=\"history\"]",
+     "what": "the See what you approved action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "title": {
       "type": "string",
-      "maxLength": 32
+      "maxLength": 32,
+      "part": "title"
      },
      "message": {
       "type": "string",
-      "maxLength": 128
+      "maxLength": 128,
+      "part": "message"
      },
      "checked": {
       "type": "string",
-      "maxLength": 32
+      "maxLength": 32,
+      "part": "checked"
      }
     },
     "required": [
@@ -9000,17 +9028,56 @@
     ]
    },
    "root": ".odl-empty-filtered",
-   "parts": [],
+   "parts": [
+    {
+     "name": "title",
+     "selector": ".odl-empty-filtered [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “No invoices match these filters”",
+     "slot": "text"
+    },
+    {
+     "name": "message",
+     "selector": ".odl-empty-filtered [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in “Your filters hide all 46 invoices. Remove one, o”",
+     "slot": "text"
+    },
+    {
+     "name": "filters",
+     "selector": ".odl-empty-filtered [data-od-list=\"filters\"]",
+     "what": "the filters, one item each",
+     "slot": "list"
+    },
+    {
+     "name": "filters.label",
+     "selector": ".odl-empty-filtered [data-od-list=\"filters\"] [data-od-slot=\"label\"]",
+     "what": "the visible label, as in “Status: Overdue”",
+     "slot": "text"
+    },
+    {
+     "name": "filters.remove",
+     "selector": ".odl-empty-filtered [data-od-list=\"filters\"] [data-od-action=\"remove\"]",
+     "what": "the remove action",
+     "slot": "action"
+    },
+    {
+     "name": "clear",
+     "selector": ".odl-empty-filtered [data-od-action=\"clear\"]",
+     "what": "the Clear all filters action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "title": {
       "type": "string",
-      "maxLength": 48
+      "maxLength": 48,
+      "part": "title"
      },
      "message": {
       "type": "string",
-      "maxLength": 96
+      "maxLength": 96,
+      "part": "message"
      },
      "filters": {
       "type": "array",
@@ -9021,13 +9088,15 @@
        "properties": {
         "label": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "filters.label"
         }
        },
        "required": [
         "label"
        ]
-      }
+      },
+      "part": "filters"
      }
     },
     "required": [
@@ -9191,17 +9260,38 @@
     ]
    },
    "root": ".odl-empty-first-use",
-   "parts": [],
+   "parts": [
+    {
+     "name": "title",
+     "selector": ".odl-empty-first-use [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “Start your first project”",
+     "slot": "text"
+    },
+    {
+     "name": "message",
+     "selector": ".odl-empty-first-use [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in “A project keeps the files, tasks and people for ”",
+     "slot": "text"
+    },
+    {
+     "name": "create",
+     "selector": ".odl-empty-first-use [data-od-action=\"create\"]",
+     "what": "the Create a project action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "title": {
       "type": "string",
-      "maxLength": 32
+      "maxLength": 32,
+      "part": "title"
      },
      "message": {
       "type": "string",
-      "maxLength": 120
+      "maxLength": 120,
+      "part": "message"
      }
     },
     "required": [
@@ -9352,17 +9442,56 @@
     ]
    },
    "root": ".odl-empty-no-results",
-   "parts": [],
+   "parts": [
+    {
+     "name": "query",
+     "selector": ".odl-empty-no-results [data-od-slot=\"query\"]",
+     "what": "what the person searched for, as in “quartely report”",
+     "slot": "text"
+    },
+    {
+     "name": "message",
+     "selector": ".odl-empty-no-results [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in “We searched file names and contents in Finance, ”",
+     "slot": "text"
+    },
+    {
+     "name": "spelling",
+     "selector": ".odl-empty-no-results [data-od-action=\"spelling\"]",
+     "what": "the Search for “quarterly report” instead action",
+     "slot": "action"
+    },
+    {
+     "name": "label",
+     "selector": ".odl-empty-no-results [data-od-slot=\"label\"]",
+     "what": "the visible label, as in “Search for “quarterly report” instead”",
+     "slot": "text"
+    },
+    {
+     "name": "all_folders",
+     "selector": ".odl-empty-no-results [data-od-action=\"all_folders\"]",
+     "what": "the Search all folders, not only Finance action",
+     "slot": "action"
+    },
+    {
+     "name": "any_date",
+     "selector": ".odl-empty-no-results [data-od-action=\"any_date\"]",
+     "what": "the Search any date action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "query": {
       "type": "string",
-      "maxLength": 24
+      "maxLength": 24,
+      "part": "query"
      },
      "message": {
       "type": "string",
-      "maxLength": 104
+      "maxLength": 104,
+      "part": "message"
      }
     },
     "required": [
@@ -10065,17 +10194,38 @@
     ]
    },
    "root": ".odl-field-error",
-   "parts": [],
+   "parts": [
+    {
+     "name": "value",
+     "selector": ".odl-field-error [data-od-slot=\"value\"]",
+     "what": "what the person typed",
+     "slot": "text"
+    },
+    {
+     "name": "error",
+     "selector": ".odl-field-error [data-od-slot=\"error\"]",
+     "what": "what is wrong and how to fix it, as in “Add the part after the @ with a dot, like name@c”",
+     "slot": "text"
+    },
+    {
+     "name": "invite",
+     "selector": ".odl-field-error [data-od-action=\"invite\"]",
+     "what": "the Send invite action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "value": {
       "type": "string",
-      "maxLength": 24
+      "maxLength": 24,
+      "part": "value"
      },
      "error": {
       "type": "string",
-      "maxLength": 96
+      "maxLength": 96,
+      "part": "error"
      }
     },
     "required": [
@@ -12096,7 +12246,20 @@
     ]
    },
    "root": ".odl-inline-spinner",
-   "parts": [],
+   "parts": [
+    {
+     "name": "save",
+     "selector": ".odl-inline-spinner [data-od-action=\"save\"]",
+     "what": "the Save changes action",
+     "slot": "action"
+    },
+    {
+     "name": "label",
+     "selector": ".odl-inline-spinner [data-od-slot=\"label\"]",
+     "what": "the visible label, as in “Save changes”",
+     "slot": "text"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {}
@@ -16120,7 +16283,32 @@
     ]
    },
    "root": ".odl-optimistic-update",
-   "parts": [],
+   "parts": [
+    {
+     "name": "tasks",
+     "selector": ".odl-optimistic-update [data-od-list=\"tasks\"]",
+     "what": "the tasks, one item each",
+     "slot": "list"
+    },
+    {
+     "name": "tasks.done",
+     "selector": ".odl-optimistic-update [data-od-list=\"tasks\"] [data-od-input=\"done\"]",
+     "what": "the done",
+     "slot": "input"
+    },
+    {
+     "name": "tasks.task",
+     "selector": ".odl-optimistic-update [data-od-list=\"tasks\"] [data-od-slot=\"task\"]",
+     "what": "the task, as in “Send Q4 invoices to Gorsedown Print”",
+     "slot": "text"
+    },
+    {
+     "name": "tasks.retry",
+     "selector": ".odl-optimistic-update [data-od-list=\"tasks\"] [data-od-action=\"retry\"]",
+     "what": "the Try again action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
@@ -16132,17 +16320,20 @@
        "type": "object",
        "properties": {
         "done": {
-         "type": "boolean"
+         "type": "boolean",
+         "part": "tasks.done"
         },
         "task": {
          "type": "string",
-         "maxLength": 56
+         "maxLength": 56,
+         "part": "tasks.task"
         }
        },
        "required": [
         "task"
        ]
-      }
+      },
+      "part": "tasks"
      }
     },
     "required": [
@@ -16653,7 +16844,44 @@
     ]
    },
    "root": ".odl-page-banners",
-   "parts": [],
+   "parts": [
+    {
+     "name": "banners",
+     "selector": ".odl-page-banners [data-od-list=\"banners\"]",
+     "what": "the banners, one item each",
+     "slot": "list"
+    },
+    {
+     "name": "banners.tone",
+     "selector": ".odl-page-banners [data-od-list=\"banners\"] [data-od-var=\"tone\"]",
+     "what": "info, success, warning or error",
+     "slot": "text"
+    },
+    {
+     "name": "banners.title",
+     "selector": ".odl-page-banners [data-od-list=\"banners\"] [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “New: approval rules.”",
+     "slot": "text"
+    },
+    {
+     "name": "banners.message",
+     "selector": ".odl-page-banners [data-od-list=\"banners\"] [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in “Bills over $5,000 now need a second approver.”",
+     "slot": "text"
+    },
+    {
+     "name": "banners.action",
+     "selector": ".odl-page-banners [data-od-list=\"banners\"] [data-od-action=\"action\"]",
+     "what": "the Set up rules action",
+     "slot": "action"
+    },
+    {
+     "name": "banners.dismiss",
+     "selector": ".odl-page-banners [data-od-list=\"banners\"] [data-od-action=\"dismiss\"]",
+     "what": "the dismiss action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
@@ -16670,15 +16898,18 @@
           "info",
           "success",
           "warning"
-         ]
+         ],
+         "part": "banners.tone"
         },
         "title": {
          "type": "string",
-         "maxLength": 32
+         "maxLength": 32,
+         "part": "banners.title"
         },
         "message": {
          "type": "string",
-         "maxLength": 64
+         "maxLength": 64,
+         "part": "banners.message"
         }
        },
        "required": [
@@ -16686,7 +16917,8 @@
         "title",
         "message"
        ]
-      }
+      },
+      "part": "banners"
      }
     },
     "required": [
@@ -16848,25 +17080,72 @@
     ]
    },
    "root": ".odl-page-error",
-   "parts": [],
+   "parts": [
+    {
+     "name": "code",
+     "selector": ".odl-page-error [data-od-slot=\"code\"]",
+     "what": "the error code, small, above the heading, as in “Error 500”",
+     "slot": "text"
+    },
+    {
+     "name": "title",
+     "selector": ".odl-page-error [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “Something went wrong on our side”",
+     "slot": "text"
+    },
+    {
+     "name": "message",
+     "selector": ".odl-page-error [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in “This page didn't load, but your work is saved. T”",
+     "slot": "text"
+    },
+    {
+     "name": "reference",
+     "selector": ".odl-page-error [data-od-slot=\"reference\"]",
+     "what": "the reference code a person gives support, as in “LRK-500-7Q2K-91D”",
+     "slot": "text"
+    },
+    {
+     "name": "copy",
+     "selector": ".odl-page-error [data-od-action=\"copy\"]",
+     "what": "the Copy code action",
+     "slot": "action"
+    },
+    {
+     "name": "retry",
+     "selector": ".odl-page-error [data-od-action=\"retry\"]",
+     "what": "the Try again action",
+     "slot": "action"
+    },
+    {
+     "name": "support",
+     "selector": ".odl-page-error [data-od-action=\"support\"]",
+     "what": "the Contact support action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "code": {
       "type": "string",
-      "maxLength": 24
+      "maxLength": 24,
+      "part": "code"
      },
      "title": {
       "type": "string",
-      "maxLength": 48
+      "maxLength": 48,
+      "part": "title"
      },
      "message": {
       "type": "string",
-      "maxLength": 176
+      "maxLength": 176,
+      "part": "message"
      },
      "reference": {
       "type": "string",
-      "maxLength": 24
+      "maxLength": 24,
+      "part": "reference"
      }
     },
     "required": [
@@ -17366,25 +17645,66 @@
     ]
    },
    "root": ".odl-page-maintenance",
-   "parts": [],
+   "parts": [
+    {
+     "name": "title",
+     "selector": ".odl-page-maintenance [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “Invoices are paused for an upgrade”",
+     "slot": "text"
+    },
+    {
+     "name": "message",
+     "selector": ".odl-page-maintenance [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in “We're upgrading the payments database. Everythin”",
+     "slot": "text"
+    },
+    {
+     "name": "until",
+     "selector": ".odl-page-maintenance [data-od-slot=\"until\"]",
+     "what": "when it will be back, as a time element, as in “3:00 PM UTC”",
+     "slot": "text"
+    },
+    {
+     "name": "detail",
+     "selector": ".odl-page-maintenance [data-od-slot=\"detail\"]",
+     "what": "a short line of detail under the title, as in “Saturday, Nov 14 · about 40 minutes from now”",
+     "slot": "text"
+    },
+    {
+     "name": "status",
+     "selector": ".odl-page-maintenance [data-od-action=\"status\"]",
+     "what": "the See live status action",
+     "slot": "action"
+    },
+    {
+     "name": "notify",
+     "selector": ".odl-page-maintenance [data-od-action=\"notify\"]",
+     "what": "the Email me when it's back action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "title": {
       "type": "string",
-      "maxLength": 48
+      "maxLength": 48,
+      "part": "title"
      },
      "message": {
       "type": "string",
-      "maxLength": 176
+      "maxLength": 176,
+      "part": "message"
      },
      "until": {
       "type": "string",
-      "maxLength": 24
+      "maxLength": 24,
+      "part": "until"
      },
      "detail": {
       "type": "string",
-      "maxLength": 64
+      "maxLength": 64,
+      "part": "detail"
      }
     },
     "required": [
@@ -17545,25 +17865,60 @@
     ]
    },
    "root": ".odl-page-no-access",
-   "parts": [],
+   "parts": [
+    {
+     "name": "title",
+     "selector": ".odl-page-no-access [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “You don't have access to this page yet”",
+     "slot": "text"
+    },
+    {
+     "name": "message",
+     "selector": ".odl-page-no-access [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in ““Q4 vendor budget” is shared with the Finance te”",
+     "slot": "text"
+    },
+    {
+     "name": "owner",
+     "selector": ".odl-page-no-access [data-od-slot=\"owner\"]",
+     "what": "who can give access, as in “Wilhelmina Okoye”",
+     "slot": "text"
+    },
+    {
+     "name": "request",
+     "selector": ".odl-page-no-access [data-od-action=\"request\"]",
+     "what": "the Request access action",
+     "slot": "action"
+    },
+    {
+     "name": "account",
+     "selector": ".odl-page-no-access [data-od-slot=\"account\"]",
+     "what": "the account the person is signed in with, as in “maya@larkspur.example”",
+     "slot": "text"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "title": {
       "type": "string",
-      "maxLength": 56
+      "maxLength": 56,
+      "part": "title"
      },
      "message": {
       "type": "string",
-      "maxLength": 112
+      "maxLength": 112,
+      "part": "message"
      },
      "owner": {
       "type": "string",
-      "maxLength": 24
+      "maxLength": 24,
+      "part": "owner"
      },
      "account": {
       "type": "string",
-      "maxLength": 32
+      "maxLength": 32,
+      "part": "account"
      }
     },
     "required": [
@@ -17727,21 +18082,61 @@
     ]
    },
    "root": ".odl-page-not-found",
-   "parts": [],
+   "parts": [
+    {
+     "name": "code",
+     "selector": ".odl-page-not-found [data-od-slot=\"code\"]",
+     "what": "the error code, small, above the heading, as in “Error 404”",
+     "slot": "text"
+    },
+    {
+     "name": "title",
+     "selector": ".odl-page-not-found [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “We can't find that page”",
+     "slot": "text"
+    },
+    {
+     "name": "message",
+     "selector": ".odl-page-not-found [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in “The link may be old, or the page may have moved.”",
+     "slot": "text"
+    },
+    {
+     "name": "search",
+     "selector": ".odl-page-not-found [data-od-action=\"search\"]",
+     "what": "the Search action",
+     "slot": "action"
+    },
+    {
+     "name": "home",
+     "selector": ".odl-page-not-found [data-od-action=\"home\"]",
+     "what": "the Go to home action",
+     "slot": "action"
+    },
+    {
+     "name": "back",
+     "selector": ".odl-page-not-found [data-od-action=\"back\"]",
+     "what": "the Go back action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "code": {
       "type": "string",
-      "maxLength": 24
+      "maxLength": 24,
+      "part": "code"
      },
      "title": {
       "type": "string",
-      "maxLength": 32
+      "maxLength": 32,
+      "part": "title"
      },
      "message": {
       "type": "string",
-      "maxLength": 144
+      "maxLength": 144,
+      "part": "message"
      }
     },
     "required": [
@@ -17905,17 +18300,68 @@
     ]
    },
    "root": ".odl-page-offline",
-   "parts": [],
+   "parts": [
+    {
+     "name": "title",
+     "selector": ".odl-page-offline [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “You're offline”",
+     "slot": "text"
+    },
+    {
+     "name": "message",
+     "selector": ".odl-page-offline [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in “Check your Wi-Fi or mobile data. We'll reconnect”",
+     "slot": "text"
+    },
+    {
+     "name": "works",
+     "selector": ".odl-page-offline [data-od-list=\"works\"]",
+     "what": "the works, one item each",
+     "slot": "list"
+    },
+    {
+     "name": "works.text",
+     "selector": ".odl-page-offline [data-od-list=\"works\"] [data-od-slot=\"text\"]",
+     "what": "the text, as in “Read the 24 notes you opened this week”",
+     "slot": "text"
+    },
+    {
+     "name": "waits",
+     "selector": ".odl-page-offline [data-od-list=\"waits\"]",
+     "what": "the waits, one item each",
+     "slot": "list"
+    },
+    {
+     "name": "waits.text",
+     "selector": ".odl-page-offline [data-od-list=\"waits\"] [data-od-slot=\"text\"]",
+     "what": "the text, as in “Sharing, comments and new files from your team”",
+     "slot": "text"
+    },
+    {
+     "name": "reconnect",
+     "selector": ".odl-page-offline [data-od-action=\"reconnect\"]",
+     "what": "the Try again now action",
+     "slot": "action"
+    },
+    {
+     "name": "synced",
+     "selector": ".odl-page-offline [data-od-slot=\"synced\"]",
+     "what": "when the device last synced, as in “Last synced today at 10:42 AM”",
+     "slot": "text"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "title": {
       "type": "string",
-      "maxLength": 24
+      "maxLength": 24,
+      "part": "title"
      },
      "message": {
       "type": "string",
-      "maxLength": 120
+      "maxLength": 120,
+      "part": "message"
      },
      "works": {
       "type": "array",
@@ -17926,13 +18372,15 @@
        "properties": {
         "text": {
          "type": "string",
-         "maxLength": 56
+         "maxLength": 56,
+         "part": "works.text"
         }
        },
        "required": [
         "text"
        ]
-      }
+      },
+      "part": "works"
      },
      "waits": {
       "type": "array",
@@ -17943,17 +18391,20 @@
        "properties": {
         "text": {
          "type": "string",
-         "maxLength": 72
+         "maxLength": 72,
+         "part": "waits.text"
         }
        },
        "required": [
         "text"
        ]
-      }
+      },
+      "part": "waits"
      },
      "synced": {
       "type": "string",
-      "maxLength": 40
+      "maxLength": 40,
+      "part": "synced"
      }
     },
     "required": [
@@ -20317,22 +20768,74 @@
     ]
    },
    "root": ".odl-progress-steps",
-   "parts": [],
+   "parts": [
+    {
+     "name": "title",
+     "selector": ".odl-progress-steps [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “Importing 4,812 contacts”",
+     "slot": "text"
+    },
+    {
+     "name": "progress",
+     "selector": ".odl-progress-steps [data-od-measure=\"progress\"]",
+     "what": "how far the task has got, 0 to 1",
+     "slot": "number"
+    },
+    {
+     "name": "left",
+     "selector": ".odl-progress-steps [data-od-slot=\"left\"]",
+     "what": "time left and what the person can do meanwhile, as in “About 2 minutes left. You can close this page; w”",
+     "slot": "text"
+    },
+    {
+     "name": "steps",
+     "selector": ".odl-progress-steps [data-od-list=\"steps\"]",
+     "what": "the steps, one item each",
+     "slot": "list"
+    },
+    {
+     "name": "steps.state",
+     "selector": ".odl-progress-steps [data-od-list=\"steps\"] [data-od-var=\"state\"]",
+     "what": "done, now or next",
+     "slot": "text"
+    },
+    {
+     "name": "steps.label",
+     "selector": ".odl-progress-steps [data-od-list=\"steps\"] [data-od-slot=\"label\"]",
+     "what": "the visible label, as in “Upload file”",
+     "slot": "text"
+    },
+    {
+     "name": "cancel",
+     "selector": ".odl-progress-steps [data-od-action=\"cancel\"]",
+     "what": "the Cancel import action",
+     "slot": "action"
+    },
+    {
+     "name": "background",
+     "selector": ".odl-progress-steps [data-od-action=\"background\"]",
+     "what": "the Keep working action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "title": {
       "type": "string",
-      "maxLength": 32
+      "maxLength": 32,
+      "part": "title"
      },
      "progress": {
       "type": "number",
       "minimum": 0,
-      "maximum": 1
+      "maximum": 1,
+      "part": "progress"
      },
      "left": {
       "type": "string",
-      "maxLength": 96
+      "maxLength": 96,
+      "part": "left"
      },
      "steps": {
       "type": "array",
@@ -20346,18 +20849,21 @@
           "done",
           "next",
           "now"
-         ]
+         ],
+         "part": "steps.state"
         },
         "label": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "steps.label"
         }
        },
        "required": [
         "state",
         "label"
        ]
-      }
+      },
+      "part": "steps"
      }
     },
     "required": [
@@ -23217,25 +23723,66 @@
     ]
    },
    "root": ".odl-session-expired",
-   "parts": [],
+   "parts": [
+    {
+     "name": "title",
+     "selector": ".odl-session-expired [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “Your session ended”",
+     "slot": "text"
+    },
+    {
+     "name": "message",
+     "selector": ".odl-session-expired [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in “For your security, we signed you out after 30 mi”",
+     "slot": "text"
+    },
+    {
+     "name": "draft",
+     "selector": ".odl-session-expired [data-od-slot=\"draft\"]",
+     "what": "the work that was kept, as in “Draft: Q4 vendor review”",
+     "slot": "text"
+    },
+    {
+     "name": "saved",
+     "selector": ".odl-session-expired [data-od-slot=\"saved\"]",
+     "what": "where and when the work was kept, as in “Kept on this device · saved 2 minutes ago”",
+     "slot": "text"
+    },
+    {
+     "name": "sign_in",
+     "selector": ".odl-session-expired [data-od-action=\"sign_in\"]",
+     "what": "the Sign in again action",
+     "slot": "action"
+    },
+    {
+     "name": "switch",
+     "selector": ".odl-session-expired [data-od-action=\"switch\"]",
+     "what": "the Use another account action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "title": {
       "type": "string",
-      "maxLength": 24
+      "maxLength": 24,
+      "part": "title"
      },
      "message": {
       "type": "string",
-      "maxLength": 176
+      "maxLength": 176,
+      "part": "message"
      },
      "draft": {
       "type": "string",
-      "maxLength": 32
+      "maxLength": 32,
+      "part": "draft"
      },
      "saved": {
       "type": "string",
-      "maxLength": 64
+      "maxLength": 64,
+      "part": "saved"
      }
     },
     "required": [
@@ -24862,7 +25409,38 @@
     ]
    },
    "root": ".odl-skeleton-card",
-   "parts": [],
+   "parts": [
+    {
+     "name": "items",
+     "selector": ".odl-skeleton-card [data-od-list=\"items\"]",
+     "what": "the items, one item each",
+     "slot": "list"
+    },
+    {
+     "name": "items.photo",
+     "selector": ".odl-skeleton-card [data-od-list=\"items\"] [data-od-media=\"photo\"]",
+     "what": "the picture",
+     "slot": "media"
+    },
+    {
+     "name": "items.name",
+     "selector": ".odl-skeleton-card [data-od-list=\"items\"] [data-od-slot=\"name\"]",
+     "what": "the name, as in “Linen room, Old Town”",
+     "slot": "text"
+    },
+    {
+     "name": "items.detail",
+     "selector": ".odl-skeleton-card [data-od-list=\"items\"] [data-od-slot=\"detail\"]",
+     "what": "a short line of detail under the title, as in “2 guests · 1 bed”",
+     "slot": "text"
+    },
+    {
+     "name": "items.price",
+     "selector": ".odl-skeleton-card [data-od-list=\"items\"] [data-od-slot=\"price\"]",
+     "what": "the price, as in “$148 night”",
+     "slot": "text"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
@@ -24882,25 +25460,30 @@
          "properties": {
           "src": {
            "type": "string",
-           "format": "uri"
+           "format": "uri",
+           "maxLength": 2048
           },
           "alt": {
            "type": "string",
            "maxLength": 120
           }
-         }
+         },
+         "part": "items.photo"
         },
         "name": {
          "type": "string",
-         "maxLength": 32
+         "maxLength": 32,
+         "part": "items.name"
         },
         "detail": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "items.detail"
         },
         "price": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "items.price"
         }
        },
        "required": [
@@ -24909,7 +25492,8 @@
         "detail",
         "price"
        ]
-      }
+      },
+      "part": "items"
      }
     },
     "required": [
@@ -25060,7 +25644,32 @@
     ]
    },
    "root": ".odl-skeleton-list",
-   "parts": [],
+   "parts": [
+    {
+     "name": "rows",
+     "selector": ".odl-skeleton-list [data-od-list=\"rows\"]",
+     "what": "the rows, one item each",
+     "slot": "list"
+    },
+    {
+     "name": "rows.name",
+     "selector": ".odl-skeleton-list [data-od-list=\"rows\"] [data-od-slot=\"name\"]",
+     "what": "the name, as in “Maya Thornquist”",
+     "slot": "text"
+    },
+    {
+     "name": "rows.detail",
+     "selector": ".odl-skeleton-list [data-od-list=\"rows\"] [data-od-slot=\"detail\"]",
+     "what": "a short line of detail under the title, as in “Approved the Q4 vendor budget”",
+     "slot": "text"
+    },
+    {
+     "name": "rows.when",
+     "selector": ".odl-skeleton-list [data-od-list=\"rows\"] [data-od-slot=\"when\"]",
+     "what": "the when, as in “2m”",
+     "slot": "text"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
@@ -25073,15 +25682,18 @@
        "properties": {
         "name": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "rows.name"
         },
         "detail": {
          "type": "string",
-         "maxLength": 40
+         "maxLength": 40,
+         "part": "rows.detail"
         },
         "when": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "rows.when"
         }
        },
        "required": [
@@ -25089,7 +25701,8 @@
         "detail",
         "when"
        ]
-      }
+      },
+      "part": "rows"
      }
     },
     "required": [
@@ -25247,7 +25860,26 @@
     ]
    },
    "root": ".odl-skeleton-media",
-   "parts": [],
+   "parts": [
+    {
+     "name": "poster",
+     "selector": ".odl-skeleton-media [data-od-media=\"poster\"]",
+     "what": "the video's poster frame",
+     "slot": "media"
+    },
+    {
+     "name": "title",
+     "selector": ".odl-skeleton-media [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “Shooting in fog”",
+     "slot": "text"
+    },
+    {
+     "name": "detail",
+     "selector": ".odl-skeleton-media [data-od-slot=\"detail\"]",
+     "what": "a short line of detail under the title, as in “Field photography · 12 min · Lesson 3 of 9”",
+     "slot": "text"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
@@ -25260,21 +25892,25 @@
       "properties": {
        "src": {
         "type": "string",
-        "format": "uri"
+        "format": "uri",
+        "maxLength": 2048
        },
        "alt": {
         "type": "string",
         "maxLength": 120
        }
-      }
+      },
+      "part": "poster"
      },
      "title": {
       "type": "string",
-      "maxLength": 24
+      "maxLength": 24,
+      "part": "title"
      },
      "detail": {
       "type": "string",
-      "maxLength": 64
+      "maxLength": 64,
+      "part": "detail"
      }
     },
     "required": [
@@ -25437,7 +26073,44 @@
     ]
    },
    "root": ".odl-skeleton-table",
-   "parts": [],
+   "parts": [
+    {
+     "name": "rows",
+     "selector": ".odl-skeleton-table [data-od-list=\"rows\"]",
+     "what": "the rows, one item each",
+     "slot": "list"
+    },
+    {
+     "name": "rows.number",
+     "selector": ".odl-skeleton-table [data-od-list=\"rows\"] [data-od-slot=\"number\"]",
+     "what": "the number, as in “INV-2041”",
+     "slot": "text"
+    },
+    {
+     "name": "rows.customer",
+     "selector": ".odl-skeleton-table [data-od-list=\"rows\"] [data-od-slot=\"customer\"]",
+     "what": "the customer, as in “Gorsedown Print”",
+     "slot": "text"
+    },
+    {
+     "name": "rows.date",
+     "selector": ".odl-skeleton-table [data-od-list=\"rows\"] [data-od-slot=\"date\"]",
+     "what": "the date, as in “Nov 12”",
+     "slot": "text"
+    },
+    {
+     "name": "rows.amount",
+     "selector": ".odl-skeleton-table [data-od-list=\"rows\"] [data-od-slot=\"amount\"]",
+     "what": "the amount, as in “$4,280.00”",
+     "slot": "text"
+    },
+    {
+     "name": "rows.status",
+     "selector": ".odl-skeleton-table [data-od-list=\"rows\"] [data-od-var=\"status\"]",
+     "what": "paid, due or overdue",
+     "slot": "text"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
@@ -25450,26 +26123,31 @@
        "properties": {
         "number": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "rows.number"
         },
         "customer": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "rows.customer"
         },
         "date": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "rows.date"
         },
         "amount": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "rows.amount"
         },
         "status": {
          "enum": [
           "danger",
           "success",
           "warning"
-         ]
+         ],
+         "part": "rows.status"
         }
        },
        "required": [
@@ -25479,7 +26157,8 @@
         "amount",
         "status"
        ]
-      }
+      },
+      "part": "rows"
      }
     },
     "required": [
@@ -25644,21 +26323,43 @@
     ]
    },
    "root": ".odl-skeleton-text",
-   "parts": [],
+   "parts": [
+    {
+     "name": "title",
+     "selector": ".odl-skeleton-text [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “Set up approval rules”",
+     "slot": "text"
+    },
+    {
+     "name": "byline",
+     "selector": ".odl-skeleton-text [data-od-slot=\"byline\"]",
+     "what": "the date and reading time, as in “Updated Nov 10 · 4 minute read”",
+     "slot": "text"
+    },
+    {
+     "name": "body",
+     "selector": ".odl-skeleton-text [data-od-slot=\"body\"]",
+     "what": "the article text, as in “Approval rules decide who signs off on a bill be”",
+     "slot": "text"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "title": {
       "type": "string",
-      "maxLength": 32
+      "maxLength": 32,
+      "part": "title"
      },
      "byline": {
       "type": "string",
-      "maxLength": 48
+      "maxLength": 48,
+      "part": "byline"
      },
      "body": {
       "type": "string",
-      "maxLength": 240
+      "maxLength": 240,
+      "part": "body"
      }
     },
     "required": [
@@ -27134,17 +27835,68 @@
     ]
    },
    "root": ".odl-success-confirmation",
-   "parts": [],
+   "parts": [
+    {
+     "name": "title",
+     "selector": ".odl-success-confirmation [data-od-slot=\"title\"]",
+     "what": "the heading: what happened, in plain words, as in “Invoice sent”",
+     "slot": "text"
+    },
+    {
+     "name": "message",
+     "selector": ".odl-success-confirmation [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in “Gorsedown Print will get INV-2042 by email in a ”",
+     "slot": "text"
+    },
+    {
+     "name": "details",
+     "selector": ".odl-success-confirmation [data-od-list=\"details\"]",
+     "what": "the details, one item each",
+     "slot": "list"
+    },
+    {
+     "name": "details.label",
+     "selector": ".odl-success-confirmation [data-od-list=\"details\"] [data-od-slot=\"label\"]",
+     "what": "the visible label, as in “Amount”",
+     "slot": "text"
+    },
+    {
+     "name": "details.value",
+     "selector": ".odl-success-confirmation [data-od-list=\"details\"] [data-od-slot=\"value\"]",
+     "what": "what the person typed, as in “$4,280.00”",
+     "slot": "text"
+    },
+    {
+     "name": "next",
+     "selector": ".odl-success-confirmation [data-od-slot=\"next\"]",
+     "what": "what happens next, as in “We'll email you when they open it and when they ”",
+     "slot": "text"
+    },
+    {
+     "name": "view",
+     "selector": ".odl-success-confirmation [data-od-action=\"view\"]",
+     "what": "the View invoice action",
+     "slot": "action"
+    },
+    {
+     "name": "another",
+     "selector": ".odl-success-confirmation [data-od-action=\"another\"]",
+     "what": "the Send another action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
      "title": {
       "type": "string",
-      "maxLength": 24
+      "maxLength": 24,
+      "part": "title"
      },
      "message": {
       "type": "string",
-      "maxLength": 80
+      "maxLength": 80,
+      "part": "message"
      },
      "details": {
       "type": "array",
@@ -27155,22 +27907,26 @@
        "properties": {
         "label": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "details.label"
         },
         "value": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "details.value"
         }
        },
        "required": [
         "label",
         "value"
        ]
-      }
+      },
+      "part": "details"
      },
      "next": {
       "type": "string",
-      "maxLength": 80
+      "maxLength": 80,
+      "part": "next"
      }
     },
     "required": [
@@ -27979,7 +28735,50 @@
     ]
    },
    "root": ".odl-toast-undo",
-   "parts": [],
+   "parts": [
+    {
+     "name": "messages",
+     "selector": ".odl-toast-undo [data-od-list=\"messages\"]",
+     "what": "the messages, one item each",
+     "slot": "list"
+    },
+    {
+     "name": "messages.from",
+     "selector": ".odl-toast-undo [data-od-list=\"messages\"] [data-od-slot=\"from\"]",
+     "what": "the from, as in “Quorbin Studio”",
+     "slot": "text"
+    },
+    {
+     "name": "messages.subject",
+     "selector": ".odl-toast-undo [data-od-list=\"messages\"] [data-od-slot=\"subject\"]",
+     "what": "the subject, as in “Revised quote for the spring catalogue”",
+     "slot": "text"
+    },
+    {
+     "name": "messages.archive",
+     "selector": ".odl-toast-undo [data-od-list=\"messages\"] [data-od-action=\"archive\"]",
+     "what": "the Archive action",
+     "slot": "action"
+    },
+    {
+     "name": "message",
+     "selector": ".odl-toast-undo [data-od-slot=\"message\"]",
+     "what": "one or two sentences: what it means and what to do next, as in “Archived”",
+     "slot": "text"
+    },
+    {
+     "name": "undo",
+     "selector": ".odl-toast-undo [data-od-action=\"undo\"]",
+     "what": "the Undo action",
+     "slot": "action"
+    },
+    {
+     "name": "close",
+     "selector": ".odl-toast-undo [data-od-action=\"close\"]",
+     "what": "the close action",
+     "slot": "action"
+    }
+   ],
    "data": {
     "type": "object",
     "properties": {
@@ -27992,22 +28791,26 @@
        "properties": {
         "from": {
          "type": "string",
-         "maxLength": 24
+         "maxLength": 24,
+         "part": "messages.from"
         },
         "subject": {
          "type": "string",
-         "maxLength": 56
+         "maxLength": 56,
+         "part": "messages.subject"
         }
        },
        "required": [
         "from",
         "subject"
        ]
-      }
+      },
+      "part": "messages"
      },
      "message": {
       "type": "string",
-      "maxLength": 24
+      "maxLength": 24,
+      "part": "message"
      }
     },
     "required": [

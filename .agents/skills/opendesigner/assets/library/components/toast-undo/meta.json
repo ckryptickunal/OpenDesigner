@@ -34,9 +34,49 @@
       "the action can't be undone (deleting for good, sending money): use confirm-dialog",
       "news about the whole page: use page-banners"
     ],
-    "keyboard": [
-      "Tab reaches each Archive button",
-      "After Archive, focus moves to Undo; after Undo, it returns to the restored row"
+    "parts": [
+      {
+        "name": "messages",
+        "selector": ".odl-toast-undo [data-od-list=\"messages\"]",
+        "what": "the messages, one item each",
+        "slot": "list"
+      },
+      {
+        "name": "messages.from",
+        "selector": ".odl-toast-undo [data-od-list=\"messages\"] [data-od-slot=\"from\"]",
+        "what": "the from, as in “Quorbin Studio”",
+        "slot": "text"
+      },
+      {
+        "name": "messages.subject",
+        "selector": ".odl-toast-undo [data-od-list=\"messages\"] [data-od-slot=\"subject\"]",
+        "what": "the subject, as in “Revised quote for the spring catalogue”",
+        "slot": "text"
+      },
+      {
+        "name": "messages.archive",
+        "selector": ".odl-toast-undo [data-od-list=\"messages\"] [data-od-action=\"archive\"]",
+        "what": "the Archive action",
+        "slot": "action"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-toast-undo [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in “Archived”",
+        "slot": "text"
+      },
+      {
+        "name": "undo",
+        "selector": ".odl-toast-undo [data-od-action=\"undo\"]",
+        "what": "the Undo action",
+        "slot": "action"
+      },
+      {
+        "name": "close",
+        "selector": ".odl-toast-undo [data-od-action=\"close\"]",
+        "what": "the close action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
@@ -50,22 +90,26 @@
             "properties": {
               "from": {
                 "type": "string",
-                "maxLength": 24
+                "maxLength": 24,
+                "part": "messages.from"
               },
               "subject": {
                 "type": "string",
-                "maxLength": 56
+                "maxLength": 56,
+                "part": "messages.subject"
               }
             },
             "required": [
               "from",
               "subject"
             ]
-          }
+          },
+          "part": "messages"
         },
         "message": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 24,
+          "part": "message"
         }
       },
       "required": [
@@ -99,11 +143,11 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
-      },
-      "missing_image": {
-        "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches each Archive button",
+      "After Archive, focus moves to Undo; after Undo, it returns to the restored row"
+    ]
   }
 }

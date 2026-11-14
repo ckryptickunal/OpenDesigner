@@ -38,19 +38,38 @@
       "a filter hid everything: use empty-filtered",
       "everything is finished: use empty-all-done"
     ],
-    "keyboard": [
-      "Tab reaches Create a project; Enter or Space presses it"
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-empty-first-use [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “Start your first project”",
+        "slot": "text"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-empty-first-use [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in “A project keeps the files, tasks and people for ”",
+        "slot": "text"
+      },
+      {
+        "name": "create",
+        "selector": ".odl-empty-first-use [data-od-action=\"create\"]",
+        "what": "the Create a project action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "title": {
           "type": "string",
-          "maxLength": 32
+          "maxLength": 32,
+          "part": "title"
         },
         "message": {
           "type": "string",
-          "maxLength": 120
+          "maxLength": 120,
+          "part": "message"
         }
       },
       "required": [
@@ -85,11 +104,10 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
-      },
-      "missing_image": {
-        "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches Create a project; Enter or Space presses it"
+    ]
   }
 }
