@@ -1,0 +1,76 @@
+{
+  "kind": "agent",
+  "date": "2026-11-14",
+  "commit": "5b071ac2",
+  "skillsRef": "working tree",
+  "label": "claude-after-fix",
+  "model": "sonnet",
+  "judgeModel": "haiku",
+  "runsPerArm": 1,
+  "claudeVersion": "2.1.302",
+  "overallScore": 0.761904761904762,
+  "meanDelta": null,
+  "casesPassed": 7,
+  "casesTotal": 7,
+  "costUsd": 1.4229029999999998,
+  "durationSeconds": 170,
+  "partial": false,
+  "cases": [
+    {
+      "name": "export-tailwind",
+      "score": 1,
+      "without": null,
+      "delta": null,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "extend-rounder",
+      "score": 0.75,
+      "without": null,
+      "delta": null,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "one-question-first",
+      "score": 0.3333333333333333,
+      "without": null,
+      "delta": null,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "redesign-audits-first",
+      "score": 0.75,
+      "without": null,
+      "delta": null,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "research-no-web",
+      "score": 1,
+      "without": null,
+      "delta": null,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "taste-all-past",
+      "score": 1,
+      "without": null,
+      "delta": null,
+      "runs": 1,
+      "errors": []
+    },
+    {
+      "name": "taste-leaves-out",
+      "score": 0.5,
+      "without": null,
+      "delta": null,
+      "runs": 1,
+      "errors": []
+    }
+  ]
+}
