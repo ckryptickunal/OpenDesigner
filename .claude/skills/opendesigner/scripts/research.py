@@ -551,10 +551,37 @@ def render_md(eng, state, rec, props, conflicts, notes):
 
 # ------------------------------------------------------------------------------------------------ add, apply, skip, status
 
+RX_PLACEHOLDER_HOST = re.compile(r"^https?://(?:[^/]+\.)?(?:example\.(?:com|org|net)|[^/]*\.(?:example|test|invalid|localhost))(?:[:/]|$)", re.I)
+
+
+def read_for_real(rec):
+    """What add refuses and check only describes (S4 #3: findings that were never read): no tool that read anything, a
+    placeholder address (.example, example.com), or a web source with no day it was opened."""
+    out = []
+    web = [s for s in rec.get("sources") or [] if isinstance(s, dict) and re.match(r"^https?://", str(s.get("url") or ""))]
+    if web and not ((rec.get("tools") or {}).get("used")):
+        out.append("tools.used is empty: say which tool read these sources. With no tool that can read the web, write the plan "
+                   "and stop (research.md section 1); never write findings you did not read")
+    for s in web:
+        if RX_PLACEHOLDER_HOST.match(str(s["url"])):
+            out.append(f"source {s.get('id')} is a placeholder address ({s['url']}), not a page that was opened"
+                       + (" (the shipped example shows the shape only; add takes findings from pages you opened)"
+                          if str(rec.get("_about", "")).startswith("An example") else ""))
+        acc = str(s.get("accessed") or "")
+        try:
+            ok = _dt.date.fromisoformat(acc) <= _dt.date.today()
+        except ValueError:
+            ok = False
+        if not ok:
+            out.append(f"source {s.get('id')} has no accessed date (YYYY-MM-DD, the day it was opened): only pages that were "
+                       "really opened count")
+    return out
+
+
 def add(eng, d, path, accept=False, only=None, as_json=False):
     rec = load(path)
     ps = problems(rec)
-    errs = [t for l, t in ps if l == "error"]
+    errs = [t for l, t in ps if l == "error"] + read_for_real(rec)
     if errs:
         print(f"Nothing was saved: {len(errs)} problem(s) in {path}.")
         for t in errs:

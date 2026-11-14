@@ -366,6 +366,13 @@ def _guard_answer(d, value, why):
         refresh_docs(d)  # decisions show in DESIGN.md, so the first guarded commit does not fail on a stale file
 
 
+def owner_quote(what, quote):
+    """Choices that write the owner's files take their own words (S4 #9: agents ran handoff yes and guard install unasked)."""
+    if not quote or len(re.findall(r"[A-Za-z]{2,}", quote)) < 2:
+        raise SystemExit(f"`engine.py {what}` writes files the owner did not write, so it needs their yes in their own words: "
+                         f"ask them once, then `engine.py {what} --quote \"<their words>\"`. Nothing was written.")
+
+
 def cmd_guard(d, action, why=None):
     """`engine.py guard install|remove|no|status`: the opt-in pre-commit hook that runs review --strict (owner, 2026-11-09).
     Never automatic: the skill asks once and runs install only on a yes, and no records a no. It never overwrites a hook it
@@ -5896,7 +5903,7 @@ def now_facts(d, state=None, text=None):
     sketched = bool((state.get("context") or {}).get("product") or (state.get("answers") or {}).get("Q-aud-01"))
     research = ((state.get("research") or {}).get("status")) or "none"
     waiting = []
-    if not prof.get("tracking"):
+    if not prof.get("tracking") and not sketched and not built:  # asked once, before the sketch; never later, never with a result (S4 #4)
         waiting.append("the log question, asked alone and first (rules.md section 11)")
     if cur:
         show = cur[2][:1].lower() + cur[2][1:]
@@ -5906,7 +5913,7 @@ def now_facts(d, state=None, text=None):
     if not built:
         nxt = "engine.py build" if sketched else "engine.py sketch (zoom.md, level 0)"
     elif not prof.get("handoff"):
-        nxt = "ask once, then engine.py handoff yes (or handoff no)"
+        nxt = "ask once, then engine.py handoff yes --quote \"<their words>\" (or handoff no)"
     elif research == "planned":
         nxt = "engine.py research add <findings.json>"
     elif research not in ("done", "skipped"):
@@ -6235,13 +6242,20 @@ def cmd_status(d, as_json=False, hook=False):
     rules = sum(1 for n in notes if n["said"] >= 2)
     root = doc_dir(d)
     if hook:
-        print(f"OpenDesigner: this project has a design system, {state.get('name')}, in opendesigner/. Use the opendesigner "
-              "skills for any UI, styling or visual work.")
-        print(now_text(f, bold=False))
+        rules_md = os.path.join(REFERENCES, "rules.md")
+        print(f"OpenDesigner: this project has a design system, {state.get('name')}, in opendesigner/. Load the "
+              "opendesigner-extend skill for any UI, styling or visual work, including building a page on this system.")
+        print(f"Now: {f['step']}.")
+        for w_ in f["waiting"] or ["nothing the engine can see"]:
+            print(f"Waiting for the owner: {w_.replace('(rules.md section', '(' + rules_md + ' section')}.")
+        print(f"Next: {f['next']}.")
+        print("Every build: open a round (engine.py ledger start \"<what>\" --items ...), build from the tokens in "
+              "opendesigner/build/css/tokens.css, run engine.py review, then check the rendered page with opendesigner-review "
+              "and show screenshots at phone and desktop width.")
         print(f"Owner notes in opendesigner/RULES.md: {rules} rule{'s' if rules != 1 else ''} and {len(notes) - rules} "
               f"note{'s' if len(notes) - rules != 1 else ''}." if notes else "No owner notes in opendesigner/RULES.md yet.")
-        print("Read DESIGN.md and opendesigner/RULES.md first; end every implementation with engine.py review and a re-read "
-              "of DESIGN.md; owner corrections go to engine.py feedback \"<the rule>\" --kind note.")
+        print(f"Read DESIGN.md and opendesigner/RULES.md first; the message rules are in {rules_md}. Owner corrections go to "
+              "engine.py feedback \"<the rule>\" --kind note.")
         print("engine.py here is: python3 " + shlex.quote(os.path.abspath(__file__)))
         try:
             cfg = checkin_settings(state)
@@ -6349,7 +6363,7 @@ def refresh_handoff(d, quiet=True):
     if block != handoff_note(d, state, light=not light)[0].strip():  # edited by hand, or written by an older engine
         if not quiet:
             print(f"  {os.path.relpath(agents)}: the OpenDesigner note there is not one the engine wrote (edited, or from an older "
-                  "engine), so it was left as it is; `engine.py handoff yes` rewrites it.")
+                  "engine), so it was left as it is; `engine.py handoff yes --quote \"<their words>\"` rewrites it.")
         return False
     new = re.sub(re.escape(HANDOFF_START) + r".*?" + re.escape(HANDOFF_END) + r"\n?",
                  lambda _m: f"{HANDOFF_START}\n{note}\n{HANDOFF_END}\n", text, count=1, flags=re.S)
@@ -6371,7 +6385,7 @@ def handoff_reminder(state):
     if ((state or {}).get("profile") or {}).get("handoff"):
         return ""
     return ("Ask once, in its own message: shall I write a short note so later sessions follow this system (AGENTS.md, and a "
-            "CLAUDE.md that imports it)? Then: engine.py handoff yes, or handoff no.")
+            "CLAUDE.md that imports it)? Then: engine.py handoff yes --quote \"<their words>\", or handoff no.")
 
 
 def cmd_handoff(d, answer=None, why=None):
@@ -11622,6 +11636,7 @@ def tailwind_classes(files):
     flat = resolve_all(files, {})
     has = lambda p: p in flat
     out = {"color": [], "layout": [], "shape": [], "elevation": [], "type": [], "motion": []}
+    TW_TOKEN.clear()
     for p, c in (("color.bg.action.primary", "bg-action-primary"), ("color.bg.action.primary-hover", "hover:bg-action-primary-hover"),
                  ("color.bg.action.primary-pressed", "active:bg-action-primary-pressed"), ("color.text.on-action", "text-on-action"),
                  ("color.surface.base", "bg-surface-base"), ("color.surface.raised", "bg-surface-raised"), ("color.text.primary", "text-fg-primary"),
@@ -11629,15 +11644,40 @@ def tailwind_classes(files):
                  ("color.border.input", "border-line-input"), ("color.border.focus", "outline-line-focus"), ("color.bg.danger.bold", "bg-danger-bold")):
         if has(p):
             out["color"].append(c)
+            TW_TOKEN[c] = p
     for p, c in (("space.inset.md", "p-inset-md"), ("space.stack.md", "gap-stack-md"), ("space.inline.sm", "gap-inline-sm"),
                  ("size.control.md", "h-control-md"), ("size.icon.md", "size-icon-md"), ("size.target.min", "min-h-target-min")):
         if has(p):
             out["layout"].append(c)
+            TW_TOKEN[c] = p
     out["shape"] = ["rounded-control", "rounded-container", "rounded-overlay", "rounded-full"]
     out["elevation"] = ["shadow-raised", "shadow-floating", "shadow-overlay"]
     out["type"] = [f"text-{'-'.join(p.split('.')[1:])}" for p in ("text.body.md", "text.label.lg", "text.title.md", "text.headline.md") if has(p)]
     out["motion"] = ["transition-feedback"] + [f"ease-{k}" for k in ("enter", "exit", "hover") if has(f"motion.easing.{k}")]
+    TW_TOKEN.update({"rounded-control": "radius.control", "rounded-container": "radius.container", "rounded-overlay": "radius.overlay", "rounded-full": "radius.full",
+                     "shadow-raised": "elevation.raised", "shadow-floating": "elevation.floating", "shadow-overlay": "elevation.overlay",
+                     "transition-feedback": "motion.transition.feedback"})
+    TW_TOKEN.update({f"ease-{k}": f"motion.easing.{k}" for k in ("enter", "exit", "hover")})
+    TW_TOKEN.update({c: "text." + c[5:].replace("-", ".", 1) for c in out["type"]})  # text-body-md -> text.body.md (a text style)
     return out
+
+
+TW_TOKEN = {}  # Tailwind class -> the token path behind it, filled by tailwind_classes (S4 #5: one token, one name per world)
+
+
+def plain_css_for(cls, area, prefix, css_names):
+    """The plain-CSS name for a Tailwind class, only as the CSS export writes it (a name it does not write is the mistake
+    review flags). A text style is a class; a transition is its duration and easing."""
+    p = TW_TOKEN.get(cls)
+    if not p:
+        return "—"
+    if area == "type":
+        return f"`.{prefix}-{'-'.join(p.split('.'))}` (a text style class)"
+    v = css_var(prefix, p)
+    if v in css_names:
+        return f"`var({v})`"
+    parts = [f"`var({v}-{x})`" for x in ("duration", "easing") if f"{v}-{x}" in css_names]
+    return " and ".join(parts) or "—"
 
 
 def render_design_md(d, files, meta, state, existing="", out_dir=None):
@@ -12238,16 +12278,22 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             "the Overview, and never add anything on its Never list without asking.",
             "4. To change the system: `engine.py set <path> <value> --why \"...\"`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.",
             "5. To extend: add a decision (never hand-edit tokens or this file). Keep semantic names the same across modes. Deprecate instead of deleting.",
-            "6. After any implementation, run `engine.py review` and re-read this file."]
+            "6. Every build: open a round (`engine.py ledger start \"<what>\" --items ...`), build from the tokens, run `engine.py review`, "
+            "check the rendered page with opendesigner-review and show screenshots at phone and desktop width, mark each ledger item "
+            "done or waived (with the owner's words), then re-read this file."]
     if std_body:
         body.append("7. Follow the Standards section. Change a standard only when the person explicitly asks: "
                     "`engine.py standard override <id> --why \"<their words>\"`.")
     if removed_entries(state):
         body.append(f"{len(body) + 1}. Never bring back anything in Removed on Purpose. Only the owner can: `engine.py removed restore <id> --why \"<their words>\"`.")
     if tw:
+        css_names = set(re.findall(r"(--[a-zA-Z0-9_-]+)\s*:", export_css(files, meta, prefix)))
         body += ["", "**Tailwind v4 classes** (one import: `@import \"tailwindcss\"; @import \"<path>/opendesigner/build/tailwind/theme.css\";`"
                  + ("; Tailwind's default colors, text sizes, radii and shadows are switched off, so only these exist" if (state.get("exports") or {}).get("tailwindReset", True) else "")
-                 + "):", "", _md_table(["Area", "Classes"], [(k.title(), ", ".join(f"`{c}`" for c in v)) for k, v in tw.items() if v])]
+                 + "). They need a Tailwind build that imports that file. In plain HTML with no build step, use the CSS name beside each "
+                 f"class from `{R('build/css/tokens.css')}`; never load Tailwind from a CDN script. Each row is one token under its two names:",
+                 "", _md_table(["Area", "Tailwind class", "Plain CSS (no build step)"],
+                               [(k.title(), f"`{c}`", plain_css_for(c, k, prefix, css_names)) for k, v in tw.items() for c in v])]
     note_ = research_py.design_md_note(state) if research_py and hasattr(research_py, "design_md_note") else ""  # S3: the research summary page
     if note_:
         body += ["", note_]
@@ -13748,6 +13794,7 @@ def _main(argv=None):
                                                         "AGENTS.md and a CLAUDE.md that imports it; no writes nothing; both are recorded")
     p.add_argument("answer", nargs="?", choices=["yes", "no"])
     p.add_argument("--why", default=None, help="the owner's words")
+    p.add_argument("--quote", default=None, help="yes: the owner's own words saying yes (required; S4 #9)")
     sub.add_parser("generate", parents=[common], help="write tokens/ (DTCG 2025.10 + resolver)")
     p = sub.add_parser("validate", parents=[common])
     p.add_argument("--json", action="store_true")
@@ -13794,6 +13841,7 @@ def _main(argv=None):
     p = sub.add_parser("guard", parents=[common], help="the opt-in pre-commit hook that runs review --strict: install, remove, no, status")
     p.add_argument("action", choices=["install", "remove", "no", "status"])
     p.add_argument("--why", default=None, help="the person's words, kept in decisions.md")
+    p.add_argument("--quote", default=None, help="install: the owner's own words saying yes (required; S4 #9)")
     p = sub.add_parser("contrast", parents=[common], help="the WCAG contrast ratio of two hex colors and the floors it meets")
     p.add_argument("fg", help="foreground hex, such as #767676")
     p.add_argument("bg", help="background hex, such as #ffffff")
@@ -13826,6 +13874,10 @@ def _main(argv=None):
     p.add_argument("--open", action="store_true")
     p.add_argument("--json", action="store_true")
     p.add_argument("--out", default=None, help="where to write the page (default opendesigner/adapt.html)")
+    p = sub.add_parser("keep", parents=[common], help="the owner approves an od-ignore reason; until then review counts those lines as open")
+    p.add_argument("reason", nargs="?", help="the reason exactly as written after od-ignore:")
+    p.add_argument("--quote", default=None, help="the owner's own words saying yes")
+    p.add_argument("--remove", action="store_true")
     p = sub.add_parser("exempt", parents=[common], help="keep example files that break the system on purpose out of review, with why")
     p.add_argument("glob", nargs="?", help="a folder, file or glob, from the repository's top folder (site/figures/*)")
     p.add_argument("--why", default=None)
@@ -13991,11 +14043,15 @@ def _main(argv=None):
     elif a.cmd == "contrast":
         return cmd_contrast(a.fg, a.bg, as_json=a.json, need=a.min)
     elif a.cmd == "guard":
-        return cmd_guard(d, a.action, a.why)
+        if a.action == "install":
+            owner_quote("guard install", a.quote)
+        return cmd_guard(d, a.action, a.why or a.quote)
     elif a.cmd == "status":
         return cmd_status(d, a.json, a.hook)
     elif a.cmd == "handoff":
-        return cmd_handoff(d, a.answer, a.why)
+        if a.answer == "yes":
+            owner_quote("handoff yes", a.quote)
+        return cmd_handoff(d, a.answer, a.why or a.quote)
     elif a.cmd == "generate":
         cmd_generate(d)
     elif a.cmd == "validate":
@@ -14037,6 +14093,8 @@ def _main(argv=None):
         if not audit_py:
             raise SystemExit("adapt needs scripts/audit.py next to engine.py.")
         return audit_py.adapt_page(sys.modules[__name__], d, a.file, open_=a.open, as_json=a.json, out=a.out)
+    elif a.cmd == "keep":
+        return cmd_keep(d, a.reason, a.quote, a.remove)
     elif a.cmd == "exempt":
         return cmd_exempt(d, a.glob, a.why, a.by, a.remove, a.json)
     elif a.cmd == "ledger":
@@ -16226,6 +16284,88 @@ def exempt_match(rules, path, root):
     return None
 
 
+GENERIC_FAMILIES = {"serif", "sans-serif", "monospace", "cursive", "fantasy", "system-ui", "ui-serif", "ui-sans-serif",
+                    "ui-monospace", "ui-rounded", "math", "emoji", "fangsong"}
+TW_WEIGHTS = {"thin": 100, "extralight": 200, "light": 300, "normal": 400, "medium": 500, "semibold": 600, "bold": 700,
+              "extrabold": 800, "black": 900}
+
+
+def font_literals(line, rel, i, ext, sys_weights, selector=""):
+    """Typed font stacks and weights off the system on one line (S4 #1): font-family, the font shorthand, JSX fontFamily and
+    fontWeight, Tailwind font-[...] and weight classes. Not inside @font-face (it declares a face, it does not pick one), not a
+    var(), not a lone generic family such as monospace."""
+    if "@font-face" in selector or "@font-face" in line:
+        return []
+    out = []
+
+    def family(v, raw):
+        v = v.strip().rstrip("\"'`,) ")
+        if v and not v.lower().startswith(("var(", "inherit", "initial", "unset", "revert")) and v.lower().strip("\"'") not in GENERIC_FAMILIES:
+            out.append((rel, i, "font", raw))
+
+    def weight(w, raw):
+        w = {"bold": 700, "normal": 400}.get(str(w).lower(), w)
+        if sys_weights and str(w).isdigit() and int(w) not in sys_weights:
+            out.append((rel, i, "weight", raw))
+    for m in re.finditer(r"(?<![\w-])font-family\s*:\s*([^;}{\n<>]+)", line):
+        v = m.group(1)
+        if ext in (".html", ".vue", ".svelte") and re.search(r"style\s*=\s*\"[^\"]*$", line[:m.start()]):
+            v = v.split('"')[0]
+        family(v, f"font-family: {v.strip().rstrip(chr(34) + chr(39) + ',) ')[:60]}")
+    for m in re.finditer(r"(?<![\w-])font\s*:\s*([^;}{\n<>]+)", line):  # the shorthand: [style] [weight] size[/lh] family
+        v = m.group(1).strip()
+        if v.lower().startswith(("var(", "inherit", "initial", "unset", "revert")):
+            continue
+        out.append((rel, i, "font", f"font: {v[:60]}"))
+    for m in re.finditer(r"(?<![\w-])font-weight\s*:\s*(\d{3}|bold|normal)\b", line):
+        weight(m.group(1), f"font-weight: {m.group(1)}")
+    for m in re.finditer(r"\bfontFamily\s*:\s*[\"'`]([^\"'`]+)", line):
+        family(m.group(1), f"fontFamily: {m.group(1)[:60]}")
+    for m in re.finditer(r"\bfontWeight\s*:\s*[\"'`]?(\d{3}|bold|normal)\b", line):
+        weight(m.group(1), f"fontWeight: {m.group(1)}")
+    if RX_TW_CONTEXT.search(line) or ext in (".html", ".vue", ".svelte"):
+        for m in re.finditer(r"(?<![\w\[-])font-\[([^\]]+)\]", line):
+            v = m.group(1).replace("_", " ")
+            if re.fullmatch(r"\d{3}", v):
+                weight(v, m.group(0))
+            else:
+                family(v, m.group(0))
+        for m in re.finditer(r"(?<![\w\[-])font-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)(?![\w-])", line):
+            weight(TW_WEIGHTS[m.group(1)], m.group(0))
+    return out
+
+
+def cmd_keep(d, reason=None, quote=None, remove=False):
+    """The owner approves an od-ignore reason: lines with that exact reason count as kept on purpose. Without approval review
+    counts them as open, so an agent cannot quiet review by commenting lines out (S4 #2). Recorded in state.keeps and as a
+    waiver, so DESIGN.md shows it. Without a reason: list the approved reasons."""
+    sp = os.path.join(d, STATE_FILE)
+    if not os.path.exists(sp):
+        raise SystemExit(f"No system here ({sp}).")
+    state = read_json(sp)
+    keeps = state.setdefault("keeps", {})
+    if not reason:
+        for k, v in sorted(keeps.items()):
+            print(f"\"{k}\": approved {v.get('date')} (\"{v.get('quote')}\")")
+        if not keeps:
+            print("No od-ignore reason is approved yet.")
+        return 0
+    if remove:
+        keeps.pop(reason, None)
+        (state.get("waivers") or {}).pop(f"od-ignore: {reason}", None)
+        dump_json(sp, state)
+        print(f"\"{reason}\" is no longer approved: its od-ignore lines count as open again.")
+        return 0
+    if not quote or len(quote.split()) < 2:
+        raise SystemExit("Only the owner approves an exception: --quote \"<their words, saying yes to it>\". Ask them first.")
+    keeps[reason] = {"quote": quote, "by": "owner", "date": _dt.date.today().isoformat()}
+    state.setdefault("waivers", {})[f"od-ignore: {reason}"] = f"approved by the owner: \"{quote}\""
+    dump_json(sp, state)
+    refresh_docs(d)
+    print(f"Approved: od-ignore lines with the reason \"{reason}\" are kept on purpose (owner: \"{quote}\").")
+    return 0
+
+
 def cmd_exempt(d, glob=None, why=None, by=None, remove=False, as_json=False):
     """Mark files as examples that break the system on purpose (a demo of mistakes), so review leaves them out and says so.
     Without a glob: list them. A reason of at least two words is required; nothing is exempt silently."""
@@ -16586,7 +16726,15 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
     wb_seen = {}  # "white" / "black" -> (file, line, text) of the first opaque use in code
     tok_rx, token_uses = token_use_rx(prefix), 0
     tok_by = collections.defaultdict(list)  # var(--ds-x) name -> [(file, line)], for audit-page
-    tok_name_rx = re.compile(rf"var\(\s*--{re.escape(prefix)}-([a-z0-9-]+)")
+    tok_name_rx = re.compile(rf"var\(\s*--{re.escape(prefix)}-([a-zA-Z0-9_-]+)")
+    # the names the system defines (every export a page can load), so a var(--ds-...) that names nothing is caught (S4 #1, #5)
+    defined_vars = set(re.findall(rf"--{re.escape(prefix)}-([a-zA-Z0-9_-]+)\s*:", export_css(files, meta, prefix)))
+    local_vars = set()  # --ds-x: defined in the person's own code
+    sys_weights = {int(v) for v in (meta.get("type") or {}).get("weights", {}).values() if isinstance(v, (int, float))}
+    for p_, t_ in light.items():
+        if t_.get("type") == "fontWeight" and isinstance(t_.get("resolved"), (int, float)):
+            sys_weights.add(int(t_["resolved"]))
+    font_findings = []  # (rel, i, value): typed font stacks and weights off the system
     exempt = exempt_rules(state)
     exempt_hits = collections.Counter()
     kept, bare, std_notes = [], [], []  # od-ignore lines with and without a reason; standards broken on od-ignore lines (notes)
@@ -16642,6 +16790,10 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
                 token_uses += len(tok_rx.findall(line))
                 for m_ in tok_name_rx.finditer(line[:REVIEW_LINE_CAP]):
                     tok_by[m_.group(1)].append((rel, i))
+                for m_ in re.finditer(rf"--{re.escape(prefix)}-([a-zA-Z0-9_-]+)\s*:", line[:REVIEW_LINE_CAP]):
+                    local_vars.add(m_.group(1))
+                font_findings.extend(font_literals(line[:REVIEW_LINE_CAP], rel, i, ext, sys_weights,
+                                                   css_selector_context(lines, i) if ext in (".css", ".scss", ".sass", ".less", ".html", ".vue", ".svelte") else ""))
                 look_tokens += len(re.findall(rf"var\(\s*--{re.escape(prefix)}-(?:color|font|text)-", line))
                 for m_ in RX_HEX.finditer(line[:REVIEW_LINE_CAP]):  # the colors and fonts the code uses, to compare with DESIGN.md
                     if not re.search(r"href=[\"']?$", line[max(0, m_.start() - 7):m_.start()]):
@@ -16808,6 +16960,31 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
                 for m in RX_RADIUS_NATIVE.finditer(line):
                     add("size", m.group(0), f"use {P}.Space / {P}.Radius (Swift) or {K}Space (Compose)")
                     break
+    import difflib
+    for name, uses in sorted(tok_by.items()):
+        if name in defined_vars or name in local_vars:
+            continue
+        near = difflib.get_close_matches(name, defined_vars, n=1, cutoff=0.5)
+        for rel_, ln_ in uses[:20]:
+            findings.append({"kind": "unknown-token", "file": rel_, "line": ln_, "value": f"var(--{prefix}-{name})",
+                             "fix": (f"no token has this name: use var(--{prefix}-{near[0]})" if near else
+                                     "no token has this name: pick one from opendesigner/build/css/tokens.css") +
+                                    " (the browser falls back to its default, often a serif font or no colour)", "severity": "error"})
+    fam = {k: css_var(prefix, f"font.family.{k}") for k in ("text", "display", "mono") if f"font.family.{k}" in light}
+    for rel_, ln_, kind_, val_ in font_findings:
+        if kind_ == "font":
+            mono_ = re.search(r"mono|code|courier|consolas|menlo", val_, re.I)
+            want = fam.get("mono" if mono_ and "mono" in fam else "text") or next(iter(fam.values()), None)
+            findings.append({"kind": "font", "file": rel_, "line": ln_, "value": val_,
+                             "fix": f"use var({want})" if want else "use a font-family token"})
+        else:
+            findings.append({"kind": "weight", "file": rel_, "line": ln_, "value": val_,
+                             "fix": f"the system's weights are {', '.join(str(w) for w in sorted(sys_weights))}: use one of them "
+                                    "(or a text style, which sets it)"})
+    # od-ignore lines are the owner's exception: an agent's own od-ignore stays open until the owner approves its reason
+    # (engine.py keep "<reason>" --quote "<their words>"; S4 #2)
+    approved = {k.lower() for k in (state.get("keeps") or {})}
+    unapproved = [k_ for k_ in kept if k_["reason"].lower() not in approved]
     # stale or untrue DESIGN.md / PRODUCT.md sections: render now and compare section by section
     stale, untrue = [], []
     out_dir = os.path.dirname(os.path.abspath(d)) if os.path.basename(os.path.abspath(d)) == DEFAULT_DIR else d
@@ -16847,7 +17024,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
     taste = taste_index(d, state)  # dials that moved away from the person's taste: flagged, never a failure (taste is theirs)
     drift = taste_py.drift(taste, meta["dials"]) if taste else []
     r_errs, r_notes = research_py.review(d, state) if research_py else ([], [])
-    hard = sum(1 for f_ in findings if f_["kind"] not in ("standard", "chart", "removed"))
+    hard = sum(1 for f_ in findings if f_["kind"] not in ("standard", "chart", "removed", "unknown-token"))
     age = system_age(d, base) if scanned else None
     seed = (light.get("color.brand.seed") or {}).get("resolved")
     share = share_card_age(d, base, seed.get("hex") if isinstance(seed, dict) else None)
@@ -16881,10 +17058,11 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
         + ([plural(len(invalid), "validate error") + " in the system"] if invalid else []) \
         + ([plural(len(r_errs), "user research error")] if r_errs else []) \
         + [f"{b} points at a missing {DEFAULT_DIR}/" for b in broken] \
-        + ([plural(len(open_items), "ledger item") + " neither done nor waived"] if open_items else [])
+        + ([plural(len(open_items), "ledger item") + " neither done nor waived"] if open_items else []) \
+        + ([plural(len(unapproved), "od-ignore line") + " the owner has not approved"] if unapproved else [])
     to_fix = len(findings) + (0 if in_charge else 1) + len(drift_look) + (1 if stale or missing else 0) + len(set(untrue)) \
-        + len(guard) + len(invalid) + len(r_errs) + len(broken) + len(open_items)
-    result.update({"keptOnPurpose": kept[:500], "ignoredWithoutReason": bare[:500], "guard": guard, "guardNotes": guard_notes,
+        + len(guard) + len(invalid) + len(r_errs) + len(broken) + len(open_items) + len(unapproved)
+    result.update({"keptOnPurpose": [k_ for k_ in kept if k_ not in unapproved][:500], "ignoredByAgent": unapproved[:500], "ignoredWithoutReason": bare[:500], "guard": guard, "guardNotes": guard_notes,
                    "standardNotes": std_notes[:500], "floorKept": floor_kept[:500],
                    "validateErrors": [{"category": i_["category"], "message": i_["message"], "where": i_["where"]} for i_ in invalid[:500]],
                    "toFix": to_fix, "ok": not reasons, "reasons": reasons})
@@ -16899,7 +17077,8 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
     else:
         for b in broken:
             print(f"Broken: {b} says the system lives in {DEFAULT_DIR}/, but there is no {DEFAULT_DIR}/{STATE_FILE} there.")
-        tokf = [f_ for f_ in findings if f_["kind"] not in ("standard", "chart", "removed")]
+        tokf = [f_ for f_ in findings if f_["kind"] not in ("standard", "chart", "removed", "unknown-token")]
+        unk = [f_ for f_ in findings if f_["kind"] == "unknown-token"]
         stdf = [f_ for f_ in findings if f_["kind"] == "standard"]
         chf = [f_ for f_ in findings if f_["kind"] == "chart"]
         gonef = [f_ for f_ in findings if f_["kind"] == "removed"]
@@ -16910,11 +17089,20 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
         for r_ in result["exempt"]:
             print(f"  Left out on purpose: {r_['files']} file{'s' if r_['files'] != 1 else ''} under {r_['glob']} ({r_['why']}; "
                   f"marked by {r_['by']} on {r_['date']}). Undo with engine.py exempt --remove '{r_['glob']}'.")
+        if unk:
+            names = collections.Counter(f_["value"] for f_ in unk)
+            print(f"{len(unk)} use{'s' if len(unk) != 1 else ''} of {len(names)} token name{'s' if len(names) != 1 else ''} that do"
+                  f"{'es' if len(names) == 1 else ''} not exist (the browser shows its default instead):")
+            for v_, n_ in names.most_common(10 if not show_all else None):
+                f_ = next(x for x in unk if x["value"] == v_)
+                print(f"  {n_:>4} x  {v_}  ->  {f_['fix'].split(' (')[0]}  (first at {f_['file']}:{f_['line']})")
+            if len(names) > 10 and not show_all:
+                print(f"  ... and {len(names) - 10} more names (engine.py review --all).")
         if not scanned:
             print("No code yet, so there is nothing to check.")
         elif total:
             print(f"{total} hard-coded value{'s' if total != 1 else ''} skip the tokens: "
-                  + ", ".join(f"{n} {plural_kind(k, n)}" for k, n in sorted(by.items()) if k not in ("standard", "chart", "removed")) + ".")
+                  + ", ".join(f"{n} {plural_kind(k, n)}" for k, n in sorted(by.items()) if k not in ("standard", "chart", "removed", "unknown-token")) + ".")
             if show_all:
                 for f_ in tokf:
                     print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']}")
@@ -16926,7 +17114,7 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
                 if len(rows) > 10:
                     print(f"  ... and {len(rows) - 10} more groups. Every line: engine.py review --all; to see and settle them: "
                           "engine.py audit-page --open.")
-            print("  To keep a raw value on purpose, add a comment with the reason on that line: od-ignore: <why, at least two words>.")
+            print("  Fix each from the tokens. A value kept on purpose is the owner's call: ask them first; never add od-ignore to make review pass.")
         elif token_uses:
             print("No hard-coded colors, sizes, radii, shadows or durations found: the code uses the tokens.")
         else:
@@ -16980,8 +17168,17 @@ def cmd_review(d, project=None, strict=False, as_json=False, limit=40, collect=N
                 print(f"  {f_['file']}:{f_['line']}  {f_['value']}  ->  {f_['fix']} ({', '.join(f_['standards'])}, {f_['strength']}; "
                       + (f"reason given: {f_['reason'][:80]}" if f_["reason"] else "no reason given")
                       + (f"; matches {', '.join(f_['removed'])}, removed on purpose)" if f_.get("removed") else ")"))
+        if unapproved:
+            rs_ = collections.Counter(k_["reason"] for k_ in unapproved)
+            print(f"{len(unapproved)} od-ignore line{'s' if len(unapproved) != 1 else ''} the owner has not approved (open until they do; "
+                  f"{len(rs_)} reason{'s' if len(rs_) != 1 else ''}):")
+            for rsn, n_ in rs_.most_common(10):
+                k_ = next(x for x in unapproved if x["reason"] == rsn)
+                print(f"  {n_:>4} x  \"{rsn[:70]}\"  (first at {k_['file']}:{k_['line']})")
+            print("  Ask the owner. If they agree: engine.py keep \"<the reason>\" --quote \"<their words>\". If not, fix the lines.")
+        kept = [k_ for k_ in kept if k_ not in unapproved]  # only what the owner approved is kept on purpose
         if kept:
-            print(f"{len(kept)} line{'s' if len(kept) != 1 else ''} kept on purpose (od-ignore with a reason; not counted as findings):")
+            print(f"{len(kept)} line{'s' if len(kept) != 1 else ''} kept on purpose (od-ignore with a reason the owner approved):")
             for k_ in kept[:limit]:
                 back = "; ".join(f"{a} ({b})" for a, b in zip(k_.get("removed") or [], k_.get("removedWhat") or []))
                 print(f"  {k_['file']}:{k_['line']}  {k_['reason'][:100]}" + (f"  (matches {back}, removed on purpose: back under this "

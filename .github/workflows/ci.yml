@@ -84,6 +84,9 @@ jobs:
       - name: Check-ins at session start, every N decisions and each closed round
         run: python3 tools/test_checkins.py
 
+      - name: Review catches what a second model got past it (S4 drift)
+        run: python3 tools/test_review_drift.py
+
       - name: Audit page, adapt page, exempt folders and the audit ledger
         run: python3 tools/test_audit_page.py
 

@@ -1,5 +1,5 @@
 {
-  "_about": "An example of research/users.json, the user research findings (references/research.md). Invented product, invented sources on .example domains: never copy these facts. Check a file with: engine.py research check <file>",
+  "_about": "An example of research/users.json, the user research findings (references/research.md). Invented product, invented sources on .example domains: never copy these facts. It shows the shape only: engine.py research check passes it, and engine.py research add refuses it on purpose, because its sources were never opened. Your own file needs pages you opened, each with its accessed date, and the tools you used.",
   "v": 1,
   "brief": "People in India over 55 who reorder the same medicines every month, mostly on Android phones",
   "date": "2026-10-26",
