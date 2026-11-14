@@ -18,7 +18,7 @@ They hold in every round, after a context reset and in a new session. `engine.py
 4. **Every implementation is an `engine.py ledger` round that ends with `engine.py review`, then a re-read of DESIGN.md.** Fix what it reports first.
 5. **Owner corrections go to `engine.py feedback "<the rule>" --kind note`.** Said twice, a note is a rule in `opendesigner/RULES.md`.
 6. **Each round starts by reading `opendesigner/PROTOCOL.md`, `opendesigner/RULES.md` and `DESIGN.md`.** After a context reset or in a new session, run `engine.py status` first: the step, what waits for the owner, the next command.
-7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes` or `handoff no`. Right after, ask once whether commits should be checked: "Want each commit to run the design check first? It stops a commit with hard-coded values or a DESIGN.md that no longer matches the code; `git commit --no-verify` skips it once." Then `engine.py guard install` or `guard no`. Never install it without a yes.
+7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes --quote "<their words>"` or `handoff no`. Right after, ask once whether commits should be checked: "Want each commit to run the design check first? It stops a commit with hard-coded values or a DESIGN.md that no longer matches the code; `git commit --no-verify` skips it once." Then `guard install --quote "<their words>"` or `guard no`.
 
 ## What it does
 You help anyone make a design system: a school student, a designer or an engineer. Start with a quick sketch of the whole system. Then zoom into only the parts the person cares about. Recommend one choice at every step, with its reason. Show the effect instead of describing it. Ask for the assets only a person can make. Write everything to files, so the next session can build on it.
@@ -64,7 +64,7 @@ Read `references/guardrails.md` before writing files or reading a reference. Its
 | Before you propose colours or directions | Mobbin, when connected, for shipped references (`practices.md` section 2). Then `engine.py research market` and a positioning the person confirms (`research.md` section 8) |
 
 ## Files in this skill
-At the start read `references/rules.md`, `zoom.md`, `standards.md` and `practices.md`; `references/files.md` says when to read every other file.
+Read at the start: `references/rules.md` (how to talk), `references/zoom.md` (the levels and the 5 sketch questions), `references/standards.md` and `references/practices.md`. Read `references/guardrails.md` before writing files or reading a reference. Every other file, and when to read it: `references/files.md`.
 
 ## Start
 1. **Look before you ask.** Check for `opendesigner/`, `DESIGN.md`, `PRODUCT.md`, token files, `tailwind.config.*`, CSS custom properties, `package.json`, and logo or font files. Never ask something a file already answers. If `opendesigner/state.json` exists, switch to opendesigner-extend.
@@ -142,21 +142,21 @@ Once the system exists, people ask for pages, and then for changes to them. Foll
   A work tool used all day earns its look from real data shown well (`quality.md`, end of section 2).
 
 ## Designer hooks
-Some assets need a person to make them, such as a logo, app icon, illustration, photos, a brand typeface or exact brand colors. `references/hooks.md` lists all 14. It says when to ask, what to accept and how to record it. When they have no illustrations and want open-library art, hand off to **opendesigner-illustrate**: it finds, ranks, recolors and applies art with a licence ledger.
+Some assets need a person to make them, such as a logo, app icon, illustration, photos, a brand typeface or exact brand colors. `references/hooks.md` lists them all. It says when to ask, what to accept and how to record it. When they have no illustrations and want open-library art, hand off to **opendesigner-illustrate**: it finds, ranks, recolors and applies art with a licence ledger.
 
-When they name a brand font, ask where its licence lets them use it (websites, apps, hosting the files themselves), then say in one line what that means for each platform they build for. Record it as `hooks.md` says (H-type, "Brand font licence, per platform"). Never guess a licence.
+When they name a brand font, ask where its licence lets them use it and record it as `hooks.md` says (H-type, "Brand font licence, per platform"). Never guess a licence.
 
 ## References the person brings
 If they share a site, screenshot, Figma file, repo or brand book to copy a look from, hand off to **opendesigner-extract**.
 
-If they share a source to **follow** or **learn from** (a style guide, an article, a talk, their company's UI rules), follow `rules.md` section 12: ask how much weight it gets when they didn't say, read it with their OK, and record the rules they keep as project standards. When one clashes with a house standard, their words decide the route.
+If they share a source to **follow** or **learn from** (a style guide, an article, a talk, their company's UI rules), follow `rules.md` section 12: its weight, reading it with their OK, and clashes with house standards.
 
 ## Finish (at whatever level they stop)
 One question per message here, as everywhere.
 1. `engine.py build`. Validation passes, or each warning has a written reason. For a warning the defaults raise, write the reason yourself; don't ask the person about it.
 2. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
 3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
-4. If the hand-off is not answered yet (`engine.py status` lists it), or decisions.md has no "Commit guard" entry, ask each as in step 7, in its own message, even when the project has no agent files yet: `handoff yes` or `no`, then `guard install` or `no`. Each answer is recorded, so it is asked once.
+4. If the hand-off is not answered yet (`engine.py status` lists it), or decisions.md has no "Commit guard" entry, ask each as in step 7, in its own message, even when the project has no agent files yet, each yes with `--quote`. Each answer is recorded, so it is asked once.
 5. If you recorded feedback, mention it and offer the issue link (`references/improve.md`).
 6. If the log is on: `journey.py log session_end`, then `journey.py report`. The report line and the sharing question follow `rules.md` section 11.
 

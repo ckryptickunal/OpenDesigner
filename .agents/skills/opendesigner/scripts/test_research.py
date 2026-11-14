@@ -38,7 +38,10 @@ def run(d, *args):
 
 
 def example():
-    return json.loads(EXAMPLE.read_text(encoding="utf-8"))
+    rec = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+    for i, src in enumerate(rec["sources"], 1):  # research add refuses placeholder addresses (S4 #3)
+        src["url"] = f"https://research-source-{i}.org/page"
+    return rec
 
 
 def errors(rec):
@@ -182,8 +185,24 @@ class Project(unittest.TestCase):
     def test_sketch_and_build_remind_until_done(self):
         self.assertIn("engine.py research plan", self.sketch.stdout)
         self.assertIn("engine.py research plan", run(self.d, "build").stdout)
-        self.assertEqual(run(self.d, "research", "add", str(EXAMPLE)).returncode, 0)
+        self.assertEqual(run(self.d, "research", "add", real_example(self.d)).returncode, 0)
         self.assertNotIn("research plan", run(self.d, "build").stdout)
+
+    def test_add_refuses_findings_nobody_read(self):
+        """S4 #3: findings written without a tool that read anything, with placeholder addresses, or with no day opened."""
+        self.assertNotEqual(run(self.d, "research", "add", str(EXAMPLE)).returncode, 0, ".example addresses are refused")
+        rec = json.loads(Path(real_example(self.d)).read_text())
+        rec["tools"]["used"] = []
+        bad = Path(self.d).parent / "no-tools.json"
+        bad.write_text(json.dumps(rec))
+        r = run(self.d, "research", "add", str(bad))
+        self.assertNotEqual(r.returncode, 0)
+        self.assertIn("tools.used is empty", r.stdout)
+        rec = json.loads(Path(real_example(self.d)).read_text())
+        del rec["sources"][0]["accessed"]
+        bad.write_text(json.dumps(rec))
+        self.assertIn("no accessed date", run(self.d, "research", "add", str(bad)).stdout)
+        self.assertEqual(run(self.d, "research", "check", str(EXAMPLE)).returncode, 0, "check still explains the shape")
 
     def test_skip_stops_the_reminder_and_is_recorded(self):
         r = run(self.d, "research", "skip", "--why", "we interview our own customers")
@@ -216,7 +235,7 @@ class Project(unittest.TestCase):
     # --- add: saves, renders, recommends, changes nothing without a yes
     def test_add_saves_and_recommends_but_changes_nothing(self):
         before = copy.deepcopy(self.state()["answers"])
-        r = run(self.d, "research", "add", str(EXAMPLE))
+        r = run(self.d, "research", "add", real_example(self.d))
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         self.assertEqual(self.state()["answers"], before)
         self.assertTrue(Path(self.d, research.FILE).is_file())
@@ -242,7 +261,7 @@ class Project(unittest.TestCase):
         self.assertNotEqual(self.state()["research"].get("status"), "done")
 
     def test_accept_applies_new_ones_with_set_by_research(self):
-        r = run(self.d, "research", "add", str(EXAMPLE), "--accept")
+        r = run(self.d, "research", "add", real_example(self.d), "--accept")
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         ans = self.state()["answers"]
         self.assertEqual(e.answer_value(ans["Q-aud-02"]), "high-trust")
@@ -257,7 +276,7 @@ class Project(unittest.TestCase):
         self.assertEqual(run(self.d, "build").returncode, 0)
 
     def test_only_names_the_ones_the_person_agreed_to(self):
-        run(self.d, "research", "add", str(EXAMPLE))
+        run(self.d, "research", "add", real_example(self.d))
         r = run(self.d, "research", "add", os.path.join(self.d, research.FILE), "--accept", "--only", "Q-aud-01")
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         ans = self.state()["answers"]
@@ -282,7 +301,7 @@ class Project(unittest.TestCase):
         r = run(self.d, "review")
         self.assertIn("User research: The users have not been researched yet", r.stdout)
         self.assertEqual(run(self.d, "review", "--strict").returncode, 0)   # optional: a note, not a failure
-        run(self.d, "research", "add", str(EXAMPLE))
+        run(self.d, "research", "add", real_example(self.d))
         self.assertNotIn("User research", run(self.d, "review").stdout)
         fp = Path(self.d, research.FILE)
         rec = json.loads(fp.read_text(encoding="utf-8"))
@@ -300,7 +319,7 @@ class Project(unittest.TestCase):
         self.assertTrue(j["research"]["errors"])
 
     def test_skip_after_research_is_refused(self):
-        run(self.d, "research", "add", str(EXAMPLE))
+        run(self.d, "research", "add", real_example(self.d))
         self.assertNotEqual(run(self.d, "research", "skip", "--why", "x").returncode, 0)
 
     def test_product_md_market_comes_from_the_research_until_their_own_line(self):
@@ -323,6 +342,17 @@ class Project(unittest.TestCase):
         self.assertIn("Not researched yet", self.product() if Path(self.root, "PRODUCT.md").exists()
                       else research.product_section(self.state()))
         self.assertEqual(research.product_section({"research": {"status": "planned"}}).split(",")[0], "Research planned")
+
+
+def real_example(where):
+    """The shipped example with its placeholder addresses swapped for ordinary ones: research add refuses .example hosts and
+    sources nobody opened, and these tests are about what add does with findings that pass."""
+    rec = json.loads(EXAMPLE.read_text(encoding="utf-8"))
+    for i, src in enumerate(rec["sources"], 1):
+        src["url"] = f"https://research-source-{i}.org/page"
+    path = Path(where).parent / "real-research.json"
+    path.write_text(json.dumps(rec), encoding="utf-8")
+    return str(path)
 
 
 DIR_EXAMPLE = SKILL / "assets/output/research-directions.example.json"
@@ -863,7 +893,7 @@ class Stakeholders(unittest.TestCase):
         out = self.ok("coverage")
         self.assertIn("missing  Users and their tasks", out)
         self.assertIn("missing  Stakeholders", out)
-        self.assertEqual(run(self.d, "research", "add", str(EXAMPLE)).returncode, 0)
+        self.assertEqual(run(self.d, "research", "add", real_example(self.d)).returncode, 0)  # add refuses the shipped example
         rows = {r["id"]: r for r in json.loads(self.ok("coverage", "--json"))}
         self.assertEqual(rows["users"]["status"], "partial")  # the example has no finding on tasks
         self.assertIn("tasks", rows["users"]["next"])

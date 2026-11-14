@@ -797,7 +797,7 @@ class HandoffAndRemovalsSecondReview(unittest.TestCase):
             with contextlib.redirect_stdout(out):                                # a decision that calls for the full note
                 e.main(["--dir", d, "set", "zoom.color", '"broad"', "--set-by", "delegated", "--why", "zoomed in"])
             self.assertEqual(self.note(t), text)                                 # untouched, the added line included
-            self.assertIn("was left as it is; `engine.py handoff yes` rewrites it", out.getvalue())
+            self.assertIn("was left as it is; `engine.py handoff yes --quote \"<their words>\"` rewrites it", out.getvalue())
             # a note from an older engine (the snippet verbatim, markers and all) is left alone too
             with open(e.HANDOFF_SNIPPET, encoding="utf-8") as f:
                 old = f"{e.HANDOFF_START}\n<!-- For the agent adding this note: delete this comment. -->\n{f.read().strip()}\n{e.HANDOFF_END}\n"
@@ -875,6 +875,7 @@ class HandoffAndRemovalsSecondReview(unittest.TestCase):
             os.makedirs(os.path.join(t, "src"))
             with open(os.path.join(t, "src", "mail.css"), "w") as f:
                 f.write(".row { border-bottom: 1px solid var(--ds-color-border-default); } /* od-ignore: email clients need the rule */\n")
+            quiet(e.cmd_keep, d, "email clients need the rule", "yes, email needs it")  # the owner approves the reason (S4 #2)
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
                 e.cmd_review(d, as_json=True)
@@ -1231,6 +1232,10 @@ class KeepDecidedSystem(unittest.TestCase):
         with tempfile.TemporaryDirectory() as t:
             d = self.project(t)
             self.write(t, ".logo { color: #ff6600; } /* od-ignore: matches the printed logo */\n.ok { gap: var(--ds-space-8); }\n")
+            res = review_json(d)  # S4 #2, owner 2026-11-14: an od-ignore stays open until the owner approves its reason
+            self.assertEqual((res["findings"], res["ok"]), ([], False))
+            self.assertEqual([k["reason"] for k in res["ignoredByAgent"]], ["matches the printed logo"])
+            quiet(e.cmd_keep, d, "matches the printed logo", "yes, keep the logo colour")
             res = review_json(d)
             self.assertEqual((res["findings"], res["ignoredWithoutReason"], res["guard"], res["ok"]), ([], [], [], True))
             self.assertEqual(res["keptOnPurpose"], [{"file": os.path.join("src", "a.css"), "line": 1, "reason": "matches the printed logo"}])
@@ -1284,6 +1289,7 @@ class KeepDecidedSystem(unittest.TestCase):
             self.assertEqual(std_run(e.cmd_review, d)[1].strip().splitlines()[-1], "Review: 1 to fix: 1 finding. Run with --strict to make this fail.")
             self.assertEqual(quiet(e.cmd_review, d, strict=True), 1)
             self.write(t, ".row { border-bottom: 1px solid var(--ds-color-border-default); } /* od-ignore: menu separators stay */\n")
+            quiet(e.cmd_keep, d, "menu separators stay", "yes, those stay")  # the owner approves the reason (S4 #2)
             res = review_json(d)                                        # a reason keeps it, and the line is listed
             self.assertEqual((res["findings"], [k["reason"] for k in res["keptOnPurpose"]], res["ok"]), ([], ["menu separators stay"], True))
 
@@ -4145,7 +4151,8 @@ class PersonaOutputFixes(unittest.TestCase):
                 for k in ("standard", "enter", "exit", "linear", "hover", "drawer"):
                     self.assertIn(f"--ease-{k}: var(--ds-motion-easing-{k});", tw)
                 agents = design_section(t, "For Agents")
-                self.assertIn("`transition-feedback`, `ease-enter`, `ease-exit`, `ease-hover`", agents)
+                for c in ("transition-feedback", "ease-enter", "ease-exit", "ease-hover"):  # one row per class, with its CSS name (S4 #5)
+                    self.assertIn(f"| Motion | `{c}` | `var(--ds-motion-", agents)
                 self.assertNotIn("`ease-standard`", agents)
 
     def test_r10_show_motion_is_built_from_the_tokens_in_force(self):
