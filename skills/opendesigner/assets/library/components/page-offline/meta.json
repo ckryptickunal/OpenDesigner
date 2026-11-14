@@ -34,20 +34,68 @@
       "the server is up but failing: use page-error",
       "only one feature needs the network: show a warning banner in that place instead (page-banners)"
     ],
-    "keyboard": [
-      "Tab moves through the links and buttons in reading order",
-      "Enter follows a link; Enter or Space presses a button"
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-page-offline [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “You're offline”",
+        "slot": "text"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-page-offline [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in “Check your Wi-Fi or mobile data. We'll reconnect”",
+        "slot": "text"
+      },
+      {
+        "name": "works",
+        "selector": ".odl-page-offline [data-od-list=\"works\"]",
+        "what": "the works, one item each",
+        "slot": "list"
+      },
+      {
+        "name": "works.text",
+        "selector": ".odl-page-offline [data-od-list=\"works\"] [data-od-slot=\"text\"]",
+        "what": "the text, as in “Read the 24 notes you opened this week”",
+        "slot": "text"
+      },
+      {
+        "name": "waits",
+        "selector": ".odl-page-offline [data-od-list=\"waits\"]",
+        "what": "the waits, one item each",
+        "slot": "list"
+      },
+      {
+        "name": "waits.text",
+        "selector": ".odl-page-offline [data-od-list=\"waits\"] [data-od-slot=\"text\"]",
+        "what": "the text, as in “Sharing, comments and new files from your team”",
+        "slot": "text"
+      },
+      {
+        "name": "reconnect",
+        "selector": ".odl-page-offline [data-od-action=\"reconnect\"]",
+        "what": "the Try again now action",
+        "slot": "action"
+      },
+      {
+        "name": "synced",
+        "selector": ".odl-page-offline [data-od-slot=\"synced\"]",
+        "what": "when the device last synced, as in “Last synced today at 10:42 AM”",
+        "slot": "text"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "title": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 24,
+          "part": "title"
         },
         "message": {
           "type": "string",
-          "maxLength": 120
+          "maxLength": 120,
+          "part": "message"
         },
         "works": {
           "type": "array",
@@ -58,13 +106,15 @@
             "properties": {
               "text": {
                 "type": "string",
-                "maxLength": 56
+                "maxLength": 56,
+                "part": "works.text"
               }
             },
             "required": [
               "text"
             ]
-          }
+          },
+          "part": "works"
         },
         "waits": {
           "type": "array",
@@ -75,17 +125,20 @@
             "properties": {
               "text": {
                 "type": "string",
-                "maxLength": 72
+                "maxLength": 72,
+                "part": "waits.text"
               }
             },
             "required": [
               "text"
             ]
-          }
+          },
+          "part": "waits"
         },
         "synced": {
           "type": "string",
-          "maxLength": 40
+          "maxLength": 40,
+          "part": "synced"
         },
         "reconnect": {
           "type": "object",
@@ -145,8 +198,12 @@
       },
       "missing_image": {
         "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
+        "how": "the part has no photo"
       }
-    }
+    },
+    "keyboard": [
+      "Tab moves through the links and buttons in reading order",
+      "Enter follows a link; Enter or Space presses a button"
+    ]
   }
 }

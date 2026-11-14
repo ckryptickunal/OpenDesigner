@@ -19,7 +19,11 @@
  *   __od.at(x, y)         everything stacked at a point, top first: what a click there would really hit
  *   __od.seekTime(sec)    pause SMIL svg animations and <video> at a time in seconds (seek() does not move these)
  *   __od.vitals()         a Promise: layout shift (CLS) and long animation frames since page load
- *   __od.stress(kind, on) reversible stress: textSpacing (WCAG 1.4.12), text200 (1.4.4), rtl, longWords, pseudoloc (+40% text)
+ *   __od.stress(kind, on) reversible stress: textSpacing (WCAG 1.4.12), text200 (1.4.4), rtl, longWords, pseudoloc (+40% text),
+ *                         translate (every word 30% longer with no new spaces, a German stand-in; {grow: 0.5} for more),
+ *                         longNames (a 200-character name in every heading, link, button and label), noNames (each such
+ *                         name empty), noImages (every image fails)
+ *   __od.craft()          text cut off, breathing room, spacing rhythm (also in probe() as craft; copy holds the page's words)
  *   __od.setMode(m)       {theme, density, motion} on <html>: the data-theme / data-density / data-motion switches OpenDesigner CSS reads
  *   __od.marks(list)      boxes for the issues you will draw: [{sel, title, gives, source}] in (a selector matching several elements,
  *                         such as a table column, gets one box around them all), page coordinates out (they match a
@@ -381,6 +385,405 @@
     return res;
   }
 
+  // ---- craft: text cut off, breathing room, spacing rhythm and copy ----------------------------------------------
+  // Review cases ST-12 to ST-14 and MS-21 to MS-24 (copyCheck below feeds CP-01 to CP-04). Every item carries `box`, its place in page
+  // coordinates, so capture.py can save a crop of it and review.py can name the crop as evidence.
+  const CONTROL = 'button,[role=button],[role=tab],[role=menuitem],[role=option],input[type=button],input[type=submit],input[type=reset]';
+  const LABEL_CLS = /(^|[\s_-])(btn|button|chip|tag|badge|pill|label|status|segment|kicker|eyebrow)s?($|[\s_-])/i;
+  const pageBox = (q) => ({ x: round(q.left + window.scrollX), y: round(q.top + window.scrollY), w: round(q.right - q.left), h: round(q.bottom - q.top) });
+  const union = (rs) => (rs.length ? rs.reduce((a, q) => ({ left: Math.min(a.left, q.left), top: Math.min(a.top, q.top), right: Math.max(a.right, q.right), bottom: Math.max(a.bottom, q.bottom) }),
+    { left: Infinity, top: Infinity, right: -Infinity, bottom: -Infinity }) : null);
+  const clsOf = (e) => (typeof e.className === 'string' ? e.className : (e.getAttribute && e.getAttribute('class')) || '');
+  const words = (t) => (t || '').replace(/\s+/g, ' ').trim();
+  function roleOf(el) {
+    if (el.closest('h1,h2,h3,h4,h5,h6,[role=heading]')) return 'heading';
+    if (el.closest(CONTROL) || (el.closest('a[href]') && LABEL_CLS.test(clsOf(el.closest('a[href]'))))) return 'control';
+    for (let n = el, i = 0; n && n.nodeType === 1 && i < 3; n = parentEl(n), i++) if (LABEL_CLS.test(clsOf(n))) return 'label';
+    if (el.closest('label,legend,th,dt,figcaption,summary,[role=tab]')) return 'label';
+    return 'text';
+  }
+  function ownRects(el) {          // the line boxes of el's own text (its direct text children)
+    const out = [];
+    for (const n of el.childNodes) {
+      if (n.nodeType !== 3 || !n.nodeValue.trim()) continue;
+      const rg = document.createRange(); rg.selectNodeContents(n);
+      for (const q of rg.getClientRects()) if (q.width >= 1 && q.height >= 1) out.push(q);
+    }
+    return out;
+  }
+  function allRects(el, cap = 150) { // the line boxes of every text node inside el
+    const out = [], tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    for (let n = tw.nextNode(), i = 0; n && i < cap; n = tw.nextNode(), i++) {
+      if (!n.nodeValue.trim() || !n.parentElement || SKIP.has(n.parentElement.tagName)) continue;
+      const pcs = getComputedStyle(n.parentElement); if (pcs.visibility === 'hidden' || pcs.display === 'none') continue;
+      const rg = document.createRange(); rg.selectNodeContents(n);
+      for (const q of rg.getClientRects()) if (q.width >= 1 && q.height >= 1) out.push(q);
+    }
+    return out;
+  }
+  const inner = (el, cs, r) => ({ left: r.left + px(cs.borderLeftWidth), top: r.top + px(cs.borderTopWidth), right: r.right - px(cs.borderRightWidth), bottom: r.bottom - px(cs.borderBottomWidth) });
+  // the nearest ancestor that hides overflow, or null when one that scrolls comes first (scrolled text can be reached)
+  function clipperOf(el) {
+    for (let n = parentEl(el); n && n !== document.body && n !== document.documentElement; n = parentEl(n)) {
+      const cs = getComputedStyle(n);
+      if (/auto|scroll/.test(cs.overflowX + ' ' + cs.overflowY)) return null;
+      if (/hidden|clip/.test(cs.overflowX + ' ' + cs.overflowY)) return n;
+    }
+    return null;
+  }
+  function scrollerAbove(el) {
+    for (let n = parentEl(el); n && n !== document.body && n !== document.documentElement; n = parentEl(n)) {
+      const c = getComputedStyle(n); if (/auto|scroll/.test(c.overflowX + ' ' + c.overflowY)) return true; if (/hidden|clip/.test(c.overflowX + ' ' + c.overflowY)) return false;
+    }
+    return false;
+  }
+  // a carousel or marquee: three or more items side by side running well past the box that shows them
+  function isTrack(P) {
+    if (P.scrollWidth < P.clientWidth * 1.8) return false;
+    let row = P; while (row.children.length === 1) row = row.children[0];
+    const rs = Array.from(row.children).map((k) => k.getBoundingClientRect()).filter((q) => q.width > 0);
+    return rs.length >= 3 && rs.every((q) => Math.abs(q.top - rs[0].top) < 4);
+  }
+  // a window onto a picture of something, inside a link or button (a component preview on a card): cropped on purpose
+  function previewWindow(P) {
+    if (!P.closest('a[href],button')) return false;
+    let n = 0; for (const e of P.querySelectorAll('*')) { if (ownText(e) && ++n >= 4) return true; }
+    return false;
+  }
+  // a visible edge of its own: a fill unlike what is behind it, a border on every side, or a shadow
+  function boundary(el, cs) {
+    if (cs.boxShadow && cs.boxShadow !== 'none') return 'shadow';
+    const b = ['Top', 'Right', 'Bottom', 'Left'].every((s) => px(cs['border' + s + 'Width']) > 0 && cs['border' + s + 'Style'] !== 'none' && rgba(cs['border' + s + 'Color'])[3] > 0.2);
+    if (b) return 'border';
+    const f = rgba(cs.backgroundColor);
+    if (f[3] > 0.1) { const behind = backdrop(parentEl(el) || document.documentElement).color; if (ratio(over(f, behind), behind) >= 1.05) return 'fill'; }
+    return null;
+  }
+  // words of el by the line they sit on, top to bottom: [{mid, words: [...]}]
+  function wordLines(el, fs, cap = 80) {
+    const lines = [], tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    let n = 0;
+    for (let t = tw.nextNode(); t && n < cap; t = tw.nextNode()) {
+      const pe = t.parentElement; if (!pe || srOnly(pe, el) || hiddenByDesign(pe, getComputedStyle(pe))) continue;
+      const re = /\S+/g; let m;
+      while ((m = re.exec(t.nodeValue)) && n < cap) {
+        const rg = document.createRange(); rg.setStart(t, m.index); rg.setEnd(t, m.index + m[0].length);
+        const qs = Array.from(rg.getClientRects()).filter((q) => q.width >= 1 && q.height >= 1); if (!qs.length) continue;
+        const q = qs[0], mid = q.top + q.height / 2; n++;
+        let L = lines.find((l) => Math.abs(l.mid - mid) < fs * 0.6); if (!L) lines.push((L = { mid, words: [] }));
+        L.words.push(m[0]);
+      }
+    }
+    return lines.sort((a, b) => a.mid - b.mid);
+  }
+  function shownText(el) {          // the words a sighted reader sees: visually hidden text left out
+    let t = ''; const tw = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    for (let n = tw.nextNode(); n; n = tw.nextNode()) { const pe = n.parentElement; if (pe && !srOnly(pe, el) && !hiddenByDesign(pe, getComputedStyle(pe))) t += n.nodeValue; }
+    return words(t);
+  }
+  const lead = (cs) => { const fs = px(cs.fontSize) || 16, lh = cs.lineHeight === 'normal' ? fs * 1.2 : px(cs.lineHeight); return Math.max(0, (lh - fs) / 2); };
+  const inFlow = (cs) => cs.position !== 'absolute' && cs.position !== 'fixed' && cs.display !== 'contents' && cs.display !== 'inline' && cs.float === 'none';
+  const sig = (e) => e.localName + '@' + Math.round(px(getComputedStyle(e).fontSize)) + '.' + clsOf(e).split(/\s+/).filter((c) => c && !/^(is-|has-)|active|current|selected|open|first|last|odd|even/.test(c)).sort().join('.');
+
+  const TOUCH = 4;                 // px: closer than this reads as touching (review.py TOUCH_GAP)
+  // inside a scaled-down preview (transform: scale), real gaps draw as 1 to 3 px: spacing is judged on the full-size part
+  const scaleCache = new Map();
+  function scaled(el) {
+    if (!el || el.nodeType !== 1 || el === document.body) return false;
+    if (scaleCache.has(el)) return scaleCache.get(el);
+    const t = getComputedStyle(el).transform; let v = false;
+    if (t && t !== 'none') { const m = t.match(/matrix\(([^,]+),([^,]+)/); if (m && Math.abs(Math.hypot(+m[1], +m[2]) - 1) > 0.02) v = true; }
+    if (!v && parseFloat(getComputedStyle(el).zoom || 1) !== 1) v = true;
+    v = v || scaled(parentEl(el));
+    scaleCache.set(el, v); return v;
+  }
+  function craftCheck(els) {
+    const de = document.documentElement, vw = de.clientWidth;
+    const out = { spill: [], hiddenByParent: [], truncated: [], orphans: [], tight: [], touching: [], insetVsGap: [], siblings: [], sections: [], measure: [],
+                  radii: [], monoProse: [], brokenUrls: [], twins: [],
+                  checked: { text: 0, boxes: 0, parents: 0, labels: 0 } };
+    const bodyStack = [];
+    for (const el of els) {
+      if (SKIP.has(el.tagName) || el === document.body || el === de) continue;
+      const cs = getComputedStyle(el), r = el.getBoundingClientRect();
+      if (!visible(el, cs, r)) continue;
+      const own = ownText(el);
+      const fs = px(cs.fontSize) || 16;
+
+      // text cut off: text that runs out of its own box, or that a parent with overflow: hidden cuts away
+      if (own && !hiddenByDesign(el, cs) && !srOnly(el, el)) {
+        out.checked.text++;
+        const u = union(ownRects(el));
+        if (u) {
+          const role = roleOf(el), block = !/^inline$/.test(cs.display);
+          // sideways by more than a pixel, or down by more than half a line (a tight line height alone draws the glyphs a
+          // little past the box: that is not text running out)
+          const side = Math.max(u.right - r.right, r.left - u.left), down = Math.max(u.bottom - r.bottom, r.top - u.top);
+          const past = side > 1 ? side : down > fs * 0.5 ? down : 0, dir = side > 1 ? 'side' : 'down';
+          const ownClip = /hidden|clip/.test(cs.overflowX + ' ' + cs.overflowY);
+          const scrolls = /auto|scroll/.test(cs.overflowX + ' ' + cs.overflowY) || scrollerAbove(el);   // reachable by scrolling
+          if (block && !ownClip && !scrolls && past > 1 && out.spill.length < CAP)
+            out.spill.push({ sel: sel(el), role, text: own.slice(0, 50), by: round(past), dir, box: pageBox(union([r, u])), w: round(r.width), h: round(r.height) });
+          const P = past > 0 || ownClip || hiddenFromAT(el) ? null : clipperOf(el);
+          if (P && !previewWindow(P)) {
+            const pc = getComputedStyle(P), pr = P.getBoundingClientRect(), pi = inner(P, pc, pr);
+            const hx = /hidden|clip/.test(pc.overflowX) && !isTrack(P), hy = /hidden|clip/.test(pc.overflowY);   // a carousel or marquee track hides sideways on purpose
+            const cut = Math.max(hx ? u.right - pi.right : 0, hx ? pi.left - u.left : 0, hy ? u.bottom - pi.bottom : 0, hy ? pi.top - u.top : 0);
+            const gone = (hx && (u.left >= pi.right || u.right <= pi.left)) || (hy && (u.top >= pi.bottom || u.bottom <= pi.top));   // wholly out of view: a slide, not a cut
+            if (cut > 1 && !gone && !hiddenByDesign(P, pc) && out.hiddenByParent.length < CAP)
+              out.hiddenByParent.push({ sel: sel(el), role, text: own.slice(0, 50), cut: round(cut), parent: sel(P), box: pageBox(pr) });
+          }
+          // an ellipsis or a line clamp that hides words in a heading, a control or a label
+          const clamp = cs.webkitLineClamp && cs.webkitLineClamp !== 'none';
+          if ((cs.textOverflow === 'ellipsis' || clamp) && role !== 'text' && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1) && out.truncated.length < CAP)
+            out.truncated.push({ sel: sel(el), role, text: words(el.textContent).slice(0, 80), how: clamp ? 'line-clamp ' + cs.webkitLineClamp : 'ellipsis', axis: clamp ? 'height' : 'width',
+                                 shown: round(clamp ? el.clientHeight : el.clientWidth), needs: round(clamp ? el.scrollHeight : el.scrollWidth), box: pageBox(r), title: el.getAttribute('title') || null });
+        }
+      }
+
+      // a heading, a lede or a label whose last line is one word
+      const isLede = el.localName === 'p' && el.previousElementSibling && /^h[12]$/.test(el.previousElementSibling.localName) && words(el.textContent).length <= 240;
+      if ((/^h[1-4]$/.test(el.localName) || isLede || el.localName === 'label' || (el.matches(CONTROL) || LABEL_CLS.test(clsOf(el))) && !(el.parentElement && el.parentElement.closest(CONTROL))) && words(el.textContent)) {
+        out.checked.labels++;
+        const t = shownText(el);
+        const cut = (n) => { for (let e = n; e && e !== document.body; e = parentEl(e)) { const c = getComputedStyle(e); if (c.textOverflow === 'ellipsis' || (c.webkitLineClamp && c.webkitLineClamp !== 'none')) return true; } return false; };
+        if (t.split(' ').length >= 3 && t.length <= 240 && !cut(el)) {
+          const lines = wordLines(el, fs);
+          const last = lines[lines.length - 1];
+          if (lines.length >= 2 && last.words.length === 1 && out.orphans.length < CAP)
+            out.orphans.push({ sel: sel(el), role: isLede ? 'lede' : roleOf(el), text: t.slice(0, 80), word: last.words[0], lines: lines.length, wrap: cs.textWrap || cs.textWrapStyle || null, box: pageBox(r) });
+        }
+      }
+
+      // body text: line height and measure (characters per line)
+      if (own && /^(p|li|dd|blockquote|td)$/.test(el.localName) && fs <= 22 && own.length > 120) {
+        const lh = cs.lineHeight === 'normal' ? 1.2 : px(cs.lineHeight) / fs;
+        const w = r.width - px(cs.paddingLeft) - px(cs.paddingRight);
+        const ch = w / chWidth(cs.fontStyle + ' ' + cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily);
+        const lines = Math.round(r.height / (lh * fs));
+        if (lines >= 3) bodyStack.push({ sel: sel(el), fs: round(fs, 10), lh: round(lh), ch: round(ch, 1), lines, box: pageBox(r) });
+      }
+
+      // prose set in a monospace face: running text over 80 characters, outside code
+      if (own.length > 80 && /^(p|li|dd|blockquote|td|figcaption|span|div)$/.test(el.localName) && !el.closest('pre,code,kbd,samp,textarea,[contenteditable]') &&
+          /mono|courier|consolas|menlo|monaco|source code|fira code|jetbrains|ibm plex mono|sf mono|ui-monospace/i.test(cs.fontFamily.split(',')[0]) && out.monoProse.length < CAP)
+        out.monoProse.push({ sel: sel(el), font: cs.fontFamily.split(',')[0].replace(/["']/g, '').trim(), text: own.slice(0, 60), box: pageBox(r) });
+
+      // a box with a visible edge: text that touches the edge, and padding smaller than the gap between its children
+      const edge = /^(inline)$/.test(cs.display) || /^(code|kbd|samp|mark|input|textarea|select|img|svg|video|canvas|iframe)$/.test(el.localName) || scaled(el) ? null : boundary(el, cs);
+      if (edge && r.width >= 16 && r.height >= 12) {
+        const rs = allRects(el);
+        const u = union(rs);
+        if (u) {
+          out.checked.boxes++;
+          const ib = inner(el, cs, r);
+          const ins = { left: u.left - ib.left, right: ib.right - u.right, top: u.top - ib.top, bottom: ib.bottom - u.bottom };
+          // sideways under 4 px; up and down under 1 px, since a line box already has room above and below its letters
+          const side = Object.entries(ins).map(([k, v]) => [k, v, /left|right/.test(k) ? TOUCH : 1]).filter((x) => Math.round(x[1]) < x[2] && x[1] > -1).sort((a, b) => a[1] - b[1])[0];
+          const runsOut = Object.values(ins).some((v) => v < -1);   // text past its box is ST-12, not touching
+          if (side && !runsOut && out.touching.length < CAP)
+            out.touching.push({ sel: sel(el), edge, side: side[0], inset: round(side[1]), padding: round(px(cs['padding' + side[0][0].toUpperCase() + side[0].slice(1)])), text: words(el.textContent).slice(0, 50), box: pageBox(r) });
+          // children stacked top to bottom: compare the space around them with the space between them
+          const kids = Array.from(el.children).filter((k) => { const kc = getComputedStyle(k), kr = k.getBoundingClientRect(); return visible(k, kc, kr) && inFlow(kc) && words(k.textContent); });
+          if (kids.length >= 2) {
+            // measured on the text, as a reader sees it: a child with its own padding or fill moves its text in
+            const kr = kids.map((k) => union(allRects(k, 60))).filter(Boolean);
+            const gaps = [];
+            for (let i = 1; i < kr.length; i++) if (kr[i].top >= kr[i - 1].bottom - 0.5) gaps.push(kr[i].top - kr[i - 1].bottom);
+            if (kr.length >= 2 && gaps.length === kr.length - 1) {
+              const g = gaps.slice().sort((a, b) => a - b)[Math.floor(gaps.length / 2)];
+              const pad = Math.min(u.left - ib.left, ib.right - u.right, u.top - ib.top, ib.bottom - u.bottom);
+              if (pad >= 0 && pad + 4 < g && pad < 32 && out.insetVsGap.length < CAP)
+                out.insetVsGap.push({ sel: sel(el), inset: round(pad), gap: round(g), children: kids.length, box: pageBox(r) });
+            }
+          }
+        }
+      }
+
+      // neighbours: text blocks that sit too close, and siblings of one kind spaced unevenly
+      if (el.children.length >= 2 && !scaled(el)) {
+        const kids = [];
+        for (const k of el.children) { const kc = getComputedStyle(k), kr = k.getBoundingClientRect(); if (visible(k, kc, kr) && inFlow(kc)) kids.push({ k, kc, kr }); }
+        if (kids.length >= 2) out.checked.parents++;
+        for (let i = 1; i < kids.length; i++) {
+          const a = kids[i - 1], b = kids[i];
+          const ea = boundary(a.k, a.kc), eb = boundary(b.k, b.kc);
+          if ((!ea && !words(a.k.textContent)) || (!eb && !words(b.k.textContent))) continue;
+          const below = b.kr.top >= a.kr.bottom - 0.5, sameRow = !below && b.kr.left >= a.kr.right - 0.5 && Math.min(a.kr.bottom, b.kr.bottom) > Math.max(a.kr.top, b.kr.top);
+          if (!below && !sameRow) continue;
+          const box = below ? b.kr.top - a.kr.bottom : b.kr.left - a.kr.right;
+          const clipTo = (x, u) => (u && /hidden|clip/.test(x.kc.overflowX + ' ' + x.kc.overflowY) ? { left: Math.max(u.left, x.kr.left), right: Math.min(u.right, x.kr.right), top: Math.max(u.top, x.kr.top), bottom: Math.min(u.bottom, x.kr.bottom) } : u);
+          // what each side shows the other: a box with an edge shows its edge, anything else shows its text
+          const face = (x, e) => (e ? x.kr : clipTo(x, union(allRects(x.k, 60))));   // hidden text is not a neighbour
+          const fa = face(a, ea), fb = face(b, eb);
+          if (!fa || !fb) continue;
+          const seen = below ? fb.top - fa.bottom : fb.left - fa.right;
+          if (seen < 0 && box >= TOUCH) continue;   // text placed outside its own box (positioned): the boxes are apart, so it is not crowding
+          let kind = ea && eb ? 'boxes' : ea || eb ? 'caption' : 'text';
+          if (kind === 'boxes' && Math.round(box) <= 0) {
+            // two boxes that touch are a joined group (a segmented control, a table, a stack of rows) when the corners
+            // that meet are square, or the parent names a group; rounded corners touching are two blocks with no gap
+            const rad = (cs, c) => px(cs['border' + c + 'Radius']);
+            const facing = below ? [rad(a.kc, 'BottomLeft'), rad(a.kc, 'BottomRight'), rad(b.kc, 'TopLeft'), rad(b.kc, 'TopRight')]
+                                 : [rad(a.kc, 'TopRight'), rad(a.kc, 'BottomRight'), rad(b.kc, 'TopLeft'), rad(b.kc, 'BottomLeft')];
+            if (Math.max(...facing) < 1 || el.matches('[role=group],[role=toolbar],[role=tablist],[role=radiogroup],table,thead,tbody,tr')) continue;
+            kind = 'boxes-touching';
+          }
+          if (Math.round(seen) < TOUCH && out.tight.length < CAP)
+            out.tight.push({ sel: sel(b.k), after: sel(a.k), kind, axis: below ? 'vertical' : 'horizontal', gap: round(box), seen: round(seen), box: pageBox(union([a.kr, b.kr])) });
+        }
+        // boxes side by side or stacked as one set (same width in a column, same height in a row) should share a corner radius
+        const boxes = kids.filter((x) => boundary(x.k, x.kc));
+        if (boxes.length >= 2) {
+          const sets = [];
+          for (const x of boxes) {
+            const s2 = sets.find((g) => Math.abs(g[0].kr.width - x.kr.width) <= 2 || Math.abs(g[0].kr.top - x.kr.top) <= 2 && Math.abs(g[0].kr.height - x.kr.height) <= 2);
+            s2 ? s2.push(x) : sets.push([x]);
+          }
+          for (const g of sets) {
+            if (g.length < 2) continue;
+            const radii = g.map((x) => round(px(x.kc.borderTopLeftRadius)));
+            const distinct = Array.from(new Set(radii.map((v) => Math.round(v))));
+            if (distinct.length > 1 && Math.max(...distinct) - Math.min(...distinct) > 1 && out.radii.length < CAP)
+              out.radii.push({ sel: sel(el), items: g.slice(0, 6).map((x, n) => ({ sel: sel(x.k), radius: radii[n] })), box: pageBox(union(g.map((x) => x.kr))) });
+          }
+        }
+        // a run of three or more siblings of the same kind, in one column or one row: are the gaps the same?
+        for (let i = 0; i < kids.length;) {
+          let j = i + 1; const s = sig(kids[i].k);
+          while (j < kids.length && sig(kids[j].k) === s) j++;
+          const run = kids.slice(i, j); i = j;
+          if (run.length < 3) continue;
+          const col = run.every((x, n) => !n || x.kr.top >= run[n - 1].kr.bottom - 0.5), row = run.every((x) => Math.abs(x.kr.top - run[0].kr.top) < 2);
+          if (!col && !row) continue;
+          const gaps = run.slice(1).map((x, n) => round(col ? x.kr.top - run[n].kr.bottom : x.kr.left - run[n].kr.right));
+          if (gaps.some((g) => g < 0)) continue;
+          const distinct = []; for (const g of gaps) if (!distinct.some((d) => Math.abs(d - g) <= 3)) distinct.push(g);
+          if (distinct.length >= 2 && out.siblings.length < CAP)
+            out.siblings.push({ sel: sel(el), kind: s.slice(0, 60), axis: col ? 'vertical' : 'horizontal', gaps: gaps.slice(0, 10), distinct: distinct.length, box: pageBox(union(run.map((x) => x.kr))) });
+        }
+      }
+    }
+
+    // vertical rhythm: the space between one section's content and the next one's, down the page
+    // the top-level sections: the children of <main> (or <body>), going down while one wrapper holds nearly everything
+    const tall = (s) => { const c = getComputedStyle(s), q = s.getBoundingClientRect(); return visible(s, c, q) && inFlow(c) && q.height > 60 && q.width >= vw * 0.4; };
+    let host = document.querySelector('main,[role=main]') || document.body, secs = [];
+    for (let depth = 0; depth < 6; depth++) {
+      secs = Array.from(host.children).filter(tall);
+      if (secs.length >= 3) break;
+      const big = Array.from(host.children).filter(tall).sort((a, b) => b.getBoundingClientRect().height - a.getBoundingClientRect().height)[0];
+      if (!big || big.getBoundingClientRect().height < host.getBoundingClientRect().height * 0.6) break;
+      host = big;
+    }
+    let prev = null;
+    for (const s of secs.slice(0, 30)) {
+      const rs = allRects(s, 400);
+      for (const m of Array.from(s.querySelectorAll('img,svg,video,canvas,iframe,picture,hr')).slice(0, 60)) { const q = m.getBoundingClientRect(); if (q.width > 1 && q.height > 1 && visible(m, getComputedStyle(m), q)) rs.push(q); }
+      for (const d of Array.from(s.querySelectorAll('*')).slice(0, 400)) { const dc = getComputedStyle(d); if ((rgba(dc.backgroundColor)[3] > 0.1 || px(dc.borderTopWidth) > 0 || dc.boxShadow !== 'none') && boundary(d, dc)) { const q = d.getBoundingClientRect(); if (q.width > 1 && q.height > 1) rs.push(q); } }
+      const u = union(rs); if (!u) continue;
+      if (prev) out.sections.push({ sel: sel(s), after: prev.sel, space: round(u.top - prev.bottom), box: pageBox({ left: 0, right: vw, top: prev.bottom, bottom: u.top }) });
+      prev = { sel: sel(s), bottom: u.bottom };
+    }
+    // a web address broken across lines, worst when the break falls inside "https://"
+    const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    for (let t = tw.nextNode(); t && out.brokenUrls.length < CAP; t = tw.nextNode()) {
+      const pe = t.parentElement; if (!pe || SKIP.has(pe.tagName) || srOnly(pe, pe)) continue;
+      const re = /\b(?:https?:\/\/|www\.)[^\s<>"')]+/g; let m;
+      while ((m = re.exec(t.nodeValue)) && out.brokenUrls.length < CAP) {
+        const rg = document.createRange(); rg.setStart(t, m.index); rg.setEnd(t, m.index + m[0].length);
+        const qs = Array.from(rg.getClientRects()).filter((q) => q.width >= 1);
+        const mids = []; for (const q of qs) { const mid = q.top + q.height / 2; if (!mids.some((v) => Math.abs(v - mid) < q.height * 0.5)) mids.push(mid); }
+        if (mids.length < 2) continue;
+        let inScheme = false;   // is the first line only the scheme ("https:" or "https://")?
+        const sch = /^https?:\/\//.exec(m[0]);
+        if (sch) {
+          const r2 = document.createRange(); r2.setStart(t, m.index); r2.setEnd(t, m.index + sch[0].length);
+          const q2 = Array.from(r2.getClientRects()).filter((q) => q.width >= 1);
+          const tops = new Set(q2.map((q) => Math.round(q.top)));
+          inScheme = tops.size > 1 || (q2.length > 0 && qs[0].width <= q2.reduce((w, q) => w + q.width, 0) + 1);   // split inside it, or a line of it alone
+        }
+        out.brokenUrls.push({ sel: sel(pe), url: m[0].slice(0, 80), lines: mids.length, inScheme, box: pageBox(union(qs)) });
+      }
+    }
+    // twins treated differently: blocks of one kind where most have a control (Copy, Download) that one or more lack.
+    // Code blocks are matched by being code blocks, whatever wraps them
+    const labelOf = (b) => words(b.getAttribute('aria-label') || b.getAttribute('title') || b.textContent || b.value).toLowerCase().replace(/[^a-z ]/g, '').trim();
+    const controlsIn = (x) => new Set(Array.from(x.querySelectorAll('button,[role=button],a[href]')).filter((b) => visible(b, getComputedStyle(b), b.getBoundingClientRect())).map(labelOf).filter((l) => l && l.length <= 24));
+    const groups = new Map();
+    for (const pre of document.querySelectorAll('pre')) {
+      const c = getComputedStyle(pre), q = pre.getBoundingClientRect(); if (!visible(pre, c, q)) continue;
+      let host = pre; for (let i = 0; i < 2 && host.parentElement && host.parentElement.querySelectorAll('pre').length === 1 && host.parentElement !== document.body; i++) host = host.parentElement;
+      (groups.get('code block') || groups.set('code block', []).get('code block')).push(host);
+    }
+    for (const el of els) {
+      if (!/^(article|section|figure|li|div)$/.test(el.localName) || !clsOf(el).trim()) continue;
+      const c = getComputedStyle(el), q = el.getBoundingClientRect(); if (!visible(el, c, q) || q.height < 40 || el.querySelector('pre')) continue;
+      const k = 'block ' + sig(el); (groups.get(k) || groups.set(k, []).get(k)).push(el);
+    }
+    for (const [kind, members] of groups) {
+      if (members.length < 2 || members.length > 60) continue;
+      const sets = members.map(controlsIn), count = new Map();
+      for (const st of sets) for (const l of st) count.set(l, (count.get(l) || 0) + 1);
+      for (const [label, n] of count) {
+        if (n < 2 || n === members.length || n < members.length / 2 || !/copy|download|share|expand|open|edit|delete|remove|install|run|view|preview|try/.test(label)) continue;
+        const without = members.filter((_, i) => !sets[i].has(label));
+        if (out.twins.length < CAP)
+          out.twins.push({ kind: kind.split('@')[0], control: label, has: n, of: members.length, missing: without.slice(0, 4).map(sel), box: pageBox(without[0].getBoundingClientRect()), sel: sel(without[0]) });
+      }
+    }
+    // under noImages: pictures drawn with no room; under noNames: named lines drawn with no height (ST-19)
+    out.collapsedImages = []; out.collapsedNamed = [];
+    if (active.noImages) for (const im of document.querySelectorAll('img')) {
+      const q = im.getBoundingClientRect(), c = getComputedStyle(im);
+      if (c.display !== 'none' && c.visibility !== 'hidden' && (q.width < 4 || q.height < 4) && out.collapsedImages.length < CAP) out.collapsedImages.push({ sel: sel(im), w: round(q.width), h: round(q.height), box: pageBox(q) });
+    }
+    if (active.noNames) for (const e of named) {
+      const q = e.getBoundingClientRect(), c = getComputedStyle(e);
+      if (c.display !== 'none' && q.height < 2 && out.collapsedNamed.length < CAP) out.collapsedNamed.push({ sel: sel(e), h: round(q.height), box: pageBox(q) });
+    }
+    out.measure = bodyStack.slice(0, 60);
+    return out;
+  }
+
+  // the words on the page, for the copy checks (CP-01 to CP-04): headings, the labels of controls, and the running text
+  function copyCheck(els) {
+    const de = document.documentElement;
+    const meta = document.querySelector('meta[name=audience]');
+    const out = { audience: de.getAttribute('data-audience') || (document.body && document.body.getAttribute('data-audience')) || (meta && meta.content) || null,
+                  headings: [], controls: [], text: '', truncatedText: false };
+    for (const h of document.querySelectorAll('h1,h2,h3,h4,h5,h6')) {
+      const cs = getComputedStyle(h), r = h.getBoundingClientRect();
+      if (!visible(h, cs, r) || out.headings.length >= 80) continue;
+      const t = words(h.textContent); if (t) out.headings.push({ sel: sel(h), level: +h.localName[1], text: t.slice(0, 120), upper: isCaps(cs, t) });
+    }
+    for (const el of document.querySelectorAll('a[href],button,[role=button],[role=tab],input[type=submit],input[type=button]')) {
+      if (out.controls.length >= 200) break;
+      const cs = getComputedStyle(el), r = el.getBoundingClientRect();
+      if (!visible(el, cs, r) || hiddenFromAT(el)) continue;
+      const t = words(el.textContent || el.value); if (!t || t.length > 60) continue;
+      const kind = el.matches('[role=tab]') ? 'tab' : el.matches('button,[role=button],input') || LABEL_CLS.test(clsOf(el)) ? 'button' : 'link';
+      out.controls.push({ sel: sel(el), kind, text: t, href: el.getAttribute('href') ? absHref(el.getAttribute('href')) : null, upper: isCaps(cs, t),
+                          menu: el.hasAttribute('aria-expanded') || el.hasAttribute('aria-haspopup'),
+                          toggle: el.hasAttribute('aria-pressed') || el.hasAttribute('aria-checked') || el.matches('[role=switch],[role=radio],[role=option]') || !!el.closest('[role=radiogroup],[role=tablist]'),
+                          box: pageBox(r) });
+    }
+    const parts = [];
+    let n = 0;
+    for (const el of els) {
+      if (!/^(p|li|dd|dt|td|th|figcaption|blockquote|label|summary)$/.test(el.localName)) continue;   // headings are in headings
+      const cs = getComputedStyle(el), r = el.getBoundingClientRect(); if (!visible(el, cs, r)) continue;
+      if (el.parentElement && el.parentElement.closest('p,li,dd,td,th,blockquote')) continue;
+      const t = words(el.textContent); if (!t) continue;
+      n += t.length + 1; if (n > 20000) { out.truncatedText = true; break; }
+      parts.push(t);
+    }
+    out.text = parts.join('\n');
+    return out;
+  }
+  const absHref = (h) => { try { const u = new URL(h, document.baseURI); return u.origin === location.origin ? u.pathname.replace(/\/index\.html$/, '/') + u.hash : u.href; } catch (e) { return h; } };
+  od.craft = () => craftCheck(all());
+
   // ---- the whole-page probe ----------------------------------------------------------------------------------
   od.probe = () => {
     const els = all();
@@ -420,7 +823,7 @@
     const counts = { svg: 0, canvas: 0, video: 0, iframe: 0, iframeCross: 0, audio: 0, shadowHosts: 0, smil: 0, lottie: 0, autoplayVideo: 0 };
     const idSeen = new Map(); let minText = null, visibleN = 0, textN = 0;
     const multiLine = [], placeholders = [], hiddenFocusable = [];
-    const PLACEHOLDER = /\b(undefined|NaN|null)\b|\[object Object\]|Lorem ipsum|\{\{.*?\}\}|\bTODO\b|\bFIXME\b|%[sd]\b/;
+    const PLACEHOLDER = /\b(undefined|NaN|null)\b|\[object Object\]|\bLorem\b|lorem ipsum|dolor sit amet|\{\{.*?\}\}|\bTODO\b|\bFIXME\b|\bTBD\b|\bXXX\b|\b[Cc]lick here\b|\b(Your|Insert) (text|title|heading|headline|copy|name|description) here\b|%[sd]\b/;
 
     for (const el of els) {
       if (SKIP.has(el.tagName)) continue;
@@ -549,7 +952,8 @@
         const ls = cs.letterSpacing === 'normal' ? 0 : px(cs.letterSpacing), caps = isCaps(cs, txt);
         if (ls !== 0) bump(type.letterSpacing, String(round(ls)), el);
         // tracking in em at each size, so review.py can see whether it tightens as type gets bigger (MS-17)
-        bump(type.tracking, fs + '|' + (fs ? round(ls / fs, 1000) : 0) + '|' + (caps ? 1 : 0), el, chars);
+        const mono = !!el.closest('pre,code,kbd,samp') || /mono|courier|consolas|menlo/i.test(cs.fontFamily.split(',')[0]);   // code sits at 0 (kerning.md)
+        bump(type.tracking, fs + '|' + (fs ? round(ls / fs, 1000) : 0) + '|' + (caps && !mono ? 1 : 0) + (mono ? '|m' : ''), el, chars);
         if (caps && ls < -0.05 && capsTight.length < CAP) capsTight.push({ sel: sel(el), text: txt.slice(0, 40), fs, em: round(ls / fs, 1000) });
         if (!minText || fs < minText.px) minText = { px: fs, sel: sel(el), text: txt.slice(0, 40) };
         const ph = PLACEHOLDER.exec(txt); if (ph && placeholders.length < CAP) placeholders.push({ sel: sel(el), match: ph[0], text: txt.slice(0, 60) });
@@ -563,9 +967,11 @@
         // with its overflow hidden (opendesigner.dev's library legends were 4 x 1 px and reported as clipped text, issue #76)
         const srOnly = (cs.position === 'absolute' && el.offsetWidth <= 1 && el.offsetHeight <= 1) || hiddenByDesign(el, cs);
         if (!srOnly && ((el.scrollWidth > el.clientWidth + 1 && /hidden|clip/.test(cs.overflowX)) || (el.scrollHeight > el.clientHeight + 1 && /hidden|clip/.test(cs.overflowY)))) {
-          if (clipped.length < CAP) clipped.push({ sel: sel(el), text: txt.slice(0, 40), sw: el.scrollWidth, cw: el.clientWidth, sh: el.scrollHeight, ch: el.clientHeight, ellipsis: cs.textOverflow === 'ellipsis', clamp: !!cs.webkitLineClamp && cs.webkitLineClamp !== 'none' });
+          if (clipped.length < CAP) clipped.push({ sel: sel(el), role: roleOf(el), box: pageBox(r), text: txt.slice(0, 40), sw: el.scrollWidth, cw: el.clientWidth, sh: el.scrollHeight, ch: el.clientHeight, ellipsis: cs.textOverflow === 'ellipsis', clamp: !!cs.webkitLineClamp && cs.webkitLineClamp !== 'none' });
         }
-        if (cs.backgroundClip !== 'text' && !el.matches(':disabled,[aria-disabled=true]')) {
+        // text inside something faded to nothing (a tooltip waiting for hover) is not on screen: no contrast to judge (MS-04)
+        const faded = () => { let o = 1; for (let n = el; n && n.nodeType === 1; n = parentEl(n)) o *= parseFloat(getComputedStyle(n).opacity); return o < 0.05; };
+        if (cs.backgroundClip !== 'text' && !el.matches(':disabled,[aria-disabled=true]') && !faded()) {
           const bd = backdrop(el);
           const fgc = rgba(cs.color); fgc[3] *= bd.opacity;
           const fg = over(fgc, bd.color);
@@ -629,6 +1035,8 @@
       for (let n = tw.nextNode(); n; n = tw.nextNode()) {
         const t = n.textContent.replace(/\s+/g, ' ').trim();
         if (!t) continue;
+        const pe = n.parentElement;   // visually hidden text for screen readers wraps in a 1 px box: not a broken label (MS-15)
+        if (pe && (srOnly(pe, el) || hiddenByDesign(pe, getComputedStyle(pe)))) continue;
         const rg = document.createRange(); rg.selectNodeContents(n);
         const fs = px(getComputedStyle(n.parentElement).fontSize) || 16;
         const mids = [];
@@ -662,7 +1070,7 @@
     out.type = {
       sizes: top(type.sizes), lineHeights: top(type.lineHeights), weights: top(type.weights), families: top(type.families), letterSpacing: top(type.letterSpacing, 12),
       tracking: top(type.tracking, 40), capsTight, headings: headLines,
-      smallest: minText, lineHeightTight: multiLine.filter((m) => m.ratio < 1.3).slice(0, CAP), longLines, textElements: textN,
+      smallest: minText, lineHeightTight: multiLine.filter((m) => m.ratio < (m.fs <= 20 ? 1.4 : 1.3)).slice(0, CAP), longLines, textElements: textN,
     };
     out.layout = layoutCheck();
     out.space = { values: top(space, 40), negativeMargins: negMargins };
@@ -764,6 +1172,8 @@
     out.motion = od.motion();
     out.stress = Array.from(new Set(Object.keys(active).concat(Array.from(document.querySelectorAll('style[id^="__od-stress-"]')).map((e) => e.id.slice(12)))));
     out.mode = { theme: de.getAttribute('data-theme'), density: de.getAttribute('data-density'), motion: de.getAttribute('data-motion') };
+    out.craft = craftCheck(els);
+    out.copy = copyCheck(els);
     return out;
   };
 
@@ -971,7 +1381,8 @@
     const out = { cls: 0, shifts: [], longFrames: [], supported: [] };
     const watch = (type, on) => {
       try {
-        const po = new PerformanceObserver(() => {}); po.observe({ type, buffered: true }); out.supported.push(type);
+        // buffered entries arrive in the callback, not in takeRecords(): an empty callback threw them away and CLS read 0
+        const po = new PerformanceObserver((list) => { for (const e of list.getEntries()) on(e); }); po.observe({ type, buffered: true }); out.supported.push(type);
         setTimeout(() => { for (const e of po.takeRecords()) on(e); po.disconnect(); }, 120);
       } catch (e) { /* not supported in this browser */ }
     };
@@ -1268,7 +1679,11 @@
     while (w.nextNode() && out.length < 2000) out.push(w.currentNode);
     return out;
   }
-  od.stress = (kind, on = true) => {
+  const GERMAN = 'ungsverwaltungseinstellungsbereichsuebersicht';
+  const NAMED = 'h1,h2,h3,h4,h5,h6,a,button,label,th,dt,strong,figcaption,[class*=name],[class*=title]';
+  const named = (od.named = od.named || []);
+  const LONG_NAME = 'Maximiliana Alexandrina Featherstonehaugh-Cholmondeley of the Northern Highlands Regional Procurement and Facilities Management Directorate, Building Seven, Floor Twelve, Desk Forty-Three, Westminster';
+  od.stress = (kind, on = true, opts = {}) => {
     if (STRESS_CSS[kind]) {
       let st = document.getElementById('__od-stress-' + kind);
       if (on && !st) { st = document.createElement('style'); st.id = '__od-stress-' + kind; st.textContent = STRESS_CSS[kind]; document.head.appendChild(st); }
@@ -1276,14 +1691,78 @@
     } else if (kind === 'rtl') {
       if (on) { if (!('dir' in originals)) originals.dir = document.documentElement.getAttribute('dir'); document.documentElement.setAttribute('dir', 'rtl'); }
       else if ('dir' in originals) { originals.dir === null ? document.documentElement.removeAttribute('dir') : document.documentElement.setAttribute('dir', originals.dir); delete originals.dir; }
-    } else if (kind === 'longWords' || kind === 'pseudoloc') {
+    } else if (kind === 'longNames') {
+      // a 200-character name wherever a name or title sits: headings, links, buttons, labels, table heads, .name and .title
       if (on) {
         if (active[kind]) return { kind, on: true, changed: 0, note: 'already on' };
-        if (Object.keys(active).some((k) => k === 'longWords' || k === 'pseudoloc')) return { error: 'turn the other text stress off first' };
+        if (Object.keys(active).some((k) => /^(longWords|pseudoloc|translate)$/.test(k))) return { error: 'turn the other text stress off first' };
         let n = 0;
         for (const t of textNodes()) {
+          const host = t.parentElement.closest(NAMED);
+          const v = t.nodeValue; if (!host || v.trim().length > 60) continue;
+          originals.set(t, v); t.nodeValue = (v.trim() + ' ' + LONG_NAME).slice(0, 200); n++;
+        }
+        active[kind] = true;
+        return { kind, on: true, changed: n };
+      }
+      for (const [t, v] of originals) if (t && t.nodeType === 3) t.nodeValue = v;
+      for (const k of Array.from(originals.keys())) if (k && k.nodeType === 3) originals.delete(k);
+      delete active[kind];
+      return { kind, on: false };
+    } else if (kind === 'noNames') {
+      // every short name or title empty, as for a record with no name: what is left must keep its shape
+      if (on) {
+        if (active[kind]) return { kind, on: true, changed: 0, note: 'already on' };
+        if (Object.keys(active).some((k) => /^(longWords|pseudoloc|translate|longNames)$/.test(k))) return { error: 'turn the other text stress off first' };
+        let n = 0; named.length = 0;
+        for (const t of textNodes()) {
+          const host = t.parentElement.closest(NAMED);
+          if (!host || t.nodeValue.trim().length > 60) continue;
+          originals.set(t, t.nodeValue); t.nodeValue = ''; n++;
+          // a name inside a repeated item (a row, card or list item) is the one whose loss breaks a layout people scan
+          if (!named.includes(host) && host.closest('li,tr,article,[class*=card],[class*=item],[class*=row]')) named.push(host);
+        }
+        active[kind] = true;
+        return { kind, on: true, changed: n };
+      }
+      for (const [t, v] of originals) if (t && t.nodeType === 3) t.nodeValue = v;
+      for (const k of Array.from(originals.keys())) if (k && k.nodeType === 3) originals.delete(k);
+      named.length = 0; delete active[kind];
+      return { kind, on: false };
+    } else if (kind === 'noImages') {
+      // every picture fails to load, as on a slow or blocked network: what is left must still hold its place and say what it was
+      const imgs = Array.from(document.querySelectorAll('img'));
+      if (on) {
+        if (active[kind]) return { kind, on: true, changed: 0, note: 'already on' };
+        for (const im of imgs) { originals.set(im, { src: im.getAttribute('src'), srcset: im.getAttribute('srcset') }); im.removeAttribute('srcset'); im.setAttribute('src', 'data:image/png;base64,AA=='); }
+        active[kind] = true;
+        return { kind, on: true, changed: imgs.length };
+      }
+      for (const [im, v] of originals) {
+        if (!im || im.nodeType !== 1 || !v || typeof v !== 'object') continue;
+        v.srcset === null ? im.removeAttribute('srcset') : im.setAttribute('srcset', v.srcset);
+        v.src === null ? im.removeAttribute('src') : im.setAttribute('src', v.src);
+        originals.delete(im);
+      }
+      delete active[kind];
+      return { kind, on: false };
+    } else if (kind === 'longWords' || kind === 'pseudoloc' || kind === 'translate') {
+      if (on) {
+        if (active[kind]) return { kind, on: true, changed: 0, note: 'already on' };
+        if (Object.keys(active).some((k) => k === 'longWords' || k === 'pseudoloc' || k === 'translate')) return { error: 'turn the other text stress off first' };
+        let n = 0;
+        const grow = typeof opts.grow === 'number' ? opts.grow : 0.3;
+        for (const t of textNodes()) {
           const v = t.nodeValue; originals.set(t, v);
-          if (kind === 'pseudoloc') {
+          if (kind === 'translate') {
+            // a German stand-in: every word grows by `grow` (30% by default) with no new spaces, the way German compounds
+            // run long and cannot wrap (W3C, text size in translation). Short labels often grow more than 30% in real German.
+        
+            let w = v.replace(/\p{L}{2,}/gu, (m) => m + GERMAN.slice(0, Math.ceil(m.length * grow)));
+            const need = Math.ceil(v.trim().length * (1 + grow)) - w.trim().length;
+            if (need > 0) w = w.replace(/(\p{L})(\P{L}*)$/u, (m, a, b) => a + GERMAN.slice(0, need) + b);
+            t.nodeValue = w; n++;
+          } else if (kind === 'pseudoloc') {
             const acc = v.replace(/[aeiouAEIOU]/g, (c) => ACCENT[c]);
             t.nodeValue = '[' + acc + ' ' + v.slice(0, Math.ceil(v.length * 0.4)).replace(/[aeiouAEIOU]/g, (c) => ACCENT[c]) + ']';
             n++;
@@ -1296,7 +1775,7 @@
       for (const k of Array.from(originals.keys())) if (k && k.nodeType === 3) originals.delete(k);
       delete active[kind];
       return { kind, on: false };
-    } else return { error: 'unknown stress ' + kind + '; use textSpacing, text200, rtl, longWords or pseudoloc' };
+    } else return { error: 'unknown stress ' + kind + '; use textSpacing, text200, rtl, longWords, pseudoloc, translate, longNames, noNames or noImages' };
     if (on) active[kind] = true; else delete active[kind];
     return { kind, on };
   };

@@ -32,6 +32,8 @@ assets/library/
 | `source` | The showcase piece it comes from (a repo path), or `null` |
 | `a11y` | One sentence on keyboard and screen-reader behaviour |
 | `width` | The width it is designed for: `narrow` (up to 400 px), `medium` (up to 640 px) or `wide` |
+| `live_region` | Optional: `polite`, `assertive` or `none`, how the part tells screen readers that something changed |
+| `tokens_planned` | Optional: `--ds-state-*` variables it reads where a system has them, each with the token it falls back to |
 | `spec` | What agents, the MCP server and smart UI need to use it without reading the file: see "spec" below |
 | `live_region` | Optional: `polite`, `assertive` or `none`, how the part tells screen readers that something changed |
 | `tokens_planned` | Optional: `--ds-state-*` variables it reads where a system has them, each with the token it falls back to |

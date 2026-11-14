@@ -36,23 +36,49 @@
       "the list has never had items: use empty-first-use",
       "items are hidden by a filter: use empty-filtered"
     ],
-    "keyboard": [
-      "Tab reaches See what you approved"
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-empty-all-done [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “You're all caught up”",
+        "slot": "text"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-empty-all-done [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in “You reviewed all 18 expense reports. New ones la”",
+        "slot": "text"
+      },
+      {
+        "name": "checked",
+        "selector": ".odl-empty-all-done [data-od-slot=\"checked\"]",
+        "what": "when the list was last checked, as in “Checked a minute ago”",
+        "slot": "text"
+      },
+      {
+        "name": "history",
+        "selector": ".odl-empty-all-done [data-od-action=\"history\"]",
+        "what": "the See what you approved action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "title": {
           "type": "string",
-          "maxLength": 32
+          "maxLength": 32,
+          "part": "title"
         },
         "message": {
           "type": "string",
-          "maxLength": 128
+          "maxLength": 128,
+          "part": "message"
         },
         "checked": {
           "type": "string",
-          "maxLength": 32
+          "maxLength": 32,
+          "part": "checked"
         }
       },
       "required": [
@@ -92,8 +118,11 @@
       },
       "missing_image": {
         "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
+        "how": "the part has no photo"
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches See what you approved"
+    ]
   }
 }

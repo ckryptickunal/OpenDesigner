@@ -38,20 +38,38 @@
       "the server refused the whole form: show an error banner above the form (page-banners) and keep every value",
       "a warning, not an error: say it as a hint, not in the error colour"
     ],
-    "keyboard": [
-      "Tab reaches the email field, then Send invite",
-      "On a failed send, focus returns to the field and its message is read"
+    "parts": [
+      {
+        "name": "value",
+        "selector": ".odl-field-error [data-od-slot=\"value\"]",
+        "what": "what the person typed",
+        "slot": "text"
+      },
+      {
+        "name": "error",
+        "selector": ".odl-field-error [data-od-slot=\"error\"]",
+        "what": "what is wrong and how to fix it, as in “Add the part after the @ with a dot, like name@c”",
+        "slot": "text"
+      },
+      {
+        "name": "invite",
+        "selector": ".odl-field-error [data-od-action=\"invite\"]",
+        "what": "the Send invite action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "value": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 24,
+          "part": "value"
         },
         "error": {
           "type": "string",
-          "maxLength": 96
+          "maxLength": 96,
+          "part": "error"
         }
       },
       "required": [
@@ -91,8 +109,12 @@
       },
       "missing_image": {
         "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
+        "how": "the part has no photo"
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches the email field, then Send invite",
+      "On a failed send, focus returns to the field and its message is read"
+    ]
   }
 }

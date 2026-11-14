@@ -78,7 +78,7 @@ See [Decisions, DESIGN.md and the overview page](/docs/decisions/).
 - **A short note in your `AGENTS.md`, and a `CLAUDE.md` that imports it,** added only after you say yes. You're asked once, and a no is remembered. The note tells later AI agents to read `DESIGN.md` and `RULES.md` first, use the tokens, and run `engine.py review` before every draft and commit.
 - **`opendesigner/feedback.md`,** written only if you report something with `engine.py feedback`.
 - **`opendesigner/RULES.md`,** written when you give a note on the work. A note you give twice becomes a rule that later sessions follow.
-- **`opendesigner/research/`,** written only if you say yes to user research: the findings with their sources, the positioning and the direction board.
+- **`opendesigner/research/`,** written only if you say yes to research: the findings with their sources, the positioning and the direction board. It also holds `stakeholders.json` (who has a say, and what each person said, with their name or role on it), `interviews.md` (at most five questions per role, to send) and `summary.html`, one page to share with your team. PRODUCT.md links to that page.
 - **`opendesigner/references/`,** written only when you share a reference with the extract skill: the measurements taken from it.
 - **`opendesigner/journey/`,** written only if you said yes to the private log.
 

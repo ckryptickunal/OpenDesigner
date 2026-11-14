@@ -42,9 +42,43 @@
       "a problem with one field: use field-error",
       "the whole page can't load: use page-error"
     ],
-    "keyboard": [
-      "Tab reaches each banner's action, then its dismiss button",
-      "Dismissing moves focus to the next banner"
+    "parts": [
+      {
+        "name": "banners",
+        "selector": ".odl-page-banners [data-od-list=\"banners\"]",
+        "what": "the banners, one item each",
+        "slot": "list"
+      },
+      {
+        "name": "banners.tone",
+        "selector": ".odl-page-banners [data-od-list=\"banners\"] [data-od-var=\"tone\"]",
+        "what": "info, success, warning or error",
+        "slot": "text"
+      },
+      {
+        "name": "banners.title",
+        "selector": ".odl-page-banners [data-od-list=\"banners\"] [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “New: approval rules.”",
+        "slot": "text"
+      },
+      {
+        "name": "banners.message",
+        "selector": ".odl-page-banners [data-od-list=\"banners\"] [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in “Bills over $5,000 now need a second approver.”",
+        "slot": "text"
+      },
+      {
+        "name": "banners.action",
+        "selector": ".odl-page-banners [data-od-list=\"banners\"] [data-od-action=\"action\"]",
+        "what": "the Set up rules action",
+        "slot": "action"
+      },
+      {
+        "name": "banners.dismiss",
+        "selector": ".odl-page-banners [data-od-list=\"banners\"] [data-od-action=\"dismiss\"]",
+        "what": "the dismiss action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
@@ -62,15 +96,18 @@
                   "info",
                   "success",
                   "warning"
-                ]
+                ],
+                "part": "banners.tone"
               },
               "title": {
                 "type": "string",
-                "maxLength": 32
+                "maxLength": 32,
+                "part": "banners.title"
               },
               "message": {
                 "type": "string",
-                "maxLength": 64
+                "maxLength": 64,
+                "part": "banners.message"
               }
             },
             "required": [
@@ -78,7 +115,8 @@
               "title",
               "message"
             ]
-          }
+          },
+          "part": "banners"
         }
       },
       "required": [
@@ -117,8 +155,12 @@
       },
       "missing_image": {
         "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
+        "how": "the part has no photo"
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches each banner's action, then its dismiss button",
+      "Dismissing moves focus to the next banner"
+    ]
   }
 }

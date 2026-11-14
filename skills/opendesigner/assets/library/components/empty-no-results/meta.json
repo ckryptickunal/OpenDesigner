@@ -37,19 +37,56 @@
       "the list is empty because nothing exists yet: use empty-first-use",
       "only filters removed the items: use empty-filtered"
     ],
-    "keyboard": [
-      "Tab moves through the three ways to widen the search; Enter or Space picks one"
+    "parts": [
+      {
+        "name": "query",
+        "selector": ".odl-empty-no-results [data-od-slot=\"query\"]",
+        "what": "what the person searched for, as in “quartely report”",
+        "slot": "text"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-empty-no-results [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in “We searched file names and contents in Finance, ”",
+        "slot": "text"
+      },
+      {
+        "name": "spelling",
+        "selector": ".odl-empty-no-results [data-od-action=\"spelling\"]",
+        "what": "the Search for “quarterly report” instead action",
+        "slot": "action"
+      },
+      {
+        "name": "label",
+        "selector": ".odl-empty-no-results [data-od-slot=\"label\"]",
+        "what": "the visible label, as in “Search for “quarterly report” instead”",
+        "slot": "text"
+      },
+      {
+        "name": "all_folders",
+        "selector": ".odl-empty-no-results [data-od-action=\"all_folders\"]",
+        "what": "the Search all folders, not only Finance action",
+        "slot": "action"
+      },
+      {
+        "name": "any_date",
+        "selector": ".odl-empty-no-results [data-od-action=\"any_date\"]",
+        "what": "the Search any date action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "query": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 24,
+          "part": "query"
         },
         "message": {
           "type": "string",
-          "maxLength": 104
+          "maxLength": 104,
+          "part": "message"
         }
       },
       "required": [
@@ -88,8 +125,11 @@
       },
       "missing_image": {
         "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
+        "how": "the part has no photo"
       }
-    }
+    },
+    "keyboard": [
+      "Tab moves through the three ways to widen the search; Enter or Space picks one"
+    ]
   }
 }

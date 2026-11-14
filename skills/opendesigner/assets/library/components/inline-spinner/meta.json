@@ -42,9 +42,19 @@
       "waits over about 10 seconds or with steps: use progress-steps",
       "a whole area loading: use a skeleton"
     ],
-    "keyboard": [
-      "Tab reaches the address field, then Save changes",
-      "Focus stays on Save changes while it saves"
+    "parts": [
+      {
+        "name": "save",
+        "selector": ".odl-inline-spinner [data-od-action=\"save\"]",
+        "what": "the Save changes action",
+        "slot": "action"
+      },
+      {
+        "name": "label",
+        "selector": ".odl-inline-spinner [data-od-slot=\"label\"]",
+        "what": "the visible label, as in “Save changes”",
+        "slot": "text"
+      }
     ],
     "data": {
       "type": "object",
@@ -100,8 +110,12 @@
       },
       "missing_image": {
         "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
+        "how": "the part has no photo"
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches the address field, then Save changes",
+      "Focus stays on Save changes while it saves"
+    ]
   }
 }

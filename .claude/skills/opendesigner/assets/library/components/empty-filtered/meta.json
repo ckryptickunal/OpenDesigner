@@ -38,20 +38,56 @@
       "the search text matched nothing: use empty-no-results",
       "there are no items at all: use empty-first-use"
     ],
-    "keyboard": [
-      "Tab reaches each filter's remove button, then Clear all filters",
-      "Removing a filter moves focus to the next filter, or to Clear all filters"
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-empty-filtered [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “No invoices match these filters”",
+        "slot": "text"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-empty-filtered [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in “Your filters hide all 46 invoices. Remove one, o”",
+        "slot": "text"
+      },
+      {
+        "name": "filters",
+        "selector": ".odl-empty-filtered [data-od-list=\"filters\"]",
+        "what": "the filters, one item each",
+        "slot": "list"
+      },
+      {
+        "name": "filters.label",
+        "selector": ".odl-empty-filtered [data-od-list=\"filters\"] [data-od-slot=\"label\"]",
+        "what": "the visible label, as in “Status: Overdue”",
+        "slot": "text"
+      },
+      {
+        "name": "filters.remove",
+        "selector": ".odl-empty-filtered [data-od-list=\"filters\"] [data-od-action=\"remove\"]",
+        "what": "the remove action",
+        "slot": "action"
+      },
+      {
+        "name": "clear",
+        "selector": ".odl-empty-filtered [data-od-action=\"clear\"]",
+        "what": "the Clear all filters action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "title": {
           "type": "string",
-          "maxLength": 48
+          "maxLength": 48,
+          "part": "title"
         },
         "message": {
           "type": "string",
-          "maxLength": 96
+          "maxLength": 96,
+          "part": "message"
         },
         "filters": {
           "type": "array",
@@ -62,13 +98,15 @@
             "properties": {
               "label": {
                 "type": "string",
-                "maxLength": 24
+                "maxLength": 24,
+                "part": "filters.label"
               }
             },
             "required": [
               "label"
             ]
-          }
+          },
+          "part": "filters"
         }
       },
       "required": [
@@ -108,8 +146,12 @@
       },
       "missing_image": {
         "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
+        "how": "the part has no photo"
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches each filter's remove button, then Clear all filters",
+      "Removing a filter moves focus to the next filter, or to Clear all filters"
+    ]
   }
 }

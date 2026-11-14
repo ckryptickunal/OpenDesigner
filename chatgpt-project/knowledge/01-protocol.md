@@ -2,8 +2,8 @@
 
 ## Binding rules
 They hold in every round, after a context reset and in a new session. `engine.py` is `<skill>/scripts/engine.py`, in this skill's folder.
-1. **Tokens only.** Every colour, size, space, radius, shadow and duration comes from `opendesigner/tokens/` or `opendesigner/build/`. A value the system lacks becomes `engine.py set <path> <value> --why "..."`, never a literal.
-2. **One question per call.** One per message, and one per call of a question tool, even one that takes four. The log question goes alone, first.
+1. **Tokens only.** Every colour, size, space, radius, shadow and duration comes from `opendesigner/tokens/` or `opendesigner/build/`. A value the system lacks becomes `engine.py set <path> <value> --why "..."`, never a literal. Never add `od-ignore` to make `review` pass: an exception is the person's to grant, so ask first.
+2. **One question per call.** One per message, and one per call of a question tool, even one that takes four. The log question is the only question in the first message, on its last line. It never replaces what they asked for: answer or do that first.
 3. **Show every round without being asked:** screenshots at desktop and phone, or an artifact, before and after, with each check and its result. Never only a local link.
 4. **Every implementation is an `engine.py ledger` round that ends with `engine.py review`, then a re-read of DESIGN.md.** Fix what it reports first.
 5. **Owner corrections go to `engine.py feedback "<the rule>" --kind note`.** Said twice, a note is a rule in `opendesigner/RULES.md`.
@@ -70,7 +70,7 @@ At the start read `references/rules.md`, `zoom.md`, `standards.md` and `practice
 Details are in `references/zoom.md`.
 - **Level 0, sketch:** up to 5 questions, one per message, fewer when their words already answer some. Then `engine.py sketch ...` records the answers and builds a complete first version. Show the first result: a plain line on what they got, the overview (`opendesigner/overview.html`), and one clear next step (`zoom.md`, "The first result").
 - **People in a hurry** ("just pick") get the sketch with `--delegated` and no optional questions. People who talk in plain words get fewer questions (`zoom.md`).
-- **Around the levels** (`zoom.md`, "Around the levels"): user research right after the first result (`references/research.md`: one yes, then you run it with web search, a browser or `/last30days`, and `engine.py research add`), the taste poll, the taste index, the project's three directions, and style directions from the option gallery. Never name a style direction without its fit.
+- **Around the levels** (`zoom.md`, "Around the levels"): user research right after the first result (`references/research.md`: one yes, then you run it with web search, a browser or `/last30days`, and `engine.py research add`; with none of them, write the plan and say so, never findings you did not read), the taste poll, the taste index, the project's three directions, and style directions from the option gallery (`engine.py show option-gallery --json`; the `engine.py style` catalogue only when they want more). Never name a style direction without its fit.
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
 - **Skip what a standard settles:** a question marked **Settled by: STD-...** is skipped like a **Planned** one, and an option marked **(breaks STD-...)** is never recommended (`rules.md` section 6).
@@ -307,7 +307,7 @@ Keep it short, in plain words:
 
 ## Around the levels: research, taste and directions
 SKILL.md ("The flow") points here. These come between the levels, in this order of need, never all at once.
-- **User research** (about 10 minutes, you do it): right after the first result, offer to research who the users are, in one message with the plan (`references/research.md`). After one yes, run it on your own, save the findings with `engine.py research add`, and ask before applying what they recommend. The engine reminds you after each `sketch` and `build` until it is done or skipped (`engine.py research skip --why "..."`). Then, before any colour or direction: the competitor table, the positioning they confirm, and three directions on the board (`research.md` sections 8 and 9).
+- **User research** (about 10 minutes, you do it): right after the first result, offer to research who the users are, in one message with the plan (`references/research.md`). After one yes, run it on your own, save the findings with `engine.py research add`, and ask before applying what they recommend. Then check the gaps (`research.py coverage`), ask the people with a say when there is more than one (`research.py stakeholders`, `research.md` section 11) and write one page for the team (`research.py summary`). The engine reminds you after each `sketch` and `build` until it is done or skipped (`engine.py research skip --why "..."`). Then, before any colour or direction: the competitor table, the positioning they confirm, and three directions on the board (`research.md` sections 8 and 9).
 - **The taste poll** (optional, about 5 minutes): the person rates 20 to 30 real screens from shipped products, and the result recommends the eight dials. Offer it when they can't put their taste into words ("I'll know it when I see it"), before level 1, or whenever they ask. It never replaces a question they already answered (`references/taste.md`).
 - **The taste index** (`taste.py index`) merges every taste signal in this project. Offer the dials it is sure about as "confirm this?", ask the rest directly, and leave out an option past one of its red lines (unless every option is: then show them all and say which line). The engine's option gallery and `engine.py review` already use it (`references/taste.md`, "The taste index").
 - **Three directions for the project** come after the positioning, on the direction board (`engine.py research directions board`, `research.md` section 9). The option gallery below is for the style (Q-dir-01).
@@ -589,7 +589,7 @@ python3 <skill>/scripts/engine.py build [--force]            generate and valida
 python3 <skill>/scripts/engine.py review [--project src/] [--strict]   end-of-implementation check: hard-coded values, broken standards, removed things that came back, od-ignore without a reason, guard problems (tokens edited by hand, a locked decision undone), validate errors, stale DESIGN.md; runs without a system too. Last line "Review: ok" or what is left to fix; --strict exits 1 unless it is ok, and always when AGENTS.md, CLAUDE.md or DESIGN.md point at a missing opendesigner/
 python3 <skill>/scripts/engine.py audit-page [--project src/] [--open] [--json]   opendesigner/audit.html: the system as the code builds it. Each token with where the code uses it, each decision and whether it changes tokens, then every inconsistency (near-duplicate colours, spacing, type sizes and corners off the scale, values on the scale typed by hand, raw shadows, components drawn several ways) with file:line evidence, a count and options previewed with the project's own values. Builds on review's scan; reports only. Choices come back as OD:fix and OD:waive lines
 python3 <skill>/scripts/engine.py adapt <reference.json> [--open] [--json]   opendesigner/adapt.html: what a reference (css_scan.py --json output) would change in this system and what stays, side by side, drawn with both systems' tokens. Locked values, standards and identity (brand colour, typefaces) stay. Records nothing; choices come back as OD:accept lines
-python3 <skill>/scripts/engine.py exempt <folder or glob> --why "..." [--by owner|agent]   keep files that break the system on purpose (a demo of mistakes) out of review; review lists them. exempt (no glob) lists them; --remove undoes one
+python3 <skill>/scripts/engine.py exempt <folder or glob> --why "..." --by owner|agent   keep files that break the system on purpose (a demo of mistakes) out of review; review lists them. exempt (no glob) lists them; --remove undoes one
 python3 <skill>/scripts/engine.py ledger start "<what this round builds>" --items a,b,c   the audit ledger, one round per implementation: items are building blocks (comp.action.button fills block coverage), audit issues (A-space-01) or your own
 python3 <skill>/scripts/engine.py ledger add|done|broke|waive <item> [--note "..."] [--why "..." --by owner|agent --quote "..."] [--files a,b]   done; broke --note says what broke; waive says why and who decided (also in state.waivers)
 python3 <skill>/scripts/engine.py ledger close | show [--json]   close refuses while an item is neither done nor waived; review fails on such items too, and DESIGN.md shows the ledger
@@ -1127,8 +1127,8 @@ A person in a hurry still gets a finished page in the first reply. What they don
 ## The audit page, when there is a system
 When the project has `opendesigner/state.json` (their own, or one `sketch` just made), run `engine.py audit-page --open` before the checklist below. It is the code-side half of the audit, on one page the person can read: every token with where the code uses it, every decision and whether it changes tokens, and every inconsistency with `file:line` evidence, a count and two or three options previewed with their own values. It reports only. Their picks come back as `OD:fix` and `OD:waive` lines (`rules.md` section 9); each becomes a ledger item.
 
-- **Examples that break the system on purpose** (a demo of mistakes, a style guide's "don't" figures) are not findings. Ask the owner, then `engine.py exempt <folder> --why "..."`; `review` and the audit page leave them out and list them.
-- **Every implementation round is a ledger round.** Before building: `engine.py ledger start "<what>" --items <the blocks and issues it covers>`. After: `ledger done` each item, `ledger broke <item> --note "..."` for what broke, and `ledger waive <item> --why "..." --by owner --quote "..."` for what was skipped on purpose. `review` fails while an item is neither done nor waived, so nothing is missed at the end; DESIGN.md shows the ledger. An agent may waive (`--by agent`); the round closes only after the owner agrees (`waive` again with `--by owner --quote`).
+- **Examples that break the system on purpose** (a demo of mistakes, a style guide's "don't" figures) are not findings. Ask the owner, then `engine.py exempt <folder> --why "..." --by owner`; `review` and the audit page leave them out and list them.
+- **Every implementation round is a ledger round.** Before building: `engine.py ledger start "<what>" --items <the blocks and issues it covers>`. After: `ledger done` each item, `ledger broke <item> --note "..."` for what broke, and `ledger waive <item> --why "..." --by owner --quote "..."` for what was skipped on purpose. `review --strict` fails while an item is neither done nor waived, so nothing is missed at the end; DESIGN.md shows the ledger. An agent may waive (`--by agent`); the round closes only after the owner agrees (`waive` again with `--by owner --quote`).
 
 ## 1. How to run it
 
@@ -1284,11 +1284,13 @@ Run this on every draft before you show it, not only when asked (owner review 20
 5. **Look.** `review.py sheet --open`, at full size.
 6. **Show.** Before and after, with what was checked and what is still open.
 
-# User research: who the users are, before the defaults
+# Research: users, market and stakeholders, before the defaults
 
 The sketch records what the person says about their users. This step checks it against the world, then ends in a positioning and three directions (sections 8 and 9). You research the group the product is for: who they are, how and where they use it, which apps they already live in, what they expect, what they prefer and what they need to read and use it. The findings are saved with their sources, and each one that touches the design becomes a recommended answer to a question the engine already asks. The person says yes before anything changes.
 
 It is desk research: it describes a group, not this product's own users. Say so once, and suggest five short conversations with real users when the stakes are high.
+
+The repo does the research itself; the person never has to bring it. Two more parts sit beside the user research: **stakeholder research** (section 11: who has a say, what each of them said, where they agree and where they differ) and a **coverage check** against the complete list of design research (section 12). Everything ends on **one summary page** the person can share with their team (section 13).
 
 ## 1. When
 - **After the sketch, before level 1.** The engine prints a reminder after every `sketch` and `build` until the research is done or skipped. Offer it as the first line of the offer after the sketch (`zoom.md`, "The offer after every level"), in one message with the plan (section 4). One question, never a gate.
@@ -1310,19 +1312,24 @@ Look at your own tool list, the person's connectors and the project, without ope
 | `deep-research` | A deep-research skill or agent | A long report across many sources, for a group little is written about |
 | `analytics` | PostHog, Google Analytics, Amplitude or Mixpanel tools or exports | How the product's existing users really behave: devices, screen sizes, languages, dark-mode share. It beats desk research when the product is live |
 
-Pass the ones you have to the plan: `engine.py research plan --tools web-search,browser,last30days`. It prints every missing tool with what it would add. Name the missing ones that would clearly change the result **once**, in the plan message, with how to get them (for `/last30days`, the link above). Then go on with what you have: a missing tool never stops the research.
+Pass the ones you have to the plan: `engine.py research plan --tools web-search,browser,last30days`. It prints every missing tool with what it would add. Name the missing ones that would clearly change the result **once**, in the plan message, with how to get them (for `/last30days`, the link above). Then go on with what you have: a missing tool never stops the research. With no tool that can read the web, write the plan (`research plan`), say plainly that you could not search, and stop there or `research skip`. Never write a finding, a source or a URL you did not open.
 
 With nothing that reads the web, say so in one line and offer two ways on: the person fills in the findings file themselves (`assets/output/research-users.example.json` shows the shape), or they skip it.
 
 ## 3. What to find out
-Seven topics. Each gets at least one search, and the findings file says which ones found nothing.
+Ten topics. Each gets at least one search, and the findings file says which ones found nothing.
 1. **Who:** age range, region, languages and scripts, reading level, devices and network.
 2. **Context:** how often, for how long, where (desk, counter, street, bed), one hand or two, light, noise, interruptions.
-3. **Apps:** the apps they open every day, and the patterns those apps have taught them (a bottom tab bar, swipe actions, a confirmation before money moves).
-4. **Expectations:** what they expect and what frustrates them, from reviews of products like this one, forums and published studies.
-5. **Preferences that touch design:** text size, dark mode, density, how much colour, colour meanings in their culture.
-6. **Accessibility:** vision, motor, hearing and cognitive needs common in the group, and tough conditions (bright light, a moving bus).
-7. **Market:** what people would use instead (the competitors, including doing it by hand), what those products all do, the gap none of them fills, and an analogous product: one from another field that solves the same kind of problem. Store listings, reviews and the competitors' own pages are the sources.
+3. **Tasks:** the jobs they come to do, in their own words, and which ones matter most.
+4. **Apps:** the apps they open every day, and the patterns those apps have taught them (a bottom tab bar, swipe actions, a confirmation before money moves).
+5. **Expectations:** what they expect and what frustrates them, from reviews of products like this one, forums and published studies.
+6. **Preferences that touch design:** text size, dark mode, density, how much colour, colour meanings in their culture.
+7. **Accessibility:** vision, motor, hearing and cognitive needs common in the group, and tough conditions (bright light, a moving bus).
+8. **Market:** what people would use instead (the competitors, including doing it by hand), what those products all do, the gap none of them fills, and an analogous product: one from another field that solves the same kind of problem. Store listings, reviews and the competitors' own pages are the sources.
+9. **Platform:** the conventions of the platforms it runs on, from the platform's own guidelines (Apple's Human Interface Guidelines, Material Design, the web's own habits) and its best apps: navigation, controls, gestures, sizes.
+10. **Voice:** the words the users use for things, their reading level, and how products in the category talk to them.
+
+The design systems the competitors or the platform publish go in `market.systems` (section 6), and the product's own analytics, when it is live, are a source of kind `analytics` on any topic.
 
 ## 4. Plan it, and get one yes
 1. **Write the users line.** One line on who they are, in the person's words where you have them, for example "pharmacists in small chemist shops, 30 to 55, at a counter all day, on Android". Never invent it: when the sketch said nothing specific, ask for it in the same message as the plan.
@@ -1344,10 +1351,11 @@ After the yes, work without stopping until the findings are saved. Don't send pr
 Save them as JSON in the shape of `assets/output/research-users.example.json`, then check the file: `engine.py research check <file>`.
 - `brief`, `date`, and `tools` (`used`, `missing`).
 - `sources`: `id`, `title`, `url` (the page you opened, or `person, YYYY-MM-DD`, `interview, YYYY-MM-DD` or `analytics, YYYY-MM-DD`), `kind`, `date`, `accessed`.
-- `findings`: `id`, `topic` (one of the six), `text` (one sentence, plain words), `confidence` (`measured`: a statistic or a study; `reported`: people say so; `inferred`: your reasoning), `sources`, `signals` (below).
+- `findings`: `id`, `topic` (one of the ten in section 3), `text` (one sentence, plain words), `confidence` (`measured`: a statistic or a study; `reported`: people say so; `inferred`: your reasoning), `sources`, `signals` (below).
 - `apps` (name, why, sources), `patterns` (the patterns they already know) and `open_questions`.
 - `market` (optional): `analogous` (name, why, sources), `competitors` (a list of name, why, sources), `pattern` and `gap` (a sentence, or text and sources), and `conventions` (the words and habits the industry's users already know; without it, `patterns` stand in). PRODUCT.md's Market section shows it with its sources until the person's own line is recorded in `context.market` (`zoom.md`, "The project's phase").
   - **The competitor table.** For each competitor with a site, measure its page (opendesigner-extract: `read_page.js`, its CSS, a screenshot or Mobbin) and add `url` (the page you opened), `measured` (`browser`, `css`, `screenshot`, `mobbin`, `figma`), `colors` (a list of `hex` and `role`: `ground`, `ink`, `accent`, `cta`, `surface`, `band`), `type` (`display`, `text` and a `class`: `grotesk`, `geometric`, `humanist`, `serif`, `slab`, `mono`, `display`) and `cta` (`shape`: `square`, `subtle`, `rounded` or `pill`; `radius`, `fill` and `label` if you have them). Never guess a value. At least 3 rows need all of these before any colour is proposed.
+  - **Published design systems** (`systems`): the design systems or guidelines the competitors or the platform publish. Each row: `name`, `url` (the page you read), `why` and `sources`. When none is public, say so in `open_questions`.
   - **The industry benchmark** (`benchmark`): shipped pages in the industry and its proven neighbours, section by section. Each row: `name`, `url` (the live page or its Mobbin link), `section`, `does`, `takes` (the principle you take) and `signature` (the device that stays theirs).
 
 **Signals** are what a finding means for the design, from a closed list. A finding can carry several, or none.
@@ -1403,6 +1411,41 @@ After the positioning is confirmed, propose exactly three directions. Each chang
 - **Market:** the competitors' shared pattern and the gap are what the alignment is checked against: a recommendation that copies the pattern needs a reason, and one that closes the gap says so. A colour within a hair of a competitor's is theirs: the directions check refuses it.
 - **Later stages:** read the `later` notes when you reach type, imagery, motion, voice and themes, and say which finding a recommendation comes from.
 - **Every session:** PRODUCT.md's Users section is what a later session or another agent reads first. `engine.py review` checks the findings again, says when they are older than 180 days, and fails `--strict` when the saved file has lost a source.
+
+## 11. Stakeholders: who has a say
+A design system is decided by more than one person. Find out who has a say, ask them, and keep what each one said, with their name or role on it.
+0. **Solo or a team?** `research.py stakeholders scan` first decides whether this step is needed at all. It counts as a team when CODEOWNERS names two or more owners or a team handle (`@org/team`), two or more people have committed (bots left out), PRODUCT.md names a team (`context.team`, or a line you kept in its Team and Governance section), or the person gave a team size (Q-scope-04). With none of these, it records **"solo: not needed"** with one line and you move on: no interviews, no questions. The same check runs before `interview`, `sent`, `none` and `answer`, so skipping `scan` never drafts questions for a solo project. The person's word outranks the repo either way: `research.py stakeholders team --why "<their words>"` when others do have a say, `stakeholders solo --why "..."` when only they decide.
+1. **Read the repo:** `research.py stakeholders scan`. It reads CODEOWNERS, the README, the docs, brand, legal and accessibility files, `package.json`, and how many people have committed (a count; names stay in git). With the GitHub CLI or a GitHub tool, export the issues first and add `--issues issues.json` (`gh issue list --state all --limit 300 --json number,title,labels`); without one, say that the issues were not read. What it finds is a sign that a role exists, never a view.
+2. **Ask the person** in one message who holds each role: owner, product, engineering, marketing, legal, accessibility, support, brand. A role nobody holds: `research.py stakeholders none <role> --why "<their words>"`. Never guess who holds a role from a name in the repo.
+3. **Draft the interviews:** `research.py stakeholders interview [--role legal ...]` writes `research/interviews.md`: at most five plain questions per role, to send as they are or to answer in the session. When one goes out: `stakeholders sent <role> --who "<their role or name>"`.
+4. **Record every answer with who said it:** `research.py stakeholders answer <role> <n> --said-by "..." --text "<their words>" [--value <option>] [--how interview|email|chat|document|person]`. `--value` is the option their words match, for a question the engine asks; leave it out when the words do not clearly match one. No emails or phone numbers.
+5. **Read the points:** `research.py stakeholders show`. Each question key is one of:
+   - **agreed:** two or more roles gave the same option and none differs.
+   - **one view:** one role answered. Say who else should be asked.
+   - **conflict:** the options differ. Show both, each with who said it. Never average them, never pick a side.
+   - **views:** open-text answers to read and use where they fit.
+   - **not asked:** nobody answered yet. Never fill it in.
+6. **Turn points into decisions:** `research.py stakeholders decide <key>`. An agreed point is recorded with `set_by research` and `source_ref research/stakeholders.json#<key>`, naming who agreed. It never overwrites the person's own answer: when theirs differs, show both. A conflict or a single view becomes a decision only when the owner settles it in their words: `--value <option> --quote "<the owner's words>"` (`set_by chosen`). The other views stay on record.
+
+`engine.py review` names open conflicts and roles not asked yet.
+
+## 12. Check what the research covers
+`research.py coverage` checks the research against the complete list and says what is covered, partial, missing, blocked or not yet possible:
+
+| Area | Covered when |
+|---|---|
+| Users and their tasks | findings on who, context and tasks |
+| The competitors' design systems | at least 3 competitors measured (section 6) and `market.systems` read |
+| Accessibility needs of the audience | a finding on accessibility |
+| Platform conventions | a finding on platform |
+| Content and voice | a finding on voice |
+| The product's own analytics | a source of kind `analytics`; "not yet" while the product is not live |
+| Stakeholders | every role answered, or marked as held by nobody; "not needed" on a solo project |
+
+Fill the gaps with the tools you have, citing each finding, then run `engine.py research add` again. When a tool that would fill a gap is missing (analytics, a browser), say so plainly in one line, with what it would add. Never mark an area covered without a finding or a source behind it.
+
+## 13. One page to share
+`research.py summary [--open]` writes `research/summary.html`: who the users are, the findings with their sources, the competitor table, the published systems, the stakeholders and what each said side by side (conflicts first), what is not asked yet, the open questions and every source. It uses the visual templates' style, works in light and dark, and has no network requests. PRODUCT.md's Users section links to it. Rebuild it after any change; `engine.py review` says when it is older than the research it shows. Show it to the person (an artifact, a screenshot or the file) and offer it for their team.
 
 # House standards (version 4)
 

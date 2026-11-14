@@ -3658,6 +3658,114 @@ def page_limits(ctx):
     return out
 
 
+# ---- states: waiting, empty and error (Q-state-08, Q-pattern-04, Q-form-03). Tokens only once one is answered, so a system
+# that never decided them keeps its files; DESIGN.md and the overview draw the states either way (plan 2026-11-13, S1).
+STATE_QS = ("Q-state-08", "Q-pattern-04", "Q-form-03")
+STATE_RAW = {"Q-state-08": "raw.waitPattern", "Q-pattern-04": "raw.emptyPattern", "Q-form-03": "raw.errorPattern"}  # the engine input each sets
+WAIT_MS = {  # when each wait signal appears, by the Q-state-08 answer
+    "nng-ladder": {"indicator": 1000, "progress": 10000},      # nothing under 1 s, a loop from 1-2 s, percent done over 10 s [S-L13-032]
+    "skeleton-first": {"indicator": 0, "progress": 10000},     # the skeleton is drawn with the page, not after a delay [S-L13-033]
+    "inline-button": {"indicator": 1000, "progress": 10000},   # the pressed button shows pending after 1 s [S-L08-067]
+}
+
+
+def state_answers(state):
+    """{qid: [option values]} for the three state questions, answered or not ([] when not)."""
+    out = {}
+    raw = state.get("raw") or {}
+    for q in STATE_QS:
+        v = raw.get(STATE_RAW[q].split(".", 1)[1])
+        if v in (None, "", []):
+            v = answer_value((state.get("answers") or {}).get(q))
+        out[q] = [str(x) for x in (v if isinstance(v, list) else [v]) if x not in (None, "")]
+    return out
+
+
+STATE_WORDS = {
+    "Q-state-08": {"nng-ladder": "Nothing under 1 second; a looping sign from 1 to 10 seconds; percent done over 10 seconds.",
+                   "skeleton-first": "Grey placeholder blocks in the shape of the content for page and area loads; a small spinner for smaller parts.",
+                   "inline-button": "The pressed button shows a spinner after 1 second and keeps focus."},
+    "Q-pattern-04": {"empty-kinds": "Each empty screen says which kind it is (first use, cleared, no results, no permission, error), why it is empty, and one next step.",
+                     "onboarding-none": "No onboarding: empty screens still say what is empty and offer one next step.",
+                     "onboarding-contextual": "Short hints on empty screens, right when people need them.",
+                     "walkthrough": "A guided tour, only on truly new and complex screens."},
+    "Q-form-03": {"inline": "Each error sits next to the field it is about.", "summary": "A summary of every error at the top of the form, each linking to its field.",
+                  "banner": "A banner over the section or page.", "dialog": "A box that blocks the page, only when nothing else can continue.",
+                  "error-page": "A full error page, only for failures that stop everything."}}
+STATE_DEFAULT = {"Q-state-08": "nng-ladder", "Q-pattern-04": "empty-kinds", "Q-form-03": "inline"}
+
+
+def states_lines(state):
+    """DESIGN.md's States section: each state, the answer or the default it shows, and the tokens it uses."""
+    ans = state_answers(state)
+    rows = []
+    for q, title, toks in (("Q-state-08", "Waiting", "state.wait.*, state.skeleton.*"), ("Q-pattern-04", "Empty screens", "state.empty.*"),
+                           ("Q-form-03", "Errors", "state.error.*")):
+        picked = ans[q]
+        how = "; ".join(STATE_WORDS[q].get(v, v) for v in picked) if picked else STATE_WORDS[q][STATE_DEFAULT[q]]
+        rows.append(f"- **{title}** ({q}, " + ("decided" if picked else "not decided yet: the default is shown") + f"): {how} "
+                    + (f"Tokens: `{toks}`." if picked else f"No tokens until it is answered: `engine.py pick {q} <option>`."))
+    rows += ["- **Not found (404) and offline**: a page that says what happened in one line and offers a way on (home, search or retry), "
+             "in the page's own layout, never a dead end.",
+             "- **Every screen that shows data** has its loading, empty and error state before it ships; skeletons take the final layout's "
+             "shape, so nothing jumps when the content arrives. Reduced motion stops the skeleton shimmer."]
+    return rows
+
+
+def build_states(ctx):
+    """The state.* tokens: wait thresholds, skeleton colours, corner and pulse (from the colour, radius and motion tokens),
+    the empty-state layout and the error colours. Each group appears only when its question is answered."""
+    ans = state_answers(ctx.state)
+    ms = lambda v: {"value": v, "unit": "ms"}
+    out = {}
+    if ans["Q-state-08"]:
+        pick = next((x for x in ans["Q-state-08"] if x in WAIT_MS), "nng-ladder")
+        w = WAIT_MS[pick]
+        off = bool(ctx.flags.get("motionOff"))
+        out["wait"] = {
+            "indicator-after": tok(ms(w["indicator"]), "Show a loading sign only after this long; faster loads show nothing "
+                                   f"(Q-state-08: {pick}; NN/g 1 s, S-L13-032).", type_="duration"),
+            "progress-after": tok(ms(w["progress"]), "Over this long, show percent done instead of a loop (NN/g 10 s, S-L13-031).",
+                                  type_="duration")}
+        out["skeleton"] = {
+            "base": tok("{color.bg.neutral.subtle}", "Skeleton block fill: the subtle neutral, so it reads as a placeholder.", type_="color"),
+            "highlight": tok("{color.surface.raised}", "The lighter band that sweeps across a skeleton.", type_="color"),
+            "radius": tok("{radius.detail}", "Skeleton corners match the small parts they stand in for.", type_="dimension"),
+            "pulse": tok(ms(0 if off else 1500), "One sweep of the skeleton shimmer; 0 when motion is off. A loop, so it is not on "
+                         "the UI duration ladder; it stops under reduced motion (WCAG 2.3.3)." , type_="duration")}
+        if "inline-button" in ans["Q-state-08"]:
+            out["wait"]["button-pending-after"] = tok(ms(1000), "A pressed button shows its spinner after this long and keeps focus "
+                                                      "(S-L08-067).", type_="duration")
+    if ans["Q-pattern-04"]:
+        e_ = ans["Q-pattern-04"]
+        out["empty"] = {
+            "gap": tok("{space.stack.md}", "Space between the picture, the line saying what is empty, and the next step.", type_="dimension"),
+            "measure": tok("{layout.measure.lead}", "Widest the empty-state text runs.", type_="dimension")}
+        if "onboarding-none" not in e_ or len(e_) > 1:
+            out["empty"]["media"] = tok("{size.icon.lg}", "Empty-state picture or icon size (Q-pattern-04); scale it up with the "
+                                        "illustration skill.", type_="dimension")
+        if "onboarding-contextual" in e_:
+            out["empty"]["hint-bg"] = tok("{color.bg.accent.subtle}", "Background of a hint shown right when it is needed.", type_="color")
+        if "walkthrough" in e_:
+            out["empty"]["tour-elevation"] = tok("{elevation.floating}", "A guided-tour step floats over the screen it explains.",
+                                                 type_="shadow")
+    if ans["Q-form-03"]:
+        f_ = ans["Q-form-03"]
+        out["error"] = {
+            "text": tok("{color.text.danger}", "Error message text, always with an icon or the word Error (DC-L01-15).", type_="color"),
+            "border": tok("{color.border.danger}", "The invalid field's border (3:1).", type_="color")}
+        if "inline" in f_:
+            out["error"]["gap"] = tok("{space.stack.xs}", "Space between a field and its error message.", type_="dimension")
+        if {"summary", "banner"} & set(f_):
+            out["error"]["bg"] = tok("{color.bg.danger.subtle}", "Error summary and banner background (Q-form-03).", type_="color")
+            out["error"]["inset"] = tok("{space.inset.md}", "Padding inside an error summary or banner.", type_="dimension")
+        if "dialog" in f_:
+            out["error"]["scrim"] = tok("{color.overlay.scrim}", "Behind an error box that blocks the page.", type_="color")
+        if "error-page" in f_:
+            out["error"]["page-measure"] = tok("{layout.measure.lead}", "Widest the text of a full error page runs.", type_="dimension")
+    return {"state": out} if out else {}
+
+
 def generate_system(state, token_types=None):
     """Files follow the spec's tiering (7.4): primitives, semantic, semantic.color.<theme>, semantic.density.<mode>,
     motion.<standard|reduced>, plus the resolver and a meta file. token_types: see apply_token_overrides."""
@@ -3674,6 +3782,7 @@ def generate_system(state, token_types=None):
     for t in (p_tree, s_tree):
         t["$extensions"] = {NS: {"source": "formula", "note": "Every value comes from references/levers.json formulas at the dials "
                                  "recorded in opendesigner.meta.json; tokens a person detached carry source: person."}}
+    merge_trees(s_tree, build_states(ctx))
     files["primitives.tokens.json"] = p_tree
     files["semantic.tokens.json"] = s_tree
     for m in ctx.modes:
@@ -4732,8 +4841,8 @@ _R = {
                Q-type-16 Q-space-06 Q-space-08 Q-space-09 Q-layout-02 Q-layout-04 Q-layout-05 Q-layout-06 Q-shape-02 Q-shape-03
                Q-shape-05 Q-depth-02 Q-depth-03 Q-motion-02 Q-motion-03 Q-motion-05 Q-motion-06 Q-motion-10 Q-icon-05 Q-icon-07 Q-icon-08
                Q-img-02 Q-img-03 Q-img-05 Q-viz-01 Q-voice-02 Q-voice-04 Q-voice-05 Q-voice-06 Q-comp-03 Q-comp-04 Q-comp-05 Q-state-01
-               Q-state-05 Q-state-06 Q-state-07 Q-state-08 Q-form-02 Q-form-03 Q-form-04 Q-form-05 Q-pattern-01 Q-pattern-02 Q-pattern-03
-               Q-pattern-04 Q-pattern-05 Q-pattern-06 Q-token-01 Q-token-02 Q-token-03 Q-token-04 Q-token-05 Q-token-06 Q-token-07 Q-token-08
+               Q-state-05 Q-state-06 Q-state-07 Q-form-02 Q-form-04 Q-form-05 Q-pattern-01 Q-pattern-02 Q-pattern-03
+               Q-pattern-05 Q-pattern-06 Q-token-01 Q-token-02 Q-token-03 Q-token-04 Q-token-05 Q-token-06 Q-token-07 Q-token-08
                Q-token-09 Q-token-10 Q-brand-02 Q-shape-01 Q-type-06 Q-type-09 Q-type-11 Q-space-07 Q-space-10 Q-layout-03 Q-depth-05
                Q-motion-09 Q-voice-03 Q-form-01 Q-state-04 Q-ai-01 Q-icon-02 Q-color-23 Q-state-02""",
     "owner": """Q-scope-01 Q-scope-02 Q-scope-03 Q-scope-04 Q-scope-05 Q-scope-07 Q-tool-01 Q-tool-02 Q-tool-04 Q-gov-01 Q-gov-02 Q-gov-03 Q-gov-04 Q-gov-05
@@ -4960,6 +5069,9 @@ def answer_effects(qid, value, state=None):
     UNSET removes an earlier value; LABEL stands for the option's plain label. A list answer merges its options."""
     v = value
     eff = {}
+    if qid in STATE_RAW:  # the state.* tokens (build_states) read these
+        vals = [str(x) for x in (v if isinstance(v, list) else [v]) if x not in (None, "")]
+        return {STATE_RAW[qid]: vals} if vals else {}
     if qid == "Q-plat-01":
         plats = v if isinstance(v, list) else [v]
         return {"raw.platforms": [str(x) for x in plats if x]} if plats else {}
@@ -10690,9 +10802,9 @@ def cmd_export(d, fmt, files=None, meta=None, quiet=False):
 # DESIGN.md and PRODUCT.md (spec 7.2, 7.3)
 # =============================================================================================
 
-DESIGN_SECTIONS = ["Overview", "Colors", "Typography", "Layout", "Elevation & Depth", "Shapes", "Components", "Do's and Don'ts",
+DESIGN_SECTIONS = ["Overview", "Colors", "Typography", "Layout", "Elevation & Depth", "Shapes", "Components", "States", "Do's and Don'ts",
                    "Motion", "Modes and Themes", "Iconography and Imagery", "Content and Voice", "Accessibility",
-                   "Platforms and Devices", "Decisions", "Open Items", "For Agents"]
+                   "Platforms and Devices", "Decisions", "Open Items", "Audit Ledger", "For Agents"]
 PRODUCT_SECTIONS = ["Product", "Audience", "Users", "Site brief", "Surfaces", "Memorable Thing", "Principles", "Constraints", "Scope", "Team and Governance"]
 SECTION_PATHS = {  # which decisions each DESIGN.md section rests on
     "Overview": r"^(dials\.(expression|brandPresence|density)|preset|macros|answers\.Q-(aud|brand|dir|scope|site)-)",
@@ -11602,6 +11714,8 @@ def render_design_md(d, files, meta, state, existing="", out_dir=None):
             f"- Inputs keep a 3:1 boundary (`color.border.input`); signifier strength: {params['signifier.minStrength']}.",
             "- Component docs belong in `opendesigner/components/<name>.md` (spec 7.8)."]
     out.append(section("Components", "\n".join(body), lead=f"**Version 1 plans {len(inv)} components, all built from these tokens.**", term_key="Component inventory scope"))
+    out.append(section("States", "\n".join(states_lines(state)), lead="**Every screen says what is happening while it loads, when it is "
+                       "empty, and when something goes wrong.** The overview draws each one with these tokens.", fold=False))
 
     # 8 Do's and Don'ts
     vr = Report()
@@ -12710,6 +12824,25 @@ def render_overview(d, files, meta, state):
              + (f'<p class="ov-note">Planned components ({len(inv)}): {_esc(", ".join(inv))}.</p>' if inv else
                 missing("Which components the product needs.", "Q-comp-02")))
 
+    # ---- states: waiting, empty, error and not found, drawn with the tokens (state.* once answered, their sources before)
+    sv = lambda p, src: f"var({css_var(prefix, p)}, {V(src)})"
+    st_ans = state_answers(state)
+    st_by = [((state.get("answers") or {}).get(q) or {}).get("set_by") for q in STATE_QS if st_ans[q]]
+    st_status = "default" if not st_by else "chosen" if any(b in PERSON_SET_BY for b in st_by) else "picked"
+    states = ('<div class="ov-states">'
+              f'<figure><div class="ov-skel" style="--sk:{sv("state.skeleton.base", "color.bg.neutral.subtle")};--skr:{sv("state.skeleton.radius", "radius.detail")}">'
+              '<i style="width:40%"></i><i></i><i style="width:75%"></i></div><figcaption>Loading: a skeleton in the shape of the content</figcaption></figure>'
+              f'<figure><div class="ov-empty" style="gap:{sv("state.empty.gap", "space.stack.md")}"><span class="ov-empty-i" aria-hidden="true"></span>'
+              '<b>No invoices yet</b><span class="ov-dim">Invoices you send show up here.</span><button class="ov-btn primary">New invoice</button></div>'
+              '<figcaption>Empty: what is empty, why, and one next step</figcaption></figure>'
+              f'<figure><label class="ov-field"><span>Email</span><input class="ov-input" value="anna@" aria-invalid="true" '
+              f'style="border-color:{sv("state.error.border", "color.border.danger")}"></label>'
+              f'<span class="ov-err" style="color:{sv("state.error.text", "color.text.danger")}">Error: add the part after @, like anna@example.com</span>'
+              '<figcaption>Error: next to the field, says how to fix it</figcaption></figure>'
+              '<figure><div class="ov-404"><b>Page not found</b><span class="ov-dim">This page moved or never existed.</span>'
+              '<button class="ov-btn secondary">Go home</button></div><figcaption>Not found: says what happened, offers a way on</figcaption></figure>'
+              '</div>' + "".join(f'<div class="ov-note">{_ov_md(x[2:])}</div>' for x in states_lines(state)[:3]))
+
     # ---- assets: every designer hook, provided or not
     cards = []
     for hid, hname, qid in hook_catalog():
@@ -12771,13 +12904,14 @@ def render_overview(d, files, meta, state):
         section("elevation", "Depth", statuses["Elevation & Depth"], depth),
         section("motion", "Motion", statuses["Motion"], motion),
         section("components", "Components", comp_status, comps),
+        section("states", "States", st_status, states, "Loading, empty, error and not found, drawn with your tokens."),
         section("iconography", f"Brand assets · {len(hooks) - len(open_hooks)} of {len(hooks)} provided", "chosen" if not open_hooks else "missing", assets,
                 "The parts only a designer or the brand owner can make. The system never invents them."),
         section("growth", "How it grew", None, timeline, "Each bar is a day. The filled part is decisions people made; the rest came from defaults and standards."),
         section("templates", "Visual templates", None, tpl, "Each template shows your system, not sample data."),
     ]
     nav = "".join(f'<a href="#{sid}">{title}</a>' for sid, title in [("brand", "Brand")] + ([("site", "Site")] if site_sec else []) + [("progress", "Progress"), ("color", "Color"),
-                  ("typography", "Type"), ("layout", "Space"), ("components", "Components"), ("iconography", "Assets"), ("growth", "History")])
+                  ("typography", "Type"), ("layout", "Space"), ("components", "Components"), ("states", "States"), ("iconography", "Assets"), ("growth", "History")])
     toggle = "".join(f'<button class="ov-th" data-set="{th}">{th.title()}</button>' for th in themes)
     page_css = f"""
 *,*::before,*::after{{box-sizing:border-box}}
@@ -12803,7 +12937,7 @@ h3{{margin:24px 0 10px;{t('text.title.md') if has('text.title.md') else t('text.
 div.ov-missing{{display:block;border-radius:{V('radius.container')};padding:16px 18px;margin:12px 0}} div.ov-missing p{{margin:8px 0 0;color:{V('color.text.secondary')}}}
 .ov-q{{display:block;margin-top:6px;{t('text.body.sm')}color:{V('color.text.tertiary')}}} .ov-how{{{t('text.body.sm')}}}
 .ov-prose ul{{padding-left:20px}} .ov-prose li{{margin:4px 0}} code{{font-family:var({css_var(prefix, 'font.family.mono')});font-size:.92em}}
-.ov-table{{width:100%;border-collapse:collapse;margin:8px 0}} .ov-table th{{text-align:left;{t('text.label.md') if has('text.label.md') else t('text.body.sm')}color:{V('color.text.secondary')};padding:8px 10px;border-bottom:1px solid {V('color.border.default')}}}
+.ov-table{{width:100%;border-collapse:collapse;margin:8px 0}} @media (max-width:600px){{.ov-table{{display:block;overflow-x:auto}}}} .ov-table th{{text-align:left;{t('text.label.md') if has('text.label.md') else t('text.body.sm')}color:{V('color.text.secondary')};padding:8px 10px;border-bottom:1px solid {V('color.border.default')}}}
 .ov-table td{{padding:8px 10px;border-bottom:1px solid {V('color.border.subtle')};vertical-align:top}} .ov-table th[scope=row]{{vertical-align:top}} .ov-table a{{color:{V('color.text.link')}}}
 .ov-themes{{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px}}
 .ov-theme{{background:{V('color.surface.base')};color:{V('color.text.primary')};border:1px solid {V('color.border.subtle')};border-radius:{V('radius.container')};padding:18px}}
@@ -12832,6 +12966,13 @@ details summary{{cursor:pointer;color:{V('color.text.secondary')};margin:16px 0 
 .ov-field{{display:grid;gap:6px;{t('text.body.sm')}color:{V('color.text.secondary')}}}
 .ov-input{{{t('text.body.md')}height:{V('size.control.md')};padding:0 {V('space.inset.md')};border-radius:{V('radius.control')};border:1px solid {V('color.border.input')};background:{V('color.surface.raised')};color:{V('color.text.primary')}}}
 .ov-card{{display:grid;gap:4px;max-width:280px;padding:{V('space.inset.xl')};background:{V('color.surface.raised')};border:{V('border.width.default')} solid {V('color.text.primary' if (meta.get('shape') or {}).get('borderDefault', 1) > 1 else 'color.border.subtle')};border-radius:{V('radius.container')};box-shadow:{V('elevation.raised')}}}
+.ov-states{{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin:8px 0 12px}}
+.ov-states figure{{margin:0;display:grid;gap:8px;align-content:start;padding:{V('space.inset.lg')};border:1px solid {V('color.border.subtle')};border-radius:{V('radius.container')};background:{V('color.surface.raised')};min-width:0}}
+.ov-states figcaption{{{t('text.body.sm')}color:{V('color.text.tertiary')}}}
+.ov-skel{{display:grid;gap:8px}} .ov-skel i{{display:block;height:12px;border-radius:var(--skr);background:var(--sk);animation:ov-pulse 1.5s ease-in-out infinite}}
+@keyframes ov-pulse{{50%{{opacity:.55}}}} @media (prefers-reduced-motion: reduce){{.ov-skel i{{animation:none}}}}
+.ov-empty,.ov-404{{display:grid;justify-items:start;gap:8px}} .ov-empty-i{{width:{V('size.icon.lg')};height:{V('size.icon.lg')};border-radius:50%;background:{V('color.bg.neutral.subtle')}}}
+.ov-err{{{t('text.body.sm')}}}
 .ov-assets{{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}}
 .ov-asset{{display:grid;gap:8px;align-content:start;padding:16px;border-radius:{V('radius.container')};border:1px solid {V('color.border.subtle')};background:{V('color.surface.raised')}}}
 .ov-asset{{min-width:0}} .ov-asset img{{width:100%;height:56px;object-fit:contain;object-position:left center}} .ov-asset .ov-tag{{justify-self:start}}
@@ -13385,7 +13526,7 @@ def _main(argv=None):
     p = sub.add_parser("exempt", parents=[common], help="keep example files that break the system on purpose out of review, with why")
     p.add_argument("glob", nargs="?", help="a folder, file or glob, from the repository's top folder (site/figures/*)")
     p.add_argument("--why", default=None)
-    p.add_argument("--by", default="owner", choices=["owner", "agent"])
+    p.add_argument("--by", default=None, choices=["owner", "agent"], help="who decided: the owner, or an agent (then ask the owner)")
     p.add_argument("--remove", action="store_true")
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("ledger", parents=[common], help="the audit ledger: what each implementation round did, broke and skipped on purpose")
@@ -15743,8 +15884,9 @@ def exempt_rules(state):
 
 
 def exempt_root(d, project=None):
-    """Where exempt globs are read from: the repository's top folder, else the folder that holds the system."""
-    return _git(project or doc_dir(d), "rev-parse", "--show-toplevel") or doc_dir(d)
+    """Where exempt globs are read from: the top folder of the repository being reviewed (the project, else the current
+    folder), else the folder that holds the system."""
+    return _git(project or os.getcwd(), "rev-parse", "--show-toplevel") or doc_dir(d)
 
 
 def exempt_match(rules, path, root):
@@ -15761,7 +15903,7 @@ def exempt_match(rules, path, root):
     return None
 
 
-def cmd_exempt(d, glob=None, why=None, by="owner", remove=False, as_json=False):
+def cmd_exempt(d, glob=None, why=None, by=None, remove=False, as_json=False):
     """Mark files as examples that break the system on purpose (a demo of mistakes), so review leaves them out and says so.
     Without a glob: list them. A reason of at least two words is required; nothing is exempt silently."""
     sp = os.path.join(d, STATE_FILE)
@@ -15781,7 +15923,7 @@ def cmd_exempt(d, glob=None, why=None, by="owner", remove=False, as_json=False):
         if not why or len(why.split()) < 2:
             raise SystemExit("Say why these files break the system on purpose, in at least two words: --why \"demo figures show mistakes\".")
         if by not in LEDGER_BY:
-            raise SystemExit(f"--by is owner or agent, not {by}.")
+            raise SystemExit("Say who decided: --by owner (the person said these files break the system on purpose) or --by agent.")
         rules[:] = [r for r in rules if r.get("glob") != glob] + [{"glob": glob, "why": why, "by": by, "date": _dt.date.today().isoformat()}]
         dump_json(sp, state)
         root = exempt_root(d)
@@ -15804,8 +15946,10 @@ def ledger_rounds(state):
 
 def ledger_open(state):
     """Ledger items that are neither done nor waived (planned, or broken and not yet fixed), in every round."""
-    return [{"round": r["id"], "item": it["id"], "status": it.get("status", "planned"), "note": it.get("note") or ""}
-            for r in ledger_rounds(state) for it in r.get("items") or [] if it.get("status", "planned") in ("planned", "broken")]
+    return [{"round": r["id"], "item": it["id"], "status": "waived by an agent, not agreed by the owner" if it.get("status") == "waived"
+             else it.get("status", "planned"), "note": it.get("note") or ""}
+            for r in ledger_rounds(state) for it in r.get("items") or []
+            if it.get("status", "planned") in ("planned", "broken") or (it.get("status") == "waived" and it.get("by") == "agent")]
 
 
 def _ontology_ids():
@@ -15883,6 +16027,8 @@ def cmd_ledger(d, action, item=None, title=None, items=None, note=None, why=None
             raise SystemExit(f"Name the item: engine.py ledger {action} <id>")
         r, it = find(item)
         if action == "done":
+            if it.get("status") == "broken":  # what broke is history now; keep it apart from the note on the fix
+                it["fixed"] = it.pop("note", "")
             it.update(status="done", date=today, **({"note": note} if note else {}))
             it.pop("why", None)
         elif action == "broke":

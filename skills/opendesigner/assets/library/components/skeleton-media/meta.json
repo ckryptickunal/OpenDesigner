@@ -46,8 +46,25 @@
       "the media size is unknown: reserve a common ratio (16:9) and crop, rather than letting it grow",
       "the photo is small and cached: give it width and height and skip the bone"
     ],
-    "keyboard": [
-      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    "parts": [
+      {
+        "name": "poster",
+        "selector": ".odl-skeleton-media [data-od-media=\"poster\"]",
+        "what": "the video's poster frame",
+        "slot": "media"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-skeleton-media [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “Shooting in fog”",
+        "slot": "text"
+      },
+      {
+        "name": "detail",
+        "selector": ".odl-skeleton-media [data-od-slot=\"detail\"]",
+        "what": "a short line of detail under the title, as in “Field photography · 12 min · Lesson 3 of 9”",
+        "slot": "text"
+      }
     ],
     "data": {
       "type": "object",
@@ -68,15 +85,18 @@
               "type": "string",
               "maxLength": 120
             }
-          }
+          },
+          "part": "poster"
         },
         "title": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 24,
+          "part": "title"
         },
         "detail": {
           "type": "string",
-          "maxLength": 64
+          "maxLength": 64,
+          "part": "detail"
         }
       },
       "required": [
@@ -116,9 +136,12 @@
       },
       "missing_image": {
         "status": "handled",
-        "how": "The poster sits in a fixed 16:9 frame with a sunken fill.",
-        "evidence": "aspect-ratio: 16 / 9"
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    ]
   }
 }

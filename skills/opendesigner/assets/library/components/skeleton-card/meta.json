@@ -55,8 +55,37 @@
       "one card or a short wait: show nothing or a spinner",
       "an unknown number of items: show one row of bones, not a full page"
     ],
-    "keyboard": [
-      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    "parts": [
+      {
+        "name": "items",
+        "selector": ".odl-skeleton-card [data-od-list=\"items\"]",
+        "what": "the items, one item each",
+        "slot": "list"
+      },
+      {
+        "name": "items.photo",
+        "selector": ".odl-skeleton-card [data-od-list=\"items\"] [data-od-media=\"photo\"]",
+        "what": "the picture",
+        "slot": "media"
+      },
+      {
+        "name": "items.name",
+        "selector": ".odl-skeleton-card [data-od-list=\"items\"] [data-od-slot=\"name\"]",
+        "what": "the name, as in “Linen room, Old Town”",
+        "slot": "text"
+      },
+      {
+        "name": "items.detail",
+        "selector": ".odl-skeleton-card [data-od-list=\"items\"] [data-od-slot=\"detail\"]",
+        "what": "a short line of detail under the title, as in “2 guests · 1 bed”",
+        "slot": "text"
+      },
+      {
+        "name": "items.price",
+        "selector": ".odl-skeleton-card [data-od-list=\"items\"] [data-od-slot=\"price\"]",
+        "what": "the price, as in “$148 night”",
+        "slot": "text"
+      }
     ],
     "data": {
       "type": "object",
@@ -84,19 +113,23 @@
                     "type": "string",
                     "maxLength": 120
                   }
-                }
+                },
+                "part": "items.photo"
               },
               "name": {
                 "type": "string",
-                "maxLength": 32
+                "maxLength": 32,
+                "part": "items.name"
               },
               "detail": {
                 "type": "string",
-                "maxLength": 24
+                "maxLength": 24,
+                "part": "items.detail"
               },
               "price": {
                 "type": "string",
-                "maxLength": 24
+                "maxLength": 24,
+                "part": "items.price"
               }
             },
             "required": [
@@ -105,7 +138,8 @@
               "detail",
               "price"
             ]
-          }
+          },
+          "part": "items"
         }
       },
       "required": [
@@ -144,9 +178,12 @@
       },
       "missing_image": {
         "status": "handled",
-        "how": "Each picture sits in a fixed 4:3 frame with a sunken fill, so a missing photo leaves the frame, not a hole.",
-        "evidence": "aspect-ratio: 4 / 3"
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    ]
   }
 }

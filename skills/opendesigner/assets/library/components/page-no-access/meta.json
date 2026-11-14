@@ -33,28 +33,60 @@
       "the item doesn't exist: use page-not-found (also when revealing that it exists would leak information)",
       "the person is signed out: use session-expired or the sign-in page"
     ],
-    "keyboard": [
-      "Tab reaches the note, Request access, then Switch account",
-      "After the request is sent, focus moves to the confirmation"
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-page-no-access [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “You don't have access to this page yet”",
+        "slot": "text"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-page-no-access [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in ““Q4 vendor budget” is shared with the Finance te”",
+        "slot": "text"
+      },
+      {
+        "name": "owner",
+        "selector": ".odl-page-no-access [data-od-slot=\"owner\"]",
+        "what": "who can give access, as in “Wilhelmina Okoye”",
+        "slot": "text"
+      },
+      {
+        "name": "request",
+        "selector": ".odl-page-no-access [data-od-action=\"request\"]",
+        "what": "the Request access action",
+        "slot": "action"
+      },
+      {
+        "name": "account",
+        "selector": ".odl-page-no-access [data-od-slot=\"account\"]",
+        "what": "the account the person is signed in with, as in “maya@larkspur.example”",
+        "slot": "text"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "title": {
           "type": "string",
-          "maxLength": 56
+          "maxLength": 56,
+          "part": "title"
         },
         "message": {
           "type": "string",
-          "maxLength": 112
+          "maxLength": 112,
+          "part": "message"
         },
         "owner": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 24,
+          "part": "owner"
         },
         "account": {
           "type": "string",
-          "maxLength": 32
+          "maxLength": 32,
+          "part": "account"
         }
       },
       "required": [
@@ -95,8 +127,12 @@
       },
       "missing_image": {
         "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
+        "how": "the part has no photo"
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches the note, Request access, then Switch account",
+      "After the request is sent, focus moves to the confirmation"
+    ]
   }
 }

@@ -33,28 +33,66 @@
       "an unplanned outage with no known end: use page-error with a status link",
       "only a small feature is paused: use a warning banner (page-banners)"
     ],
-    "keyboard": [
-      "Tab moves through the links and buttons in reading order",
-      "Enter follows a link; Enter or Space presses a button"
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-page-maintenance [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “Invoices are paused for an upgrade”",
+        "slot": "text"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-page-maintenance [data-od-slot=\"message\"]",
+        "what": "one or two sentences: what it means and what to do next, as in “We're upgrading the payments database. Everythin”",
+        "slot": "text"
+      },
+      {
+        "name": "until",
+        "selector": ".odl-page-maintenance [data-od-slot=\"until\"]",
+        "what": "when it will be back, as a time element, as in “3:00 PM UTC”",
+        "slot": "text"
+      },
+      {
+        "name": "detail",
+        "selector": ".odl-page-maintenance [data-od-slot=\"detail\"]",
+        "what": "a short line of detail under the title, as in “Saturday, Nov 14 · about 40 minutes from now”",
+        "slot": "text"
+      },
+      {
+        "name": "status",
+        "selector": ".odl-page-maintenance [data-od-action=\"status\"]",
+        "what": "the See live status action",
+        "slot": "action"
+      },
+      {
+        "name": "notify",
+        "selector": ".odl-page-maintenance [data-od-action=\"notify\"]",
+        "what": "the Email me when it's back action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "title": {
           "type": "string",
-          "maxLength": 48
+          "maxLength": 48,
+          "part": "title"
         },
         "message": {
           "type": "string",
-          "maxLength": 176
+          "maxLength": 176,
+          "part": "message"
         },
         "until": {
           "type": "string",
-          "maxLength": 24
+          "maxLength": 24,
+          "part": "until"
         },
         "detail": {
           "type": "string",
-          "maxLength": 64
+          "maxLength": 64,
+          "part": "detail"
         }
       },
       "required": [
@@ -95,8 +133,12 @@
       },
       "missing_image": {
         "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
+        "how": "the part has no photo"
       }
-    }
+    },
+    "keyboard": [
+      "Tab moves through the links and buttons in reading order",
+      "Enter follows a link; Enter or Space presses a button"
+    ]
   }
 }

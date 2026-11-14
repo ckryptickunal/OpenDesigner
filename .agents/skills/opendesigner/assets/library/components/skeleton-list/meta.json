@@ -38,8 +38,31 @@
       "more rows arriving at the end of a long list: show a small spinner row instead",
       "a wait under about 300 ms: show nothing"
     ],
-    "keyboard": [
-      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    "parts": [
+      {
+        "name": "rows",
+        "selector": ".odl-skeleton-list [data-od-list=\"rows\"]",
+        "what": "the rows, one item each",
+        "slot": "list"
+      },
+      {
+        "name": "rows.name",
+        "selector": ".odl-skeleton-list [data-od-list=\"rows\"] [data-od-slot=\"name\"]",
+        "what": "the name, as in “Maya Thornquist”",
+        "slot": "text"
+      },
+      {
+        "name": "rows.detail",
+        "selector": ".odl-skeleton-list [data-od-list=\"rows\"] [data-od-slot=\"detail\"]",
+        "what": "a short line of detail under the title, as in “Approved the Q4 vendor budget”",
+        "slot": "text"
+      },
+      {
+        "name": "rows.when",
+        "selector": ".odl-skeleton-list [data-od-list=\"rows\"] [data-od-slot=\"when\"]",
+        "what": "the when, as in “2m”",
+        "slot": "text"
+      }
     ],
     "data": {
       "type": "object",
@@ -53,15 +76,18 @@
             "properties": {
               "name": {
                 "type": "string",
-                "maxLength": 24
+                "maxLength": 24,
+                "part": "rows.name"
               },
               "detail": {
                 "type": "string",
-                "maxLength": 40
+                "maxLength": 40,
+                "part": "rows.detail"
               },
               "when": {
                 "type": "string",
-                "maxLength": 24
+                "maxLength": 24,
+                "part": "rows.when"
               }
             },
             "required": [
@@ -69,7 +95,8 @@
               "detail",
               "when"
             ]
-          }
+          },
+          "part": "rows"
         }
       },
       "required": [
@@ -108,8 +135,11 @@
       },
       "missing_image": {
         "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
+        "how": "the part has no photo"
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches Show loaded (the demo toggle), then the loaded content once it's ready; nothing inside is focusable while loading"
+    ]
   }
 }

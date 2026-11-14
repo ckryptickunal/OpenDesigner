@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Tests for preflight.py (standard library only; the video tests need ffmpeg and skip without it)."""
-import shutil, subprocess, sys, tempfile, unittest
+import json, shutil, subprocess, sys, tempfile, unittest
 from pathlib import Path
 
 SCRIPT = Path(__file__).with_name("preflight.py")
@@ -227,6 +227,50 @@ class TestFlash(unittest.TestCase):
             self.assertNotIn("ERROR", r.stdout)
             self.assertIn("worst flashing area 400 px²", r.stdout)
 
+
+CRAFT_BAD = """<!doctype html><html><head><style>
+p { font-size: 16px; line-height: 1.2; max-width: 100ch; letter-spacing: 0.04em; overflow-wrap: anywhere; }
+.lede { font-family: ui-monospace, Menlo, monospace; }
+h2 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.btn { height: 36px; white-space: nowrap; overflow: hidden; }
+.small { font-size: 12px; letter-spacing: -0.02em; }
+h1 { font-size: 48px; letter-spacing: 0.01em; }
+</style></head><body><h1>Plan Your Next Big Project</h1><h2>Quarterly revenue by region</h2><h2>Design tokens for every team</h2>
+<p>Lorem ipsum dolor sit amet. <span class="small">x</span></p><p class="lede">y</p><a class="btn" href="/s">Sign up</a> <a href="/r">Register</a></body></html>"""
+
+CRAFT_GOOD = """<!doctype html><html><head><style>
+p { font-size: 16px; line-height: 1.5; max-width: 65ch; letter-spacing: 0; }
+h2 { text-wrap: balance; }
+.btn { min-height: 36px; }
+.small { font-size: 12px; letter-spacing: 0.02em; }
+h1 { font-size: 48px; letter-spacing: -0.02em; }
+</style></head><body><h1>Plan your next big project</h1><h2>Quarterly revenue by region</h2>
+<p>Real words for real people. <span class="small">x</span></p><a class="btn" href="/s">Sign up</a></body></html>"""
+
+
+class TestCraft(unittest.TestCase):
+    def test_cut_text_room_tracking_and_copy_are_caught(self):          # checklist 66 to 69 [M67-M70]
+        r = run(CRAFT_BAD, "--case", "sentence")
+        for needle in ("line height under 1.4", "ellipsis or line clamp", "fixed height with nowrap", "outside 45-75",
+                       "body text tracked open", "small text tracked tight", "display text not tightened",
+                       "placeholder text left in", "'sign up' / 'register'", "Title Case headings where the system says sentence case",
+                       "body text set in a monospace font", "breaks addresses"):
+            self.assertIn(needle, r.stdout, needle)
+
+    def test_the_good_page_is_quiet(self):
+        r = run(CRAFT_GOOD, "--case", "sentence")
+        self.assertEqual(r.returncode, 0, r.stdout)
+        for needle in ("[M67]", "[M68]", "[M70]", "[M71]", "tracked open", "tracked tight", "not tightened"):
+            self.assertNotIn(needle, r.stdout, needle)
+
+    def test_the_systems_case_rule_is_read_from_state_json(self):
+        r = run(CRAFT_BAD, files={"opendesigner/state.json": json.dumps({"answers": {"Q-voice-03": {"value": "sentence"}}})})
+        self.assertIn("Title Case headings where the system says sentence case", r.stdout)
+
+    def test_without_a_recorded_rule_mixed_case_is_only_a_note(self):
+        r = run(CRAFT_BAD.replace("<h2>Design tokens for every team</h2>", "<h2>Design tokens for every team</h2><h3>Spacing that stays even</h3>"))
+        self.assertIn("mixed heading case", r.stdout)
+        self.assertNotIn("WARN   Title Case", r.stdout)
 
 if __name__ == "__main__":
     unittest.main()

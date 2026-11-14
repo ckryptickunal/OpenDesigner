@@ -36,24 +36,74 @@
       "waits of a few seconds: use inline-spinner",
       "unknown length with no steps: say what is happening and show an indeterminate bar"
     ],
-    "keyboard": [
-      "Tab reaches Cancel import, then Keep working"
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-progress-steps [data-od-slot=\"title\"]",
+        "what": "the heading: what happened, in plain words, as in “Importing 4,812 contacts”",
+        "slot": "text"
+      },
+      {
+        "name": "progress",
+        "selector": ".odl-progress-steps [data-od-measure=\"progress\"]",
+        "what": "how far the task has got, 0 to 1",
+        "slot": "number"
+      },
+      {
+        "name": "left",
+        "selector": ".odl-progress-steps [data-od-slot=\"left\"]",
+        "what": "time left and what the person can do meanwhile, as in “About 2 minutes left. You can close this page; w”",
+        "slot": "text"
+      },
+      {
+        "name": "steps",
+        "selector": ".odl-progress-steps [data-od-list=\"steps\"]",
+        "what": "the steps, one item each",
+        "slot": "list"
+      },
+      {
+        "name": "steps.state",
+        "selector": ".odl-progress-steps [data-od-list=\"steps\"] [data-od-var=\"state\"]",
+        "what": "done, now or next",
+        "slot": "text"
+      },
+      {
+        "name": "steps.label",
+        "selector": ".odl-progress-steps [data-od-list=\"steps\"] [data-od-slot=\"label\"]",
+        "what": "the visible label, as in “Upload file”",
+        "slot": "text"
+      },
+      {
+        "name": "cancel",
+        "selector": ".odl-progress-steps [data-od-action=\"cancel\"]",
+        "what": "the Cancel import action",
+        "slot": "action"
+      },
+      {
+        "name": "background",
+        "selector": ".odl-progress-steps [data-od-action=\"background\"]",
+        "what": "the Keep working action",
+        "slot": "action"
+      }
     ],
     "data": {
       "type": "object",
       "properties": {
         "title": {
           "type": "string",
-          "maxLength": 32
+          "maxLength": 32,
+          "part": "title"
         },
         "progress": {
           "type": "number",
           "minimum": 0,
-          "maximum": 1
+          "maximum": 1,
+          "part": "progress"
         },
         "left": {
           "type": "string",
-          "maxLength": 96
+          "maxLength": 96,
+          "part": "left"
         },
         "steps": {
           "type": "array",
@@ -67,18 +117,21 @@
                   "done",
                   "next",
                   "now"
-                ]
+                ],
+                "part": "steps.state"
               },
               "label": {
                 "type": "string",
-                "maxLength": 24
+                "maxLength": 24,
+                "part": "steps.label"
               }
             },
             "required": [
               "state",
               "label"
             ]
-          }
+          },
+          "part": "steps"
         }
       },
       "required": [
@@ -119,8 +172,11 @@
       },
       "missing_image": {
         "status": "none",
-        "how": "The part has no picture; its drawing is an inline icon."
+        "how": "the part has no photo"
       }
-    }
+    },
+    "keyboard": [
+      "Tab reaches Cancel import, then Keep working"
+    ]
   }
 }
