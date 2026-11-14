@@ -17,7 +17,7 @@ OpenDesigner works inside the AI tool you already use, and a small Python engine
 4. **It asks once about a private log** of your steps. Only a clear yes turns it on.
 5. **The sketch: up to five questions, one per message.** What you are making, who it is for, where it runs, how it should feel, and your brand color or logo. Each comes with a suggested answer and its reason. Answer in your own words, or say "just pick".
 6. **You get a complete first version** in a few seconds: every token, the code for your platforms, your rules in plain words, and an overview page that marks each area Chosen, Picked for you, Default or Not enough information.
-7. **It offers to research your users.** About 10 minutes, and it does the work after one yes: a table of competitors, a positioning for you to confirm and three directions on one board. Say no, and it doesn't ask again.
+7. **It offers to research your users.** About 10 minutes, and it does the work after one yes: a table of competitors, a positioning for you to confirm and three directions on one board. It also asks the others with a say, keeps who said what, and ends on one page to share with your team. Say no, and it doesn't ask again.
 8. **Zoom in only where you care, or stop.** See [Zoom levels](/docs/zoom-levels/).
 9. **It checks its own work.** Fixed rules check contrast, target sizes, focus rings and reduced motion before the AI gives any opinion. Errors block the build.
 10. **It writes everything down,** and asks before adding a short note for your other AI agents, so later sessions follow the same rules.

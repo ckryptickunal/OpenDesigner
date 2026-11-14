@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-audience="everyone">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Craft checks: one of every defect</title>
+<!-- Planted defects for test_probe_live.py (review cases ST-12 to ST-14, MS-21 to MS-24, MS-07, MS-17, CP-01 to CP-03).
+     Each element id says what is wrong with it. craft-good.html is the same page done right. -->
+<style>
+  body { margin: 0; font: 16px/1.5 system-ui, sans-serif; color: #1a1a1a; background: #fff; }
+  main { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  section { padding: 48px 0; }
+  #s-two { padding: 8px 0; }
+  #s-four { padding: 120px 0; }
+  #spill { width: 90px; white-space: nowrap; background: #eee; }
+  .clipbox { width: 120px; height: 24px; overflow: hidden; }
+  #ellipsis-h { width: 160px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #clamp-btn { width: 120px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+  #orphan-h { width: 340px; font-size: 32px; line-height: 1.2; letter-spacing: 0; }
+  #tight-lh { line-height: 1.2; max-width: 60ch; }
+  #wide { max-width: none; width: 920px; font-size: 14px; }
+  #narrow { width: 220px; }
+  #track-body { letter-spacing: 0.05em; max-width: 60ch; }
+  #track-small { font-size: 12px; letter-spacing: -0.02em; }
+  #caps-zero { text-transform: uppercase; letter-spacing: 0; font-size: 12px; }
+  #display { font-size: 56px; line-height: 1.1; letter-spacing: 0.01em; }
+  .card { background: #f0f0f0; border-radius: 8px; padding: 6px; }
+  .card > * { margin: 0 0 24px; }
+  .card > *:last-child { margin-bottom: 0; }
+  #touch { background: #e8e8f8; padding: 1px 2px; display: inline-block; }
+  .pair h3 { margin: 0; line-height: 1; font-size: 20px; }
+  .pair p { margin: 0; line-height: 1.1; }
+  .list > li { margin: 0; }
+  .list > li:nth-child(2) { margin-top: 18px; }
+  .list > li:nth-child(4) { margin-top: 8px; }
+  button { font: inherit; padding: 8px 16px; }
+  #fixed-btn { width: 96px; height: 40px; white-space: nowrap; overflow: hidden; }
+  .blk { background: #f3f3f6; border: 1px solid #ccc; border-radius: 10px; padding: 16px; margin: 0; }
+  #rad-b { border-radius: 2px; margin-top: 16px; }
+  #cap { margin: 0; font-size: 14px; }
+  #mono { font-family: ui-monospace, Menlo, monospace; max-width: 60ch; }
+  .code { position: relative; margin: 16px 0; background: #f6f6f6; border: 1px solid #ddd; border-radius: 8px; padding: 12px; }
+  .code pre { margin: 0; }
+  #url { width: 130px; overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<main>
+  <section id="s-one">
+    <h1 id="title-case">Plan Your Next Big Project Today</h1>
+    <p>Lorem ipsum dolor sit amet, this text was never replaced.</p>
+    <div id="spill">This label runs out of its box</div>
+    <div class="clipbox"><span id="clipped-by-parent">A sentence that its parent cuts off</span></div>
+    <h2 id="ellipsis-h">Quarterly revenue by region and team</h2>
+    <button id="clamp-btn">Download the full annual report</button>
+    <h2 id="orphan-h">Everything you need to ship a design system</h2>
+  </section>
+  <section id="s-two">
+    <p id="tight-lh">Body text set with a line height of 1.2 is hard to follow across lines: the eye drops back to the start of
+      the wrong line. This paragraph is long enough to wrap onto several lines at most widths so the check can see it.</p>
+    <p id="wide">A line that runs the whole width of a wide layout makes the eye travel too far, so readers lose their place when they
+      come back for the next one. This paragraph is long enough to wrap over three or more lines at desktop widths, which is
+      where the measure check looks, and it keeps going a little longer to be sure of it.</p>
+    <p id="narrow">A narrow column of body text breaks every few words, so the reader spends more time jumping between lines than
+      reading them, and the rag turns ragged and uneven down the page.</p>
+  </section>
+  <section id="s-three">
+    <p id="track-body">Body copy tracked open reads as spaced out letters rather than words, and it is slower to read than text at the
+      font's own spacing. This paragraph is long enough to count as body text.</p>
+    <p id="track-small">Small print tracked tight makes its letters touch at small sizes.</p>
+    <p id="caps-zero">Capitals at zero tracking</p>
+    <p id="display">Display text left loose</p>
+    <div class="card" id="inset-card"><h3>Card heading</h3><p>The gap between the heading and this text is wider than the card's own padding.</p></div>
+    <p><span id="touch">Text that touches its own edge</span></p>
+    <div class="pair"><h3 id="tight-a">Heading set solid</h3><p id="tight-b">A line right under it, with no room between.</p></div>
+    <ul class="list" id="uneven">
+      <li class="item">First item</li><li class="item">Second item</li><li class="item">Third item</li><li class="item">Fourth item</li>
+    </ul>
+  </section>
+  <section id="s-four">
+    <a class="btn" href="/signup" id="cta-a">Sign up</a>
+    <a class="btn" href="/register" id="cta-b">Register</a>
+    <button id="not-verb">Pricing details</button>
+    <button id="fixed-btn">Continue to checkout</button>
+    <p>Pick a DTCG token from the semantic token set to change the accent color.</p>
+  </section>
+  <section id="s-library">
+    <div class="blk" id="gap0-a"><p>Block one</p></div>
+    <div class="blk" id="gap0-b"><p>Block two, with no gap above</p></div>
+    <div class="blk" id="rad-a"><p>Rounded 10 px</p></div>
+    <div class="blk" id="rad-b"><p>Rounded 2 px, its twin above is 10 px</p></div>
+    <div class="blk" id="figure"><p>A figure</p></div>
+    <p id="cap">Caption touching the figure above it.</p>
+    <p id="mono">This paragraph of ordinary prose is set in a monospace face, which makes running text slow and uneven to read.</p>
+    <div class="code"><pre>npm install one</pre><button class="copy">Copy</button></div>
+    <div class="code"><pre>npm install two</pre><button class="copy">Copy</button></div>
+    <div class="code" id="twin-missing"><pre>npm install three</pre></div>
+    <p id="url">Read https://example.com/docs/install for the steps.</p>
+  </section>
+  <section id="s-five"><p>Footer text for the last section.</p></section>
+</main>
+</body>
+</html>

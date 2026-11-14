@@ -129,7 +129,9 @@ class Exempt(unittest.TestCase):
         self.assertTrue(any(f["file"].startswith("demo") for f in before["findings"]))
         r = run("exempt", "demo", cwd=self.p.root, ok=False)
         self.assertNotEqual(r.returncode, 0, "a reason is required")
-        run("exempt", "demo", "--why", "a page of mistakes on purpose", cwd=self.p.root)
+        self.assertNotEqual(run("exempt", "demo", "--why", "a page of mistakes on purpose", cwd=self.p.root, ok=False).returncode, 0,
+                            "say who decided")
+        run("exempt", "demo", "--why", "a page of mistakes on purpose", "--by", "owner", cwd=self.p.root)
         after = json.loads(run("review", "--json", "--project", ".", cwd=self.p.root).stdout)
         self.assertFalse(any(f["file"].startswith("demo") for f in after["findings"]))
         self.assertEqual(after["exempt"][0]["glob"], "demo")
@@ -165,6 +167,8 @@ class Ledger(unittest.TestCase):
         self.assertNotEqual(run("ledger", "waive", "empty-state", "--why", "no empty lists on this page", "--by", "owner",
                                 cwd=root, ok=False).returncode, 0, "owner needs their words")
         run("ledger", "waive", "empty-state", "--why", "no empty lists on this page", "--by", "agent", cwd=root)
+        rev = json.loads(run("review", "--json", "--project", "src", cwd=root).stdout)
+        self.assertIn("empty-state", [o["item"] for o in rev["ledgerOpen"]], "an agent's waiver is open until the owner agrees")
         run("ledger", "done", "A-space-01", cwd=root)
         r = run("ledger", "close", cwd=root, ok=False)
         self.assertEqual(r.returncode, 1, "an agent's waiver waits for the owner")
@@ -192,6 +196,44 @@ class Ledger(unittest.TestCase):
     def test_no_ledger_no_section(self):
         run("design-md", cwd=self.p.root)
         self.assertNotIn("Audit Ledger", (self.p.root / "DESIGN.md").read_text())
+
+
+class States(unittest.TestCase):
+    """Q-state-08, Q-pattern-04 and Q-form-03 change real output: state.* tokens, DESIGN.md's States section, the overview."""
+
+    def setUp(self):
+        self.p = Project()
+
+    def tearDown(self):
+        self.p.close()
+
+    def tokens(self):
+        return json.loads((self.p.root / "opendesigner" / "tokens" / "semantic.tokens.json").read_text())
+
+    def test_no_answer_no_tokens_but_the_section_shows_defaults(self):
+        run("build", cwd=self.p.root)
+        self.assertNotIn("state", self.tokens())
+        design = (self.p.root / "DESIGN.md").read_text()
+        self.assertIn("## States", design)
+        self.assertIn("Q-state-08, not decided yet", design)
+        self.assertIn('id="states"', (self.p.root / "opendesigner" / "overview.html").read_text())
+
+    def test_answers_make_tokens(self):
+        r = run("pick", "Q-state-08", "skeleton-first", "--set-by", "assumed", cwd=self.p.root)
+        self.assertIn("tokens:", r.stdout)
+        self.assertNotIn("not tokens", r.stdout)
+        run("pick", "Q-form-03", "inline", "--set-by", "assumed", cwd=self.p.root)
+        run("build", cwd=self.p.root)
+        st = self.tokens()["state"]
+        self.assertEqual(st["wait"]["indicator-after"]["$value"], {"value": 0, "unit": "ms"})
+        self.assertEqual(st["skeleton"]["base"]["$value"], "{color.bg.neutral.subtle}")
+        self.assertEqual(st["error"]["text"]["$value"], "{color.text.danger}")
+        self.assertNotIn("empty", st, "Q-pattern-04 is not answered")
+        css = (self.p.root / "opendesigner" / "build" / "css" / "tokens.css").read_text()
+        self.assertIn("--ds-state-skeleton-base: var(--ds-color-bg-neutral-subtle)", css)
+        self.assertIn("Q-state-08, decided", (self.p.root / "DESIGN.md").read_text())
+        v = json.loads(run("validate", "--json", cwd=self.p.root, ok=False).stdout)
+        self.assertFalse([i for i in v.get("items", []) if i.get("severity") == "error"])
 
 
 class Adapt(unittest.TestCase):

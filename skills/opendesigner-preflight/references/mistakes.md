@@ -173,3 +173,19 @@ The project hand-wrote eleven check scripts for what the review missed, over abo
 **M65. llms.txt written for an earlier page.** The same site's robots.txt and llms.txt were written once and never touched again while the page changed. llms.txt described the page from four days earlier: it missed two new sections and kept a claim and a word the owner had since removed. robots.txt let AI-training crawlers in with no recorded decision, and both files sat in a docs folder the site did not serve. The owner: "I hope we keep updating the llms.txt and robots.txt of their website." *Catch:* after every content change, run `search.py audit` and refresh llms.txt, the share text and image, and the sitemap (opendesigner-search, "After every content change").
 
 **M66. Review tools served to visitors.** The live page loaded every design direction from the review rounds and showed the options picker to visitors, and its public folder served two dozen screenshots no page used and a dev script with a local path from the builder's machine. *Catch:* `preflight.py public <build folder>` before each deploy, and `review.py check` on the live address (EN-07).
+
+## Found watching people use OpenDesigner (owner, 2026-11-13)
+
+The owner counted what people hit most: kerning, spacing, breathing room, text cut off and copy that is off. Before this, the review had 0 checks for cut-off text and copy and 1 checklist line for breathing room.
+
+**M67. Text cut off.** Labels sized to their English words ran out of their buttons at 320 px, a parent with `overflow: hidden` cut the end off a line, and headings were shortened with an ellipsis. Each looked fine at the designer's width. *Catch:* run the probe at 320 px, with 200% text and with `__od.stress('translate')`; `review.py check` reports ST-12 to ST-14 with a crop of each.
+
+**M68. No breathing room.** Text sat against its neighbour or the edge of its own chip, and cards had less padding than the gap between the things inside them, so groups did not read as groups. Every value was on the spacing scale, so the spacing check passed. *Catch:* MS-22 measures the space around the text itself; MS-07 checks body line height (1.4 or more) and measure (45 to 75 characters).
+
+**M69. Values on the scale, rhythm off.** Lists with gaps of 8, 16 and 12 px, sections 40, 120 and 64 px apart, and display text tracked like body text. *Catch:* MS-23, MS-24 and the tracking-by-role rows of MS-17, with the system's token in each fix.
+
+**M70. Copy nobody read.** Title Case headings in a sentence-case system, "Pricing details" on a button, "Sign up" and "Register" on one page, leftover "Lorem", and token words on a page for everyone. *Catch:* CP-01 to CP-04 in `review.py check`, ST-06 for placeholders, and `preflight.py html` on the markup. A word list decides a verb and a glossary decides jargon, so read those two as judgment calls.
+
+**M71. Parts that do not match their neighbours.** On a library part page, blocks sat with no gap between them, a caption touched the box above, sibling boxes had different corner radii, prose was set in the code face, one copyable block had no Copy button while its twins did, and "https://" broke across lines. Each part passed on its own. *Catch:* MS-22, MS-25, MS-26, MS-27 and ST-15 in `review.py check`; `preflight.py html` for mono prose and `overflow-wrap: anywhere` on body text.
+
+**M72. Only the happy path.** Views were reviewed with data on a fast connection, so nobody saw a blank load, a list that pushed the page down when it arrived, an empty list with no words, "undefined" after a failed request, a bare server 404 or a card broken by a long name. *Catch:* capture.py's network states and not-found pass, and the `longNames` and `noImages` stresses (ST-16 to ST-19).
