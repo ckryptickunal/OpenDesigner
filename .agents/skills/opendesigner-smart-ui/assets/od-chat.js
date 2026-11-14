@@ -23,11 +23,27 @@ class ODChat extends HTMLElement {
   async connectedCallback() {
     if (this._ready) return;
     this._ready = true;
-    this.catalog = await (await fetch(this.dataset.catalog || "/system/smart-ui/catalog.json")).json();
+    this.classList.add("od-chat");
+    const loading = el("p", "od-chat-wait", "Loading the assistant…");
+    this.setAttribute("aria-busy", "true");
+    this.replaceChildren(loading);
+    try {
+      const res = await fetch(this.dataset.catalog || "/system/smart-ui/catalog.json");
+      if (!res.ok) throw new Error(res.status);
+      this.catalog = await res.json();
+    } catch {
+      this.removeAttribute("aria-busy");
+      const retry = el("button", "od-chat-chip", "Try again");
+      retry.type = "button";
+      retry.addEventListener("click", () => { this._ready = false; this.connectedCallback(); });
+      this.replaceChildren(el("p", "od-chat-error", "The assistant didn't load. Check your connection, then try again."), retry);
+      return;
+    }
+    this.removeAttribute("aria-busy");
+    loading.remove();
     let info = {};
     try { info = await (await fetch("/api/info")).json(); } catch { info = { provider: "none" }; }
     this.info = info;
-    this.classList.add("od-chat");
     const head = el("p", "od-chat-mode",
       info.provider && info.provider !== "recorded" ? `Live: ${info.model || info.provider}` : "Recorded answers (no model key found)");
     this.log = el("div", "od-chat-log");

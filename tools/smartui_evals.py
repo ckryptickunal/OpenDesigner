@@ -357,6 +357,31 @@ def report():
                         why.append("floors: " + "; ".join(x.get("floors", [])[:3]))
                     lines.append(f"- `{x['id']}` run {x['run']}: " + " · ".join(why))
                 lines.append("")
+    after = [f for f in sorted((EV / "results").glob("live-*.json")) if "round" not in f.stem and "fernhollow" not in f.stem]
+    if after:
+        sec = lambda ms: "–" if ms is None else f"{ms / 1000:.1f} s" if ms >= 1000 else f"{ms} ms"
+        lines += ["## Speed: before and after (billing app, live path)", "",
+                  "Per turn, measured around each answer: **first** is when something shows (the chosen part's skeleton, or the first "
+                  "words); **full** is the checked answer. Before: the model routed every turn, answered in free text, thought as much as "
+                  "it liked, and nothing showed until the end (one run of each case, 31 turns). After: words route to the app's read "
+                  "actions without a model unless it's unclear, one answer call constrained to the chosen parts' JSON schema, thinking "
+                  "off or low, a skeleton first and the words streamed (three runs, 93 turns). Models ran side by side, sharing the API.", "",
+                  "| Model | Before: first, p50 / p95 | Before: full, p50 / p95 | Calls a turn | After: first, p50 / p95 | After: full, p50 / p95 | Calls a turn | Tokens a turn | Right part, before → after | Approval for changes, before → after |",
+                  "|---|---|---|---|---|---|---|---|---|---|"]
+        for f in after:
+            r = json.loads(f.read_text())
+            b4 = EV / "results" / f"before-{r['model']}.json"
+            b = json.loads(b4.read_text()) if b4.exists() else None
+            sa, sb = r["summary"].get("speed") or {}, (b["summary"].get("speed") or {}) if b else {}
+            if not sa:
+                continue
+            lines.append(f"| {r['model']} | {sec(sb.get('skeleton_ms_p50'))} / {sec(sb.get('skeleton_ms_p95'))} | {sec(sb.get('full_ms_p50'))} / {sec(sb.get('full_ms_p95'))} | "
+                         f"{sb.get('calls_per_turn', '–')} | {sec(sa['skeleton_ms_p50'])} / {sec(sa['skeleton_ms_p95'])} | {sec(sa['full_ms_p50'])} / {sec(sa['full_ms_p95'])} | "
+                         f"{sa['calls_per_turn']} | {sa['tokens_per_turn']:,} | {b['summary']['picked_right_pct'] if b else '–'}% → {r['summary']['picked_right_pct']}% | "
+                         f"{b['summary']['approval_shown_pct'] if b else '–'}% → {r['summary']['approval_shown_pct']}% |")
+        lines += ["", "The `claude` rows run through the `claude` command (no API key on this computer): each call starts a Claude Code "
+                  "process, which adds seconds and loads its own context (the tokens column). With an API key the same path uses the "
+                  "Messages API with a forced tool for the schema.", ""]
     live = sorted((EV / "results").glob("live-*.json"))
     if live:
         lines += ["## The live path (examples/smart-ui-support)", "",

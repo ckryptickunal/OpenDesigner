@@ -8,7 +8,7 @@ a:hover { text-decoration-thickness: var(--ds-border-width-emphasis); }
 
 .skip { position: absolute; inset-inline-start: var(--ds-space-inset-md); inset-block-start: var(--ds-space-inset-md); z-index: 1;
   padding: var(--ds-space-inset-sm) var(--ds-space-inset-md); color: var(--ds-color-text-primary); background: var(--ds-color-surface-raised);
-  border-radius: var(--ds-radius-control); transform: translateY(-200%); }
+  border-radius: var(--ds-radius-control); transform: translateY(-200%); font: var(--ds-text-label-lg); }
 .skip:focus-visible { transform: none; }
 
 .masthead { color: var(--ds-color-text-on-brand); background: var(--ds-color-bg-brand); }
@@ -43,7 +43,7 @@ a:hover { text-decoration-thickness: var(--ds-border-width-emphasis); }
 .panel h2, .card h2 { margin: 0; font: var(--ds-text-title-md); }
 .side { display: grid; gap: var(--ds-space-stack-lg); }
 .card { display: grid; gap: var(--ds-space-stack-sm); padding: var(--ds-space-inset-lg); }
-.card p { margin: 0; }
+.card p { margin: 0; text-wrap: pretty; }
 .card .small { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
 .facts { display: grid; margin: 0; }
 .facts div { display: grid; gap: var(--ds-space-stack-xs); padding-block: var(--ds-space-inset-sm); border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
@@ -52,7 +52,7 @@ a:hover { text-decoration-thickness: var(--ds-border-width-emphasis); }
 .facts dd { margin: 0; }
 
 .foot { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
-.foot p { margin-block: 0; padding-block: var(--ds-space-inset-xl); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); }
+.foot p { margin-block: 0; padding-block: var(--ds-space-inset-xl); color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); overflow-wrap: anywhere; }
 
 /* The assistant (od-chat.js) */
 .od-chat { display: grid; gap: var(--ds-space-stack-md); }
@@ -98,3 +98,4 @@ a:hover { text-decoration-thickness: var(--ds-border-width-emphasis); }
   .od-chat-chips { flex-wrap: nowrap; overflow-x: auto; padding-block-end: var(--ds-space-stack-xs); }
   .od-chat-chip { flex: none; }
 }
+strong { font-weight: var(--ds-font-weight-heading); }

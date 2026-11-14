@@ -546,8 +546,9 @@ def build_prompt(msg, catalog, k=3, scope=None, data=None, boost=None, always=()
         "You can answer with interface parts from the person's own design system (OpenDesigner Smart UI).",
         catalog["instructions"],
         "",
-        *(['Output: JSON {"text": "<your answer in plain words>", "part": {"component": "<Name>", ...properties} or null}. '
-            "The text comes first and stands on its own; the part shows the details. It is wrapped in an A2UI v1.0 createSurface for you."]
+        *(['Output: JSON {"text": "<your answer in plain words>", "part": {"<Name>": {...its properties}} or null}. '
+            "The text comes first and stands on its own; the part shows the details. Use only the properties listed for that part. "
+            "It is wrapped in an A2UI v1.0 createSurface for you."]
           if structured else
           ["Output: your text answer. If a part helps, add ONE fenced block marked a2ui holding the part as one JSON object:",
            '```a2ui\n{"component": "<Name>", ...properties}\n```',
@@ -608,9 +609,18 @@ def response_schema(catalog, names):
             out["required"] = [r for r in out["required"] if r != "id"]
         return out
 
-    parts = [clean(catalog["components"][n]) for n in names if n in catalog["components"]]
+    # each part sits under its own name ({"part": {"KeyFacts": {...}}}): providers enforce an object's own properties far
+    # better than "one of these", so a small model can't mix one part's properties into another
+    parts = {}
+    for n in names:
+        if n in catalog["components"]:
+            c = clean(catalog["components"][n])
+            c["properties"].pop("component", None)
+            c["required"] = [r for r in c.get("required", []) if r != "component"]
+            parts[n] = c
+    part = {"type": ["object", "null"], "additionalProperties": False, "properties": parts, "maxProperties": 1} if parts else {"type": "null"}
     return {"type": "object", "additionalProperties": False, "required": ["text", "part"],
-            "properties": {"text": {"type": "string"}, "part": {"anyOf": parts + [{"type": "null"}]} if parts else {"type": "null"}}}
+            "properties": {"text": {"type": "string"}, "part": part}}
 
 
 def cmd_prompt(a):

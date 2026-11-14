@@ -260,7 +260,7 @@ class Live(unittest.TestCase):
         self.asked = []
 
         def ask(provider, system, turns, schema=None, on_text=None):
-            if schema and "calls" in schema.get("properties", {}):
+            if isinstance(schema, dict) and "calls" in schema.get("properties", {}):
                 return next(rt, '{"calls": []}')
             self.asked.append(schema)
             return next(it)
@@ -311,6 +311,15 @@ class Live(unittest.TestCase):
         self.assertEqual(r["log"]["part"], "KeyFacts")
         self.assertIn("KeyFacts", json.dumps(self.asked[0]))  # the reply was constrained to the chosen parts
         self.assertIn("skeleton", r["log"]["ms"])
+
+    def test_a_part_under_its_own_name(self):
+        reply = json.dumps({"text": "Two are open.", "part": {"KeyFacts": {"title": "Open invoices", "facts": [
+            {"label": "TH-1047", "value": "€1,104.00"}, {"label": "TH-1043", "value": "€184.00"}]}}})
+        self.script([reply])
+        r = self.live.Conversation(self.app, "scripted").answer("Show my open invoices")
+        self.assertEqual(r["log"]["part"], "KeyFacts")
+        sch = smartui.response_schema(self.live.Conversation(self.app, "scripted").catalog, ["KeyFacts", "DataTable"])
+        self.assertEqual(sorted(sch["properties"]["part"]["properties"]), ["DataTable", "KeyFacts"])  # one key per part
 
     def test_change_needs_the_renderers_approval(self):
         self.script(["It's paid.", "It's paid."])

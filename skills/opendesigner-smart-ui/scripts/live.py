@@ -44,7 +44,7 @@ import smartui  # noqa: E402
 CLAUDE = os.environ.get("OD_CLAUDE_MODEL") or "claude-haiku-5-5"
 MODELS = {"anthropic": CLAUDE, "claude-cli": CLAUDE, "gemini": os.environ.get("OD_GEMINI_MODEL") or "gemini-3.8-flash"}
 THINKING = os.environ.get("OD_THINKING") or ("none" if re.search(r"flash|lite|haiku", MODELS["gemini"]) else "low")
-_NO_THINKING, _LOOSE, _TRIED = set(), set(), set()  # models that refused a thinking setting; schemas a provider called too complex
+_NO_THINKING, _SCHEMA_OK, _TOO_BIG = set(), {}, {}  # models that refused a thinking setting; (model, schema) -> the form that was accepted  # models that refused a thinking setting; schemas a provider called too complex
 USAGE = {}  # model -> tokens used in this process: {"calls", "input", "output"} (output includes thinking)
 
 
@@ -93,7 +93,10 @@ def available():
 def ask(provider, system, turns, schema=None, on_text=None):
     """turns: [{"role": "user"|"assistant", "text": ...}]. Returns the model's text (JSON text when schema is given).
     schema: a JSON Schema the reply must follow (constrained decoding where the provider has it).
-    on_text: called with the reply so far while it streams (Gemini); otherwise once at the end."""
+    on_text: called with the reply so far while it streams (Gemini); otherwise once at the end.
+    A list of schemas means: the first, or the next when a provider finds one too complex (Gemini)."""
+    if isinstance(schema, list) and provider != "gemini":
+        schema = schema[0]
     if provider == "anthropic":
         body = {"model": MODELS["anthropic"], "max_tokens": 600 if schema and "calls" in schema.get("properties", {}) else 3000, "system": system,
                 "messages": [{"role": t["role"], "content": t["text"]} for t in turns]}
@@ -113,31 +116,45 @@ def ask(provider, system, turns, schema=None, on_text=None):
         return out
     if provider == "gemini":
         model = MODELS["gemini"]
-        body = {"systemInstruction": {"parts": [{"text": system}]},
-                "contents": [{"role": "model" if t["role"] == "assistant" else "user", "parts": [{"text": t["text"]}]} for t in turns],
-                "generationConfig": {"maxOutputTokens": 600 if schema and "calls" in schema.get("properties", {}) else 3000}}
-        if THINKING != "high" and model not in _NO_THINKING:
-            body["generationConfig"]["thinkingConfig"] = {"thinkingLevel": "low"} if THINKING == "low" else {"thinkingBudget": 0}
-        if schema:
-            key = json.dumps(schema, sort_keys=True)
-            body["generationConfig"]["responseMimeType"] = "application/json"
-            body["generationConfig"]["responseJsonSchema"] = _loose(schema) if key in _LOOSE else schema
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:streamGenerateContent?alt=sse"
-        try:
-            return _gemini_stream(url, body, model, on_text)
-        except RuntimeError as e:
-            msg = str(e)
-            if "HTTP 400" not in msg:
-                raise
-            if "thinkingConfig" in body["generationConfig"] and ("thinking" in msg.lower() or not schema or key in _LOOSE
-                                                                   or "invalid argument" in msg.lower() and model not in _TRIED):
-                _TRIED.add(model)
-                _NO_THINKING.add(model)  # this model takes no thinking setting: ask again without one
-            elif schema and key not in _LOOSE:
-                _LOOSE.add(key)  # the provider found this schema too complex: JSON with text and part, checked afterwards
-            else:
-                raise
-            return ask(provider, system, turns, schema, on_text)
+        options = schema if isinstance(schema, list) else [schema] if schema else [None]
+        route = bool(options[0]) and "calls" in options[0].get("properties", {})
+        key = (model, json.dumps(options[0], sort_keys=True)) if options[0] else None
+        # providers refuse a schema whose combined bounds are too complex: try the chosen parts, then fewer parts, then
+        # plain JSON {text, part} (the validator checks the part either way); remember what worked
+        tries = options + ([_loose(options[0])] if options[0] and not route else [])
+        start = _SCHEMA_OK.get(key, 0)
+        for attempt in range(2):
+            thinking = THINKING != "high" and model not in _NO_THINKING
+            for i in range(start, len(tries)):
+                size = len(json.dumps(tries[i])) if tries[i] else 0
+                if size >= _TOO_BIG.get(model, 10 ** 9) and i < len(tries) - 1:
+                    continue  # this model refused a schema this large before: skip to a smaller form without asking
+                body = {"systemInstruction": {"parts": [{"text": system}]},
+                        "contents": [{"role": "model" if t["role"] == "assistant" else "user", "parts": [{"text": t["text"]}]} for t in turns],
+                        "generationConfig": {"maxOutputTokens": (600 if route else 3000) + (8000 if thinking and THINKING == "low" else 0)}}
+                if thinking:
+                    body["generationConfig"]["thinkingConfig"] = {"thinkingLevel": "low"} if THINKING == "low" else {"thinkingBudget": 0}
+                if tries[i]:
+                    body["generationConfig"]["responseMimeType"] = "application/json"
+                    body["generationConfig"]["responseJsonSchema"] = tries[i]
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:streamGenerateContent?alt=sse"
+                try:
+                    out = _gemini_stream(url, body, model, on_text)
+                    if key:
+                        _SCHEMA_OK[key] = i
+                    return out
+                except RuntimeError as e:
+                    if "HTTP 400" not in str(e):
+                        raise
+                    if "thinking" in str(e).lower() and thinking:
+                        break  # this model takes no such thinking setting: start over without one
+                    if size:
+                        _TOO_BIG[model] = min(size, _TOO_BIG.get(model, 10 ** 9))
+            if not thinking:
+                raise RuntimeError(f"{model} refused every form of this request (HTTP 400)")
+            _NO_THINKING.add(model)  # a generic refusal of every form: some models take no thinking setting at all
+            _TOO_BIG.pop(model, None)  # those refusals may have been about thinking, not size
+            start = 0
     if provider == "claude-cli":
         convo = "\n\n".join(f"{'Person' if t['role'] == 'user' else 'You (earlier)'}: {t['text']}" for t in turns[:-1])
         msg = (f"Conversation so far:\n{convo}\n\nPerson now: {turns[-1]['text']}" if convo else turns[-1]["text"])
@@ -162,8 +179,9 @@ def ask(provider, system, turns, schema=None, on_text=None):
 
 def _loose(schema):
     """The same reply shape without the parts' own schemas: JSON {text, part}, the part checked by the validator."""
-    return {"type": "object", "required": ["text", "part"],
-            "properties": {"text": {"type": "string"}, "part": {"type": ["object", "null"]}}}
+    names = list(((schema or {}).get("properties", {}).get("part") or {}).get("properties", {}))
+    return {"type": "object", "required": ["text", "part"], "properties": {"text": {"type": "string"}, "part": {
+        "type": ["object", "null"], "properties": {n: {"type": "object"} for n in names}, "additionalProperties": False}}}
 
 
 def _gemini_stream(url, body, model, on_text):
@@ -279,7 +297,7 @@ class Conversation:
         self.surfaces = 0
         self.log = []          # per turn: calls, first errors, repaired, ui
         self.offered = []      # the changes an answer offered as buttons: (name, context); a press must match one (R3)
-        self.case_fixed, self.first_case_errors, self.routed_by_model = 0, [], False
+        self.case_fixed, self.first_case_errors, self.routed_by_model, self.last_calls = 0, [], False, []
 
     # -- routing: which read actions to run
     def fast_route(self, message):
@@ -333,6 +351,15 @@ class Conversation:
             calls.append((name, args))
         return calls[:2], bool(calls)
 
+    CHANGE_WORDS = re.compile(r"\b(pay|book|renew|switch|move|upgrade|downgrade|add|remove|cancel|upload|send|change|confirm|apply)\b", re.I)
+
+    def names_a_change(self, message):
+        """The person asks for something that changes data: a change action's own words, or a plain verb for one."""
+        msg = set(smartui.words(message))
+        verbs = {"get", "list", "check", "find", "fetch", "read", "show", "view", "load"}
+        return bool(self.CHANGE_WORDS.search(message)) or any(
+            (set(smartui.words(a["fn"].__name__.replace("_", " "))) - verbs) <= msg for a in self.app.ACTIONS.values() if a.get("changes"))
+
     def route(self, message):
         if self.provider == "recorded":
             return []
@@ -384,19 +411,27 @@ class Conversation:
         surface = f"s{self.surfaces + 1}"
         history = "\n".join(f"{'Person' if t['role'] == 'user' else 'You'}: {t['text'][:400]}" for t in self.turns[-6:])
         boost = {}
-        for name, _ in calls:  # the parts this repo's scope tied to the actions just run
+        for name, _ in calls or self.last_calls:  # the parts this repo's scope tied to the actions run (a follow-up: last turn's)
             for i, part in enumerate(self.route_parts.get(name, [])):
-                boost[part] = boost.get(part, 0) + (3 if i == 0 else 2)
+                boost[part] = boost.get(part, 0) + (3 if i == 0 else 2) - (0 if calls or len(smartui.words(message)) >= 2 else 2)
+        if calls:
+            self.last_calls = calls
+        if "ApprovalPrompt" in self.catalog["components"] and self.names_a_change(message):
+            boost["ApprovalPrompt"] = boost.get("ApprovalPrompt", 0) + 4  # "pay the smaller one", "add 3 seats": ask first
         said = " ".join([t["text"] for t in self.turns if t["role"] == "user"] + [message])
         source = {**data, "_the_person_said": said}  # numbers the person typed count as given (R6)
-        always = ["ApprovalPrompt"] if any(a.get("changes") for a in self.app.ACTIONS.values()) else []
+        # the approval prompt is offered when the person asks for a change ("pay the smaller one"), not on every turn: a
+        # bigger schema is slower, and a small model mixes its buttons into other parts
+        always = ["ApprovalPrompt"] if any(a.get("changes") for a in self.app.ACTIONS.values()) and self.names_a_change(message) else []
         sel = smartui.select(message, self.catalog, 3, self.scope, data, boost)
         if sel["ui"] and sel["candidates"]:
             ms["skeleton"] = (time.perf_counter() - t0) * 1000
             emit({"type": "skeleton", "part": sel["candidates"][0]})
         system, sel = smartui.build_prompt(message, self.catalog, 3, self.scope, data, boost, always, structured=True, sel=sel)
         names = (list(sel["candidates"]) + [a for a in always if a not in sel["candidates"] and a in self.catalog["components"]]) if sel["ui"] else []
-        schema = smartui.response_schema(self.catalog, names)
+        smaller = [names, names[:2] + [a for a in always if a in names[2:]], names[:1] + [a for a in always if a in names[1:]]]
+        schema = [smartui.response_schema(self.catalog, n) for i, n in enumerate(smaller) if n and n not in smaller[:i]] \
+            or smartui.response_schema(self.catalog, [])
         shown = [""]
 
         def on_text(raw):
@@ -465,6 +500,9 @@ class Conversation:
             return raw
         text = str(obj.get("text") or "")
         part = obj.get("part")
+        if isinstance(part, dict) and "component" not in part and len(part) == 1 and isinstance(next(iter(part.values())), dict):
+            name, props = next(iter(part.items()))  # {"KeyFacts": {...}} -> {"component": "KeyFacts", ...}
+            part = {"component": name, **props}
         return text + (f"\n```a2ui\n{json.dumps(part, ensure_ascii=False)}\n```" if isinstance(part, dict) and part else "")
 
     def _check(self, reply, data, surface, max_parts):
@@ -608,6 +646,20 @@ def serve(app_path, port, provider):
                     self.end_headers()
                     return self.wfile.write(b)
             return super().do_GET()
+
+        def send_error(self, code, message=None, explain=None):
+            """The app's own not-found page (web/404.html) when it has one, instead of the server's bare error."""
+            page = web / "404.html"
+            if code == 404 and page.is_file():
+                b = page.read_bytes()
+                self.send_response(404)
+                self.send_header("content-type", "text/html; charset=utf-8")
+                self.send_header("content-length", str(len(b)))
+                self.end_headers()
+                if self.command != "HEAD":
+                    self.wfile.write(b)
+                return
+            super().send_error(code, message, explain)
 
         def _same_site(self):
             """Loopback pages from this server only: a JSON body, our own Host, and our own Origin when the browser sends one

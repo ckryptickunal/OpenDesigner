@@ -37,6 +37,15 @@ Ask once for the image hosts and link domains the assistant may use (`--allow-im
 - **Select.** Scores every part against the message (its intents, tags and "use when"), adds the confirmed scope phrases, and keeps the top three. It also decides whether the message gives any reason for UI (R1). No reason: the prompt says "answer in text only".
 - **Prompt.** The rules, the output format (after the text, one fenced `a2ui` block holding just the part as a JSON object, which the code wraps in an A2UI `createSurface`; full A2UI messages are accepted too. The short form exists because, in the first eval round, 31 of 75 Claude replies closed the five-deep A2UI brackets in the wrong order), and only the selected parts' properties in a compact form. With `--data`, the data the model may use, so R6 can be checked.
 
+## 4b. A fast turn (the reference server, `scripts/live.py`)
+A person expects an answer about as fast as a page loads. The reference server keeps a turn to one model call:
+1. **Data without a model.** The message's words are matched against each read action's name, description and the scope's route phrases. An id in the message (TH-1047) or one of a parameter's listed choices ("hollow-lane, marsh-road or eastgate") fills a parameter, unless the message says "not" ("haven't paid" never becomes `status=paid`). A model routes only when the best match needs a value the message doesn't give ("the refunded one"). Change actions are never run here.
+2. **Skeleton first.** The selector picks the part from the words and the data, and the page draws its loading shape at once (`showLoading`), typically within 10 ms.
+3. **One constrained call.** The reply must be JSON `{"text", "part"}` following the chosen parts' schemas (`response_schema()`: Gemini `responseJsonSchema`, Claude a forced tool or `--json-schema`). When a provider finds the schema too complex, the server tries fewer parts, then plain JSON, and remembers what worked. A fast model is the default (`OD_GEMINI_MODEL`, `OD_CLAUDE_MODEL` pick another; `OD_THINKING` none, low or high). The words stream to the page as they arrive.
+4. **Fix wording on the spot.** Title Case is changed to sentence case without asking again (names the data uses keep their capitals). Other failures go back once.
+
+`evals/smart-ui/REPORT.md` has the time to the first thing on screen and to the checked answer, before and after, for each model.
+
 ## 5. Validate
 Before anything renders: `smartui.py validate reply.txt --source data.json` (or `validate()` from `od-validate.js`, which `<od-surface>` calls itself). The two validators share one fixture suite (`assets/fixtures/validator/`), so a rule cannot exist in one and not the other. Send failures back once as A2UI errors (`--a2ui`); then fall back to text.
 

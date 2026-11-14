@@ -1,0 +1,601 @@
+{
+  "made": "2026-11-14T15:02:10",
+  "system": "Fernhollow",
+  "probes": 43,
+  "inputs": [
+    "not-found.json",
+    "root-1440x900-light.forced-colors.json",
+    "root-1440x900-light.json",
+    "root-1440x900-light.json",
+    "root-1440x900-light.json",
+    "root-1440x900-light.json",
+    "root-1440x900-light.json",
+    "root-1440x900-light.json",
+    "root-1440x900-light.json",
+    "root-1440x900-light.json",
+    "root-1440x900-light.json",
+    "root-1440x900-light.json",
+    "root-1440x900-light.reduced-motion.json",
+    "root-1440x900-light.stress-longNames.json",
+    "root-1440x900-light.stress-longWords.json",
+    "root-1440x900-light.stress-noImages.json",
+    "root-1440x900-light.stress-noNames.json",
+    "root-1440x900-light.stress-pseudoloc.json",
+    "root-1440x900-light.stress-rtl.json",
+    "root-1440x900-light.stress-text200.json",
+    "root-1440x900-light.stress-textSpacing.json",
+    "root-1440x900-light.stress-translate.json",
+    "root-375x844-light.forced-colors.json",
+    "root-375x844-light.json",
+    "root-375x844-light.json",
+    "root-375x844-light.json",
+    "root-375x844-light.json",
+    "root-375x844-light.json",
+    "root-375x844-light.json",
+    "root-375x844-light.json",
+    "root-375x844-light.json",
+    "root-375x844-light.json",
+    "root-375x844-light.json",
+    "root-375x844-light.reduced-motion.json",
+    "root-375x844-light.stress-longNames.json",
+    "root-375x844-light.stress-longWords.json",
+    "root-375x844-light.stress-noImages.json",
+    "root-375x844-light.stress-noNames.json",
+    "root-375x844-light.stress-pseudoloc.json",
+    "root-375x844-light.stress-rtl.json",
+    "root-375x844-light.stress-text200.json",
+    "root-375x844-light.stress-textSpacing.json",
+    "root-375x844-light.stress-translate.json"
+  ],
+  "findings": [
+    {
+      "id": "M-CV05-2002",
+      "case": "CV-05",
+      "severity": "error",
+      "basis": "measured",
+      "title": "The page scrolls sideways under longWords",
+      "where": [
+        "/ · 1440x900 · light · stress: longWords",
+        "/ · 375x844 · light · stress: longNames",
+        "/ · 375x844 · light · stress: longWords",
+        "/ · 375x844 · light · stress: text200"
+      ],
+      "measured": "161 px wider than the viewport (1440 px)",
+      "expected": "no horizontal scroll (WCAG 1.4.10 at 320 px)",
+      "evidence": [
+        "div.layout:nth-of-type(2) > aside.side > section.card:nth-of-type(1)",
+        "div.layout:nth-of-type(2) > aside.side > section.card:nth-of-type(2)",
+        "aside.side > section.card:nth-of-type(1) > h2",
+        "aside.side > section.card:nth-of-type(1) > dl.facts",
+        "h2#ask-title",
+        "section#ask > od-chat.od-chat"
+      ],
+      "fix": "find the widest element listed and let it wrap, shrink (min-width: 0, max-width: 100%) or scroll inside its own box",
+      "standard": "WCAG 1.4.10",
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-EN06-0863",
+      "case": "EN-06",
+      "severity": "error",
+      "basis": "measured",
+      "title": "Errors in the console",
+      "where": [
+        "/ · 1440x900 · light",
+        "/ · 375x844 · light"
+      ],
+      "measured": "2: Failed to fetch | Failed to fetch",
+      "expected": "no console errors while the page loads and scrolls",
+      "evidence": [],
+      "fix": "open the first error: a thrown error often leaves part of the page unrendered",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-EN06-0655",
+      "case": "EN-06",
+      "severity": "error",
+      "basis": "measured",
+      "title": "Requests failed or returned an error status",
+      "where": [
+        "/ · 1440x900 · light",
+        "/ · 375x844 · light"
+      ],
+      "measured": "4: GET http://127.0.0.1:8031/system/smart-ui/catalog.json net::ERR_FAILED | 500 http://127.0.0.1:8031/system/smart-ui/catalog.json | 500 http://127.0.0.1:8031/api/info",
+      "expected": "every request the page makes succeeds",
+      "evidence": [],
+      "fix": "a 404 on a font or image explains a fallback font or a broken picture",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-IN03-2740",
+      "case": "IN-03",
+      "severity": "error",
+      "basis": "measured",
+      "title": "Controls with no accessible name",
+      "where": [
+        "/ · 1440x900 · light · stress: noNames",
+        "/ · 375x844 · light · stress: noNames"
+      ],
+      "measured": "8 control(s): a.skip; od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(1); od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(2); od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(3)",
+      "expected": "every control has a name a screen reader can say",
+      "evidence": [
+        "a.skip",
+        "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(1)",
+        "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(2)",
+        "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(3)"
+      ],
+      "fix": "add aria-label, visible text, or a <label>",
+      "standard": "WCAG 4.1.2 / 1.1.1",
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-MS02-9112",
+      "case": "MS-02",
+      "severity": "warn",
+      "basis": "measured",
+      "title": "Font weights one step apart",
+      "where": [
+        "/ · 1440x900 · light",
+        "/ · 1440x900 · light · reduced motion",
+        "/ · 375x844 · light",
+        "/ · 375x844 · light · reduced motion"
+      ],
+      "measured": "400 on 30 element(s), 600 on 6 element(s), 700 on 2 element(s); 600 and 700 are one step apart, which can read as a mistake rather than a level",
+      "expected": "three weights at most in a system, and two in any one view, clearly apart, such as 400 and 600 (DC-L19-24; it marks two neighbouring weights reading as a mistake as inferred)",
+      "evidence": [
+        "a.skip",
+        "header.masthead > div.masthead-in > a.wordmark",
+        "div.masthead-in > p.who > strong"
+      ],
+      "fix": "give each weight a job (body, labels, headings) and merge the near ones; try size or space before a third weight",
+      "standard": "DC-L19-24",
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-MS07-8266",
+      "case": "MS-07",
+      "severity": "warn",
+      "basis": "measured",
+      "title": "Lines longer than 80 characters",
+      "where": [
+        "/ · 1440x900 · light · stress: longNames",
+        "/ · 1440x900 · light · stress: longWords",
+        "/ · 1440x900 · light · stress: pseudoloc",
+        "/ · 1440x900 · light · stress: translate",
+        "/ · 375x844 · light · stress: longNames",
+        "/ · 375x844 · light · stress: longWords"
+      ],
+      "measured": "a.skip is about 143 characters wide",
+      "expected": "at most 80 (WCAG 1.4.8, AAA); 45-75 is the usual target",
+      "evidence": [
+        "a.skip",
+        "header.masthead > div.masthead-in > a.wordmark",
+        "div.masthead-in > p.who > strong",
+        "footer.foot > p",
+        "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(1)",
+        "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(2)"
+      ],
+      "fix": "set max-width: 65ch on the text block",
+      "standard": "WCAG 1.4.8 (AAA)",
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-MS17-7795",
+      "case": "MS-17",
+      "severity": "warn",
+      "basis": "measured",
+      "title": "Capitals with no tracking",
+      "where": [
+        "/ · 1440x900 · light · forced colors",
+        "/ · 1440x900 · light",
+        "/ · 1440x900 · light · reduced motion",
+        "/ · 375x844 · light · forced colors",
+        "/ · 375x844 · light",
+        "/ · 375x844 · light · reduced motion"
+      ],
+      "measured": "16 px at 0em, e.g. dl.facts > div:nth-of-type(3) > dd",
+      "expected": "capitals tracked open, about 0.06em",
+      "evidence": [
+        "dl.facts > div:nth-of-type(3) > dd"
+      ],
+      "fix": "letter-spacing: var(--ds-text-label-sm-tracking) (0.06em)",
+      "standard": "kerning.md",
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-MS21-0718",
+      "case": "MS-21",
+      "severity": "warn",
+      "basis": "measured",
+      "title": "A heading, lede or label ends on one word",
+      "where": [
+        "/ · 1440x900 · light · forced colors",
+        "/ · 1440x900 · light",
+        "/ · 1440x900 · light · reduced motion"
+      ],
+      "measured": "aside.side > section.card:nth-of-type(2) > p:nth-of-type(1) (lede): \"Call 0300 555 0142, Monday to Friday, 9:00 to 17:00.\" leaves \"17:00.\" alone on line 2",
+      "expected": "no last line of a single word in headings, ledes and labels, at every width (preflight 39)",
+      "evidence": [
+        "aside.side > section.card:nth-of-type(2) > p:nth-of-type(1)",
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/crops/root-1440x900-light-00.png"
+      ],
+      "fix": "text-wrap: balance on headings and labels, text-wrap: pretty on ledes; or rewrite the line",
+      "standard": "preflight 39",
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-MS22-0010",
+      "case": "MS-22",
+      "severity": "warn",
+      "basis": "measured",
+      "title": "Padding smaller than the space between the items inside",
+      "where": [
+        "/ · 1440x900 · light · forced colors",
+        "/ · 1440x900 · light",
+        "/ · 1440x900 · light · reduced motion",
+        "/ · 375x844 · light · forced colors",
+        "/ · 375x844 · light",
+        "/ · 375x844 · light · reduced motion"
+      ],
+      "measured": "div.layout:nth-of-type(2) > aside.side > section.card:nth-of-type(1): 20 px padding around items 30 px apart",
+      "expected": "the space inside a group at most the space around it (HOW-IT-WORKS section 7: inner spacing smaller than outer)",
+      "evidence": [
+        "div.layout:nth-of-type(2) > aside.side > section.card:nth-of-type(1)",
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/crops/root-1440x900-light-01.png",
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/crops/root-375x844-light-00.png"
+      ],
+      "fix": "raise the padding to var(--ds-space-32) (32 px) or lower the gap to var(--ds-space-20) (20 px)",
+      "standard": "tokens",
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-ST12-1224",
+      "case": "ST-12",
+      "severity": "warn",
+      "basis": "measured",
+      "title": "Text runs out of its box under longWords",
+      "where": [
+        "/ · 375x844 · light · stress: longWords"
+      ],
+      "measured": "footer.foot > p (text): \"Fernhollow is an invented council. Its people, pla\" goes 65.42 px past a 375 px wide box",
+      "expected": "every line of text inside its own box, at 320 px, at 200% text and with longer words",
+      "evidence": [
+        "footer.foot > p",
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/crops/root-375x844-light.stress-longWords-00.png"
+      ],
+      "fix": "let the text wrap: remove the fixed width or height and white-space: nowrap, set min-width: 0 on flex and grid children, and overflow-wrap: anywhere for long words",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-ST16-8636",
+      "case": "ST-16",
+      "severity": "warn",
+      "basis": "operated",
+      "title": "A blank screen while the page loads on a slow network",
+      "where": [
+        "/ · 1440x900 · light",
+        "/ · 375x844 · light"
+      ],
+      "measured": "1 s into a throttled load (400 ms latency, 50 KB/s): no text and no loading sign; full load took 8538 ms",
+      "expected": "something on screen at once: the layout with a skeleton, or a loading sign",
+      "evidence": [],
+      "fix": "render the page frame first, then a skeleton the size of the content that is coming",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-ST16-7942",
+      "case": "ST-16",
+      "severity": "warn",
+      "basis": "operated",
+      "title": "No loading sign while the data is on its way",
+      "where": [
+        "/ · 1440x900 · light",
+        "/ · 375x844 · light"
+      ],
+      "measured": "3 s into a request that has not answered: no skeleton, spinner, progress bar, aria-busy or \"Loading\" (914 characters on screen)",
+      "expected": "a skeleton the size of the content, or a loading sign, until the data arrives",
+      "evidence": [
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/root-1440x900-light-data-hang.png",
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/root-375x844-light-data-hang.png"
+      ],
+      "fix": "render a skeleton for the view and set aria-busy on it until the data lands",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-ST16-8310",
+      "case": "ST-16",
+      "severity": "warn",
+      "basis": "operated",
+      "title": "No message when the data is empty",
+      "where": [
+        "/ · 1440x900 · light",
+        "/ · 375x844 · light"
+      ],
+      "measured": "959 characters on screen and no new words for this state (requests answered this way: http://127.0.0.1:8031/api/info, http://127.0.0.1:8031/system/smart-ui/catalog.json)",
+      "expected": "an empty state that says there is nothing yet and what to do",
+      "evidence": [
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/root-1440x900-light-data-empty.png",
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/root-375x844-light-data-empty.png"
+      ],
+      "fix": "write the state into the view: say what happened and offer the next step",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "judgment"
+    },
+    {
+      "id": "M-ST16-4751",
+      "case": "ST-16",
+      "severity": "warn",
+      "basis": "operated",
+      "title": "No message when the data is failing with a server error",
+      "where": [
+        "/ · 1440x900 · light",
+        "/ · 375x844 · light"
+      ],
+      "measured": "959 characters on screen and no new words for this state (requests answered this way: http://127.0.0.1:8031/api/info, http://127.0.0.1:8031/system/smart-ui/catalog.json)",
+      "expected": "an error that says what failed and offers a retry",
+      "evidence": [
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/root-1440x900-light-data-error.png",
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/root-375x844-light-data-error.png"
+      ],
+      "fix": "write the state into the view: say what happened and offer the next step",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "judgment"
+    },
+    {
+      "id": "M-ST16-4677",
+      "case": "ST-16",
+      "severity": "warn",
+      "basis": "operated",
+      "title": "No message when the data is unreachable (offline)",
+      "where": [
+        "/ · 1440x900 · light",
+        "/ · 375x844 · light"
+      ],
+      "measured": "914 characters on screen and no new words for this state (requests answered this way: http://127.0.0.1:8031/api/info, http://127.0.0.1:8031/system/smart-ui/catalog.json)",
+      "expected": "a message that the connection is down, with a retry",
+      "evidence": [
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/root-1440x900-light-data-offline.png",
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/root-375x844-light-data-offline.png"
+      ],
+      "fix": "write the state into the view: say what happened and offer the next step",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "judgment"
+    },
+    {
+      "id": "M-ST18-1798",
+      "case": "ST-18",
+      "severity": "warn",
+      "basis": "operated",
+      "title": "The not-found page offers no way on",
+      "where": [
+        "/__od-no-such-page-7aeb788d · 1280x900 · light"
+      ],
+      "measured": "0 links on the page",
+      "expected": "a link home, to search or to the main sections",
+      "evidence": [
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/not-found.png"
+      ],
+      "fix": "add the site header, or at least a link home",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-ST18-0008",
+      "case": "ST-18",
+      "severity": "warn",
+      "basis": "operated",
+      "title": "The not-found page says a code, not what happened",
+      "where": [
+        "/__od-no-such-page-7aeb788d · 1280x900 · light"
+      ],
+      "measured": "heading: \"Error response\"",
+      "expected": "plain words: what happened and what to do",
+      "evidence": [
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/not-found.png"
+      ],
+      "fix": "say it as a person would (\"We can't find that page\") and keep 404 as small print",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-ST19-6842",
+      "case": "ST-19",
+      "severity": "warn",
+      "basis": "measured",
+      "title": "A missing name collapses its box",
+      "where": [
+        "/ · 1440x900 · light · stress: noNames",
+        "/ · 375x844 · light · stress: noNames"
+      ],
+      "measured": "aside.side > section.card:nth-of-type(1) > h2 is 0 px tall with no text; dl.facts > div:nth-of-type(1) > dt is 0 px tall with no text; dl.facts > div:nth-of-type(2) > dt is 0 px tall with no text; dl.facts > div:nth-of-type(3) > dt is 0 px tall with no text",
+      "expected": "an empty name keeps the row or card the same height, or the product shows a fallback (\"Untitled\")",
+      "evidence": [
+        "aside.side > section.card:nth-of-type(1) > h2",
+        "dl.facts > div:nth-of-type(1) > dt",
+        "dl.facts > div:nth-of-type(2) > dt",
+        "dl.facts > div:nth-of-type(3) > dt",
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/crops/root-1440x900-light.stress-noNames-00.png",
+        "/private/tmp/claude-501/-Users-Kunal-Desktop-Design-System--claude-worktrees-bold-mayer-187bc2/07bac604-ef71-43d9-9d6a-bd038a38d9f5/scratchpad/fh-review/shots/crops/root-1440x900-light.stress-noNames-01.png"
+      ],
+      "fix": "show a fallback name, or give the line a min-height of one line",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-CP02-2529",
+      "case": "CP-02",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Button labels that do not start with a verb",
+      "where": [
+        "/ · 1440x900 · light · forced colors",
+        "/ · 1440x900 · light",
+        "/ · 1440x900 · light · reduced motion",
+        "/ · 375x844 · light · forced colors",
+        "/ · 375x844 · light",
+        "/ · 375x844 · light · reduced motion"
+      ],
+      "measured": "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(3): \"When is the Hollow Lane office open?\"; od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(5): \"Where is my application?\"; od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(6): \"Can I get a visitor permit?\"",
+      "expected": "a button says what it does: a verb first (\"Compare prices\", not \"Pricing details\")",
+      "evidence": [
+        "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(3)",
+        "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(5)",
+        "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(6)"
+      ],
+      "fix": "start with the action; a word list decided this, so read each one",
+      "standard": "DC-L06-22",
+      "status": "confirmed",
+      "decided": "judgment"
+    },
+    {
+      "id": "M-EN09-0433",
+      "case": "EN-09",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Before launch: share image, favicon or indexing",
+      "where": [
+        "/ · 1440x900 · light",
+        "/ · 1440x900 · light · reduced motion",
+        "/ · 375x844 · light",
+        "/ · 375x844 · light · reduced motion"
+      ],
+      "measured": "missing a share image (og:image), a meta description",
+      "expected": "a public page has a share image, a favicon and a description; noindex only on drafts",
+      "evidence": [],
+      "fix": null,
+      "standard": null,
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-IN08-2014",
+      "case": "IN-08",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Controls placed outside the page box",
+      "where": [
+        "/ · 1440x900 · light · forced colors",
+        "/ · 1440x900 · light",
+        "/ · 1440x900 · light · reduced motion",
+        "/ · 1440x900 · light · stress: longNames",
+        "/ · 1440x900 · light · stress: longWords",
+        "/ · 1440x900 · light · stress: noImages",
+        "/ · 1440x900 · light · stress: noNames",
+        "/ · 1440x900 · light · stress: pseudoloc",
+        "/ · 1440x900 · light · stress: rtl",
+        "/ · 1440x900 · light · stress: text200",
+        "/ · 1440x900 · light · stress: textSpacing",
+        "/ · 1440x900 · light · stress: translate",
+        "/ · 375x844 · light · forced colors",
+        "/ · 375x844 · light",
+        "/ · 375x844 · light · reduced motion",
+        "/ · 375x844 · light · stress: longNames",
+        "/ · 375x844 · light · stress: longWords",
+        "/ · 375x844 · light · stress: noImages",
+        "/ · 375x844 · light · stress: noNames",
+        "/ · 375x844 · light · stress: pseudoloc",
+        "/ · 375x844 · light · stress: rtl",
+        "/ · 375x844 · light · stress: text200",
+        "/ · 375x844 · light · stress: textSpacing",
+        "/ · 375x844 · light · stress: translate"
+      ],
+      "measured": "a.skip",
+      "expected": "a skip link that appears on focus is fine; anything else is off-canvas content",
+      "evidence": [
+        "a.skip",
+        "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(3)",
+        "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(4)",
+        "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(2)",
+        "od-chat.od-chat > div.od-chat-chips:nth-of-type(2) > button.od-chat-chip:nth-of-type(1)"
+      ],
+      "fix": "Tab to it and confirm it appears",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-MS02-2927",
+      "case": "MS-02",
+      "severity": "info",
+      "basis": "measured",
+      "title": "Font weights outside the system's",
+      "where": [
+        "/ · 1440x900 · light",
+        "/ · 1440x900 · light · reduced motion",
+        "/ · 375x844 · light",
+        "/ · 375x844 · light · reduced motion"
+      ],
+      "measured": "weight 700 on 2 element(s); the system uses [400, 600]",
+      "expected": "the system's weights",
+      "evidence": [
+        "div.masthead-in > p.who > strong"
+      ],
+      "fix": null,
+      "standard": null,
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-ST01-4049",
+      "case": "ST-01",
+      "severity": "info",
+      "basis": "operated",
+      "title": "Hovering most sampled controls changes nothing you can see",
+      "where": [
+        "/ · 1440x900 · light",
+        "/ · 375x844 · light"
+      ],
+      "measured": "2 of 5: header.masthead > div.masthead-in > a.wordmark; div.masthead-in > p.who > a",
+      "expected": "a hover cue on pointer devices",
+      "evidence": [
+        "header.masthead > div.masthead-in > a.wordmark",
+        "div.masthead-in > p.who > a"
+      ],
+      "fix": "confirm with a screenshot while hovering; touch-only products can skip this",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "rule"
+    },
+    {
+      "id": "M-ST19-6395",
+      "case": "ST-19",
+      "severity": "info",
+      "basis": "seen",
+      "title": "Look at the page with every image missing",
+      "where": [
+        "/ · 1440x900 · light · stress: noImages",
+        "/ · 375x844 · light · stress: noImages"
+      ],
+      "measured": "0 image(s) made to fail",
+      "expected": "cards and rows keep their size, and alt text or a placeholder says what was there",
+      "evidence": [],
+      "fix": "reserve the box (width and height or aspect-ratio) and give it a background",
+      "standard": null,
+      "status": "confirmed",
+      "decided": "judgment"
+    }
+  ]
+}

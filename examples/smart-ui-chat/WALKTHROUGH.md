@@ -122,7 +122,13 @@ Open http://127.0.0.1:8000/. The header says which model is answering. Ask, in t
 3. Press **Choose** on Standard, then ask to book it: the answer is an approval prompt. Nothing is booked until you press the approve button; only then does the server run `book_flight` (the renderer adds the approval, never the model).
 4. "When does check-in open?": a sentence, no part.
 
-Each turn: the model may call only the app's read actions, then answers; the answer is validated against the data it got; a failure goes back once with the errors ("Repaired once" shows under the answer); a second failure shows the text only. Without a key the same page stays in recorded mode.
+Each turn:
+1. **Pick the data, usually without a model.** The message's words are matched against each read action's name, description and listed choices ("Hollow Lane", "visitor"), and an id in the message fills a parameter (TH-1047). A model routes only when it isn't clear, as in "the refunded one". Change actions are never run here.
+2. **Draw the part's skeleton at once.** The selector picks the part from the words and the data, so its loading shape shows in a few milliseconds.
+3. **One model call.** A fast model (Gemini Flash Lite by default; `OD_GEMINI_MODEL` picks another, such as Gemini 4 Hydrogen) writes JSON that must follow the chosen parts' schema, so the answer usually passes on the first try. The words stream in as they arrive.
+4. **Check, then show.** The answer is validated against the data it got. Title Case is fixed on the spot, without asking again. Any other failure goes back once with the errors ("Repaired once" shows under the answer), and a second failure shows the text only.
+
+Without a key the same page stays in recorded mode.
 
 ## 6. Adapting to a developer's own repo
 
@@ -143,3 +149,27 @@ Check the whole loop in a browser at 1440 and 375 px:
 python3 examples/smart-ui-support/check_live.py --provider gemini
 ```
 The live evals (`python3 tools/smartui_evals.py --model gemini --live`) run 25 cases like these, three times each, and count how often the right part showed, how often the first answer passed, how often a short fact stayed text, and whether the model ever ran a change on its own (it can't: the router drops change actions).
+
+## 7. A public service: Fernhollow
+
+`examples/smart-ui-fernhollow/` is a council service in Fernhollow, the calm public-service system on the website (brand #1E3A8A, made with `engine.py sketch --name "Fernhollow" --audience large --platforms web --feel calm,trustworthy --brand "#1E3A8A"`; its tokens match the website's). People use it now and then, so the words are plain and nothing happens without a clear yes. Its API in `server.py` has eleven read routes (permit, renewal quote, fines, one fine, slots, application status, documents, offices, one office, permit prices, eligibility) and four that change data (renew a permit, pay a fine, book an appointment, upload a document). The scope step reads it as a public service:
+```bash
+python3 skills/opendesigner-smart-ui/scripts/smartui.py scope --project examples/smart-ui-fernhollow
+```
+Run it live:
+```bash
+python3 examples/smart-ui-fernhollow/server.py --provider gemini
+```
+Open http://127.0.0.1:8020/ and try, in this order:
+1. "Do I have any fines?": a table with the paid and unpaid notices.
+2. "Pay the unpaid one": an approval prompt with the amount you'd pay today (£35, the 14-day discount), and a warning that paying ends the right to challenge. Nothing is paid until you press Pay.
+3. Press **Pay £35.00**: a receipt with the payment reference.
+4. "Where is my application?": the four steps, with the one it is on.
+5. "Which zone am I in?": one sentence, no part.
+
+Check the whole loop in a browser at 1440 and 375 px, with timings measured in the page:
+```bash
+python3 examples/smart-ui-fernhollow/check_live.py --provider gemini --model gemini-3.1-flash-lite
+```
+The Fernhollow evals (`python3 tools/smartui_evals.py --live --model gemini --cases live-cases-fernhollow.json`) ask 20 questions like these.
+
