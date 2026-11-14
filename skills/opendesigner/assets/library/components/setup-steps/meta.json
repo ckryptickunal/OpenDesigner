@@ -4,15 +4,38 @@
   "use": "for a new account's first steps",
   "type": "navigation",
   "style": "friendly",
-  "industries": ["saas", "finance", "education", "health"],
-  "tags": ["onboarding", "checklist", "progress", "steps", "setup"],
-  "states": ["done", "current", "upcoming", "hover", "focus"],
+  "industries": [
+    "saas",
+    "finance",
+    "education",
+    "health"
+  ],
+  "tags": [
+    "onboarding",
+    "checklist",
+    "progress",
+    "steps",
+    "setup"
+  ],
+  "states": [
+    "done",
+    "current",
+    "upcoming",
+    "hover",
+    "focus"
+  ],
   "source": "brand/showcase/components/09-onboarding-stepper",
   "a11y": "An ordered list with the current step marked aria-current; progress is a native progress element with a label, and the count is also written out.",
   "width": "narrow",
   "spec": {
-    "use_when": ["a home-screen card that brings people back to an unfinished setup, one step at a time"],
-    "avoid_when": ["steps an AI agent is running on its own: use agent-steps", "a long form split into pages with back and next: build it from the form's own sections", "a daily habit or goal: use daily-goals or habit-tracker"],
+    "use_when": [
+      "a home-screen card that brings people back to an unfinished setup, one step at a time"
+    ],
+    "avoid_when": [
+      "steps an AI agent is running on its own: use agent-steps",
+      "a long form split into pages with back and next: build it from the form's own sections",
+      "a daily habit or goal: use daily-goals or habit-tracker"
+    ],
     "parts": [
       {
         "name": "title",
@@ -65,7 +88,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "steps"],
+      "required": [
+        "title",
+        "steps"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -79,7 +105,10 @@
           "part": "steps",
           "items": {
             "type": "object",
-            "required": ["title", "state"],
+            "required": [
+              "title",
+              "state"
+            ],
             "properties": {
               "title": {
                 "type": "string",
@@ -90,7 +119,11 @@
                 "maxLength": 14
               },
               "state": {
-                "enum": ["done", "now", "next"]
+                "enum": [
+                  "done",
+                  "now",
+                  "next"
+                ]
               },
               "detail": {
                 "type": "string",
@@ -111,12 +144,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "when every step is done, replace the list with a short success line and a button to dismiss the card"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show the card with a grey progress bar and three rows of grey circles and bars"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -135,8 +170,15 @@
         "status": "handled",
         "how": "step names and the detail line wrap beside the mark; the short note on the right never wraps",
         "evidence": "grid-template-columns: var(--ds-size-control-sm) minmax(0, 1fr)"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches the current step's main button, then Skip for now", "Enter or Space presses the focused button"]
+    "keyboard": [
+      "Tab reaches the current step's main button, then Skip for now",
+      "Enter or Space presses the focused button"
+    ]
   }
 }

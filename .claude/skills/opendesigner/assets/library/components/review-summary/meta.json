@@ -49,8 +49,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a clothing or shoe page where buyers need to know how it fits as well as how it rates"],
-    "avoid_when": ["one rating line inside a product card: product-card already shows stars and a count", "a discussion thread with replies: use comment-thread", "a ranked list of people or scores: use leaderboard"],
+    "use_when": [
+      "a clothing or shoe page where buyers need to know how it fits as well as how it rates"
+    ],
+    "avoid_when": [
+      "one rating line inside a product card: product-card already shows stars and a count",
+      "a discussion thread with replies: use comment-thread",
+      "a ranked list of people or scores: use leaderboard"
+    ],
     "parts": [
       {
         "name": "title",
@@ -145,7 +151,12 @@
     ],
     "data": {
       "type": "object",
-      "required": ["average", "counts", "distribution", "reviews"],
+      "required": [
+        "average",
+        "counts",
+        "distribution",
+        "reviews"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -169,9 +180,24 @@
           "maxItems": 5,
           "part": "distribution",
           "items": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 100
+            "type": "object",
+            "properties": {
+              "stars": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "percent": {
+                "type": "number"
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "share": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
           }
         },
         "fit": {
@@ -204,10 +230,18 @@
           "part": "filters",
           "items": {
             "type": "object",
-            "required": ["key", "label"],
+            "required": [
+              "key",
+              "label"
+            ],
             "properties": {
               "key": {
-                "enum": ["photos", "verified", "five", "low"]
+                "enum": [
+                  "photos",
+                  "verified",
+                  "five",
+                  "low"
+                ]
               },
               "label": {
                 "type": "string",
@@ -227,7 +261,11 @@
           "part": "reviews",
           "items": {
             "type": "object",
-            "required": ["name", "rating", "text"],
+            "required": [
+              "name",
+              "rating",
+              "text"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -270,8 +308,30 @@
                 "maxItems": 3,
                 "part": "photos",
                 "items": {
-                  "type": "string",
-                  "maxLength": 300
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "maxLength": 120
+                    },
+                    "photo": {
+                      "type": "object",
+                      "required": [
+                        "src",
+                        "alt"
+                      ],
+                      "properties": {
+                        "src": {
+                          "type": "string",
+                          "maxLength": 2048
+                        },
+                        "alt": {
+                          "type": "string",
+                          "maxLength": 200
+                        }
+                      }
+                    }
+                  }
                 }
               },
               "facts": {
@@ -306,6 +366,14 @@
                     "minimum": 0
                   }
                 }
+              },
+              "helpful_yes": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "helpful_no": {
+                "type": "string",
+                "maxLength": 80
               }
             }
           }
@@ -314,6 +382,25 @@
           "type": "string",
           "maxLength": 28,
           "part": "more"
+        },
+        "fit_label": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "fit_summary": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "fit_position": {
+          "type": "number"
+        },
+        "fit_low": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "fit_high": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
@@ -324,8 +411,9 @@
         "evidence": "No reviews match these filters."
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the summary column and show two review rows with muted blocks for name, stars and text"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -344,8 +432,17 @@
         "status": "handled",
         "how": "review text wraps and is kept to a readable line length; dates and chips never wrap",
         "evidence": "max-inline-size: 60ch"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches each filter chip, then in each review its photos and its Yes and No votes, then Show all reviews", "Enter or Space on a filter chip turns it on or off and filters the reviews; 5 stars and 1 to 3 stars turn each other off", "Enter or Space on a vote marks it and adds one to its count; pressing it again takes the vote back"]
+    "keyboard": [
+      "Tab reaches each filter chip, then in each review its photos and its Yes and No votes, then Show all reviews",
+      "Enter or Space on a filter chip turns it on or off and filters the reviews; 5 stars and 1 to 3 stars turn each other off",
+      "Enter or Space on a vote marks it and adds one to its count; pressing it again takes the vote back"
+    ]
   }
 }

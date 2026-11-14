@@ -119,12 +119,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "When every message is archived, show empty-all-done in place of the list."
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "Not applicable: archive is instant here; a slow server would use optimistic-update's rollback."
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -143,6 +145,10 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": [

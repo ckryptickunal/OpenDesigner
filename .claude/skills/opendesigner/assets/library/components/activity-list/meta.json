@@ -85,8 +85,13 @@
     }
   ],
   "spec": {
-    "use_when": ["any feed of reactions to the person's own posts, where some rows offer a follow-back"],
-    "avoid_when": ["work alerts that need actions like approve or assign: use notification-inbox", "a team's change history with exact times: use audit-log or activity-feed"],
+    "use_when": [
+      "any feed of reactions to the person's own posts, where some rows offer a follow-back"
+    ],
+    "avoid_when": [
+      "work alerts that need actions like approve or assign: use notification-inbox",
+      "a team's change history with exact times: use audit-log or activity-feed"
+    ],
     "parts": [
       {
         "name": "title",
@@ -157,7 +162,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["groups"],
+      "required": [
+        "groups"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -171,14 +178,22 @@
           "part": "filter",
           "items": {
             "type": "object",
-            "required": ["label", "kind"],
+            "required": [
+              "label",
+              "kind"
+            ],
             "properties": {
               "label": {
                 "type": "string",
                 "maxLength": 14
               },
               "kind": {
-                "enum": ["all", "like", "follow", "mention"]
+                "enum": [
+                  "all",
+                  "like",
+                  "follow",
+                  "mention"
+                ]
               }
             }
           }
@@ -190,7 +205,10 @@
           "part": "groups",
           "items": {
             "type": "object",
-            "required": ["title", "items"],
+            "required": [
+              "title",
+              "items"
+            ],
             "properties": {
               "title": {
                 "type": "string",
@@ -202,10 +220,19 @@
                 "maxItems": 10,
                 "items": {
                   "type": "object",
-                  "required": ["kind", "people", "text", "time"],
+                  "required": [
+                    "kind",
+                    "people",
+                    "text",
+                    "time"
+                  ],
                   "properties": {
                     "kind": {
-                      "enum": ["like", "follow", "mention"]
+                      "enum": [
+                        "like",
+                        "follow",
+                        "mention"
+                      ]
                     },
                     "people": {
                       "type": "array",
@@ -213,7 +240,10 @@
                       "maxItems": 2,
                       "items": {
                         "type": "object",
-                        "required": ["name", "photo"],
+                        "required": [
+                          "name",
+                          "photo"
+                        ],
                         "properties": {
                           "name": {
                             "type": "string",
@@ -242,7 +272,11 @@
                       "type": "boolean"
                     },
                     "end": {
-                      "enum": ["thumb", "story", "follow_back"]
+                      "enum": [
+                        "thumb",
+                        "story",
+                        "follow_back"
+                      ]
                     },
                     "thumb": {
                       "type": "string",
@@ -254,6 +288,27 @@
                     },
                     "following": {
                       "type": "boolean"
+                    },
+                    "names": {
+                      "type": "string",
+                      "maxLength": 80
+                    },
+                    "story": {
+                      "type": "object",
+                      "required": [
+                        "src",
+                        "alt"
+                      ],
+                      "properties": {
+                        "src": {
+                          "type": "string",
+                          "maxLength": 2048
+                        },
+                        "alt": {
+                          "type": "string",
+                          "maxLength": 200
+                        }
+                      }
                     }
                   }
                 }
@@ -275,8 +330,9 @@
         "evidence": "empty.hidden = any"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the heading and chips and show three rows with grey circles and grey text bars in place of the photos and text"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -295,8 +351,16 @@
         "status": "handled",
         "how": "the activity text wraps in its own column while the photo and end item keep their size; the time never breaks",
         "evidence": "grid-template-columns: auto minmax(0, 1fr) auto"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches the filter chips as one radio group; the arrow keys move between them and change the filter", "Tab then reaches each Follow back button; Enter or Space toggles it between Follow back and Following"]
+    "keyboard": [
+      "Tab reaches the filter chips as one radio group; the arrow keys move between them and change the filter",
+      "Tab then reaches each Follow back button; Enter or Space toggles it between Follow back and Following"
+    ]
   }
 }

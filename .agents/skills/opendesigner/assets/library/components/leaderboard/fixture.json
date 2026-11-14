@@ -1,0 +1,130 @@
+{
+ "eyebrow": "Office step challenge · ends Sunday",
+ "title": "Step league",
+ "periods": [
+  {
+   "label": "Today",
+   "podium": [
+    {
+     "name": "Mirela Dragan",
+     "photo": {
+      "src": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Mirela Dragan"
+     },
+     "points": 18420
+    },
+    {
+     "name": "Tobias Wren",
+     "photo": {
+      "src": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Tobias Wren"
+     },
+     "points": 16905
+    },
+    {
+     "name": "Hana Sato",
+     "photo": {
+      "src": "https://images.unsplash.com/photo-1757649734013-705dd6456c02?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Hana Sato"
+     },
+     "points": 15230
+    }
+   ],
+   "rows": [
+    {
+     "rank": 4,
+     "name": "Oyelaran Bello",
+     "photo": {
+      "src": "https://images.unsplash.com/photo-1596580817363-a4a8f67d4bc8?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Oyelaran Bello"
+     },
+     "change": 2,
+     "points": 14870
+    },
+    {
+     "rank": 5,
+     "name": "Greta Lindahl",
+     "photo": {
+      "src": "https://images.unsplash.com/photo-1543949806-2c9935e6aa78?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Greta Lindahl"
+     },
+     "change": -1,
+     "points": 13990
+    },
+    {
+     "rank": 6,
+     "name": "Rafael Okonjo",
+     "photo": {
+      "src": "https://images.unsplash.com/photo-1603559822934-c01e9aa89708?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Rafael Okonjo"
+     },
+     "change": 0,
+     "points": 12450
+    }
+   ],
+   "you_rank": 19,
+   "you_name": "Sam Ortiz",
+   "you_photo": {
+    "src": "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Photo of Sam Ortiz"
+   },
+   "you_change": 4,
+   "you_points": 8120
+  },
+  {
+   "label": "This month",
+   "you_rank": "",
+   "you_name": "",
+   "you_change": "",
+   "you_points": "",
+   "podium": [
+    {
+     "name": "Tobias Wren",
+     "photo": {
+      "src": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Tobias Wren"
+     },
+     "points": 402300
+    },
+    {
+     "name": "Hana Sato",
+     "photo": {
+      "src": "https://images.unsplash.com/photo-1757649734013-705dd6456c02?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Hana Sato"
+     },
+     "points": 389150
+    },
+    {
+     "name": "Mirela Dragan",
+     "photo": {
+      "src": "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Mirela Dragan"
+     },
+     "points": 376800
+    }
+   ],
+   "rows": [
+    {
+     "rank": 4,
+     "name": "Greta Lindahl",
+     "photo": {
+      "src": "https://images.unsplash.com/photo-1543949806-2c9935e6aa78?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Greta Lindahl"
+     },
+     "change": 1,
+     "points": 351200
+    },
+    {
+     "rank": 5,
+     "name": "Rafael Okonjo",
+     "photo": {
+      "src": "https://images.unsplash.com/photo-1603559822934-c01e9aa89708?w=80&h=80&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Rafael Okonjo"
+     },
+     "change": -2,
+     "points": 340010
+    }
+   ]
+  }
+ ]
+}

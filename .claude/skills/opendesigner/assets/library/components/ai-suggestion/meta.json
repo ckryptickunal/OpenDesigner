@@ -4,15 +4,38 @@
   "use": "when an assistant proposes an edit a person should accept or reject",
   "type": "ai",
   "style": "quiet",
-  "industries": ["saas", "productivity", "crm"],
-  "tags": ["ai", "suggestion", "diff", "rewrite", "writing assistant"],
-  "states": ["suggested", "alternative", "accepted", "rejected", "undo", "hover", "focus"],
+  "industries": [
+    "saas",
+    "productivity",
+    "crm"
+  ],
+  "tags": [
+    "ai",
+    "suggestion",
+    "diff",
+    "rewrite",
+    "writing assistant"
+  ],
+  "states": [
+    "suggested",
+    "alternative",
+    "accepted",
+    "rejected",
+    "undo",
+    "hover",
+    "focus"
+  ],
   "source": null,
   "a11y": "Removed and added words use del and ins; the buttons are real buttons, the result is announced in a status line with focus moved to Undo, and the alternative count is a polite live region.",
   "width": "medium",
   "spec": {
-    "use_when": ["a writing assistant that offers two or more rewrites of the same sentence, one at a time"],
-    "avoid_when": ["the assistant answers a question rather than editing the person's text: use chat-answer", "many edits across a long document at once: list them in a review panel instead of one card per sentence"],
+    "use_when": [
+      "a writing assistant that offers two or more rewrites of the same sentence, one at a time"
+    ],
+    "avoid_when": [
+      "the assistant answers a question rather than editing the person's text: use chat-answer",
+      "many edits across a long document at once: list them in a review panel instead of one card per sentence"
+    ],
     "parts": [
       {
         "name": "label",
@@ -89,7 +112,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["original", "suggestions"],
+      "required": [
+        "original",
+        "suggestions"
+      ],
       "properties": {
         "label": {
           "type": "string",
@@ -118,7 +144,10 @@
           "part": "diffs",
           "items": {
             "type": "object",
-            "required": ["text", "diff"],
+            "required": [
+              "text",
+              "diff"
+            ],
             "properties": {
               "text": {
                 "type": "string",
@@ -134,10 +163,17 @@
                 "maxItems": 12,
                 "items": {
                   "type": "object",
-                  "required": ["op", "text"],
+                  "required": [
+                    "op",
+                    "text"
+                  ],
                   "properties": {
                     "op": {
-                      "enum": ["keep", "remove", "add"]
+                      "enum": [
+                        "keep",
+                        "remove",
+                        "add"
+                      ]
                     },
                     "text": {
                       "type": "string",
@@ -178,12 +214,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no suggestion, hide the card and leave the text field as it is"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show the card head with 'Suggested edit' and a muted block in place of the diff, with the three buttons hidden"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -202,8 +240,16 @@
         "status": "handled",
         "how": "the highlighted sentence keeps its rounded highlight on every line it wraps to; button labels never wrap",
         "evidence": "box-decoration-break: clone"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches Try another, Reject, then Accept", "Enter or Space presses the focused button", "After Accept or Reject, focus moves to Undo; Undo puts focus back on Accept"]
+    "keyboard": [
+      "Tab reaches Try another, Reject, then Accept",
+      "Enter or Space presses the focused button",
+      "After Accept or Reject, focus moves to Undo; Undo puts focus back on Accept"
+    ]
   }
 }

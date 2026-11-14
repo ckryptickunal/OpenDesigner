@@ -1,0 +1,9 @@
+{"title": "Cancel the Pro plan for Northfold Studio?", "summary": "Your team keeps Pro features until the end of this billing period.",
+ "details": [
+  {"label": "Workspace", "value": "Northfold Studio"},
+  {"label": "Plan", "value": "Pro, 12 seats"},
+  {"label": "Ends on", "value": "30 Nov"},
+  {"label": "Refund", "value": "None for this month"}],
+ "warning": "Files over the free limit of 5 GB become read-only after 30 Nov.",
+ "approve": {"label": "Cancel plan", "event": {"name": "cancel_plan", "context": {"workspace": "northfold"}}},
+ "cancel": {"label": "Keep Pro", "event": {"name": "keep_plan"}}}

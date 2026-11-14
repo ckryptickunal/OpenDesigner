@@ -4,20 +4,53 @@
   "use": "in admin and security settings, to show who changed what",
   "type": "data",
   "style": "technical",
-  "industries": ["security", "saas", "finance"],
-  "tags": ["audit", "security", "log", "events", "filter"],
-  "states": ["all events", "high risk only", "person or service account", "focus"],
+  "industries": [
+    "security",
+    "saas",
+    "finance"
+  ],
+  "tags": [
+    "audit",
+    "security",
+    "log",
+    "events",
+    "filter"
+  ],
+  "states": [
+    "all events",
+    "high risk only",
+    "person or service account",
+    "focus"
+  ],
   "source": "brand/showcase/product/06-ferrule-security",
   "a11y": "The filter is a native radio group with visible focus; risk is written as a word, not shown by colour alone.",
   "width": "medium",
   "photos": [
-    {"img": "photo-1681097561932-36d0df02b379", "author": "Anky Lau", "page": "ntLkvt6OZvQ"},
-    {"img": "photo-1604072366595-e75dc92d6bdc", "author": "Jorik Kleen", "page": "lNNHyRbmm0o"},
-    {"img": "photo-1500648767791-00dcc994a43e", "author": "Jurica Koletić", "page": "7YVZYZeITc8"}
+    {
+      "img": "photo-1681097561932-36d0df02b379",
+      "author": "Anky Lau",
+      "page": "ntLkvt6OZvQ"
+    },
+    {
+      "img": "photo-1604072366595-e75dc92d6bdc",
+      "author": "Jorik Kleen",
+      "page": "lNNHyRbmm0o"
+    },
+    {
+      "img": "photo-1500648767791-00dcc994a43e",
+      "author": "Jurica Koletić",
+      "page": "7YVZYZeITc8"
+    }
   ],
   "spec": {
-    "use_when": ["a compliance review where someone must find the risky changes quickly among routine ones"],
-    "avoid_when": ["the history of one record with old and new field values: use activity-feed", "a list of recent events with no risk or source detail: use activity-list", "a large log people sort, search and page through: put it in receipts-table style rows with filter-bar and pagination"],
+    "use_when": [
+      "a compliance review where someone must find the risky changes quickly among routine ones"
+    ],
+    "avoid_when": [
+      "the history of one record with old and new field values: use activity-feed",
+      "a list of recent events with no risk or source detail: use activity-list",
+      "a large log people sort, search and page through: put it in receipts-table style rows with filter-bar and pagination"
+    ],
     "parts": [
       {
         "name": "title",
@@ -76,7 +109,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["events"],
+      "required": [
+        "events"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -89,7 +124,10 @@
           "part": "scope"
         },
         "filter": {
-          "enum": ["all", "high"],
+          "enum": [
+            "all",
+            "high"
+          ],
           "part": "filter"
         },
         "events": {
@@ -99,7 +137,11 @@
           "part": "events",
           "items": {
             "type": "object",
-            "required": ["actor", "action", "time"],
+            "required": [
+              "actor",
+              "action",
+              "time"
+            ],
             "properties": {
               "actor": {
                 "type": "string",
@@ -107,7 +149,10 @@
                 "part": "summary"
               },
               "actor_type": {
-                "enum": ["person", "service"],
+                "enum": [
+                  "person",
+                  "service"
+                ],
                 "part": "who"
               },
               "avatar": {
@@ -117,7 +162,10 @@
                 "part": "who"
               },
               "severity": {
-                "enum": ["high", "medium"],
+                "enum": [
+                  "high",
+                  "medium"
+                ],
                 "part": "severity"
               },
               "action": {
@@ -131,8 +179,16 @@
                 "maxItems": 2,
                 "part": "meta",
                 "items": {
-                  "type": "string",
-                  "maxLength": 32
+                  "type": "object",
+                  "required": [
+                    "text"
+                  ],
+                  "properties": {
+                    "text": {
+                      "type": "string",
+                      "maxLength": 32
+                    }
+                  }
                 }
               },
               "ip": {
@@ -152,12 +208,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no events, or no high-risk ones under the filter, show empty-state ('No high-risk changes today') under the header"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the header and fill four rows with a muted square for who and muted bars for the summary, meta and time"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -175,8 +233,16 @@
         "status": "handled",
         "how": "the summary wraps beside a fixed who column, the time never wraps, and the row layout changes for wide and narrow boxes",
         "evidence": "@container (min-width: 50rem)"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab moves to the filter's checked choice", "Left and Right or Up and Down arrows move between All events and High risk, and the list updates at once"]
+    "keyboard": [
+      "Tab moves to the filter's checked choice",
+      "Left and Right or Up and Down arrows move between All events and High risk, and the list updates at once"
+    ]
   }
 }

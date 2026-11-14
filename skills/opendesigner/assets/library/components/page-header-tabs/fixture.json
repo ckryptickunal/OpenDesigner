@@ -1,0 +1,67 @@
+{
+ "breadcrumb": [
+  {
+   "label": "Accounts",
+   "href": "#accounts"
+  },
+  {
+   "label": "Renewals this quarter",
+   "href": "#renewals"
+  },
+  {
+   "label": "Harrow & Pike Logistics"
+  }
+ ],
+ "initials": "HP",
+ "title": "Harrow & Pike Logistics",
+ "summary": [
+  {
+   "label": "Owner",
+   "value": "Teodora Vasilescu",
+   "photo": {
+    "src": "https://images.unsplash.com/photo-1607569708758-0270aa4651bd?w=48&h=48&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Photo of Teodora Vasilescu"
+   }
+  },
+  {
+   "label": "Last call",
+   "value": "Monday"
+  },
+  {
+   "value": "1 renewal · €48,000.00"
+  }
+ ],
+ "secondary": {
+  "label": "Follow",
+  "event": {
+   "name": "follow_account"
+  }
+ },
+ "primary": {
+  "label": "Log a call",
+  "event": {
+   "name": "log_call"
+  }
+ },
+ "tabs": [
+  {
+   "label": "Overview"
+  },
+  {
+   "label": "Contracts",
+   "count": 4
+  },
+  {
+   "label": "Contacts",
+   "count": 11
+  },
+  {
+   "label": "Tickets",
+   "count": 3
+  },
+  {
+   "label": "Files",
+   "count": 9
+  }
+ ]
+}

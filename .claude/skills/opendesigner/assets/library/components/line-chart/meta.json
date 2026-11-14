@@ -1,0 +1,207 @@
+{
+  "name": "Line chart",
+  "summary": "One or two values over time as lines on a light grid, with the highest and lowest marked and a button that shows the same numbers as a table.",
+  "use": "for a trend over time, such as a price, a usage figure or a measurement week by week",
+  "type": "chart",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "line chart",
+    "trend",
+    "time series",
+    "history",
+    "table"
+  ],
+  "states": [
+    "one or two series",
+    "missing values as gaps",
+    "shown as a table"
+  ],
+  "source": null,
+  "a11y": "The drawing is hidden from screen readers; a data table with row and column headers carries every value and is always readable, and the button shows it on screen.",
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "an answer about how one or two numbers changed over 2 to 24 periods"
+    ],
+    "avoid_when": [
+      "amounts per period to compare side by side, or against a budget: use bar-chart",
+      "a share of a whole: use donut-breakdown",
+      "one current number with no history: use kpi-strip"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-line-chart h3",
+        "what": "what the lines measure",
+        "slot": "text"
+      },
+      {
+        "name": "summary",
+        "selector": ".odl-sub",
+        "what": "the period covered and how to read it",
+        "slot": "text"
+      },
+      {
+        "name": "unit",
+        "selector": ".odl-unit",
+        "what": "the unit of the values, above the plot",
+        "slot": "text"
+      },
+      {
+        "name": "toggle",
+        "selector": ".odl-toggle",
+        "what": "shows the numbers as a table instead of the chart, and back",
+        "slot": "none"
+      },
+      {
+        "name": "legend",
+        "selector": ".odl-legend",
+        "what": "which line is which, drawn from the table's headers when there are two",
+        "slot": "none"
+      },
+      {
+        "name": "plot",
+        "selector": ".odl-plot",
+        "what": "the lines, the grid and the highest and lowest labels, drawn from the table",
+        "slot": "none"
+      },
+      {
+        "name": "x_label",
+        "selector": "thead th:first-child",
+        "what": "the name of the time column, such as Week or Month",
+        "slot": "text"
+      },
+      {
+        "name": "series",
+        "selector": "thead th:nth-child(2)",
+        "what": "the name of the first line",
+        "slot": "text"
+      },
+      {
+        "name": "series2",
+        "selector": "thead .odl-s2",
+        "what": "the name of the second line, when there is one",
+        "slot": "text"
+      },
+      {
+        "name": "points",
+        "selector": "tbody tr",
+        "what": "one period: its label and one or two values; a null value is a gap in the line, never a zero",
+        "slot": "list"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "unit",
+        "series",
+        "points"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "title"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 90,
+          "part": "summary"
+        },
+        "unit": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "unit"
+        },
+        "x_label": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "x_label"
+        },
+        "series": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "series"
+        },
+        "series2": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "series2"
+        },
+        "points": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 24,
+          "part": "points",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "value"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 12
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "value2": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "with no values the plot shows a quiet line saying there is nothing to show yet",
+        "evidence": "No values to show yet."
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the series fails to load, show error-retry in place of the plot"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "the chart has one control, the table toggle, which is never disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "up to 24 points fit any width because the drawing scales; only the first, middle and last labels show under it",
+        "evidence": "x labels: first, middle and last, so they never crowd"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the title, summary, unit and legend wrap; the table scrolls sideways in its own box",
+        "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Show as table",
+      "Enter or Space shows the table in place of the chart; again brings the chart back"
+    ]
+  }
+}

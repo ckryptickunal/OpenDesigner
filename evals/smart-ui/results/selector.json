@@ -1,0 +1,299 @@
+{
+ "date": "2026-11-14",
+ "recall_at_3_pct": 100.0,
+ "held_back_pct": 100.0,
+ "cases": [
+  {
+   "id": "answer-policy",
+   "expect": [
+    "AnswerSources",
+    "CitationList"
+   ],
+   "ui": true,
+   "candidates": [
+    "AnswerSources",
+    "ResultList",
+    "ProgressStatus"
+   ],
+   "hit": true
+  },
+  {
+   "id": "facts-hotel",
+   "expect": [
+    "KeyFacts",
+    "Receipt"
+   ],
+   "ui": true,
+   "candidates": [
+    "KeyFacts",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "hit": true
+  },
+  {
+   "id": "define-term",
+   "expect": [
+    "SummaryCard",
+    "KeyFacts"
+   ],
+   "ui": true,
+   "candidates": [
+    "SummaryCard"
+   ],
+   "hit": true
+  },
+  {
+   "id": "table-bookings",
+   "expect": [
+    "DataTable"
+   ],
+   "ui": true,
+   "candidates": [
+    "DataTable",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "hit": true
+  },
+  {
+   "id": "bars-spend",
+   "expect": [
+    "BarChart",
+    "LineChart",
+    "DataTable"
+   ],
+   "ui": true,
+   "candidates": [
+    "BarChart"
+   ],
+   "hit": true
+  },
+  {
+   "id": "line-fare",
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "ui": true,
+   "candidates": [
+    "LineChart",
+    "Comparison"
+   ],
+   "hit": true
+  },
+  {
+   "id": "donut-categories",
+   "expect": [
+    "DonutBreakdown",
+    "DataTable",
+    "BarChart"
+   ],
+   "ui": true,
+   "candidates": [
+    "DonutBreakdown",
+    "BarChart"
+   ],
+   "hit": true
+  },
+  {
+   "id": "kpi-year",
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "ui": true,
+   "candidates": [
+    "KpiStrip",
+    "BarChart"
+   ],
+   "hit": true
+  },
+  {
+   "id": "status-refund",
+   "expect": [
+    "ProgressStatus"
+   ],
+   "ui": true,
+   "candidates": [
+    "ProgressStatus",
+    "LocationCard",
+    "FlightResults"
+   ],
+   "hit": true
+  },
+  {
+   "id": "compare-fares",
+   "expect": [
+    "Comparison"
+   ],
+   "ui": true,
+   "candidates": [
+    "Comparison",
+    "ProgressStatus"
+   ],
+   "hit": true
+  },
+  {
+   "id": "results-hotels",
+   "expect": [
+    "ResultList"
+   ],
+   "ui": true,
+   "candidates": [
+    "ResultList",
+    "LocationCard"
+   ],
+   "hit": true
+  },
+  {
+   "id": "flights-search",
+   "expect": [
+    "FlightResults",
+    "ResultList"
+   ],
+   "ui": true,
+   "candidates": [
+    "FlightResults"
+   ],
+   "hit": true
+  },
+  {
+   "id": "chips-change",
+   "expect": [
+    "QuickReplies"
+   ],
+   "ui": true,
+   "candidates": [
+    "QuickReplies",
+    "FormFields"
+   ],
+   "hit": true
+  },
+  {
+   "id": "form-passport",
+   "expect": [
+    "FormFields"
+   ],
+   "ui": true,
+   "candidates": [
+    "FormFields",
+    "KeyFacts",
+    "Receipt"
+   ],
+   "hit": true
+  },
+  {
+   "id": "slots-transfer",
+   "expect": [
+    "TimeSlots"
+   ],
+   "ui": true,
+   "candidates": [
+    "TimeSlots",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "hit": true
+  },
+  {
+   "id": "approve-cancel",
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "candidates": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ResultList"
+   ],
+   "hit": true
+  },
+  {
+   "id": "receipt-seat",
+   "expect": [
+    "Receipt",
+    "ProgressStatus"
+   ],
+   "ui": true,
+   "candidates": [
+    "Receipt",
+    "FormFields"
+   ],
+   "hit": true
+  },
+  {
+   "id": "error-search",
+   "expect": [
+    "ErrorRetry"
+   ],
+   "ui": true,
+   "candidates": [
+    "FlightResults",
+    "ErrorRetry",
+    "ResultList"
+   ],
+   "hit": true
+  },
+  {
+   "id": "location-hotel",
+   "expect": [
+    "LocationCard"
+   ],
+   "ui": true,
+   "candidates": [
+    "ProgressStatus",
+    "LocationCard",
+    "AnswerSources"
+   ],
+   "hit": true
+  },
+  {
+   "id": "file-invoice",
+   "expect": [
+    "FileCard"
+   ],
+   "ui": true,
+   "candidates": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "hit": true
+  },
+  {
+   "id": "noui-visa",
+   "expect": [],
+   "ui": false,
+   "candidates": [],
+   "hit": true
+  },
+  {
+   "id": "noui-checkin",
+   "expect": [],
+   "ui": false,
+   "candidates": [],
+   "hit": true
+  },
+  {
+   "id": "noui-breakfast",
+   "expect": [],
+   "ui": false,
+   "candidates": [],
+   "hit": true
+  },
+  {
+   "id": "noui-bags",
+   "expect": [],
+   "ui": false,
+   "candidates": [],
+   "hit": true
+  },
+  {
+   "id": "noui-thanks",
+   "expect": [],
+   "ui": false,
+   "candidates": [],
+   "hit": true
+  }
+ ]
+}

@@ -1,0 +1,148 @@
+{
+ "night": "Asleep last night · Sat 14 to Sun 15 Nov",
+ "asleep": "6 h 58 min",
+ "in_bed": "In bed 23:40 – 07:05",
+ "awake": "Awake 27 min",
+ "summary": "Sleep stages through the night: three cycles, most deep sleep early, three short wakings, the longest around 03:30",
+ "segments": [
+  {
+   "stage": "light",
+   "start": 0,
+   "width": 4
+  },
+  {
+   "stage": "deep",
+   "start": 4,
+   "width": 10
+  },
+  {
+   "stage": "rem",
+   "start": 14,
+   "width": 10
+  },
+  {
+   "stage": "awake",
+   "start": 24,
+   "width": 1
+  },
+  {
+   "stage": "light",
+   "start": 25,
+   "width": 14
+  },
+  {
+   "stage": "deep",
+   "start": 39,
+   "width": 7
+  },
+  {
+   "stage": "rem",
+   "start": 46,
+   "width": 16
+  },
+  {
+   "stage": "awake",
+   "start": 62,
+   "width": 1.5
+  },
+  {
+   "stage": "light",
+   "start": 63.5,
+   "width": 16
+  },
+  {
+   "stage": "deep",
+   "start": 79.5,
+   "width": 3
+  },
+  {
+   "stage": "rem",
+   "start": 82.5,
+   "width": 16
+  },
+  {
+   "stage": "awake",
+   "start": 98.5,
+   "width": 1.5
+  }
+ ],
+ "axis": [
+  {
+   "label": "00:00",
+   "at": 4.5
+  },
+  {
+   "label": "02:00",
+   "at": 31.5
+  },
+  {
+   "label": "04:00",
+   "at": 58.5
+  },
+  {
+   "label": "06:00",
+   "at": 85.5
+  }
+ ],
+ "totals": [
+  {
+   "stage": "awake",
+   "time": "27 min",
+   "share": 6
+  },
+  {
+   "stage": "rem",
+   "time": "1 h 34 min",
+   "share": 21
+  },
+  {
+   "stage": "light",
+   "time": "3 h 57 min",
+   "share": 53
+  },
+  {
+   "stage": "deep",
+   "time": "1 h 27 min"
+  }
+ ],
+ "week_title": "This week",
+ "week_average": "Average 7 h 02 min",
+ "week_nights": [
+  {
+   "day": "M",
+   "label": "Monday: 7 h 10 min",
+   "hours": 7.2
+  },
+  {
+   "day": "T",
+   "label": "Tuesday: 6 h 25 min",
+   "hours": 6.4
+  },
+  {
+   "day": "W",
+   "label": "Wednesday: 7 h 40 min",
+   "hours": 7.7
+  },
+  {
+   "day": "T",
+   "label": "Thursday: 6 h 05 min",
+   "hours": 6.1
+  },
+  {
+   "day": "F",
+   "label": "Friday: 7 h 55 min",
+   "hours": 7.9
+  },
+  {
+   "day": "S",
+   "label": "Saturday: 8 h 20 min",
+   "hours": 8.3
+  },
+  {
+   "day": "S",
+   "label": "Last night: 6 h 58 min",
+   "hours": 7.0
+  }
+ ],
+ "week_goal_label": "8 h goal"
+}

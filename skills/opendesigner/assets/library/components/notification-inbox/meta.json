@@ -4,21 +4,61 @@
   "use": "for a work app's notifications and mentions",
   "type": "data",
   "style": "quiet",
-  "industries": ["saas", "finance", "productivity"],
-  "tags": ["notifications", "inbox", "mentions", "unread", "activity"],
-  "states": ["unread", "read", "hover", "focus", "tab selected", "approved", "filtered"],
+  "industries": [
+    "saas",
+    "finance",
+    "productivity"
+  ],
+  "tags": [
+    "notifications",
+    "inbox",
+    "mentions",
+    "unread",
+    "activity"
+  ],
+  "states": [
+    "unread",
+    "read",
+    "hover",
+    "focus",
+    "tab selected",
+    "approved",
+    "filtered"
+  ],
   "source": null,
   "a11y": "Tabs follow the tab pattern with arrow keys; groups are labelled lists; Approve and View are real buttons and the result is shown as text. Placement as a popover is the project's.",
   "width": "narrow",
   "photos": [
-    {"img": "photo-1438761681033-6461ffad8d80", "author": "Christopher Campbell", "page": "rDEOVtE7vOs"},
-    {"img": "photo-1506794778202-cad84cf45f1d", "author": "Albert Dera", "page": "ILip77SbmOE"},
-    {"img": "photo-1725033489648-a819750348eb", "author": "Arnab De", "page": "WYwNK-zW7u4"},
-    {"img": "photo-1684598273404-2d94d7a7ce2f", "author": "Hugo ROUQUETTE", "page": "RhTXKh0UofQ"}
+    {
+      "img": "photo-1438761681033-6461ffad8d80",
+      "author": "Christopher Campbell",
+      "page": "rDEOVtE7vOs"
+    },
+    {
+      "img": "photo-1506794778202-cad84cf45f1d",
+      "author": "Albert Dera",
+      "page": "ILip77SbmOE"
+    },
+    {
+      "img": "photo-1725033489648-a819750348eb",
+      "author": "Arnab De",
+      "page": "WYwNK-zW7u4"
+    },
+    {
+      "img": "photo-1684598273404-2d94d7a7ce2f",
+      "author": "Hugo ROUQUETTE",
+      "page": "RhTXKh0UofQ"
+    }
   ],
   "spec": {
-    "use_when": ["a bell-icon popover or side panel where some notifications can be acted on in place, such as approving a request"],
-    "avoid_when": ["a short message about something that just happened: use toast-stack", "a running history of changes to one record: use activity-feed or audit-log", "a warning that applies to the whole page: use alert-banners"],
+    "use_when": [
+      "a bell-icon popover or side panel where some notifications can be acted on in place, such as approving a request"
+    ],
+    "avoid_when": [
+      "a short message about something that just happened: use toast-stack",
+      "a running history of changes to one record: use activity-feed or audit-log",
+      "a warning that applies to the whole page: use alert-banners"
+    ],
     "parts": [
       {
         "name": "title",
@@ -95,7 +135,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["groups"],
+      "required": [
+        "groups"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -109,7 +151,10 @@
           "part": "tabs",
           "items": {
             "type": "object",
-            "required": ["label", "filter"],
+            "required": [
+              "label",
+              "filter"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -134,7 +179,10 @@
           "part": "groups",
           "items": {
             "type": "object",
-            "required": ["label", "items"],
+            "required": [
+              "label",
+              "items"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -146,7 +194,10 @@
                 "maxItems": 6,
                 "items": {
                   "type": "object",
-                  "required": ["line", "time"],
+                  "required": [
+                    "line",
+                    "time"
+                  ],
                   "properties": {
                     "kind": {
                       "type": "string",
@@ -203,12 +254,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "when a tab has nothing, the groups hide but no message shows; add an empty-state line ('No mentions yet') in the panel"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show three rows with a muted circle for the avatar and two muted bars for the line and time"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -226,8 +279,17 @@
         "status": "handled",
         "how": "the text column can shrink, so long lines and quotes wrap under each other beside the avatar",
         "evidence": "grid-template-columns: var(--ds-space-8) var(--ds-size-control-sm) minmax(0, 1fr)"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Mark all read, the selected tab, each notification row, its buttons, and Notification settings", "Left and Right arrows move between the All and Mentions tabs and filter the list; only the selected tab is in the Tab order", "Enter or Space on Approve marks it approved and shows the result line; Enter on a row itself does nothing"]
+    "keyboard": [
+      "Tab reaches Mark all read, the selected tab, each notification row, its buttons, and Notification settings",
+      "Left and Right arrows move between the All and Mentions tabs and filter the list; only the selected tab is in the Tab order",
+      "Enter or Space on Approve marks it approved and shows the result line; Enter on a row itself does nothing"
+    ]
   }
 }

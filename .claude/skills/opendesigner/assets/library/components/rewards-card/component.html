@@ -20,7 +20,7 @@
 .odl-rewards-card .odl-next p { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--ds-space-inline-sm); margin: 0; font: var(--ds-text-label-md); color: var(--ds-color-text-secondary); font-variant-numeric: tabular-nums; }
 .odl-rewards-card .odl-next b { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
 .odl-rewards-card .odl-track { position: relative; block-size: var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--ds-color-surface-raised); }
-.odl-rewards-card .odl-track i { position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: 62%; border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-bold); }
+.odl-rewards-card .odl-track i { position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: calc(var(--od-ratio, 0.62) * 100%); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-bold); }
 /* The code: always dark on white so it scans in dark mode too. */
 .odl-rewards-card .odl-code { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--ds-space-inline-md); padding: var(--ds-space-inset-md); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
   border-radius: var(--ds-radius-nested); background: var(--ds-color-white); color: var(--ds-color-neutral-light-12); }
@@ -45,6 +45,9 @@
 .odl-rewards-card .odl-act { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-xs); min-block-size: var(--odl-tap); padding: 0 var(--ds-space-inset-md); border: 0; border-radius: var(--ds-radius-control);
   background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font: var(--ds-text-label-md); white-space: nowrap; cursor: pointer;
   transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+/* Rendered from data: data-active is the starting state (the script copies it); the template item stays hidden. */
+.odl-rewards-card .odl-act[data-active="true"], .odl-rewards-card .odl-act[data-active="false"] { cursor: pointer; }
+.odl-rewards-card [hidden] { display: none !important; }
 .odl-rewards-card .odl-act:hover { background: var(--ds-color-bg-action-primary-hover); }
 .odl-rewards-card .odl-act svg { display: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); stroke-width: var(--ds-icon-stroke-md); }
 .odl-rewards-card .odl-act[aria-pressed="true"] { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
@@ -58,13 +61,13 @@
   .odl-rewards-card .odl-act { grid-column: 2; justify-self: start; } }
 @media (prefers-reduced-motion: reduce) { .odl-rewards-card, .odl-rewards-card *, .odl-rewards-card *::before { transition: none !important; animation: none !important; } }
 </style>
-<section class="odl-rewards-card" aria-label="Brindlecup Rewards card">
+<section class="odl-rewards-card" aria-label="Brindlecup Rewards card" data-od-label="programme">
   <div class="odl-wrap">
     <div class="odl-face">
-      <div class="odl-brand"><p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg>Brindlecup Rewards</p><span class="odl-tier">Silver member</span></div>
-      <div class="odl-pts"><p class="odl-lbl">Points balance</p><p class="odl-big">1,240 <small>pts</small></p></div>
-      <div class="odl-next">
-        <p><span><b>760 points</b> to Gold</span><span>1,240 / 2,000</span></p>
+      <div class="odl-brand"><p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1"/><path d="M6 2v2"/></svg><span data-od-slot="programme">Brindlecup Rewards</span></p><span class="odl-tier" data-od-slot="tier" data-od-optional>Silver member</span></div>
+      <div class="odl-pts"><p class="odl-lbl">Points balance</p><p class="odl-big"><span data-od-slot="balance">1,240</span> <small>pts</small></p></div>
+      <div class="odl-next" data-od-optional>
+        <p><span><b class="odl-togo">760 points</b> to <span data-od-slot="next_tier_name">Gold</span></span><span class="odl-of">1,240 / 2,000</span><data data-od-slot="next_tier_target" hidden>2000</data></p>
         <div class="odl-track" role="progressbar" aria-label="Progress to Gold" aria-valuemin="0" aria-valuemax="2000" aria-valuenow="1240" aria-valuetext="1,240 of 2,000 points"><i></i></div>
       </div>
       <div class="odl-code">
@@ -76,18 +79,23 @@
             <rect class="odl-eye" x="0" y="18" width="7" height="7"/><rect class="odl-eye-in" x="1" y="19" width="5" height="5"/><rect class="odl-eye" x="2" y="20" width="3" height="3"/>
           </svg>
         </div>
-        <p><b>Wairimu Njoroge</b><span>Scan at the till to earn and pay</span><span class="odl-num">4417 2208 9631</span></p>
+        <p><b data-od-slot="member_name">Wairimu Njoroge</b><span data-od-slot="member_instruction" data-od-optional>Scan at the till to earn and pay</span><span class="odl-num" data-od-slot="member_number">4417 2208 9631</span></p>
       </div>
     </div>
     <div class="odl-offers">
-      <h3>Offers for you</h3>
-      <ul>
-        <li>
+      <h3 data-od-slot="offers_title">Offers for you</h3>
+      <ul data-od-list="offers">
+        <li data-od-item data-od-template hidden>
+          <img src="https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=144&amp;h=144&amp;fit=crop&amp;crop=focalpoint&amp;fp-x=0.18&amp;fp-y=0.45&amp;fp-z=1.5&amp;auto=format&amp;q=70" class="odl-ph" data-od-media="photo" alt="" width="72" height="72" loading="lazy" decoding="async">
+          <p class="odl-offer"><b data-od-slot="title"></b><span data-od-slot="detail" data-od-optional></span></p>
+          <button type="button" class="odl-act" aria-pressed="false" data-od-var="active" data-active="false" data-od-label="activate_label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="odl-l">Activate</span></button>
+        </li>
+        <li data-od-item>
           <img class="odl-ph" src="https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=144&amp;h=144&amp;fit=crop&amp;crop=focalpoint&amp;fp-x=0.18&amp;fp-y=0.45&amp;fp-z=1.5&amp;auto=format&amp;q=70" alt="Sliced fresh fruit" width="72" height="72" loading="lazy" decoding="async">
           <p class="odl-offer"><b>Free fruit cup with any drink</b><span>Ends Sunday</span></p>
           <button type="button" class="odl-act" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="odl-l">Activate</span><span class="odl-sr"> free fruit cup offer</span></button>
         </li>
-        <li>
+        <li data-od-item>
           <img class="odl-ph" src="https://images.unsplash.com/photo-1563311977-d285756282dc?w=144&amp;h=144&amp;fit=crop&amp;crop=focalpoint&amp;fp-x=0.8&amp;fp-y=0.72&amp;fp-z=1.4&amp;auto=format&amp;q=70" alt="Cappuccino with latte art" width="72" height="72" loading="lazy" decoding="async">
           <p class="odl-offer"><b>Double points on coffee</b><span>3 days left · any size</span></p>
           <button type="button" class="odl-act" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="odl-l">Active</span><span class="odl-sr"> double points offer</span></button>
@@ -100,6 +108,21 @@
 document.querySelectorAll(".odl-rewards-card").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
+  // Rendered from data: points to go, the progress bar and each offer's state come from the marked values.
+  const fmt = new Intl.NumberFormat("en"), num = (el) => Number((el?.textContent || "").replace(/[^\d.]/g, ""));
+  const bal = num(root.querySelector('[data-od-slot="balance"]')), target = num(root.querySelector('[data-od-slot="next_tier_target"]'));
+  const next = root.querySelector(".odl-next"), tier = root.querySelector('[data-od-slot="next_tier_name"]')?.textContent.trim();
+  if (next && target) {
+    const track = next.querySelector(".odl-track");
+    next.querySelector(".odl-togo").textContent = `${fmt.format(Math.max(0, target - bal))} points`;
+    next.querySelector(".odl-of").textContent = `${fmt.format(bal)} / ${fmt.format(target)}`;
+    track.querySelector("i").style.setProperty("--od-ratio", String(Math.min(1, bal / target)));
+    track.setAttribute("aria-label", `Progress to ${tier}`); track.setAttribute("aria-valuemax", String(target));
+    track.setAttribute("aria-valuenow", String(bal)); track.setAttribute("aria-valuetext", `${fmt.format(bal)} of ${fmt.format(target)} points`);
+  }
+  root.querySelectorAll(".odl-act[data-active]").forEach((b) => {
+    const on = b.dataset.active === "true"; b.setAttribute("aria-pressed", String(on)); b.querySelector(".odl-l").textContent = on ? "Active" : "Activate";
+  });
   root.querySelectorAll(".odl-act").forEach((b) => b.addEventListener("click", () => {
     const on = b.getAttribute("aria-pressed") !== "true";
     b.setAttribute("aria-pressed", String(on)); b.querySelector(".odl-l").textContent = on ? "Active" : "Activate";

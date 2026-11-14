@@ -31,8 +31,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a confirmation screen right after buying, to show the ticket the fan will scan"],
-    "avoid_when": ["a flight or train journey: use boarding-pass", "choosing a seat before buying: use seat-picker", "browsing upcoming events to buy: use media-shelf or calendar-agenda"],
+    "use_when": [
+      "a confirmation screen right after buying, to show the ticket the fan will scan"
+    ],
+    "avoid_when": [
+      "a flight or train journey: use boarding-pass",
+      "choosing a seat before buying: use seat-picker",
+      "browsing upcoming events to buy: use media-shelf or calendar-agenda"
+    ],
     "parts": [
       {
         "name": "photo",
@@ -103,11 +109,19 @@
     ],
     "data": {
       "type": "object",
-      "required": ["act", "venue", "when", "ticket_number"],
+      "required": [
+        "act",
+        "venue",
+        "when",
+        "ticket_number"
+      ],
       "properties": {
         "photo": {
           "type": "object",
-          "required": ["src", "alt"],
+          "required": [
+            "src",
+            "alt"
+          ],
           "part": "photo",
           "properties": {
             "src": {
@@ -147,7 +161,10 @@
           "part": "when",
           "items": {
             "type": "object",
-            "required": ["label", "value"],
+            "required": [
+              "label",
+              "value"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -167,7 +184,10 @@
           "part": "seat",
           "items": {
             "type": "object",
-            "required": ["label", "value"],
+            "required": [
+              "label",
+              "value"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -203,12 +223,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no tickets yet, show empty-state ('No tickets yet') with a link to browse events"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the card shape: the photo area already has a dark fill, so add muted blocks for the times, seat and code"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -227,8 +249,17 @@
         "status": "handled",
         "how": "times and seat values never wrap, so keep them short; the act and venue wrap onto more lines",
         "evidence": "dd { margin: 0; font: var(--ds-text-title-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Add to wallet, then Transfer", "Enter or Space on Add to wallet switches it to In your wallet and back", "Transfer is a button with no action in the file"]
+    "keyboard": [
+      "Tab reaches Add to wallet, then Transfer",
+      "Enter or Space on Add to wallet switches it to In your wallet and back",
+      "Transfer is a button with no action in the file"
+    ]
   }
 }

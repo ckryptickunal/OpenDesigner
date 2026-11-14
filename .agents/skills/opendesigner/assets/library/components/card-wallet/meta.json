@@ -33,8 +33,14 @@
     }
   ],
   "spec": {
-    "use_when": ["one card or account with a few quick actions and a short list of what it was spent on"],
-    "avoid_when": ["a full statement with search, filters or many rows: use receipts-table", "a points or loyalty balance: use rewards-card", "saving towards a target: use savings-goal"],
+    "use_when": [
+      "one card or account with a few quick actions and a short list of what it was spent on"
+    ],
+    "avoid_when": [
+      "a full statement with search, filters or many rows: use receipts-table",
+      "a points or loyalty balance: use rewards-card",
+      "saving towards a target: use savings-goal"
+    ],
     "parts": [
       {
         "name": "account",
@@ -123,7 +129,12 @@
     ],
     "data": {
       "type": "object",
-      "required": ["account", "balance", "currency", "card"],
+      "required": [
+        "account",
+        "balance",
+        "currency",
+        "card"
+      ],
       "properties": {
         "account": {
           "type": "string",
@@ -141,7 +152,10 @@
         },
         "card": {
           "type": "object",
-          "required": ["name", "last4"],
+          "required": [
+            "name",
+            "last4"
+          ],
           "properties": {
             "name": {
               "type": "string",
@@ -219,7 +233,10 @@
               "part": "transactions",
               "items": {
                 "type": "object",
-                "required": ["name", "amount"],
+                "required": [
+                  "name",
+                  "amount"
+                ],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -234,7 +251,10 @@
                     "maxLength": 10
                   },
                   "direction": {
-                    "enum": ["in", "out"]
+                    "enum": [
+                      "in",
+                      "out"
+                    ]
                   },
                   "photo": {
                     "type": "string",
@@ -244,17 +264,100 @@
               }
             }
           }
+        },
+        "card_label": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "card_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "card_type": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "card_last4": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "card_number": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "card_expiry": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "card_cvc": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "recent_title": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "recent_period": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "transactions": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "properties": {
+              "photo": {
+                "type": "object",
+                "required": [
+                  "src",
+                  "alt"
+                ],
+                "properties": {
+                  "src": {
+                    "type": "string",
+                    "maxLength": 2048
+                  },
+                  "alt": {
+                    "type": "string",
+                    "maxLength": 200
+                  }
+                }
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "detail": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "amount": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "direction": {
+                "enum": [
+                  "in",
+                  "out"
+                ]
+              }
+            }
+          }
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no transactions, keep the Recent heading and put one secondary line under it ('No payments yet this month')"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the card and buttons, show the balance and each transaction row as muted blocks of the same height"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -273,8 +376,17 @@
         "status": "handled",
         "how": "long merchant names end in an ellipsis; amounts and the card number never wrap",
         "evidence": "text-overflow: ellipsis; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Card details, Add money, Send and Freeze card in that order", "Enter or Space on Card details shows or masks the full card number, expiry and CVC", "Enter or Space on Freeze card freezes or unfreezes it; while frozen, Send and Card details are disabled and Tab skips them"]
+    "keyboard": [
+      "Tab reaches Card details, Add money, Send and Freeze card in that order",
+      "Enter or Space on Card details shows or masks the full card number, expiry and CVC",
+      "Enter or Space on Freeze card freezes or unfreezes it; while frozen, Send and Card details are disabled and Tab skips them"
+    ]
   }
 }

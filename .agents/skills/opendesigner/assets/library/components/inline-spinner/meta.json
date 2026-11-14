@@ -58,7 +58,24 @@
     ],
     "data": {
       "type": "object",
-      "properties": {}
+      "properties": {
+        "save": {
+          "type": "object",
+          "required": [
+            "label",
+            "event"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          }
+        }
+      }
     },
     "edge": {
       "empty": {
@@ -90,6 +107,10 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": [

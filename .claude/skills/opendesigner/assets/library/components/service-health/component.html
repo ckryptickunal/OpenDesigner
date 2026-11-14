@@ -33,6 +33,7 @@
 .odl-service-health .odl-prev { stroke: var(--ds-color-border-strong); stroke-dasharray: 2 3; fill: none; }
 .odl-service-health .odl-line { stroke: var(--ds-color-text-primary); fill: none; stroke-linejoin: round; }
 .odl-service-health .odl-hot { stroke: var(--ds-color-text-warning); }
+.odl-service-health [hidden] { display: none !important; }
 .odl-service-health .odl-gap { fill: var(--ds-color-bg-neutral-subtle); }
 .odl-service-health .odl-deploy { stroke: var(--ds-color-border-strong); stroke-dasharray: 2 3; }
 .odl-service-health .odl-plot line, .odl-service-health .odl-plot path, .odl-service-health .odl-plot circle { vector-effect: non-scaling-stroke; stroke-width: 1.5; }
@@ -57,17 +58,17 @@
   .odl-service-health .odl-now { justify-items: start; }
 }
 </style>
-<article class="odl-service-health" aria-label="settle-api latency">
+<article class="odl-service-health" aria-label="settle-api latency" data-od-label="service">
   <div class="odl-card">
   <header>
-    <div><h3>Latency p95</h3><p class="odl-meta">settle-api · last 24 hours</p></div>
-    <dl class="odl-now"><dt>Now</dt><dd>547 ms</dd></dl>
+    <div><h3 data-od-slot="title">Latency p95</h3><p class="odl-meta" data-od-optional><span data-od-slot="service" data-od-optional>settle-api</span> · <span data-od-slot="window" data-od-optional>last 24 hours</span></p></div>
+    <dl class="odl-now"><dt>Now</dt><dd><span data-od-slot="now">547</span> <span data-od-slot="unit">ms</span></dd></dl>
   </header>
-  <p class="odl-status"><span><svg class="odl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Above its 450 ms objective since 13:21</span><a href="#">View alert<svg class="odl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></p>
+  <p class="odl-status" data-od-optional><span><svg class="odl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg><span data-od-slot="status">Above its 450 ms objective since 13:21</span></span><a href="#" data-od-action="alert"><span data-od-slot="label">View alert</span><svg class="odl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a></p>
   <figure>
     <div class="odl-plot">
     <span class="odl-pin is-max" aria-hidden="true">600 ms</span><span class="odl-pin is-obj" aria-hidden="true">Objective 450 ms</span>
-    <svg viewBox="0 0 300 120" preserveAspectRatio="none" role="img" aria-label="p95 latency over the last 24 hours: steady near 380 ms, then rising to 547 ms in the last hour, shortly after deploy v2.41.0">
+    <svg viewBox="0 0 300 120" preserveAspectRatio="none" role="img" data-od-label="summary" aria-label="p95 latency over the last 24 hours: steady near 380 ms, then rising to 547 ms in the last hour, shortly after deploy v2.41.0">
       <line class="odl-grid" x1="0" y1="0.5" x2="300" y2="0.5"/><line class="odl-grid" x1="0" y1="119.5" x2="300" y2="119.5"/>
       <rect class="odl-gap" x="150" y="1" width="14" height="118"/>
       <line class="odl-objective" x1="0" y1="45" x2="300" y2="45"/>
@@ -78,8 +79,57 @@
     </svg>
     <span class="odl-dep" aria-hidden="true"></span><span class="odl-end" aria-hidden="true"></span>
     </div>
-    <div class="odl-axis" aria-hidden="true"><span style="--x: 0">14:00</span><span style="--x: 25">20:00</span><span style="--x: 50">02:00</span><span style="--x: 75">08:00</span><span style="--x: 100">Now</span></div>
+    <div class="odl-axis" aria-hidden="true" data-od-list="axis"><span data-od-item data-od-template hidden data-od-slot="label"></span><span data-od-item style="--x: 0">14:00</span><span data-od-item style="--x: 25">20:00</span><span data-od-item style="--x: 50">02:00</span><span data-od-item style="--x: 75">08:00</span><span data-od-item style="--x: 100">Now</span></div>
     <figcaption><span><i></i>Today</span><span><i class="odl-k-prev"></i>Yesterday</span><span><i class="odl-k-obj"></i>Objective</span><span><i class="odl-k-gap"></i>No data</span><span><i class="odl-k-dep"></i>Deploy</span></figcaption>
+    <div class="odl-data" hidden><data data-od-slot="objective">450</data><data data-od-slot="scale_max">600</data><data data-od-slot="deploy_at">0.873</data>
+      <ol data-od-list="series"><li data-od-item data-od-template hidden><data data-od-slot="value"></data></li></ol>
+      <ol data-od-list="previous"><li data-od-item data-od-template hidden><data data-od-slot="value"></data></li></ol>
+      <ol data-od-list="gaps"><li data-od-item data-od-template hidden><data data-od-slot="from"></data><data data-od-slot="to"></data></li></ol></div>
   </figure>
   </div>
 </article>
+<script>
+// Rendered from data: when the series list holds values, the plot, pins, markers and axis are drawn from them.
+document.querySelectorAll(".odl-service-health").forEach((root) => {
+  const nums = (list, key = "value") => [...root.querySelectorAll(`[data-od-list="${list}"] > [data-od-item]:not([data-od-template])`)]
+    .map((li) => Number(li.querySelector(`[data-od-slot="${key}"]`)?.textContent)).filter((n) => Number.isFinite(n));
+  const series = nums("series");
+  const key = series.join(",") + "|" + nums("previous").join(",");
+  if (series.length < 2 && root.dataset.odComponent) { // rendered with no series yet: an empty plot, never the sample's lines
+    root.querySelectorAll(".odl-plot path").forEach((n) => n.removeAttribute("d"));
+    root.querySelectorAll(".odl-plot .odl-pin, .odl-plot .odl-dep, .odl-plot .odl-end, .odl-plot .odl-deploy, .odl-plot .odl-objective, .odl-plot .odl-gap").forEach((n) => n.remove());
+    return;
+  }
+  if (series.length < 2 || root.dataset.odlKey === key) return; // the sample drawing stays until data arrives
+  root.dataset.odlKey = key;
+  const one = (n) => { const t = root.querySelector(`.odl-data [data-od-slot="${n}"]`)?.textContent.trim(); return t === "" || t == null ? null : Number(t); };
+  const prev = nums("previous"), obj = one("objective"), dep = one("deploy_at");
+  const unit = root.querySelector('.odl-now [data-od-slot="unit"]')?.textContent.trim() || "";
+  const max = one("scale_max") || Math.max(...series, ...prev, obj || 0) * 1.1 || 1;
+  const W = 300, H = 120, x = (i, n) => (i / (n - 1)) * W, y = (v) => Math.max(1, Math.min(H - 1, H - (v / max) * H));
+  const path = (vs) => vs.map((v, i) => `${i ? "L" : "M"}${x(i, vs.length).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
+  const svg = root.querySelector(".odl-plot svg");
+  const [line, hot] = svg.querySelectorAll(".odl-line");
+  line.setAttribute("d", path(series));
+  const hotParts = [];
+  if (obj != null) series.forEach((v, i) => { if (i && v > obj && series[i - 1] > obj) hotParts.push(`M${x(i - 1, series.length).toFixed(1)} ${y(series[i - 1]).toFixed(1)} L${x(i, series.length).toFixed(1)} ${y(v).toFixed(1)}`); });
+  hot.setAttribute("d", hotParts.join(" "));
+  const p = svg.querySelector(".odl-prev");
+  if (prev.length > 1) p.setAttribute("d", path(prev)); else p.removeAttribute("d");
+  const o = svg.querySelector(".odl-objective"), pinObj = root.querySelector(".odl-pin.is-obj");
+  if (obj != null) { o.setAttribute("y1", y(obj)); o.setAttribute("y2", y(obj)); pinObj.style.insetBlockStart = `${(y(obj) / H) * 100}%`; pinObj.textContent = `Objective ${obj} ${unit}`.trim(); }
+  else { o.remove(); pinObj.remove(); }
+  root.querySelector(".odl-pin.is-max").textContent = `${max} ${unit}`.trim();
+  const last = series[series.length - 1];
+  root.querySelector(".odl-end").style.insetBlockStart = `${(y(last) / H) * 100}%`;
+  const dl = svg.querySelector(".odl-deploy"), dm = root.querySelector(".odl-dep");
+  if (dep != null) { dl.setAttribute("x1", dep * W); dl.setAttribute("x2", dep * W); dm.style.insetInlineStart = `${dep * 100}%`; } else { dl.remove(); dm.remove(); }
+  const gaps = [...root.querySelectorAll('[data-od-list="gaps"] > [data-od-item]:not([data-od-template])')]
+    .map((li) => [Number(li.querySelector('[data-od-slot="from"]')?.textContent), Number(li.querySelector('[data-od-slot="to"]')?.textContent)]);
+  const rect = svg.querySelector(".odl-gap");
+  gaps.forEach(([a, b], i) => { const r = i ? rect.cloneNode() : rect; r.setAttribute("x", a * W); r.setAttribute("width", Math.max(0, b - a) * W); if (i) rect.after(r); });
+  if (!gaps.length) rect.remove();
+  const ticks = [...root.querySelectorAll(".odl-axis > span:not([hidden])")];
+  ticks.forEach((t, i) => t.style.setProperty("--x", ticks.length > 1 ? String((i / (ticks.length - 1)) * 100) : "0"));
+});
+</script>

@@ -1,0 +1,10 @@
+{"title": "Payments to reconcile",
+ "summary": "4 from the card processor · €8,214.50",
+ "rows": [
+  {"name": "Holloway Print Works", "reference": "INV 2291 HOLLOWAY", "amount": "€3,480.00", "currency": "EUR", "status": "matched", "status_label": "Matched", "key": "pay_7781", "value": false},
+  {"name": "Brightmere Florists", "reference": "BRIGHTMERE OCT", "amount": "€612.50", "currency": "EUR", "status": "suggested", "status_label": "Suggested", "key": "pay_7782", "value": true},
+  {"name": "Quarrytown Bikes", "amount": "€2,950.00", "currency": "EUR", "status": "short", "status_label": "Part payment", "key": "pay_7783", "value": false},
+  {"name": "Elmstead Dental Group", "reference": "ED-00412", "amount": "€1,172.00", "status": "none", "status_label": "No match", "key": "pay_7784", "value": true}
+ ],
+ "primary": {"label": "Confirm matches", "event": {"name": "confirm_matches"}},
+ "secondary": {"label": "Hold as credit", "event": {"name": "hold_as_credit"}}}

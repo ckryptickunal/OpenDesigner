@@ -4,15 +4,36 @@
   "use": "as the keyboard-first way to reach any page or action in a work app",
   "type": "navigation",
   "style": "technical",
-  "industries": ["devtools", "saas", "productivity"],
-  "tags": ["command palette", "search", "keyboard", "shortcuts", "cmd k"],
-  "states": ["active option", "hover", "filtered", "no results"],
+  "industries": [
+    "devtools",
+    "saas",
+    "productivity"
+  ],
+  "tags": [
+    "command palette",
+    "search",
+    "keyboard",
+    "shortcuts",
+    "cmd k"
+  ],
+  "states": [
+    "active option",
+    "hover",
+    "filtered",
+    "no results"
+  ],
   "source": "brand/showcase/components/02-command-palette",
   "a11y": "A combobox with a listbox: arrow keys move the active option through aria-activedescendant, and groups hide when nothing in them matches.",
   "width": "medium",
   "spec": {
-    "use_when": ["a jump-to search over pages and records in a tool with many screens, opened from a shortcut"],
-    "avoid_when": ["a few actions on one item: use action-menu", "the main navigation people see all the time: use sidebar-nav", "asking an assistant a free question: use ai-composer"],
+    "use_when": [
+      "a jump-to search over pages and records in a tool with many screens, opened from a shortcut"
+    ],
+    "avoid_when": [
+      "a few actions on one item: use action-menu",
+      "the main navigation people see all the time: use sidebar-nav",
+      "asking an assistant a free question: use ai-composer"
+    ],
     "parts": [
       {
         "name": "search",
@@ -47,7 +68,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["groups"],
+      "required": [
+        "groups"
+      ],
       "properties": {
         "placeholder": {
           "type": "string",
@@ -61,7 +84,10 @@
           "part": "groups",
           "items": {
             "type": "object",
-            "required": ["label", "options"],
+            "required": [
+              "label",
+              "options"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -73,7 +99,9 @@
                 "maxItems": 8,
                 "items": {
                   "type": "object",
-                  "required": ["label"],
+                  "required": [
+                    "label"
+                  ],
                   "properties": {
                     "label": {
                       "type": "string",
@@ -111,8 +139,9 @@
         "evidence": "No commands match. Try a shorter word."
       },
       "loading": {
-        "status": "not_built",
-        "how": "while results load, keep the search box and show two or three muted option rows in the list"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -131,8 +160,16 @@
         "status": "handled",
         "how": "long command labels are cut with an ellipsis on one line",
         "evidence": "text-overflow: ellipsis; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Typing in the search box filters the commands and hides empty groups", "Down and Up arrows move the active option and wrap at the ends; the search box keeps focus", "Enter and Esc are shown in the footer but the file does not handle them"]
+    "keyboard": [
+      "Typing in the search box filters the commands and hides empty groups",
+      "Down and Up arrows move the active option and wrap at the ends; the search box keeps focus",
+      "Enter and Esc are shown in the footer but the file does not handle them"
+    ]
   }
 }

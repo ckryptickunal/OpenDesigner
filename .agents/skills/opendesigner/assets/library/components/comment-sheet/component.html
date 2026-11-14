@@ -60,21 +60,24 @@
   .odl-comment-sheet .odl-composer { padding-inline: var(--ds-space-inset-lg); }
 }
 @media (prefers-reduced-motion: reduce) { .odl-comment-sheet, .odl-comment-sheet *, .odl-comment-sheet *::before { transition: none !important; animation: none !important; } }
+.odl-comment-sheet .odl-c ul > .od-empty { display: none; } /* a renderer's "nothing yet" line where an empty list should simply show nothing */
+.odl-comment-sheet [hidden] { display: none; }
 </style>
 <div class="odl-comment-sheet">
   <div class="odl-screen">
-    <div class="odl-behind" aria-hidden="true"><img class="odl-behind-photo" src="https://images.unsplash.com/photo-1514565131-fce0801e5785?w=880&h=440&fit=crop&auto=format&q=70" alt="" width="440" height="220" loading="lazy" decoding="async"></div>
+    <div class="odl-behind" aria-hidden="true"><img class="odl-behind-photo" data-od-media="post_photo" src="https://images.unsplash.com/photo-1514565131-fce0801e5785?w=880&h=440&fit=crop&auto=format&q=70" alt="" width="440" height="220" loading="lazy" decoding="async"></div>
     <div class="odl-scrim" aria-hidden="true"></div>
     <section class="odl-sheet" role="dialog" aria-modal="true" aria-labelledby="odl-cs-title">
-      <div class="odl-top"><span class="odl-grab" aria-hidden="true"></span><h3 id="odl-cs-title">Comments <span>86</span></h3>
+      <div class="odl-top"><span class="odl-grab" aria-hidden="true"></span><h3 id="odl-cs-title">Comments <span data-od-slot="count" data-od-optional>86</span></h3>
         <button type="button" class="odl-close" aria-label="Close comments"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>
-      <ul class="odl-list" tabindex="0" aria-label="86 comments">
-        <li class="odl-c"><span class="odl-av" aria-hidden="true"><img src="https://images.unsplash.com/photo-1705645930353-0e335311ef20?w=80&h=80&fit=crop&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"></span>
+      <ul class="odl-list" tabindex="0" aria-label="86 comments" data-od-list="comments">
+        <li class="odl-c" data-od-item data-od-template hidden><span class="odl-av" aria-hidden="true"><img data-od-media="avatar" src="https://images.unsplash.com/photo-1705645930353-0e335311ef20?w=80&amp;h=80&amp;fit=crop&amp;auto=format&amp;q=70" alt="" width="40" height="40" loading="lazy" decoding="async"></span><div class="odl-text"><p class="odl-meta"><b data-od-slot="name"></b><span class="odl-author" data-od-when="is_author=true">Author</span><time data-od-slot="time"></time></p><p data-od-slot="text"></p><button type="button" class="odl-reply">Reply</button></div><button type="button" class="odl-like" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span data-od-slot="likes"></span></button><ul data-od-list="replies"><li class="odl-c" data-od-item data-od-template hidden><span class="odl-av is-sm" aria-hidden="true"><img data-od-media="avatar" src="https://images.unsplash.com/photo-1705645930353-0e335311ef20?w=48&amp;h=48&amp;fit=crop&amp;auto=format&amp;q=70" alt="" width="24" height="24" loading="lazy" decoding="async"></span><div class="odl-text"><p class="odl-meta"><b data-od-slot="name"></b><span class="odl-author" data-od-when="is_author=true">Author</span><time data-od-slot="time"></time></p><p data-od-slot="text"></p><button type="button" class="odl-reply">Reply</button></div><button type="button" class="odl-like" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span data-od-slot="likes"></span></button></li></ul><button type="button" class="odl-more" data-od-optional>View <span data-od-slot="more_replies"></span> more replies</button></li>
+        <li class="odl-c" data-od-item><span class="odl-av" aria-hidden="true"><img src="https://images.unsplash.com/photo-1705645930353-0e335311ef20?w=80&h=80&fit=crop&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"></span>
           <div class="odl-text"><p class="odl-meta"><b>rafal.makes</b><span class="odl-author">Author</span><time>1 h</time></p>
             <p>Shot handheld at 1/60. Lens and settings are in the first reply, since a few of you asked.</p><button type="button" class="odl-reply">Reply</button></div>
           <button type="button" class="odl-like" aria-pressed="false" data-n="214" aria-label="Like, 214 likes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span>214</span></button>
         </li>
-        <li class="odl-c"><span class="odl-av" aria-hidden="true"><img src="https://images.unsplash.com/photo-1596580817363-a4a8f67d4bc8?w=80&h=80&fit=crop&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"></span>
+        <li class="odl-c" data-od-item><span class="odl-av" aria-hidden="true"><img src="https://images.unsplash.com/photo-1596580817363-a4a8f67d4bc8?w=80&h=80&fit=crop&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"></span>
           <div class="odl-text"><p class="odl-meta"><b>kwesi.frames</b><time>2 h</time></p>
             <p>The lights on those towers are unreal. Which lens?</p><button type="button" class="odl-reply">Reply</button></div>
           <button type="button" class="odl-like" aria-pressed="true" data-n="48" aria-label="Unlike, 48 likes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span>48</span></button>
@@ -87,19 +90,19 @@
           </ul>
           <button type="button" class="odl-more">View 4 more replies</button>
         </li>
-        <li class="odl-c"><span class="odl-av" aria-hidden="true"><img src="https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=80&h=80&fit=crop&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"></span>
+        <li class="odl-c" data-od-item><span class="odl-av" aria-hidden="true"><img src="https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=80&h=80&fit=crop&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"></span>
           <div class="odl-text"><p class="odl-meta"><b>leilani.k</b><time>3 h</time></p>
             <p>Saving this for my trip in March. Is the roof open to visitors or was this a friend's flat?</p><button type="button" class="odl-reply">Reply</button></div>
           <button type="button" class="odl-like" aria-pressed="false" data-n="9" aria-label="Like, 9 likes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span>9</span></button>
         </li>
-        <li class="odl-c"><span class="odl-av" aria-hidden="true"><img src="https://images.unsplash.com/photo-1607569708758-0270aa4651bd?w=80&h=80&fit=crop&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"></span>
+        <li class="odl-c" data-od-item><span class="odl-av" aria-hidden="true"><img src="https://images.unsplash.com/photo-1607569708758-0270aa4651bd?w=80&h=80&fit=crop&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"></span>
           <div class="odl-text"><p class="odl-meta"><b>mireille.v</b><time>5 h</time></p>
             <p>The colours in the third photo look like a painting.</p><button type="button" class="odl-reply">Reply</button></div>
           <button type="button" class="odl-like" aria-pressed="false" data-n="3" aria-label="Like, 3 likes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span>3</span></button>
         </li>
       </ul>
       <form class="odl-composer">
-        <span class="odl-av" aria-hidden="true"><img src="https://images.unsplash.com/photo-1611403119860-57c4937ef987?w=80&h=80&fit=crop&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"></span>
+        <span class="odl-av" aria-hidden="true"><img data-od-media="viewer_avatar" src="https://images.unsplash.com/photo-1611403119860-57c4937ef987?w=80&h=80&fit=crop&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"></span>
         <label class="odl-field"><span class="odl-sr">Add a comment for rafal.makes</span><input type="text" placeholder="Add a comment…" autocomplete="off" enterkeyhint="send">
           <button type="submit" class="odl-post" disabled>Post</button></label>
       </form>
@@ -112,11 +115,18 @@ document.querySelectorAll(".odl-comment-sheet").forEach((root) => {
   root.dataset.odlReady = "1";
   const list = root.querySelector(".odl-list"), form = root.querySelector(".odl-composer"), input = form.querySelector("input"), post = form.querySelector(".odl-post");
   const heart = root.querySelector(".odl-like svg"), me = form.querySelector(".odl-av img");
-  const wire = (b) => b.addEventListener("click", () => {
+  const count = root.querySelector("h3 span"); // rendered from data: name the list by its count
+  if (count && count.textContent.trim()) list.setAttribute("aria-label", `${count.textContent.trim()} comments`);
+  const wire = (b) => {
+    if (b.dataset.n === undefined) { // rendered from data: the count is only in the text
+      b.dataset.n = String(Number(b.querySelector("span").textContent.replace(/\D/g, "")) || 0);
+      b.setAttribute("aria-label", `${b.getAttribute("aria-pressed") === "true" ? "Unlike" : "Like"}, ${b.dataset.n} ${b.dataset.n === "1" ? "like" : "likes"}`);
+    }
+    b.addEventListener("click", () => {
     const on = b.getAttribute("aria-pressed") !== "true", n = Number(b.dataset.n) + (on ? 1 : -1);
     b.dataset.n = n; b.setAttribute("aria-pressed", String(on)); b.querySelector("span").textContent = n;
     b.setAttribute("aria-label", `${on ? "Unlike" : "Like"}, ${n} ${n === 1 ? "like" : "likes"}`);
-  });
+  }); };
   root.querySelectorAll(".odl-like").forEach(wire);
   root.querySelectorAll(".odl-reply").forEach((r) => r.addEventListener("click", () => {
     const who = r.parentElement.querySelector("b").textContent;

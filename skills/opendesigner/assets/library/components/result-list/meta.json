@@ -1,0 +1,276 @@
+{
+  "name": "Result list",
+  "summary": "Up to eight results as cards: a photo, the name, one meta line, an optional detail and badge, a price and one button each.",
+  "use": "when someone asks to find or be shown a few places, stays, products or services and will open one",
+  "type": "content",
+  "style": "friendly",
+  "industries": [
+    "travel",
+    "food",
+    "retail",
+    "events",
+    "home",
+    "any"
+  ],
+  "tags": [
+    "results",
+    "search",
+    "list",
+    "cards",
+    "recommendations"
+  ],
+  "states": [
+    "with photo",
+    "without photo",
+    "badge",
+    "price",
+    "hover",
+    "focus",
+    "disabled",
+    "stacks on a phone"
+  ],
+  "source": null,
+  "a11y": "A list of results, each with its name as text and its photo described; each button is named with its result (\"View, Casa da Calçada\").",
+  "width": "medium",
+  "photos": [
+    {
+      "img": "photo-1618773928121-c32242e63f39",
+      "author": "Vojtech Bruzek",
+      "page": "Yrxr3bsPdS0"
+    },
+    {
+      "img": "photo-1611892440504-42a792e24d32",
+      "author": "visualsofdana",
+      "page": "T5pL6ciEn-I"
+    },
+    {
+      "img": "photo-1631049307264-da0ec9d70304",
+      "author": "Point3D Commercial Imaging Ltd.",
+      "page": "oxeCZrodz78"
+    },
+    {
+      "img": "photo-1583847268964-b28dc8f51f92",
+      "author": "Minh Pham",
+      "page": "OtXADkUh3-I"
+    }
+  ],
+  "spec": {
+    "use_when": [
+      "a short list of results to scan and open one: stays, restaurants, products, classes or venues"
+    ],
+    "avoid_when": [
+      "two to four options compared on the same attributes: use comparison",
+      "one item in detail: use product-card",
+      "rows of records with many columns: use data-table"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-result-list h3",
+        "what": "what was searched for",
+        "slot": "text"
+      },
+      {
+        "name": "note",
+        "selector": ".odl-sub",
+        "what": "how many results, and the filters that apply",
+        "slot": "text"
+      },
+      {
+        "name": "results",
+        "selector": ".odl-result-list li",
+        "what": "one result card",
+        "slot": "list"
+      },
+      {
+        "name": "image",
+        "selector": ".odl-thumb",
+        "what": "a square photo of the result",
+        "slot": "media"
+      },
+      {
+        "name": "result_title",
+        "selector": ".odl-title",
+        "what": "the result's name",
+        "slot": "text"
+      },
+      {
+        "name": "badge",
+        "selector": ".odl-badge",
+        "what": "one short fact worth a badge, such as 'Free cancellation'",
+        "slot": "text"
+      },
+      {
+        "name": "meta",
+        "selector": ".odl-meta",
+        "what": "one line: kind, rating, distance",
+        "slot": "text"
+      },
+      {
+        "name": "detail",
+        "selector": ".odl-detail",
+        "what": "one sentence about it",
+        "slot": "text"
+      },
+      {
+        "name": "value",
+        "selector": ".odl-value",
+        "what": "the price or headline value",
+        "slot": "text"
+      },
+      {
+        "name": "value_note",
+        "selector": ".odl-per",
+        "what": "what the value covers, such as 'a night'",
+        "slot": "text"
+      },
+      {
+        "name": "action",
+        "selector": ".odl-act",
+        "what": "opens or picks this result",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "results"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "title"
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 80,
+          "part": "note"
+        },
+        "results": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "part": "results",
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "meta",
+              "action"
+            ],
+            "properties": {
+              "image": {
+                "type": "object",
+                "part": "image",
+                "properties": {
+                  "src": {
+                    "type": "string",
+                    "maxLength": 2048
+                  },
+                  "alt": {
+                    "type": "string",
+                    "maxLength": 200
+                  }
+                },
+                "required": [
+                  "src",
+                  "alt"
+                ]
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 40,
+                "part": "result_title"
+              },
+              "badge": {
+                "type": "string",
+                "maxLength": 22,
+                "part": "badge"
+              },
+              "meta": {
+                "type": "string",
+                "maxLength": 60,
+                "part": "meta"
+              },
+              "detail": {
+                "type": "string",
+                "maxLength": 110,
+                "part": "detail"
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 12,
+                "part": "value"
+              },
+              "value_note": {
+                "type": "string",
+                "maxLength": 20,
+                "part": "value_note"
+              },
+              "action": {
+                "type": "object",
+                "part": "action",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "maxLength": 40
+                  },
+                  "event": {
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "label",
+                  "event"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "no results: the list shows one dashed line saying there is nothing to show; better still, answer in text with what to change",
+        "evidence": ".od-empty"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "handled",
+        "how": "a photo that fails to load keeps its square, with the photo's description written in it",
+        "evidence": ".od-missing-image"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "a result that cannot be opened (sold out) has its button disabled and dimmed",
+        "evidence": ".odl-act:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "on a phone the photo stays beside the text and the price and button move to one line underneath",
+        "evidence": "@container (max-width: 32rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "names, badge, meta and detail wrap; the price never wraps",
+        "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab moves through the result buttons in list order",
+      "Enter or Space presses one"
+    ]
+  }
+}

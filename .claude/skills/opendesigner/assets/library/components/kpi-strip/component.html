@@ -13,8 +13,9 @@
 .odl-kpi-strip .odl-note { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
 .odl-kpi-strip .odl-meter { display: flex; align-items: center; gap: var(--ds-space-inline-sm); }
 .odl-kpi-strip .odl-meter i { flex: 1; max-inline-size: 6rem; block-size: var(--ds-space-6); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); overflow: hidden; }
-.odl-kpi-strip .odl-meter i::before { content: ""; display: block; block-size: 100%; inline-size: var(--odl-fill, 50%); background: var(--ds-color-bg-inverse); border-radius: inherit; }
+.odl-kpi-strip .odl-meter i::before { content: ""; display: block; block-size: 100%; inline-size: calc(var(--od-ratio, 0.5) * 100%); background: var(--ds-color-bg-inverse); border-radius: inherit; }
 .odl-kpi-strip .odl-warn { color: var(--ds-color-text-warning); }
+.odl-kpi-strip .odl-warn + span::before { content: " · "; color: var(--ds-color-text-secondary); }
 /* Phone: a 2 by 2 grid, label above value, the figure one step smaller so it never squeezes. */
 @container (max-width: 25.98rem) {
   .odl-kpi-strip dl > div { padding: var(--ds-space-inset-lg); gap: var(--ds-space-stack-xs); }
@@ -22,11 +23,14 @@
   .odl-kpi-strip .odl-meter i { max-inline-size: 3rem; }
   .odl-kpi-strip .odl-note { margin-block-start: var(--ds-space-stack-xs); }
 }
+.odl-kpi-strip [hidden] { display: none; }
 </style>
-<div class="odl-kpi-strip"><dl aria-label="Receipts this month">
-  <div><dt>Received</dt><dd class="odl-value">$2,846,191<span>.37</span></dd><dd class="odl-note">2,418 receipts · USD at booking rates</dd></div>
-  <div><dt>Matched to invoices</dt><dd class="odl-value">$2,492,802<span>.73</span></dd>
-    <dd class="odl-note odl-meter"><i style="--odl-fill: 87.6%" aria-hidden="true"></i>87.6% of value</dd></div>
-  <div><dt>Waiting to match</dt><dd class="odl-value">$311,482<span>.09</span></dd><dd class="odl-note"><span class="odl-warn">192 receipts</span> · oldest from Oct 9</dd></div>
-  <div><dt>Held as credit</dt><dd class="odl-value">$41,906<span>.55</span></dd><dd class="odl-note">63 receipts on 58 accounts</dd></div>
+<div class="odl-kpi-strip"><dl aria-label="Receipts this month" data-od-label="label" data-od-list="stats">
+  <div data-od-item data-od-template hidden><dt data-od-slot="label"></dt><dd class="odl-value" data-od-slot="value"></dd>
+    <dd class="odl-note odl-meter" data-od-optional><i data-od-measure="share" data-od-optional aria-hidden="true"></i><span class="odl-warn" data-od-slot="warning" data-od-optional></span><span data-od-slot="note" data-od-optional></span></dd></div>
+  <div data-od-item><dt>Received</dt><dd class="odl-value">$2,846,191<span>.37</span></dd><dd class="odl-note">2,418 receipts · USD at booking rates</dd></div>
+  <div data-od-item><dt>Matched to invoices</dt><dd class="odl-value">$2,492,802<span>.73</span></dd>
+    <dd class="odl-note odl-meter"><i style="--od-ratio: 0.876" aria-hidden="true"></i>87.6% of value</dd></div>
+  <div data-od-item><dt>Waiting to match</dt><dd class="odl-value">$311,482<span>.09</span></dd><dd class="odl-note"><span class="odl-warn">192 receipts</span> · oldest from Oct 9</dd></div>
+  <div data-od-item><dt>Held as credit</dt><dd class="odl-value">$41,906<span>.55</span></dd><dd class="odl-note">63 receipts on 58 accounts</dd></div>
 </dl></div>

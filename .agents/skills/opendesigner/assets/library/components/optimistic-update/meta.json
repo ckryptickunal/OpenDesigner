@@ -98,8 +98,9 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "With no tasks, show empty-first-use or empty-all-done instead of the list."
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
         "status": "shown",
@@ -124,6 +125,10 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": [

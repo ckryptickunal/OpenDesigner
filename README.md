@@ -70,7 +70,7 @@ The audit measures your running app in a browser, so it needs a coding agent tha
 <details>
 <summary><b>Claude app</b> (claude.ai or Desktop, no terminal)</summary>
 
-Download [opendesigner.zip](https://opendesigner.dev/.well-known/agent-skills/opendesigner.zip) and upload it under Customize > Skills. Code execution must be on. That zip builds a system. To audit an app you already built, also upload [opendesigner-review.zip](https://opendesigner.dev/.well-known/agent-skills/opendesigner-review.zip) and [opendesigner-extract.zip](https://opendesigner.dev/.well-known/agent-skills/opendesigner-extract.zip). The [install guide](https://opendesigner.dev/docs/install/) lists the other six.
+Download [opendesigner.zip](https://opendesigner.dev/.well-known/agent-skills/opendesigner.zip) and upload it under Customize > Skills. Code execution must be on. That zip builds a system. To audit an app you already built, also upload [opendesigner-review.zip](https://opendesigner.dev/.well-known/agent-skills/opendesigner-review.zip) and [opendesigner-extract.zip](https://opendesigner.dev/.well-known/agent-skills/opendesigner-extract.zip). The [install guide](https://opendesigner.dev/docs/install/) lists the other seven.
 
 To build the zips yourself, clone the repo and run `python3 tools/build_dist.py`. They land in `dist/`.
 
@@ -79,7 +79,7 @@ To build the zips yourself, clone the repo and run `python3 tools/build_dist.py`
 <details>
 <summary><b>Codex, Cursor, VS Code with Copilot, Gemini CLI and other agents</b></summary>
 
-These tools read skills from `.agents/skills/`. Run this inside your project. It copies in the nine skill folders and leaves nothing else behind.
+These tools read skills from `.agents/skills/`. Run this inside your project. It copies in the ten skill folders and leaves nothing else behind.
 
 ```bash
 git clone --depth 1 https://github.com/ckryptickunal/OpenDesigner .opendesigner-tmp
@@ -126,7 +126,11 @@ New to the repo? You only need `skills/` or a zip from above. Everything else he
 </picture>
 
 
-82 ready-made parts built only on your tokens. Optional. [Browse them](https://opendesigner.dev/library/).
+123 ready-made parts built only on your tokens, each with its words and numbers marked so an app or assistant can fill it. Optional. [Browse them](https://opendesigner.dev/library/).
+
+## Smart UI
+
+Optional. Your assistant answers with a part of your own system, like a list of flights, a fare comparison or a booking step, instead of three paragraphs. The model picks the part and fills in words and numbers. It can't pick a colour, a size or a link, every answer is checked before it shows, and anything that books, pays or deletes waits for the person to press a button. Plain HTML, so it works in any framework, and it speaks A2UI and MCP Apps. [See it](https://opendesigner.dev/smart-ui/) · [Add it to your assistant](https://opendesigner.dev/docs/smart-ui-quickstart/).
 
 ## Status
 

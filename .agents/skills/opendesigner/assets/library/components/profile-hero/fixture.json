@@ -1,0 +1,15 @@
+{"cover": {"src": "https://images.unsplash.com/photo-1505490096310-204ef067fe6b?w=1408&h=400&fit=crop&auto=format&q=70", "alt": "Cover photo: pine trees by teal water"},
+ "avatar": {"src": "https://images.unsplash.com/photo-1613498382159-0972b7b4c9f1?w=192&h=192&fit=crop&auto=format&q=70", "alt": "Inès Marchetti"},
+ "name": "Inès Marchetti",
+ "handle": "@ines.outdoors",
+ "tags": [{"text": "she/her"}, {"text": "Trail runner"}],
+ "bio": "Long runs before work, maps on Sundays. Writing a guide to the coastal path, one stage a month.",
+ "link": {"label": "ines.example/trails", "event": {"name": "open_profile_link"}},
+ "posts": 96, "followers": 4310, "following": 287,
+ "is_following": "true",
+ "message": {"label": "Message", "a11y_label": "Message Inès Marchetti", "event": {"name": "open_direct_message"}},
+ "highlights": [
+  {"title": "Coast path", "cover": {"src": "https://images.unsplash.com/photo-1515506733362-f6161cbcfbe6?w=128&h=128&fit=crop&auto=format&q=70", "alt": "Sea cliffs"}},
+  {"title": "Races", "cover": {"src": "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=128&h=128&fit=crop&auto=format&q=70", "alt": "Runners at sunrise"}},
+  {"title": "Hills", "cover": {"src": "https://images.unsplash.com/photo-1518214598173-1666bc921d66?w=128&h=128&fit=crop&auto=format&q=70", "alt": "Running on a hilltop"}}
+ ]}

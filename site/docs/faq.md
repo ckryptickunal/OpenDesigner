@@ -90,6 +90,10 @@ python3 skills/opendesigner/scripts/engine.py audit-page --open
 
 It finds them and proposes the fix; it does not edit your code by itself. `engine.py review` lists every hard-coded color, size, radius, shadow and duration, and the audit page offers up to three ways to settle each one. Your AI makes the change after you say yes. See [For engineers](/docs/engineers/).
 
+### Can my chatbot answer with my own components instead of text?
+
+Yes, with Smart UI, which comes with OpenDesigner and stays off until you ask for it. Your assistant answers with a part of your system, like a table of invoices or a booking step, and every answer is checked before it shows: no colours, sizes or links of the model's choosing, and nothing that pays or books until the person presses the button. It reads your repo to propose which answers need a part. [How it works](/docs/smart-ui/).
+
 ### Does it send my code or data anywhere?
 
 The engine runs on your computer and makes no network calls. Your chat goes to your AI provider, as any prompt does. The illustration skill searches open-licence art and photo sites only when you use it, and library parts with a photo load it from Unsplash. In the Claude app, the scripts run in Claude's code-execution sandbox.

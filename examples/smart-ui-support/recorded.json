@@ -1,0 +1,636 @@
+{
+ "about": "Answers recorded from gemini-3.1-pro-preview with live.py record; replayed when there is no model.",
+ "turns": {
+  "Show my open invoices": {
+   "text": "You have two open invoices at the moment. Here are the details:",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "component": "DataTable",
+        "title": "Open Invoices",
+        "columns": [
+         {
+          "label": "Invoice"
+         },
+         {
+          "label": "Date"
+         },
+         {
+          "label": "Due"
+         },
+         {
+          "label": "Amount",
+          "align": "end"
+         }
+        ],
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1047"
+           },
+           {
+            "text": "2026-11-01"
+           },
+           {
+            "text": "2026-11-30"
+           },
+           {
+            "text": "€1,104.00"
+           }
+          ]
+         },
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "2026-07-15"
+           },
+           {
+            "text": "2026-11-20"
+           },
+           {
+            "text": "€184.00"
+           }
+          ]
+         }
+        ],
+        "id": "root"
+       }
+      ]
+     }
+    }
+   ],
+   "data": {
+    "list_invoices": {
+     "invoices": [
+      {
+       "number": "TH-1047",
+       "date": "2026-11-01",
+       "amount": "€1,104.00",
+       "status": "open",
+       "due": "2026-11-30",
+       "file": "Tallyhaus-TH-1047.pdf",
+       "size": "92 KB",
+       "lines": [
+        {
+         "label": "Team plan, 12 seats",
+         "amount": "€1,104.00"
+        }
+       ]
+      },
+      {
+       "number": "TH-1043",
+       "date": "2026-07-15",
+       "amount": "€184.00",
+       "status": "open",
+       "due": "2026-11-20",
+       "file": "Tallyhaus-TH-1043.pdf",
+       "size": "92 KB",
+       "lines": [
+        {
+         "label": "4 extra seats, prorated",
+         "amount": "€184.00"
+        }
+       ]
+      }
+     ],
+     "currency": "EUR"
+    }
+   },
+   "model": "gemini-3.1-pro-preview"
+  },
+  "How has our API usage changed this year?": {
+   "text": "Here is your API usage for this year. Your API calls have increased steadily from 182,000 in January to 412,600 in November, while your active seats grew from 9 to 12. You are still within your limit of 500,000 calls.",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "component": "LineChart",
+        "title": "API Usage This Year",
+        "summary": "Monthly API calls",
+        "unit": "Calls",
+        "series": "API Calls",
+        "points": [
+         {
+          "label": "Jan",
+          "value": 182000
+         },
+         {
+          "label": "Feb",
+          "value": 201500
+         },
+         {
+          "label": "Mar",
+          "value": 240100
+         },
+         {
+          "label": "Apr",
+          "value": 236800
+         },
+         {
+          "label": "May",
+          "value": 281200
+         },
+         {
+          "label": "Jun",
+          "value": 305400
+         },
+         {
+          "label": "Jul",
+          "value": 298900
+         },
+         {
+          "label": "Aug",
+          "value": 334700
+         },
+         {
+          "label": "Sep",
+          "value": 351000
+         },
+         {
+          "label": "Oct",
+          "value": 390200
+         },
+         {
+          "label": "Nov",
+          "value": 412600
+         }
+        ],
+        "id": "root"
+       }
+      ]
+     }
+    }
+   ],
+   "data": {
+    "get_usage": {
+     "usage": [
+      {
+       "month": "Jan",
+       "calls": 182000,
+       "seats": 9
+      },
+      {
+       "month": "Feb",
+       "calls": 201500,
+       "seats": 9
+      },
+      {
+       "month": "Mar",
+       "calls": 240100,
+       "seats": 10
+      },
+      {
+       "month": "Apr",
+       "calls": 236800,
+       "seats": 10
+      },
+      {
+       "month": "May",
+       "calls": 281200,
+       "seats": 10
+      },
+      {
+       "month": "Jun",
+       "calls": 305400,
+       "seats": 10
+      },
+      {
+       "month": "Jul",
+       "calls": 298900,
+       "seats": 12
+      },
+      {
+       "month": "Aug",
+       "calls": 334700,
+       "seats": 12
+      },
+      {
+       "month": "Sep",
+       "calls": 351000,
+       "seats": 12
+      },
+      {
+       "month": "Oct",
+       "calls": 390200,
+       "seats": 12
+      },
+      {
+       "month": "Nov",
+       "calls": 412600,
+       "seats": 12
+      }
+     ],
+     "limit_calls": 500000
+    }
+   },
+   "model": "gemini-3.1-pro-preview"
+  },
+  "Compare the plans": {
+   "text": "Here is a comparison of the available plans. You are currently on the Team plan.",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "component": "Comparison",
+        "title": "Plan Comparison",
+        "options": [
+         {
+          "name": "Starter",
+          "price": "38",
+          "price_note": "per seat",
+          "choose": {
+           "label": "Choose Starter",
+           "event": {
+            "name": "change_plan",
+            "context": {
+             "plan": "Starter"
+            }
+           }
+          }
+         },
+         {
+          "name": "Team",
+          "badge": "Current",
+          "price": "92",
+          "price_note": "per seat",
+          "choose": {
+           "label": "Keep Team",
+           "event": {
+            "name": "change_plan",
+            "context": {
+             "plan": "Team"
+            }
+           }
+          }
+         },
+         {
+          "name": "Scale",
+          "price": "148",
+          "price_note": "per seat",
+          "choose": {
+           "label": "Choose Scale",
+           "event": {
+            "name": "change_plan",
+            "context": {
+             "plan": "Scale"
+            }
+           }
+          }
+         }
+        ],
+        "rows": [
+         {
+          "label": "Calls",
+          "values": [
+           {
+            "value": "100,000 a month"
+           },
+           {
+            "value": "500,000 a month"
+           },
+           {
+            "value": "2,000,000 a month"
+           }
+          ]
+         },
+         {
+          "label": "Support",
+          "values": [
+           {
+            "value": "Email, 2 working days"
+           },
+           {
+            "value": "Email and chat, same day"
+           },
+           {
+            "value": "Named contact, 1 hour"
+           }
+          ]
+         },
+         {
+          "label": "SSO",
+          "values": [
+           {
+            "mark": "no",
+            "value": "No"
+           },
+           {
+            "mark": "yes",
+            "value": "Yes"
+           },
+           {
+            "mark": "yes",
+            "value": "Yes"
+           }
+          ]
+         },
+         {
+          "label": "Audit log",
+          "values": [
+           {
+            "mark": "no",
+            "value": "No"
+           },
+           {
+            "value": "90 days"
+           },
+           {
+            "value": "2 years"
+           }
+          ]
+         }
+        ],
+        "id": "root"
+       }
+      ]
+     }
+    }
+   ],
+   "data": {
+    "list_plans": {
+     "plans": [
+      {
+       "name": "Starter",
+       "price_per_seat": 38,
+       "calls": "100,000 a month",
+       "support": "Email, 2 working days",
+       "sso": "No",
+       "audit_log": "No"
+      },
+      {
+       "name": "Team",
+       "price_per_seat": 92,
+       "calls": "500,000 a month",
+       "support": "Email and chat, same day",
+       "sso": "Yes",
+       "audit_log": "90 days"
+      },
+      {
+       "name": "Scale",
+       "price_per_seat": 148,
+       "calls": "2,000,000 a month",
+       "support": "Named contact, 1 hour",
+       "sso": "Yes",
+       "audit_log": "2 years"
+      }
+     ],
+     "current": "Team"
+    }
+   },
+   "model": "gemini-3.1-pro-preview"
+  },
+  "What plan are we on?": {
+   "text": "You are currently on the Team plan. Here are the details of your subscription.",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "component": "KeyFacts",
+        "title": "Subscription Details",
+        "facts": [
+         {
+          "label": "Plan",
+          "value": "Team"
+         },
+         {
+          "label": "Seats",
+          "value": "12",
+          "note": "92 per seat"
+         },
+         {
+          "label": "Monthly cost",
+          "value": "€1,104"
+         },
+         {
+          "label": "Included calls",
+          "value": "500000"
+         },
+         {
+          "label": "Renews",
+          "value": "2026-12-01"
+         },
+         {
+          "label": "Payment method",
+          "value": "Visa ending 4471"
+         }
+        ],
+        "id": "root"
+       }
+      ]
+     }
+    }
+   ],
+   "data": {
+    "get_subscription": {
+     "subscription": {
+      "plan": "Team",
+      "seats": 12,
+      "price_per_seat": 92,
+      "monthly": "€1,104",
+      "renews": "2026-12-01",
+      "card": "Visa ending 4471",
+      "calls_included": 500000
+     }
+    }
+   },
+   "model": "gemini-3.1-pro-preview"
+  },
+  "Where's the refund for invoice TH-1041?": {
+   "text": "Your refund of €920.00 for invoice TH-1041 has been processed and sent to your bank. It should arrive in your account by 19 Nov.",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "component": "ProgressStatus",
+        "title": "Refund for invoice TH-1041",
+        "tone": "info",
+        "status": "Sent to your bank",
+        "steps": [
+         {
+          "state": "done",
+          "label": "Refund requested",
+          "time": "3 Nov"
+         },
+         {
+          "state": "done",
+          "label": "Approved",
+          "time": "5 Nov"
+         },
+         {
+          "state": "now",
+          "label": "Sent to your bank",
+          "time": "7 Nov"
+         },
+         {
+          "state": "next",
+          "label": "In your account",
+          "time": "by 19 Nov"
+         }
+        ],
+        "id": "root"
+       }
+      ]
+     }
+    }
+   ],
+   "data": {
+    "refund_status": {
+     "refund": {
+      "invoice": "TH-1041",
+      "amount": "€920.00",
+      "status": "Sent to your bank",
+      "arrives": "by 19 Nov",
+      "steps": [
+       {
+        "label": "Refund requested",
+        "date": "3 Nov",
+        "state": "done"
+       },
+       {
+        "label": "Approved",
+        "date": "5 Nov",
+        "state": "done"
+       },
+       {
+        "label": "Sent to your bank",
+        "date": "7 Nov",
+        "state": "now"
+       },
+       {
+        "label": "In your account",
+        "date": "by 19 Nov",
+        "state": "next"
+       }
+      ]
+     }
+    }
+   },
+   "model": "gemini-3.1-pro-preview"
+  },
+  "When is my next invoice due?": {
+   "text": "Your next invoice is due on 2026-11-20. You currently have two open invoices to keep track of.",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "component": "DataTable",
+        "title": "Open Invoices",
+        "columns": [
+         {
+          "label": "Invoice Number"
+         },
+         {
+          "label": "Issue Date"
+         },
+         {
+          "label": "Due Date"
+         },
+         {
+          "label": "Amount",
+          "align": "end"
+         }
+        ],
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "2026-07-15"
+           },
+           {
+            "text": "2026-11-20"
+           },
+           {
+            "text": "€184.00"
+           }
+          ]
+         },
+         {
+          "cells": [
+           {
+            "text": "TH-1047"
+           },
+           {
+            "text": "2026-11-01"
+           },
+           {
+            "text": "2026-11-30"
+           },
+           {
+            "text": "€1,104.00"
+           }
+          ]
+         }
+        ],
+        "id": "root"
+       }
+      ]
+     }
+    }
+   ],
+   "data": {
+    "list_invoices": {
+     "invoices": [
+      {
+       "number": "TH-1047",
+       "date": "2026-11-01",
+       "amount": "€1,104.00",
+       "status": "open",
+       "due": "2026-11-30",
+       "file": "Tallyhaus-TH-1047.pdf",
+       "size": "92 KB",
+       "lines": [
+        {
+         "label": "Team plan, 12 seats",
+         "amount": "€1,104.00"
+        }
+       ]
+      },
+      {
+       "number": "TH-1043",
+       "date": "2026-07-15",
+       "amount": "€184.00",
+       "status": "open",
+       "due": "2026-11-20",
+       "file": "Tallyhaus-TH-1043.pdf",
+       "size": "92 KB",
+       "lines": [
+        {
+         "label": "4 extra seats, prorated",
+         "amount": "€184.00"
+        }
+       ]
+      }
+     ],
+     "currency": "EUR"
+    }
+   },
+   "model": "gemini-3.1-pro-preview"
+  }
+ }
+}

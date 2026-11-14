@@ -4,15 +4,37 @@
   "use": "on a pricing or upgrade page",
   "type": "commerce",
   "style": "friendly",
-  "industries": ["saas", "productivity", "education"],
-  "tags": ["pricing", "plans", "billing", "radio cards", "upgrade"],
-  "states": ["selected", "hover", "focus", "monthly", "yearly"],
+  "industries": [
+    "saas",
+    "productivity",
+    "education"
+  ],
+  "tags": [
+    "pricing",
+    "plans",
+    "billing",
+    "radio cards",
+    "upgrade"
+  ],
+  "states": [
+    "selected",
+    "hover",
+    "focus",
+    "monthly",
+    "yearly"
+  ],
   "source": "brand/showcase/components/01-pricing-glass",
   "a11y": "Native radio groups for the period and the plan; the whole card is the label, and the focus ring goes around the card.",
   "width": "wide",
   "spec": {
-    "use_when": ["an upgrade step inside a product, where the person picks a plan before going to checkout"],
-    "avoid_when": ["more than three plans, or a feature-by-feature comparison grid: the layout holds three cards side by side", "paying for the plan once chosen: use order-summary", "turning single add-ons on or off: use settings-toggles"],
+    "use_when": [
+      "an upgrade step inside a product, where the person picks a plan before going to checkout"
+    ],
+    "avoid_when": [
+      "more than three plans, or a feature-by-feature comparison grid: the layout holds three cards side by side",
+      "paying for the plan once chosen: use order-summary",
+      "turning single add-ons on or off: use settings-toggles"
+    ],
     "parts": [
       {
         "name": "title",
@@ -65,7 +87,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["plans"],
+      "required": [
+        "plans"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -73,7 +97,10 @@
           "part": "title"
         },
         "period": {
-          "enum": ["month", "year"],
+          "enum": [
+            "month",
+            "year"
+          ],
           "part": "period"
         },
         "yearly_note": {
@@ -88,7 +115,11 @@
           "part": "plans",
           "items": {
             "type": "object",
-            "required": ["id", "name", "price_month"],
+            "required": [
+              "id",
+              "name",
+              "price_month"
+            ],
             "properties": {
               "id": {
                 "type": "string",
@@ -135,8 +166,16 @@
                 "maxItems": 6,
                 "part": "features",
                 "items": {
-                  "type": "string",
-                  "maxLength": 32
+                  "type": "object",
+                  "required": [
+                    "text"
+                  ],
+                  "properties": {
+                    "text": {
+                      "type": "string",
+                      "maxLength": 32
+                    }
+                  }
                 }
               },
               "selected": {
@@ -149,12 +188,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no plans to offer, show empty-state in place of the cards"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the period switch and show three cards with muted bars for the name, price and features"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -173,8 +214,16 @@
         "status": "handled",
         "how": "plan names and features wrap, the name leaves room for the radio, and the tag and period labels never wrap",
         "evidence": ".odl-plan-picker .odl-tag { white-space: nowrap;"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab moves to the billing period group, then to the plan group", "Left and Right or Up and Down arrows move between Monthly and Yearly, and the prices change at once", "Arrow keys move between the plan cards and select the one reached"]
+    "keyboard": [
+      "Tab moves to the billing period group, then to the plan group",
+      "Left and Right or Up and Down arrows move between Monthly and Yearly, and the prices change at once",
+      "Arrow keys move between the plan cards and select the one reached"
+    ]
   }
 }

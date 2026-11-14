@@ -125,12 +125,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "With no notices, render no banner: the region has no frame of its own, so nothing shows."
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "Not applicable: banners report a state; they aren't loaded."
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "shown",
@@ -150,6 +152,10 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": [

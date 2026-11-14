@@ -1,0 +1,50 @@
+{
+ "title": "Friends",
+ "stories": [
+  {
+   "name": "noor.bakes",
+   "full_name": "Noor Haddad",
+   "photo": {
+    "src": "https://images.unsplash.com/photo-1757649734013-705dd6456c02?w=168&h=168&fit=crop&auto=format&q=70",
+    "alt": "Noor Haddad"
+   },
+   "state": "live"
+  },
+  {
+   "name": "tomas_r",
+   "full_name": "Tomás Riera",
+   "photo": {
+    "src": "https://images.unsplash.com/photo-1607346256330-dee7af15f7c5?w=168&h=168&fit=crop&auto=format&q=70",
+    "alt": "Tomás Riera"
+   },
+   "state": "new"
+  },
+  {
+   "name": "ama.sews",
+   "full_name": "Ama Owusu",
+   "photo": {
+    "src": "https://images.unsplash.com/photo-1530785602389-07594beb8b73?w=168&h=168&fit=crop&auto=format&q=70",
+    "alt": "Ama Owusu"
+   },
+   "state": "close"
+  },
+  {
+   "name": "jun.park",
+   "full_name": "Jun Park",
+   "photo": {
+    "src": "https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=168&h=168&fit=crop&auto=format&q=70",
+    "alt": "Jun Park"
+   },
+   "state": "new"
+  },
+  {
+   "name": "elsa.lind",
+   "full_name": "Elsa Lindqvist",
+   "photo": {
+    "src": "https://images.unsplash.com/photo-1699899657680-421c2c2d5064?w=168&h=168&fit=crop&auto=format&q=70",
+    "alt": "Elsa Lindqvist"
+   },
+   "state": "seen"
+  }
+ ]
+}

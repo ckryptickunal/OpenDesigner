@@ -53,8 +53,14 @@
     }
   ],
   "spec": {
-    "use_when": ["any saved-for-later list of products where price changes and stock matter"],
-    "avoid_when": ["items the person is about to buy: use cart-drawer", "browsing a shop's catalogue: use product-card", "one product's photos and options: use product-gallery"],
+    "use_when": [
+      "any saved-for-later list of products where price changes and stock matter"
+    ],
+    "avoid_when": [
+      "items the person is about to buy: use cart-drawer",
+      "browsing a shop's catalogue: use product-card",
+      "one product's photos and options: use product-gallery"
+    ],
     "parts": [
       {
         "name": "title",
@@ -125,7 +131,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["items"],
+      "required": [
+        "items"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -144,7 +152,11 @@
           "part": "items",
           "items": {
             "type": "object",
-            "required": ["name", "photo", "price"],
+            "required": [
+              "name",
+              "photo",
+              "price"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -206,8 +218,9 @@
         "evidence": "class=\"odl-slot-li\""
       },
       "loading": {
-        "status": "not_built",
-        "how": "show four cards with a grey tall photo box and two grey bars each"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -227,8 +240,17 @@
         "status": "handled",
         "how": "the product name is cut to one line; prices and tags wrap under each other; button labels never wrap",
         "evidence": "-webkit-line-clamp: 1"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab moves through Share list, then each item's remove heart and Move to bag; sold-out buttons are skipped", "Enter or Space on Move to bag toggles it, and the change is read out", "Enter or Space on a heart removes the item, reads out the change and moves focus to the next item's heart, or to Share list"]
+    "keyboard": [
+      "Tab moves through Share list, then each item's remove heart and Move to bag; sold-out buttons are skipped",
+      "Enter or Space on Move to bag toggles it, and the change is read out",
+      "Enter or Space on a heart removes the item, reads out the change and moves focus to the next item's heart, or to Share list"
+    ]
   }
 }

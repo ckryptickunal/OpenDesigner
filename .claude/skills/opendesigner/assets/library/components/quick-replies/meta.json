@@ -1,0 +1,141 @@
+{
+  "name": "Quick replies",
+  "summary": "An optional question and two to six short answers as chips, so the person can reply with one tap instead of typing.",
+  "use": "under an assistant's message, when the next reply is one of a few known answers",
+  "type": "ai",
+  "style": "friendly",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "chips",
+    "suggestions",
+    "replies",
+    "assistant",
+    "choices"
+  ],
+  "states": [
+    "hover",
+    "pressed",
+    "picked",
+    "focus",
+    "disabled",
+    "wraps to more lines"
+  ],
+  "source": null,
+  "a11y": "A labelled group of buttons, each named by its own words; the picked one is marked with aria-pressed.",
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "the assistant asks a question whose answer is one of two to six short options, such as a day, a size or a next step"
+    ],
+    "avoid_when": [
+      "options that need prices or details to choose between: use comparison or result-list",
+      "a free answer is likely: ask in text and let the person type",
+      "more than six answers: use a list or a select field in form-fields"
+    ],
+    "parts": [
+      {
+        "name": "prompt",
+        "selector": ".odl-prompt",
+        "what": "the question, when the message above does not already ask it",
+        "slot": "text"
+      },
+      {
+        "name": "replies",
+        "selector": ".odl-quick-replies li",
+        "what": "one answer",
+        "slot": "list"
+      },
+      {
+        "name": "reply",
+        "selector": ".odl-chip",
+        "what": "the chip that sends this answer",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "replies"
+      ],
+      "properties": {
+        "prompt": {
+          "type": "string",
+          "maxLength": 80,
+          "part": "prompt"
+        },
+        "replies": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "part": "replies",
+          "items": {
+            "type": "object",
+            "required": [
+              "reply"
+            ],
+            "properties": {
+              "reply": {
+                "type": "object",
+                "part": "reply",
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "maxLength": 40
+                  },
+                  "event": {
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "label",
+                  "event"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a reply cannot be sent, the host says so in the conversation; the chips stay"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "after the conversation moves on, the host may disable the chips; they stay readable",
+        "evidence": ".odl-chip:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "chips wrap to more lines; a long answer wraps inside its chip",
+        "evidence": "flex-wrap: wrap"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long answer wraps inside its chip instead of running out of it",
+        "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab moves from chip to chip",
+      "Enter or Space sends that answer"
+    ]
+  }
+}

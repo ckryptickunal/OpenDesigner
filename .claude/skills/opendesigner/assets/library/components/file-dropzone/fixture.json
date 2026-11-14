@@ -1,0 +1,29 @@
+{
+ "title": "Add site photos",
+ "intro": "Photos go to the Hollins Road project and are shared with the client.",
+ "types": "JPG, PNG or HEIC · up to 40 MB each",
+ "files": [
+  {
+   "name": "kitchen-before.jpg",
+   "state": "done",
+   "meta": "6.1 MB"
+  },
+  {
+   "name": "kitchen-after-wide.heic",
+   "state": "uploading",
+   "meta": "8.4 of 21.0 MB · about 9 s left",
+   "progress": 40
+  },
+  {
+   "name": "boiler-label.png",
+   "state": "failed",
+   "meta": "The file is larger than 40 MB."
+  },
+  {
+   "name": "hallway-tiles.jpg",
+   "state": "queued",
+   "meta": "3.2 MB · waiting to upload"
+  }
+ ],
+ "total": "1 of 4 uploaded · 38.7 MB in total"
+}

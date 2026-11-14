@@ -10,20 +10,26 @@
 .odl-setup-steps progress::-webkit-progress-bar { background: var(--ds-color-bg-neutral-subtle); }
 .odl-setup-steps progress::-webkit-progress-value { background: var(--ds-color-bg-action-primary); border-radius: var(--ds-radius-full); }
 .odl-setup-steps progress::-moz-progress-bar { background: var(--ds-color-bg-action-primary); border-radius: var(--ds-radius-full); }
-.odl-setup-steps ol { list-style: none; margin: 0; padding: 0; display: grid; }
-.odl-setup-steps li { display: grid; grid-template-columns: var(--ds-size-control-sm) minmax(0, 1fr); gap: 0 var(--ds-space-inset-lg); padding-block: var(--ds-space-stack-md); }
-.odl-setup-steps li:first-child { padding-block-start: 0; }
+.odl-setup-steps ol { list-style: none; margin: 0; padding: 0; display: grid; counter-reset: odl-step; }
+.odl-setup-steps li { counter-increment: odl-step; display: grid; grid-template-columns: var(--ds-size-control-sm) minmax(0, 1fr); gap: 0 var(--ds-space-inset-lg); padding-block: var(--ds-space-stack-md); }
+.odl-setup-steps li:first-child, .odl-setup-steps li[hidden]:first-child + li { padding-block-start: 0; }
 .odl-setup-steps li:last-child { padding-block-end: 0; }
 .odl-setup-steps li + li { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
+.odl-setup-steps li[hidden]:first-child + li { border-block-start: 0; }
 .odl-setup-steps .odl-mark { grid-row: span 3; inline-size: var(--ds-size-control-sm); block-size: var(--ds-size-control-sm); display: grid; place-items: center; border-radius: var(--ds-radius-full);
   border: var(--ds-border-width-emphasis) solid var(--ds-color-border-default); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-variant-numeric: tabular-nums; }
 .odl-setup-steps .odl-mark svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); stroke-width: var(--ds-icon-stroke-lg); }
-.odl-setup-steps .is-done .odl-mark { background: var(--ds-color-bg-success-subtle); border-color: transparent; color: var(--ds-color-text-success); }
-.odl-setup-steps .is-done .odl-title { color: var(--ds-color-text-secondary); }
-.odl-setup-steps .is-now .odl-mark { background: var(--ds-color-bg-action-primary); border-color: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
+.odl-setup-steps .is-done .odl-mark, .odl-setup-steps .odl-mark[data-state="done"] { background: var(--ds-color-bg-success-subtle); border-color: transparent; color: var(--ds-color-text-success); }
+.odl-setup-steps .is-done .odl-title, .odl-setup-steps li:has(> .odl-mark[data-state="done"]) .odl-title { color: var(--ds-color-text-secondary); }
+.odl-setup-steps .is-now .odl-mark, .odl-setup-steps .odl-mark[data-state="now"] { background: var(--ds-color-bg-action-primary); border-color: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); }
 .odl-setup-steps .odl-title { align-self: center; min-block-size: var(--ds-size-control-sm); display: flex; align-items: center; justify-content: space-between; gap: var(--ds-space-inline-sm); }
-.odl-setup-steps .is-now .odl-title { font-weight: var(--ds-font-weight-heading); }
+.odl-setup-steps .is-now .odl-title, .odl-setup-steps li:has(> .odl-mark[data-state="now"]) .odl-title { font-weight: var(--ds-font-weight-heading); }
 .odl-setup-steps .odl-title small { color: var(--ds-color-text-tertiary); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-body); white-space: nowrap; }
+/* a step drawn from data: a tick when done, its number otherwise (a CSS counter) */
+.odl-setup-steps .odl-mark[data-state="next"] { color: var(--ds-color-text-secondary); }
+.odl-setup-steps .odl-mark[data-state]:not([data-state="done"])::before { content: counter(odl-step); }
+.odl-setup-steps .odl-mark[data-state]:not([data-state="done"]) svg { display: none; }
+.odl-setup-steps .odl-title > span { min-inline-size: 0; overflow-wrap: anywhere; }
 .odl-setup-steps .odl-detail { margin: var(--ds-space-stack-xs) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-body-md); text-wrap: pretty; }
 .odl-setup-steps .odl-acts { display: flex; flex-wrap: wrap; gap: var(--ds-space-inline-sm); align-items: center; margin-block-start: var(--ds-space-stack-md); }
 
@@ -36,20 +42,38 @@
 .odl-setup-steps .odl-quiet:hover { background: var(--ds-color-bg-neutral-subtle); }
 .odl-setup-steps button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 @media (max-width: 30rem) { .odl-setup-steps { padding: var(--ds-space-inset-lg); } }
+/* the hidden template item (data-od-template) stays out of sight in the static file */
+.odl-setup-steps [hidden] { display: none !important; }
 @media (prefers-reduced-motion: reduce) { .odl-setup-steps, .odl-setup-steps *, .odl-setup-steps *::before { transition: none !important; animation: none !important; } }
 </style>
-<section class="odl-setup-steps" aria-label="Set up your workspace">
-  <header><h3>Set up your workspace</h3>
-    <div class="odl-count"><progress max="4" value="2" aria-label="2 of 4 steps done"></progress><span>2 of 4 done</span></div></header>
-  <ol>
-    <li class="is-done"><span class="odl-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>
+<section class="odl-setup-steps" aria-label="Set up your workspace" data-od-label="title">
+  <header><h3 data-od-slot="title">Set up your workspace</h3>
+    <div class="odl-count"><progress max="4" value="2" aria-label="2 of 4 steps done"></progress><span class="odl-done">2 of 4 done</span></div></header>
+  <ol data-od-list="steps">
+    <li data-od-item data-od-template hidden><span class="odl-mark" data-od-var="state" data-state="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>
+      <span class="odl-title"><span data-od-slot="title"></span><small data-od-slot="note" data-od-optional></small></span>
+      <p class="odl-detail" data-od-slot="detail" data-od-optional data-od-when="state=now"></p>
+      <div class="odl-acts" data-od-optional data-od-when="state=now"><button type="button" class="odl-primary" data-od-action="action"></button><button type="button" class="odl-quiet" data-od-action="skip"></button></div></li>
+    <li class="is-done" data-od-item><span class="odl-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>
       <span class="odl-title">Create your workspace <small>Done</small></span></li>
-    <li class="is-done"><span class="odl-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>
+    <li class="is-done" data-od-item><span class="odl-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>
       <span class="odl-title">Invite your team <small>4 invited</small></span></li>
-    <li class="is-now" aria-current="step"><span class="odl-mark">3</span>
+    <li class="is-now" aria-current="step" data-od-item><span class="odl-mark">3</span>
       <span class="odl-title">Connect your bank <small>About 2 min</small></span>
       <p class="odl-detail">Read-only access. We never move money without your approval.</p>
       <div class="odl-acts"><button type="button" class="odl-primary">Connect a bank</button><button type="button" class="odl-quiet">Skip for now</button></div></li>
-    <li><span class="odl-mark">4</span><span class="odl-title">Send your first invoice</span></li>
+    <li data-od-item><span class="odl-mark">4</span><span class="odl-title">Send your first invoice</span></li>
   </ol>
 </section>
+<script>
+document.querySelectorAll(".odl-setup-steps").forEach((root) => {
+  // a copy drawn from data: count the done steps for the bar and mark the current one (the sample already has both)
+  const marks = [...root.querySelectorAll("li:not([hidden]) > .odl-mark[data-state]")];
+  if (!marks.length) return;
+  const done = marks.filter((m) => m.dataset.state === "done").length, total = marks.length;
+  const bar = root.querySelector("progress"), text = root.querySelector(".odl-done");
+  if (bar) { bar.max = total; bar.value = done; bar.setAttribute("aria-label", `${done} of ${total} steps done`); }
+  if (text) text.textContent = `${done} of ${total} done`;
+  marks.forEach((m) => { if (m.dataset.state === "now") m.parentElement.setAttribute("aria-current", "step"); else m.parentElement.removeAttribute("aria-current"); });
+});
+</script>

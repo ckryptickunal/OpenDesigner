@@ -39,6 +39,9 @@
 .odl-plan-picker .odl-for { color: var(--ds-color-text-secondary); text-wrap: pretty; }
 .odl-plan-picker ul { margin: var(--ds-space-stack-xs) 0 0; padding: var(--ds-space-stack-md) 0 0; border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
   list-style: none; display: grid; align-content: start; gap: var(--ds-space-stack-sm); }
+/* Rendered from data: data-selected marks the plan that starts chosen (the script checks it); template items stay hidden. */
+.odl-plan-picker .odl-plan[data-selected="true"], .odl-plan-picker .odl-plan[data-selected="false"] { cursor: pointer; }
+.odl-plan-picker [hidden] { display: none !important; }
 .odl-plan-picker li { display: flex; align-items: start; gap: var(--ds-space-inline-sm); }
 .odl-plan-picker li svg { flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); margin-block-start: calc((1lh - var(--ds-size-icon-sm)) / 2); color: var(--ds-color-icon-default); stroke-width: var(--ds-icon-stroke-md); }
 .odl-plan-picker .odl-period input:focus-visible + span { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
@@ -52,23 +55,43 @@
 @media (prefers-reduced-motion: reduce) { .odl-plan-picker, .odl-plan-picker *, .odl-plan-picker *::before { transition: none !important; animation: none !important; } }
 </style>
 <div class="odl-plan-picker">
-  <div class="odl-top"><h3 id="odl-pp-title">Choose a plan</h3>
+  <div class="odl-top"><h3 id="odl-pp-title" data-od-slot="title">Choose a plan</h3>
   <fieldset class="odl-period"><legend class="odl-sr">Billing period</legend><div>
     <label><input type="radio" name="odl-plan-picker-period" value="month"><span>Monthly</span></label>
-    <label><input type="radio" name="odl-plan-picker-period" value="year" checked><span>Yearly <small>2 months free</small></span></label>
-  </div></fieldset></div>
+    <label><input type="radio" name="odl-plan-picker-period" value="year" checked><span>Yearly <small data-od-slot="yearly_note" data-od-optional>2 months free</small></span></label>
+  </div><data data-od-slot="period" hidden>year</data></fieldset></div>
   <fieldset>
     <legend class="odl-sr">Choose a plan</legend>
-    <div class="odl-plans">
-      <label class="odl-plan"><input type="radio" name="odl-plan-picker-plan" value="starter"><span class="odl-name">Starter</span>
+    <div class="odl-plans" data-od-list="plans">
+      <label class="odl-plan" data-od-item data-od-template hidden data-od-var="selected" data-selected="false"><input type="radio" name="odl-plan-picker-plan"><data data-od-slot="id" hidden></data><span class="odl-name"><span data-od-slot="name"></span><span class="odl-tag" data-od-slot="tag" data-od-optional></span></span>
+        <span class="odl-price"><span class="odl-y" data-od-slot="price_year" data-od-optional></span><span class="odl-m" data-od-slot="price_month"></span> <small data-od-slot="unit" data-od-optional></small><span class="odl-billed odl-y" data-od-slot="billed_yearly" data-od-optional></span></span><span class="odl-for" data-od-slot="for" data-od-optional></span>
+        <ul data-od-list="features"><li data-od-item data-od-template hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span data-od-slot="text"></span></li></ul></label>
+      <label class="odl-plan" data-od-item><input type="radio" name="odl-plan-picker-plan" value="starter"><span class="odl-name">Starter</span>
         <span class="odl-price">$0 <small>for up to 3 people</small></span><span class="odl-for">For trying it with a small team.</span>
         <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Unlimited projects</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>7 days of history</li></ul></label>
-      <label class="odl-plan"><input type="radio" name="odl-plan-picker-plan" value="team" checked><span class="odl-name">Team <span class="odl-tag">Most teams pick this</span></span>
+      <label class="odl-plan" data-od-item><input type="radio" name="odl-plan-picker-plan" value="team" checked><span class="odl-name">Team <span class="odl-tag">Most teams pick this</span></span>
         <span class="odl-price"><span class="odl-y">$10</span><span class="odl-m">$12</span> <small>per person a month</small><span class="odl-billed odl-y">$120 a person, billed yearly</span></span><span class="odl-for">For teams who ship every week.</span>
         <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Everything in Starter</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Single sign-on</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>1 year of history</li></ul></label>
-      <label class="odl-plan"><input type="radio" name="odl-plan-picker-plan" value="business"><span class="odl-name">Business</span>
+      <label class="odl-plan" data-od-item><input type="radio" name="odl-plan-picker-plan" value="business"><span class="odl-name">Business</span>
         <span class="odl-price"><span class="odl-y">$20</span><span class="odl-m">$24</span> <small>per person a month</small><span class="odl-billed odl-y">$240 a person, billed yearly</span></span><span class="odl-for">For companies with audits to pass.</span>
         <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Everything in Team</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Audit log and SCIM</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Unlimited history</li></ul></label>
     </div>
   </fieldset>
 </div>
+<script>
+// Rendered from data: each plan's value, the chosen plan and the billing period come from the marked values.
+document.querySelectorAll(".odl-plan-picker").forEach((root) => {
+  if (root.dataset.odlReady) return; // once per root
+  root.dataset.odlReady = "1";
+  const period = root.querySelector('[data-od-slot="period"]')?.textContent.trim();
+  const p = period && root.querySelector(`.odl-period input[value="${period}"]`);
+  if (p) p.checked = true;
+  root.querySelectorAll(".odl-plan:not([hidden])").forEach((plan) => {
+    const input = plan.querySelector("input"), id = plan.querySelector('[data-od-slot="id"]')?.textContent.trim();
+    if (id) input.value = id;
+    if (plan.dataset.selected === "true") input.checked = true;
+    const m = plan.querySelector(".odl-price > .odl-m");
+    if (m && !plan.querySelector('.odl-price > .odl-y[data-od-slot="price_year"]') && plan.querySelector('[data-od-slot="price_month"]')) m.classList.remove("odl-m"); // one price for both periods
+  });
+});
+</script>

@@ -1,0 +1,17 @@
+{"title": "Invite people to Halden Robotics",
+ "lede": "The link in the email works for 14 days.",
+ "emails": [
+  {"address": "ines.okafor@haldenrobotics.example"},
+  {"address": "tomas.lindqvist@haldenrobotics.example"},
+  {"address": "priya.raman@haldenrobotics"}
+ ],
+ "roles": [
+  {"label": "Owner"},
+  {"label": "Editor"},
+  {"label": "Guest"}
+ ],
+ "role_description": "Can open and edit projects. Cannot add people or change the plan.",
+ "seats_used": 12,
+ "seats_total": 20,
+ "cancel": {"label": "Not now", "event": {"name": "close_invite"}},
+ "send": {"label": "Send invites", "event": {"name": "send_invites"}}}

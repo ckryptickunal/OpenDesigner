@@ -1,0 +1,42 @@
+/* <od-surface> states: loading, missing, stale, no permission, empty, approval. Tokens only (--ds-*), like the
+   library components. Load after tokens.css. MIT. */
+.od-surface { display: block; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
+/* an answer's words can be longer than the sample's: break a long word rather than push the page sideways */
+.od-surface [data-od-slot] { overflow-wrap: anywhere; }
+/* a button label written by the model may be longer than the sample: let it wrap inside the button, never past the edge */
+.od-surface [data-od-action] { max-inline-size: 100%; }
+.od-surface [data-od-action] [data-od-slot="label"], .od-surface [data-od-action]:not(:has(*)) { white-space: normal; text-align: center; }
+.od-surface .od-column { display: grid; gap: var(--ds-space-stack-md); }
+.od-surface .od-column[data-gap="sm"] { gap: var(--ds-space-stack-sm); }
+.od-surface .od-column[data-gap="lg"] { gap: var(--ds-space-stack-lg); }
+
+/* Loading: each slot still waiting becomes a quiet block the size of a short line, so the layout does not jump. */
+.od-surface [data-od-pending] { display: inline-block; min-inline-size: 6ch; min-block-size: 1lh; vertical-align: middle; color: transparent;
+  background: var(--ds-color-bg-neutral-subtle); border-radius: var(--ds-radius-detail);
+  animation: od-pulse var(--ds-motion-duration-extra) var(--ds-motion-easing-standard) infinite alternate; }
+.od-surface img[data-od-pending], .od-surface .od-missing-image[data-od-pending] { display: block; }
+/* a separator drawn before or after a waiting slot waits too */
+.od-surface [data-od-pending]::before, .od-surface [data-od-pending]::after, .od-surface [data-od-pending] + *::before { content: none; }
+@keyframes od-pulse { to { background: var(--ds-color-bg-neutral-subtle-hover); } }
+
+/* A value the answer did not have shows as missing, never as an invented number (R6). */
+.od-surface [data-od-missing]:empty::before { content: "–"; color: var(--ds-color-text-tertiary); }
+.od-surface .od-missing-image { display: grid; place-items: center; min-block-size: var(--ds-size-control-lg); padding: var(--ds-space-inset-md);
+  color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); text-align: center; background: var(--ds-color-bg-neutral-subtle); }
+
+.od-surface .od-notice { display: flex; gap: var(--ds-space-inline-xs); margin: 0 0 var(--ds-space-stack-sm); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.od-surface .od-notice[data-kind="lock"] { margin: 0; padding: var(--ds-space-inset-lg); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
+  border-radius: var(--ds-radius-container); background: var(--ds-color-surface-raised); }
+.od-surface .od-stale > :not(.od-notice) { opacity: 0.92; }
+.od-surface .od-empty { color: var(--ds-color-text-secondary); font: var(--ds-text-body-md); list-style: none; }
+.od-surface .od-empty td { padding: var(--ds-space-inset-lg); text-align: center; }
+
+.od-surface .od-approval { margin-block-start: var(--ds-space-stack-md); }
+.od-surface [data-od-state="pending"] { cursor: progress; }
+.od-surface [data-od-state="done"] { cursor: default; }
+
+.od-live { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .od-surface [data-od-pending] { animation: none; }
+}

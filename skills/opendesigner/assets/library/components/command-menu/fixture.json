@@ -1,0 +1,14 @@
+{
+ "groups": [
+  {"label": "Suggested", "options": [
+    {"label": "Create a project", "shortcut": "P"},
+    {"label": "Invite a teammate", "shortcut": "I"},
+    {"label": "Import tasks from a file"}]},
+  {"label": "Projects", "options": [
+    {"label": "Spring catalogue shoot", "meta": "12 open"},
+    {"label": "Warehouse move", "meta": "Due Fri"}]},
+  {"label": "Settings", "options": [
+    {"label": "Notifications"},
+    {"label": "Billing", "shortcut": "B"}]}
+ ],
+ "empty": "Nothing matches. Try another word."}

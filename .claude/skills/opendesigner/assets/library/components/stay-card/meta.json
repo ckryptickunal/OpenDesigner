@@ -47,8 +47,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a grid of search results where each place needs several photos and a save action before the person opens it"],
-    "avoid_when": ["a restaurant with cuisine and opening times: use restaurant-card", "a full booked trip with times and codes: use itinerary", "a list of saved places to compare: use wishlist-grid"],
+    "use_when": [
+      "a grid of search results where each place needs several photos and a save action before the person opens it"
+    ],
+    "avoid_when": [
+      "a restaurant with cuisine and opening times: use restaurant-card",
+      "a full booked trip with times and codes: use itinerary",
+      "a list of saved places to compare: use wishlist-grid"
+    ],
     "parts": [
       {
         "name": "photos",
@@ -113,7 +119,11 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "photos", "price"],
+      "required": [
+        "title",
+        "photos",
+        "price"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -133,7 +143,10 @@
           "part": "photos",
           "items": {
             "type": "object",
-            "required": ["src", "alt"],
+            "required": [
+              "src",
+              "alt"
+            ],
             "properties": {
               "src": {
                 "type": "string",
@@ -143,6 +156,23 @@
               "alt": {
                 "type": "string",
                 "maxLength": 100
+              },
+              "photo": {
+                "type": "object",
+                "required": [
+                  "src",
+                  "alt"
+                ],
+                "properties": {
+                  "src": {
+                    "type": "string",
+                    "maxLength": 2048
+                  },
+                  "alt": {
+                    "type": "string",
+                    "maxLength": 200
+                  }
+                }
               }
             }
           }
@@ -173,8 +203,16 @@
           "maxItems": 2,
           "part": "lines",
           "items": {
-            "type": "string",
-            "maxLength": 48
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 48
+              }
+            }
           }
         },
         "price": {
@@ -201,12 +239,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no photos, show one muted slide at the same size and hide the arrows and dots"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show the photo area as a muted block and the title, lines and price as muted bars"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -226,8 +266,18 @@
         "status": "handled",
         "how": "a long title wraps in balanced lines beside the rating, which never shrinks; price parts wrap onto a new line",
         "evidence": "text-wrap: balance"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches the heart, then the next or previous photo button, then the title link", "Enter or Space on the heart saves or unsaves the place", "Enter or Space on the photo buttons moves one photo, and the photo count is updated", "Enter on the title opens the place"]
+    "keyboard": [
+      "Tab reaches the heart, then the next or previous photo button, then the title link",
+      "Enter or Space on the heart saves or unsaves the place",
+      "Enter or Space on the photo buttons moves one photo, and the photo count is updated",
+      "Enter on the title opens the place"
+    ]
   }
 }

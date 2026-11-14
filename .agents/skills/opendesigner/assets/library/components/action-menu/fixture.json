@@ -1,0 +1,14 @@
+{"trigger": "Actions",
+ "menu_label": "Order actions",
+ "groups": [
+  {"heading": "Order",
+   "items": [
+    {"label": "Edit shipping", "shortcut": "E"},
+    {"label": "Print packing slip", "shortcut": "⌘P"},
+    {"label": "Split shipment"}]},
+  {"heading": "Refunds",
+   "items": [
+    {"label": "Issue refund", "disabled_note": "Not paid yet"},
+    {"label": "Copy order link", "shortcut": "⌘L"}]}],
+ "danger_label": "Cancel order",
+ "danger_shortcut": "⌘⌫"}

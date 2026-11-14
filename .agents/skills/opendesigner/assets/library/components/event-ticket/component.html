@@ -45,34 +45,38 @@
 .odl-event-ticket button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 @container (max-width: 21rem) { .odl-event-ticket .odl-actions { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .odl-event-ticket, .odl-event-ticket *, .odl-event-ticket *::before { transition: none !important; animation: none !important; } }
+.odl-event-ticket .odl-wallet[data-in_wallet="true"], .odl-event-ticket .odl-wallet[data-in_wallet="false"] { cursor: pointer; } /* the script copies it to aria-pressed */
+.odl-event-ticket .odl-card [hidden] { display: none; }
 </style>
-<article class="odl-event-ticket" aria-label="Ticket 1 of 2: Odalys Reyne, Lowtide Tour, Wrenfield Hall, Saturday 5 December">
+<article class="odl-event-ticket" aria-label="Ticket 1 of 2: Odalys Reyne, Lowtide Tour, Wrenfield Hall, Saturday 5 December" data-od-label="act">
   <div class="odl-card">
     <div class="odl-art">
-      <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=768&h=520&fit=crop&auto=format&q=70" alt="Stage lights over a concert crowd" width="384" height="260" loading="lazy" decoding="async">
-      <span class="odl-kind">Ticket 1 of 2</span>
-      <p class="odl-tour">Lowtide Tour 2026</p>
-      <h3>Odalys Reyne</h3>
-      <p class="odl-venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Wrenfield Hall, Glasgow</p>
+      <img data-od-media="photo" src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=768&h=520&fit=crop&auto=format&q=70" alt="Stage lights over a concert crowd" width="384" height="260" loading="lazy" decoding="async">
+      <span class="odl-kind" data-od-slot="count" data-od-optional>Ticket 1 of 2</span>
+      <p class="odl-tour" data-od-slot="tour" data-od-optional>Lowtide Tour 2026</p>
+      <h3 data-od-slot="act">Odalys Reyne</h3>
+      <p class="odl-venue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg><span data-od-slot="venue">Wrenfield Hall, Glasgow</span></p>
     </div>
     <div class="odl-body">
-      <dl class="odl-when">
-        <div><dt>Date</dt><dd>Sat 5 Dec</dd></div>
-        <div><dt>Doors</dt><dd>19:00</dd></div>
-        <div><dt>Show</dt><dd>20:30</dd></div>
+      <dl class="odl-when" data-od-list="when">
+        <div data-od-item><dt>Date</dt><dd>Sat 5 Dec</dd></div>
+        <div data-od-item><dt>Doors</dt><dd>19:00</dd></div>
+        <div data-od-item><dt>Show</dt><dd>20:30</dd></div>
+        <div data-od-item data-od-template hidden><dt data-od-slot="label"></dt><dd data-od-slot="value"></dd></div>
       </dl>
-      <dl class="odl-seat">
-        <div><dt>Section</dt><dd>B</dd></div>
-        <div><dt>Row</dt><dd>12</dd></div>
-        <div><dt>Seat</dt><dd>18</dd></div>
+      <dl class="odl-seat" data-od-list="seat">
+        <div data-od-item><dt>Section</dt><dd>B</dd></div>
+        <div data-od-item><dt>Row</dt><dd>12</dd></div>
+        <div data-od-item><dt>Seat</dt><dd>18</dd></div>
+        <div data-od-item data-od-template hidden><dt data-od-slot="label"></dt><dd data-od-slot="value"></dd></div>
       </dl>
       <div class="odl-qr">
-        <div><svg viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="Entry code for ticket 4417 0926 3381"><path d="M0 0h7v1h-7zM10 0h3v1h-3zM14 0h3v1h-3zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM11 1h4v1h-4zM19 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM12 2h3v1h-3zM18 2h2v1h-2zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h1v1h-1zM12 3h2v1h-2zM15 3h3v1h-3zM19 3h2v1h-2zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM8 4h3v1h-3zM16 4h1v1h-1zM18 4h3v1h-3zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM11 5h2v1h-2zM15 5h1v1h-1zM17 5h1v1h-1zM19 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM11 7h2v1h-2zM15 7h1v1h-1zM17 7h4v1h-4zM0 8h2v1h-2zM3 8h2v1h-2zM6 8h1v1h-1zM8 8h1v1h-1zM10 8h1v1h-1zM12 8h5v1h-5zM19 8h1v1h-1zM23 8h1v1h-1zM25 8h1v1h-1zM27 8h2v1h-2zM0 9h1v1h-1zM3 9h1v1h-1zM5 9h1v1h-1zM7 9h2v1h-2zM10 9h5v1h-5zM17 9h2v1h-2zM21 9h2v1h-2zM24 9h2v1h-2zM0 10h1v1h-1zM3 10h1v1h-1zM5 10h2v1h-2zM9 10h1v1h-1zM11 10h4v1h-4zM16 10h4v1h-4zM22 10h2v1h-2zM26 10h1v1h-1zM2 11h4v1h-4zM7 11h2v1h-2zM10 11h1v1h-1zM12 11h2v1h-2zM15 11h1v1h-1zM17 11h3v1h-3zM22 11h2v1h-2zM1 12h1v1h-1zM3 12h2v1h-2zM6 12h1v1h-1zM8 12h1v1h-1zM12 12h1v1h-1zM14 12h1v1h-1zM17 12h1v1h-1zM19 12h2v1h-2zM22 12h4v1h-4zM0 13h2v1h-2zM5 13h1v1h-1zM13 13h1v1h-1zM15 13h1v1h-1zM18 13h4v1h-4zM23 13h1v1h-1zM25 13h1v1h-1zM0 14h2v1h-2zM3 14h1v1h-1zM6 14h3v1h-3zM10 14h1v1h-1zM12 14h6v1h-6zM19 14h1v1h-1zM21 14h1v1h-1zM26 14h1v1h-1zM28 14h1v1h-1zM0 15h1v1h-1zM4 15h2v1h-2zM8 15h1v1h-1zM10 15h1v1h-1zM12 15h3v1h-3zM22 15h2v1h-2zM26 15h1v1h-1zM28 15h1v1h-1zM2 16h1v1h-1zM5 16h3v1h-3zM9 16h1v1h-1zM12 16h1v1h-1zM14 16h1v1h-1zM16 16h1v1h-1zM18 16h1v1h-1zM22 16h1v1h-1zM25 16h3v1h-3zM0 17h3v1h-3zM8 17h2v1h-2zM12 17h1v1h-1zM14 17h1v1h-1zM22 17h3v1h-3zM1 18h2v1h-2zM4 18h8v1h-8zM16 18h2v1h-2zM21 18h1v1h-1zM25 18h3v1h-3zM0 19h1v1h-1zM3 19h3v1h-3zM8 19h6v1h-6zM16 19h1v1h-1zM19 19h2v1h-2zM25 19h2v1h-2zM1 20h1v1h-1zM3 20h1v1h-1zM5 20h3v1h-3zM11 20h1v1h-1zM14 20h3v1h-3zM18 20h8v1h-8zM8 21h2v1h-2zM11 21h1v1h-1zM13 21h1v1h-1zM19 21h2v1h-2zM24 21h5v1h-5zM0 22h7v1h-7zM8 22h1v1h-1zM11 22h1v1h-1zM13 22h1v1h-1zM18 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h2v1h-2zM28 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM20 23h1v1h-1zM24 23h1v1h-1zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM11 24h1v1h-1zM13 24h5v1h-5zM20 24h6v1h-6zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h1v1h-1zM13 25h7v1h-7zM22 25h2v1h-2zM25 25h1v1h-1zM28 25h1v1h-1zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM11 26h3v1h-3zM15 26h1v1h-1zM17 26h1v1h-1zM19 26h1v1h-1zM21 26h2v1h-2zM24 26h2v1h-2zM0 27h1v1h-1zM6 27h1v1h-1zM9 27h1v1h-1zM11 27h5v1h-5zM17 27h1v1h-1zM20 27h1v1h-1zM22 27h1v1h-1zM25 27h4v1h-4zM0 28h7v1h-7zM8 28h1v1h-1zM11 28h3v1h-3zM17 28h1v1h-1zM19 28h1v1h-1zM22 28h1v1h-1zM25 28h1v1h-1zM27 28h2v1h-2z"/></svg></div>
-        <p>4417 0926 3381 · Show at the door</p>
+        <div data-od-sample><svg viewBox="0 0 29 29" shape-rendering="crispEdges" role="img" aria-label="Entry code for ticket 4417 0926 3381"><path d="M0 0h7v1h-7zM10 0h3v1h-3zM14 0h3v1h-3zM22 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM11 1h4v1h-4zM19 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM12 2h3v1h-3zM18 2h2v1h-2zM22 2h1v1h-1zM24 2h3v1h-3zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h1v1h-1zM12 3h2v1h-2zM15 3h3v1h-3zM19 3h2v1h-2zM22 3h1v1h-1zM24 3h3v1h-3zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM8 4h3v1h-3zM16 4h1v1h-1zM18 4h3v1h-3zM22 4h1v1h-1zM24 4h3v1h-3zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM11 5h2v1h-2zM15 5h1v1h-1zM17 5h1v1h-1zM19 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h7v1h-7zM11 7h2v1h-2zM15 7h1v1h-1zM17 7h4v1h-4zM0 8h2v1h-2zM3 8h2v1h-2zM6 8h1v1h-1zM8 8h1v1h-1zM10 8h1v1h-1zM12 8h5v1h-5zM19 8h1v1h-1zM23 8h1v1h-1zM25 8h1v1h-1zM27 8h2v1h-2zM0 9h1v1h-1zM3 9h1v1h-1zM5 9h1v1h-1zM7 9h2v1h-2zM10 9h5v1h-5zM17 9h2v1h-2zM21 9h2v1h-2zM24 9h2v1h-2zM0 10h1v1h-1zM3 10h1v1h-1zM5 10h2v1h-2zM9 10h1v1h-1zM11 10h4v1h-4zM16 10h4v1h-4zM22 10h2v1h-2zM26 10h1v1h-1zM2 11h4v1h-4zM7 11h2v1h-2zM10 11h1v1h-1zM12 11h2v1h-2zM15 11h1v1h-1zM17 11h3v1h-3zM22 11h2v1h-2zM1 12h1v1h-1zM3 12h2v1h-2zM6 12h1v1h-1zM8 12h1v1h-1zM12 12h1v1h-1zM14 12h1v1h-1zM17 12h1v1h-1zM19 12h2v1h-2zM22 12h4v1h-4zM0 13h2v1h-2zM5 13h1v1h-1zM13 13h1v1h-1zM15 13h1v1h-1zM18 13h4v1h-4zM23 13h1v1h-1zM25 13h1v1h-1zM0 14h2v1h-2zM3 14h1v1h-1zM6 14h3v1h-3zM10 14h1v1h-1zM12 14h6v1h-6zM19 14h1v1h-1zM21 14h1v1h-1zM26 14h1v1h-1zM28 14h1v1h-1zM0 15h1v1h-1zM4 15h2v1h-2zM8 15h1v1h-1zM10 15h1v1h-1zM12 15h3v1h-3zM22 15h2v1h-2zM26 15h1v1h-1zM28 15h1v1h-1zM2 16h1v1h-1zM5 16h3v1h-3zM9 16h1v1h-1zM12 16h1v1h-1zM14 16h1v1h-1zM16 16h1v1h-1zM18 16h1v1h-1zM22 16h1v1h-1zM25 16h3v1h-3zM0 17h3v1h-3zM8 17h2v1h-2zM12 17h1v1h-1zM14 17h1v1h-1zM22 17h3v1h-3zM1 18h2v1h-2zM4 18h8v1h-8zM16 18h2v1h-2zM21 18h1v1h-1zM25 18h3v1h-3zM0 19h1v1h-1zM3 19h3v1h-3zM8 19h6v1h-6zM16 19h1v1h-1zM19 19h2v1h-2zM25 19h2v1h-2zM1 20h1v1h-1zM3 20h1v1h-1zM5 20h3v1h-3zM11 20h1v1h-1zM14 20h3v1h-3zM18 20h8v1h-8zM8 21h2v1h-2zM11 21h1v1h-1zM13 21h1v1h-1zM19 21h2v1h-2zM24 21h5v1h-5zM0 22h7v1h-7zM8 22h1v1h-1zM11 22h1v1h-1zM13 22h1v1h-1zM18 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h2v1h-2zM28 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM20 23h1v1h-1zM24 23h1v1h-1zM0 24h1v1h-1zM2 24h3v1h-3zM6 24h1v1h-1zM11 24h1v1h-1zM13 24h5v1h-5zM20 24h6v1h-6zM0 25h1v1h-1zM2 25h3v1h-3zM6 25h1v1h-1zM8 25h1v1h-1zM13 25h7v1h-7zM22 25h2v1h-2zM25 25h1v1h-1zM28 25h1v1h-1zM0 26h1v1h-1zM2 26h3v1h-3zM6 26h1v1h-1zM11 26h3v1h-3zM15 26h1v1h-1zM17 26h1v1h-1zM19 26h1v1h-1zM21 26h2v1h-2zM24 26h2v1h-2zM0 27h1v1h-1zM6 27h1v1h-1zM9 27h1v1h-1zM11 27h5v1h-5zM17 27h1v1h-1zM20 27h1v1h-1zM22 27h1v1h-1zM25 27h4v1h-4zM0 28h7v1h-7zM8 28h1v1h-1zM11 28h3v1h-3zM17 28h1v1h-1zM19 28h1v1h-1zM22 28h1v1h-1zM25 28h1v1h-1zM27 28h2v1h-2z"/></svg></div>
+        <p><span data-od-slot="ticket_number">4417 0926 3381</span><span data-od-optional> · <span data-od-slot="code_note">Show at the door</span></span></p>
       </div>
       <div class="odl-actions">
-        <button type="button" class="odl-wallet" aria-pressed="false"><svg class="is-add" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg><svg class="is-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="is-add">Add to wallet</span><span class="is-done">In your wallet</span></button>
-        <button type="button" class="odl-send"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg>Transfer</button>
+        <button type="button" class="odl-wallet" aria-pressed="false" data-od-var="in_wallet" data-in_wallet="false"><svg class="is-add" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg><svg class="is-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="is-add">Add to wallet</span><span class="is-done">In your wallet</span></button>
+        <button type="button" class="odl-send" data-od-action="transfer" data-od-effect="change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg><span data-od-slot="label">Transfer</span></button>
       </div>
     </div>
   </div>
@@ -81,7 +85,9 @@
 document.querySelectorAll(".odl-event-ticket").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
-  root.querySelector(".odl-wallet").addEventListener("click", (e) => {
+  const wallet = root.querySelector(".odl-wallet");
+  if (wallet.dataset.in_wallet) wallet.setAttribute("aria-pressed", String(wallet.dataset.in_wallet === "true")); // from data
+  wallet.addEventListener("click", (e) => {
     const b = e.currentTarget; b.setAttribute("aria-pressed", String(b.getAttribute("aria-pressed") !== "true"));
   });
 });

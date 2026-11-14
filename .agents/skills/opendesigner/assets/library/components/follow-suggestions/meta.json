@@ -80,8 +80,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a community or creator app suggesting accounts, groups or creators to follow, with a reason for each"],
-    "avoid_when": ["a full list of people to manage or search: use member-list", "inviting teammates by email to a workspace: use invite-members", "one person's own profile: use profile-card"],
+    "use_when": [
+      "a community or creator app suggesting accounts, groups or creators to follow, with a reason for each"
+    ],
+    "avoid_when": [
+      "a full list of people to manage or search: use member-list",
+      "inviting teammates by email to a workspace: use invite-members",
+      "one person's own profile: use profile-card"
+    ],
     "parts": [
       {
         "name": "title",
@@ -146,7 +152,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "people"],
+      "required": [
+        "title",
+        "people"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -165,7 +174,10 @@
           "part": "cards",
           "items": {
             "type": "object",
-            "required": ["name", "photo"],
+            "required": [
+              "name",
+              "photo"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -188,12 +200,20 @@
                 "minItems": 0,
                 "maxItems": 2,
                 "items": {
-                  "type": "string",
-                  "maxLength": 300
+                  "type": "object",
+                  "properties": {
+                    "photo": {
+                      "type": "string",
+                      "maxLength": 300
+                    }
+                  }
                 }
               },
               "follow_label": {
-                "enum": ["Follow", "Follow back"]
+                "enum": [
+                  "Follow",
+                  "Follow back"
+                ]
               },
               "following": {
                 "type": "boolean"
@@ -215,8 +235,9 @@
         "evidence": ".odl-wrap.is-empty .odl-done { display: block; }"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show three or four cards with a muted circle for the photo and muted bars for the name and button"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -235,8 +256,17 @@
         "status": "handled",
         "how": "long names and handles are cut with an ellipsis on one line; the reason wraps",
         "evidence": "text-overflow: ellipsis; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab moves through See all, then each card's remove button and follow button", "Enter or Space on a follow button switches it between Follow and Following", "Enter or Space on a remove button removes the card, announces it and moves focus to the next card's remove button"]
+    "keyboard": [
+      "Tab moves through See all, then each card's remove button and follow button",
+      "Enter or Space on a follow button switches it between Follow and Following",
+      "Enter or Space on a remove button removes the card, announces it and moves focus to the next card's remove button"
+    ]
   }
 }

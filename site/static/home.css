@@ -600,3 +600,15 @@
   [data-au].on .au-more:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; border-radius: var(--r-card); }
   [data-au].on:not(.au-open) .au-list { display: none; }
 }
+
+/* Smart UI's live demo in a frame (site/smart_ui_page.py): /smart-ui/ shows the whole demo, the home page its ?mini preview.
+   The iframe takes the bezel's radius minus its rim, like a picture on a stage. */
+.su-frame { display: block; width: 100%; height: min(760px, 82vh); border: 0; border-radius: max(2px, calc(var(--in-r) - var(--rim))); background: #fff; }
+.su-mini .su-frame { height: 440px; }
+@media (max-width: 640px) { .su-frame { height: min(680px, 80vh); } .su-mini .su-frame { height: 420px; } }
+@supports (corner-shape: superellipse(1.35)) { .su-frame { corner-shape: superellipse(1.35); } }
+.h-smart .h-split { align-items: center; }
+.h-smart .h-lede { max-width: 46ch; }
+.h-smart .h-more { margin: 20px 0 0; text-align: left; }
+.su-preview { margin: 0; min-width: 0; }
+.h-smart .h-head { margin-bottom: 0; }

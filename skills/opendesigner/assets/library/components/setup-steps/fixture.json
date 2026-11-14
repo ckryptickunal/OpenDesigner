@@ -1,0 +1,11 @@
+{"title": "Get your shop ready to sell",
+ "steps": [
+  {"title": "Add your shop name", "state": "done", "note": "Done"},
+  {"title": "Upload a logo", "state": "done", "note": "Done"},
+  {"title": "Add your first product", "state": "now", "note": "About 5 min",
+   "detail": "A photo, a price and a short description are enough to start.",
+   "action": {"label": "Add a product", "event": {"name": "open_product_editor"}},
+   "skip": {"label": "Do it later", "event": {"name": "skip_step", "context": {"step": "first_product"}}}},
+  {"title": "Choose delivery options", "state": "next"},
+  {"title": "Connect a payout account", "state": "next", "note": "About 3 min"},
+  {"title": "Publish your shop", "state": "next"}]}

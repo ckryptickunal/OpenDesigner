@@ -1,0 +1,10 @@
+{"title": "Open late",
+ "subtitle": "Delivering to Larch Avenue",
+ "places": [
+  {"name": "Tamberly Noodle House", "photo": {"src": "https://images.unsplash.com/photo-1612927601601-6638404737ce?w=720&h=450&fit=crop&auto=format&q=70", "alt": "Ramen topped with egg, chili and scallions"}, "save_label": "Save Tamberly Noodle House", "saved": "false",
+   "rating": 4.7, "rating_count": "3.1k", "cuisine": "Noodles · Dumplings · $$", "time": "25–35 min", "fee": "$0.99 delivery", "promo": "Free dumplings over $30", "promo_kind": "offer"},
+  {"name": "Corriemoor Café", "photo": {"src": "https://images.unsplash.com/photo-1530610476181-d83430b64dcd?w=720&h=450&fit=crop&auto=format&q=70", "alt": "A croissant on a steel tray"}, "save_label": "Save Corriemoor Café", "saved": "true",
+   "rating": 4.5, "rating_count": "412", "cuisine": "Café · Pastries · $", "time": "10–20 min", "fee": "Free delivery", "promo": ""},
+  {"name": "Greenvale Kitchen", "photo": {"src": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=720&h=450&fit=crop&auto=format&q=70", "alt": "A grain bowl with vegetables and meat"}, "save_label": "Save Greenvale Kitchen", "saved": "false",
+   "cuisine": "Bowls · Salads · $$", "rating": "", "rating_count": "", "time": "20–30 min", "fee": "", "promo": "New on the app", "promo_kind": "new"}
+ ]}

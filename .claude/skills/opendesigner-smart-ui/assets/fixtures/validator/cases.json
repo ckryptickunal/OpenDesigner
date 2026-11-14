@@ -1,0 +1,2324 @@
+{
+ "about": "Shared fixtures for smartui.py validate() and od-validate.js validate(). expect lists rule@path for every error; both must match exactly.",
+ "cases": [
+  {
+   "name": "ok-facts",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "ok-results-named",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Results",
+        "items": [
+         {
+          "title": "Harbour room",
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room"
+           }
+          }
+         },
+         {
+          "title": "Garden room",
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room"
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "unknown-component",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Carousel",
+        "items": []
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "unknown-component@/0/createSurface/components/0/component"
+   ]
+  },
+  {
+   "name": "off-token-colour",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ],
+        "tone": "#ff0000"
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R4-token@/0/createSurface/components/0/tone"
+   ]
+  },
+  {
+   "name": "style-key",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ],
+        "style": {
+         "color": "red"
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R4-key@/0/createSurface/components/0/style"
+   ]
+  },
+  {
+   "name": "class-key",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ],
+        "class": "big"
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R4-key@/0/createSurface/components/0/class"
+   ]
+  },
+  {
+   "name": "onclick-key",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ],
+        "onClick": "steal()"
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R4-key@/0/createSurface/components/0/onClick"
+   ]
+  },
+  {
+   "name": "raw-px-text",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "12px",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R4-style@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "raw-hex-text",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "#1e3a8a",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R4-style@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "script-in-text",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "<script>alert(1)</script>",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R4-html@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "html-tag-in-fact",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "<b>Seats</b>",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R4-html@/0/createSurface/components/0/facts/0/label"
+   ]
+  },
+  {
+   "name": "hex-word-is-fine",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Ticket #123 open",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "code-may-hold-html",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Code",
+        "code": "<div style=\"color:#fff\">12px</div>"
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "foreign-image-url",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Results",
+        "items": [
+         {
+          "title": "Harbour room",
+          "photo": {
+           "src": "https://evil.example/p.png?d=secret",
+           "alt": "Room"
+          },
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room"
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R4-url@/0/createSurface/components/0/items/0/photo/src"
+   ]
+  },
+  {
+   "name": "http-image-url",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Results",
+        "items": [
+         {
+          "title": "Harbour room",
+          "photo": {
+           "src": "http://images.unsplash.com/photo-1",
+           "alt": "Room"
+          },
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room"
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R4-url@/0/createSurface/components/0/items/0/photo/src"
+   ]
+  },
+  {
+   "name": "wildcard-host-ok",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Results",
+        "items": [
+         {
+          "title": "Harbour room",
+          "photo": {
+           "src": "https://img.cdn.example/a.jpg",
+           "alt": "Room"
+          },
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room"
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "image-without-alt",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Results",
+        "items": [
+         {
+          "title": "Harbour room",
+          "photo": {
+           "src": "https://images.unsplash.com/photo-1",
+           "alt": ""
+          },
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room"
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "empty@/0/createSurface/components/0/items/0/photo/alt"
+   ]
+  },
+  {
+   "name": "unnamed-button",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Results",
+        "items": [
+         {
+          "title": "Harbour room",
+          "book": {
+           "label": "",
+           "event": {
+            "name": "book_room"
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "empty@/0/createSurface/components/0/items/0/book/label"
+   ]
+  },
+  {
+   "name": "repeated-names-outside-list",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Results",
+        "items": [
+         {
+          "title": "Room",
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room"
+           }
+          }
+         },
+         {
+          "title": "Room",
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room"
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R5-repeat@/0/createSurface/components/0/items/1/book"
+   ]
+  },
+  {
+   "name": "a11y-label-separates",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Results",
+        "items": [
+         {
+          "title": "Room",
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room"
+           },
+           "a11y_label": "Book the harbour room"
+          }
+         },
+         {
+          "title": "Room",
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room"
+           },
+           "a11y_label": "Book the garden room"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "model-approves-itself",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Results",
+        "items": [
+         {
+          "title": "Harbour room",
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room",
+            "context": {
+             "approved": true
+            }
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R3-approval@/0/createSurface/components/0/items/0/book/event/context/approved"
+   ]
+  },
+  {
+   "name": "bad-event-name",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Results",
+        "items": [
+         {
+          "title": "Harbour room",
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "Book Now!"
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "pattern@/0/createSurface/components/0/items/0/book/event/name"
+   ]
+  },
+  {
+   "name": "unknown-property",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ],
+        "subtitle": "x"
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "unknown-property@/0/createSurface/components/0/subtitle"
+   ]
+  },
+  {
+   "name": "missing-required",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "required@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "too-long",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "length@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "too-many-items",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "0",
+          "value": "1"
+         },
+         {
+          "label": "1",
+          "value": "1"
+         },
+         {
+          "label": "2",
+          "value": "1"
+         },
+         {
+          "label": "3",
+          "value": "1"
+         },
+         {
+          "label": "4",
+          "value": "1"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "items@/0/createSurface/components/0/facts"
+   ]
+  },
+  {
+   "name": "measure-out-of-range",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12",
+          "share": 140
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "range@/0/createSurface/components/0/facts/0/share"
+   ]
+  },
+  {
+   "name": "theme-in-v1",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ],
+      "theme": {
+       "primaryColor": "#000"
+      }
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R4-key@/0/createSurface/theme"
+   ]
+  },
+  {
+   "name": "wrong-version",
+   "answer": [
+    {
+     "version": "0.9",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "version@/0/version"
+   ]
+  },
+  {
+   "name": "no-root",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "facts",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "root@"
+   ]
+  },
+  {
+   "name": "two-parts-by-default",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Column",
+        "children": [
+         "a",
+         "b"
+        ]
+       },
+       {
+        "id": "a",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       },
+       {
+        "id": "b",
+        "component": "Facts",
+        "title": "Other",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "R2-one@"
+   ]
+  },
+  {
+   "name": "two-parts-when-asked",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Column",
+        "children": [
+         "a",
+         "b"
+        ]
+       },
+       {
+        "id": "a",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       },
+       {
+        "id": "b",
+        "component": "Facts",
+        "title": "Other",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "limits": {
+     "leaves": 2
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "cycle",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Column",
+        "children": [
+         "c",
+         "a"
+        ]
+       },
+       {
+        "id": "c",
+        "component": "Column",
+        "children": [
+         "root",
+         "a"
+        ]
+       },
+       {
+        "id": "a",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "limits": {
+     "leaves": 3
+    }
+   },
+   "expect": [
+    "cycle@/0/createSurface/components/0"
+   ]
+  },
+  {
+   "name": "orphan",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       },
+       {
+        "id": "x",
+        "component": "Facts",
+        "title": "Lost",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "orphan@/0/createSurface/components/1"
+   ]
+  },
+  {
+   "name": "assertive-live",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ],
+        "@accessibility": {
+         "live": "assertive"
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "enum@/0/createSurface/components/0/@accessibility/live"
+   ]
+  },
+  {
+   "name": "binding-refused",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": {
+         "@path": "/plan/name"
+        },
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ],
+      "dataModel": {
+       "plan": {
+        "name": "Team"
+       }
+      }
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "binding@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "binding-missing",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": {
+         "@path": "/plan/name"
+        },
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ],
+      "dataModel": {}
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "binding@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "binding-never-reaches-render",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": {
+         "@path": "/t"
+        },
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ],
+      "dataModel": {
+       "t": "<img src=x>"
+      }
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "binding@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "update-before-create",
+   "answer": [
+    {
+     "version": "1.0",
+     "updateComponents": {
+      "surfaceId": "s9",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "integrity@/0/updateComponents/surfaceId"
+   ]
+  },
+  {
+   "name": "partial-allows-missing",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts"
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "partial": true
+   },
+   "expect": []
+  },
+  {
+   "name": "partial-still-refuses-html",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "<i>x</i>"
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "partial": true
+   },
+   "expect": [
+    "R4-html@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "invented-number",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Results",
+        "items": [
+         {
+          "title": "Harbour room",
+          "price": 189,
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room"
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "source": {
+     "rooms": [
+      {
+       "name": "Harbour room",
+       "price": 179
+      }
+     ]
+    }
+   },
+   "expect": [
+    "R6-number@/0/createSurface/components/0/items/0/price"
+   ]
+  },
+  {
+   "name": "number-from-data",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Results",
+        "items": [
+         {
+          "title": "Harbour room",
+          "price": 179,
+          "book": {
+           "label": "Book",
+           "event": {
+            "name": "book_room"
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "source": {
+     "rooms": [
+      {
+       "name": "Harbour room",
+       "price": "179.00"
+      }
+     ]
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "missing-value-is-null",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12",
+          "share": null
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "source": {
+     "seats": 12
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "wrong-catalog",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://a2ui.org/specification/v1_0/catalogs/basic/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "catalog@/0/createSurface/catalogId"
+   ]
+  },
+  {
+   "name": "not-a-list",
+   "answer": "hello",
+   "opts": {},
+   "expect": [
+    "shape@"
+   ]
+  },
+  {
+   "name": "null-where-not-allowed",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": null,
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "type@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "short-form-one-part",
+   "answer": {
+    "component": "Facts",
+    "title": "Plan",
+    "facts": [
+     {
+      "label": "Seats",
+      "value": "12"
+     }
+    ]
+   },
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "short-form-checked-too",
+   "answer": {
+    "component": "Facts",
+    "title": "<b>Plan</b>",
+    "facts": [
+     {
+      "label": "Seats",
+      "value": "12"
+     }
+    ],
+    "style": "x"
+   },
+   "opts": {},
+   "expect": [
+    "R4-html@/0/createSurface/components/0/title",
+    "R4-key@/0/createSurface/components/0/style"
+   ]
+  },
+  {
+   "name": "short-form-list",
+   "answer": [
+    {
+     "component": "Column",
+     "id": "root",
+     "children": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "component": "Facts",
+     "id": "a",
+     "title": "A",
+     "facts": [
+      {
+       "label": "x",
+       "value": "1"
+      }
+     ]
+    },
+    {
+     "component": "Facts",
+     "id": "b",
+     "title": "B",
+     "facts": [
+      {
+       "label": "y",
+       "value": "2"
+      }
+     ]
+    }
+   ],
+   "opts": {
+    "limits": {
+     "leaves": 2
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "copy-title-case",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Unpaid Invoices",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": [
+    "copy-case@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "copy-sentence-case-ok",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Unpaid invoices",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": []
+  },
+  {
+   "name": "copy-name-from-data",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Casa do Rio",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true,
+    "source": {
+     "hotel": "Casa do Rio"
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "copy-acronym-ok",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Invoice TH-1043",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": []
+  },
+  {
+   "name": "copy-banned-word",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Paid successfully",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": [
+    "copy-word@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "copy-duplicate-row",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Plan",
+        "facts": [
+         {
+          "label": "Number",
+          "value": "TH-1043"
+         },
+         {
+          "label": "Invoice number",
+          "value": "TH-1043"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": [
+    "duplicate-row@/0/createSurface/components/0/facts/1"
+   ]
+  },
+  {
+   "name": "copy-off-by-default",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Payment Confirmation",
+        "facts": [
+         {
+          "label": "Seats",
+          "value": "12"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "ok-table",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Table",
+        "title": "Unpaid invoices",
+        "columns": [
+         {
+          "label": "Invoice"
+         },
+         {
+          "label": "Amount",
+          "align": "end"
+         }
+        ],
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "$120.00"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": []
+  },
+  {
+   "name": "bad-table-no-columns",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Table",
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "$120.00"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "required@/0/createSurface/components/0/columns",
+    "table-headers@/0/createSurface/components/0/columns"
+   ]
+  },
+  {
+   "name": "bad-table-blank-header",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Table",
+        "columns": [
+         {
+          "label": "Invoice"
+         },
+         {
+          "label": "  "
+         }
+        ],
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "$120.00"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "table-headers@/0/createSurface/components/0/columns/1/label"
+   ]
+  },
+  {
+   "name": "bad-table-more-cells-than-headers",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Table",
+        "columns": [
+         {
+          "label": "Invoice"
+         },
+         {
+          "label": "Amount",
+          "align": "end"
+         }
+        ],
+        "rows": [
+         {
+          "cells": [
+           {
+            "text": "TH-1043"
+           },
+           {
+            "text": "$120.00"
+           },
+           {
+            "text": "Sep 2"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {},
+   "expect": [
+    "table-headers@/0/createSurface/components/0/rows/0/cells"
+   ]
+  },
+  {
+   "name": "ok-consequence-stated",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Confirm",
+        "title": "Pay fine FH40018273",
+        "approve": {
+         "label": "Pay £35.00",
+         "event": {
+          "name": "pay_fine",
+          "context": {
+           "reference": "FH40018273"
+          }
+         }
+        },
+        "warning": "Paying closes the notice. You can no longer challenge it."
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "consequences": {
+     "pay_fine": [
+      "Paying closes the notice. You can no longer challenge it."
+     ]
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "bad-consequence-left-out",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Confirm",
+        "title": "Pay fine FH40018273",
+        "approve": {
+         "label": "Pay £35.00",
+         "event": {
+          "name": "pay_fine",
+          "context": {
+           "reference": "FH40018273"
+          }
+         }
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "consequences": {
+     "pay_fine": [
+      "Paying closes the notice. You can no longer challenge it."
+     ]
+    }
+   },
+   "expect": [
+    "R3-consequence@/0/createSurface/components/0"
+   ]
+  },
+  {
+   "name": "ok-consequence-other-action",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Confirm",
+        "title": "Pay fine FH40018273",
+        "approve": {
+         "label": "Book",
+         "event": {
+          "name": "book_slot"
+         }
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "consequences": {
+     "pay_fine": [
+      "Paying closes the notice. You can no longer challenge it."
+     ]
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "ok-steps-from-data",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Steps",
+        "steps": [
+         {
+          "label": "Submitted",
+          "state": "done"
+         },
+         {
+          "label": "Waiting for your document",
+          "state": "now"
+         },
+         {
+          "label": "Decision",
+          "state": "next"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "source": {
+     "application": {
+      "steps": [
+       {
+        "label": "Submitted",
+        "state": "done"
+       },
+       {
+        "label": "Waiting for your document",
+        "state": "current"
+       },
+       {
+        "label": "Decision",
+        "state": "next"
+       }
+      ]
+     }
+    }
+   },
+   "expect": []
+  },
+  {
+   "name": "bad-step-state-not-the-data",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Steps",
+        "steps": [
+         {
+          "label": "Submitted",
+          "state": "done"
+         },
+         {
+          "label": "Decision",
+          "state": "now"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "source": {
+     "application": {
+      "steps": [
+       {
+        "label": "Submitted",
+        "state": "done"
+       },
+       {
+        "label": "Waiting for your document",
+        "state": "current"
+       },
+       {
+        "label": "Decision",
+        "state": "next"
+       }
+      ]
+     }
+    }
+   },
+   "expect": [
+    "R6-step@/0/createSurface/components/0/steps/1/state"
+   ]
+  },
+  {
+   "name": "bad-step-not-in-the-data",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Steps",
+        "steps": [
+         {
+          "label": "Submitted",
+          "state": "done"
+         },
+         {
+          "label": "Under review",
+          "state": "now"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "source": {
+     "application": {
+      "steps": [
+       {
+        "label": "Submitted",
+        "state": "done"
+       },
+       {
+        "label": "Waiting for your document",
+        "state": "current"
+       },
+       {
+        "label": "Decision",
+        "state": "next"
+       }
+      ]
+     }
+    }
+   },
+   "expect": [
+    "R6-step@/0/createSurface/components/0/steps/1/label"
+   ]
+  },
+  {
+   "name": "bad-copy-successful",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Facts",
+        "title": "Payment successful",
+        "facts": [
+         {
+          "label": "Paid",
+          "value": "£35.00"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "copy": true
+   },
+   "expect": [
+    "copy-word@/0/createSurface/components/0/title"
+   ]
+  },
+  {
+   "name": "ok-consequence-request-button",
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/test/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Confirm",
+        "title": "Fine FH40018273",
+        "cancel": {
+         "label": "Pay this fine",
+         "event": {
+          "name": "pay_fine",
+          "context": {
+           "reference": "FH40018273"
+          }
+         }
+        },
+        "approve": {
+         "label": "Done",
+         "event": {
+          "name": "close"
+         }
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "opts": {
+    "consequences": {
+     "pay_fine": [
+      "Paying closes the notice. You can no longer challenge it."
+     ]
+    }
+   },
+   "expect": []
+  }
+ ]
+}

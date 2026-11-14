@@ -1,0 +1,9 @@
+{"poster": {"src": "https://images.unsplash.com/photo-1446038202205-1c96430dbdab?w=1472&h=828&fit=crop&auto=format&q=70", "alt": "Rocky coastline and blue ocean"},
+ "duration": 1505, "position": 64, "buffered": 300, "volume": 65,
+ "cues": [
+  {"at": 58, "text": "Every spring the cliffs lose a little more ground."},
+  {"at": 64, "text": "This stretch moved two metres last winter."},
+  {"at": 77, "text": "Hanne has walked it every morning for thirty years."}
+ ],
+ "eyebrow": "Coastline Diaries · Episode 2", "tag": "CC · HD", "title": "The Moving Shore",
+ "summary": "Hanne Rystad walks the eroding cliffs near her village and counts what the sea took this year. 25 min."}

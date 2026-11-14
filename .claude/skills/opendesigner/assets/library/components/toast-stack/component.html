@@ -12,13 +12,13 @@
 .odl-toast-stack li:nth-child(3) { animation-delay: calc(2 * var(--ds-motion-duration-stagger)); }
 @keyframes odl-toast-in { from { opacity: 0; transform: translateY(var(--ds-space-8)) scale(var(--ds-motion-scale-enter)); } }
 .odl-toast-stack .odl-icon { inline-size: var(--ds-size-icon-md); block-size: var(--ds-size-icon-md); margin-block-start: calc((1lh - var(--ds-size-icon-md)) / 2); }
-.odl-toast-stack .is-ok .odl-icon { color: var(--ds-color-text-success); }
-.odl-toast-stack .is-error .odl-icon { color: var(--ds-color-text-danger); }
-.odl-toast-stack .is-busy .odl-icon { color: var(--ds-color-icon-subtle); }
+.odl-toast-stack [data-kind="ok"] .odl-icon { color: var(--ds-color-text-success); }
+.odl-toast-stack [data-kind="error"] .odl-icon { color: var(--ds-color-text-danger); }
+.odl-toast-stack [data-kind="busy"] .odl-icon { color: var(--ds-color-icon-subtle); }
 .odl-toast-stack p { display: grid; gap: var(--ds-space-stack-xs); margin: 0; min-inline-size: 0; font-weight: var(--ds-font-weight-label); }
 .odl-toast-stack p small { color: var(--ds-color-text-secondary); font: var(--ds-text-body-sm); font-variant-numeric: tabular-nums; }
 .odl-toast-stack .odl-progress { display: block; block-size: var(--ds-space-4); margin-block-start: var(--ds-space-stack-xs); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); overflow: hidden; }
-.odl-toast-stack .odl-progress::before { content: ""; display: block; inline-size: 62%; block-size: 100%; border-radius: inherit; background: var(--ds-color-bg-action-primary); }
+.odl-toast-stack .odl-progress::before { content: ""; display: block; inline-size: calc(var(--od-ratio, 0.62) * 100%); block-size: 100%; border-radius: inherit; background: var(--ds-color-bg-action-primary); }
 .odl-toast-stack .odl-acts { display: flex; align-items: center; gap: var(--ds-space-2); margin-block: calc((1lh - max(var(--ds-size-control-sm), var(--ds-size-target-min))) / 2) 0; }
 .odl-toast-stack button { display: inline-grid; place-items: center; min-inline-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); min-block-size: max(var(--ds-size-control-sm), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-sm);
   border: 0; border-radius: var(--ds-radius-control); background: transparent; color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); cursor: pointer;
@@ -33,20 +33,29 @@
   .odl-toast-stack .odl-acts { grid-column: 2; margin-block-start: var(--ds-space-stack-xs); margin-inline-start: calc(-1 * var(--ds-space-inset-sm)); }
   .odl-toast-stack .odl-close { margin-inline-start: auto; }
 }
+/* the hidden full template item (data-od-template) stays out of sight in the static file */
+.odl-toast-stack [hidden] { display: none !important; }
+/* a renderer's "nothing to show" row spans the whole toast */
+.odl-toast-stack li.od-empty { display: block; color: var(--ds-color-text-secondary); }
 @media (prefers-reduced-motion: reduce) { .odl-toast-stack, .odl-toast-stack *, .odl-toast-stack *::before { transition: none !important; animation: none !important; } }
 </style>
-<ol class="odl-toast-stack" aria-label="Notifications">
-  <li class="is-ok" role="status">
+<ol class="odl-toast-stack" aria-label="Notifications" data-od-list="toasts">
+  <li data-od-item data-od-template hidden data-od-var="kind" data-kind="ok" role="status">
+    <svg class="odl-icon" data-od-when="kind=ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg><svg class="odl-icon" data-od-when="kind=busy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg><svg class="odl-icon" data-od-when="kind=error" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+    <p><span data-od-slot="message"></span><small data-od-slot="detail" data-od-optional></small><span class="odl-progress" data-od-measure="progress" data-od-optional aria-hidden="true"></span></p>
+    <span class="odl-acts"><button type="button" class="odl-act" data-od-action="action" ></button><button type="button" class="odl-close" aria-label="Dismiss" data-od-action="dismiss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
+  </li>
+  <li data-od-item data-kind="ok" role="status">
     <svg class="odl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
     <p>Moved 3 receipts to credit<small>Quenwick Mutual · $21,162.82</small></p>
     <span class="odl-acts"><button type="button" class="odl-act">Undo</button><button type="button" class="odl-close" aria-label="Dismiss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
   </li>
-  <li class="is-busy" role="status">
+  <li data-od-item data-kind="busy" role="status">
     <svg class="odl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-    <p>Uploading statement.pdf<small>2.1 of 3.4 MB</small><span class="odl-progress" aria-hidden="true"></span></p>
+    <p>Uploading statement.pdf<small>2.1 of 3.4 MB</small><span class="odl-progress" style="--od-ratio: 0.62" aria-hidden="true"></span></p>
     <span class="odl-acts"><button type="button" class="odl-act">Cancel</button></span>
   </li>
-  <li class="is-error" role="alert">
+  <li data-od-item data-kind="error" role="alert">
     <svg class="odl-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
     <p>Couldn’t send the reminder<small>The mail server didn’t answer. Your text is saved.</small></p>
     <span class="odl-acts"><button type="button" class="odl-act">Retry</button><button type="button" class="odl-close" aria-label="Dismiss"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>

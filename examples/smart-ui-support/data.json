@@ -1,0 +1,232 @@
+{
+ "about": "Invented billing data for the Smart UI example.",
+ "subscription": {
+  "plan": "Team",
+  "seats": 12,
+  "price_per_seat": 92,
+  "monthly": "€1,104",
+  "renews": "2026-12-01",
+  "card": "Visa ending 4471",
+  "calls_included": 500000
+ },
+ "plans": [
+  {
+   "name": "Starter",
+   "price_per_seat": 38,
+   "calls": "100,000 a month",
+   "support": "Email, 2 working days",
+   "sso": "No",
+   "audit_log": "No"
+  },
+  {
+   "name": "Team",
+   "price_per_seat": 92,
+   "calls": "500,000 a month",
+   "support": "Email and chat, same day",
+   "sso": "Yes",
+   "audit_log": "90 days"
+  },
+  {
+   "name": "Scale",
+   "price_per_seat": 148,
+   "calls": "2,000,000 a month",
+   "support": "Named contact, 1 hour",
+   "sso": "Yes",
+   "audit_log": "2 years"
+  }
+ ],
+ "invoices": [
+  {
+   "number": "TH-1047",
+   "date": "2026-11-01",
+   "amount": "€1,104.00",
+   "status": "open",
+   "due": "2026-11-30",
+   "file": "Tallyhaus-TH-1047.pdf",
+   "size": "92 KB",
+   "lines": [
+    {
+     "label": "Team plan, 12 seats",
+     "amount": "€1,104.00"
+    }
+   ]
+  },
+  {
+   "number": "TH-1046",
+   "date": "2026-10-01",
+   "amount": "€1,104.00",
+   "status": "paid",
+   "due": "2026-10-31",
+   "file": "Tallyhaus-TH-1046.pdf",
+   "size": "92 KB",
+   "lines": [
+    {
+     "label": "Team plan, 12 seats",
+     "amount": "€1,104.00"
+    }
+   ]
+  },
+  {
+   "number": "TH-1045",
+   "date": "2026-09-01",
+   "amount": "€1,012.00",
+   "status": "paid",
+   "due": "2026-09-30",
+   "file": "Tallyhaus-TH-1045.pdf",
+   "size": "92 KB",
+   "lines": [
+    {
+     "label": "Team plan, 12 seats",
+     "amount": "€1,012.00"
+    }
+   ]
+  },
+  {
+   "number": "TH-1044",
+   "date": "2026-08-01",
+   "amount": "€1,012.00",
+   "status": "paid",
+   "due": "2026-08-31",
+   "file": "Tallyhaus-TH-1044.pdf",
+   "size": "92 KB",
+   "lines": [
+    {
+     "label": "Team plan, 12 seats",
+     "amount": "€1,012.00"
+    }
+   ]
+  },
+  {
+   "number": "TH-1043",
+   "date": "2026-07-15",
+   "amount": "€184.00",
+   "status": "open",
+   "due": "2026-11-20",
+   "file": "Tallyhaus-TH-1043.pdf",
+   "size": "92 KB",
+   "lines": [
+    {
+     "label": "4 extra seats, prorated",
+     "amount": "€184.00"
+    }
+   ]
+  },
+  {
+   "number": "TH-1042",
+   "date": "2026-07-01",
+   "amount": "€920.00",
+   "status": "paid",
+   "due": "2026-07-31",
+   "file": "Tallyhaus-TH-1042.pdf",
+   "size": "92 KB",
+   "lines": [
+    {
+     "label": "Team plan, 12 seats",
+     "amount": "€920.00"
+    }
+   ]
+  },
+  {
+   "number": "TH-1041",
+   "date": "2026-06-01",
+   "amount": "€920.00",
+   "status": "refunded",
+   "due": "2026-06-30",
+   "file": "Tallyhaus-TH-1041.pdf",
+   "size": "92 KB",
+   "lines": [
+    {
+     "label": "Team plan, 12 seats",
+     "amount": "€920.00"
+    }
+   ]
+  }
+ ],
+ "usage": [
+  {
+   "month": "Jan",
+   "calls": 182000,
+   "seats": 9
+  },
+  {
+   "month": "Feb",
+   "calls": 201500,
+   "seats": 9
+  },
+  {
+   "month": "Mar",
+   "calls": 240100,
+   "seats": 10
+  },
+  {
+   "month": "Apr",
+   "calls": 236800,
+   "seats": 10
+  },
+  {
+   "month": "May",
+   "calls": 281200,
+   "seats": 10
+  },
+  {
+   "month": "Jun",
+   "calls": 305400,
+   "seats": 10
+  },
+  {
+   "month": "Jul",
+   "calls": 298900,
+   "seats": 12
+  },
+  {
+   "month": "Aug",
+   "calls": 334700,
+   "seats": 12
+  },
+  {
+   "month": "Sep",
+   "calls": 351000,
+   "seats": 12
+  },
+  {
+   "month": "Oct",
+   "calls": 390200,
+   "seats": 12
+  },
+  {
+   "month": "Nov",
+   "calls": 412600,
+   "seats": 12
+  }
+ ],
+ "refunds": [
+  {
+   "invoice": "TH-1041",
+   "amount": "€920.00",
+   "status": "Sent to your bank",
+   "arrives": "by 19 Nov",
+   "steps": [
+    {
+     "label": "Refund requested",
+     "date": "3 Nov",
+     "state": "done"
+    },
+    {
+     "label": "Approved",
+     "date": "5 Nov",
+     "state": "done"
+    },
+    {
+     "label": "Sent to your bank",
+     "date": "7 Nov",
+     "state": "now"
+    },
+    {
+     "label": "In your account",
+     "date": "by 19 Nov",
+     "state": "next"
+    }
+   ]
+  }
+ ]
+}

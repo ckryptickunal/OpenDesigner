@@ -36,8 +36,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a desktop work app with several sections and more than one workspace or team"],
-    "avoid_when": ["fewer than five pages, or a consumer phone app: use a bottom tab bar or page-header-tabs", "finding any page or action by typing: use command-menu, opened from this rail's search button", "tabs inside one page: use page-header-tabs"],
+    "use_when": [
+      "a desktop work app with several sections and more than one workspace or team"
+    ],
+    "avoid_when": [
+      "fewer than five pages, or a consumer phone app: use a bottom tab bar or page-header-tabs",
+      "finding any page or action by typing: use command-menu, opened from this rail's search button",
+      "tabs inside one page: use page-header-tabs"
+    ],
     "parts": [
       {
         "name": "switcher",
@@ -90,12 +96,16 @@
     ],
     "data": {
       "type": "object",
-      "required": ["sections"],
+      "required": [
+        "sections"
+      ],
       "properties": {
         "workspace": {
           "type": "object",
           "part": "switcher",
-          "required": ["name"],
+          "required": [
+            "name"
+          ],
           "properties": {
             "name": {
               "type": "string",
@@ -128,7 +138,9 @@
           "part": "headings",
           "items": {
             "type": "object",
-            "required": ["items"],
+            "required": [
+              "items"
+            ],
             "properties": {
               "heading": {
                 "type": "string",
@@ -146,7 +158,10 @@
                 "maxItems": 8,
                 "items": {
                   "type": "object",
-                  "required": ["label", "href"],
+                  "required": [
+                    "label",
+                    "href"
+                  ],
                   "properties": {
                     "label": {
                       "type": "string",
@@ -184,7 +199,9 @@
         "person": {
           "type": "object",
           "part": "person",
-          "required": ["name"],
+          "required": [
+            "name"
+          ],
           "properties": {
             "name": {
               "type": "string",
@@ -199,17 +216,56 @@
               "maxLength": 300
             }
           }
+        },
+        "workspace_initial": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "workspace_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "workspace_detail": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "person_photo": {
+          "type": "object",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 2048
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "person_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "person_detail": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "a rail always has pages; for a new workspace with no sections yet, show only Home and Inbox"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the switcher and show muted bars in place of the item labels and counts"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -227,8 +283,18 @@
         "status": "handled",
         "how": "long page labels and the workspace detail are cut with an ellipsis; the workspace name wraps",
         "evidence": "text-overflow: ellipsis; white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab moves through the workspace switcher, Search, each page link, the collapsible group heading and the person button", "Enter follows a page link", "Enter or Space on the group heading opens or closes it, as a native details element", "The switcher, Search and person buttons open nothing yet, and Cmd+K is labelled but not wired"]
+    "keyboard": [
+      "Tab moves through the workspace switcher, Search, each page link, the collapsible group heading and the person button",
+      "Enter follows a page link",
+      "Enter or Space on the group heading opens or closes it, as a native details element",
+      "The switcher, Search and person buttons open nothing yet, and Cmd+K is labelled but not wired"
+    ]
   }
 }

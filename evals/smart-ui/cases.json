@@ -1,0 +1,591 @@
+{
+ "about": "Smart UI evals: 20 intents across every group plus 5 where the right answer is text only. The data is invented (domains and names are examples). tools/smartui_evals.py runs them.",
+ "catalog": "examples/smart-ui-chat/opendesigner/smart-ui/catalog.json",
+ "cases": [
+  {
+   "id": "answer-policy",
+   "message": "What does the Flex fare say about refunds if I cancel? Show me where it says it.",
+   "expect": [
+    "AnswerSources",
+    "CitationList"
+   ],
+   "data": {
+    "fare_rules": [
+     {
+      "id": 1,
+      "title": "Flex fare conditions",
+      "publisher": "Orvell Travel",
+      "section": "4.2",
+      "text": "Flex fares can be cancelled up to 2 hours before departure for a full refund to the original payment method."
+     },
+     {
+      "id": 2,
+      "title": "Refund times",
+      "publisher": "Orvell Travel",
+      "section": "7.1",
+      "text": "Refunds reach card accounts within 5 to 10 working days."
+     }
+    ]
+   }
+  },
+  {
+   "id": "facts-hotel",
+   "message": "Give me the key details of my Lisbon hotel booking.",
+   "expect": [
+    "KeyFacts",
+    "Receipt"
+   ],
+   "data": {
+    "booking": {
+     "hotel": "Casa do Rio",
+     "check_in": "Thu 4 Dec, from 15:00",
+     "check_out": "Sun 7 Dec, by 11:00",
+     "room": "Double room, river view",
+     "guests": 2,
+     "reference": "OR-58213",
+     "breakfast": "Included"
+    }
+   }
+  },
+  {
+   "id": "define-term",
+   "message": "Explain what an open-jaw ticket is, with the main points to know.",
+   "expect": [
+    "SummaryCard",
+    "KeyFacts"
+   ],
+   "data": {
+    "glossary": {
+     "term": "Open-jaw ticket",
+     "kind": "ticket type",
+     "summary": "A return ticket where you fly into one city and home from another, or leave from a different city than the one you return to.",
+     "points": [
+      "Often costs about the same as a normal return",
+      "You cover the gap between the two cities yourself",
+      "Both flights sit on one booking"
+     ],
+     "also_called": "multi-city return"
+    }
+   }
+  },
+  {
+   "id": "table-bookings",
+   "message": "Show all my bookings this year as a table.",
+   "expect": [
+    "DataTable"
+   ],
+   "data": {
+    "bookings": [
+     {
+      "ref": "OR-41120",
+      "what": "Flight BRS to OPO",
+      "date": "2026-03-14",
+      "status": "Flown",
+      "price": "€142"
+     },
+     {
+      "ref": "OR-44310",
+      "what": "Hotel Porto, 3 nights",
+      "date": "2026-03-14",
+      "status": "Stayed",
+      "price": "€318"
+     },
+     {
+      "ref": "OR-50982",
+      "what": "Flight BRS to FAO",
+      "date": "2026-07-02",
+      "status": "Flown",
+      "price": "€188"
+     },
+     {
+      "ref": "OR-58213",
+      "what": "Hotel Lisbon, 3 nights",
+      "date": "2026-12-04",
+      "status": "Upcoming",
+      "price": "€396"
+     },
+     {
+      "ref": "OR-58214",
+      "what": "Flight BRS to LIS",
+      "date": "2026-12-04",
+      "status": "Upcoming",
+      "price": "€164"
+     }
+    ]
+   }
+  },
+  {
+   "id": "bars-spend",
+   "message": "How much did I spend on travel each month from June to November?",
+   "expect": [
+    "BarChart",
+    "LineChart",
+    "DataTable"
+   ],
+   "data": {
+    "spend_by_month": [
+     {
+      "month": "Jun",
+      "eur": 0
+     },
+     {
+      "month": "Jul",
+      "eur": 402
+     },
+     {
+      "month": "Aug",
+      "eur": 96
+     },
+     {
+      "month": "Sep",
+      "eur": 0
+     },
+     {
+      "month": "Oct",
+      "eur": 214
+     },
+     {
+      "month": "Nov",
+      "eur": 560
+     }
+    ]
+   }
+  },
+  {
+   "id": "line-fare",
+   "message": "How has the Bristol to Lisbon fare moved over the last 8 weeks?",
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "data": {
+    "fare_history": {
+     "route": "BRS to LIS",
+     "currency": "EUR",
+     "weeks": [
+      {
+       "week": "14 Sep",
+       "low": 118
+      },
+      {
+       "week": "21 Sep",
+       "low": 124
+      },
+      {
+       "week": "28 Sep",
+       "low": 131
+      },
+      {
+       "week": "5 Oct",
+       "low": 127
+      },
+      {
+       "week": "12 Oct",
+       "low": 139
+      },
+      {
+       "week": "19 Oct",
+       "low": 152
+      },
+      {
+       "week": "26 Oct",
+       "low": 149
+      },
+      {
+       "week": "2 Nov",
+       "low": 164
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "donut-categories",
+   "message": "Break down my 2026 travel spend by category.",
+   "expect": [
+    "DonutBreakdown",
+    "DataTable",
+    "BarChart"
+   ],
+   "data": {
+    "spend_2026": {
+     "total_eur": 1980,
+     "categories": [
+      {
+       "name": "Flights",
+       "eur": 846
+      },
+      {
+       "name": "Hotels",
+       "eur": 714
+      },
+      {
+       "name": "Transfers",
+       "eur": 168
+      },
+      {
+       "name": "Activities",
+       "eur": 252
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "kpi-year",
+   "message": "How's my travel year looking? Trips, nights away, points and spend.",
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "data": {
+    "year_2026": {
+     "trips": 4,
+     "nights_away": 11,
+     "points": 12480,
+     "points_to_next_tier": 2520,
+     "spend_eur": 1980
+    }
+   }
+  },
+  {
+   "id": "status-refund",
+   "message": "Where's my refund for the cancelled Porto flight?",
+   "expect": [
+    "ProgressStatus"
+   ],
+   "data": {
+    "refund": {
+     "booking": "OR-47755",
+     "amount": "€142",
+     "status": "Sent to your bank",
+     "steps": [
+      {
+       "label": "Cancellation received",
+       "time": "2 Nov",
+       "state": "done"
+      },
+      {
+       "label": "Refund approved",
+       "time": "4 Nov",
+       "state": "done"
+      },
+      {
+       "label": "Sent to your bank",
+       "time": "6 Nov",
+       "state": "now"
+      },
+      {
+       "label": "In your account",
+       "time": "by 20 Nov",
+       "state": "next"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "compare-fares",
+   "message": "Compare the Basic, Standard and Flex fares for the 08:40 to Lisbon.",
+   "expect": [
+    "Comparison"
+   ],
+   "data": {
+    "fares": [
+     {
+      "name": "Basic",
+      "price": "€164",
+      "bag": "Small bag only",
+      "seat": "Random seat",
+      "changes": "Not allowed",
+      "refund": "No refund"
+     },
+     {
+      "name": "Standard",
+      "price": "€212",
+      "bag": "1 checked bag, 23 kg",
+      "seat": "Choose your seat",
+      "changes": "€45 fee",
+      "refund": "No refund"
+     },
+     {
+      "name": "Flex",
+      "price": "€289",
+      "bag": "1 checked bag, 23 kg",
+      "seat": "Choose your seat",
+      "changes": "Free",
+      "refund": "Full refund up to 2 hours before"
+     }
+    ]
+   }
+  },
+  {
+   "id": "results-hotels",
+   "message": "Find me hotels near Lisbon's old town under €150 a night for 4 to 7 December.",
+   "expect": [
+    "ResultList"
+   ],
+   "data": {
+    "hotels": [
+     {
+      "id": "h1",
+      "name": "Casa do Rio",
+      "area": "Alfama, 4 min walk to the cathedral",
+      "price_per_night": "€132",
+      "rating": "4.6"
+     },
+     {
+      "id": "h2",
+      "name": "Pátio Azul",
+      "area": "Baixa, 6 min walk",
+      "price_per_night": "€118",
+      "rating": "4.4"
+     },
+     {
+      "id": "h3",
+      "name": "Hotel Miradouro",
+      "area": "Graça, 10 min walk",
+      "price_per_night": "€145",
+      "rating": "4.7"
+     }
+    ]
+   }
+  },
+  {
+   "id": "flights-search",
+   "message": "Flights from Bristol to Lisbon on 4 December?",
+   "expect": [
+    "FlightResults",
+    "ResultList"
+   ],
+   "data": {
+    "flights": [
+     {
+      "id": "OV214",
+      "depart": "08:40",
+      "arrive": "11:55",
+      "from": "BRS",
+      "to": "LIS",
+      "duration": "2h 15m",
+      "stops": 0,
+      "airline": "Orvell Air",
+      "price": "€164"
+     },
+     {
+      "id": "OV218",
+      "depart": "13:10",
+      "arrive": "16:25",
+      "from": "BRS",
+      "to": "LIS",
+      "duration": "2h 15m",
+      "stops": 0,
+      "airline": "Orvell Air",
+      "price": "€151"
+     },
+     {
+      "id": "TQ902",
+      "depart": "06:05",
+      "arrive": "12:40",
+      "from": "BRS",
+      "to": "LIS",
+      "duration": "5h 35m",
+      "stops": 1,
+      "airline": "Tequa",
+      "price": "€119"
+     }
+    ]
+   }
+  },
+  {
+   "id": "chips-change",
+   "message": "I want to change my Lisbon trip.",
+   "expect": [
+    "QuickReplies"
+   ],
+   "data": {
+    "trip": "OR-58213 and OR-58214",
+    "changeable": [
+     "Dates",
+     "Flight time",
+     "Room",
+     "Add a bag",
+     "Cancel"
+    ]
+   }
+  },
+  {
+   "id": "form-passport",
+   "message": "I need to update the passport details on my booking.",
+   "expect": [
+    "FormFields"
+   ],
+   "data": {
+    "traveller": {
+     "name": "Sam Ortega",
+     "passport_number_on_file": "ending 4471",
+     "fields_required": [
+      "passport number",
+      "issuing country",
+      "expiry date",
+      "date of birth"
+     ]
+    }
+   }
+  },
+  {
+   "id": "slots-transfer",
+   "message": "Book an airport transfer for when I land on Thursday. What times are free?",
+   "expect": [
+    "TimeSlots"
+   ],
+   "data": {
+    "landing": "Thu 4 Dec 11:55",
+    "transfer_slots": [
+     {
+      "day": "Thu 4 Dec",
+      "times": [
+       "12:30",
+       "12:45",
+       "13:15",
+       "13:45",
+       "14:30"
+      ]
+     }
+    ],
+    "price": "€38"
+   }
+  },
+  {
+   "id": "approve-cancel",
+   "message": "Cancel my Porto hotel booking.",
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "data": {
+    "booking": {
+     "ref": "OR-61102",
+     "hotel": "Ribeira Lodge",
+     "dates": "16 to 18 Jan",
+     "price": "€244",
+     "refund": "€244 back to your card, free cancellation until 14 Jan"
+    }
+   }
+  },
+  {
+   "id": "receipt-seat",
+   "message": "Did my seat change go through?",
+   "expect": [
+    "Receipt",
+    "ProgressStatus"
+   ],
+   "data": {
+    "seat_change": {
+     "status": "confirmed",
+     "flight": "OV214, 4 Dec",
+     "old_seat": "23E",
+     "new_seat": "12A",
+     "fee": "€0",
+     "reference": "SC-90311"
+    }
+   }
+  },
+  {
+   "id": "error-search",
+   "message": "Search flights to Faro on 30 February.",
+   "expect": [
+    "ErrorRetry"
+   ],
+   "data": {
+    "search_error": {
+     "code": "INVALID_DATE",
+     "message": "30 February is not a date.",
+     "retry_possible": true
+    }
+   }
+  },
+  {
+   "id": "location-hotel",
+   "message": "Where's my Lisbon hotel and how far is it from the airport?",
+   "expect": [
+    "LocationCard"
+   ],
+   "data": {
+    "hotel": {
+     "name": "Casa do Rio",
+     "address": [
+      "Rua dos Remédios 41",
+      "1100-441 Lisboa",
+      "Portugal"
+     ],
+     "from_airport": "25 min by taxi, 40 min by metro",
+     "reception": "24 hours"
+    }
+   }
+  },
+  {
+   "id": "file-invoice",
+   "message": "Send me the invoice for my Lisbon trip.",
+   "expect": [
+    "FileCard"
+   ],
+   "data": {
+    "invoice": {
+     "file": "Orvell-invoice-OR-58213.pdf",
+     "kind": "PDF",
+     "size": "184 KB",
+     "date": "13 Nov 2026"
+    }
+   }
+  },
+  {
+   "id": "noui-visa",
+   "message": "Do I need a visa for Portugal with a UK passport for a 3-night trip?",
+   "expect": [],
+   "data": {
+    "entry_rules": {
+     "country": "Portugal",
+     "uk_passport": "No visa needed for stays up to 90 days in 180; passport valid 3 months past departure."
+    }
+   }
+  },
+  {
+   "id": "noui-checkin",
+   "message": "When does check-in open for my Lisbon flight?",
+   "expect": [],
+   "data": {
+    "flight": {
+     "id": "OV214",
+     "checkin_opens": "30 hours before departure: 3 Dec, 02:40"
+    }
+   }
+  },
+  {
+   "id": "noui-breakfast",
+   "message": "Is breakfast included at my hotel?",
+   "expect": [],
+   "data": {
+    "booking": {
+     "hotel": "Casa do Rio",
+     "breakfast": "Included, 07:30 to 10:30"
+    }
+   }
+  },
+  {
+   "id": "noui-bags",
+   "message": "How many bags can I take on a Basic fare?",
+   "expect": [],
+   "data": {
+    "fare": {
+     "name": "Basic",
+     "bags": "One small bag under the seat, 40 x 30 x 15 cm"
+    }
+   }
+  },
+  {
+   "id": "noui-thanks",
+   "message": "Thanks, that's everything!",
+   "expect": [],
+   "data": {}
+  }
+ ]
+}

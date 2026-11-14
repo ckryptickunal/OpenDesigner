@@ -1,0 +1,70 @@
+{
+ "title": "Ready to ship",
+ "status": "success",
+ "count": 3,
+ "add_hint": "Add a card to Ready to ship",
+ "cards": [
+  {
+   "id": "ORB-77",
+   "title": "Retry webhook deliveries with backoff",
+   "labels": [
+    {
+     "text": "API",
+     "kind": "api"
+    },
+    {
+     "text": "Bug",
+     "kind": "bug"
+    }
+   ],
+   "subtasks_done": 2,
+   "subtasks_total": 4,
+   "subtasks_share": 0.5,
+   "due": "Dec 2",
+   "comments": 4,
+   "assignee": {
+    "src": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=48&h=48&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Assigned to Jonas Ekberg"
+   }
+  },
+  {
+   "id": "ORB-81",
+   "title": "New empty state for the invoices page",
+   "labels": [
+    {
+     "text": "Design",
+     "kind": "design"
+    }
+   ],
+   "subtasks_done": "",
+   "subtasks_total": "",
+   "due": "Dec 9",
+   "comments": ""
+  },
+  {
+   "id": "ORB-90",
+   "title": "Show tax lines on the receipt",
+   "labels": [
+    {
+     "text": "Billing",
+     "kind": "billing"
+    }
+   ],
+   "subtasks_done": 3,
+   "subtasks_total": 3,
+   "subtasks_share": 1,
+   "due": "",
+   "comments": 1,
+   "assignee": {
+    "src": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=48&h=48&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Assigned to Leila Haddad"
+   }
+  }
+ ],
+ "add": {
+  "label": "Add card",
+  "event": {
+   "name": "add_card"
+  }
+ }
+}

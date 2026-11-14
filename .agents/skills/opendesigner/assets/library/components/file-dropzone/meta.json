@@ -4,15 +4,36 @@
   "use": "where people upload documents or statements",
   "type": "form",
   "style": "quiet",
-  "industries": ["any"],
-  "tags": ["upload", "dropzone", "files", "progress", "attachments"],
-  "states": ["hover", "focus", "drag over", "uploaded", "uploading", "failed", "queued"],
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "upload",
+    "dropzone",
+    "files",
+    "progress",
+    "attachments"
+  ],
+  "states": [
+    "hover",
+    "focus",
+    "drag over",
+    "uploaded",
+    "uploading",
+    "failed",
+    "queued"
+  ],
   "source": "brand/showcase/components/04-upload-brutal",
   "a11y": "A real file input sits inside the browse label, so keyboard users can pick files; the list is a polite live region, the progress bar has role progressbar with a value, and every remove and retry button names its file.",
   "width": "medium",
   "spec": {
-    "use_when": ["a form step that needs several documents, where people must see which ones failed and retry them"],
-    "avoid_when": ["attaching a source to a message for an assistant: use ai-composer, which has its own attach button", "a long list of uploaded files to search and manage later: use receipts-table"],
+    "use_when": [
+      "a form step that needs several documents, where people must see which ones failed and retry them"
+    ],
+    "avoid_when": [
+      "attaching a source to a message for an assistant: use ai-composer, which has its own attach button",
+      "a long list of uploaded files to search and manage later: use receipts-table"
+    ],
     "parts": [
       {
         "name": "title",
@@ -89,7 +110,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "accept"],
+      "required": [
+        "title",
+        "accept"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -118,7 +142,10 @@
           "part": "files",
           "items": {
             "type": "object",
-            "required": ["name", "state"],
+            "required": [
+              "name",
+              "state"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -126,7 +153,12 @@
                 "part": "name"
               },
               "state": {
-                "enum": ["done", "uploading", "failed", "queued"]
+                "enum": [
+                  "done",
+                  "uploading",
+                  "failed",
+                  "queued"
+                ]
               },
               "meta": {
                 "type": "string",
@@ -163,7 +195,7 @@
       "error": {
         "status": "shown",
         "how": "a failed file gets a red border and tile, the reason in its status line, and a Retry button",
-        "evidence": "li.is-failed { border-color: var(--ds-color-border-danger); }"
+        "evidence": "li[data-state=\"failed\"] { border-color: var(--ds-color-border-danger); }"
       },
       "disabled": {
         "status": "not_built",
@@ -177,8 +209,16 @@
         "status": "handled",
         "how": "a long file name ends in an ellipsis on wider boxes and wraps in a narrow one",
         "evidence": ".odl-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches the browse link, which holds the real file input, then each file's Retry and Remove buttons", "Enter or Space on browse opens the system file picker", "After a file is removed, focus moves to the next file's first button, or back to the file input when none are left"]
+    "keyboard": [
+      "Tab reaches the browse link, which holds the real file input, then each file's Retry and Remove buttons",
+      "Enter or Space on browse opens the system file picker",
+      "After a file is removed, focus moves to the next file's first button, or back to the file input when none are left"
+    ]
   }
 }

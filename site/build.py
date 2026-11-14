@@ -24,6 +24,7 @@ import urllib.request
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import library_page  # noqa: E402  (the component library page, /library/)
 import tour_page  # noqa: E402  (how OpenDesigner works, drawn live: /tour/)
+import smart_ui_page  # noqa: E402  (Smart UI with its live demo: /smart-ui/)
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
@@ -799,7 +800,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar"><div class="bar-in">
 <a class="brand" href="/" aria-label="{NAME} home">{lockup()}</a>
-<nav class="top-nav" aria-label="Main"><a href="/docs/"{CUR if path.startswith("/docs/") else ""}>Docs</a><a href="/docs/install/">Install</a><a href="/docs/enterprise/">For teams</a><a href="/showcase/"{CUR if path == "/showcase/" else ""}>Showcase</a><a class="nav-lib" title="Component library" href="/library/"{CUR if path.startswith("/library/") else ""}><svg class="nav-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M17 13.5v7M13.5 17h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="nav-lib-t">Library</span></a></nav>
+<nav class="top-nav" aria-label="Main"><a href="/docs/"{CUR if path.startswith("/docs/") else ""}>Docs</a><a href="/docs/install/">Install</a><a href="/docs/enterprise/">For teams</a><a href="/showcase/"{CUR if path == "/showcase/" else ""}>Showcase</a><a href="{smart_ui_page.PATH}"{CUR if path == smart_ui_page.PATH else ""}>Smart UI</a><a class="nav-lib" title="Component library" href="/library/"{CUR if path.startswith("/library/") else ""}><svg class="nav-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M17 13.5v7M13.5 17h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="nav-lib-t">Library</span></a></nav>
 <a class="nav-book" href="/book/">Book a call</a><a class="gh-btn" href="{GH}">{GH_ICON}<span>GitHub</span><span class="gh-count" data-stars>{STATE["stars"]}</span></a>
 </div></header>
 {inner}
@@ -813,7 +814,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 
 FOOT_COLS = [  # the top row: short labels that fit on one line down to 320 px
     ("Product", [("Install", "/docs/install/"), ("Showcase", "/showcase/"), ("Component library", "/library/"),
-                 ("For teams", "/docs/enterprise/"), ("How it works", tour_page.PATH), ("Book a call", "/book/")]),
+                 ("For teams", "/docs/enterprise/"), ("How it works", tour_page.PATH), ("Smart UI", smart_ui_page.PATH), ("Book a call", "/book/")]),
     ("Project", [(f'Changelog <span class="foot-ver">v{VERSION}</span>', "/changelog/"), ("GitHub", GH), ("Contribute", "/docs/contribute/"),
                  ("Report a problem", f"{GH}/issues/new/choose")]),
     ("Trust", [("Security and data", "/docs/security/"), ("Report a vulnerability", f"{GH}/blob/main/SECURITY.md"),
@@ -832,6 +833,7 @@ FOOT_SHORT = {
     "ui-details": "Interface details", "resources": "Sources we learn from", "engine": "Engine commands",
     "files": "Files it writes", "dials": "The eight dials", "evals": "Evals", "contribute": "Contribute",
     "install": "Install", "quickstart": "Quickstart", "search": "Search and AI answers", "states": "Empty, loading, errors",
+    "smart-ui": "Smart UI", "smart-ui-quickstart": "Add Smart UI", "smart-ui-adapters": "Where Smart UI runs",
 }
 FOOT_MAX = 23
 
@@ -1346,11 +1348,12 @@ def home(pages, facts, faq):
     pid, author, page_id = SCENES["blue-waves"]
     cta_bg = f"background-image:url(https://images.unsplash.com/{pid}?auto=format&fit=crop&w=1600&q=70)"
     ba_html, ba_credit = before_after()
+    su_stage, su_credit = smart_ui_page.preview(sys.modules[__name__])
     craft = [c for c in CRAFT if any(p["slug"] == c[0] for p in pages)]
     craft_html = "".join(f'<a class="craft-card {v}" href="/docs/{s}/"><span class="vg" aria-hidden="true"><i></i><i></i><i></i></span><h3>{t}</h3><p>{d}</p><span class="more">Open the guide {CHEVRON}</span></a>' for s, t, d, v in craft)
     craft_sec = f"""
 <section class="h-sec" id="craft">
-<div class="h-head">{idx("10", "Learn the craft")}<h2 class="h-h2">A field guide to interfaces that feel right.</h2>
+<div class="h-head">{idx("11", "Learn the craft")}<h2 class="h-h2">A field guide to interfaces that feel right.</h2>
 <p class="h-lede">See each rule live, with its source.</p></div>
 <div class="craft">{craft_html}</div>
 </section>
@@ -1415,13 +1418,22 @@ def home(pages, facts, faq):
 <ol class="h-steps">{"".join(f'<li class="h-step">{A_PICTS[i]}<span class="h-n num">0{i + 1}</span><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></li>' for i, (t, d, v) in enumerate(STEPS))}</ol>
 </section>
 
+<section class="h-sec h-smart" id="smart-ui">
+<div class="h-split">
+<div><div class="h-head">{idx("08", "Smart UI")}<h2 class="h-h2">Answers made of your own components.</h2>
+<p class="h-lede">Ask for flights and get a list you can book, drawn with your components and tokens. Every answer is checked before it shows.</p>
+<p class="h-more"><a class="h-link" href="{smart_ui_page.PATH}">Try the live demo {ARROW}</a></p></div></div>
+<figure class="su-preview">{su_stage}<figcaption class="h-fine">Live HTML: a recorded answer, drawn by the real renderer. Photo: {su_credit} on Unsplash.</figcaption></figure>
+</div>
+</section>
+
 <section class="h-sec" id="use-cases">
-<div class="h-head">{idx("08", "What you can build")}<h2 class="h-h2">Websites, apps, dashboards and enterprise software.</h2></div>
+<div class="h-head">{idx("09", "What you can build")}<h2 class="h-h2">Websites, apps, dashboards and enterprise software.</h2></div>
 <div class="who">{"".join(f'<a class="who-card" href="{u}"><h3>{t}</h3><p>{d}</p><span class="more">{l} {CHEVRON}</span></a>' for t, d, u, l in USES)}</div>
 </section>
 
 <section class="h-sec" id="features">
-<div class="h-head h-head-row"><div>{idx("09", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together.</h2></div>
+<div class="h-head h-head-row"><div>{idx("10", "Why it stays consistent")}<h2 class="h-h2">Built to keep your product together.</h2></div>
 <a class="h-link" href="{tour_page.PATH}#protect">See what protects you {ARROW}</a></div>
 <div class="bento">{"".join(f'<article class="bento-card span-{sp}"><h3>{t}</h3><p>{d}</p><div class="vg">{v}</div></article>' for t, d, v, sp in INSIDE)}</div>
 <div class="h-split h-files">
@@ -2180,6 +2192,10 @@ def vercel_json():
                                                 {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
                                                 {"key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), interest-cohort=()"},
                                                 {"key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains"}]},
+                # the Smart UI demo is framed by /smart-ui/ and the home page (same origin), so only it may be framed, and only by this site.
+                # It comes after "/(.*)" so its Content-Security-Policy replaces that one for these paths.
+                {"source": "/smart-ui/demo/(.*)", "headers": [{"key": "Content-Security-Policy", "value": CSP.replace("frame-ancestors 'none'", "frame-ancestors 'self'")},
+                                                              {"key": "X-Frame-Options", "value": "SAMEORIGIN"}]},
                 {"source": "/fonts/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=31536000, immutable"}]},
                 {"source": "/img/(.*)", "headers": [{"key": "Cache-Control", "value": "public, max-age=604800"}]},
                 {"source": "/library/r/(.*)", "headers": [{"key": "X-Robots-Tag", "value": "noindex"}, {"key": "Content-Type", "value": "text/html; charset=utf-8"}, {"key": "Access-Control-Allow-Origin", "value": "*"}]},
@@ -2223,7 +2239,7 @@ def agent_skills():
 
 def page_paths(pages):
     """Every page's address, in sitemap order. tools/check_links.py checks the docs' links to the site against it."""
-    return (["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/", tour_page.PATH, "/library/"]
+    return (["/", "/docs/"] + [p["path"] for p in pages] + ["/showcase/", "/book/", tour_page.PATH, smart_ui_page.PATH, "/library/"]
             + [f"/library/{c['slug']}/" for c in library_page.components()])
 
 
@@ -2279,6 +2295,7 @@ def main():
     library_page.add(sys.modules[__name__], files, mds, library_paths)  # /library/: the optional component library (its own module)
     tour_paths = []
     tour_page.add(sys.modules[__name__], files, mds, tour_paths)  # /tour/: how OpenDesigner works, drawn live (its own module)
+    smart_ui_page.add(sys.modules[__name__], files, mds, tour_paths)  # /smart-ui/ and its live demo at /smart-ui/demo/ (its own module)
     for rel, text in {**files, **mds}.items():
         if rel.endswith(".html") and not rel.startswith("library/"):  # the library's parts keep their own markup
             text = caps_spans(text)

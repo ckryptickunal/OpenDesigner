@@ -1,0 +1,13 @@
+{"where_label": "Going to",
+ "suggestions": [
+  {"name": "Porto Vell, Spain", "detail": "City · 860 stays", "photo": {"src": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=128&h=128&fit=crop&auto=format&q=70", "alt": "City skyline in daylight"}},
+  {"name": "Porto Vell Coast, Spain", "detail": "Beach · 210 stays", "photo": {"src": "https://images.unsplash.com/photo-1515506733362-f6161cbcfbe6?w=128&h=128&fit=crop&auto=format&q=70", "alt": "Sea cliffs in daylight"}},
+  {"name": "Portovan, Italy", "photo": {"src": "https://images.unsplash.com/photo-1559310589-2673bfe16970?w=128&h=128&fit=crop&auto=format&q=70", "alt": "Turquoise lake below snowy mountains"}}
+ ],
+ "months": [{"name": "February 2027", "first_weekday": 0, "days": 28}, {"name": "March 2027", "first_weekday": 0, "days": 31}],
+ "check_in": "2027-02-25", "check_out": "2027-03-02",
+ "guests": [
+  {"label": "Adults", "hint": "Ages 13 or above", "count": 3, "min": 1},
+  {"label": "Children", "hint": "Ages 2 to 12", "count": 0, "min": 0},
+  {"label": "Infants", "hint": "Under 2", "count": 1, "min": 0}
+ ]}

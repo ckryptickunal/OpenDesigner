@@ -4,15 +4,43 @@
   "use": "when an AI agent works through several steps and may need a person's approval",
   "type": "ai",
   "style": "technical",
-  "industries": ["finance", "saas", "devtools", "productivity"],
-  "tags": ["agent", "timeline", "steps", "approval", "run log"],
-  "states": ["done", "running", "waiting for approval", "approved", "denied", "skipped", "stopped", "expanded", "hover", "focus"],
+  "industries": [
+    "finance",
+    "saas",
+    "devtools",
+    "productivity"
+  ],
+  "tags": [
+    "agent",
+    "timeline",
+    "steps",
+    "approval",
+    "run log"
+  ],
+  "states": [
+    "done",
+    "running",
+    "waiting for approval",
+    "approved",
+    "denied",
+    "skipped",
+    "stopped",
+    "expanded",
+    "hover",
+    "focus"
+  ],
   "source": null,
   "a11y": "The steps are an ordered list with the running one marked aria-current and a labelled progressbar; tool output opens with a native details element, the run status is a live status line, and Approve, Deny and Stop run are real buttons.",
   "width": "medium",
   "spec": {
-    "use_when": ["a person wants to see what an automated run did, with the raw tool output one click away"],
-    "avoid_when": ["a list of setup tasks the person does themselves: use setup-steps", "a past record of events with no live run: use audit-log or activity-feed", "one AI answer in a conversation: use chat-answer"],
+    "use_when": [
+      "a person wants to see what an automated run did, with the raw tool output one click away"
+    ],
+    "avoid_when": [
+      "a list of setup tasks the person does themselves: use setup-steps",
+      "a past record of events with no live run: use audit-log or activity-feed",
+      "one AI answer in a conversation: use chat-answer"
+    ],
     "parts": [
       {
         "name": "title",
@@ -95,7 +123,11 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "status", "steps"],
+      "required": [
+        "title",
+        "status",
+        "steps"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -103,7 +135,10 @@
           "part": "title"
         },
         "status": {
-          "enum": ["running", "stopped"],
+          "enum": [
+            "running",
+            "stopped"
+          ],
           "part": "run_status"
         },
         "started": {
@@ -118,7 +153,10 @@
           "part": "steps",
           "items": {
             "type": "object",
-            "required": ["title", "state"],
+            "required": [
+              "title",
+              "state"
+            ],
             "properties": {
               "title": {
                 "type": "string",
@@ -126,7 +164,13 @@
                 "part": "step_title"
               },
               "state": {
-                "enum": ["done", "running", "waiting", "skipped", "stopped"]
+                "enum": [
+                  "done",
+                  "running",
+                  "waiting",
+                  "skipped",
+                  "stopped"
+                ]
               },
               "time": {
                 "type": "string",
@@ -145,7 +189,10 @@
               },
               "progress": {
                 "type": "object",
-                "required": ["value", "max"],
+                "required": [
+                  "value",
+                  "max"
+                ],
                 "part": "progress",
                 "properties": {
                   "label": {
@@ -159,6 +206,10 @@
                     "type": "number"
                   }
                 }
+              },
+              "progress_label": {
+                "type": "string",
+                "maxLength": 120
               }
             }
           }
@@ -187,8 +238,9 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "before the first step starts, show the header with one running step titled 'Starting', or empty-state if no run exists"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
         "status": "shown",
@@ -213,8 +265,16 @@
         "status": "handled",
         "how": "step text wraps in its column; tool output wraps at any character; times never wrap",
         "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches Stop run, each Tool output summary, then Approve and Deny", "Enter or Space presses the focused button", "Enter or Space on a Tool output summary opens or closes it"]
+    "keyboard": [
+      "Tab reaches Stop run, each Tool output summary, then Approve and Deny",
+      "Enter or Space presses the focused button",
+      "Enter or Space on a Tool output summary opens or closes it"
+    ]
   }
 }

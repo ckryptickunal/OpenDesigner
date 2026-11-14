@@ -1,0 +1,6 @@
+{"title": "Sign in to Tallow Rota", "hint": "Use the email your shift lead added you with.",
+ "email_label": "Email", "password_label": "Password", "forgot_label": "Reset password",
+ "error": "We couldn't sign you in. Check your email and password and try again.",
+ "remember_label": "Stay signed in", "remember_note": "for 14 days",
+ "submit_label": "Sign in", "sso_label": "Sign in with your work account",
+ "foot_text": "No account yet?", "foot_link": "Ask your shift lead"}

@@ -4,19 +4,49 @@
   "use": "for one day's events in a scheduling or CRM tool",
   "type": "data",
   "style": "quiet",
-  "industries": ["productivity", "saas", "any"],
-  "tags": ["calendar", "agenda", "schedule", "day view", "events"],
-  "states": ["hover", "focus", "past", "now", "overlapping", "all day"],
+  "industries": [
+    "productivity",
+    "saas",
+    "any"
+  ],
+  "tags": [
+    "calendar",
+    "agenda",
+    "schedule",
+    "day view",
+    "events"
+  ],
+  "states": [
+    "hover",
+    "focus",
+    "past",
+    "now",
+    "overlapping",
+    "all day"
+  ],
   "source": null,
   "a11y": "Events are links in a labelled list with the title, time and place in their text; the hour rail is hidden from screen readers and the now line has a text label.",
   "width": "medium",
   "photos": [
-    {"img": "photo-1438761681033-6461ffad8d80", "author": "Christopher Campbell", "page": "rDEOVtE7vOs"},
-    {"img": "photo-1522529599102-193c0d76b5b6", "author": "Elizeu Dias", "page": "2EGNqazbAMk"}
+    {
+      "img": "photo-1438761681033-6461ffad8d80",
+      "author": "Christopher Campbell",
+      "page": "rDEOVtE7vOs"
+    },
+    {
+      "img": "photo-1522529599102-193c0d76b5b6",
+      "author": "Elizeu Dias",
+      "page": "2EGNqazbAMk"
+    }
   ],
   "spec": {
-    "use_when": ["a side panel that shows the rest of today next to other work, with what is happening now marked"],
-    "avoid_when": ["a week or month at a glance: this day view does not stretch to it; build a week grid instead", "a short list of upcoming items without times on a rail: use activity-feed"],
+    "use_when": [
+      "a side panel that shows the rest of today next to other work, with what is happening now marked"
+    ],
+    "avoid_when": [
+      "a week or month at a glance: this day view does not stretch to it; build a week grid instead",
+      "a short list of upcoming items without times on a rail: use activity-feed"
+    ],
     "parts": [
       {
         "name": "day_num",
@@ -75,7 +105,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["date", "events"],
+      "required": [
+        "date",
+        "events"
+      ],
       "properties": {
         "day_num": {
           "type": "number",
@@ -98,7 +131,9 @@
           "part": "all_day",
           "items": {
             "type": "object",
-            "required": ["title"],
+            "required": [
+              "title"
+            ],
             "properties": {
               "title": {
                 "type": "string",
@@ -109,7 +144,12 @@
                 "maxLength": 24
               },
               "tone": {
-                "enum": ["accent", "info", "warn", "neutral"]
+                "enum": [
+                  "accent",
+                  "info",
+                  "warn",
+                  "neutral"
+                ]
               },
               "href": {
                 "type": "string",
@@ -130,7 +170,11 @@
           "part": "events",
           "items": {
             "type": "object",
-            "required": ["title", "start", "end"],
+            "required": [
+              "title",
+              "start",
+              "end"
+            ],
             "properties": {
               "title": {
                 "type": "string",
@@ -149,13 +193,22 @@
                 "maxLength": 28
               },
               "tone": {
-                "enum": ["accent", "info", "warn", "neutral"]
+                "enum": [
+                  "accent",
+                  "info",
+                  "warn",
+                  "neutral"
+                ]
               },
               "past": {
                 "type": "boolean"
               },
               "column": {
-                "enum": ["full", "left", "right"]
+                "enum": [
+                  "full",
+                  "left",
+                  "right"
+                ]
               },
               "href": {
                 "type": "string",
@@ -179,6 +232,10 @@
                     "maxLength": 48
                   }
                 }
+              },
+              "people_names": {
+                "type": "string",
+                "maxLength": 80
               }
             }
           }
@@ -192,12 +249,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no events, keep the header and put an empty-state line ('Nothing booked') over the hour rail"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the header and rail, and draw two or three muted event blocks in the grid until the day loads"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -215,8 +274,16 @@
       "long_text": {
         "status": "not_built",
         "how": "the event box is a fixed number of quarter-hour rows, so clamp each event title to one or two lines with an ellipsis"
+      },
+      "missing_image": {
+        "status": "not_built",
+        "how": "a photo that fails to load shows the browser's broken image"
       }
     },
-    "keyboard": ["Tab reaches the previous day, Today and next day buttons, then the all-day event and each timed event in order", "Enter on an event follows its link", "Enter or Space presses a day button, but the file wires no action to them"]
+    "keyboard": [
+      "Tab reaches the previous day, Today and next day buttons, then the all-day event and each timed event in order",
+      "Enter on an event follows its link",
+      "Enter or Space presses a day button, but the file wires no action to them"
+    ]
   }
 }

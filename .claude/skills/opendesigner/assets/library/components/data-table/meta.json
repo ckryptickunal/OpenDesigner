@@ -1,0 +1,203 @@
+{
+  "name": "Data table",
+  "summary": "A plain table of up to 50 rows with a title and a summary line, sortable by any column and shown ten rows to a page.",
+  "use": "for a list of records an assistant or a report fills in, such as invoices, orders or transactions",
+  "type": "data",
+  "style": "quiet",
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "table",
+    "rows",
+    "sort",
+    "pagination",
+    "records"
+  ],
+  "states": [
+    "hover row",
+    "sorted ascending",
+    "sorted descending",
+    "first and last page",
+    "first column fixed on a phone"
+  ],
+  "source": null,
+  "a11y": "A real table with column headers; each header is a button that sorts the rows and announces the order through aria-sort, and the page range is a status line.",
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "an answer that lists records with the same few fields, where the person may want to sort or page through them"
+    ],
+    "avoid_when": [
+      "two to four headline totals: use kpi-strip",
+      "numbers over time: use line-chart or bar-chart",
+      "a handful of options to pick from: use result-list or comparison",
+      "rows the person must select and act on in bulk: use receipts-table"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-data-table h3",
+        "what": "what the table lists",
+        "slot": "text"
+      },
+      {
+        "name": "summary",
+        "selector": ".odl-sum",
+        "what": "one line under the title: counts, totals or the date range",
+        "slot": "text"
+      },
+      {
+        "name": "columns",
+        "selector": ".odl-columns > li",
+        "what": "one column: its label and alignment; the script draws the header row from these, each header a button that sorts by it",
+        "slot": "list"
+      },
+      {
+        "name": "rows",
+        "selector": "table > tbody",
+        "what": "one row of cells",
+        "slot": "list"
+      },
+      {
+        "name": "cells",
+        "selector": "td",
+        "what": "one cell's text, in column order",
+        "slot": "list"
+      },
+      {
+        "name": "more_note",
+        "selector": ".odl-more",
+        "what": "a note when there are more records than the table shows",
+        "slot": "text"
+      },
+      {
+        "name": "pager",
+        "selector": ".odl-pager",
+        "what": "the page range and Previous and Next, shown when there are more than ten rows",
+        "slot": "none"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "columns",
+        "rows"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "title"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 120,
+          "part": "summary"
+        },
+        "columns": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "part": "columns",
+          "items": {
+            "type": "object",
+            "required": [
+              "label"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 24,
+                "minLength": 1
+              },
+              "align": {
+                "type": "string",
+                "enum": [
+                  "start",
+                  "end"
+                ]
+              }
+            }
+          }
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 50,
+          "part": "rows",
+          "items": {
+            "type": "object",
+            "required": [
+              "cells"
+            ],
+            "properties": {
+              "cells": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 6,
+                "part": "cells",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "text"
+                  ],
+                  "properties": {
+                    "text": {
+                      "type": "string",
+                      "maxLength": 80
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "more_note": {
+          "type": "string",
+          "maxLength": 120,
+          "part": "more_note"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "with no rows the renderer adds one quiet line saying there is nothing to show, drawn across the table under the headers; the pager stays hidden",
+        "evidence": ".odl-data-table tbody.od-empty"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the records fail to load, show error-retry in place of the table"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "Previous is disabled on the first page and Next on the last",
+        "evidence": "button:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "more than ten rows page ten at a time; wide tables scroll sideways in their own box with the first column fixed on a phone",
+        "evidence": "overflow-x: auto"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long cell wraps at about 14rem and breaks long words, so a row grows taller instead of wider",
+        "evidence": "max-inline-size: 14rem; white-space: normal; overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches each column header, then Previous and Next",
+      "Enter or Space on a header sorts by that column; again reverses the order"
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+{"toasts": [
+  {"kind": "ok", "message": "Saved the menu for Friday", "detail": "Larkfield Kitchen · 14 dishes", "action": {"label": "Undo", "event": {"name": "undo_save"}}, "dismiss": {"label": "Dismiss", "a11y_label": "Dismiss: Saved the menu for Friday", "event": {"name": "dismiss_toast"}}},
+  {"kind": "busy", "message": "Exporting guest list", "detail": "118 of 240 rows", "progress": 49, "action": {"label": "Cancel", "event": {"name": "cancel_export"}}},
+  {"kind": "error", "message": "Couldn't reach the printer", "detail": "Check that Kitchen printer 2 is on, then try again.", "dismiss": {"label": "Dismiss", "a11y_label": "Dismiss: Couldn't reach the printer", "event": {"name": "dismiss_toast"}}}
+]}

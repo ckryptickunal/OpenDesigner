@@ -11,8 +11,8 @@
 .odl-order-summary ul { margin: 0; padding: 0; list-style: none; display: grid; }
 .odl-order-summary .odl-item { display: grid; grid-template-columns: var(--odl-thumb) minmax(0, 1fr) auto; column-gap: var(--ds-space-inline-md); row-gap: var(--ds-space-stack-sm);
   padding-block: var(--ds-space-stack-md); }
-.odl-order-summary .odl-item + .odl-item { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
-.odl-order-summary .odl-item:first-child { padding-block-start: 0; }
+.odl-order-summary .odl-item:not([hidden]) + .odl-item { border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-order-summary .odl-item:first-child, .odl-order-summary .odl-item[hidden] + .odl-item { padding-block-start: 0; }
 .odl-order-summary .odl-item:last-child { padding-block-end: 0; }
 .odl-order-summary .odl-thumb { grid-row: span 2; inline-size: var(--odl-thumb); block-size: var(--odl-thumb); border-radius: var(--ds-radius-nested); overflow: hidden;
   background: var(--ds-color-surface-sunken); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
@@ -85,12 +85,24 @@
   .odl-order-summary .odl-step { grid-column: 2; }
 }
 @media (prefers-reduced-motion: reduce) { .odl-order-summary, .odl-order-summary *, .odl-order-summary *::before { transition: none !important; animation: none !important; } }
+.odl-order-summary [data-od-template][hidden] { display: none; }
 </style>
 <section class="odl-order-summary" aria-label="Order summary">
   <div class="odl-card">
-    <div class="odl-head"><h3>Order summary</h3><span class="odl-count">3 items</span></div>
-    <ul>
-      <li class="odl-item" data-price="28" data-unit="cup" data-units="cups">
+    <div class="odl-head"><h3 data-od-slot="title">Order summary</h3><span class="odl-count">3 items</span><data data-od-slot="currency" hidden>USD</data></div>
+    <ul data-od-list="items">
+      <li class="odl-item" data-od-item data-od-template hidden>
+        <span class="odl-thumb"><img data-od-media="photo" data-od-optional alt="" width="72" height="72" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1782351076283-73aa35f76058?w=144&h=144&fit=crop&auto=format&q=70"></span>
+        <span class="odl-name"><b data-od-slot="name"></b><small data-od-slot="variant" data-od-optional></small></span>
+        <span class="odl-line"></span>
+        <div class="odl-step" role="group" data-od-label="name">
+          <button type="button" data-d="-1" aria-label="One fewer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+          <output aria-live="polite" data-od-slot="quantity">1</output>
+          <button type="button" data-d="1" aria-label="One more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
+        </div>
+        <data data-od-slot="price" hidden></data><data data-od-slot="unit" data-od-optional hidden></data><data data-od-slot="units" data-od-optional hidden></data>
+      </li>
+      <li class="odl-item" data-od-item data-price="28" data-unit="cup" data-units="cups">
         <span class="odl-thumb"><img src="https://images.unsplash.com/photo-1782351076283-73aa35f76058?w=144&h=144&fit=crop&auto=format&q=70" alt="Speckled green stoneware cup" width="72" height="72" loading="lazy" decoding="async"></span>
         <span class="odl-name"><b>Speckled stoneware cup</b><small>Moss glaze · $28.00 each</small></span>
         <span class="odl-line">$56.00</span>
@@ -100,7 +112,7 @@
           <button type="button" data-d="1" aria-label="One cup more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
         </div>
       </li>
-      <li class="odl-item" data-price="96" data-unit="lamp" data-units="lamps">
+      <li class="odl-item" data-od-item data-price="96" data-unit="lamp" data-units="lamps">
         <span class="odl-thumb"><img src="https://images.unsplash.com/photo-1570974802254-4b0ad1a755f5?w=144&h=144&fit=crop&crop=focalpoint&fp-x=0.5&fp-y=0.55&fp-z=1&auto=format&q=70" alt="Cream metal gooseneck desk lamp" width="72" height="72" loading="lazy" decoding="async"></span>
         <span class="odl-name"><b>Gooseneck desk lamp</b><small>Cream metal · $96.00 each</small></span>
         <span class="odl-line">$96.00</span>
@@ -118,33 +130,51 @@
         <button type="button" class="odl-apply">Apply</button>
       </div>
       <p class="odl-msg" role="alert"></p>
-      <span class="odl-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
-        <span><code>AUTUMN15</code> · 15% off</span>
+      <span class="odl-chip" data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+        <span><code data-od-slot="promo_code">AUTUMN15</code> · <bdi data-od-slot="promo_label">15% off</bdi><data data-od-slot="promo_rate" hidden>0.15</data></span>
         <button type="button" class="odl-remove" aria-label="Remove code AUTUMN15"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
     </div>
-    <dl>
-      <div><dt>Subtotal</dt><dd class="odl-sub">$152.00</dd></div>
-      <div class="odl-off"><dt>Discount, 15%</dt><dd class="odl-disc">−$22.80</dd></div>
-      <div><dt>Shipping</dt><dd>Free</dd></div>
-      <div><dt>Sales tax, 8.25%</dt><dd class="odl-tax">$10.66</dd></div>
-      <div class="odl-total"><dt>Total</dt><dd><span class="odl-sum">$139.86</span><small>USD</small></dd></div>
+    <dl data-od-list="totals">
+      <div data-od-item data-od-template hidden><dt data-od-slot="label"></dt><dd data-od-slot="value"></dd></div>
+      <div data-od-item><dt>Subtotal</dt><dd class="odl-sub">$152.00</dd></div>
+      <div data-od-item class="odl-off"><dt>Discount, 15%</dt><dd class="odl-disc">−$22.80</dd></div>
+      <div data-od-item><dt>Shipping</dt><dd>Free</dd></div>
+      <div data-od-item><dt>Sales tax, 8.25%</dt><dd class="odl-tax">$10.66</dd></div>
+      <div data-od-item class="odl-total"><dt>Total</dt><dd><span class="odl-sum">$139.86</span><small>USD</small></dd></div>
     </dl>
-    <button type="button" class="odl-pay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Pay <span class="odl-paysum">$139.86</span></button>
-    <p class="odl-fine">Charged to the card ending 2861. Free returns within 30 days.</p>
+    <button type="button" class="odl-pay" data-od-action="pay" data-od-effect="change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span data-od-slot="label">Pay</span> <span class="odl-paysum">$139.86</span></button>
+    <p class="odl-fine" data-od-slot="fine" data-od-optional>Charged to the card ending 2861. Free returns within 30 days.</p>
   </div>
 </section>
 <script>
 document.querySelectorAll(".odl-order-summary").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
-  const CODE = "AUTUMN15", RATE = 0.15, TAX = 0.0825;
-  const money = (n) => "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-  const $ = (s) => root.querySelector(s);
+  // Prices, units and the promo come from marked parts, so a rendered answer works like the sample.
+  const slot = (el, n) => ((el.querySelector(`[data-od-slot="${n}"]`) || {}).textContent || "").trim(), num = (t) => parseFloat(String(t).replace(/[^\d.-]/g, ""));
+  const cur = slot(root, "currency") || "USD", lang = (root.closest("[lang]") || {}).lang || "en-US";
+  const money = (n) => { try { return new Intl.NumberFormat(lang, { style: "currency", currency: cur }).format(n); } catch (e) { return `${cur} ${n.toFixed(2)}`; } };
+  const $ = (s) => root.querySelector(s), put = (s, t) => { const el = $(s); if (el) el.textContent = t; };
+  const CODE = slot(root, "promo_code"), RATE = num(slot(root, "promo_rate")) || 0, TAX = 0.0825, sample = !!$(".odl-sub");
+  const items = [...root.querySelectorAll(".odl-item:not([data-od-template])")];
+  items.forEach((item) => {
+    if (item.dataset.price) return; // the sample's rows carry their price already
+    item.dataset.price = String(num(slot(item, "price")) || 0);
+    item.dataset.unit = slot(item, "unit") || "item"; item.dataset.units = slot(item, "units") || item.dataset.unit + "s";
+    const out = item.querySelector("output"); if (!(Number(out.textContent) >= 1)) out.textContent = "1";
+    const v = item.querySelector('[data-od-slot="variant"]'); if (v) v.textContent = `${v.textContent} · ${money(Number(item.dataset.price))} each`;
+    const name = slot(item, "name"), group = item.querySelector(".odl-step");
+    group.setAttribute("aria-label", `${name} quantity`);
+    group.querySelector('[data-d="-1"]').setAttribute("aria-label", `One ${item.dataset.unit} fewer, ${name}`);
+    group.querySelector('[data-d="1"]').setAttribute("aria-label", `One ${item.dataset.unit} more, ${name}`);
+  });
+  if (!sample) { const rows = root.querySelectorAll("dl > div:not([data-od-template])"), last = rows[rows.length - 1]; if (last) { last.classList.add("odl-total"); put(".odl-paysum", slot(last, "value")); } }
   const input = $("input"), msg = $(".odl-msg"), chip = $(".odl-chip");
-  let applied = true;
+  const remove = $(".odl-remove"); if (remove && CODE) remove.setAttribute("aria-label", `Remove code ${CODE}`);
+  let applied = !!chip && !!CODE;
   const update = () => {
     let sub = 0, count = 0;
-    root.querySelectorAll(".odl-item").forEach((item) => {
+    items.forEach((item) => {
       const q = Number(item.querySelector("output").textContent), line = q * Number(item.dataset.price);
       sub += line; count += q;
       item.querySelector(".odl-line").textContent = money(line);
@@ -153,11 +183,12 @@ document.querySelectorAll(".odl-order-summary").forEach((root) => {
     });
     const disc = applied ? Math.round(sub * RATE * 100) / 100 : 0;
     const tax = Math.round((sub - disc) * TAX * 100) / 100, total = sub - disc + tax;
-    $(".odl-count").textContent = `${count} ${count === 1 ? "item" : "items"}`;
+    put(".odl-count", `${count} ${count === 1 ? "item" : "items"}`);
+    if (chip) chip.hidden = !applied;
+    if (!sample) return; // a rendered answer's totals are the app's own
     $(".odl-sub").textContent = money(sub);
     $(".odl-disc").textContent = "−" + money(disc);
     $(".odl-off").hidden = !applied;
-    chip.hidden = !applied;
     $(".odl-tax").textContent = money(tax);
     $(".odl-sum").textContent = money(total);
     $(".odl-paysum").textContent = money(total);
@@ -167,11 +198,11 @@ document.querySelectorAll(".odl-order-summary").forEach((root) => {
     out.textContent = Math.min(20, Math.max(1, Number(out.textContent) + Number(b.dataset.d)));
     update();
   }));
-  $(".odl-remove").addEventListener("click", () => { applied = false; update(); input.focus(); });
+  if (remove) remove.addEventListener("click", () => { applied = false; update(); input.focus(); });
   const apply = () => {
     const code = input.value.trim().toUpperCase();
     if (!code) return;
-    const ok = code === CODE;
+    const ok = !!CODE && code === CODE.toUpperCase() && !!chip;
     msg.textContent = ok ? "" : `${code} isn't a valid code. Check it and try again.`;
     input.setAttribute("aria-invalid", String(!ok));
     if (ok) { applied = true; input.value = ""; update(); }

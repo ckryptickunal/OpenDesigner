@@ -1,0 +1,15 @@
+{"title": "Average price of a 1 kg loaf", "summary": "Monthly, January to December 2026 · two stores compared", "unit": "euros", "x_label": "Month",
+ "series": "Corner bakery", "series2": "Supermarket",
+ "points": [
+  {"label": "Jan", "value": 3.40, "value2": 2.10},
+  {"label": "Feb", "value": 3.40, "value2": 2.15},
+  {"label": "Mar", "value": 3.55, "value2": 2.15},
+  {"label": "Apr", "value": 3.55, "value2": 2.20},
+  {"label": "May", "value": null, "value2": 2.25},
+  {"label": "Jun", "value": 3.70, "value2": 2.25},
+  {"label": "Jul", "value": 3.70, "value2": 2.30},
+  {"label": "Aug", "value": 3.85, "value2": null},
+  {"label": "Sep", "value": 3.85, "value2": 2.35},
+  {"label": "Oct", "value": 3.90, "value2": 2.40},
+  {"label": "Nov", "value": 3.90, "value2": 2.45},
+  {"label": "Dec", "value": 4.05, "value2": 2.45}]}

@@ -1,0 +1,220 @@
+{
+  "name": "Answer with sources",
+  "summary": "A written answer in a few short paragraphs, each with small numbered chips that point to the sources listed under it.",
+  "use": "for an assistant's answer that has to show where each statement comes from",
+  "type": "ai",
+  "style": "editorial",
+  "industries": [
+    "productivity",
+    "saas",
+    "education",
+    "any"
+  ],
+  "tags": [
+    "answer",
+    "sources",
+    "citations",
+    "ai",
+    "research"
+  ],
+  "states": [
+    "with title",
+    "paragraph without citations",
+    "source without date",
+    "wraps on a phone"
+  ],
+  "source": null,
+  "a11y": "An article with a heading; each citation chip is read as 'source 2', and the sources are an ordered list whose numbers match the chips.",
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "an answer drawn from documents, policies or pages, where the person may want to check each statement"
+    ],
+    "avoid_when": [
+      "a short factual answer that fits in one sentence: answer in plain text",
+      "only the list of sources, with no answer: use citation-list",
+      "one term or idea explained in a few lines: use summary-card"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-title",
+        "what": "the question or the subject of the answer",
+        "slot": "text"
+      },
+      {
+        "name": "paragraphs",
+        "selector": ".odl-text > p",
+        "what": "one paragraph of the answer",
+        "slot": "list"
+      },
+      {
+        "name": "text",
+        "selector": ".odl-text > p > span:first-child",
+        "what": "the paragraph's words",
+        "slot": "text"
+      },
+      {
+        "name": "cites",
+        "selector": ".odl-cite",
+        "what": "a small chip with the number of a source this paragraph uses",
+        "slot": "list"
+      },
+      {
+        "name": "sources",
+        "selector": ".odl-src",
+        "what": "one source: its number, title, where it is from and its date",
+        "slot": "list"
+      },
+      {
+        "name": "number",
+        "selector": ".odl-num",
+        "what": "the source's number, matching the chips",
+        "slot": "number"
+      },
+      {
+        "name": "source_title",
+        "selector": ".odl-src-title",
+        "what": "the source's title",
+        "slot": "text"
+      },
+      {
+        "name": "publisher",
+        "selector": ".odl-meta",
+        "what": "the site, team or publisher, as plain text",
+        "slot": "text"
+      },
+      {
+        "name": "date",
+        "selector": ".odl-date",
+        "what": "when the source was published or updated",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "paragraphs",
+        "sources"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 90,
+          "part": "title"
+        },
+        "paragraphs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "part": "paragraphs",
+          "items": {
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 600,
+                "part": "text"
+              },
+              "cites": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 4,
+                "part": "cites",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "number"
+                  ],
+                  "properties": {
+                    "number": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 10,
+                      "part": "cites"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "part": "sources",
+          "items": {
+            "type": "object",
+            "required": [
+              "number",
+              "title",
+              "publisher"
+            ],
+            "properties": {
+              "number": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10,
+                "part": "number"
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 100,
+                "part": "source_title"
+              },
+              "publisher": {
+                "type": "string",
+                "maxLength": 60,
+                "part": "publisher"
+              },
+              "date": {
+                "type": "string",
+                "maxLength": 24,
+                "part": "date"
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "a paragraph with no citations shows no chips, and an answer with no sources hides the sources block",
+        "evidence": ".odl-sources:has(.od-empty) { display: none; }"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the answer could not be written, say so in plain text instead of this part"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "the part has no controls, so there is no disabled state"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "up to six paragraphs and ten sources stack in the card; a phone gets less padding",
+        "evidence": "@container (max-width: 30rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "paragraphs, titles and publishers wrap, and long words or domains break",
+        "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": []
+  }
+}

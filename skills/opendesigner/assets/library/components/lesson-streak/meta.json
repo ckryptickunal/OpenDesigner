@@ -34,8 +34,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a course home where the learner should see what is done, what is next and what is still locked in one unit"],
-    "avoid_when": ["daily habits to tick off by day: use habit-tracker", "steps to set up an account or product: use setup-steps", "one question inside a lesson: use quiz-question"],
+    "use_when": [
+      "a course home where the learner should see what is done, what is next and what is still locked in one unit"
+    ],
+    "avoid_when": [
+      "daily habits to tick off by day: use habit-tracker",
+      "steps to set up an account or product: use setup-steps",
+      "one question inside a lesson: use quiz-question"
+    ],
     "parts": [
       {
         "name": "stats",
@@ -100,7 +106,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["unit", "lessons"],
+      "required": [
+        "unit",
+        "lessons"
+      ],
       "properties": {
         "streak": {
           "type": "integer",
@@ -144,14 +153,21 @@
           "part": "lessons",
           "items": {
             "type": "object",
-            "required": ["title", "state"],
+            "required": [
+              "title",
+              "state"
+            ],
             "properties": {
               "title": {
                 "type": "string",
                 "maxLength": 28
               },
               "state": {
-                "enum": ["done", "now", "locked"]
+                "enum": [
+                  "done",
+                  "now",
+                  "locked"
+                ]
               },
               "sub": {
                 "type": "string",
@@ -173,12 +189,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no lessons in the unit, keep the stats and unit banner and show an empty-state line in place of the path"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show the stats tiles and banner as muted blocks and the path as grey circles"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -198,8 +216,18 @@
         "status": "handled",
         "how": "the unit title wraps beside the guide button, and the lesson card is capped in width so its text wraps",
         "evidence": "inline-size: min(calc(100cqi - var(--ds-space-8)), 19rem)"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches the guide button, each lesson that is not locked, and Start lesson in the card", "Enter or Space on a lesson chooses it; the card moves under it with that lesson's title and button label, and the change is announced", "Locked lessons are skipped by Tab", "The guide and Start lesson buttons have no action wired in the file"]
+    "keyboard": [
+      "Tab reaches the guide button, each lesson that is not locked, and Start lesson in the card",
+      "Enter or Space on a lesson chooses it; the card moves under it with that lesson's title and button label, and the change is announced",
+      "Locked lessons are skipped by Tab",
+      "The guide and Start lesson buttons have no action wired in the file"
+    ]
   }
 }

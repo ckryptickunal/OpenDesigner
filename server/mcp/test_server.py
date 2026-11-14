@@ -94,7 +94,7 @@ class Legacy(unittest.TestCase):
 
     def test_tools_are_read_only_and_described(self):
         tools = self.s.send("tools/list")["result"]["tools"]
-        self.assertEqual({t["name"] for t in tools}, {"list_components", "get_component", "get_tokens_template", "suggest_components"})
+        self.assertEqual({t["name"] for t in tools}, {"list_components", "get_component", "get_tokens_template", "suggest_components", "show_ui"})
         for t in tools:
             a = t["annotations"]
             self.assertTrue(a["readOnlyHint"], t["name"])
@@ -125,7 +125,7 @@ class Legacy(unittest.TestCase):
         self.assertIn('class="odl-approval-panel', sc["html"])
         self.assertIn(".odl-approval-panel", sc["css"])
         self.assertNotIn("<style>", sc["markup"])
-        self.assertEqual(set(sc["entry"]["states"]["edge"]), {"empty", "loading", "error", "disabled", "overflow", "long_text"})
+        self.assertEqual(set(sc["entry"]["states"]["edge"]), {"empty", "loading", "error", "disabled", "overflow", "long_text", "missing_image"})
 
     def test_get_unknown_component(self):
         r = self.s.send("tools/call", {"name": "get_component", "arguments": {"id": "../../etc/passwd"}})["result"]

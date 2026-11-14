@@ -1,0 +1,72 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-code-block { box-sizing: border-box; inline-size: 100%; max-inline-size: 44rem; margin: 0 auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
+.odl-code-block *, .odl-code-block *::before, .odl-code-block *::after { box-sizing: border-box; }
+.odl-code-block .odl-card { display: grid; grid-template-columns: minmax(0, 1fr); background: var(--ds-color-surface-sunken);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); }
+.odl-code-block figcaption { display: flex; align-items: center; gap: var(--ds-space-inline-md); min-block-size: max(var(--ds-size-control-lg), var(--ds-size-target-min));
+  padding: var(--ds-space-inset-xs) var(--ds-space-inset-xs) var(--ds-space-inset-xs) var(--ds-space-inset-lg); border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-subtle);
+  background: var(--ds-color-surface-raised); border-start-start-radius: var(--ds-radius-container); border-start-end-radius: var(--ds-radius-container); }
+.odl-code-block .odl-names { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--ds-space-2) var(--ds-space-inline-md); flex: 1; min-inline-size: 0; }
+.odl-code-block .odl-file { font: var(--ds-text-code-sm); font-weight: var(--ds-font-weight-label); overflow-wrap: anywhere; }
+.odl-code-block .odl-lang { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-code-block .odl-copy { display: inline-flex; flex: none; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm);
+  min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); min-inline-size: var(--ds-size-target-min); padding: 0 var(--ds-space-inset-sm);
+  border: 0; border-radius: var(--ds-radius-control); background: transparent; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); white-space: nowrap; cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-code-block .odl-copy:hover { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
+.odl-code-block .odl-copy[data-copied] { color: var(--ds-color-text-success); }
+.odl-code-block .odl-copy svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); stroke-width: var(--ds-icon-stroke-md); }
+.odl-code-block pre { margin: 0; padding: var(--ds-space-inset-lg); max-block-size: 28rem; overflow: auto; color: var(--ds-color-text-primary); font: var(--ds-text-code-md); white-space: pre; tab-size: 2;
+  border-end-start-radius: var(--ds-radius-container); border-end-end-radius: var(--ds-radius-container); }
+.odl-code-block code { font: inherit; }
+.odl-code-block .odl-copy:focus-visible, .odl-code-block pre:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: calc(-1 * var(--ds-focus-ring-width)); }
+/* Phone: the header keeps one row; long lines still scroll inside the code box. */
+@container (max-width: 26rem) {
+  .odl-code-block figcaption { padding-inline-start: var(--ds-space-inset-md); }
+  .odl-code-block pre { padding: var(--ds-space-inset-md); font: var(--ds-text-code-sm); }
+}
+@media (prefers-reduced-motion: reduce) { .odl-code-block .odl-copy { transition: none; } }
+</style>
+<figure class="odl-code-block">
+  <div class="odl-card">
+    <figcaption>
+      <span class="odl-names"><span class="odl-file" data-od-slot="filename" data-od-optional>retry.ts</span><span class="odl-lang" data-od-slot="language">TypeScript</span></span>
+      <button type="button" class="odl-copy" data-od-action="copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg><span class="odl-copy-label" data-od-slot="label">Copy</span></button>
+    </figcaption>
+    <pre tabindex="0" role="region" aria-label="Code"><code data-od-slot="code">export async function withRetry&lt;T&gt;(run: () =&gt; Promise&lt;T&gt;, tries = 3): Promise&lt;T&gt; {
+  for (let i = 1; ; i++) {
+    try {
+      return await run();
+    } catch (err) {
+      if (i &gt;= tries) throw err;
+      await new Promise((r) =&gt; setTimeout(r, 250 * 2 ** i)); // wait 0.5 s, then 1 s, then 2 s before trying again
+    }
+  }
+}</code></pre>
+  </div>
+</figure>
+<script>
+document.querySelectorAll(".odl-code-block").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  const btn = root.querySelector(".odl-copy");
+  const code = root.querySelector("code");
+  const label = btn && btn.querySelector(".odl-copy-label");
+  if (!btn || !code || !label) return;
+  let timer = 0;
+  const original = label.textContent;
+  const show = (text) => {
+    label.textContent = text;
+    btn.dataset.copied = "";
+    clearTimeout(timer);
+    timer = setTimeout(() => { label.textContent = original; delete btn.dataset.copied; }, 1600);
+  };
+  // Without clipboard access (an insecure page, a blocked permission) the code is selected, ready for the copy shortcut.
+  const select = () => { const s = window.getSelection(); if (s) s.selectAllChildren(code); show("Selected"); };
+  btn.addEventListener("click", () => {
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code.textContent).then(() => show("Copied"), select);
+    else select();
+  });
+});
+</script>

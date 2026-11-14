@@ -1,0 +1,2515 @@
+{
+ "model": "gemini-3.1-pro-preview",
+ "date": "2026-11-13",
+ "runs_per_case": 3,
+ "summary": {
+  "runs": 75,
+  "picked_right_pct": 95.0,
+  "held_back_pct": 100.0,
+  "over_trigger_pct": 0.0,
+  "valid_first_pct": 93.0,
+  "no_ui_when_needed_pct": 5.0,
+  "floor_findings": 0,
+  "rendered": 53
+ },
+ "rows": [
+  {
+   "ui": true,
+   "parts": [
+    "AnswerSources"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "answer-policy",
+   "run": 1,
+   "expect": [
+    "AnswerSources",
+    "CitationList"
+   ],
+   "selector": [
+    "AnswerSources",
+    "ResultList",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "promptTokenCount": 907,
+    "candidatesTokenCount": 243,
+    "totalTokenCount": 2151,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 907
+     }
+    ],
+    "thoughtsTokenCount": 1001,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "AnswerSources"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "answer-policy",
+   "run": 2,
+   "expect": [
+    "AnswerSources",
+    "CitationList"
+   ],
+   "selector": [
+    "AnswerSources",
+    "ResultList",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "promptTokenCount": 907,
+    "candidatesTokenCount": 234,
+    "totalTokenCount": 2191,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 907
+     }
+    ],
+    "thoughtsTokenCount": 1050,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "AnswerSources"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "answer-policy",
+   "run": 3,
+   "expect": [
+    "AnswerSources",
+    "CitationList"
+   ],
+   "selector": [
+    "AnswerSources",
+    "ResultList",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "promptTokenCount": 907,
+    "candidatesTokenCount": 241,
+    "totalTokenCount": 2272,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 907
+     }
+    ],
+    "thoughtsTokenCount": 1124,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KeyFacts"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "facts-hotel",
+   "run": 1,
+   "expect": [
+    "KeyFacts",
+    "Receipt"
+   ],
+   "selector": [
+    "KeyFacts",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "promptTokenCount": 941,
+    "candidatesTokenCount": 178,
+    "totalTokenCount": 2262,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 941
+     }
+    ],
+    "thoughtsTokenCount": 1143,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KeyFacts"
+   ],
+   "valid": false,
+   "errors": [
+    "root  one component needs id \"root\""
+   ],
+   "warnings": 0,
+   "right": true,
+   "id": "facts-hotel",
+   "run": 2,
+   "expect": [
+    "KeyFacts",
+    "Receipt"
+   ],
+   "selector": [
+    "KeyFacts",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "promptTokenCount": 941,
+    "candidatesTokenCount": 177,
+    "totalTokenCount": 2502,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 941
+     }
+    ],
+    "thoughtsTokenCount": 1384,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KeyFacts"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "facts-hotel",
+   "run": 3,
+   "expect": [
+    "KeyFacts",
+    "Receipt"
+   ],
+   "selector": [
+    "KeyFacts",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "promptTokenCount": 941,
+    "candidatesTokenCount": 173,
+    "totalTokenCount": 2018,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 941
+     }
+    ],
+    "thoughtsTokenCount": 904,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "SummaryCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "define-term",
+   "run": 1,
+   "expect": [
+    "SummaryCard",
+    "KeyFacts"
+   ],
+   "selector": [
+    "SummaryCard"
+   ],
+   "usage": {
+    "promptTokenCount": 562,
+    "candidatesTokenCount": 168,
+    "totalTokenCount": 1505,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 562
+     }
+    ],
+    "thoughtsTokenCount": 775,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "SummaryCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "define-term",
+   "run": 2,
+   "expect": [
+    "SummaryCard",
+    "KeyFacts"
+   ],
+   "selector": [
+    "SummaryCard"
+   ],
+   "usage": {
+    "promptTokenCount": 562,
+    "candidatesTokenCount": 191,
+    "totalTokenCount": 1562,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 562
+     }
+    ],
+    "thoughtsTokenCount": 809,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "SummaryCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "define-term",
+   "run": 3,
+   "expect": [
+    "SummaryCard",
+    "KeyFacts"
+   ],
+   "selector": [
+    "SummaryCard"
+   ],
+   "usage": {
+    "promptTokenCount": 562,
+    "candidatesTokenCount": 191,
+    "totalTokenCount": 1583,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 562
+     }
+    ],
+    "thoughtsTokenCount": 830,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "table-bookings",
+   "run": 1,
+   "expect": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "promptTokenCount": 1141,
+    "candidatesTokenCount": 347,
+    "totalTokenCount": 2376,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 1141
+     }
+    ],
+    "thoughtsTokenCount": 888,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "table-bookings",
+   "run": 2,
+   "expect": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "promptTokenCount": 1141,
+    "candidatesTokenCount": 366,
+    "totalTokenCount": 2717,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 1141
+     }
+    ],
+    "thoughtsTokenCount": 1210,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "table-bookings",
+   "run": 3,
+   "expect": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "promptTokenCount": 1141,
+    "candidatesTokenCount": 359,
+    "totalTokenCount": 3149,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 1141
+     }
+    ],
+    "thoughtsTokenCount": 1649,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "BarChart"
+   ],
+   "valid": false,
+   "errors": [
+    "required /0/createSurface/components/0/months/0/forecast forecast is required",
+    "required /0/createSurface/components/0/months/1/forecast forecast is required",
+    "required /0/createSurface/components/0/months/2/forecast forecast is required",
+    "required /0/createSurface/components/0/months/3/forecast forecast is required",
+    "required /0/createSurface/components/0/months/4/forecast forecast is required",
+    "required /0/createSurface/components/0/months/5/forecast forecast is required",
+    "required /0/createSurface/components/0/budget budget is required"
+   ],
+   "warnings": 0,
+   "right": true,
+   "id": "bars-spend",
+   "run": 1,
+   "expect": [
+    "BarChart",
+    "LineChart",
+    "DataTable"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "promptTokenCount": 615,
+    "candidatesTokenCount": 200,
+    "totalTokenCount": 2811,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 615
+     }
+    ],
+    "thoughtsTokenCount": 1996,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "BarChart"
+   ],
+   "valid": false,
+   "errors": [
+    "required /0/createSurface/components/0/months/0/forecast forecast is required",
+    "required /0/createSurface/components/0/months/1/forecast forecast is required",
+    "required /0/createSurface/components/0/months/2/forecast forecast is required",
+    "required /0/createSurface/components/0/months/3/forecast forecast is required",
+    "required /0/createSurface/components/0/months/4/forecast forecast is required",
+    "required /0/createSurface/components/0/months/5/forecast forecast is required",
+    "required /0/createSurface/components/0/budget budget is required"
+   ],
+   "warnings": 0,
+   "right": true,
+   "id": "bars-spend",
+   "run": 2,
+   "expect": [
+    "BarChart",
+    "LineChart",
+    "DataTable"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "promptTokenCount": 615,
+    "candidatesTokenCount": 172,
+    "totalTokenCount": 2720,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 615
+     }
+    ],
+    "thoughtsTokenCount": 1933,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "BarChart"
+   ],
+   "valid": false,
+   "errors": [
+    "required /0/createSurface/components/0/budget budget is required"
+   ],
+   "warnings": 0,
+   "right": true,
+   "id": "bars-spend",
+   "run": 3,
+   "expect": [
+    "BarChart",
+    "LineChart",
+    "DataTable"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "promptTokenCount": 615,
+    "candidatesTokenCount": 246,
+    "totalTokenCount": 2309,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 615
+     }
+    ],
+    "thoughtsTokenCount": 1448,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LineChart"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "line-fare",
+   "run": 1,
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "selector": [
+    "LineChart",
+    "Comparison"
+   ],
+   "usage": {
+    "promptTokenCount": 834,
+    "candidatesTokenCount": 216,
+    "totalTokenCount": 1735,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 834
+     }
+    ],
+    "thoughtsTokenCount": 685,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LineChart"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "line-fare",
+   "run": 2,
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "selector": [
+    "LineChart",
+    "Comparison"
+   ],
+   "usage": {
+    "promptTokenCount": 834,
+    "candidatesTokenCount": 258,
+    "totalTokenCount": 2080,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 834
+     }
+    ],
+    "thoughtsTokenCount": 988,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LineChart"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "line-fare",
+   "run": 3,
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "selector": [
+    "LineChart",
+    "Comparison"
+   ],
+   "usage": {
+    "promptTokenCount": 834,
+    "candidatesTokenCount": 246,
+    "totalTokenCount": 2304,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 834
+     }
+    ],
+    "thoughtsTokenCount": 1224,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "donut-categories",
+   "run": 1,
+   "expect": [
+    "DonutBreakdown",
+    "DataTable",
+    "BarChart"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "promptTokenCount": 609,
+    "candidatesTokenCount": 56,
+    "totalTokenCount": 1474,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 609
+     }
+    ],
+    "thoughtsTokenCount": 809,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "donut-categories",
+   "run": 2,
+   "expect": [
+    "DonutBreakdown",
+    "DataTable",
+    "BarChart"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "promptTokenCount": 609,
+    "candidatesTokenCount": 58,
+    "totalTokenCount": 1303,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 609
+     }
+    ],
+    "thoughtsTokenCount": 636,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": false,
+   "id": "donut-categories",
+   "run": 3,
+   "expect": [
+    "DonutBreakdown",
+    "DataTable",
+    "BarChart"
+   ],
+   "selector": [
+    "BarChart"
+   ],
+   "usage": {
+    "promptTokenCount": 609,
+    "candidatesTokenCount": 59,
+    "totalTokenCount": 1423,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 609
+     }
+    ],
+    "thoughtsTokenCount": 755,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KpiStrip"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "kpi-year",
+   "run": 1,
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "selector": [
+    "KpiStrip",
+    "BarChart"
+   ],
+   "usage": {
+    "promptTokenCount": 691,
+    "candidatesTokenCount": 155,
+    "totalTokenCount": 1749,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 691
+     }
+    ],
+    "thoughtsTokenCount": 903,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KpiStrip"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "kpi-year",
+   "run": 2,
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "selector": [
+    "KpiStrip",
+    "BarChart"
+   ],
+   "usage": {
+    "promptTokenCount": 691,
+    "candidatesTokenCount": 148,
+    "totalTokenCount": 1686,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 691
+     }
+    ],
+    "thoughtsTokenCount": 847,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "KpiStrip"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "kpi-year",
+   "run": 3,
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "selector": [
+    "KpiStrip",
+    "BarChart"
+   ],
+   "usage": {
+    "promptTokenCount": 691,
+    "candidatesTokenCount": 154,
+    "totalTokenCount": 2127,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 691
+     }
+    ],
+    "thoughtsTokenCount": 1282,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ProgressStatus"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "status-refund",
+   "run": 1,
+   "expect": [
+    "ProgressStatus"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "FlightResults"
+   ],
+   "usage": {
+    "promptTokenCount": 999,
+    "candidatesTokenCount": 184,
+    "totalTokenCount": 2059,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 999
+     }
+    ],
+    "thoughtsTokenCount": 876,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ProgressStatus"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "status-refund",
+   "run": 2,
+   "expect": [
+    "ProgressStatus"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "FlightResults"
+   ],
+   "usage": {
+    "promptTokenCount": 999,
+    "candidatesTokenCount": 188,
+    "totalTokenCount": 2187,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 999
+     }
+    ],
+    "thoughtsTokenCount": 1000,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ProgressStatus"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "status-refund",
+   "run": 3,
+   "expect": [
+    "ProgressStatus"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "FlightResults"
+   ],
+   "usage": {
+    "promptTokenCount": 999,
+    "candidatesTokenCount": 192,
+    "totalTokenCount": 2300,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 999
+     }
+    ],
+    "thoughtsTokenCount": 1109,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "Comparison"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "compare-fares",
+   "run": 1,
+   "expect": [
+    "Comparison"
+   ],
+   "selector": [
+    "Comparison",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "promptTokenCount": 841,
+    "candidatesTokenCount": 324,
+    "totalTokenCount": 2815,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 841
+     }
+    ],
+    "thoughtsTokenCount": 1650,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "Comparison"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "compare-fares",
+   "run": 2,
+   "expect": [
+    "Comparison"
+   ],
+   "selector": [
+    "Comparison",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "promptTokenCount": 841,
+    "candidatesTokenCount": 325,
+    "totalTokenCount": 2846,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 841
+     }
+    ],
+    "thoughtsTokenCount": 1680,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "Comparison"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "compare-fares",
+   "run": 3,
+   "expect": [
+    "Comparison"
+   ],
+   "selector": [
+    "Comparison",
+    "ProgressStatus"
+   ],
+   "usage": {
+    "promptTokenCount": 841,
+    "candidatesTokenCount": 326,
+    "totalTokenCount": 2106,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 841
+     }
+    ],
+    "thoughtsTokenCount": 939,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ResultList"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "results-hotels",
+   "run": 1,
+   "expect": [
+    "ResultList"
+   ],
+   "selector": [
+    "ResultList",
+    "LocationCard"
+   ],
+   "usage": {
+    "promptTokenCount": 830,
+    "candidatesTokenCount": 319,
+    "totalTokenCount": 2841,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 830
+     }
+    ],
+    "thoughtsTokenCount": 1692,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ResultList"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 2,
+   "right": true,
+   "id": "results-hotels",
+   "run": 2,
+   "expect": [
+    "ResultList"
+   ],
+   "selector": [
+    "ResultList",
+    "LocationCard"
+   ],
+   "usage": {
+    "promptTokenCount": 830,
+    "candidatesTokenCount": 310,
+    "totalTokenCount": 1903,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 830
+     }
+    ],
+    "thoughtsTokenCount": 763,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ResultList"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "results-hotels",
+   "run": 3,
+   "expect": [
+    "ResultList"
+   ],
+   "selector": [
+    "ResultList",
+    "LocationCard"
+   ],
+   "usage": {
+    "promptTokenCount": 830,
+    "candidatesTokenCount": 311,
+    "totalTokenCount": 2641,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 830
+     }
+    ],
+    "thoughtsTokenCount": 1500,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FlightResults"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "flights-search",
+   "run": 1,
+   "expect": [
+    "FlightResults",
+    "ResultList"
+   ],
+   "selector": [
+    "FlightResults"
+   ],
+   "usage": {
+    "promptTokenCount": 838,
+    "candidatesTokenCount": 322,
+    "totalTokenCount": 2783,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 838
+     }
+    ],
+    "thoughtsTokenCount": 1623,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FlightResults"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "flights-search",
+   "run": 2,
+   "expect": [
+    "FlightResults",
+    "ResultList"
+   ],
+   "selector": [
+    "FlightResults"
+   ],
+   "usage": {
+    "promptTokenCount": 838,
+    "candidatesTokenCount": 318,
+    "totalTokenCount": 2572,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 838
+     }
+    ],
+    "thoughtsTokenCount": 1416,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FlightResults"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 1,
+   "right": true,
+   "id": "flights-search",
+   "run": 3,
+   "expect": [
+    "FlightResults",
+    "ResultList"
+   ],
+   "selector": [
+    "FlightResults"
+   ],
+   "usage": {
+    "promptTokenCount": 838,
+    "candidatesTokenCount": 330,
+    "totalTokenCount": 2802,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 838
+     }
+    ],
+    "thoughtsTokenCount": 1634,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "QuickReplies"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "chips-change",
+   "run": 1,
+   "expect": [
+    "QuickReplies"
+   ],
+   "selector": [
+    "QuickReplies",
+    "FormFields"
+   ],
+   "usage": {
+    "promptTokenCount": 748,
+    "candidatesTokenCount": 218,
+    "totalTokenCount": 1906,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 748
+     }
+    ],
+    "thoughtsTokenCount": 940,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "QuickReplies"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "chips-change",
+   "run": 2,
+   "expect": [
+    "QuickReplies"
+   ],
+   "selector": [
+    "QuickReplies",
+    "FormFields"
+   ],
+   "usage": {
+    "promptTokenCount": 748,
+    "candidatesTokenCount": 190,
+    "totalTokenCount": 2021,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 748
+     }
+    ],
+    "thoughtsTokenCount": 1083,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "QuickReplies"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "chips-change",
+   "run": 3,
+   "expect": [
+    "QuickReplies"
+   ],
+   "selector": [
+    "QuickReplies",
+    "FormFields"
+   ],
+   "usage": {
+    "promptTokenCount": 748,
+    "candidatesTokenCount": 190,
+    "totalTokenCount": 2181,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 748
+     }
+    ],
+    "thoughtsTokenCount": 1243,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FormFields"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "form-passport",
+   "run": 1,
+   "expect": [
+    "FormFields"
+   ],
+   "selector": [
+    "FormFields",
+    "KeyFacts",
+    "Receipt"
+   ],
+   "usage": {
+    "promptTokenCount": 976,
+    "candidatesTokenCount": 222,
+    "totalTokenCount": 1808,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 976
+     }
+    ],
+    "thoughtsTokenCount": 610,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FormFields"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "form-passport",
+   "run": 2,
+   "expect": [
+    "FormFields"
+   ],
+   "selector": [
+    "FormFields",
+    "KeyFacts",
+    "Receipt"
+   ],
+   "usage": {
+    "promptTokenCount": 976,
+    "candidatesTokenCount": 233,
+    "totalTokenCount": 2224,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 976
+     }
+    ],
+    "thoughtsTokenCount": 1015,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FormFields"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "form-passport",
+   "run": 3,
+   "expect": [
+    "FormFields"
+   ],
+   "selector": [
+    "FormFields",
+    "KeyFacts",
+    "Receipt"
+   ],
+   "usage": {
+    "promptTokenCount": 976,
+    "candidatesTokenCount": 219,
+    "totalTokenCount": 1699,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 976
+     }
+    ],
+    "thoughtsTokenCount": 504,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "TimeSlots"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "slots-transfer",
+   "run": 1,
+   "expect": [
+    "TimeSlots"
+   ],
+   "selector": [
+    "TimeSlots",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "promptTokenCount": 960,
+    "candidatesTokenCount": 291,
+    "totalTokenCount": 2348,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 960
+     }
+    ],
+    "thoughtsTokenCount": 1097,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "TimeSlots"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "slots-transfer",
+   "run": 2,
+   "expect": [
+    "TimeSlots"
+   ],
+   "selector": [
+    "TimeSlots",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "promptTokenCount": 960,
+    "candidatesTokenCount": 276,
+    "totalTokenCount": 2324,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 960
+     }
+    ],
+    "thoughtsTokenCount": 1088,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "TimeSlots"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "slots-transfer",
+   "run": 3,
+   "expect": [
+    "TimeSlots"
+   ],
+   "selector": [
+    "TimeSlots",
+    "ApprovalPrompt",
+    "Receipt"
+   ],
+   "usage": {
+    "promptTokenCount": 960,
+    "candidatesTokenCount": 286,
+    "totalTokenCount": 2637,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 960
+     }
+    ],
+    "thoughtsTokenCount": 1391,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "approve-cancel",
+   "run": 1,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ResultList"
+   ],
+   "usage": {
+    "promptTokenCount": 975,
+    "candidatesTokenCount": 219,
+    "totalTokenCount": 2222,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 975
+     }
+    ],
+    "thoughtsTokenCount": 1028,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "approve-cancel",
+   "run": 2,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ResultList"
+   ],
+   "usage": {
+    "promptTokenCount": 975,
+    "candidatesTokenCount": 213,
+    "totalTokenCount": 2098,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 975
+     }
+    ],
+    "thoughtsTokenCount": 910,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "approve-cancel",
+   "run": 3,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt",
+    "Receipt",
+    "ResultList"
+   ],
+   "usage": {
+    "promptTokenCount": 975,
+    "candidatesTokenCount": 236,
+    "totalTokenCount": 2201,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 975
+     }
+    ],
+    "thoughtsTokenCount": 990,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "Receipt"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "receipt-seat",
+   "run": 1,
+   "expect": [
+    "Receipt",
+    "ProgressStatus"
+   ],
+   "selector": [
+    "Receipt",
+    "FormFields"
+   ],
+   "usage": {
+    "promptTokenCount": 865,
+    "candidatesTokenCount": 158,
+    "totalTokenCount": 1802,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 865
+     }
+    ],
+    "thoughtsTokenCount": 779,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "Receipt"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "receipt-seat",
+   "run": 2,
+   "expect": [
+    "Receipt",
+    "ProgressStatus"
+   ],
+   "selector": [
+    "Receipt",
+    "FormFields"
+   ],
+   "usage": {
+    "promptTokenCount": 865,
+    "candidatesTokenCount": 167,
+    "totalTokenCount": 1545,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 865
+     }
+    ],
+    "thoughtsTokenCount": 513,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "Receipt"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "receipt-seat",
+   "run": 3,
+   "expect": [
+    "Receipt",
+    "ProgressStatus"
+   ],
+   "selector": [
+    "Receipt",
+    "FormFields"
+   ],
+   "usage": {
+    "promptTokenCount": 865,
+    "candidatesTokenCount": 163,
+    "totalTokenCount": 1801,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 865
+     }
+    ],
+    "thoughtsTokenCount": 773,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ErrorRetry"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "error-search",
+   "run": 1,
+   "expect": [
+    "ErrorRetry"
+   ],
+   "selector": [
+    "FlightResults",
+    "ErrorRetry",
+    "ResultList"
+   ],
+   "usage": {
+    "promptTokenCount": 959,
+    "candidatesTokenCount": 127,
+    "totalTokenCount": 2020,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 959
+     }
+    ],
+    "thoughtsTokenCount": 934,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ErrorRetry"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "error-search",
+   "run": 2,
+   "expect": [
+    "ErrorRetry"
+   ],
+   "selector": [
+    "FlightResults",
+    "ErrorRetry",
+    "ResultList"
+   ],
+   "usage": {
+    "promptTokenCount": 959,
+    "candidatesTokenCount": 127,
+    "totalTokenCount": 1820,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 959
+     }
+    ],
+    "thoughtsTokenCount": 734,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "ErrorRetry"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "error-search",
+   "run": 3,
+   "expect": [
+    "ErrorRetry"
+   ],
+   "selector": [
+    "FlightResults",
+    "ErrorRetry",
+    "ResultList"
+   ],
+   "usage": {
+    "promptTokenCount": 959,
+    "candidatesTokenCount": 146,
+    "totalTokenCount": 1941,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 959
+     }
+    ],
+    "thoughtsTokenCount": 836,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LocationCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "location-hotel",
+   "run": 1,
+   "expect": [
+    "LocationCard"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "AnswerSources"
+   ],
+   "usage": {
+    "promptTokenCount": 818,
+    "candidatesTokenCount": 194,
+    "totalTokenCount": 2054,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 818
+     }
+    ],
+    "thoughtsTokenCount": 1042,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LocationCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "location-hotel",
+   "run": 2,
+   "expect": [
+    "LocationCard"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "AnswerSources"
+   ],
+   "usage": {
+    "promptTokenCount": 818,
+    "candidatesTokenCount": 186,
+    "totalTokenCount": 1833,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 818
+     }
+    ],
+    "thoughtsTokenCount": 829,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "LocationCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "location-hotel",
+   "run": 3,
+   "expect": [
+    "LocationCard"
+   ],
+   "selector": [
+    "ProgressStatus",
+    "LocationCard",
+    "AnswerSources"
+   ],
+   "usage": {
+    "promptTokenCount": 818,
+    "candidatesTokenCount": 188,
+    "totalTokenCount": 1919,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 818
+     }
+    ],
+    "thoughtsTokenCount": 913,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FileCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "file-invoice",
+   "run": 1,
+   "expect": [
+    "FileCard"
+   ],
+   "selector": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "usage": {
+    "promptTokenCount": 745,
+    "candidatesTokenCount": 132,
+    "totalTokenCount": 1671,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 745
+     }
+    ],
+    "thoughtsTokenCount": 794,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FileCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "file-invoice",
+   "run": 2,
+   "expect": [
+    "FileCard"
+   ],
+   "selector": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "usage": {
+    "promptTokenCount": 745,
+    "candidatesTokenCount": 132,
+    "totalTokenCount": 1623,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 745
+     }
+    ],
+    "thoughtsTokenCount": 746,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": true,
+   "parts": [
+    "FileCard"
+   ],
+   "valid": true,
+   "errors": [],
+   "warnings": 0,
+   "right": true,
+   "id": "file-invoice",
+   "run": 3,
+   "expect": [
+    "FileCard"
+   ],
+   "selector": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "usage": {
+    "promptTokenCount": 745,
+    "candidatesTokenCount": 132,
+    "totalTokenCount": 1461,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 745
+     }
+    ],
+    "thoughtsTokenCount": 584,
+    "serviceTier": "standard"
+   },
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-visa",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 408,
+    "candidatesTokenCount": 58,
+    "totalTokenCount": 878,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 408
+     }
+    ],
+    "thoughtsTokenCount": 412,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-visa",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 408,
+    "candidatesTokenCount": 58,
+    "totalTokenCount": 871,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 408
+     }
+    ],
+    "thoughtsTokenCount": 405,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-visa",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 408,
+    "candidatesTokenCount": 63,
+    "totalTokenCount": 807,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 408
+     }
+    ],
+    "thoughtsTokenCount": 336,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-checkin",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 393,
+    "candidatesTokenCount": 30,
+    "totalTokenCount": 773,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 393
+     }
+    ],
+    "thoughtsTokenCount": 350,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-checkin",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 393,
+    "candidatesTokenCount": 29,
+    "totalTokenCount": 744,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 393
+     }
+    ],
+    "thoughtsTokenCount": 322,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-checkin",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 393,
+    "candidatesTokenCount": 27,
+    "totalTokenCount": 799,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 393
+     }
+    ],
+    "thoughtsTokenCount": 379,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-breakfast",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 384,
+    "candidatesTokenCount": 28,
+    "totalTokenCount": 787,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 384
+     }
+    ],
+    "thoughtsTokenCount": 375,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-breakfast",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 384,
+    "candidatesTokenCount": 27,
+    "totalTokenCount": 790,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 384
+     }
+    ],
+    "thoughtsTokenCount": 379,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-breakfast",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 384,
+    "candidatesTokenCount": 28,
+    "totalTokenCount": 796,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 384
+     }
+    ],
+    "thoughtsTokenCount": 384,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-bags",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 390,
+    "candidatesTokenCount": 29,
+    "totalTokenCount": 773,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 390
+     }
+    ],
+    "thoughtsTokenCount": 354,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-bags",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 390,
+    "candidatesTokenCount": 29,
+    "totalTokenCount": 669,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 390
+     }
+    ],
+    "thoughtsTokenCount": 250,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-bags",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 390,
+    "candidatesTokenCount": 29,
+    "totalTokenCount": 718,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 390
+     }
+    ],
+    "thoughtsTokenCount": 299,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-thanks",
+   "run": 1,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 354,
+    "candidatesTokenCount": 20,
+    "totalTokenCount": 569,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 354
+     }
+    ],
+    "thoughtsTokenCount": 195,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-thanks",
+   "run": 2,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 354,
+    "candidatesTokenCount": 24,
+    "totalTokenCount": 534,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 354
+     }
+    ],
+    "thoughtsTokenCount": 156,
+    "serviceTier": "standard"
+   }
+  },
+  {
+   "ui": false,
+   "parts": [],
+   "valid": null,
+   "errors": [],
+   "right": true,
+   "id": "noui-thanks",
+   "run": 3,
+   "expect": [],
+   "selector": [],
+   "usage": {
+    "promptTokenCount": 354,
+    "candidatesTokenCount": 22,
+    "totalTokenCount": 559,
+    "promptTokensDetails": [
+     {
+      "modality": "TEXT",
+      "tokenCount": 354
+     }
+    ],
+    "thoughtsTokenCount": 183,
+    "serviceTier": "standard"
+   }
+  }
+ ]
+}

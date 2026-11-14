@@ -1,0 +1,6 @@
+{"label": "Workspace usage in November",
+ "meters": [
+  {"label": "Cloud spend", "alert": "Forecast 112% by Nov 30", "display": "71%", "limit_display": "of €8,500.00", "share": 0.71, "forecast_percent": 100,
+   "thresholds": [{"at": 0.75}, {"at": 0.95}], "note": "Alerts at 75% and 95%. Builds keep running past 100%."},
+  {"label": "Editor seats", "status": "60% used", "display": "15", "limit_display": "of 25 seats", "share": 0.6, "note": "10 seats free."},
+  {"label": "Support hours", "status": "92% used", "display": "23 h", "limit_display": "of 25 h", "share": 0.92, "thresholds": [{"at": 0.9}]}]}

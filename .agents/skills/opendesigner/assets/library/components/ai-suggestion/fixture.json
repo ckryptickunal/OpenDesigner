@@ -1,0 +1,13 @@
+{"label": "Note to the Larchmont tenants",
+ "text_before": "Hello all, a quick update on the lift in block C.",
+ "original": "The engineer is going to try to come round at some point on Thursday if the part has arrived by then.",
+ "text_after": "Stairs stay open as usual.",
+ "suggestions": [
+  {"text": "The engineer will fix the lift on Thursday, Nov 19, once the part arrives.", "why": "Clearer and gives the day",
+   "diff": [{"op": "remove", "text": "The engineer is going to try to come round at some point on Thursday if the part has arrived by then."}, {"op": "add", "text": "The engineer will fix the lift on Thursday, Nov 19, once the part arrives."}]},
+  {"text": "The lift should work again on Thursday, Nov 19.",
+   "diff": [{"op": "keep", "text": "The"}, {"op": "remove", "text": "engineer is going to try to come round at some point on Thursday if the part has arrived by then."}, {"op": "add", "text": "lift should work again on Thursday, Nov 19."}]}],
+ "note": "Date from the repair booking · medium confidence",
+ "another": {"label": "Try another", "event": {"name": "next_suggestion"}},
+ "reject": {"label": "Reject", "event": {"name": "reject_suggestion"}},
+ "accept": {"label": "Accept", "event": {"name": "accept_suggestion", "context": {"field": "tenant_note"}}}}

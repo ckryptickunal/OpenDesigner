@@ -1,0 +1,48 @@
+{
+ "title": "Team",
+ "count": "38 members · 2 seats free on the Team plan",
+ "members": [
+  {
+   "name": "Ines Okafor",
+   "email": "ines.okafor@brightwell.example",
+   "avatar": {
+    "src": "https://images.unsplash.com/photo-1611432579699-484f7990b127?w=64&h=64&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Photo of Ines Okafor"
+   },
+   "role": "Owner",
+   "status": "owner",
+   "last_active": "Active now"
+  },
+  {
+   "name": "Pavel Rusu",
+   "email": "pavel.rusu@brightwell.example",
+   "avatar": {
+    "src": "https://images.unsplash.com/photo-1605980776566-0486c3ac7617?w=64&h=64&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Photo of Pavel Rusu"
+   },
+   "role": "Admin",
+   "status": "active",
+   "last_active": "3 h ago"
+  },
+  {
+   "name": "Sunniva Berg",
+   "email": "sunniva.berg@brightwell.example",
+   "role": "Member",
+   "status": "active",
+   "last_active": "Nov 2"
+  },
+  {
+   "name": "arjun.mehta@brightwell.example",
+   "role": "Member",
+   "status": "pending",
+   "invite_note": "Sent by Ines Okafor · expires Nov 20",
+   "resend": {
+    "label": "Resend",
+    "event": {
+     "name": "resend_invite"
+    }
+   },
+   "email": "arjun.mehta@brightwell.example"
+  }
+ ]
+}

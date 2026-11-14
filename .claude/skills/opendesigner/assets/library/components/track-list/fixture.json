@@ -1,0 +1,11 @@
+{"cover": {"src": "https://images.unsplash.com/photo-1557264322-b44d383a2906?w=480&h=480&fit=crop&auto=format&q=70", "alt": "Album cover: green and pink abstract fluid art"},
+ "eyebrow": "EP · 2025", "title": "Small Hours at Fennick Road",
+ "artist": "Odile Marsh", "artist_photo": {"src": "https://images.unsplash.com/photo-1611432579699-484f7990b127?w=64&h=64&fit=crop&crop=faces&auto=format&q=70", "alt": "Odile Marsh"},
+ "summary": "5 songs, 19 min",
+ "tracks": [
+  {"title": "Porch Light", "artists": "Odile Marsh", "length": "3:12"},
+  {"title": "Second Kettle", "artists": "Odile Marsh, Teo Varga", "length": "4:05"},
+  {"title": "Fennick Road", "length": "3:58"},
+  {"title": "Paper Moon over the Allotments", "artists": "Odile Marsh", "length": "4:44"},
+  {"title": "Last Tram", "artists": "Odile Marsh", "length": "3:31"}
+ ]}

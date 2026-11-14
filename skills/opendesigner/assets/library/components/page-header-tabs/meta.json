@@ -34,8 +34,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a record such as a company, deal or project whose content splits into sections with counts"],
-    "avoid_when": ["moving between top-level areas of an app: use sidebar-nav", "a person's public profile with photos and followers: use profile-hero", "a header for a list with filters rather than one record: use filter-bar"],
+    "use_when": [
+      "a record such as a company, deal or project whose content splits into sections with counts"
+    ],
+    "avoid_when": [
+      "moving between top-level areas of an app: use sidebar-nav",
+      "a person's public profile with photos and followers: use profile-hero",
+      "a header for a list with filters rather than one record: use filter-bar"
+    ],
     "parts": [
       {
         "name": "breadcrumb",
@@ -94,7 +100,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "tabs"],
+      "required": [
+        "title",
+        "tabs"
+      ],
       "properties": {
         "breadcrumb": {
           "type": "array",
@@ -103,7 +112,9 @@
           "part": "breadcrumb",
           "items": {
             "type": "object",
-            "required": ["label"],
+            "required": [
+              "label"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -137,7 +148,9 @@
           "part": "summary",
           "items": {
             "type": "object",
-            "required": ["value"],
+            "required": [
+              "value"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -180,7 +193,9 @@
           "part": "tabs",
           "items": {
             "type": "object",
-            "required": ["label"],
+            "required": [
+              "label"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -203,12 +218,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "a tab with nothing in it still shows; leave its count out and let the panel below show empty-state"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show the title and tabs as muted blocks of the same height, and leave the counts out until they load"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -227,8 +244,17 @@
         "status": "handled",
         "how": "the title balances its lines and breaks long words; tab and button labels never wrap; summary chips wrap to new lines",
         "evidence": "overflow-wrap: break-word; text-wrap: balance"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches the breadcrumb links, the favourite star, Add to list, Compose email, then the selected tab, then More when it is shown", "Enter or Space on the star adds or removes the favourite", "In the tab row, Left and Right arrows move to and select the previous or next tab, wrapping at the ends; Home and End go to the first and last tab"]
+    "keyboard": [
+      "Tab reaches the breadcrumb links, the favourite star, Add to list, Compose email, then the selected tab, then More when it is shown",
+      "Enter or Space on the star adds or removes the favourite",
+      "In the tab row, Left and Right arrows move to and select the previous or next tab, wrapping at the ends; Home and End go to the first and last tab"
+    ]
   }
 }

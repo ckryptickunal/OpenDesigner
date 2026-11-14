@@ -4,15 +4,37 @@
   "use": "when a row or record has more actions than fit as buttons",
   "type": "overlay",
   "style": "dense",
-  "industries": ["any"],
-  "tags": ["menu", "dropdown", "actions", "shortcuts", "context menu"],
-  "states": ["open", "closed", "hover", "focus", "disabled", "danger", "submenu"],
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "menu",
+    "dropdown",
+    "actions",
+    "shortcuts",
+    "context menu"
+  ],
+  "states": [
+    "open",
+    "closed",
+    "hover",
+    "focus",
+    "disabled",
+    "danger",
+    "submenu"
+  ],
   "source": null,
   "a11y": "A menu button with aria-expanded; items are menuitems with roving focus (arrow keys, Home, End), Escape closes and returns focus to the button, and the disabled item is aria-disabled.",
   "width": "narrow",
   "spec": {
-    "use_when": ["a toolbar or card header where rare or destructive actions should stay out of sight until asked for"],
-    "avoid_when": ["searching across many commands or pages by typing: use command-menu", "only one or two actions: show them as buttons", "an action that needs a reason or a second look before it runs: open confirm-dialog from the menu item"],
+    "use_when": [
+      "a toolbar or card header where rare or destructive actions should stay out of sight until asked for"
+    ],
+    "avoid_when": [
+      "searching across many commands or pages by typing: use command-menu",
+      "only one or two actions: show them as buttons",
+      "an action that needs a reason or a second look before it runs: open confirm-dialog from the menu item"
+    ],
     "parts": [
       {
         "name": "trigger",
@@ -53,7 +75,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["trigger", "groups"],
+      "required": [
+        "trigger",
+        "groups"
+      ],
       "properties": {
         "trigger": {
           "type": "string",
@@ -70,7 +95,9 @@
           "maxItems": 4,
           "items": {
             "type": "object",
-            "required": ["items"],
+            "required": [
+              "items"
+            ],
             "properties": {
               "heading": {
                 "type": "string",
@@ -84,7 +111,9 @@
                 "part": "items",
                 "items": {
                   "type": "object",
-                  "required": ["label"],
+                  "required": [
+                    "label"
+                  ],
                   "properties": {
                     "label": {
                       "type": "string",
@@ -123,7 +152,9 @@
         },
         "danger": {
           "type": "object",
-          "required": ["label"],
+          "required": [
+            "label"
+          ],
           "part": "danger",
           "properties": {
             "label": {
@@ -140,17 +171,27 @@
               }
             }
           }
+        },
+        "danger_label": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "danger_shortcut": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no actions for this record, hide the More button rather than open an empty menu"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "if items depend on a fetch, show one disabled item reading 'Loading' until they arrive"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -169,8 +210,19 @@
         "status": "handled",
         "how": "a long label wraps in its column while shortcuts and notes stay on one line",
         "evidence": "minmax(0, 1fr) auto"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Enter or Space on More opens or closes the menu and focuses the first item", "Arrow Down or Arrow Up on More opens the menu at the first or last item", "Arrow Down and Arrow Up move between items and wrap around; Home and End jump to the first and last", "Enter or Space runs the focused item and closes the menu, except the disabled item and Move to", "Escape or Tab closes the menu and returns focus to More", "the shortcut keys shown are labels only; the file does not listen for them"]
+    "keyboard": [
+      "Enter or Space on More opens or closes the menu and focuses the first item",
+      "Arrow Down or Arrow Up on More opens the menu at the first or last item",
+      "Arrow Down and Arrow Up move between items and wrap around; Home and End jump to the first and last",
+      "Enter or Space runs the focused item and closes the menu, except the disabled item and Move to",
+      "Escape or Tab closes the menu and returns focus to More",
+      "the shortcut keys shown are labels only; the file does not listen for them"
+    ]
   }
 }

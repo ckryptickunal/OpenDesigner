@@ -4,15 +4,37 @@
   "use": "for monthly spend or usage against a budget, with a forecast",
   "type": "chart",
   "style": "quiet",
-  "industries": ["saas", "finance", "devtools"],
-  "tags": ["bar chart", "spend", "budget", "forecast", "billing", "tooltip"],
-  "states": ["hover", "focus", "current month", "forecast over budget"],
+  "industries": [
+    "saas",
+    "finance",
+    "devtools"
+  ],
+  "tags": [
+    "bar chart",
+    "spend",
+    "budget",
+    "forecast",
+    "billing",
+    "tooltip"
+  ],
+  "states": [
+    "hover",
+    "focus",
+    "current month",
+    "forecast over budget"
+  ],
   "source": "brand/showcase/product/05-kilnworks-billing",
   "a11y": "Each bar is a button whose name says the month, the amount and how it sits against the budget; Tab moves through the months and shows the same tooltip as hover.",
   "width": "medium",
   "spec": {
-    "use_when": ["a billing or usage page that must warn early when the month is heading over budget"],
-    "avoid_when": ["a share of a whole, such as spend by team: use donut-breakdown", "a few headline numbers with no monthly history: use kpi-strip or budget-meters", "more or fewer than six periods: the columns are fixed at six"],
+    "use_when": [
+      "a billing or usage page that must warn early when the month is heading over budget"
+    ],
+    "avoid_when": [
+      "a share of a whole, such as spend by team: use donut-breakdown",
+      "a few headline numbers with no monthly history: use kpi-strip or budget-meters",
+      "more or fewer than six periods: the columns are fixed at six"
+    ],
     "parts": [
       {
         "name": "title",
@@ -83,7 +105,12 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "currency", "budget", "months"],
+      "required": [
+        "title",
+        "currency",
+        "budget",
+        "months"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -107,7 +134,10 @@
           "part": "stats",
           "items": {
             "type": "object",
-            "required": ["label", "value"],
+            "required": [
+              "label",
+              "value"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -139,7 +169,11 @@
           "part": "months",
           "items": {
             "type": "object",
-            "required": ["label", "short", "spent"],
+            "required": [
+              "label",
+              "short",
+              "spent"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -180,12 +214,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no months of data, keep the heading and axis and put a short empty-state line across the plot"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show the card with grey blocks in place of the figures and six short grey bars"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -204,8 +240,15 @@
         "status": "handled",
         "how": "the heading and figures wrap onto separate lines; figures, axis labels and the budget label never break",
         "evidence": "flex-wrap: wrap; align-items: start; justify-content: space-between"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab moves through the six month bars in order", "A focused bar shows its tooltip and dims the other bars, as hover does"]
+    "keyboard": [
+      "Tab moves through the six month bars in order",
+      "A focused bar shows its tooltip and dims the other bars, as hover does"
+    ]
   }
 }

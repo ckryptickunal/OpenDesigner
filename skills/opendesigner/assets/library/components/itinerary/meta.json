@@ -56,8 +56,14 @@
     }
   ],
   "spec": {
-    "use_when": ["an event or tour schedule over a few days where each stop has a place on a map and a booking code"],
-    "avoid_when": ["one booking with its dates and price: use stay-card", "a ticket to show at a gate: use boarding-pass or event-ticket", "a day of meetings with no places or map: use calendar-agenda"],
+    "use_when": [
+      "an event or tour schedule over a few days where each stop has a place on a map and a booking code"
+    ],
+    "avoid_when": [
+      "one booking with its dates and price: use stay-card",
+      "a ticket to show at a gate: use boarding-pass or event-ticket",
+      "a day of meetings with no places or map: use calendar-agenda"
+    ],
     "parts": [
       {
         "name": "title",
@@ -134,7 +140,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "days"],
+      "required": [
+        "title",
+        "days"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -153,7 +162,10 @@
           "part": "days",
           "items": {
             "type": "object",
-            "required": ["label", "stops"],
+            "required": [
+              "label",
+              "stops"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -177,7 +189,11 @@
                 "part": "stops",
                 "items": {
                   "type": "object",
-                  "required": ["time", "name", "kind"],
+                  "required": [
+                    "time",
+                    "name",
+                    "kind"
+                  ],
                   "properties": {
                     "time": {
                       "type": "string",
@@ -185,7 +201,14 @@
                       "part": "time"
                     },
                     "kind": {
-                      "enum": ["train", "stay", "meal", "walk", "class", "flight"]
+                      "enum": [
+                        "train",
+                        "stay",
+                        "meal",
+                        "walk",
+                        "class",
+                        "flight"
+                      ]
                     },
                     "name": {
                       "type": "string",
@@ -235,12 +258,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "for a day with no plans, show empty-state ('Nothing planned yet') in that day's panel and no pins on the map"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the tabs and fill the panel with three stop cards made of muted bars, and leave the map without pins"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -259,8 +284,17 @@
         "status": "handled",
         "how": "stop names and details wrap inside the card beside the photo; dates in the tabs never wrap",
         "evidence": ".odl-itinerary .odl-tabs small { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches the selected day tab, then each stop's number button", "Left and Right arrows on a day tab move to the previous or next day and show it, wrapping at the ends", "Enter or Space on a stop's number toggles the highlight on its pin on the map"]
+    "keyboard": [
+      "Tab reaches the selected day tab, then each stop's number button",
+      "Left and Right arrows on a day tab move to the previous or next day and show it, wrapping at the ends",
+      "Enter or Space on a stop's number toggles the highlight on its pin on the map"
+    ]
   }
 }

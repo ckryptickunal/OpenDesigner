@@ -1,0 +1,620 @@
+{
+ "about": "Recorded turns for the Smart UI demo. Invented product, people and places.",
+ "turns": [
+  {
+   "user": "Flights from Bristol to Lisbon on 4 December?",
+   "text": "Three flights on Thursday 4 December. The 13:10 is the cheapest nonstop.",
+   "data": {
+    "flights": [
+     {
+      "id": "OV214",
+      "depart": "08:40",
+      "arrive": "11:55",
+      "duration": "2h 15m",
+      "stops": "Nonstop",
+      "airline": "Orvell Air",
+      "price": "€164"
+     },
+     {
+      "id": "OV218",
+      "depart": "13:10",
+      "arrive": "16:25",
+      "duration": "2h 15m",
+      "stops": "Nonstop",
+      "airline": "Orvell Air",
+      "price": "€151"
+     },
+     {
+      "id": "TQ902",
+      "depart": "06:05",
+      "arrive": "12:40",
+      "duration": "5h 35m",
+      "stops": "1 stop",
+      "airline": "Tequa",
+      "price": "€119"
+     }
+    ]
+   },
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s1",
+      "catalogId": "https://opendesigner.dev/catalogs/orvell-travel/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "FlightResults",
+        "title": "Bristol to Lisbon",
+        "summary": "Thu 4 Dec · 1 adult · economy",
+        "flights": [
+         {
+          "depart": "08:40",
+          "arrive": "11:55",
+          "from": "BRS",
+          "to": "LIS",
+          "duration": "2h 15m",
+          "stops": "Nonstop",
+          "airline": "Orvell Air",
+          "price": "€164",
+          "per": "per person",
+          "select": {
+           "label": "Select",
+           "event": {
+            "name": "select_flight",
+            "context": {
+             "flight": "OV214"
+            }
+           }
+          }
+         },
+         {
+          "depart": "13:10",
+          "arrive": "16:25",
+          "from": "BRS",
+          "to": "LIS",
+          "duration": "2h 15m",
+          "stops": "Nonstop",
+          "airline": "Orvell Air",
+          "price": "€151",
+          "per": "per person",
+          "select": {
+           "label": "Select",
+           "event": {
+            "name": "select_flight",
+            "context": {
+             "flight": "OV218"
+            }
+           }
+          }
+         },
+         {
+          "depart": "06:05",
+          "arrive": "12:40",
+          "from": "BRS",
+          "to": "LIS",
+          "duration": "5h 35m",
+          "stops": "1 stop",
+          "airline": "Tequa",
+          "price": "€119",
+          "per": "per person",
+          "select": {
+           "label": "Select",
+           "event": {
+            "name": "select_flight",
+            "context": {
+             "flight": "TQ902"
+            }
+           }
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "user": "Compare the fares on the 08:40",
+   "text": "Standard adds a checked bag and a seat you choose. Flex adds free changes and a refund.",
+   "data": {
+    "fares": [
+     {
+      "name": "Basic",
+      "price": "€164"
+     },
+     {
+      "name": "Standard",
+      "price": "€212"
+     },
+     {
+      "name": "Flex",
+      "price": "€289"
+     }
+    ]
+   },
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s2",
+      "catalogId": "https://opendesigner.dev/catalogs/orvell-travel/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Comparison",
+        "title": "Fares on OV214, 08:40",
+        "note": "Prices per person, taxes included",
+        "options": [
+         {
+          "name": "Basic",
+          "price": "€164",
+          "choose": {
+           "label": "Choose",
+           "event": {
+            "name": "choose_fare",
+            "context": {
+             "fare": "basic"
+            }
+           }
+          }
+         },
+         {
+          "name": "Standard",
+          "badge": "Most picked",
+          "price": "€212",
+          "choose": {
+           "label": "Choose",
+           "event": {
+            "name": "choose_fare",
+            "context": {
+             "fare": "standard"
+            }
+           }
+          }
+         },
+         {
+          "name": "Flex",
+          "price": "€289",
+          "choose": {
+           "label": "Choose",
+           "event": {
+            "name": "choose_fare",
+            "context": {
+             "fare": "flex"
+            }
+           }
+          }
+         }
+        ],
+        "rows": [
+         {
+          "label": "Bags",
+          "values": [
+           {
+            "value": "Small bag only"
+           },
+           {
+            "value": "1 checked bag, 23 kg"
+           },
+           {
+            "value": "1 checked bag, 23 kg"
+           }
+          ]
+         },
+         {
+          "label": "Seat",
+          "values": [
+           {
+            "value": "Random"
+           },
+           {
+            "value": "Choose your seat"
+           },
+           {
+            "value": "Choose your seat"
+           }
+          ]
+         },
+         {
+          "label": "Changes",
+          "values": [
+           {
+            "mark": "no",
+            "value": "Not allowed"
+           },
+           {
+            "value": "€45 fee"
+           },
+           {
+            "mark": "yes",
+            "value": "Free"
+           }
+          ]
+         },
+         {
+          "label": "Refund",
+          "values": [
+           {
+            "mark": "no",
+            "value": "No"
+           },
+           {
+            "mark": "no",
+            "value": "No"
+           },
+           {
+            "mark": "yes",
+            "value": "Up to 2 hours before"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "after": "choose_fare",
+   "user": "",
+   "text": "Standard on the 08:40 to Lisbon, €212. Nothing is booked until you confirm.",
+   "data": {
+    "fare": "Standard",
+    "price": "€212",
+    "flight": "OV214"
+   },
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s3",
+      "catalogId": "https://opendesigner.dev/catalogs/orvell-travel/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "ApprovalPrompt",
+        "title": "Book the 08:40 to Lisbon?",
+        "summary": "Your card ending 4471 is charged €212 when you confirm.",
+        "details": [
+         {
+          "label": "Flight",
+          "value": "OV214, Thu 4 Dec, 08:40"
+         },
+         {
+          "label": "Fare",
+          "value": "Standard, 1 checked bag"
+         },
+         {
+          "label": "Traveller",
+          "value": "Sam Ortega"
+         },
+         {
+          "label": "Total",
+          "value": "€212"
+         }
+        ],
+        "approve": {
+         "label": "Book for €212",
+         "event": {
+          "name": "book_flight",
+          "context": {
+           "flight": "OV214",
+           "fare": "standard"
+          }
+         }
+        },
+        "cancel": {
+         "label": "Not now",
+         "event": {
+          "name": "cancel_booking"
+         }
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "after": "book_flight",
+   "user": "",
+   "text": "Booked. The confirmation is on its way to your email.",
+   "data": {
+    "reference": "OR-58214",
+    "flight": "OV214",
+    "seat": "chosen at check-in",
+    "total": "€212"
+   },
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s4",
+      "catalogId": "https://opendesigner.dev/catalogs/orvell-travel/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "Receipt",
+        "tone": "success",
+        "status": "Booked",
+        "title": "Bristol to Lisbon, Thu 4 Dec",
+        "reference": "OR-58214",
+        "lines": [
+         {
+          "label": "Flight",
+          "value": "OV214, 08:40 to 11:55"
+         },
+         {
+          "label": "Fare",
+          "value": "Standard"
+         },
+         {
+          "label": "Bag",
+          "value": "1 checked bag, 23 kg"
+         },
+         {
+          "label": "Seat",
+          "value": "Choose at check-in"
+         }
+        ],
+        "total_label": "Paid",
+        "total_value": "€212",
+        "note": "Check-in opens 30 hours before departure.",
+        "primary": {
+         "label": "Add to calendar",
+         "event": {
+          "name": "add_to_calendar",
+          "context": {
+           "reference": "OR-58214"
+          }
+         }
+        },
+        "secondary": {
+         "label": "View booking",
+         "event": {
+          "name": "view_booking",
+          "context": {
+           "reference": "OR-58214"
+          }
+         }
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "user": "When does check-in open?",
+   "text": "Check-in for OV214 opens 30 hours before departure: Wednesday 3 December at 02:40.",
+   "data": {
+    "checkin_opens": "3 Dec 02:40"
+   }
+  },
+  {
+   "user": "Where's my hotel?",
+   "text": "Casa do Rio is in Alfama, about 25 minutes from the airport by taxi.",
+   "data": {
+    "hotel": {
+     "name": "Casa do Rio",
+     "address": "Rua dos Remédios 41",
+     "locality": "1100-441 Lisboa, Portugal",
+     "from_airport": "25 min by taxi",
+     "reception": "Reception open 24 hours"
+    }
+   },
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s5",
+      "catalogId": "https://opendesigner.dev/catalogs/orvell-travel/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "LocationCard",
+        "name": "Casa do Rio",
+        "address": "Rua dos Remédios 41",
+        "locality": "1100-441 Lisboa, Portugal",
+        "distance": "25 min by taxi from the airport",
+        "hours": "Reception open 24 hours",
+        "open_maps": {
+         "label": "Open in maps",
+         "event": {
+          "name": "open_maps",
+          "context": {
+           "place": "Casa do Rio"
+          }
+         }
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "user": "Book a transfer for when I land",
+   "text": "These times are free on Thursday, after you land at 11:55. A car costs €38.",
+   "data": {
+    "landing": "11:55",
+    "price": "€38",
+    "times": [
+     "12:30",
+     "12:45",
+     "13:15",
+     "13:45",
+     "14:30"
+    ]
+   },
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s6",
+      "catalogId": "https://opendesigner.dev/catalogs/orvell-travel/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "TimeSlots",
+        "title": "Airport transfer, Thu 4 Dec",
+        "timezone": "Lisbon time (WET)",
+        "days": [
+         {
+          "label": "Thu 4 Dec",
+          "slots": [
+           {
+            "select": {
+             "label": "12:30",
+             "event": {
+              "name": "pick_transfer",
+              "context": {
+               "time": "12:30"
+              }
+             }
+            },
+            "tone": "warning"
+           },
+           {
+            "select": {
+             "label": "12:45",
+             "event": {
+              "name": "pick_transfer",
+              "context": {
+               "time": "12:45"
+              }
+             }
+            }
+           },
+           {
+            "select": {
+             "label": "13:15",
+             "event": {
+              "name": "pick_transfer",
+              "context": {
+               "time": "13:15"
+              }
+             }
+            }
+           },
+           {
+            "select": {
+             "label": "13:45",
+             "event": {
+              "name": "pick_transfer",
+              "context": {
+               "time": "13:45"
+              }
+             }
+            }
+           },
+           {
+            "select": {
+             "label": "14:30",
+             "event": {
+              "name": "pick_transfer",
+              "context": {
+               "time": "14:30"
+              }
+             }
+            }
+           }
+          ]
+         }
+        ],
+        "legend": "Amber: tight if your flight is late"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "user": "What are the key details of my hotel booking?",
+   "text": "Here is your Lisbon stay.",
+   "data": {
+    "booking": {
+     "hotel": "Casa do Rio",
+     "check_in": "Thu 4 Dec, from 15:00",
+     "check_out": "Sun 7 Dec, by 11:00",
+     "room": "Double, river view",
+     "guests": "2",
+     "breakfast": "Included",
+     "reference": "OR-58213"
+    }
+   },
+   "answer": [
+    {
+     "version": "1.0",
+     "createSurface": {
+      "surfaceId": "s7",
+      "catalogId": "https://opendesigner.dev/catalogs/orvell-travel/v1/catalog.json",
+      "components": [
+       {
+        "id": "root",
+        "component": "KeyFacts",
+        "title": "Casa do Rio, Lisbon",
+        "subtitle": "3 nights · reference OR-58213",
+        "facts": [
+         {
+          "label": "Check-in",
+          "value": "Thu 4 Dec, from 15:00"
+         },
+         {
+          "label": "Check-out",
+          "value": "Sun 7 Dec, by 11:00"
+         },
+         {
+          "label": "Room",
+          "value": "Double, river view"
+         },
+         {
+          "label": "Guests",
+          "value": "2"
+         },
+         {
+          "label": "Breakfast",
+          "value": "Included",
+          "tone": "success"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ],
+ "broken": {
+  "user": "Show me a picture of the hotel",
+  "text": "Here it is.",
+  "data": {},
+  "answer": [
+   {
+    "version": "1.0",
+    "createSurface": {
+     "surfaceId": "bad",
+     "catalogId": "https://opendesigner.dev/catalogs/orvell-travel/v1/catalog.json",
+     "components": [
+      {
+       "id": "root",
+       "component": "ImageCard",
+       "tone": "#ff6600",
+       "image": {
+        "src": "https://tracker.example/pixel.png?u=sam",
+        "alt": "Hotel"
+       },
+       "caption": "<b>Casa do Rio</b>",
+       "style": {
+        "padding": "40px"
+       }
+      }
+     ]
+    }
+   }
+  ]
+ }
+}

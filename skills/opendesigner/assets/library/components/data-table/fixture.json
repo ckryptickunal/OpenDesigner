@@ -1,0 +1,536 @@
+{
+ "title": "Orders this month",
+ "summary": "23 orders \u00b7 \u20ac6,912.40 in total \u00b7 2 delayed",
+ "columns": [
+  {
+   "label": "Order",
+   "align": "start"
+  },
+  {
+   "label": "Customer"
+  },
+  {
+   "label": "Placed",
+   "align": "start"
+  },
+  {
+   "label": "Ship to"
+  },
+  {
+   "label": "Status"
+  },
+  {
+   "label": "Total",
+   "align": "end"
+  }
+ ],
+ "rows": [
+  {
+   "cells": [
+    {
+     "text": "#48120"
+    },
+    {
+     "text": "Ada Brennan"
+    },
+    {
+     "text": "Nov 1, 2026"
+    },
+    {
+     "text": "Lisbon"
+    },
+    {
+     "text": "Shipped"
+    },
+    {
+     "text": "\u20ac164.82"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48127"
+    },
+    {
+     "text": "Tomas Iwu"
+    },
+    {
+     "text": "Nov 2, 2026"
+    },
+    {
+     "text": "Leeds"
+    },
+    {
+     "text": "Packed"
+    },
+    {
+     "text": "\u20ac82.17"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48134"
+    },
+    {
+     "text": "Mira Castell"
+    },
+    {
+     "text": "Nov 3, 2026"
+    },
+    {
+     "text": "Austin"
+    },
+    {
+     "text": "Delivered"
+    },
+    {
+     "text": "\u20ac264.35"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48141"
+    },
+    {
+     "text": "Joon Park"
+    },
+    {
+     "text": "Nov 4, 2026"
+    },
+    {
+     "text": "Osaka"
+    },
+    {
+     "text": "Delayed"
+    },
+    {
+     "text": "\u20ac114.39"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48148"
+    },
+    {
+     "text": "Leila Haddad"
+    },
+    {
+     "text": "Nov 5, 2026"
+    },
+    {
+     "text": "Lyon"
+    },
+    {
+     "text": "Shipped"
+    },
+    {
+     "text": "\u20ac59.37"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48155"
+    },
+    {
+     "text": "Owen Faraday"
+    },
+    {
+     "text": "Nov 6, 2026"
+    },
+    {
+     "text": "Collect from the Rua Augusta locker, bay 4"
+    },
+    {
+     "text": "Delivered"
+    },
+    {
+     "text": "\u20ac267.79"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48162"
+    },
+    {
+     "text": "Priya Raman"
+    },
+    {
+     "text": "Nov 7, 2026"
+    },
+    {
+     "text": "Porto"
+    },
+    {
+     "text": "Shipped"
+    },
+    {
+     "text": "\u20ac588.97"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48169"
+    },
+    {
+     "text": "Sven Aalto"
+    },
+    {
+     "text": "Nov 8, 2026"
+    },
+    {
+     "text": "Denver"
+    },
+    {
+     "text": "Packed"
+    },
+    {
+     "text": "\u20ac515.88"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48176"
+    },
+    {
+     "text": "Ines Duarte"
+    },
+    {
+     "text": "Nov 9, 2026"
+    },
+    {
+     "text": "Lisbon"
+    },
+    {
+     "text": "Delivered"
+    },
+    {
+     "text": "\u20ac493.93"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48183"
+    },
+    {
+     "text": "Kofi Mensah"
+    },
+    {
+     "text": "Nov 10, 2026"
+    },
+    {
+     "text": "Leeds"
+    },
+    {
+     "text": "Delayed"
+    },
+    {
+     "text": "\u20ac156.04"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48190"
+    },
+    {
+     "text": "Hana Sato"
+    },
+    {
+     "text": "Nov 11, 2026"
+    },
+    {
+     "text": "Austin"
+    },
+    {
+     "text": "Shipped"
+    },
+    {
+     "text": "\u20ac351.81"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48197"
+    },
+    {
+     "text": "Luca Ferro"
+    },
+    {
+     "text": "Nov 12, 2026"
+    },
+    {
+     "text": "Osaka"
+    },
+    {
+     "text": "Delivered"
+    },
+    {
+     "text": "\u20ac190.10"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48204"
+    },
+    {
+     "text": "Nadia Petrov"
+    },
+    {
+     "text": "Nov 13, 2026"
+    },
+    {
+     "text": "Lyon"
+    },
+    {
+     "text": "Shipped"
+    },
+    {
+     "text": "\u20ac125.40"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48211"
+    },
+    {
+     "text": "Ravi Kumar"
+    },
+    {
+     "text": "Nov 14, 2026"
+    },
+    {
+     "text": "Malm\u00f6"
+    },
+    {
+     "text": "Packed"
+    },
+    {
+     "text": "\u20ac84.05"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48218"
+    },
+    {
+     "text": "Elsa Moreau"
+    },
+    {
+     "text": "Nov 15, 2026"
+    },
+    {
+     "text": "Porto"
+    },
+    {
+     "text": "Delivered"
+    },
+    {
+     "text": "\u20ac151.36"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48225"
+    },
+    {
+     "text": "Dario Lentz"
+    },
+    {
+     "text": "Nov 16, 2026"
+    },
+    {
+     "text": "Denver"
+    },
+    {
+     "text": "Delayed"
+    },
+    {
+     "text": "\u20ac594.89"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48232"
+    },
+    {
+     "text": "Yara Osei"
+    },
+    {
+     "text": "Nov 17, 2026"
+    },
+    {
+     "text": "Lisbon"
+    },
+    {
+     "text": "Shipped"
+    },
+    {
+     "text": "\u20ac533.59"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48239"
+    },
+    {
+     "text": "Felix Grau"
+    },
+    {
+     "text": "Nov 18, 2026"
+    },
+    {
+     "text": "Leeds"
+    },
+    {
+     "text": "Delivered"
+    },
+    {
+     "text": "\u20ac519.74"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48246"
+    },
+    {
+     "text": "Maya Lind"
+    },
+    {
+     "text": "Nov 19, 2026"
+    },
+    {
+     "text": "Austin"
+    },
+    {
+     "text": "Shipped"
+    },
+    {
+     "text": "\u20ac515.88"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48253"
+    },
+    {
+     "text": "Ben Achebe"
+    },
+    {
+     "text": "Nov 20, 2026"
+    },
+    {
+     "text": "Osaka"
+    },
+    {
+     "text": "Packed"
+    },
+    {
+     "text": "\u20ac138.32"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48260"
+    },
+    {
+     "text": "Zoe Hart"
+    },
+    {
+     "text": "Nov 21, 2026"
+    },
+    {
+     "text": "Lyon"
+    },
+    {
+     "text": "Delivered"
+    },
+    {
+     "text": "\u20ac210.73"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48267"
+    },
+    {
+     "text": "Arjun Mehta"
+    },
+    {
+     "text": "Nov 22, 2026"
+    },
+    {
+     "text": "Malm\u00f6"
+    },
+    {
+     "text": "Delayed"
+    },
+    {
+     "text": "\u20ac407.98"
+    }
+   ]
+  },
+  {
+   "cells": [
+    {
+     "text": "#48274"
+    },
+    {
+     "text": "Clara Voss"
+    },
+    {
+     "text": "Nov 23, 2026"
+    },
+    {
+     "text": "Porto"
+    },
+    {
+     "text": "Shipped"
+    },
+    {
+     "text": "\u20ac473.24"
+    }
+   ]
+  }
+ ],
+ "more_note": "Showing the 23 orders placed since Nov 1. Ask for an earlier month to see more."
+}

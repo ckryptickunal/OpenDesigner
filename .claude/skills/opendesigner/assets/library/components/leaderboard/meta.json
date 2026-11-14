@@ -91,8 +91,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a time-boxed contest or class challenge where people want to see their own place even when far from the top"],
-    "avoid_when": ["a ranked table of work data such as sales by account: use receipts-table or bar-chart", "a single person's own streak or progress: use lesson-streak or daily-goals", "people to follow rather than to compare: use follow-suggestions"],
+    "use_when": [
+      "a time-boxed contest or class challenge where people want to see their own place even when far from the top"
+    ],
+    "avoid_when": [
+      "a ranked table of work data such as sales by account: use receipts-table or bar-chart",
+      "a single person's own streak or progress: use lesson-streak or daily-goals",
+      "people to follow rather than to compare: use follow-suggestions"
+    ],
     "parts": [
       {
         "name": "eyebrow",
@@ -139,7 +145,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "periods"],
+      "required": [
+        "title",
+        "periods"
+      ],
       "properties": {
         "eyebrow": {
           "type": "string",
@@ -158,7 +167,11 @@
           "part": "period",
           "items": {
             "type": "object",
-            "required": ["label", "podium", "rows"],
+            "required": [
+              "label",
+              "podium",
+              "rows"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -170,7 +183,10 @@
                 "maxItems": 3,
                 "items": {
                   "type": "object",
-                  "required": ["name", "points"],
+                  "required": [
+                    "name",
+                    "points"
+                  ],
                   "properties": {
                     "name": {
                       "type": "string",
@@ -192,7 +208,11 @@
                 "maxItems": 10,
                 "items": {
                   "type": "object",
-                  "required": ["rank", "name", "points"],
+                  "required": [
+                    "rank",
+                    "name",
+                    "points"
+                  ],
                   "properties": {
                     "rank": {
                       "type": "integer",
@@ -219,7 +239,11 @@
               "you": {
                 "type": "object",
                 "part": "you",
-                "required": ["rank", "name", "points"],
+                "required": [
+                  "rank",
+                  "name",
+                  "points"
+                ],
                 "properties": {
                   "rank": {
                     "type": "integer",
@@ -241,6 +265,39 @@
                     "type": "number"
                   }
                 }
+              },
+              "you_rank": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "you_photo": {
+                "type": "object",
+                "required": [
+                  "src",
+                  "alt"
+                ],
+                "properties": {
+                  "src": {
+                    "type": "string",
+                    "maxLength": 2048
+                  },
+                  "alt": {
+                    "type": "string",
+                    "maxLength": 200
+                  }
+                }
+              },
+              "you_name": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "you_change": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "you_points": {
+                "type": "string",
+                "maxLength": 80
               }
             }
           }
@@ -249,12 +306,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "before anyone scores, hide the podium and rows and show empty-state ('No scores yet this week')"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show three muted circles on the podium and muted bars in each row while scores load"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -272,8 +331,16 @@
         "status": "handled",
         "how": "row names are cut with an ellipsis; podium names wrap and break long words",
         "evidence": "text-overflow: ellipsis; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches the period switch", "Arrow keys move between This week and All time, as in any native radio group, and the board below changes with it"]
+    "keyboard": [
+      "Tab reaches the period switch",
+      "Arrow keys move between This week and All time, as in any native radio group, and the board below changes with it"
+    ]
   }
 }

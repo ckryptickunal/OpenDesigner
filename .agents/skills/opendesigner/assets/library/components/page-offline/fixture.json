@@ -2,6 +2,7 @@
   "title": "You're offline",
   "message": "Check your Wi-Fi or mobile data. We'll reconnect on our own as soon as it's back.",
   "synced": "Last synced today at 10:42 AM",
+  "reconnect": {"label": "Try again now", "event": {"name": "reconnect"}},
   "works": [
     {
       "text": "Read the 24 notes you opened this week"

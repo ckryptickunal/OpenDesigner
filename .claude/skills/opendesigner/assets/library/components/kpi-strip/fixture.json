@@ -1,0 +1,5 @@
+{"label": "Support this week", "stats": [
+  {"label": "Open tickets", "value": "128", "note": "31 more than last week"},
+  {"label": "Solved", "value": "412", "share": 76, "note": "76% within a day"},
+  {"label": "Waiting on us", "value": "19", "warning": "4 overdue", "note": "oldest 3 days"},
+  {"label": "Satisfaction", "value": "4.6 / 5", "note": "from 233 replies"}]}

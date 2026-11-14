@@ -1,0 +1,39 @@
+<style>
+.odl-quick-replies { box-sizing: border-box; inline-size: 100%; max-inline-size: 40rem; container-type: inline-size; display: grid; gap: var(--ds-space-stack-md); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-quick-replies *, .odl-quick-replies *::before { box-sizing: border-box; }
+.odl-quick-replies .odl-prompt { margin: 0; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); overflow-wrap: anywhere; }
+.odl-quick-replies ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--ds-space-target-gap) var(--ds-space-inline-sm); }
+.odl-quick-replies li { display: flex; min-inline-size: 0; max-inline-size: 100%; }
+.odl-quick-replies .odl-chip { display: inline-flex; align-items: center; max-inline-size: 100%; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: var(--ds-space-inset-xs) var(--ds-space-inset-md);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-default); border-radius: var(--ds-radius-full); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary);
+  font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-align: start; overflow-wrap: anywhere; cursor: pointer;
+  transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard), border-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-quick-replies .odl-chip:hover { background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-strong); }
+.odl-quick-replies .odl-chip:active { background: var(--ds-color-bg-neutral-subtle-pressed); }
+/* the reply the person picked stays marked; the others stay pressable until the conversation moves on */
+.odl-quick-replies .odl-chip[aria-pressed="true"] { border-color: var(--ds-color-border-accent); background: var(--ds-color-bg-accent-subtle); color: var(--ds-color-text-primary); }
+.odl-quick-replies .odl-chip:disabled { cursor: not-allowed; border-color: var(--ds-color-border-subtle); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); }
+.odl-quick-replies .odl-chip:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+/* the hidden template item (data-od-template) stays out of sight in the static file */
+.odl-quick-replies [hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { .odl-quick-replies, .odl-quick-replies *, .odl-quick-replies *::before { transition: none !important; animation: none !important; } }
+</style>
+<div class="odl-quick-replies" role="group" aria-label="Suggested replies">
+  <p class="odl-prompt" data-od-slot="prompt" data-od-optional>Which day should the plumber come?</p>
+  <ul data-od-list="replies">
+    <li data-od-item><button type="button" class="odl-chip" data-od-action="reply">Tomorrow morning</button></li>
+    <li data-od-item><button type="button" class="odl-chip">Tomorrow afternoon</button></li>
+    <li data-od-item><button type="button" class="odl-chip">Thursday</button></li>
+    <li data-od-item><button type="button" class="odl-chip">Any day next week</button></li>
+  </ul>
+</div>
+<script>
+document.querySelectorAll(".odl-quick-replies").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once
+  root.dataset.odlReady = "1";
+  const chips = [...root.querySelectorAll(".odl-chip")];
+  chips.forEach((chip) => chip.addEventListener("click", () => {
+    chips.forEach((c) => c.setAttribute("aria-pressed", String(c === chip)));
+  }));
+});
+</script>

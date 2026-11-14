@@ -1,0 +1,60 @@
+/* The demo's chat around the answers. Tokens only, like everything the answers render with. */
+* { box-sizing: border-box; }
+html, body { margin: 0; block-size: 100%; }
+body { background: var(--ds-color-bg-canvas, var(--ds-color-surface-default)); color: var(--ds-color-text-primary); font: var(--ds-text-body-md); }
+.chat { display: grid; grid-template-rows: auto 1fr auto; block-size: 100dvh; max-inline-size: 52rem; margin-inline: auto; }
+
+.bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--ds-space-stack-sm) var(--ds-space-inline-md);
+  padding: var(--ds-space-inset-md) var(--ds-space-inset-lg); border-block-end: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.who { display: flex; align-items: center; gap: var(--ds-space-inline-md); }
+.who h1 { margin: 0; font: var(--ds-text-title-sm); }
+.who p { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.mark { inline-size: var(--ds-size-control-md); block-size: var(--ds-size-control-md); border-radius: var(--ds-radius-full); background: var(--ds-color-bg-accent-bold); }
+.tools { display: flex; flex-wrap: wrap; align-items: center; gap: var(--ds-space-inline-sm); }
+.pick { display: flex; align-items: center; gap: var(--ds-space-inline-xs); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.pick select, .tool { min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-sm);
+  color: var(--ds-color-text-primary); font: var(--ds-text-label-md); background: var(--ds-color-surface-raised);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-default, var(--ds-color-border-subtle)); border-radius: var(--ds-radius-control); }
+.tool { cursor: pointer; }
+.tool[aria-pressed="true"] { background: var(--ds-color-bg-accent-subtle); border-color: var(--ds-color-border-accent); }
+.pick select:focus-visible, .tool:focus-visible, .ask:focus-visible, .link:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+
+.log { overflow-y: auto; padding: var(--ds-space-inset-lg); display: grid; align-content: start; gap: var(--ds-space-stack-lg); scroll-behavior: smooth; }
+.turn { display: grid; gap: var(--ds-space-stack-sm); min-inline-size: 0; }
+.turn > * { min-inline-size: 0; }
+.me { justify-self: end; max-inline-size: 80%; margin: 0; padding: var(--ds-space-inset-sm) var(--ds-space-inset-md);
+  color: var(--ds-color-text-on-accent, var(--ds-color-text-inverse)); background: var(--ds-color-bg-accent-bold); border-radius: var(--ds-radius-container); }
+.bot { margin: 0; max-inline-size: 42rem; }
+.turn od-surface { inline-size: 100%; max-inline-size: 40rem; }
+/* in a chat, an answer lines up with the text above it instead of centring itself */
+.turn od-surface > [data-od-component], .turn od-surface > .od-stale, .turn .od-approval > * { margin-inline: 0; }
+.sys { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.sys code { font: var(--ds-text-label-md); font-family: var(--ds-font-family-mono, monospace); overflow-wrap: anywhere; }
+.checked { margin: 0; color: var(--ds-color-text-tertiary); font: var(--ds-text-label-sm); }
+.errors { margin: 0; padding: var(--ds-space-inset-md); background: var(--ds-color-bg-danger-subtle); border-radius: var(--ds-radius-container);
+  font: var(--ds-text-label-md); }
+.errors li { margin-block: var(--ds-space-stack-xs); }
+.fallback { margin: 0; padding: var(--ds-space-inset-md); white-space: pre-wrap; font: var(--ds-text-body-md);
+  background: var(--ds-color-surface-raised); border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); }
+
+.composer { padding: var(--ds-space-inset-md) var(--ds-space-inset-lg) var(--ds-space-inset-lg); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.next { display: flex; flex-wrap: wrap; gap: var(--ds-space-inline-sm); }
+.ask { min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md); cursor: pointer;
+  color: var(--ds-color-text-primary); font: var(--ds-text-label-lg); background: var(--ds-color-surface-raised);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-full); }
+.ask:hover { background: var(--ds-color-bg-neutral-subtle-hover); }
+.note { margin: var(--ds-space-stack-sm) 0 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.link { padding: 0; min-block-size: var(--ds-size-target-min); color: var(--ds-color-text-accent); font: inherit; background: none; border: 0; text-decoration: underline; cursor: pointer; }
+
+@media (max-width: 40rem) {
+  .bar, .log, .composer { padding-inline: var(--ds-space-inset-md); }
+  .me { max-inline-size: 92%; }
+  .next { flex-wrap: nowrap; overflow-x: auto; padding-block-end: var(--ds-space-inset-xs); }
+  .ask { flex: none; }
+}
+@media (prefers-reduced-motion: reduce) { .log { scroll-behavior: auto; } }
+.ask-form { display: flex; gap: var(--ds-space-inline-sm); margin-block-start: var(--ds-space-stack-sm); }
+.ask-form input { flex: 1; min-inline-size: 0; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
+  color: var(--ds-color-text-primary); font: var(--ds-text-body-md); background: var(--ds-color-surface-raised);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-control); }
+.ask-form input:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }

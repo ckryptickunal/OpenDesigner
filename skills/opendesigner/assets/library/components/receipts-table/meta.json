@@ -4,15 +4,37 @@
   "use": "for dense lists people review and act on in bulk",
   "type": "data",
   "style": "dense",
-  "industries": ["finance", "logistics", "saas"],
-  "tags": ["table", "bulk actions", "selection", "status", "reconciliation"],
-  "states": ["hover", "selected", "no selection", "focus", "four statuses"],
+  "industries": [
+    "finance",
+    "logistics",
+    "saas"
+  ],
+  "tags": [
+    "table",
+    "bulk actions",
+    "selection",
+    "status",
+    "reconciliation"
+  ],
+  "states": [
+    "hover",
+    "selected",
+    "no selection",
+    "focus",
+    "four statuses"
+  ],
   "source": "brand/showcase/product/01-quoin-payments",
   "a11y": "Each checkbox is named after its row and has a 24 px target; the bulk bar is a labelled toolbar whose count is a polite live region; the table scrolls sideways in its own box on narrow screens.",
   "width": "wide",
   "spec": {
-    "use_when": ["matching bank lines, invoices or shipments where each row has a status and several rows get the same action"],
-    "avoid_when": ["one item that needs a decision with its policy and steps: use approval-panel", "a read-only history of changes: use audit-log", "a short list with no bulk actions: use activity-list"],
+    "use_when": [
+      "matching bank lines, invoices or shipments where each row has a status and several rows get the same action"
+    ],
+    "avoid_when": [
+      "one item that needs a decision with its policy and steps: use approval-panel",
+      "a read-only history of changes: use audit-log",
+      "a short list with no bulk actions: use activity-list"
+    ],
     "parts": [
       {
         "name": "title",
@@ -83,7 +105,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["rows", "actions"],
+      "required": [
+        "rows",
+        "actions"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -102,7 +127,11 @@
           "part": "rows",
           "items": {
             "type": "object",
-            "required": ["name", "amount", "status"],
+            "required": [
+              "name",
+              "amount",
+              "status"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -124,7 +153,12 @@
                 "part": "amount"
               },
               "status": {
-                "enum": ["matched", "suggested", "short", "none"],
+                "enum": [
+                  "matched",
+                  "suggested",
+                  "short",
+                  "none"
+                ],
                 "part": "status"
               },
               "status_label": {
@@ -135,13 +169,19 @@
               "selected": {
                 "type": "boolean",
                 "part": "select"
+              },
+              "key": {
+                "type": "string",
+                "maxLength": 40
               }
             }
           }
         },
         "actions": {
           "type": "object",
-          "required": ["primary"],
+          "required": [
+            "primary"
+          ],
           "properties": {
             "primary": {
               "type": "string",
@@ -159,12 +199,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no rows, hide the table and show empty-state ('Everything is matched') under the heading"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the header row and fill five rows with muted bars in each cell; leave the checkboxes out until data arrives"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -183,8 +225,16 @@
         "status": "handled",
         "how": "cells never wrap in the table layout; in a narrow box they wrap and the bulk buttons end in an ellipsis",
         "evidence": "white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches each row's checkbox in turn, then the bulk buttons once a row is picked", "Space ticks or unticks the focused checkbox, and the bulk count updates", "Enter or Space presses the focused bulk button"]
+    "keyboard": [
+      "Tab reaches each row's checkbox in turn, then the bulk buttons once a row is picked",
+      "Space ticks or unticks the focused checkbox, and the bulk count updates",
+      "Enter or Space presses the focused bulk button"
+    ]
   }
 }

@@ -20,8 +20,10 @@
   border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: transparent; color: var(--ds-color-text-secondary);
   font: var(--ds-text-label-lg); font-variant-numeric: tabular-nums; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-hover); }
 .odl-pagination .odl-page:hover, .odl-pagination .odl-step:hover:not(:disabled) { background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-primary); }
-.odl-pagination .odl-page[aria-current="page"] { background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-default); color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-heading); cursor: default; }
+.odl-pagination .odl-page[aria-current="page"], .odl-pagination .odl-page[data-current="true"] { background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-default); color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-heading); cursor: default; }
 .odl-pagination .odl-step { padding-inline: var(--ds-space-inset-md); border-color: var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
+.odl-pagination .odl-page[data-current="false"] { cursor: pointer; }
+.odl-pagination li[hidden] { display: none; }
 .odl-pagination .odl-step:disabled { color: var(--ds-color-text-disabled); cursor: not-allowed; }
 .odl-pagination .odl-step svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); stroke-width: var(--ds-icon-stroke-md); }
 .odl-pagination .odl-gap { display: inline-grid; place-items: center; min-inline-size: var(--ds-size-control-md); color: var(--ds-color-text-tertiary); }
@@ -47,25 +49,26 @@
 <nav class="odl-pagination" aria-label="Pagination">
   <div class="odl-bar">
     <div class="odl-info">
-      <p class="odl-count" aria-live="polite">Showing <b>101–150</b> of <b>2,418</b></p>
+      <p class="odl-count" aria-live="polite">Showing <b><data data-od-slot="first_row">101</data>–<data data-od-slot="last_row">150</data></b> of <b data-od-slot="total_rows">2,418</b></p>
       <label class="odl-rows">Rows per page
         <span class="odl-select"><select><option>25</option><option selected>50</option><option>100</option></select>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span>
       </label>
     </div>
     <div class="odl-pager">
-      <button type="button" class="odl-step" aria-label="Previous page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span>Previous</span></button>
-      <ol>
-        <li><button type="button" class="odl-page" aria-label="Page 1">1</button></li>
-        <li><button type="button" class="odl-page" aria-label="Page 2">2</button></li>
-        <li><button type="button" class="odl-page" aria-label="Page 3" aria-current="page">3</button></li>
-        <li><button type="button" class="odl-page" aria-label="Page 4">4</button></li>
-        <li><button type="button" class="odl-page" aria-label="Page 5">5</button></li>
-        <li class="odl-gap" aria-hidden="true">…</li>
-        <li><button type="button" class="odl-page" aria-label="Page 49, last page">49</button></li>
+      <button type="button" class="odl-step" aria-label="Previous page" data-od-action="previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span data-od-slot="label">Previous</span></button>
+      <ol data-od-list="visible_pages">
+        <li data-od-item data-od-template hidden><button type="button" class="odl-page" data-od-when="kind=page" data-od-action="page" data-od-var="current" data-current="false"><span data-od-slot="label"></span></button><span class="odl-gap" data-od-when="kind=gap" aria-hidden="true">…</span></li>
+        <li data-od-item><button type="button" class="odl-page" aria-label="Page 1">1</button></li>
+        <li data-od-item><button type="button" class="odl-page" aria-label="Page 2">2</button></li>
+        <li data-od-item><button type="button" class="odl-page" aria-label="Page 3" aria-current="page">3</button></li>
+        <li data-od-item><button type="button" class="odl-page" aria-label="Page 4">4</button></li>
+        <li data-od-item><button type="button" class="odl-page" aria-label="Page 5">5</button></li>
+        <li data-od-item class="odl-gap" aria-hidden="true">…</li>
+        <li data-od-item><button type="button" class="odl-page" aria-label="Page 49, last page">49</button></li>
       </ol>
-      <p class="odl-of">Page 3 <span>of 49</span></p>
-      <button type="button" class="odl-step" aria-label="Next page"><span>Next</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+      <p class="odl-of">Page <data data-od-slot="current_page">3</data> <span>of <data data-od-slot="total_pages">49</data></span></p>
+      <button type="button" class="odl-step" aria-label="Next page" data-od-action="next"><span data-od-slot="label">Next</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
     </div>
   </div>
 </nav>

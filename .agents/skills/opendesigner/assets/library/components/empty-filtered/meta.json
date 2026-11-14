@@ -122,8 +122,9 @@
         "evidence": "class=\"odl-art\""
       },
       "loading": {
-        "status": "not_built",
-        "how": "Not applicable: shown after the data has loaded and come back empty; while loading, show a skeleton."
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -142,6 +143,10 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": [

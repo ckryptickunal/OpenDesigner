@@ -45,8 +45,14 @@
     }
   ],
   "spec": {
-    "use_when": ["any booking that needs a place, a date range and a head count in one form, such as a holiday rental or a hotel"],
-    "avoid_when": ["showing flights already found: use flight-results", "picking only a date range inside a work tool: use date-range-picker", "narrowing a list of results that is already on screen: use filter-bar"],
+    "use_when": [
+      "any booking that needs a place, a date range and a head count in one form, such as a holiday rental or a hotel"
+    ],
+    "avoid_when": [
+      "showing flights already found: use flight-results",
+      "picking only a date range inside a work tool: use date-range-picker",
+      "narrowing a list of results that is already on screen: use filter-bar"
+    ],
     "parts": [
       {
         "name": "mode",
@@ -111,10 +117,16 @@
     ],
     "data": {
       "type": "object",
-      "required": ["months", "guests"],
+      "required": [
+        "months",
+        "guests"
+      ],
       "properties": {
         "mode": {
-          "enum": ["stays", "flights"],
+          "enum": [
+            "stays",
+            "flights"
+          ],
           "part": "mode"
         },
         "where_label": {
@@ -139,7 +151,9 @@
           "part": "suggestions",
           "items": {
             "type": "object",
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -167,7 +181,11 @@
           "part": "months",
           "items": {
             "type": "object",
-            "required": ["name", "first_weekday", "days"],
+            "required": [
+              "name",
+              "first_weekday",
+              "days"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -205,7 +223,10 @@
           "part": "guests",
           "items": {
             "type": "object",
-            "required": ["label", "count"],
+            "required": [
+              "label",
+              "count"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -241,8 +262,9 @@
         "evidence": "list.hidden = !open"
       },
       "loading": {
-        "status": "not_built",
-        "how": "while suggestions load, show two suggestion rows with a muted photo box and muted text lines under the field"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -261,8 +283,18 @@
         "status": "handled",
         "how": "suggestion text wraps in a column beside the photo, and the When line wraps under its heading",
         "evidence": ".odl-trip-search .odl-sugg li { display: grid; grid-template-columns: auto minmax(0, 1fr);"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches the Stays and Flights switch as one radio group; the arrow keys change it", "In the destination field, typing filters the suggestions, Down and Up arrows move through them, Enter picks the highlighted one and Escape closes the list", "Tab reaches every day button; Enter or Space on the first sets check-in and on a later day sets check-out", "Tab then reaches each Fewer and More button and Search; Enter or Space presses them"]
+    "keyboard": [
+      "Tab reaches the Stays and Flights switch as one radio group; the arrow keys change it",
+      "In the destination field, typing filters the suggestions, Down and Up arrows move through them, Enter picks the highlighted one and Escape closes the list",
+      "Tab reaches every day button; Enter or Space on the first sets check-in and on a later day sets check-out",
+      "Tab then reaches each Fewer and More button and Search; Enter or Space presses them"
+    ]
   }
 }

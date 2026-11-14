@@ -22,12 +22,12 @@
 .odl-code-input .odl-boxes input:hover { border-color: var(--ds-color-border-strong); }
 .odl-code-input .odl-boxes input:focus-visible { outline: none; border-color: var(--ds-color-border-focus); box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-color-border-focus); }
 .odl-code-input .odl-boxes .odl-dash { inline-size: var(--ds-space-12); block-size: var(--ds-border-width-emphasis); border-radius: var(--ds-radius-full); background: var(--ds-color-border-default); }
-.odl-code-input fieldset.is-invalid .odl-boxes input { border-color: var(--ds-color-border-danger); }
-.odl-code-input fieldset.is-invalid .odl-boxes input:focus-visible { box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-color-border-danger); }
+.odl-code-input fieldset:has(.odl-error:not(:empty)) .odl-boxes input { border-color: var(--ds-color-border-danger); }
+.odl-code-input fieldset:has(.odl-error:not(:empty)) .odl-boxes input:focus-visible { box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-color-border-danger); }
 .odl-code-input .odl-msg { display: flex; gap: var(--ds-space-inline-sm); margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
 .odl-code-input .odl-msg svg { display: none; flex: none; inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); margin-block-start: var(--ds-space-2); }
-.odl-code-input fieldset.is-invalid .odl-msg { color: var(--ds-color-text-danger); }
-.odl-code-input fieldset.is-invalid .odl-msg svg { display: block; }
+.odl-code-input fieldset:has(.odl-error:not(:empty)) .odl-msg { color: var(--ds-color-text-danger); }
+.odl-code-input fieldset:has(.odl-error:not(:empty)) .odl-msg svg { display: block; }
 .odl-code-input .odl-verify { display: inline-flex; align-items: center; justify-content: center; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: 0 var(--ds-space-inset-md);
   border: 0; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary); color: var(--ds-color-text-on-action); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); cursor: pointer;
   transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
@@ -45,15 +45,17 @@
   .odl-code-input .odl-mark { border-radius: min(var(--ds-radius-control), max(var(--ds-radius-detail), calc(var(--ds-radius-container) - var(--ds-space-inset-lg)))); }
 }
 @media (prefers-reduced-motion: reduce) { .odl-code-input, .odl-code-input *, .odl-code-input *::before { transition: none !important; animation: none !important; } }
+.odl-code-input .odl-msg span:empty { display: none; }
+.odl-code-input .odl-error:not(:empty) ~ .odl-help { display: none; } /* an error replaces the help line */
 </style>
 <section class="odl-code-input" aria-labelledby="odl-ci-title">
   <span class="odl-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
   <div class="odl-head">
-    <h2 id="odl-ci-title">Check your email</h2>
-    <p>We sent a 6-digit code to <strong>c•••••@abernathylow.example</strong>. It works for 10 minutes.</p>
+    <h2 id="odl-ci-title" data-od-slot="title">Check your email</h2>
+    <p><span data-od-slot="intro" data-od-optional>We sent a 6-digit code to</span> <strong data-od-slot="destination">c•••••@abernathylow.example</strong><span data-od-sample>. It works for 10 minutes.</span></p>
   </div>
-  <fieldset class="is-invalid">
-    <legend>Verification code</legend>
+  <fieldset>
+    <legend data-od-slot="label">Verification code</legend>
     <div class="odl-boxes">
       <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" aria-label="Digit 1 of 6" aria-invalid="true" aria-describedby="odl-ci-msg" value="4">
       <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 2 of 6" aria-invalid="true" aria-describedby="odl-ci-msg" value="8">
@@ -63,26 +65,33 @@
       <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 5 of 6" aria-invalid="true" aria-describedby="odl-ci-msg" value="0">
       <input type="text" inputmode="numeric" maxlength="1" aria-label="Digit 6 of 6" aria-invalid="true" aria-describedby="odl-ci-msg" value="3">
     </div>
-    <p class="odl-msg" id="odl-ci-msg" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span>That code does not match. Check the newest email from us; 2 tries left.</span></p>
+    <p class="odl-msg" id="odl-ci-msg" aria-live="polite"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg><span class="odl-error" data-od-slot="error" data-od-optional>That code does not match. Check the newest email from us; 2 tries left.</span><span class="odl-help" data-od-slot="help" data-od-optional></span></p>
   </fieldset>
-  <button type="button" class="odl-verify">Verify</button>
+  <button type="button" class="odl-verify" data-od-action="verify">Verify</button>
   <div class="odl-foot">
-    <button type="button" class="odl-link odl-resend" disabled><span>Resend code in <span class="odl-time">0:42</span></span></button>
-    <button type="button" class="odl-link">Use a different email</button>
+    <button type="button" class="odl-link odl-resend" disabled><span>Resend code in <span class="odl-time" data-od-slot="resend_seconds">0:42</span></span></button>
+    <button type="button" class="odl-link" data-od-action="change">Use a different email</button>
   </div>
 </section>
 <script>
 document.querySelectorAll(".odl-code-input").forEach((root) => {
   if (root.dataset.odlReady) return; root.dataset.odlReady = "1";
-  const boxes = [...root.querySelectorAll(".odl-boxes input")], set = root.querySelector("fieldset"), msg = root.querySelector(".odl-msg span"), verify = root.querySelector(".odl-verify");
+  const boxes = [...root.querySelectorAll(".odl-boxes input")], msgP = root.querySelector(".odl-msg"), verify = root.querySelector(".odl-verify");
   const resend = root.querySelector(".odl-resend");
-  let left = 42, timer;
+  const err = () => msgP.querySelector(".odl-error");
+  const say = (text) => { let h = msgP.querySelector(".odl-help"); if (!h) { h = document.createElement("span"); h.className = "odl-help"; msgP.append(h); } h.textContent = text; };
+  const t0 = resend.querySelector(".odl-time"), parts = ((t0 && t0.textContent) || "42").split(":").map(Number); // "0:42", or plain seconds from data
+  const from = parts.length > 1 ? parts[0] * 60 + parts[1] : parts[0] || 42;
+  const clock = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+  if (t0) t0.textContent = clock(from);
+  if (!(err() && err().textContent.trim())) boxes.forEach((b) => { b.removeAttribute("aria-invalid"); b.value = ""; }); // no error: a fresh, empty code
+  let left = from, timer;
   const tick = () => {
     if (left <= 0) { clearInterval(timer); resend.disabled = false; resend.textContent = "Resend code"; return; }
-    left--; const t = resend.querySelector(".odl-time"); if (t) t.textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, "0")}`;
+    left--; const t = resend.querySelector(".odl-time"); if (t) t.textContent = clock(left);
   };
-  const start = () => { left = 42; resend.disabled = true; const w = document.createElement("span"), t = document.createElement("span"); t.className = "odl-time"; t.textContent = "0:42"; w.append("Resend code in ", t); resend.replaceChildren(w); clearInterval(timer); timer = setInterval(tick, 1000); };
-  const clearError = () => { if (!set.classList.contains("is-invalid")) return; set.classList.remove("is-invalid"); boxes.forEach((b) => b.removeAttribute("aria-invalid")); msg.textContent = "Type or paste the code. It fills the boxes for you."; };
+  const start = () => { left = from; resend.disabled = true; const w = document.createElement("span"), t = document.createElement("span"); t.className = "odl-time"; t.textContent = clock(from); w.append("Resend code in ", t); resend.replaceChildren(w); clearInterval(timer); timer = setInterval(tick, 1000); };
+  const clearError = () => { const e = err(); if (!e || !e.textContent) return; e.textContent = ""; boxes.forEach((b) => b.removeAttribute("aria-invalid")); say("Type or paste the code. It fills the boxes for you."); };
   const sync = () => { verify.disabled = boxes.some((b) => !b.value); };
   const fill = (from, digits) => { digits.split("").forEach((d, i) => { if (boxes[from + i]) boxes[from + i].value = d; }); const next = boxes[Math.min(from + digits.length, boxes.length - 1)]; next.focus(); next.select(); sync(); };
   boxes.forEach((box, i) => {
@@ -105,7 +114,7 @@ document.querySelectorAll(".odl-code-input").forEach((root) => {
       e.preventDefault(); clearError(); fill(digits.length >= boxes.length ? 0 : i, digits.slice(0, boxes.length));
     });
   });
-  resend.addEventListener("click", () => { start(); boxes.forEach((b) => { b.value = ""; }); clearError(); msg.textContent = "We sent a new code. The old one no longer works."; boxes[0].focus(); sync(); });
+  resend.addEventListener("click", () => { start(); boxes.forEach((b) => { b.value = ""; }); clearError(); say("We sent a new code. The old one no longer works."); boxes[0].focus(); sync(); });
   timer = setInterval(tick, 1000);
 });
 </script>

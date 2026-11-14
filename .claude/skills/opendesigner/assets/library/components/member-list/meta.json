@@ -4,21 +4,59 @@
   "use": "in team or workspace settings, to manage people and roles",
   "type": "data",
   "style": "quiet",
-  "industries": ["saas", "security", "any"],
-  "tags": ["members", "team", "roles", "invite", "permissions"],
-  "states": ["hover", "focus", "owner locked", "pending invite", "online"],
+  "industries": [
+    "saas",
+    "security",
+    "any"
+  ],
+  "tags": [
+    "members",
+    "team",
+    "roles",
+    "invite",
+    "permissions"
+  ],
+  "states": [
+    "hover",
+    "focus",
+    "owner locked",
+    "pending invite",
+    "online"
+  ],
   "source": "brand/showcase/product/06-ferrule-security",
   "a11y": "Each role is a native select labelled with the person's name; the resend button names the invitee; on narrow widths the rows restack without hiding anything.",
   "width": "medium",
   "photos": [
-    {"img": "photo-1604072366595-e75dc92d6bdc", "author": "Jorik Kleen", "page": "lNNHyRbmm0o"},
-    {"img": "photo-1535713875002-d1d0cf377fde", "author": "Alex Suprun", "page": "ZHvM3XIOHoE"},
-    {"img": "photo-1500648767791-00dcc994a43e", "author": "Jurica Koletić", "page": "7YVZYZeITc8"},
-    {"img": "photo-1681097561932-36d0df02b379", "author": "Anky Lau", "page": "ntLkvt6OZvQ"}
+    {
+      "img": "photo-1604072366595-e75dc92d6bdc",
+      "author": "Jorik Kleen",
+      "page": "lNNHyRbmm0o"
+    },
+    {
+      "img": "photo-1535713875002-d1d0cf377fde",
+      "author": "Alex Suprun",
+      "page": "ZHvM3XIOHoE"
+    },
+    {
+      "img": "photo-1500648767791-00dcc994a43e",
+      "author": "Jurica Koletić",
+      "page": "7YVZYZeITc8"
+    },
+    {
+      "img": "photo-1681097561932-36d0df02b379",
+      "author": "Anky Lau",
+      "page": "ntLkvt6OZvQ"
+    }
   ],
   "spec": {
-    "use_when": ["a seat-limited plan where admins change roles and chase pending invites in one place"],
-    "avoid_when": ["sending new invites with emails and a role: use invite-members", "one person's public profile: use profile-card", "a history of role changes: use audit-log"],
+    "use_when": [
+      "a seat-limited plan where admins change roles and chase pending invites in one place"
+    ],
+    "avoid_when": [
+      "sending new invites with emails and a role: use invite-members",
+      "one person's public profile: use profile-card",
+      "a history of role changes: use audit-log"
+    ],
     "parts": [
       {
         "name": "title",
@@ -95,7 +133,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["members", "roles"],
+      "required": [
+        "members",
+        "roles"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -124,7 +165,11 @@
           "part": "members",
           "items": {
             "type": "object",
-            "required": ["email", "role", "status"],
+            "required": [
+              "email",
+              "role",
+              "status"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -148,7 +193,11 @@
                 "part": "role"
               },
               "status": {
-                "enum": ["active", "pending", "owner"]
+                "enum": [
+                  "active",
+                  "pending",
+                  "owner"
+                ]
               },
               "is_you": {
                 "type": "boolean",
@@ -171,12 +220,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with only the owner, show empty-state under the owner's row with the Invite button as its action"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the header and column labels and fill four rows with a muted circle and muted bars"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -195,8 +246,17 @@
         "status": "handled",
         "how": "emails break anywhere to fit, names wrap with their tags, and in a narrow box each row restacks with the role and time under the name",
         "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Invite, then each role picker, then the Resend button", "Arrow keys or Space open and change a role picker, as in any native select", "Enter or Space presses Invite or Resend"]
+    "keyboard": [
+      "Tab reaches Invite, then each role picker, then the Resend button",
+      "Arrow keys or Space open and change a role picker, as in any native select",
+      "Enter or Space presses Invite or Resend"
+    ]
   }
 }

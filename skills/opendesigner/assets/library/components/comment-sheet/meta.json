@@ -60,8 +60,13 @@
     }
   ],
   "spec": {
-    "use_when": ["a phone screen where comments must open over the post without leaving it"],
-    "avoid_when": ["comments in a work tool, beside a document or task: use comment-thread", "a short confirm or choice over a screen: use confirm-dialog"],
+    "use_when": [
+      "a phone screen where comments must open over the post without leaving it"
+    ],
+    "avoid_when": [
+      "comments in a work tool, beside a document or task: use comment-thread",
+      "a short confirm or choice over a screen: use confirm-dialog"
+    ],
     "parts": [
       {
         "name": "behind",
@@ -126,7 +131,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["comments"],
+      "required": [
+        "comments"
+      ],
       "properties": {
         "post_photo": {
           "type": "string",
@@ -144,7 +151,10 @@
           "part": "comments",
           "items": {
             "type": "object",
-            "required": ["name", "text"],
+            "required": [
+              "name",
+              "text"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -177,7 +187,10 @@
                 "maxItems": 3,
                 "items": {
                   "type": "object",
-                  "required": ["name", "text"],
+                  "required": [
+                    "name",
+                    "text"
+                  ],
                   "properties": {
                     "name": {
                       "type": "string",
@@ -228,12 +241,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no comments, put an empty-state line ('No comments yet') in the list area and keep the comment box"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the sheet and fill the list with three muted rows the shape of a comment"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -253,8 +268,19 @@
         "status": "handled",
         "how": "comment text breaks anywhere so long words and links wrap; names and tags wrap onto a second line",
         "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Close, the comment list, then each Reply and Like button, View more replies, the comment box and Post", "The comment list takes focus, so the arrow keys scroll it", "Enter or Space presses the focused button; Like toggles between liked and not", "Reply fills the box with @name and moves focus to it", "Enter in the comment box posts the comment when it has text; the new comment appears at the top of the list"]
+    "keyboard": [
+      "Tab reaches Close, the comment list, then each Reply and Like button, View more replies, the comment box and Post",
+      "The comment list takes focus, so the arrow keys scroll it",
+      "Enter or Space presses the focused button; Like toggles between liked and not",
+      "Reply fills the box with @name and moves focus to it",
+      "Enter in the comment box posts the comment when it has text; the new comment appears at the top of the list"
+    ]
   }
 }

@@ -38,8 +38,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a member screen shown at the till, where the code must stay dark on white in any theme"],
-    "avoid_when": ["a stored payment or gift card: use card-wallet", "progress toward a personal saving target rather than a reward tier: use savings-goal", "a list of many offers or deals to browse: use product-card in a grid"],
+    "use_when": [
+      "a member screen shown at the till, where the code must stay dark on white in any theme"
+    ],
+    "avoid_when": [
+      "a stored payment or gift card: use card-wallet",
+      "progress toward a personal saving target rather than a reward tier: use savings-goal",
+      "a list of many offers or deals to browse: use product-card in a grid"
+    ],
     "parts": [
       {
         "name": "programme",
@@ -104,7 +110,11 @@
     ],
     "data": {
       "type": "object",
-      "required": ["programme", "balance", "member"],
+      "required": [
+        "programme",
+        "balance",
+        "member"
+      ],
       "properties": {
         "programme": {
           "type": "string",
@@ -124,7 +134,10 @@
         "next_tier": {
           "type": "object",
           "part": "next",
-          "required": ["name", "target"],
+          "required": [
+            "name",
+            "target"
+          ],
           "properties": {
             "name": {
               "type": "string",
@@ -139,7 +152,10 @@
         "member": {
           "type": "object",
           "part": "member",
-          "required": ["name", "number"],
+          "required": [
+            "name",
+            "number"
+          ],
           "properties": {
             "name": {
               "type": "string",
@@ -171,7 +187,9 @@
           "part": "offers",
           "items": {
             "type": "object",
-            "required": ["title"],
+            "required": [
+              "title"
+            ],
             "properties": {
               "photo": {
                 "type": "string",
@@ -191,20 +209,46 @@
               },
               "active": {
                 "type": "boolean"
+              },
+              "activate_label": {
+                "type": "string",
+                "maxLength": 120
               }
             }
           }
+        },
+        "next_tier_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "next_tier_target": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "member_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "member_instruction": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "member_number": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no offers, hide the offers heading and list, or show one empty-state line ('No offers right now')"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the card face and show a muted block for the balance and the code while they load"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -222,8 +266,16 @@
         "status": "handled",
         "how": "offer titles wrap, and on a phone the button drops under the text so the title never squeezes",
         "evidence": "@container (max-width: 23rem)"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches each offer's Activate button", "Enter or Space switches an offer between Activate and Active"]
+    "keyboard": [
+      "Tab reaches each offer's Activate button",
+      "Enter or Space switches an offer between Activate and Active"
+    ]
   }
 }

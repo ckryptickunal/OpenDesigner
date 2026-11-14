@@ -35,8 +35,14 @@
     }
   ],
   "spec": {
-    "use_when": ["one pot with a target amount, where quick top-ups from the main account should feel immediate"],
-    "avoid_when": ["several spending categories against limits: use budget-meters", "a split of a total into parts: use donut-breakdown", "a target counted in steps or minutes rather than money: use daily-goals"],
+    "use_when": [
+      "one pot with a target amount, where quick top-ups from the main account should feel immediate"
+    ],
+    "avoid_when": [
+      "several spending categories against limits: use budget-meters",
+      "a split of a total into parts: use donut-breakdown",
+      "a target counted in steps or minutes rather than money: use daily-goals"
+    ],
     "parts": [
       {
         "name": "cover",
@@ -101,7 +107,12 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "goal", "saved", "currency"],
+      "required": [
+        "title",
+        "goal",
+        "saved",
+        "currency"
+      ],
       "properties": {
         "cover": {
           "type": "string",
@@ -157,25 +168,54 @@
           "maxItems": 3,
           "part": "amounts",
           "items": {
-            "type": "number",
-            "minimum": 1
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
           }
         },
         "from_account": {
           "type": "string",
           "maxLength": 14,
           "part": "add"
+        },
+        "pace": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "pace_detail": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "roundups_on": {
+          "enum": [
+            "false",
+            "true"
+          ]
+        },
+        "roundups_note": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with nothing saved yet, show the ring at 0% and replace the on-track line with a prompt to make the first top-up"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show the ring as its track only and the amounts as muted blocks; set disabled on the Add button until the balance loads"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -195,8 +235,18 @@
         "status": "handled",
         "how": "the facts column takes the room beside the ring and wraps there",
         "evidence": "grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--ds-space-inset-xl)"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches the round-ups switch, the chosen amount, then the Add button", "Enter or Space flips round-ups on or off", "Arrow keys move between the amounts and pick one; the Add button's label follows", "Enter or Space on Add adds the money; the ring moves and the result is announced"]
+    "keyboard": [
+      "Tab reaches the round-ups switch, the chosen amount, then the Add button",
+      "Enter or Space flips round-ups on or off",
+      "Arrow keys move between the amounts and pick one; the Add button's label follows",
+      "Enter or Space on Add adds the money; the ring moves and the result is announced"
+    ]
   }
 }

@@ -4,15 +4,36 @@
   "use": "in a smart home app's main screen, for switching lights, heating, locks and speakers room by room",
   "type": "form",
   "style": "friendly",
-  "industries": ["home"],
-  "tags": ["smart home", "devices", "thermostat", "lights", "toggle"],
-  "states": ["on", "off", "room filtered", "at limit", "hover", "focus"],
+  "industries": [
+    "home"
+  ],
+  "tags": [
+    "smart home",
+    "devices",
+    "thermostat",
+    "lights",
+    "toggle"
+  ],
+  "states": [
+    "on",
+    "off",
+    "room filtered",
+    "at limit",
+    "hover",
+    "focus"
+  ],
   "source": null,
   "a11y": "Rooms are a radio group; each device is a toggle button with aria-pressed whose name reads the device and its state, sliders are named range inputs, and the thermostat buttons say the temperature they will set.",
   "width": "medium",
   "spec": {
-    "use_when": ["a handful of on-off devices grouped by room, where a few also need one level such as brightness, volume or a target temperature"],
-    "avoid_when": ["app or account preferences rather than physical devices: use settings-toggles", "one device in depth with schedules and history: use detail-drawer", "a single media player with a queue: use music-player"],
+    "use_when": [
+      "a handful of on-off devices grouped by room, where a few also need one level such as brightness, volume or a target temperature"
+    ],
+    "avoid_when": [
+      "app or account preferences rather than physical devices: use settings-toggles",
+      "one device in depth with schedules and history: use detail-drawer",
+      "a single media player with a queue: use music-player"
+    ],
     "parts": [
       {
         "name": "title",
@@ -71,7 +92,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["devices"],
+      "required": [
+        "devices"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -90,7 +113,10 @@
           "part": "rooms",
           "items": {
             "type": "object",
-            "required": ["id", "name"],
+            "required": [
+              "id",
+              "name"
+            ],
             "properties": {
               "id": {
                 "type": "string",
@@ -113,7 +139,11 @@
           "part": "devices",
           "items": {
             "type": "object",
-            "required": ["name", "room", "on"],
+            "required": [
+              "name",
+              "room",
+              "on"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -142,7 +172,10 @@
               "level": {
                 "type": "object",
                 "part": "level",
-                "required": ["label", "value"],
+                "required": [
+                  "label",
+                  "value"
+                ],
                 "properties": {
                   "label": {
                     "type": "string",
@@ -165,7 +198,9 @@
         "thermostat": {
           "type": "object",
           "part": "thermostat",
-          "required": ["target"],
+          "required": [
+            "target"
+          ],
           "properties": {
             "name": {
               "type": "string",
@@ -193,17 +228,35 @@
               "part": "steppers"
             }
           }
+        },
+        "thermostat_target": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "thermostat_mode": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "thermostat_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "thermostat_detail": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "for a room with no devices, hide the tile grid and show empty-state ('No devices in this room yet') with an Add device button"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the room chips and draw each tile as a sunken box with muted blocks for the icon, name and state"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -223,8 +276,17 @@
         "status": "handled",
         "how": "the state line ends in an ellipsis; room chips never wrap and device names wrap inside the tile",
         "evidence": "white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches the room chips as one radio group; the arrow keys move between rooms and filter the tiles", "Tab then reaches each device toggle; Enter or Space switches it on or off", "On a brightness or volume slider, the arrow keys, Home and End change the level", "On the thermostat, Enter or Space on Lower or Raise changes the target by half a degree; each button is disabled at its limit"]
+    "keyboard": [
+      "Tab reaches the room chips as one radio group; the arrow keys move between rooms and filter the tiles",
+      "Tab then reaches each device toggle; Enter or Space switches it on or off",
+      "On a brightness or volume slider, the arrow keys, Home and End change the level",
+      "On the thermostat, Enter or Space on Lower or Raise changes the target by half a degree; each button is disabled at its limit"
+    ]
   }
 }

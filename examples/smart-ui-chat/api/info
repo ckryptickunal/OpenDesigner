@@ -1,0 +1,1 @@
+{"provider": "recorded", "note": "Served as a static file when the demo runs without a model. live.py answers this path itself."}

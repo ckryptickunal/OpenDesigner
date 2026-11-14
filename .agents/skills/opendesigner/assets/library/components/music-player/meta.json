@@ -33,8 +33,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a now-playing card for one audio track, voice note or episode, docked beside other content"],
-    "avoid_when": ["a list of tracks to choose from: use track-list", "a list of podcast episodes: use podcast-episodes", "video playback: use video-player"],
+    "use_when": [
+      "a now-playing card for one audio track, voice note or episode, docked beside other content"
+    ],
+    "avoid_when": [
+      "a list of tracks to choose from: use track-list",
+      "a list of podcast episodes: use podcast-episodes",
+      "video playback: use video-player"
+    ],
     "parts": [
       {
         "name": "art",
@@ -99,7 +105,11 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "artist", "duration_seconds"],
+      "required": [
+        "title",
+        "artist",
+        "duration_seconds"
+      ],
       "properties": {
         "art": {
           "type": "string",
@@ -161,8 +171,9 @@
         "how": "with nothing queued, show a muted art square, 'Nothing playing' as the title and disable the transport"
       },
       "loading": {
-        "status": "not_built",
-        "how": "while the track buffers, show the play button with a spinner and keep the seek bar at its place"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -181,8 +192,18 @@
         "status": "handled",
         "how": "artist and album are cut with an ellipsis; the title wraps",
         "evidence": ".odl-by span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Like, Seek, Previous, Play, Next, then Volume", "Enter or Space presses the focused button; Play switches to Pause while playing", "Arrow keys on Seek move by one second and update the time", "Arrow keys on Volume change the level"]
+    "keyboard": [
+      "Tab reaches Like, Seek, Previous, Play, Next, then Volume",
+      "Enter or Space presses the focused button; Play switches to Pause while playing",
+      "Arrow keys on Seek move by one second and update the time",
+      "Arrow keys on Volume change the level"
+    ]
   }
 }

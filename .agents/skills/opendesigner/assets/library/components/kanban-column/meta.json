@@ -4,20 +4,54 @@
   "use": "on a task board",
   "type": "data",
   "style": "dense",
-  "industries": ["productivity", "saas", "devtools"],
-  "tags": ["kanban", "board", "cards", "tasks", "drag and drop"],
-  "states": ["hover", "focus", "dragging", "overdue", "done subtasks"],
+  "industries": [
+    "productivity",
+    "saas",
+    "devtools"
+  ],
+  "tags": [
+    "kanban",
+    "board",
+    "cards",
+    "tasks",
+    "drag and drop"
+  ],
+  "states": [
+    "hover",
+    "focus",
+    "dragging",
+    "overdue",
+    "done subtasks"
+  ],
   "source": null,
   "a11y": "Cards are focusable list items with a described keyboard-move hint; progress bars are role=progressbar with values, and counts have screen-reader words.",
   "width": "narrow",
   "photos": [
-    {"img": "photo-1438761681033-6461ffad8d80", "author": "Christopher Campbell", "page": "rDEOVtE7vOs"},
-    {"img": "photo-1522529599102-193c0d76b5b6", "author": "Elizeu Dias", "page": "2EGNqazbAMk"},
-    {"img": "photo-1725033489648-a819750348eb", "author": "Arnab De", "page": "WYwNK-zW7u4"}
+    {
+      "img": "photo-1438761681033-6461ffad8d80",
+      "author": "Christopher Campbell",
+      "page": "rDEOVtE7vOs"
+    },
+    {
+      "img": "photo-1522529599102-193c0d76b5b6",
+      "author": "Elizeu Dias",
+      "page": "2EGNqazbAMk"
+    },
+    {
+      "img": "photo-1725033489648-a819750348eb",
+      "author": "Arnab De",
+      "page": "WYwNK-zW7u4"
+    }
   ],
   "spec": {
-    "use_when": ["any pipeline of items moving through a few named stages, such as hiring or support tickets"],
-    "avoid_when": ["many items compared by several fields at once: use receipts-table", "a single task's steps in order: use setup-steps or agent-steps", "a timeline of events: use activity-feed"],
+    "use_when": [
+      "any pipeline of items moving through a few named stages, such as hiring or support tickets"
+    ],
+    "avoid_when": [
+      "many items compared by several fields at once: use receipts-table",
+      "a single task's steps in order: use setup-steps or agent-steps",
+      "a timeline of events: use activity-feed"
+    ],
     "parts": [
       {
         "name": "status",
@@ -100,7 +134,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "cards"],
+      "required": [
+        "title",
+        "cards"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -108,7 +145,12 @@
           "part": "title"
         },
         "status": {
-          "enum": ["warning", "info", "success", "neutral"],
+          "enum": [
+            "warning",
+            "info",
+            "success",
+            "neutral"
+          ],
           "part": "status"
         },
         "count": {
@@ -122,7 +164,9 @@
           "part": "cards",
           "items": {
             "type": "object",
-            "required": ["title"],
+            "required": [
+              "title"
+            ],
             "properties": {
               "id": {
                 "type": "string",
@@ -138,14 +182,21 @@
                 "maxItems": 3,
                 "items": {
                   "type": "object",
-                  "required": ["text"],
+                  "required": [
+                    "text"
+                  ],
                   "properties": {
                     "text": {
                       "type": "string",
                       "maxLength": 14
                     },
                     "kind": {
-                      "enum": ["bug", "billing", "api", "design"]
+                      "enum": [
+                        "bug",
+                        "billing",
+                        "api",
+                        "design"
+                      ]
                     }
                   }
                 }
@@ -169,7 +220,9 @@
               },
               "assignee": {
                 "type": "object",
-                "required": ["name"],
+                "required": [
+                  "name"
+                ],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -183,6 +236,9 @@
               },
               "dragging": {
                 "type": "boolean"
+              },
+              "subtasks_share": {
+                "type": "number"
               }
             }
           }
@@ -191,17 +247,23 @@
           "type": "string",
           "maxLength": 16,
           "part": "add"
+        },
+        "add_hint": {
+          "type": "string",
+          "maxLength": 120
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no cards, show the header with a count of 0 and a dashed box above Add card saying 'Drop a card here'"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the header and show two cards with grey bars in place of the title and footer"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -219,8 +281,16 @@
         "status": "handled",
         "how": "card titles wrap inside the card; labels and footer items stay on one line each and wrap as a group",
         "evidence": "odl-labels { display: flex; flex-wrap: wrap"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab moves through the add and options buttons, then each card, then Add card", "Enter or Space presses the focused button; a focused card has no action of its own"]
+    "keyboard": [
+      "Tab moves through the add and options buttons, then each card, then Add card",
+      "Enter or Space presses the focused button; a focused card has no action of its own"
+    ]
   }
 }

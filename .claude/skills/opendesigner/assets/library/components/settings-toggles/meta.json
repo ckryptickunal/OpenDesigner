@@ -25,8 +25,14 @@
   "a11y": "Native checkboxes with role switch inside their labels, so the whole row is the target; the switch is at least 24 px tall; a setting the organization locked shows its state in words with a lock and is read as \"On, locked\".",
   "width": "medium",
   "spec": {
-    "use_when": ["admin or security settings where some options are set by the organization and the person must see that they cannot change them"],
-    "avoid_when": ["a setting with more than two choices: use a select or radio group, as member-list does for roles", "choosing a paid plan: use plan-picker", "quick on and off controls for devices: use home-controls"],
+    "use_when": [
+      "admin or security settings where some options are set by the organization and the person must see that they cannot change them"
+    ],
+    "avoid_when": [
+      "a setting with more than two choices: use a select or radio group, as member-list does for roles",
+      "choosing a paid plan: use plan-picker",
+      "quick on and off controls for devices: use home-controls"
+    ],
     "parts": [
       {
         "name": "title",
@@ -73,7 +79,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "settings"],
+      "required": [
+        "title",
+        "settings"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -87,7 +96,10 @@
           "part": "settings",
           "items": {
             "type": "object",
-            "required": ["name", "on"],
+            "required": [
+              "name",
+              "on"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -111,6 +123,14 @@
                 "type": "string",
                 "maxLength": 40,
                 "part": "locked_note"
+              },
+              "key": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "state_label": {
+                "type": "string",
+                "maxLength": 80
               }
             }
           }
@@ -119,12 +139,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no settings in the group, leave the group out rather than showing an empty box"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the rows and set disabled on each switch until its saved value arrives"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -143,8 +165,15 @@
         "status": "handled",
         "how": "names and explanations wrap beside the switch, the title breaks anywhere to fit, and the locked state never wraps",
         "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches each switch in turn; locked settings have no control and are skipped", "Space turns the focused switch on or off"]
+    "keyboard": [
+      "Tab reaches each switch in turn; locked settings have no control and are skipped",
+      "Space turns the focused switch on or off"
+    ]
   }
 }

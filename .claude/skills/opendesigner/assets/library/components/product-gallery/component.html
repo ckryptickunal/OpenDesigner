@@ -66,9 +66,13 @@
   box-shadow: inset 0 0 0 var(--ds-border-width-default) var(--ds-color-neutral-alpha-light-5); }
 .odl-product-gallery .odl-sw:hover span { border-color: var(--ds-color-border-default); }
 .odl-product-gallery .odl-sw input:checked + span { border-color: var(--ds-color-text-primary); }
-.odl-product-gallery .odl-sw.is-chalk { --c: var(--ds-color-neutral-light-1); } .odl-product-gallery .odl-sw.is-sand { --c: var(--ds-color-warning-light-4); }
-.odl-product-gallery .odl-sw.is-ink { --c: var(--ds-color-neutral-light-12); } .odl-product-gallery .odl-sw.is-moss { --c: var(--ds-color-success-light-9); }
+.odl-product-gallery .odl-sw.is-chalk, .odl-product-gallery .odl-sw[data-swatch="chalk"] { --c: var(--ds-color-neutral-light-1); } .odl-product-gallery .odl-sw.is-sand, .odl-product-gallery .odl-sw[data-swatch="sand"] { --c: var(--ds-color-warning-light-4); }
+.odl-product-gallery .odl-sw.is-ink, .odl-product-gallery .odl-sw[data-swatch="ink"] { --c: var(--ds-color-neutral-light-12); } .odl-product-gallery .odl-sw.is-moss, .odl-product-gallery .odl-sw[data-swatch="moss"] { --c: var(--ds-color-success-light-9); }
 .odl-product-gallery .odl-cname { display: none; }
+/* Rendered from data: the script names the chosen colour here, paints each swatch and disables sold-out sizes; template items stay hidden. */
+.odl-product-gallery .odl-cname.is-live { display: inline; }
+.odl-product-gallery .odl-size[data-sold_out="true"], .odl-product-gallery .odl-size[data-sold_out="false"] { position: relative; }
+.odl-product-gallery [hidden] { display: none !important; }
 .odl-product-gallery:has(input[value="chalk"]:checked) .odl-cname.is-chalk, .odl-product-gallery:has(input[value="sand"]:checked) .odl-cname.is-sand,
 .odl-product-gallery:has(input[value="ink"]:checked) .odl-cname.is-ink, .odl-product-gallery:has(input[value="moss"]:checked) .odl-cname.is-moss { display: inline; }
 .odl-product-gallery .odl-size span { display: grid; place-items: center; min-inline-size: 0; min-block-size: var(--odl-tap); padding: 0 var(--ds-space-4);
@@ -101,14 +105,15 @@
 .odl-product-gallery .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { .odl-product-gallery, .odl-product-gallery *, .odl-product-gallery *::before { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
 </style>
-<section class="odl-product-gallery" aria-label="Heavyweight cotton tee">
+<section class="odl-product-gallery" aria-label="Heavyweight cotton tee" data-od-label="name">
   <div class="odl-wrap">
     <div class="odl-gallery">
       <div class="odl-stage">
-        <div class="odl-track" tabindex="0" aria-label="Photos, 1 of 3" role="group">
-          <figure class="odl-slide"><img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=1200&h=1500&fit=crop&crop=focalpoint&fp-x=0.5&fp-y=0.62&fp-z=2.2&auto=format&q=70" alt="White crew-neck tee on a hanger, front" width="600" height="750" loading="lazy" decoding="async"></figure>
-          <figure class="odl-slide"><img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=1200&h=1500&fit=crop&crop=focalpoint&fp-x=0.5&fp-y=0.5&fp-z=3.2&auto=format&q=70" alt="Close-up of the ribbed collar and cotton" width="600" height="750" loading="lazy" decoding="async"></figure>
-          <figure class="odl-slide"><img src="https://images.unsplash.com/photo-1651761179569-4ba2aa054997?w=1200&h=1500&fit=crop&auto=format&q=70" alt="White crew-neck tee laid flat" width="600" height="750" loading="lazy" decoding="async"></figure>
+        <div class="odl-track" tabindex="0" aria-label="Photos, 1 of 3" role="group" data-od-list="photos">
+          <figure class="odl-slide" data-od-item data-od-template hidden><img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=1200&h=1500&fit=crop&crop=focalpoint&fp-x=0.5&fp-y=0.62&fp-z=2.2&auto=format&q=70" data-od-media="photo" alt="" width="600" height="750" loading="lazy" decoding="async"><data data-od-slot="label" hidden></data></figure>
+          <figure class="odl-slide" data-od-item><img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=1200&h=1500&fit=crop&crop=focalpoint&fp-x=0.5&fp-y=0.62&fp-z=2.2&auto=format&q=70" alt="White crew-neck tee on a hanger, front" width="600" height="750" loading="lazy" decoding="async"></figure>
+          <figure class="odl-slide" data-od-item><img src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=1200&h=1500&fit=crop&crop=focalpoint&fp-x=0.5&fp-y=0.5&fp-z=3.2&auto=format&q=70" alt="Close-up of the ribbed collar and cotton" width="600" height="750" loading="lazy" decoding="async"></figure>
+          <figure class="odl-slide" data-od-item><img src="https://images.unsplash.com/photo-1651761179569-4ba2aa054997?w=1200&h=1500&fit=crop&auto=format&q=70" alt="White crew-neck tee laid flat" width="600" height="750" loading="lazy" decoding="async"></figure>
         </div>
         <div class="odl-dots">
           <button type="button" class="odl-dot" aria-label="Photo 1: front" aria-current="true"></button>
@@ -124,10 +129,10 @@
     </div>
     <div class="odl-info">
       <div class="odl-head">
-        <p class="odl-eyebrow">Workroom line · Men's T-shirts</p>
-        <h3>Heavyweight cotton tee</h3>
-        <p class="odl-price"><span class="odl-now"><span class="odl-sr">Now </span>$28</span><span class="odl-was"><span class="odl-sr">was </span>$40</span><span class="odl-save">Sale · Save 30%</span></p>
-        <button type="button" class="odl-rating" aria-label="Rated 4.7 out of 5 from 212 reviews. Read reviews">
+        <p class="odl-eyebrow" data-od-slot="eyebrow" data-od-optional>Workroom line · Men's T-shirts</p>
+        <h3 data-od-slot="name">Heavyweight cotton tee</h3>
+        <p class="odl-price"><span class="odl-now"><span class="odl-sr">Now </span><data data-od-slot="price">$28</data></span><span class="odl-was" data-od-optional><span class="odl-sr">was </span><data data-od-slot="was_price">$40</data></span><span class="odl-save" data-od-slot="sale_label" data-od-optional>Sale · Save 30%</span><data data-od-slot="currency" hidden></data></p>
+        <button type="button" class="odl-rating" data-od-optional aria-label="Rated 4.7 out of 5 from 212 reviews. Read reviews">
           <span class="odl-stars" aria-hidden="true">
             <svg class="is-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
             <svg class="is-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
@@ -135,37 +140,40 @@
             <svg class="is-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
             <svg class="is-half" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path class="is-out" d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/><path d="M12 18.338a2.1 2.1 0 0 0-.987.244L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.12 2.12 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.12 2.12 0 0 0 1.597-1.16l2.309-4.679A.53.53 0 0 1 12 2"/></svg>
           </span>
-          <b aria-hidden="true">4.7</b><span aria-hidden="true">212 reviews</span>
+          <b aria-hidden="true" data-od-slot="rating_average">4.7</b><span aria-hidden="true"><data data-od-slot="rating_count">212</data> reviews</span>
         </button>
       </div>
       <fieldset class="odl-colour">
         <legend>Colour <span><span class="odl-cname is-chalk">Chalk</span><span class="odl-cname is-sand">Sand</span><span class="odl-cname is-ink">Ink</span><span class="odl-cname is-moss">Moss</span></span></legend>
-        <div class="odl-swatches">
-          <label class="odl-sw is-chalk"><input type="radio" name="odl-product-gallery-colour" value="chalk" checked aria-label="Chalk"><span></span></label>
-          <label class="odl-sw is-sand"><input type="radio" name="odl-product-gallery-colour" value="sand" aria-label="Sand"><span></span></label>
-          <label class="odl-sw is-ink"><input type="radio" name="odl-product-gallery-colour" value="ink" aria-label="Ink"><span></span></label>
-          <label class="odl-sw is-moss"><input type="radio" name="odl-product-gallery-colour" value="moss" aria-label="Moss"><span></span></label>
+        <div class="odl-swatches" data-od-list="colours">
+          <label class="odl-sw" data-od-item data-od-template hidden data-od-var="swatch" data-swatch="chalk"><input type="radio" name="odl-product-gallery-colour" data-od-label="name"><span></span><data data-od-slot="name" hidden></data></label>
+          <label class="odl-sw is-chalk" data-od-item><input type="radio" name="odl-product-gallery-colour" value="chalk" checked aria-label="Chalk"><span></span></label>
+          <label class="odl-sw is-sand" data-od-item><input type="radio" name="odl-product-gallery-colour" value="sand" aria-label="Sand"><span></span></label>
+          <label class="odl-sw is-ink" data-od-item><input type="radio" name="odl-product-gallery-colour" value="ink" aria-label="Ink"><span></span></label>
+          <label class="odl-sw is-moss" data-od-item><input type="radio" name="odl-product-gallery-colour" value="moss" aria-label="Moss"><span></span></label>
         </div>
       </fieldset>
       <fieldset class="odl-size-set">
-        <legend>Size <span>Fits true to size</span></legend>
-        <div class="odl-sizes">
-          <label class="odl-size"><input type="radio" name="odl-product-gallery-size" value="S"><span>S</span></label>
-          <label class="odl-size"><input type="radio" name="odl-product-gallery-size" value="M" checked><span>M</span></label>
-          <label class="odl-size"><input type="radio" name="odl-product-gallery-size" value="L"><span>L</span></label>
-          <label class="odl-size"><input type="radio" name="odl-product-gallery-size" value="XL" disabled aria-label="XL, sold out"><span>XL</span></label>
-          <label class="odl-size"><input type="radio" name="odl-product-gallery-size" value="XXL"><span>XXL</span></label>
+        <legend>Size <span data-od-slot="size_note" data-od-optional>Fits true to size</span></legend>
+        <div class="odl-sizes" data-od-list="sizes">
+          <label class="odl-size" data-od-item data-od-template hidden data-od-var="sold_out" data-sold_out="false"><input type="radio" name="odl-product-gallery-size"><span data-od-slot="label"></span></label>
+          <label class="odl-size" data-od-item><input type="radio" name="odl-product-gallery-size" value="S"><span>S</span></label>
+          <label class="odl-size" data-od-item><input type="radio" name="odl-product-gallery-size" value="M" checked><span>M</span></label>
+          <label class="odl-size" data-od-item><input type="radio" name="odl-product-gallery-size" value="L"><span>L</span></label>
+          <label class="odl-size" data-od-item><input type="radio" name="odl-product-gallery-size" value="XL" disabled aria-label="XL, sold out"><span>XL</span></label>
+          <label class="odl-size" data-od-item><input type="radio" name="odl-product-gallery-size" value="XXL"><span>XXL</span></label>
         </div>
-        <p class="odl-low">Only 3 left in M</p>
+        <p class="odl-low" data-od-slot="stock" data-od-optional>Only 3 left in M</p>
       </fieldset>
       <div class="odl-buy">
-        <button type="button" class="odl-add"><svg class="is-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><svg class="is-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="odl-add-label">Add to bag</span></button>
+        <button type="button" class="odl-add" data-od-action="add" data-od-effect="change"><svg class="is-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><svg class="is-done" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span class="odl-add-label" data-od-slot="label">Add to bag</span></button>
         <button type="button" class="odl-fav" aria-label="Save to wishlist" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
       </div>
       <p class="odl-sr" aria-live="polite"></p>
-      <ul class="odl-perks">
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg><span><b>Free delivery</b> by Thursday, 5 Nov</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg><span><b>Free returns</b> for 30 days</span></li>
+      <ul class="odl-perks" data-od-list="perks">
+        <li data-od-item data-od-template hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg><span><b data-od-slot="title"></b> <span data-od-slot="detail" data-od-optional></span></span></li>
+        <li data-od-item><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg><span><b>Free delivery</b> by Thursday, 5 Nov</span></li>
+        <li data-od-item><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/></svg><span><b>Free returns</b> for 30 days</span></li>
       </ul>
     </div>
   </div>
@@ -174,7 +182,47 @@
 document.querySelectorAll(".odl-product-gallery").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
-  const track = root.querySelector(".odl-track"), dots = [...root.querySelectorAll(".odl-dot")], thumbs = [...root.querySelectorAll(".odl-thumb")];
+  const track = root.querySelector(".odl-track");
+  // Rendered from data: dots and thumbs follow the photos, and price, stars, colours and sizes come from the marked values.
+  const slides = [...track.querySelectorAll(".odl-slide:not([hidden])")];
+  const dotBox = root.querySelector(".odl-dots"), thumbBox = root.querySelector(".odl-thumbs");
+  if (root.dataset.odComponent && !slides.length) { dotBox.replaceChildren(); thumbBox.replaceChildren(); } // rendered with no photos
+  else if (slides.some((f) => f.querySelector('[data-od-slot="label"]'))) {
+    const d0 = dotBox.querySelector(".odl-dot"), t0 = thumbBox.querySelector(".odl-thumb");
+    dotBox.replaceChildren(...slides.map((f, i) => { const d = d0.cloneNode(true), l = f.querySelector('[data-od-slot="label"]')?.textContent.trim(); d.setAttribute("aria-label", `Photo ${i + 1}${l ? ": " + l : ""}`); d.setAttribute("aria-current", String(!i)); return d; }));
+    thumbBox.replaceChildren(...slides.map((f, i) => { const t = t0.cloneNode(true), l = f.querySelector('[data-od-slot="label"]')?.textContent.trim(), im = f.querySelector("img");
+      t.setAttribute("aria-label", `Show ${l || "photo " + (i + 1)}`); t.setAttribute("aria-current", String(!i)); if (im) t.querySelector("img").src = im.src; else t.querySelector("img").remove(); return t; }));
+  }
+  const cur = root.querySelector('[data-od-slot="currency"]')?.textContent.trim();
+  if (cur) root.querySelectorAll('[data-od-slot="price"], [data-od-slot="was_price"]').forEach((el) => {
+    const n = Number(el.textContent.replace(/[^\d.]/g, ""));
+    if (Number.isFinite(n)) try { el.textContent = new Intl.NumberFormat(root.closest("[lang]")?.getAttribute("lang") || "en", { style: "currency", currency: cur, minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(n); } catch (e) { /* an unknown currency code: the price stays as sent */ }
+  });
+  const avg = Number(root.querySelector('[data-od-slot="rating_average"]')?.textContent), count = root.querySelector('[data-od-slot="rating_count"]')?.textContent.trim();
+  const rate = root.querySelector(".odl-rating");
+  if (rate && avg >= 0 && avg <= 5) {
+    rate.querySelectorAll(".odl-stars svg").forEach((sv, i) => {
+      const half = sv.querySelector(".is-out") && avg - i >= 0.25 && avg - i < 0.75;
+      sv.classList.toggle("is-full", avg - i >= (sv.querySelector(".is-out") ? 0.75 : 0.5)); sv.classList.toggle("is-half", !!half);
+    });
+    rate.setAttribute("aria-label", `Rated ${avg} out of 5${count ? ` from ${count} reviews` : ""}. Read reviews`);
+  }
+  const swatches = [...root.querySelectorAll(".odl-sw:not([hidden])")].filter((l) => l.querySelector('[data-od-slot="name"]'));
+  if (swatches.length) {
+    const names = root.querySelector(".odl-colour legend > span"), live = document.createElement("span");
+    live.className = "odl-cname is-live";
+    swatches.forEach((l) => { l.querySelector("input").value = l.querySelector('[data-od-slot="name"]').textContent.trim(); });
+    if (!swatches.some((l) => l.querySelector("input").checked)) swatches[0].querySelector("input").checked = true;
+    const say = () => { live.textContent = root.querySelector(".odl-colour input:checked")?.value || ""; };
+    names?.replaceChildren(live); say();
+    swatches.forEach((l) => l.querySelector("input").addEventListener("change", say));
+  }
+  root.querySelectorAll(".odl-size[data-sold_out]:not([hidden])").forEach((l) => {
+    const i = l.querySelector("input"), t = l.querySelector('[data-od-slot="label"]')?.textContent.trim();
+    if (t) i.value = t;
+    if (l.dataset.sold_out === "true") { i.disabled = true; i.setAttribute("aria-label", `${t}, sold out`); }
+  });
+  const dots = [...root.querySelectorAll(".odl-dot")], thumbs = [...root.querySelectorAll(".odl-thumb")];
   const mark = (i) => { [dots, thumbs].forEach((set) => set.forEach((b, j) => b.setAttribute("aria-current", String(i === j)))); track.setAttribute("aria-label", `Photos, ${i + 1} of ${dots.length}`); };
   const go = (i) => { track.scrollTo({ left: i * track.clientWidth, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); mark(i); };
   [dots, thumbs].forEach((set) => set.forEach((b, i) => b.addEventListener("click", () => go(i))));
@@ -185,10 +233,11 @@ document.querySelectorAll(".odl-product-gallery").forEach((root) => {
     if (e.key === "ArrowLeft") { e.preventDefault(); go(Math.max(i - 1, 0)); }
   });
   const add = root.querySelector(".odl-add"), label = root.querySelector(".odl-add-label"), live = root.querySelector("[aria-live]");
-  add.addEventListener("click", () => {
-    const c = root.querySelector('.odl-colour input:checked').getAttribute("aria-label"), s = root.querySelector('.odl-size-set input:checked').value;
+  const addText = label.textContent;
+  if (!add.dataset.odEvent) add.addEventListener("click", () => { // a rendered button reports its event instead of this demo
+    const c = root.querySelector('.odl-colour input:checked')?.getAttribute("aria-label"), s = root.querySelector('.odl-size-set input:checked')?.value;
     add.classList.add("is-added"); label.textContent = "Added to bag"; live.textContent = `Added to bag: ${c}, size ${s}`;
-    setTimeout(() => { add.classList.remove("is-added"); label.textContent = "Add to bag"; }, 2200);
+    setTimeout(() => { add.classList.remove("is-added"); label.textContent = addText; }, 2200);
   });
   root.querySelector(".odl-fav").addEventListener("click", (e) => {
     const b = e.currentTarget, on = b.getAttribute("aria-pressed") !== "true"; b.setAttribute("aria-pressed", String(on)); b.setAttribute("aria-label", on ? "Saved to wishlist" : "Save to wishlist");

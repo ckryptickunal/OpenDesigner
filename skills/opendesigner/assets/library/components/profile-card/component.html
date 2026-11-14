@@ -26,6 +26,9 @@
 .odl-profile-card .odl-stats div + div { padding-inline-start: var(--ds-space-inset-md); border-inline-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
 .odl-profile-card .odl-stats dt { order: 2; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
 .odl-profile-card .odl-stats dd { order: 1; margin: 0; font: var(--ds-text-numeric-md); font-weight: var(--ds-font-weight-heading); font-variant-numeric: tabular-nums; }
+/* Rendered from data: data-following is the starting state, copied to aria-pressed by the script; the template items stay hidden. */
+.odl-profile-card .odl-follow[data-following="true"], .odl-profile-card .odl-follow[data-following="false"] { cursor: pointer; }
+.odl-profile-card [hidden] { display: none !important; }
 .odl-profile-card .odl-about { margin: 0; color: var(--ds-color-text-secondary); }
 .odl-profile-card .odl-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--ds-space-inline-sm); }
 .odl-profile-card button { display: inline-flex; align-items: center; justify-content: center; gap: var(--ds-space-inline-sm); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min));
@@ -49,32 +52,34 @@
 }
 @media (prefers-reduced-motion: reduce) { .odl-profile-card, .odl-profile-card *, .odl-profile-card *::before { transition: none !important; animation: none !important; } }
 </style>
-<article class="odl-profile-card" aria-label="Profile of Margaux Lefèvre">
-  <img class="odl-band" src="https://images.unsplash.com/photo-1578771792482-1e7eb2b8b447?w=832&h=224&fit=crop&auto=format&q=70" alt="" width="416" height="112" loading="lazy" decoding="async">
+<article class="odl-profile-card" aria-label="Profile of Margaux Lefèvre" data-od-label="name">
+  <img class="odl-band" data-od-media="cover" src="https://images.unsplash.com/photo-1578771792482-1e7eb2b8b447?w=832&h=224&fit=crop&auto=format&q=70" alt="" width="416" height="112" loading="lazy" decoding="async">
   <div class="odl-body">
     <header class="odl-who">
     <div class="odl-top">
-      <img class="odl-avatar" src="https://images.unsplash.com/photo-1521146764736-56c929d59c83?w=160&h=160&fit=crop&crop=faces&auto=format&q=70" alt="Margaux Lefèvre" width="80" height="80" loading="lazy" decoding="async">
-      <span class="odl-presence">Available</span>
+      <img class="odl-avatar" data-od-media="avatar" src="https://images.unsplash.com/photo-1521146764736-56c929d59c83?w=160&h=160&fit=crop&crop=faces&auto=format&q=70" alt="Margaux Lefèvre" width="80" height="80" loading="lazy" decoding="async">
+      <span class="odl-presence" data-od-slot="presence" data-od-optional>Available</span>
     </div>
     <div class="odl-id">
-      <h3 class="odl-name">Margaux Lefèvre</h3>
-      <p class="odl-role">Payments operations lead · Treasury team</p>
-      <ul class="odl-meta">
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Lyon, France</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span><time datetime="16:12">4:12 pm</time> local time</span></li>
+      <h3 class="odl-name" data-od-slot="name">Margaux Lefèvre</h3>
+      <p class="odl-role" data-od-slot="role" data-od-optional>Payments operations lead · Treasury team</p>
+      <ul class="odl-meta" data-od-list="meta">
+        <li data-od-item data-od-template hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-od-when="icon=place"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-od-when="icon=time"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span data-od-slot="text"></span></li>
+        <li data-od-item><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Lyon, France</li>
+        <li data-od-item><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span><time datetime="16:12">4:12 pm</time> local time</span></li>
       </ul>
     </div>
     </header>
-    <dl class="odl-stats">
-      <div><dt>Reviews</dt><dd>128</dd></div>
-      <div><dt>Approvals</dt><dd>1,204</dd></div>
-      <div><dt>Replies in</dt><dd>2h</dd></div>
+    <dl class="odl-stats" data-od-list="stats">
+      <div data-od-item><dt>Reviews</dt><dd>128</dd></div>
+      <div data-od-item><dt>Approvals</dt><dd>1,204</dd></div>
+      <div data-od-item><dt>Replies in</dt><dd>2h</dd></div>
+      <div data-od-item data-od-template hidden><dt data-od-slot="label"></dt><dd data-od-slot="value"></dd></div>
     </dl>
-    <p class="odl-about">Runs the weekly payment batch and owns refunds over €2,000. Ask her before changing a payout schedule.</p>
+    <p class="odl-about" data-od-slot="about" data-od-optional>Runs the weekly payment batch and owns refunds over €2,000. Ask her before changing a payout schedule.</p>
     <div class="odl-actions">
-      <button type="button" class="odl-message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Message</button>
-      <button type="button" class="odl-follow" aria-pressed="false"><svg class="odl-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg><svg class="odl-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg><span class="odl-off">Follow</span><span class="odl-on">Following</span></button>
+      <button type="button" class="odl-message" data-od-action="message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span data-od-slot="label">Message</span></button>
+      <button type="button" class="odl-follow" aria-pressed="false" data-od-var="following" data-following="false"><svg class="odl-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></svg><svg class="odl-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg><span class="odl-off">Follow</span><span class="odl-on">Following</span></button>
     </div>
   </div>
 </article>
@@ -83,6 +88,7 @@ document.querySelectorAll(".odl-profile-card").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
   const follow = root.querySelector(".odl-follow");
+  if (follow.dataset.following) follow.setAttribute("aria-pressed", follow.dataset.following === "true" ? "true" : "false");
   follow.addEventListener("click", () => follow.setAttribute("aria-pressed", follow.getAttribute("aria-pressed") === "true" ? "false" : "true"));
 });
 </script>

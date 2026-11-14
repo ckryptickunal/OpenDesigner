@@ -28,11 +28,16 @@
   .odl-empty-state .odl-acts { flex-direction: column; align-self: stretch; }
   .odl-empty-state .odl-acts > * { align-self: stretch; }
 }
+.odl-empty-state .odl-acts:not(:has(button)):not(:has(a)) { display: none; }
+.odl-empty-state .odl-acts > button, .odl-empty-state .odl-acts > a { display: inline-flex; min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); }
+/* Disabled or still loading: quiet but readable (AA), never the faint disabled pair. */
+.odl-empty-state .odl-acts > a[data-od-pending] { background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); }
+.odl-empty-state button:disabled { cursor: not-allowed; background: var(--ds-color-bg-neutral-subtle); border-color: var(--ds-color-border-subtle); color: var(--ds-color-text-secondary); }
 @media (prefers-reduced-motion: reduce) { .odl-empty-state, .odl-empty-state *, .odl-empty-state *::before { transition: none !important; animation: none !important; } }
 </style>
-<section class="odl-empty-state" aria-label="Receipts">
+<section class="odl-empty-state" aria-label="Receipts" data-od-label="label">
   <span class="odl-art" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg><span class="odl-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg></span></span>
-  <h3>Every receipt is matched</h3>
-  <p>New payments from your bank feed show up here within a few minutes.</p>
-  <div class="odl-acts"><button type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>Import a bank file</button><a href="#">Set up match rules</a></div>
+  <h3 data-od-slot="title">Every receipt is matched</h3>
+  <p data-od-slot="body" data-od-optional>New payments from your bank feed show up here within a few minutes.</p>
+  <div class="odl-acts"><button type="button" data-od-action="primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg><span data-od-slot="label">Import a bank file</span></button><a href="#" data-od-action="secondary">Set up match rules</a></div>
 </section>

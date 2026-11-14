@@ -40,8 +40,14 @@
     }
   ],
   "spec": {
-    "use_when": ["any single item sold in variants, such as shoes, bags or homeware, where the buyer picks options before adding it"],
-    "avoid_when": ["many products in a grid or list: use product-card or wishlist-grid", "the bag or checkout after adding: use cart-drawer or order-summary", "a product with no options to pick: product-card with an add button is enough"],
+    "use_when": [
+      "any single item sold in variants, such as shoes, bags or homeware, where the buyer picks options before adding it"
+    ],
+    "avoid_when": [
+      "many products in a grid or list: use product-card or wishlist-grid",
+      "the bag or checkout after adding: use cart-drawer or order-summary",
+      "a product with no options to pick: product-card with an add button is enough"
+    ],
     "parts": [
       {
         "name": "photos",
@@ -124,7 +130,11 @@
     ],
     "data": {
       "type": "object",
-      "required": ["name", "price", "photos"],
+      "required": [
+        "name",
+        "price",
+        "photos"
+      ],
       "properties": {
         "photos": {
           "type": "array",
@@ -133,7 +143,10 @@
           "part": "photos",
           "items": {
             "type": "object",
-            "required": ["src", "alt"],
+            "required": [
+              "src",
+              "alt"
+            ],
             "properties": {
               "src": {
                 "type": "string",
@@ -146,6 +159,23 @@
               "label": {
                 "type": "string",
                 "maxLength": 16
+              },
+              "photo": {
+                "type": "object",
+                "required": [
+                  "src",
+                  "alt"
+                ],
+                "properties": {
+                  "src": {
+                    "type": "string",
+                    "maxLength": 2048
+                  },
+                  "alt": {
+                    "type": "string",
+                    "maxLength": 200
+                  }
+                }
               }
             }
           }
@@ -176,7 +206,10 @@
         "rating": {
           "type": "object",
           "part": "rating",
-          "required": ["average", "count"],
+          "required": [
+            "average",
+            "count"
+          ],
           "properties": {
             "average": {
               "type": "number",
@@ -196,7 +229,10 @@
           "part": "colours",
           "items": {
             "type": "object",
-            "required": ["name", "value"],
+            "required": [
+              "name",
+              "value"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -205,6 +241,14 @@
               "value": {
                 "type": "string",
                 "maxLength": 40
+              },
+              "swatch": {
+                "enum": [
+                  "chalk",
+                  "ink",
+                  "moss",
+                  "sand"
+                ]
               }
             }
           }
@@ -216,7 +260,9 @@
           "part": "sizes",
           "items": {
             "type": "object",
-            "required": ["label"],
+            "required": [
+              "label"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -250,7 +296,9 @@
           "part": "perks",
           "items": {
             "type": "object",
-            "required": ["title"],
+            "required": [
+              "title"
+            ],
             "properties": {
               "title": {
                 "type": "string",
@@ -262,17 +310,31 @@
               }
             }
           }
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "rating_average": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "rating_count": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no photos, show the sunken track at its 4 by 5 shape with a muted product icon and hide the dots and thumbnails"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the sunken photo box and fill the name, price and chips with muted blocks; disable Add to bag until loaded"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -292,8 +354,18 @@
         "status": "handled",
         "how": "the name wraps; the price, old price and sale tag wrap onto a second line when tight",
         "evidence": ".odl-price { display: flex; flex-wrap: wrap"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches the photo track, the dots or thumbnails, the rating, the colour and size groups, Add to bag and Save", "Left and Right arrows on the focused photo track move one photo at a time", "Arrow keys move within the colour and size groups, as in any native radio group, and skip the sold-out size", "Enter or Space presses Add to bag, Save, the rating, a dot or a thumbnail"]
+    "keyboard": [
+      "Tab reaches the photo track, the dots or thumbnails, the rating, the colour and size groups, Add to bag and Save",
+      "Left and Right arrows on the focused photo track move one photo at a time",
+      "Arrow keys move within the colour and size groups, as in any native radio group, and skip the sold-out size",
+      "Enter or Space presses Add to bag, Save, the rating, a dot or a thumbnail"
+    ]
   }
 }

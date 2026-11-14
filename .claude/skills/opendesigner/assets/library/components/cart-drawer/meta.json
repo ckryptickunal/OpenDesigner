@@ -65,8 +65,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a food or grocery shop where people change quantities often before paying"],
-    "avoid_when": ["the final review on the checkout page with delivery and payment: use order-summary", "one product's page with photos and sizes: use product-gallery or product-card", "items saved for later rather than to buy now: use wishlist-grid"],
+    "use_when": [
+      "a food or grocery shop where people change quantities often before paying"
+    ],
+    "avoid_when": [
+      "the final review on the checkout page with delivery and payment: use order-summary",
+      "one product's page with photos and sizes: use product-gallery or product-card",
+      "items saved for later rather than to buy now: use wishlist-grid"
+    ],
     "parts": [
       {
         "name": "page",
@@ -125,7 +131,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["items", "currency"],
+      "required": [
+        "items",
+        "currency"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -154,7 +163,11 @@
           "part": "items",
           "items": {
             "type": "object",
-            "required": ["name", "price", "quantity"],
+            "required": [
+              "name",
+              "price",
+              "quantity"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -208,8 +221,9 @@
         "evidence": ".odl-sheet.is-empty .odl-empty { display: block; }"
       },
       "loading": {
-        "status": "not_built",
-        "how": "while quantities save, disable the steppers and Checkout and keep the old totals"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -229,8 +243,18 @@
         "status": "handled",
         "how": "a long name or variant wraps beside the line price, which stays to the right",
         "evidence": ".odl-line { display: grid; grid-template-columns: minmax(0, 1fr) auto"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Close bag, then each item's One fewer, One more and Remove, then Checkout", "Enter or Space on One more or One fewer changes the quantity, and the totals and the free-delivery bar update", "Enter or Space on Remove takes the item out and moves focus to the next item's Remove, or to Close bag when none are left", "Close bag and Checkout are buttons with no action in the file; there is no Escape handling"]
+    "keyboard": [
+      "Tab reaches Close bag, then each item's One fewer, One more and Remove, then Checkout",
+      "Enter or Space on One more or One fewer changes the quantity, and the totals and the free-delivery bar update",
+      "Enter or Space on Remove takes the item out and moves focus to the next item's Remove, or to Close bag when none are left",
+      "Close bag and Checkout are buttons with no action in the file; there is no Escape handling"
+    ]
   }
 }

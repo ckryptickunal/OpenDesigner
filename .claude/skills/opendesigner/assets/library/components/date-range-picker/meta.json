@@ -4,15 +4,38 @@
   "use": "for filtering a report or table by dates",
   "type": "form",
   "style": "quiet",
-  "industries": ["any"],
-  "tags": ["date range", "calendar", "presets", "filter", "report"],
-  "states": ["hover", "focus", "selected start", "in range", "selected end", "today", "disabled future day", "picking end"],
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "date range",
+    "calendar",
+    "presets",
+    "filter",
+    "report"
+  ],
+  "states": [
+    "hover",
+    "focus",
+    "selected start",
+    "in range",
+    "selected end",
+    "today",
+    "disabled future day",
+    "picking end"
+  ],
   "source": "brand/showcase/components/03-date-range-picker",
   "a11y": "Every day is a button with its full date as its label and aria-pressed on the start and end; today has aria-current, future days are disabled, and the range length is announced in a polite live region.",
   "width": "wide",
   "spec": {
-    "use_when": ["a past period for analytics or billing, where days after today must not be picked"],
-    "avoid_when": ["picking one date or a travel date in the future: future days are disabled here; use trip-search", "choosing several filters at once, of which dates are only one: use filter-bar and open this from it", "seeing what happens on each day: use calendar-agenda"],
+    "use_when": [
+      "a past period for analytics or billing, where days after today must not be picked"
+    ],
+    "avoid_when": [
+      "picking one date or a travel date in the future: future days are disabled here; use trip-search",
+      "choosing several filters at once, of which dates are only one: use filter-bar and open this from it",
+      "seeing what happens on each day: use calendar-agenda"
+    ],
     "parts": [
       {
         "name": "presets",
@@ -77,7 +100,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["today"],
+      "required": [
+        "today"
+      ],
       "properties": {
         "presets": {
           "type": "array",
@@ -86,14 +111,23 @@
           "part": "presets",
           "items": {
             "type": "object",
-            "required": ["label", "id"],
+            "required": [
+              "label",
+              "id"
+            ],
             "properties": {
               "label": {
                 "type": "string",
                 "maxLength": 16
               },
               "id": {
-                "enum": ["today", "7", "month", "quarter", "custom"]
+                "enum": [
+                  "today",
+                  "7",
+                  "month",
+                  "quarter",
+                  "custom"
+                ]
               }
             }
           }
@@ -145,8 +179,9 @@
         "evidence": "output.is-empty"
       },
       "loading": {
-        "status": "not_built",
-        "how": "not needed for the calendar itself; if presets come from a server, show the preset buttons as grey blocks until they arrive"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -166,8 +201,17 @@
         "status": "handled",
         "how": "the start and end fields cut a long date off with an ellipsis; preset labels never wrap",
         "evidence": "white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab moves through the preset buttons, previous and next month, every day that is not disabled, then Cancel and Apply", "Enter or Space on a day picks the start, then the end; focus stays on that day", "Enter or Space on a preset sets its range and shows its months", "The range length is read out by a polite live region after each pick"]
+    "keyboard": [
+      "Tab moves through the preset buttons, previous and next month, every day that is not disabled, then Cancel and Apply",
+      "Enter or Space on a day picks the start, then the end; focus stays on that day",
+      "Enter or Space on a preset sets its range and shows its months",
+      "The range length is read out by a polite live region after each pick"
+    ]
   }
 }

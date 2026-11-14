@@ -1,0 +1,148 @@
+{
+  "name": "Code block",
+  "summary": "A piece of code with its file name and language, a Copy button, and long lines that scroll sideways inside the box.",
+  "use": "to show a command, a snippet or an example request the person can copy",
+  "type": "content",
+  "style": "technical",
+  "industries": [
+    "devtools",
+    "saas",
+    "education",
+    "any"
+  ],
+  "tags": [
+    "code",
+    "snippet",
+    "copy",
+    "command",
+    "developer"
+  ],
+  "states": [
+    "copied",
+    "selected when the clipboard is blocked",
+    "hover",
+    "focus",
+    "long lines scroll",
+    "tall code scrolls"
+  ],
+  "source": null,
+  "a11y": "The code box is a named region that Tab reaches, so keyboard users can scroll it with the arrow keys; the Copy button says Copied when it worked.",
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "the answer includes a command, a config file, a snippet or an example request the person will run or paste"
+    ],
+    "avoid_when": [
+      "a short command name inside a sentence: keep it in the text",
+      "a file the person downloads: use file-card",
+      "a form the person fills in: use a form part"
+    ],
+    "parts": [
+      {
+        "name": "filename",
+        "selector": ".odl-file",
+        "what": "the file the code belongs in",
+        "slot": "text"
+      },
+      {
+        "name": "language",
+        "selector": ".odl-lang",
+        "what": "the language or tool, in words",
+        "slot": "text"
+      },
+      {
+        "name": "copy",
+        "selector": ".odl-copy",
+        "what": "copies the code to the clipboard, or selects it when the page may not use the clipboard",
+        "slot": "action"
+      },
+      {
+        "name": "code",
+        "selector": "pre code",
+        "what": "the code itself, as plain text",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "language",
+        "code"
+      ],
+      "properties": {
+        "filename": {
+          "type": "string",
+          "maxLength": 80,
+          "part": "filename"
+        },
+        "language": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "language"
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 4000,
+          "x-od-code": true,
+          "part": "code"
+        },
+        "copy": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "label",
+            "event"
+          ],
+          "part": "copy"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no code, answer in plain text instead of this part"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "handled",
+        "how": "when the clipboard is blocked, the code is selected and the button says Selected",
+        "evidence": "show(\"Selected\")"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "an answer without a copy action shows no button"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "long lines and tall code scroll inside the code box, never the page",
+        "evidence": "max-block-size: 28rem; overflow: auto"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "code keeps its lines and scrolls sideways; a long file name wraps",
+        "evidence": "white-space: pre"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Copy, then the code box",
+      "Enter or Space presses Copy",
+      "arrow keys scroll the focused code box"
+    ]
+  }
+}

@@ -50,18 +50,39 @@
 .odl-kanban-column button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
 .odl-kanban-column .odl-sr { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (prefers-reduced-motion: reduce) { .odl-kanban-column, .odl-kanban-column *, .odl-kanban-column *::before { transition: none !important; animation: none !important; } }
+.odl-kanban-column .odl-status[data-status="warning"] { background: var(--ds-color-bg-warning-bold); }
+.odl-kanban-column .odl-status[data-status="info"] { background: var(--ds-color-bg-info-bold); }
+.odl-kanban-column .odl-status[data-status="success"] { background: var(--ds-color-bg-success-bold); }
+.odl-kanban-column .odl-status[data-status="neutral"] { background: var(--ds-color-border-strong); }
+.odl-kanban-column .odl-tag:has([data-kind="bug"])::before { background: var(--ds-color-bg-danger-bold); }
+.odl-kanban-column .odl-tag:has([data-kind="billing"])::before { background: var(--ds-color-border-strong); }
+.odl-kanban-column .odl-tag:has([data-kind="api"])::before { background: var(--ds-color-bg-info-bold); }
+.odl-kanban-column .odl-tag:has([data-kind="design"])::before { background: var(--ds-color-bg-warning-bold); }
+.odl-kanban-column .odl-bar span[data-od-measure] { inline-size: calc(var(--od-ratio, 0) * 100%); }
+.odl-kanban-column [hidden] { display: none; }
 </style>
 <section class="odl-kanban-column" aria-labelledby="odl-kc-title">
   <div class="odl-head">
-    <span class="odl-status" aria-hidden="true"></span>
-    <h3 id="odl-kc-title">In review <span><span class="odl-sr">, </span>3<span class="odl-sr"> cards</span></span></h3>
-    <button type="button" class="odl-icon-btn" aria-label="Add a card to In review"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
+    <span class="odl-status" aria-hidden="true" data-od-var="status" data-status="warning"></span>
+    <h3 id="odl-kc-title"><bdi data-od-slot="title">In review</bdi> <span data-od-optional><span class="odl-sr">, </span><bdi data-od-slot="count">3</bdi><span class="odl-sr"> cards</span></span></h3>
+    <button type="button" class="odl-icon-btn" aria-label="Add a card to In review" data-od-label="add_hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
     <button type="button" class="odl-icon-btn" aria-label="Column options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
   </div>
-  <ul>
-    <li class="odl-card" tabindex="0" aria-describedby="odl-kc-hint">
+  <ul data-od-list="cards">
+    <li class="odl-card" tabindex="0" aria-describedby="odl-kc-hint" data-od-item data-od-template hidden>
+      <div class="odl-top"><span class="odl-id" data-od-slot="id" data-od-optional></span><p class="odl-title" data-od-slot="title"></p></div>
+      <ul class="odl-labels" aria-label="Labels" data-od-list="labels" data-od-optional><li class="odl-tag" data-od-item><bdi data-od-slot="text" data-od-var="kind" data-kind="billing"></bdi></li></ul>
+      <div class="odl-progress" data-od-optional><div class="odl-bar" role="progressbar" aria-label="Subtasks done"><span data-od-measure="subtasks_share"></span></div><span><bdi data-od-slot="subtasks_done"></bdi>/<bdi data-od-slot="subtasks_total"></bdi></span></div>
+      <div class="odl-foot">
+        <time data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg><bdi data-od-slot="due"></bdi></time>
+        <span class="odl-spacer"></span>
+        <span data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><bdi data-od-slot="comments"></bdi><span class="odl-sr"> comments</span></span>
+        <img class="odl-avatar" data-od-media="assignee" data-od-optional alt="" width="24" height="24" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1725033489648-a819750348eb?w=48&h=48&fit=crop&crop=faces&auto=format&q=70">
+      </div>
+    </li>
+    <li class="odl-card" tabindex="0" aria-describedby="odl-kc-hint" data-od-item>
       <div class="odl-top"><span class="odl-id">FEN-412</span><p class="odl-title">Split ACH batches over $50,000 into two runs</p></div>
-      <ul class="odl-labels" aria-label="Labels"><li class="odl-tag is-billing">Payments</li><li class="odl-tag is-api">API</li></ul>
+      <ul class="odl-labels" aria-label="Labels" data-od-list="labels"><li class="odl-tag is-billing" data-od-item>Payments</li><li class="odl-tag is-api" data-od-item>API</li></ul>
       <div class="odl-progress"><div class="odl-bar" role="progressbar" aria-label="Subtasks done" aria-valuenow="3" aria-valuemin="0" aria-valuemax="5"><span style="inline-size: 60%"></span></div><span>3/5</span></div>
       <div class="odl-foot">
         <time class="is-overdue" datetime="2026-10-19"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Oct 19 · overdue</time>
@@ -70,9 +91,9 @@
         <img class="odl-avatar" src="https://images.unsplash.com/photo-1725033489648-a819750348eb?w=48&h=48&fit=crop&crop=faces&auto=format&q=70" alt="Assigned to Nandini Iyer" width="24" height="24" loading="lazy" decoding="async">
       </div>
     </li>
-    <li class="odl-card is-dragging" tabindex="0" aria-grabbed="true" aria-describedby="odl-kc-hint">
+    <li class="odl-card is-dragging" tabindex="0" aria-grabbed="true" aria-describedby="odl-kc-hint" data-od-item>
       <div class="odl-top"><span class="odl-id">FEN-398</span><p class="odl-title">Show the policy that applies on every bill row</p></div>
-      <ul class="odl-labels" aria-label="Labels"><li class="odl-tag is-design">Design</li></ul>
+      <ul class="odl-labels" aria-label="Labels" data-od-list="labels"><li class="odl-tag is-design" data-od-item>Design</li></ul>
       <div class="odl-progress"><div class="odl-bar" role="progressbar" aria-label="Subtasks done" aria-valuenow="4" aria-valuemin="0" aria-valuemax="4"><span style="inline-size: 100%"></span></div><span>4/4</span></div>
       <div class="odl-foot">
         <time datetime="2026-10-28"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>Oct 28</time>
@@ -81,9 +102,9 @@
         <img class="odl-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=48&h=48&fit=crop&crop=faces&auto=format&q=70" alt="Assigned to Bettina Marangoni" width="24" height="24" loading="lazy" decoding="async">
       </div>
     </li>
-    <li class="odl-card" tabindex="0" aria-describedby="odl-kc-hint">
+    <li class="odl-card" tabindex="0" aria-describedby="odl-kc-hint" data-od-item>
       <div class="odl-top"><span class="odl-id">FEN-421</span><p class="odl-title">Duplicate invoice warning fires on credit notes</p></div>
-      <ul class="odl-labels" aria-label="Labels"><li class="odl-tag is-bug">Bug</li><li class="odl-tag is-billing">Payments</li></ul>
+      <ul class="odl-labels" aria-label="Labels" data-od-list="labels"><li class="odl-tag is-bug" data-od-item>Bug</li><li class="odl-tag is-billing" data-od-item>Payments</li></ul>
       <div class="odl-progress"><div class="odl-bar" role="progressbar" aria-label="Subtasks done" aria-valuenow="1" aria-valuemin="0" aria-valuemax="3"><span style="inline-size: 33%"></span></div><span>1/3</span></div>
       <div class="odl-foot">
         <time datetime="2026-11-03"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>Nov 3</time>
@@ -94,5 +115,5 @@
     </li>
   </ul>
   <p id="odl-kc-hint" class="odl-sr">Press space to pick up a card, arrow keys to move it, space again to drop.</p>
-  <button type="button" class="odl-add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Add card</button>
+  <button type="button" class="odl-add" data-od-action="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span data-od-slot="label">Add card</span></button>
 </section>

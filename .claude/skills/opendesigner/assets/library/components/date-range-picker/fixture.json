@@ -1,0 +1,13 @@
+{"presets": [
+  {"label": "Today", "id": "today"},
+  {"label": "Past week", "id": "7"},
+  {"label": "Month to date", "id": "month"},
+  {"label": "Previous quarter", "id": "quarter"},
+  {"label": "Pick dates", "id": "custom"}
+ ],
+ "start": "2026-09-14",
+ "end": "2026-10-02",
+ "today": "2026-10-05",
+ "timezone_note": "in London time, UTC+1",
+ "apply": {"label": "Show report", "event": {"name": "apply_range"}},
+ "cancel": {"label": "Close", "event": {"name": "close_picker"}}}

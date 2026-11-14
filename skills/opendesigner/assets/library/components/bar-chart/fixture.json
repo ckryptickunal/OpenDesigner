@@ -1,0 +1,52 @@
+{
+ "title": "Software subscriptions",
+ "subtitle": "Jun to Nov 2026 \u00b7 updated Nov 13, 08:15 CET",
+ "currency": "EUR",
+ "stats": [
+  {
+   "label": "November so far",
+   "value": "\u20ac4,180.00"
+  },
+  {
+   "label": "Forecast by Nov 30",
+   "value": "\u20ac9,950",
+   "badge": "111%"
+  }
+ ],
+ "axis_max": 12000,
+ "budget": 9000,
+ "months": [
+  {
+   "label": "June 2026",
+   "short": "Jun",
+   "spent": 7420.1
+  },
+  {
+   "label": "July 2026",
+   "short": "Jul",
+   "spent": 7615.4
+  },
+  {
+   "label": "August 2026",
+   "short": "Aug",
+   "spent": 8890.0
+  },
+  {
+   "label": "September 2026",
+   "short": "Sep",
+   "spent": 8302.75
+  },
+  {
+   "label": "October 2026",
+   "short": "Oct",
+   "spent": 9240.6
+  },
+  {
+   "label": "November 2026 \u00b7 day 13 of 30",
+   "short": "Nov",
+   "spent": 4180.0,
+   "forecast": 9950.0
+  }
+ ],
+ "note": "Forecast from the last 14 days"
+}

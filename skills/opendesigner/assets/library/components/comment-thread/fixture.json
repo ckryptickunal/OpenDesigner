@@ -1,0 +1,58 @@
+{
+ "title": "Notes",
+ "count": 4,
+ "context": "PO-55210 · Corbel Freight · £2,940.00",
+ "comments": [
+  {
+   "author": "Ines Castellano",
+   "avatar": {
+    "src": "https://images.unsplash.com/photo-1758600587839-56ba05596c69?w=64&h=64&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Ines Castellano"
+   },
+   "time": "Nov 3, 2:05 PM",
+   "text": "The pallet count on the delivery note is 14, but we were billed for 16.",
+   "reactions": [
+    {
+     "emoji": "👀",
+     "count": 2
+    }
+   ],
+   "resolved_by": "Marcus Oyelaran",
+   "resolved_when": "Nov 4",
+   "replies": [
+    {
+     "author": "Marcus Oyelaran",
+     "avatar": {
+      "src": "https://images.unsplash.com/photo-1596075700978-ecba72d16eb0?w=48&h=48&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Marcus Oyelaran"
+     },
+     "time": "Nov 4, 9:30 AM",
+     "text": "Corbel sent a credit note for two pallets. Attached to the PO."
+    }
+   ]
+  },
+  {
+   "author": "Priya Raghunathan",
+   "avatar": {
+    "src": "https://images.unsplash.com/photo-1617309644714-89d2ab1c9e19?w=64&h=64&fit=crop&crop=faces&auto=format&q=70",
+    "alt": "Priya Raghunathan"
+   },
+   "time": "Nov 5, 11:12 AM",
+   "edited": "true",
+   "text": "Paying the corrected amount on Friday's run.",
+   "resolved_by": "",
+   "resolved_when": "",
+   "reactions": [
+    {
+     "emoji": "👍",
+     "count": 3
+    },
+    {
+     "emoji": "✅",
+     "count": 1
+    }
+   ]
+  }
+ ],
+ "send_label": "Post"
+}

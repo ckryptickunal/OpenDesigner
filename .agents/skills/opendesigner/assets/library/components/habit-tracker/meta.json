@@ -4,15 +4,40 @@
   "use": "in a health, wellbeing or self-improvement app, for ticking off daily habits",
   "type": "form",
   "style": "friendly",
-  "industries": ["health", "fitness", "education"],
-  "tags": ["habits", "streak", "checklist", "week", "daily"],
-  "states": ["done", "not done", "today", "future day", "no streak", "hover", "pressed", "focus"],
+  "industries": [
+    "health",
+    "fitness",
+    "education"
+  ],
+  "tags": [
+    "habits",
+    "streak",
+    "checklist",
+    "week",
+    "daily"
+  ],
+  "states": [
+    "done",
+    "not done",
+    "today",
+    "future day",
+    "no streak",
+    "hover",
+    "pressed",
+    "focus"
+  ],
   "source": null,
   "a11y": "Each day is a toggle button with aria-pressed and its full date as its name, grouped per habit; days still to come are disabled, and the done-today count is a polite live region.",
   "width": "medium",
   "spec": {
-    "use_when": ["a weekly check-in screen where each day of each habit can be ticked or unticked after the fact"],
-    "avoid_when": ["one goal measured by amount, such as steps or minutes: use daily-goals", "a one-off list of tasks with no week or streak: use setup-steps", "lessons to unlock in order with a streak: use lesson-streak"],
+    "use_when": [
+      "a weekly check-in screen where each day of each habit can be ticked or unticked after the fact"
+    ],
+    "avoid_when": [
+      "one goal measured by amount, such as steps or minutes: use daily-goals",
+      "a one-off list of tasks with no week or streak: use setup-steps",
+      "lessons to unlock in order with a streak: use lesson-streak"
+    ],
     "parts": [
       {
         "name": "title",
@@ -65,7 +90,11 @@
     ],
     "data": {
       "type": "object",
-      "required": ["habits", "week_days", "today"],
+      "required": [
+        "habits",
+        "week_days",
+        "today"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -84,7 +113,10 @@
           "part": "days_header",
           "items": {
             "type": "object",
-            "required": ["letter", "date"],
+            "required": [
+              "letter",
+              "date"
+            ],
             "properties": {
               "letter": {
                 "type": "string",
@@ -114,7 +146,10 @@
           "part": "habits",
           "items": {
             "type": "object",
-            "required": ["name", "days"],
+            "required": [
+              "name",
+              "days"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -133,7 +168,11 @@
                 "minItems": 7,
                 "maxItems": 7,
                 "items": {
-                  "enum": ["done", "not_done", "future"]
+                  "enum": [
+                    "done",
+                    "not_done",
+                    "future"
+                  ]
                 }
               }
             }
@@ -148,12 +187,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no habits, keep the header and the Add a habit button and put an empty-state line above it"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the header and week row and draw muted rows the height of a habit"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -173,8 +214,16 @@
         "status": "handled",
         "how": "a long habit name wraps beside its icon; the done-today count never wraps",
         "evidence": "grid-template-columns: auto minmax(0, 1fr); align-items: center"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches each day circle that is not in the future, habit by habit, then Add a habit", "Enter or Space ticks or unticks the focused day; the streak and the done-today count update, and the count is announced", "Add a habit is a button, but the file wires no action to it"]
+    "keyboard": [
+      "Tab reaches each day circle that is not in the future, habit by habit, then Add a habit",
+      "Enter or Space ticks or unticks the focused day; the streak and the done-today count update, and the count is announced",
+      "Add a habit is a button, but the file wires no action to it"
+    ]
   }
 }

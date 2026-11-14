@@ -51,6 +51,7 @@ Read `references/guardrails.md` before writing files or reading a reference. Its
 | A screen or page is built and they ask "does it look right?", "review this" or "QA this", or you built it and are about to say it is done | **opendesigner-review** |
 | Anything visual is about to be exported or shared (a page, video, deck or card): "is this ready?" | **opendesigner-preflight** |
 | They want the site found: "do SEO", AEO, GEO, "show up in ChatGPT or Google", or a site is about to launch | **opendesigner-search**. Give it the Site brief in PRODUCT.md: Q-site-04 (how people find it, languages, the questions it answers) and Q-site-05 (page families) |
+| An assistant in the app | **opendesigner-smart-ui**, offer once (`references/smart-ui.md`) |
 | A one-off UI task in a project that already has a system | Follow its DESIGN.md. Don't interview |
 
 **Run these without being asked.** Never wait for the person to name a tool.

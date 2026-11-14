@@ -1,0 +1,12 @@
+{"label": "Boarding pass, Nordvik Airways flight NV 1207, Bergen to Reykjavik",
+ "airline": "Nordvik Airways",
+ "flight": "NV 1207",
+ "date": "Fri 4 Dec",
+ "from_code": "BGO", "from_city": "Bergen",
+ "to_code": "KEF", "to_city": "Reykjavik",
+ "duration": "2h 05m",
+ "facts": [{"label": "Gate", "value": "C3"}, {"label": "Seat", "value": "7F"}, {"label": "Boards", "value": "13:10"}, {"label": "Zone", "value": "1"}],
+ "passenger": "Halvard Ekelund",
+ "departs": "13:40",
+ "status": "Delayed 20 min · gate closes 13:25",
+ "booking_code": "R4PLW8 · SEQ 042"}

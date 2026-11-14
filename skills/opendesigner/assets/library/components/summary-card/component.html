@@ -1,0 +1,46 @@
+<!-- Icons: Lucide (lucide.dev), ISC licence -->
+<style>
+.odl-summary-card { box-sizing: border-box; inline-size: 100%; max-inline-size: 36rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-summary-card *, .odl-summary-card *::before, .odl-summary-card *::after { box-sizing: border-box; }
+.odl-summary-card .odl-card { display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); }
+.odl-summary-card header { display: grid; gap: var(--ds-space-stack-xs); }
+.odl-summary-card .odl-kind { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); overflow-wrap: anywhere; }
+.odl-summary-card h3 { margin: 0; font: var(--ds-text-title-lg); overflow-wrap: anywhere; }
+.odl-summary-card .odl-summary { margin: 0; font: var(--ds-text-body-lg); overflow-wrap: anywhere; }
+.odl-summary-card .odl-points { display: grid; gap: var(--ds-space-stack-sm); padding-block-start: var(--ds-space-stack-lg); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-summary-card .odl-points h4 { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-summary-card ul { display: grid; gap: var(--ds-space-stack-sm); margin: 0; padding: 0; list-style: none; }
+.odl-summary-card li { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: var(--ds-space-inline-md); overflow-wrap: anywhere; }
+.odl-summary-card li svg { inline-size: var(--ds-size-icon-sm); block-size: var(--ds-size-icon-sm); margin-block-start: var(--ds-space-2); stroke-width: var(--ds-icon-stroke-md); color: var(--ds-color-icon-accent); }
+.odl-summary-card .odl-aka { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); overflow-wrap: anywhere; }
+.odl-summary-card .odl-aka b { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
+/* No key points: the block and its heading go. */
+.odl-summary-card .odl-points:has(.od-empty) { display: none; }
+/* Phone: a little less padding, so the text keeps its width. */
+@container (max-width: 26rem) {
+  .odl-summary-card .odl-card { padding: var(--ds-space-inset-lg); gap: var(--ds-space-stack-md); }
+  .odl-summary-card h3 { font: var(--ds-text-title-md); }
+}
+/* The hidden full template item stays hidden, whatever display its row has. */
+.odl-summary-card [hidden] { display: none; }
+</style>
+<article class="odl-summary-card" aria-label="Summary">
+  <div class="odl-card">
+    <header>
+      <p class="odl-kind" data-od-slot="kind" data-od-optional>Term · payments</p>
+      <h3 data-od-slot="title">Escrow</h3>
+    </header>
+    <p class="odl-summary" data-od-slot="summary">Money held by a neutral party until both sides of a deal have done what they agreed. The seller is paid only once the buyer confirms the goods arrived as described.</p>
+    <section class="odl-points" aria-label="Key points">
+      <h4>Key points</h4>
+      <ul data-od-list="points">
+        <li data-od-item data-od-template hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span data-od-slot="text"></span></li>
+        <li data-od-item><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Neither side can take the money back alone.</span></li>
+        <li data-od-item><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>Common for house sales, freelance work and marketplace orders.</span></li>
+        <li data-od-item><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span>The holder usually charges a small fee for the service.</span></li>
+      </ul>
+    </section>
+    <p class="odl-aka" data-od-optional><b>Also called</b> <span data-od-slot="also_called">a holding account, a trust account</span></p>
+  </div>
+</article>

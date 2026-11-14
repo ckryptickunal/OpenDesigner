@@ -37,8 +37,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a recorded talk or event replay, where captions and skipping back matter"],
-    "avoid_when": ["audio only, such as a song or podcast: use music-player or podcast-episodes", "choosing what to watch from many titles: use media-shelf", "a title's page with seasons and cast before playing: use title-detail"],
+    "use_when": [
+      "a recorded talk or event replay, where captions and skipping back matter"
+    ],
+    "avoid_when": [
+      "audio only, such as a song or podcast: use music-player or podcast-episodes",
+      "choosing what to watch from many titles: use media-shelf",
+      "a title's page with seasons and cast before playing: use title-detail"
+    ],
     "parts": [
       {
         "name": "poster",
@@ -133,11 +139,18 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "poster", "duration"],
+      "required": [
+        "title",
+        "poster",
+        "duration"
+      ],
       "properties": {
         "poster": {
           "type": "object",
-          "required": ["src", "alt"],
+          "required": [
+            "src",
+            "alt"
+          ],
           "part": "poster",
           "properties": {
             "src": {
@@ -186,7 +199,10 @@
           "part": "caption",
           "items": {
             "type": "object",
-            "required": ["at", "text"],
+            "required": [
+              "at",
+              "text"
+            ],
             "properties": {
               "at": {
                 "type": "integer",
@@ -223,12 +239,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no video yet, keep the frame and poster and replace the big play button with a short line such as 'Available Friday'"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "the seek bar already shows what has loaded; while waiting for data, swap the big play button for a spinner and keep the controls"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -247,8 +265,19 @@
         "status": "handled",
         "how": "a long caption wraps with each line on its own backing; the time and tag never wrap; the title wraps",
         "evidence": "box-decoration-break: clone"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches the big play button, the seek bar, Play, Back 10 seconds, Forward 10 seconds, Mute, Volume, Captions, then Full screen", "Enter or Space on Play or the big play button starts or pauses; the big button hands focus to Play", "Arrow keys on the seek bar move it one second at a time and on the volume slider one step at a time, as with any native range", "Enter or Space on Mute, Captions or Full screen switches them", "while focus is inside the player the controls stay visible; there are no single-key shortcuts"]
+    "keyboard": [
+      "Tab reaches the big play button, the seek bar, Play, Back 10 seconds, Forward 10 seconds, Mute, Volume, Captions, then Full screen",
+      "Enter or Space on Play or the big play button starts or pauses; the big button hands focus to Play",
+      "Arrow keys on the seek bar move it one second at a time and on the volume slider one step at a time, as with any native range",
+      "Enter or Space on Mute, Captions or Full screen switches them",
+      "while focus is inside the player the controls stay visible; there are no single-key shortcuts"
+    ]
   }
 }

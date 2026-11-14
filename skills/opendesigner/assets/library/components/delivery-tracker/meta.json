@@ -35,8 +35,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a food, grocery or parcel app where a courier is on the way and the customer may need to reach them"],
-    "avoid_when": ["an order that has not been placed yet: use order-summary or cart-drawer", "a list of past orders or events: use activity-list", "a trip with flights and stays: use itinerary"],
+    "use_when": [
+      "a food, grocery or parcel app where a courier is on the way and the customer may need to reach them"
+    ],
+    "avoid_when": [
+      "an order that has not been placed yet: use order-summary or cart-drawer",
+      "a list of past orders or events: use activity-list",
+      "a trip with flights and stays: use itinerary"
+    ],
     "parts": [
       {
         "name": "map",
@@ -119,7 +125,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["eta", "steps"],
+      "required": [
+        "eta",
+        "steps"
+      ],
       "properties": {
         "from": {
           "type": "string",
@@ -147,7 +156,9 @@
         },
         "courier": {
           "type": "object",
-          "required": ["name"],
+          "required": [
+            "name"
+          ],
           "properties": {
             "name": {
               "type": "string",
@@ -179,7 +190,10 @@
           "part": "steps",
           "items": {
             "type": "object",
-            "required": ["label", "state"],
+            "required": [
+              "label",
+              "state"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -190,7 +204,11 @@
                 "maxLength": 6
               },
               "state": {
-                "enum": ["done", "now", "upcoming"]
+                "enum": [
+                  "done",
+                  "now",
+                  "upcoming"
+                ]
               },
               "note": {
                 "type": "string",
@@ -217,13 +235,51 @@
           "type": "string",
           "maxLength": 14,
           "part": "view"
+        },
+        "courier_photo": {
+          "type": "object",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 2048
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "courier_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "courier_vehicle": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "courier_rating": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "order_summary": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "order_reference": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "before a courier is assigned, hide the courier row and the map route and say 'Finding a courier' in the heading"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
         "status": "shown",
@@ -247,8 +303,16 @@
         "status": "handled",
         "how": "the courier's vehicle and rating line stays on one line and is cut off; step labels and notes wrap",
         "evidence": "overflow: hidden; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Message, Call, then View order", "Enter or Space presses the focused button"]
+    "keyboard": [
+      "Tab reaches Message, Call, then View order",
+      "Enter or Space presses the focused button"
+    ]
   }
 }

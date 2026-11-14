@@ -12,15 +12,16 @@ Setup for people: [site/docs/library-mcp.md](../../site/docs/library-mcp.md) (on
 | `test_server.py` | Tests over real stdio: `python3 server/mcp/test_server.py` |
 
 ## Tools
-All four carry `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true` and `openWorldHint: false` (DC-L18-05).
+All five carry `readOnlyHint: true`, `destructiveHint: false`, `idempotentHint: true` and `openWorldHint: false` (DC-L18-05).
 | Tool | Returns |
 |---|---|
 | `list_components` | Rows from `library.json`, filtered by type, style, width, audience or industry. Linked to the gallery view |
 | `get_component` | One catalog entry, the file, its CSS, markup and script |
 | `get_tokens_template` | A `tokens.css` made by `engine.py` in a temporary folder from a brand colour, audience and feel words. Takes a few seconds; cached per brief while the server runs |
 | `suggest_components` | Keyword matches for a described screen, with the matched words and each part's `avoid_when`. Not a model |
+| `show_ui` | Smart UI (`smartui_tool.py`): an assistant's answer as A2UI messages, checked against the project's own catalog (`opendesigner/smart-ui/catalog.json` in `OD_PROJECT` or the working folder) and drawn in the `ui://opendesigner/surface` view with the project's tokens. Errors come back for the model to fix; the plain-text version is the text result. A button pressed in the view comes back as `OD:action <name> <context>`; nothing runs in the server |
 
-Resources: the gallery view, and `od://library/catalog` (the whole `library.json`).
+Resources: the gallery view, the Smart UI view, `od://library/catalog` (the whole `library.json`) and `od://smart-ui/catalog` (the project's Smart UI catalog).
 
 Each result has `structuredContent` and a plain-text summary written for the model. The spec says a tool with structured content SHOULD also send the same JSON as text; this server sends the summary instead (and `get_component` puts the full entry in its text), because 82 rows of JSON would cost the model far more than the summary. Hosts that read `structuredContent` get all of it.
 

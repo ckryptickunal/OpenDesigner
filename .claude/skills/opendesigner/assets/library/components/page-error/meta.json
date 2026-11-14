@@ -101,6 +101,54 @@
           "type": "string",
           "maxLength": 24,
           "part": "reference"
+        },
+        "retry": {
+          "type": "object",
+          "required": [
+            "label",
+            "event"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          }
+        },
+        "copy": {
+          "type": "object",
+          "required": [
+            "label",
+            "event"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          }
+        },
+        "support": {
+          "type": "object",
+          "required": [
+            "label",
+            "event"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "event": {
+              "type": "object"
+            }
+          }
         }
       },
       "required": [
@@ -139,6 +187,10 @@
         "status": "handled",
         "how": "Titles balance and body text wraps at word boundaries inside a capped measure.",
         "evidence": "text-wrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": [

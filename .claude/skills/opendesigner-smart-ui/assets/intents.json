@@ -1,0 +1,641 @@
+{
+ "travel": {
+  "match": [
+   "travel",
+   "flight",
+   "airline",
+   "hotel",
+   "booking",
+   "trip",
+   "stay"
+  ],
+  "intents": [
+   {
+    "intent": "flight results",
+    "phrases": [
+     "flights",
+     "fly to",
+     "cheapest flight"
+    ],
+    "components": [
+     "FlightResults",
+     "ResultList"
+    ]
+   },
+   {
+    "intent": "fare comparison",
+    "phrases": [
+     "fare",
+     "compare fares",
+     "basic vs"
+    ],
+    "components": [
+     "Comparison"
+    ]
+   },
+   {
+    "intent": "stay or place results",
+    "phrases": [
+     "hotels",
+     "places to stay",
+     "near"
+    ],
+    "components": [
+     "ResultList",
+     "LocationCard"
+    ]
+   },
+   {
+    "intent": "trip facts (baggage, check-in, rules)",
+    "phrases": [
+     "baggage",
+     "check-in",
+     "allowance"
+    ],
+    "components": [
+     "KeyFacts"
+    ]
+   },
+   {
+    "intent": "pick a time (transfers, tables, tours)",
+    "phrases": [
+     "available times",
+     "book a time"
+    ],
+    "components": [
+     "TimeSlots"
+    ]
+   },
+   {
+    "intent": "book or pay (asks first)",
+    "phrases": [
+     "book it",
+     "pay"
+    ],
+    "components": [
+     "ApprovalPrompt"
+    ]
+   },
+   {
+    "intent": "booking confirmation",
+    "phrases": [
+     "confirmation",
+     "booked"
+    ],
+    "components": [
+     "Receipt"
+    ]
+   },
+   {
+    "intent": "trip or refund status",
+    "phrases": [
+     "status",
+     "where is my refund"
+    ],
+    "components": [
+     "ProgressStatus"
+    ]
+   }
+  ]
+ },
+ "commerce": {
+  "match": [
+   "shop",
+   "store",
+   "retail",
+   "commerce",
+   "marketplace",
+   "checkout"
+  ],
+  "intents": [
+   {
+    "intent": "product search",
+    "phrases": [
+     "find",
+     "show me"
+    ],
+    "components": [
+     "ResultList"
+    ]
+   },
+   {
+    "intent": "one product",
+    "phrases": [
+     "this product",
+     "price of"
+    ],
+    "components": [
+     "ProductCard"
+    ]
+   },
+   {
+    "intent": "compare products",
+    "phrases": [
+     "compare",
+     "difference between"
+    ],
+    "components": [
+     "Comparison"
+    ]
+   },
+   {
+    "intent": "order status",
+    "phrases": [
+     "where is my order",
+     "delivery"
+    ],
+    "components": [
+     "ProgressStatus"
+    ]
+   },
+   {
+    "intent": "return or cancel (asks first)",
+    "phrases": [
+     "return",
+     "cancel my order"
+    ],
+    "components": [
+     "FormFields",
+     "ApprovalPrompt"
+    ]
+   },
+   {
+    "intent": "order confirmation",
+    "phrases": [
+     "order placed",
+     "receipt"
+    ],
+    "components": [
+     "Receipt"
+    ]
+   }
+  ]
+ },
+ "work-tool": {
+  "match": [
+   "work",
+   "saas",
+   "b2b",
+   "dashboard",
+   "admin",
+   "crm",
+   "support",
+   "helpdesk",
+   "finance",
+   "analytics",
+   "ops",
+   "billing",
+   "subscription",
+   "invoice",
+   "accounting",
+   "payments"
+  ],
+  "intents": [
+   {
+    "intent": "headline numbers",
+    "phrases": [
+     "how are we doing",
+     "this week",
+     "totals"
+    ],
+    "components": [
+     "KpiStrip"
+    ]
+   },
+   {
+    "intent": "records as a table",
+    "phrases": [
+     "list all",
+     "show me the",
+     "invoices",
+     "tickets"
+    ],
+    "components": [
+     "DataTable"
+    ]
+   },
+   {
+    "intent": "numbers over time",
+    "phrases": [
+     "trend",
+     "by month",
+     "over time"
+    ],
+    "components": [
+     "LineChart",
+     "BarChart"
+    ]
+   },
+   {
+    "intent": "a breakdown",
+    "phrases": [
+     "breakdown",
+     "by category",
+     "split"
+    ],
+    "components": [
+     "DonutBreakdown"
+    ]
+   },
+   {
+    "intent": "the status of a job",
+    "phrases": [
+     "status",
+     "progress",
+     "is it done"
+    ],
+    "components": [
+     "ProgressStatus"
+    ]
+   },
+   {
+    "intent": "a request form",
+    "phrases": [
+     "request",
+     "fill in",
+     "update"
+    ],
+    "components": [
+     "FormFields"
+    ]
+   },
+   {
+    "intent": "a change that needs approval",
+    "phrases": [
+     "approve",
+     "delete",
+     "send"
+    ],
+    "components": [
+     "ApprovalPrompt"
+    ]
+   },
+   {
+    "intent": "an answer from documents",
+    "phrases": [
+     "policy",
+     "according to",
+     "what does"
+    ],
+    "components": [
+     "AnswerSources",
+     "CitationList"
+    ]
+   },
+   {
+    "intent": "a file",
+    "phrases": [
+     "export",
+     "download",
+     "file"
+    ],
+    "components": [
+     "FileCard"
+    ]
+   },
+   {
+    "intent": "plans side by side",
+    "phrases": [
+     "compare plans",
+     "which plan",
+     "upgrade"
+    ],
+    "components": [
+     "Comparison"
+    ]
+   },
+   {
+    "intent": "what the account is on now",
+    "phrases": [
+     "my plan",
+     "subscription",
+     "renewal"
+    ],
+    "components": [
+     "KeyFacts"
+    ]
+   }
+  ]
+ },
+ "devtools": {
+  "match": [
+   "developer",
+   "devtool",
+   "api",
+   "sdk",
+   "cli",
+   "infrastructure"
+  ],
+  "intents": [
+   {
+    "intent": "a code example",
+    "phrases": [
+     "how do i",
+     "example",
+     "snippet"
+    ],
+    "components": [
+     "CodeBlock"
+    ]
+   },
+   {
+    "intent": "service health",
+    "phrases": [
+     "status",
+     "is it down",
+     "uptime"
+    ],
+    "components": [
+     "ProgressStatus",
+     "LineChart"
+    ]
+   },
+   {
+    "intent": "usage numbers",
+    "phrases": [
+     "usage",
+     "requests",
+     "how much"
+    ],
+    "components": [
+     "KpiStrip",
+     "BarChart"
+    ]
+   },
+   {
+    "intent": "an answer from the docs",
+    "phrases": [
+     "docs",
+     "how does"
+    ],
+    "components": [
+     "AnswerSources"
+    ]
+   },
+   {
+    "intent": "a failed job",
+    "phrases": [
+     "failed",
+     "error"
+    ],
+    "components": [
+     "ErrorRetry"
+    ]
+   }
+  ]
+ },
+ "health": {
+  "match": [
+   "health",
+   "clinic",
+   "patient",
+   "care",
+   "wellness",
+   "fitness"
+  ],
+  "intents": [
+   {
+    "intent": "book an appointment",
+    "phrases": [
+     "appointment",
+     "available times"
+    ],
+    "components": [
+     "TimeSlots",
+     "ApprovalPrompt"
+    ]
+   },
+   {
+    "intent": "appointment confirmation",
+    "phrases": [
+     "booked",
+     "confirmation"
+    ],
+    "components": [
+     "Receipt"
+    ]
+   },
+   {
+    "intent": "clinic location",
+    "phrases": [
+     "where is",
+     "address"
+    ],
+    "components": [
+     "LocationCard"
+    ]
+   },
+   {
+    "intent": "a term explained",
+    "phrases": [
+     "what is",
+     "what does it mean"
+    ],
+    "components": [
+     "SummaryCard"
+    ]
+   },
+   {
+    "intent": "a form to fill",
+    "phrases": [
+     "form",
+     "update my details"
+    ],
+    "components": [
+     "FormFields"
+    ]
+   }
+  ]
+ },
+ "education": {
+  "match": [
+   "education",
+   "learning",
+   "course",
+   "school",
+   "student",
+   "lesson"
+  ],
+  "intents": [
+   {
+    "intent": "a concept explained",
+    "phrases": [
+     "what is",
+     "explain"
+    ],
+    "components": [
+     "SummaryCard",
+     "AnswerSources"
+    ]
+   },
+   {
+    "intent": "progress",
+    "phrases": [
+     "my progress",
+     "how far"
+    ],
+    "components": [
+     "ProgressStatus",
+     "SetupSteps"
+    ]
+   },
+   {
+    "intent": "pick a next step",
+    "phrases": [
+     "what next",
+     "which one"
+    ],
+    "components": [
+     "QuickReplies"
+    ]
+   },
+   {
+    "intent": "a code example",
+    "phrases": [
+     "example",
+     "code"
+    ],
+    "components": [
+     "CodeBlock"
+    ]
+   }
+  ]
+ },
+ "content": {
+  "match": [
+   "content",
+   "media",
+   "news",
+   "blog",
+   "publishing",
+   "consumer"
+  ],
+  "intents": [
+   {
+    "intent": "results to browse",
+    "phrases": [
+     "show me",
+     "recommend"
+    ],
+    "components": [
+     "ResultList"
+    ]
+   },
+   {
+    "intent": "a picture",
+    "phrases": [
+     "photo",
+     "what does it look like"
+    ],
+    "components": [
+     "ImageCard"
+    ]
+   },
+   {
+    "intent": "an answer with sources",
+    "phrases": [
+     "according to",
+     "sources"
+    ],
+    "components": [
+     "AnswerSources",
+     "CitationList"
+    ]
+   },
+   {
+    "intent": "follow-up choices",
+    "phrases": [
+     "what next",
+     "more like this"
+    ],
+    "components": [
+     "QuickReplies"
+    ]
+   }
+  ]
+ },
+ "public-service": {
+  "match": [
+   "council",
+   "public service",
+   "permit",
+   "resident",
+   "government",
+   "citizen",
+   "licence",
+   "benefit"
+  ],
+  "intents": [
+   {
+    "intent": "where an application is",
+    "phrases": [
+     "where is my application",
+     "status",
+     "what happens next"
+    ],
+    "components": [
+     "ProgressStatus"
+    ]
+   },
+   {
+    "intent": "book an appointment",
+    "phrases": [
+     "appointment",
+     "book a time",
+     "available times"
+    ],
+    "components": [
+     "TimeSlots",
+     "ApprovalPrompt"
+    ]
+   },
+   {
+    "intent": "pay a charge or fee",
+    "phrases": [
+     "pay",
+     "fine",
+     "penalty"
+    ],
+    "components": [
+     "ApprovalPrompt",
+     "Receipt"
+    ]
+   },
+   {
+    "intent": "opening hours and offices",
+    "phrases": [
+     "open",
+     "opening hours",
+     "office"
+    ],
+    "components": [
+     "KeyFacts",
+     "DataTable"
+    ]
+   },
+   {
+    "intent": "can I get one",
+    "phrases": [
+     "can i get",
+     "am i eligible",
+     "do i qualify"
+    ],
+    "components": [
+     "KeyFacts"
+    ]
+   },
+   {
+    "intent": "what it costs",
+    "phrases": [
+     "how much",
+     "price",
+     "cost"
+    ],
+    "components": [
+     "Comparison",
+     "KeyFacts"
+    ]
+   }
+  ]
+ }
+}

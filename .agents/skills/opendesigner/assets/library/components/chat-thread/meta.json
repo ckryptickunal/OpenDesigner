@@ -34,8 +34,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a buyer and seller talking about one listing, where replies and reactions help keep track"],
-    "avoid_when": ["a list of many conversations: use notification-inbox or member-list", "a customer talking to a support agent: use live-chat", "talking with an AI assistant: use chat-answer or ai-composer"],
+    "use_when": [
+      "a buyer and seller talking about one listing, where replies and reactions help keep track"
+    ],
+    "avoid_when": [
+      "a list of many conversations: use notification-inbox or member-list",
+      "a customer talking to a support agent: use live-chat",
+      "talking with an AI assistant: use chat-answer or ai-composer"
+    ],
     "parts": [
       {
         "name": "back",
@@ -124,7 +130,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["name", "messages"],
+      "required": [
+        "name",
+        "messages"
+      ],
       "properties": {
         "name": {
           "type": "string",
@@ -157,10 +166,16 @@
           "part": "messages",
           "items": {
             "type": "object",
-            "required": ["from", "text"],
+            "required": [
+              "from",
+              "text"
+            ],
             "properties": {
               "from": {
-                "enum": ["them", "me"]
+                "enum": [
+                  "them",
+                  "me"
+                ]
               },
               "text": {
                 "type": "string",
@@ -168,7 +183,10 @@
               },
               "reply_to": {
                 "type": "object",
-                "required": ["name", "text"],
+                "required": [
+                  "name",
+                  "text"
+                ],
                 "properties": {
                   "name": {
                     "type": "string",
@@ -182,6 +200,14 @@
               },
               "reaction": {
                 "type": "boolean"
+              },
+              "reply_to_name": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "reply_to_text": {
+                "type": "string",
+                "maxLength": 80
               }
             }
           }
@@ -199,17 +225,24 @@
           "type": "string",
           "maxLength": 24,
           "part": "input"
+        },
+        "is_online": {
+          "enum": [
+            "true"
+          ]
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no messages yet, show the other person's photo and name centred in the log with a line like 'Say hello'"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the header and composer and fill the log with three grey bubbles on alternating sides"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -229,8 +262,17 @@
         "status": "handled",
         "how": "bubbles wrap and break long words; the person's name in the header is cut off with an ellipsis",
         "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab moves through Back, Voice call and Video call, then the conversation, which the arrow keys scroll, then Attach, the message field and Send", "Enter in the message field sends it when it has text; the field keeps focus for the next message", "Enter or Space presses the focused button"]
+    "keyboard": [
+      "Tab moves through Back, Voice call and Video call, then the conversation, which the arrow keys scroll, then Attach, the message field and Send",
+      "Enter in the message field sends it when it has text; the field keeps focus for the next message",
+      "Enter or Space presses the focused button"
+    ]
   }
 }

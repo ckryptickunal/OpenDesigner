@@ -5971,6 +5971,21 @@ Designers: handoff and tooling · Code: `DTCG plus resolver, then platform code`
 
 </details>
 
+### A2UI
+
+An open set of rules for how an AI helper describes a screen part to an app.  
+Designers: agent-to-UI protocol · Code: `A2UI v1.0`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** A shared way for assistants to say which part to show and what goes in it. Your system decides how it looks.
+
+**Engineer:** A2UI v1.0 (Apache-2.0): createSurface, updateComponents, updateDataModel and deleteSurface messages against a catalog the renderer supports; errors come back as VALIDATION_FAILED with a path.
+
+**Also called:** agent to UI
+
+</details>
+
 ### Agent-readable distribution
 
 The files and links that let AI helpers read your design and follow it.  
@@ -6116,6 +6131,21 @@ Designers: open-source design tool, native DTCG · Code: `$themes.json and $meta
 
 </details>
 
+### MCP Apps
+
+A way for a tool to show a small screen inside Claude or ChatGPT.  
+Designers: chat app panel · Code: `ui://opendesigner/surface`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Lets the same parts appear inside an AI chat app, drawn in your own look unless you choose the app's look.
+
+**Engineer:** MCP Apps 2026-01-26: a ui:// resource (text/html;profile=mcp-app) in a sandboxed frame, linked by _meta.ui.resourceUri. Smart UI adds show_ui and ui://opendesigner/surface.
+
+**Also called:** MCP UI
+
+</details>
+
 ### Distribution model
 
 How coders get the kit into their app, like adding a package or pasting in the code.  
@@ -6159,6 +6189,51 @@ Designers: design spec and decision log · Code: `DESIGN.md, decisions.md, state
 
 </details>
 
+### slot mark
+
+A hidden tag in a part that says which words or numbers can change.  
+Designers: content slot · Code: `data-od-slot`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Marks the parts of a component that hold content, like a title, a price or a list of rows, so an assistant can fill them without touching the look.
+
+**Engineer:** data-od-slot, data-od-list, data-od-item, data-od-var, data-od-media, data-od-action and data-od-measure attributes in component.html; slots.py reads and checks them, and library.py check runs it.
+
+**Also called:** data-od-slot
+
+</details>
+
+### Smart UI
+
+An AI helper answers with a small screen part, like a chart or a form, made from your own style.  
+Designers: generative UI, intelligent UI · Code: `opendesigner-smart-ui`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** The assistant shows the right part of your system for a question, like a comparison or a booking step. Short answers stay text; changes wait for a tap.
+
+**Engineer:** Optional skill opendesigner-smart-ui: smartui.py scope, catalog, prompt, validate and audit, plus the od-surface renderer. Answers are A2UI v1.0 messages checked before render.
+
+**Also called:** generative UI, intelligent UI
+
+</details>
+
+### Smart UI catalog
+
+The list of parts an AI helper may show, and what it may put in each.  
+Designers: component inventory for the assistant · Code: `catalog.json`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** Only the parts you confirmed, each with the words and numbers it holds. Looks come only from your colour roles, so no invented colour or size.
+
+**Engineer:** opendesigner/smart-ui/catalog.json, an A2UI v1.0 catalog written by smartui.py catalog from slot marks and spec.data. No colour, size, style or free URL properties.
+
+**Also called:** A2UI catalog
+
+</details>
+
 ### Source of truth and round-trip direction
 
 The one main copy that all other copies follow, and which way changes flow.  
@@ -6171,6 +6246,21 @@ Designers: canonical source, design tools mirror · Code: `state.json to tokens/
 **Engineer:** engine.py build compiles state.json to DTCG 2025.10 plus resolver and code; Figma variables carry matching code syntax. JSON-first keeps OKLCH and P3 values Figma import drops.
 
 **Also called:** canonical source
+
+</details>
+
+### surface
+
+The spot in a chat where an answer's screen part shows up.  
+Designers: answer card · Code: `od-surface`
+
+<details><summary>Designer and engineer</summary>
+
+**Designer:** The frame an assistant's part appears in, inside your chat or inside Claude or ChatGPT. It takes its look from your system, not from the chat it sits in.
+
+**Engineer:** An A2UI surface (createSurface, updateComponents, deleteSurface) drawn by the od-surface custom element, which validates each answer, fills slots with textContent and announces new surfaces once.
+
+**Also called:** od-surface
 
 </details>
 

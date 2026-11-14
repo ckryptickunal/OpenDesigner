@@ -4,15 +4,33 @@
   "use": "in a sleep, health or wearable app, for the morning summary of last night",
   "type": "chart",
   "style": "quiet",
-  "industries": ["health", "fitness"],
-  "tags": ["sleep", "hypnogram", "stages", "week", "wearable"],
-  "states": ["last night", "goal line"],
+  "industries": [
+    "health",
+    "fitness"
+  ],
+  "tags": [
+    "sleep",
+    "hypnogram",
+    "stages",
+    "week",
+    "wearable"
+  ],
+  "states": [
+    "last night",
+    "goal line"
+  ],
   "source": null,
   "a11y": "The hypnogram is one image with a written summary of the night; stage totals are a description list and each night's bar carries its date and hours as text for screen readers.",
   "width": "medium",
   "spec": {
-    "use_when": ["any one-night timeline of a few levels, such as stages of rest, with totals per level and a week of nightly totals against a goal"],
-    "avoid_when": ["a workout or activity just finished: use workout-summary", "a general split of a total into categories: use donut-breakdown", "comparing values across many periods with axes and gridlines: use bar-chart"],
+    "use_when": [
+      "any one-night timeline of a few levels, such as stages of rest, with totals per level and a week of nightly totals against a goal"
+    ],
+    "avoid_when": [
+      "a workout or activity just finished: use workout-summary",
+      "a general split of a total into categories: use donut-breakdown",
+      "comparing values across many periods with axes and gridlines: use bar-chart"
+    ],
     "parts": [
       {
         "name": "eyebrow",
@@ -77,7 +95,11 @@
     ],
     "data": {
       "type": "object",
-      "required": ["asleep", "segments", "totals"],
+      "required": [
+        "asleep",
+        "segments",
+        "totals"
+      ],
       "properties": {
         "night": {
           "type": "string",
@@ -111,10 +133,19 @@
           "part": "segments",
           "items": {
             "type": "object",
-            "required": ["stage", "start", "width"],
+            "required": [
+              "stage",
+              "start",
+              "width"
+            ],
             "properties": {
               "stage": {
-                "enum": ["awake", "rem", "light", "deep"]
+                "enum": [
+                  "awake",
+                  "rem",
+                  "light",
+                  "deep"
+                ]
               },
               "start": {
                 "type": "number",
@@ -136,7 +167,10 @@
           "part": "axis",
           "items": {
             "type": "object",
-            "required": ["label", "at"],
+            "required": [
+              "label",
+              "at"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -157,10 +191,18 @@
           "part": "totals",
           "items": {
             "type": "object",
-            "required": ["stage", "time"],
+            "required": [
+              "stage",
+              "time"
+            ],
             "properties": {
               "stage": {
-                "enum": ["awake", "rem", "light", "deep"]
+                "enum": [
+                  "awake",
+                  "rem",
+                  "light",
+                  "deep"
+                ]
               },
               "time": {
                 "type": "string",
@@ -194,7 +236,11 @@
               "part": "nights",
               "items": {
                 "type": "object",
-                "required": ["day", "label", "hours"],
+                "required": [
+                  "day",
+                  "label",
+                  "hours"
+                ],
                 "properties": {
                   "day": {
                     "type": "string",
@@ -218,17 +264,52 @@
               "part": "goal"
             }
           }
+        },
+        "week_title": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "week_average": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "week_nights": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "hours": {
+                "type": "number"
+              },
+              "day": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
+          }
+        },
+        "week_goal_label": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "for a night with no data, keep the header with 'No sleep recorded', leave out the plot and totals, and keep the week bars with that night at zero"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show the lanes with an empty plot and the totals as muted boxes until the night is processed"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -247,6 +328,10 @@
         "status": "handled",
         "how": "durations and the headline never wrap; the in-bed line wraps between its two parts; totals go from two to four columns in a wider box",
         "evidence": "font-variant-numeric: tabular-nums; white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": []

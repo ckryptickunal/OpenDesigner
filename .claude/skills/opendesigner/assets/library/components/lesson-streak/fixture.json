@@ -1,0 +1,51 @@
+{
+ "streak": 9,
+ "xp_total": "4,815",
+ "xp_today": 20,
+ "xp_goal": 40,
+ "cover": {
+  "src": "https://images.unsplash.com/photo-1578771792482-1e7eb2b8b447?w=896&h=358&fit=crop&auto=format&q=70",
+  "alt": "Narrow street in an old European city"
+ },
+ "unit_label": "Unit 5 · Section 1",
+ "unit": "Getting around town",
+ "guide": {
+  "label": "Unit 5 guide: words and phrases",
+  "event": {
+   "name": "open_unit_guide"
+  }
+ },
+ "lessons": [
+  {
+   "title": "Asking for directions",
+   "state": "done",
+   "sub": "Done · practise again for +5 XP",
+   "cta": "Practise",
+   "offset": 0
+  },
+  {
+   "title": "Buying a ticket",
+   "state": "done",
+   "sub": "Done · practise again for +5 XP",
+   "cta": "Practise",
+   "offset": -1
+  },
+  {
+   "title": "On the tram",
+   "state": "now",
+   "sub": "Lesson 3 of 5 · +15 XP",
+   "cta": "Start lesson",
+   "offset": -0.4
+  },
+  {
+   "title": "Lost luggage",
+   "state": "locked",
+   "offset": 0.7
+  },
+  {
+   "title": "Unit review",
+   "state": "locked",
+   "offset": 1.2
+  }
+ ]
+}

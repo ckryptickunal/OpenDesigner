@@ -4,20 +4,56 @@
   "use": "on a record people discuss together",
   "type": "data",
   "style": "quiet",
-  "industries": ["saas", "finance", "productivity"],
-  "tags": ["comments", "thread", "mentions", "reactions", "composer"],
-  "states": ["hover", "focus", "resolved", "edited", "reaction on", "send disabled", "send enabled"],
+  "industries": [
+    "saas",
+    "finance",
+    "productivity"
+  ],
+  "tags": [
+    "comments",
+    "thread",
+    "mentions",
+    "reactions",
+    "composer"
+  ],
+  "states": [
+    "hover",
+    "focus",
+    "resolved",
+    "edited",
+    "reaction on",
+    "send disabled",
+    "send enabled"
+  ],
   "source": "brand/showcase/product/02-fennick-approvals",
   "a11y": "Comments are an ordered list; reactions are toggle buttons with aria-pressed and a count in their name; the composer's textarea is labelled and Cmd or Ctrl+Enter sends.",
   "width": "medium",
   "photos": [
-    {"img": "photo-1438761681033-6461ffad8d80", "author": "Christopher Campbell", "page": "rDEOVtE7vOs"},
-    {"img": "photo-1522529599102-193c0d76b5b6", "author": "Elizeu Dias", "page": "2EGNqazbAMk"},
-    {"img": "photo-1725033489648-a819750348eb", "author": "Arnab De", "page": "WYwNK-zW7u4"}
+    {
+      "img": "photo-1438761681033-6461ffad8d80",
+      "author": "Christopher Campbell",
+      "page": "rDEOVtE7vOs"
+    },
+    {
+      "img": "photo-1522529599102-193c0d76b5b6",
+      "author": "Elizeu Dias",
+      "page": "2EGNqazbAMk"
+    },
+    {
+      "img": "photo-1725033489648-a819750348eb",
+      "author": "Arnab De",
+      "page": "WYwNK-zW7u4"
+    }
   ],
   "spec": {
-    "use_when": ["a review or approval where a question needs an answer from a named teammate and can be marked resolved"],
-    "avoid_when": ["a live back-and-forth conversation: use chat-thread or live-chat", "comments on a phone opened from a record: use comment-sheet", "a log of what changed rather than what people said: use activity-feed"],
+    "use_when": [
+      "a review or approval where a question needs an answer from a named teammate and can be marked resolved"
+    ],
+    "avoid_when": [
+      "a live back-and-forth conversation: use chat-thread or live-chat",
+      "comments on a phone opened from a record: use comment-sheet",
+      "a log of what changed rather than what people said: use activity-feed"
+    ],
     "parts": [
       {
         "name": "title",
@@ -88,7 +124,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["comments"],
+      "required": [
+        "comments"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -111,7 +149,11 @@
           "part": "comments",
           "items": {
             "type": "object",
-            "required": ["author", "time", "text"],
+            "required": [
+              "author",
+              "time",
+              "text"
+            ],
             "properties": {
               "author": {
                 "type": "string",
@@ -140,7 +182,10 @@
                 "part": "reactions",
                 "items": {
                   "type": "object",
-                  "required": ["emoji", "count"],
+                  "required": [
+                    "emoji",
+                    "count"
+                  ],
                   "properties": {
                     "emoji": {
                       "type": "string",
@@ -176,7 +221,10 @@
                 "part": "replies",
                 "items": {
                   "type": "object",
-                  "required": ["author", "text"],
+                  "required": [
+                    "author",
+                    "text"
+                  ],
                   "properties": {
                     "author": {
                       "type": "string",
@@ -196,6 +244,14 @@
                     }
                   }
                 }
+              },
+              "resolved_by": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "resolved_when": {
+                "type": "string",
+                "maxLength": 80
               }
             }
           }
@@ -214,12 +270,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no comments, put one secondary line ('No comments yet') where the list is and keep the composer"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show two comment rows with a round avatar block and muted text blocks, and keep the composer usable"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -239,8 +297,17 @@
         "status": "handled",
         "how": "comment text wraps in a column that can shrink, and the name and time line wraps; a long unbroken link is not broken and can overflow",
         "evidence": ".odl-comment-thread .odl-body { min-inline-size: 0;"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches each comment's reaction, Add a reaction and Reply, then the comment box, Mention, Attach and Comment", "Enter or Space on a reaction turns yours on or off and updates the count", "Cmd or Ctrl+Enter in the comment box sends it when it has text; the Comment button is disabled, and skipped by Tab, while the box is empty"]
+    "keyboard": [
+      "Tab reaches each comment's reaction, Add a reaction and Reply, then the comment box, Mention, Attach and Comment",
+      "Enter or Space on a reaction turns yours on or off and updates the count",
+      "Cmd or Ctrl+Enter in the comment box sends it when it has text; the Comment button is disabled, and skipped by Tab, while the box is empty"
+    ]
   }
 }

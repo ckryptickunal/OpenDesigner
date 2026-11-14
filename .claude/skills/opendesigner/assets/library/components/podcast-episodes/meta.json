@@ -36,8 +36,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a list of recorded talks or lessons people play in order and keep offline"],
-    "avoid_when": ["songs in an album or playlist: use track-list", "playing the current episode with controls: use music-player", "videos or shows with poster art: use media-shelf or title-detail"],
+    "use_when": [
+      "a list of recorded talks or lessons people play in order and keep offline"
+    ],
+    "avoid_when": [
+      "songs in an album or playlist: use track-list",
+      "playing the current episode with controls: use music-player",
+      "videos or shows with poster art: use media-shelf or title-detail"
+    ],
     "parts": [
       {
         "name": "art",
@@ -114,7 +120,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "episodes"],
+      "required": [
+        "title",
+        "episodes"
+      ],
       "properties": {
         "art": {
           "type": "string",
@@ -148,7 +157,11 @@
           "part": "episodes",
           "items": {
             "type": "object",
-            "required": ["title", "date", "length"],
+            "required": [
+              "title",
+              "date",
+              "length"
+            ],
             "properties": {
               "title": {
                 "type": "string",
@@ -182,7 +195,11 @@
                 "type": "boolean"
               },
               "download": {
-                "enum": ["idle", "loading", "done"]
+                "enum": [
+                  "idle",
+                  "loading",
+                  "done"
+                ]
               }
             }
           }
@@ -191,12 +208,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "for a show with no episodes yet, keep the header and use empty-state under it with 'First episode coming soon'"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the header and show three rows with grey bars for the date, title and two description lines; the download ring is for downloads only"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -214,8 +233,17 @@
         "status": "handled",
         "how": "descriptions are cut to two lines; titles and the show name wrap",
         "evidence": "-webkit-line-clamp: 2"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab moves through each episode's play, download and more buttons in order", "Enter or Space on play starts that episode and pauses any other; again pauses it", "Enter or Space on download starts it, and on a downloading or downloaded episode cancels or removes it"]
+    "keyboard": [
+      "Tab moves through each episode's play, download and more buttons in order",
+      "Enter or Space on play starts that episode and pauses any other; again pauses it",
+      "Enter or Space on download starts it, and on a downloading or downloaded episode cancels or removes it"
+    ]
   }
 }

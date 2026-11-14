@@ -40,7 +40,7 @@
 .odl-filter-bar .odl-count strong { color: var(--ds-color-text-primary); font-weight: var(--ds-font-weight-label); }
 .odl-filter-bar .odl-sort { border: var(--ds-border-width-default) solid var(--ds-color-border-default); background: var(--ds-color-surface-raised); color: var(--ds-color-text-primary); }
 .odl-filter-bar .odl-sort:hover { background: var(--ds-color-bg-neutral-subtle-hover); }
-.odl-filter-bar .odl-sort span { color: var(--ds-color-text-secondary); }
+.odl-filter-bar .odl-sort span:not(.odl-v) { color: var(--ds-color-text-secondary); }
 .odl-filter-bar .odl-sort svg { color: var(--ds-color-icon-subtle); }
 .odl-filter-bar button:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: calc(-1 * var(--ds-focus-ring-width)); position: relative; }
 @container (max-width: 899.98px) {
@@ -56,31 +56,38 @@
     border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-separator); }
 }
 @container (max-width: 359.98px) {
-  .odl-filter-bar .odl-sort span { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .odl-filter-bar .odl-sort span:not(.odl-v) { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 }
 @media (prefers-reduced-motion: reduce) { .odl-filter-bar, .odl-filter-bar *, .odl-filter-bar *::before { transition: none !important; animation: none !important; } }
+.odl-filter-bar .odl-wrap { display: contents; }
+.odl-filter-bar .odl-filters .od-empty { display: none; }
+.odl-filter-bar .odl-filters [hidden] { display: none; } /* a renderer's "nothing yet" line where an empty list should simply show nothing */
 </style>
 <div class="odl-filter-bar"><div class="odl-bar" role="search" aria-label="Filter receipts">
   <label class="odl-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
     <input type="search" placeholder="Search receipts" aria-label="Search receipts"><kbd>/</kbd></label>
   <div class="odl-filters" role="group" aria-label="Filters">
-    <span class="odl-active"><button type="button" class="odl-chip" aria-haspopup="dialog">Received <strong>Oct 1 – 14</strong></button><button type="button" class="odl-x" aria-label="Remove filter: received Oct 1 to 14"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span>
-    <button type="button" class="odl-chip" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>Match status</button>
-    <button type="button" class="odl-chip" aria-haspopup="dialog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>Paid by</button>
-    <button type="button" class="odl-ghost" aria-haspopup="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>Add filter</button>
+    <span class="odl-wrap" data-od-list="applied"><span class="odl-active" data-od-item data-od-template hidden><button type="button" class="odl-chip" aria-haspopup="dialog"><span data-od-slot="name"></span> <strong data-od-slot="value"></strong></button><button type="button" class="odl-x" aria-label="Remove filter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span><span class="odl-active" data-od-item><button type="button" class="odl-chip" aria-haspopup="dialog">Received <strong>Oct 1 – 14</strong></button><button type="button" class="odl-x" aria-label="Remove filter: received Oct 1 to 14"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></span></span>
+    <span class="odl-wrap" data-od-list="filters"><button type="button" class="odl-chip" aria-haspopup="dialog" data-od-item data-od-template hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg><span data-od-slot="name"></span></button><button type="button" class="odl-chip" aria-haspopup="dialog" data-od-item><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>Match status</button>
+    <button type="button" class="odl-chip" aria-haspopup="dialog" data-od-item><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg>Paid by</button></span>
+    <button type="button" class="odl-ghost" aria-haspopup="menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span data-od-slot="add_label">Add filter</span></button>
   </div>
   <div class="odl-end">
-    <p class="odl-count" aria-live="polite"><strong>192</strong> receipts</p>
-    <button type="button" class="odl-sort" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg><span>Sort:</span>Newest first</button>
+    <p class="odl-count" aria-live="polite"><strong data-od-slot="count">192</strong> <span data-od-slot="noun">receipts</span></p>
+    <button type="button" class="odl-sort" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 16-4 4-4-4"/><path d="M17 20V4"/><path d="m3 8 4-4 4 4"/><path d="M7 4v16"/></svg><span>Sort:</span><span class="odl-v" data-od-slot="sort">Newest first</span></button>
   </div>
 </div></div>
 <script>
 document.querySelectorAll(".odl-filter-bar").forEach((root) => {
   if (root.dataset.odlReady) return; root.dataset.odlReady = "1";
-  const count = root.querySelector(".odl-count strong");
+  const count = root.querySelector(".odl-count strong"), sample = !!root.querySelector("[data-od-template]"); // the static sample, not a rendered answer
+  root.querySelectorAll(".odl-active:not([hidden])").forEach((w) => { // rendered from data: name each remove button after its filter
+    const x = w.querySelector(".odl-x"), c = w.querySelector(".odl-chip");
+    if (!sample && x && c) x.setAttribute("aria-label", `Remove filter: ${c.textContent.replace(/\s+/g, " ").trim()}`);
+  });
   root.querySelectorAll(".odl-x").forEach((x) => x.addEventListener("click", () => {
-    const wrap = x.closest(".odl-active"), chip = wrap.querySelector(".odl-chip"), plus = root.querySelector(".odl-filters > .odl-chip svg").cloneNode(true);
-    chip.replaceChildren(plus, chip.firstChild.textContent.trim()); wrap.replaceWith(chip); count.textContent = "2,418"; chip.focus();
+    const wrap = x.closest(".odl-active"), chip = wrap.querySelector(".odl-chip"), plus = root.querySelector('.odl-filters .odl-chip:not(.odl-active *) svg').cloneNode(true);
+    chip.replaceChildren(plus, chip.firstChild.textContent.trim()); wrap.replaceWith(chip); if (sample) count.textContent = "2,418"; chip.focus();
   }));
 });
 </script>

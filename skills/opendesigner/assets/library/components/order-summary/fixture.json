@@ -1,0 +1,63 @@
+{
+ "title": "Your basket",
+ "items": [
+  {
+   "name": "Linen table lamp",
+   "variant": "Oat shade",
+   "photo": {
+    "src": "https://images.unsplash.com/photo-1570974802254-4b0ad1a755f5?w=144&h=144&fit=crop&auto=format&q=70",
+    "alt": "White table lamp"
+   },
+   "price": 64,
+   "quantity": 1,
+   "unit": "lamp",
+   "units": "lamps"
+  },
+  {
+   "name": "Glazed planter",
+   "variant": "Teal, medium",
+   "photo": {
+    "src": "https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=144&h=144&fit=crop&auto=format&q=70",
+    "alt": "Succulent in a teal pot"
+   },
+   "price": 18.5,
+   "quantity": 3,
+   "unit": "pot",
+   "units": "pots"
+  },
+  {
+   "name": "Gift wrap",
+   "price": 4,
+   "quantity": 1
+  }
+ ],
+ "promo_code": "WELCOME10",
+ "promo_label": "10% off",
+ "promo_rate": 0.1,
+ "totals": [
+  {
+   "label": "Subtotal",
+   "value": "€123.50"
+  },
+  {
+   "label": "Discount, 10%",
+   "value": "−€12.35"
+  },
+  {
+   "label": "Delivery",
+   "value": "€4.95"
+  },
+  {
+   "label": "Total",
+   "value": "€116.10"
+  }
+ ],
+ "currency": "EUR",
+ "pay": {
+  "label": "Pay",
+  "event": {
+   "name": "pay_order"
+  }
+ },
+ "fine": "Charged to the card ending 4407. Returns within 14 days."
+}

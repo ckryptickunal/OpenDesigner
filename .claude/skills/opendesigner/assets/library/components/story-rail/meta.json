@@ -76,8 +76,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a row of people or channels with something new, where opening one clears its ring"],
-    "avoid_when": ["suggesting people to follow: use follow-suggestions", "a row of shows, albums or products: use media-shelf", "a full list of members with roles: use member-list"],
+    "use_when": [
+      "a row of people or channels with something new, where opening one clears its ring"
+    ],
+    "avoid_when": [
+      "suggesting people to follow: use follow-suggestions",
+      "a row of shows, albums or products: use media-shelf",
+      "a full list of members with roles: use member-list"
+    ],
     "parts": [
       {
         "name": "title",
@@ -130,7 +136,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["stories"],
+      "required": [
+        "stories"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -158,7 +166,12 @@
           "part": "stories",
           "items": {
             "type": "object",
-            "required": ["name", "full_name", "photo", "state"],
+            "required": [
+              "name",
+              "full_name",
+              "photo",
+              "state"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -173,7 +186,12 @@
                 "maxLength": 300
               },
               "state": {
-                "enum": ["new", "seen", "live", "close"]
+                "enum": [
+                  "new",
+                  "seen",
+                  "live",
+                  "close"
+                ]
               }
             }
           }
@@ -182,12 +200,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no stories from others, show only your own add ring and change the count to a line such as 'No new stories'"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show six grey circles with short grey bars under them in place of the rings"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -207,8 +227,17 @@
         "status": "handled",
         "how": "a name wider than its ring is cut off with an ellipsis",
         "evidence": ".odl-name { max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab moves through the back and forward arrows, then each story in order", "Enter or Space on an arrow scrolls the rail by most of its width", "Enter or Space on a story opens it and marks it seen; on your own ring it is the add action"]
+    "keyboard": [
+      "Tab moves through the back and forward arrows, then each story in order",
+      "Enter or Space on an arrow scrolls the rail by most of its width",
+      "Enter or Space on a story opens it and marks it seen; on your own ring it is the add action"
+    ]
   }
 }

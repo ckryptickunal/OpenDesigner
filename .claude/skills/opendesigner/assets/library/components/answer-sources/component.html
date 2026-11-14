@@ -1,0 +1,51 @@
+<style>
+.odl-answer-sources { box-sizing: border-box; inline-size: 100%; max-inline-size: 40rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-answer-sources *, .odl-answer-sources *::before, .odl-answer-sources *::after { box-sizing: border-box; }
+.odl-answer-sources .odl-card { display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); }
+.odl-answer-sources .odl-title { margin: 0; font: var(--ds-text-title-md); overflow-wrap: anywhere; }
+.odl-answer-sources .odl-text { display: grid; gap: var(--ds-space-stack-md); }
+.odl-answer-sources .odl-text > p { margin: 0; overflow-wrap: anywhere; }
+.odl-answer-sources .odl-cites { display: inline; }
+.odl-answer-sources .odl-cite { display: inline-grid; place-items: center; min-inline-size: 1.5em; block-size: 1.5em; margin-inline-start: var(--ds-space-2); padding: 0 var(--ds-space-2); vertical-align: 0.1em;
+  border-radius: var(--ds-radius-full); background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-label-sm); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.odl-answer-sources .odl-vh { position: absolute; inline-size: 1px; block-size: 1px; clip-path: inset(50%); white-space: nowrap; }
+.odl-answer-sources .odl-sources { display: grid; gap: var(--ds-space-stack-sm); padding-block-start: var(--ds-space-stack-lg); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-answer-sources .odl-sources h4 { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); }
+.odl-answer-sources .odl-sources ol { display: grid; gap: var(--ds-space-stack-sm); margin: 0; padding: 0; list-style: none; }
+.odl-answer-sources .odl-src { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: var(--ds-space-inline-md); min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); }
+.odl-answer-sources .odl-num { display: grid; place-items: center; min-inline-size: var(--ds-size-control-sm); block-size: var(--ds-size-control-sm); padding: 0 var(--ds-space-2); border-radius: var(--ds-radius-control-sm);
+  background: var(--ds-color-bg-neutral-subtle); color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); font-weight: var(--ds-font-weight-label); font-variant-numeric: tabular-nums; }
+.odl-answer-sources .odl-src-text { display: grid; gap: var(--ds-space-stack-xs); min-inline-size: 0; }
+.odl-answer-sources .odl-src-title { font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); overflow-wrap: anywhere; }
+.odl-answer-sources .odl-meta { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); overflow-wrap: anywhere; }
+.odl-answer-sources .odl-date::before { content: " · "; }
+/* A paragraph without citations and an answer without sources show nothing in their place. */
+.odl-answer-sources .odl-cites .od-empty, .odl-answer-sources .odl-sources:has(.od-empty) { display: none; }
+/* Phone: a little less padding, so the answer keeps its width. */
+@container (max-width: 30rem) {
+  .odl-answer-sources .odl-card { padding: var(--ds-space-inset-lg); gap: var(--ds-space-stack-md); }
+}
+/* The hidden full template item stays hidden, whatever display its row has. */
+.odl-answer-sources [hidden] { display: none; }
+</style>
+<article class="odl-answer-sources" aria-label="Answer with sources">
+  <div class="odl-card">
+    <h3 class="odl-title" data-od-slot="title" data-od-optional>How long can I work from abroad?</h3>
+    <div class="odl-text" data-od-list="paragraphs">
+      <p data-od-item data-od-template hidden><span data-od-slot="text"></span><span class="odl-cites" data-od-list="cites"><span class="odl-cite" data-od-item><span class="odl-vh">source </span><span data-od-slot="number"></span></span></span></p>
+      <p data-od-item>You can work from another country for up to 30 working days in a calendar year, in blocks of no more than 10 days at a time.<span class="odl-cites"><span class="odl-cite"><span class="odl-vh">source </span>1</span></span></p>
+      <p data-od-item>Ask your manager at least two weeks before you go, and add the trip to the travel form so payroll can check the tax rules for that country.<span class="odl-cites"><span class="odl-cite"><span class="odl-vh">source </span>1</span><span class="odl-cite"><span class="odl-vh">source </span>2</span></span></p>
+      <p data-od-item>A few roles can't work abroad at all because of client contracts. People Ops keeps that list; it last changed in September.<span class="odl-cites"><span class="odl-cite"><span class="odl-vh">source </span>3</span></span></p>
+    </div>
+    <section class="odl-sources" aria-label="Sources">
+      <h4>Sources</h4>
+      <ol data-od-list="sources">
+        <li class="odl-src" data-od-item data-od-template hidden><span class="odl-num" data-od-slot="number"></span><span class="odl-src-text"><span class="odl-src-title" data-od-slot="title"></span><span class="odl-meta"><span data-od-slot="publisher"></span><span class="odl-date" data-od-slot="date" data-od-optional></span></span></span></li>
+        <li class="odl-src" data-od-item><span class="odl-num">1</span><span class="odl-src-text"><span class="odl-src-title">Working from abroad policy</span><span class="odl-meta"><span>handbook.ferncastle.example</span><span class="odl-date">Updated 2 Sep 2026</span></span></span></li>
+        <li class="odl-src" data-od-item><span class="odl-num">2</span><span class="odl-src-text"><span class="odl-src-title">Travel and tax checklist</span><span class="odl-meta"><span>payroll.ferncastle.example</span><span class="odl-date">14 Aug 2026</span></span></span></li>
+        <li class="odl-src" data-od-item><span class="odl-num">3</span><span class="odl-src-text"><span class="odl-src-title">Roles with location limits</span><span class="odl-meta"><span>people.ferncastle.example</span></span></span></li>
+      </ol>
+    </section>
+  </div>
+</article>

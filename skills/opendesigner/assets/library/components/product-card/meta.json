@@ -36,8 +36,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a featured product or add-on shown on its own, with a quick add and save"],
-    "avoid_when": ["several saved items in a grid: use wishlist-grid", "the full product page with several photos: use product-gallery", "a dish on a menu: use menu-item"],
+    "use_when": [
+      "a featured product or add-on shown on its own, with a quick add and save"
+    ],
+    "avoid_when": [
+      "several saved items in a grid: use wishlist-grid",
+      "the full product page with several photos: use product-gallery",
+      "a dish on a menu: use menu-item"
+    ],
     "parts": [
       {
         "name": "photo",
@@ -96,7 +102,12 @@
     ],
     "data": {
       "type": "object",
-      "required": ["name", "price", "photo", "photo_alt"],
+      "required": [
+        "name",
+        "price",
+        "photo",
+        "photo_alt"
+      ],
       "properties": {
         "photo": {
           "type": "string",
@@ -190,8 +201,16 @@
       "long_text": {
         "status": "not_built",
         "how": "name and description wrap with no limit; clamp the description to two lines with -webkit-line-clamp to keep cards in a row even"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Save to favourites, then Add to bag", "Enter or Space toggles the focused button between pressed and not pressed"]
+    "keyboard": [
+      "Tab reaches Save to favourites, then Add to bag",
+      "Enter or Space toggles the focused button between pressed and not pressed"
+    ]
   }
 }

@@ -4,15 +4,38 @@
   "use": "before an action that cannot be undone, such as deleting data",
   "type": "overlay",
   "style": "quiet",
-  "industries": ["saas", "finance", "any"],
-  "tags": ["dialog", "modal", "confirm", "delete", "destructive"],
-  "states": ["open", "delete disabled", "delete enabled", "hover", "pressed", "focus"],
+  "industries": [
+    "saas",
+    "finance",
+    "any"
+  ],
+  "tags": [
+    "dialog",
+    "modal",
+    "confirm",
+    "delete",
+    "destructive"
+  ],
+  "states": [
+    "open",
+    "delete disabled",
+    "delete enabled",
+    "hover",
+    "pressed",
+    "focus"
+  ],
   "source": null,
   "a11y": "An alertdialog labelled by its title and described by its sentence; the input has a visible label and hint, Delete stays a disabled native button until the typed name matches, and Enter confirms once it does.",
   "width": "narrow",
   "spec": {
-    "use_when": ["deleting several records at once, where listing them lets the person check what goes before they type to confirm"],
-    "avoid_when": ["a reversible action: act at once and offer Undo in toast-stack", "an approval decision with money and policy context: use approval-panel", "editing or reading a record beside a list: use detail-drawer"],
+    "use_when": [
+      "deleting several records at once, where listing them lets the person check what goes before they type to confirm"
+    ],
+    "avoid_when": [
+      "a reversible action: act at once and offer Undo in toast-stack",
+      "an approval decision with money and policy context: use approval-panel",
+      "editing or reading a record beside a list: use detail-drawer"
+    ],
     "parts": [
       {
         "name": "mark",
@@ -71,7 +94,12 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "lede", "confirm_text", "delete_label"],
+      "required": [
+        "title",
+        "lede",
+        "confirm_text",
+        "delete_label"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -90,7 +118,9 @@
           "part": "items",
           "items": {
             "type": "object",
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -136,12 +166,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with nothing selected, do not open the dialog; with no list to show, leave the list out"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "after Delete is pressed, disable both buttons and change the Delete label to 'Deleting' until the result comes back"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -161,8 +193,17 @@
         "status": "handled",
         "how": "a long item name ends in an ellipsis and the amount never wraps; a long name to type breaks anywhere",
         "evidence": "text-overflow: ellipsis; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches the text box, then Cancel, then Delete when it is enabled", "Enter in the text box presses Delete once the typed text matches", "Enter or Space presses the focused button", "the file has no Escape handling or focus trap; the project's dialog code must add them"]
+    "keyboard": [
+      "Tab reaches the text box, then Cancel, then Delete when it is enabled",
+      "Enter in the text box presses Delete once the typed text matches",
+      "Enter or Space presses the focused button",
+      "the file has no Escape handling or focus trap; the project's dialog code must add them"
+    ]
   }
 }

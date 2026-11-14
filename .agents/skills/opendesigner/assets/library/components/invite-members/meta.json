@@ -4,15 +4,39 @@
   "use": "when adding people to a workspace or team",
   "type": "form",
   "style": "quiet",
-  "industries": ["saas", "productivity", "any"],
-  "tags": ["invite", "team", "members", "roles", "seats", "chips"],
-  "states": ["hover", "focus", "invalid email", "seats used", "over seat limit", "disabled send"],
+  "industries": [
+    "saas",
+    "productivity",
+    "any"
+  ],
+  "tags": [
+    "invite",
+    "team",
+    "members",
+    "roles",
+    "seats",
+    "chips"
+  ],
+  "states": [
+    "hover",
+    "focus",
+    "invalid email",
+    "seats used",
+    "over seat limit",
+    "disabled send"
+  ],
   "source": null,
   "a11y": "The email field is a labelled input; each chip has a remove button that names the address, Backspace removes the last chip, the role is a native select described by its explanation, and errors are tied to the field.",
   "width": "medium",
   "spec": {
-    "use_when": ["a plan with a seat limit, where people need to see what the invites will use before sending"],
-    "avoid_when": ["managing people who are already members: use member-list", "sharing one item by link or app: use share-sheet", "signing a single person in: use sign-in-form"],
+    "use_when": [
+      "a plan with a seat limit, where people need to see what the invites will use before sending"
+    ],
+    "avoid_when": [
+      "managing people who are already members: use member-list",
+      "sharing one item by link or app: use share-sheet",
+      "signing a single person in: use sign-in-form"
+    ],
     "parts": [
       {
         "name": "title",
@@ -77,7 +101,12 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "roles", "seats_used", "seats_total"],
+      "required": [
+        "title",
+        "roles",
+        "seats_used",
+        "seats_total"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -95,8 +124,16 @@
           "maxItems": 12,
           "part": "emails",
           "items": {
-            "type": "string",
-            "maxLength": 254
+            "type": "object",
+            "required": [
+              "address"
+            ],
+            "properties": {
+              "address": {
+                "type": "string",
+                "maxLength": 254
+              }
+            }
           }
         },
         "placeholder": {
@@ -111,7 +148,11 @@
           "part": "role",
           "items": {
             "type": "object",
-            "required": ["value", "label", "description"],
+            "required": [
+              "value",
+              "label",
+              "description"
+            ],
             "properties": {
               "value": {
                 "type": "string",
@@ -143,6 +184,10 @@
           "type": "integer",
           "minimum": 1,
           "part": "seats"
+        },
+        "role_description": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
@@ -153,8 +198,9 @@
         "evidence": "send.disabled = !ok || over"
       },
       "loading": {
-        "status": "not_built",
-        "how": "after Send, disable both buttons and the field and change the label to 'Sending' until the result comes back"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "shown",
@@ -175,8 +221,18 @@
         "status": "handled",
         "how": "a long address ends in an ellipsis inside its chip; the remove button stays visible",
         "evidence": ".odl-chip > span { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches each chip's remove button, the email field, the role choice, Cancel, then Send", "Enter or comma in the email field turns what was typed into a chip; leaving the field does the same", "Backspace in an empty email field removes the last chip", "Enter or Space on a chip's remove button removes that address", "Arrow keys change the role, as in any native select, and the line under it updates"]
+    "keyboard": [
+      "Tab reaches each chip's remove button, the email field, the role choice, Cancel, then Send",
+      "Enter or comma in the email field turns what was typed into a chip; leaving the field does the same",
+      "Backspace in an empty email field removes the last chip",
+      "Enter or Space on a chip's remove button removes that address",
+      "Arrow keys change the role, as in any native select, and the line under it updates"
+    ]
   }
 }

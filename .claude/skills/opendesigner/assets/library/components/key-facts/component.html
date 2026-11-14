@@ -1,0 +1,60 @@
+<style>
+.odl-key-facts { box-sizing: border-box; inline-size: 100%; max-inline-size: 36rem; margin-inline: auto; container-type: inline-size; color: var(--ds-color-text-primary); font: var(--ds-text-body-md); text-wrap: pretty; }
+.odl-key-facts *, .odl-key-facts *::before, .odl-key-facts *::after { box-sizing: border-box; }
+.odl-key-facts .odl-card { display: grid; gap: var(--ds-space-stack-lg); padding: var(--ds-space-inset-xl); background: var(--ds-color-surface-raised);
+  border: var(--ds-border-width-default) solid var(--ds-color-border-subtle); border-radius: var(--ds-radius-container); box-shadow: var(--ds-elevation-raised); }
+.odl-key-facts header { display: grid; gap: var(--ds-space-stack-xs); }
+.odl-key-facts h3 { margin: 0; font: var(--ds-text-title-md); overflow-wrap: anywhere; }
+.odl-key-facts .odl-sub { margin: 0; color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); overflow-wrap: anywhere; }
+.odl-key-facts dl { display: grid; margin: 0; }
+.odl-key-facts dl > div { display: grid; grid-template-columns: minmax(7rem, 2fr) minmax(0, 3fr); align-items: baseline; gap: var(--ds-space-stack-xs) var(--ds-space-inline-md);
+  min-block-size: max(var(--ds-size-row-md), var(--ds-size-target-min)); padding-block: var(--ds-space-inset-sm); border-block-start: var(--ds-border-width-default) solid var(--ds-color-border-subtle); }
+.odl-key-facts dl > div:first-child, .odl-key-facts dl > [hidden] + div { border-block-start: 0; }
+.odl-key-facts dt { color: var(--ds-color-text-secondary); font: var(--ds-text-label-lg); overflow-wrap: anywhere; }
+.odl-key-facts dd { display: grid; gap: var(--ds-space-2); margin: 0; min-inline-size: 0; }
+.odl-key-facts .odl-value { display: inline-flex; align-items: baseline; gap: var(--ds-space-inline-sm); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.odl-key-facts .odl-value::before { content: ""; flex: none; align-self: center; inline-size: var(--ds-space-6); block-size: var(--ds-space-6); border-radius: var(--ds-radius-full); background: currentColor; }
+.odl-key-facts .odl-value[data-tone="neutral"] { color: var(--ds-color-text-primary); }
+.odl-key-facts .odl-value[data-tone="neutral"]::before { content: none; }
+.odl-key-facts .odl-value[data-tone="accent"] { color: var(--ds-color-text-accent); }
+.odl-key-facts .odl-value[data-tone="success"] { color: var(--ds-color-text-success); }
+.odl-key-facts .odl-value[data-tone="warning"] { color: var(--ds-color-text-warning); }
+.odl-key-facts .odl-value[data-tone="danger"] { color: var(--ds-color-text-danger); }
+.odl-key-facts .odl-value[data-tone="info"] { color: var(--ds-color-text-info); }
+.odl-key-facts .odl-note { color: var(--ds-color-text-secondary); font: var(--ds-text-label-md); overflow-wrap: anywhere; }
+/* Phone: the label sits over its value, so neither column gets squeezed. */
+@container (max-width: 26rem) {
+  .odl-key-facts .odl-card { padding: var(--ds-space-inset-lg); gap: var(--ds-space-stack-md); }
+  .odl-key-facts dl > div { grid-template-columns: minmax(0, 1fr); }
+}
+/* The hidden full template item stays hidden, whatever display its row has. */
+.odl-key-facts [hidden] { display: none; }
+/* An optional next step under the facts ("Pay this fine"): absent from the static card, shown when an answer gives one. */
+.odl-key-facts .odl-acts { display: flex; flex-wrap: wrap; gap: var(--ds-space-inline-sm); }
+.odl-key-facts .odl-acts[hidden], .odl-key-facts .odl-acts button[hidden] { display: none; }
+.odl-key-facts .odl-act { display: inline-flex; align-items: center; justify-content: center; max-inline-size: 100%;
+  min-block-size: max(var(--ds-size-control-md), var(--ds-size-target-min)); padding: var(--ds-space-inset-xs) var(--ds-space-inset-lg);
+  border: var(--ds-border-width-default) solid transparent; border-radius: var(--ds-radius-control); background: var(--ds-color-bg-action-primary);
+  color: var(--ds-color-text-on-action); font: var(--ds-text-label-lg); font-weight: var(--ds-font-weight-label); text-align: center;
+  overflow-wrap: anywhere; cursor: pointer; transition: background-color var(--ds-motion-duration-short) var(--ds-motion-easing-standard); }
+.odl-key-facts .odl-act:hover { background: var(--ds-color-bg-action-primary-hover); }
+.odl-key-facts .odl-act:focus-visible { outline: var(--ds-focus-ring-width) solid var(--ds-color-border-focus); outline-offset: var(--ds-focus-ring-offset); }
+@media (prefers-reduced-motion: reduce) { .odl-key-facts .odl-act { transition: none; } }
+</style>
+<section class="odl-key-facts" aria-label="Key facts">
+  <div class="odl-card">
+    <header>
+      <h3 data-od-slot="title">Island ferry, 08:40 sailing</h3>
+      <p class="odl-sub" data-od-slot="subtitle" data-od-optional>Westpier to Orrin Island · Saturday 21 November</p>
+    </header>
+    <dl data-od-list="facts">
+      <div data-od-item data-od-template hidden><dt data-od-slot="label"></dt><dd><span class="odl-value" data-od-slot="value" data-od-var="tone" data-tone="neutral"></span><span class="odl-note" data-od-slot="note" data-od-optional></span></dd></div>
+      <div data-od-item><dt>Status</dt><dd><span class="odl-value" data-tone="success">On time</span></dd></div>
+      <div data-od-item><dt>Departs</dt><dd><span class="odl-value" data-tone="neutral">08:40</span><span class="odl-note">Boarding closes 08:25 at gate B</span></dd></div>
+      <div data-od-item><dt>Crossing time</dt><dd><span class="odl-value" data-tone="neutral">1 h 15 min</span></dd></div>
+      <div data-od-item><dt>Seats left</dt><dd><span class="odl-value" data-tone="warning">12</span><span class="odl-note">Car deck is full</span></dd></div>
+      <div data-od-item><dt>Fare</dt><dd><span class="odl-value" data-tone="neutral">€18.50</span><span class="odl-note">Foot passenger, one way</span></dd></div>
+    </dl>
+    <div class="odl-acts" data-od-optional hidden><button type="button" class="odl-act" data-od-action="action">Book this sailing</button></div>
+  </div>
+</section>

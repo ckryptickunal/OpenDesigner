@@ -1,0 +1,11 @@
+{"tone": "success", "status": "Payment sent", "title": "€1,250.00 to Marta Oliveira", "reference": "TRF-20931-PT",
+ "lines": [
+  {"label": "From", "value": "Everyday account ··4821"},
+  {"label": "To", "value": "PT50 ··· 7713"},
+  {"label": "Arrives", "value": "Today, within 2 hours"},
+  {"label": "Fee", "value": "€0.00"},
+  {"label": "Note", "value": "November rent"}],
+ "total_label": "Total sent", "total_value": "€1,250.00",
+ "note": "Marta gets an email when it lands. You can't cancel a transfer once it has arrived.",
+ "primary": {"label": "Done", "event": {"name": "close_receipt"}},
+ "secondary": {"label": "Share receipt", "event": {"name": "share_receipt", "context": {"reference": "TRF-20931-PT"}}}}

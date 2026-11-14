@@ -4,15 +4,33 @@
   "use": "on a status or monitoring page",
   "type": "chart",
   "style": "technical",
-  "industries": ["devtools", "saas"],
-  "tags": ["observability", "latency", "sparkline", "slo", "monitoring"],
-  "states": ["above objective", "missing data", "deploy marker"],
+  "industries": [
+    "devtools",
+    "saas"
+  ],
+  "tags": [
+    "observability",
+    "latency",
+    "sparkline",
+    "slo",
+    "monitoring"
+  ],
+  "states": [
+    "above objective",
+    "missing data",
+    "deploy marker"
+  ],
   "source": "brand/showcase/product/04-sounding-observability",
   "a11y": "The chart is one image with a sentence that says what it shows; the key spells out each line style, so colour is never the only cue.",
   "width": "medium",
   "spec": {
-    "use_when": ["in an incident or alert view, to show when a metric crossed its objective and whether a deploy came just before"],
-    "avoid_when": ["comparing amounts across categories: use bar-chart", "several headline numbers side by side: use kpi-strip"],
+    "use_when": [
+      "in an incident or alert view, to show when a metric crossed its objective and whether a deploy came just before"
+    ],
+    "avoid_when": [
+      "comparing amounts across categories: use bar-chart",
+      "several headline numbers side by side: use kpi-strip"
+    ],
     "parts": [
       {
         "name": "title",
@@ -65,7 +83,12 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "unit", "series", "objective"],
+      "required": [
+        "title",
+        "unit",
+        "series",
+        "objective"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -120,7 +143,12 @@
           "maxItems": 120,
           "part": "plot",
           "items": {
-            "type": "number"
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number"
+              }
+            }
           }
         },
         "previous": {
@@ -129,7 +157,12 @@
           "maxItems": 120,
           "part": "plot",
           "items": {
-            "type": "number"
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "number"
+              }
+            }
           }
         },
         "deploy": {
@@ -153,8 +186,16 @@
           "maxItems": 5,
           "part": "axis",
           "items": {
-            "type": "string",
-            "maxLength": 6
+            "type": "object",
+            "required": [
+              "label"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 6
+              }
+            }
           }
         },
         "gaps": {
@@ -164,7 +205,10 @@
           "part": "plot",
           "items": {
             "type": "object",
-            "required": ["from", "to"],
+            "required": [
+              "from",
+              "to"
+            ],
             "properties": {
               "from": {
                 "type": "number",
@@ -178,17 +222,23 @@
               }
             }
           }
+        },
+        "deploy_at": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no data for the window, keep the header and replace the plot with empty-state ('No data in the last 24 hours')"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the header and draw a muted band the height of the plot until the series arrives"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -207,8 +257,14 @@
         "status": "handled",
         "how": "the value, pins, axis labels and link never wrap; the header and warning line wrap their pieces onto new rows",
         "evidence": "white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches the View alert link; Enter follows it"]
+    "keyboard": [
+      "Tab reaches the View alert link; Enter follows it"
+    ]
   }
 }

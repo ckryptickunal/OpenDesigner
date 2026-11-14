@@ -4,15 +4,36 @@
   "use": "on the home screen of a fitness or health app, for today's progress against daily goals",
   "type": "chart",
   "style": "friendly",
-  "industries": ["fitness", "health"],
-  "tags": ["goals", "progress", "steps", "daily", "week"],
-  "states": ["today", "past day selected", "goal met", "hover", "focus"],
+  "industries": [
+    "fitness",
+    "health"
+  ],
+  "tags": [
+    "goals",
+    "progress",
+    "steps",
+    "daily",
+    "week"
+  ],
+  "states": [
+    "today",
+    "past day selected",
+    "goal met",
+    "hover",
+    "focus"
+  ],
   "source": null,
   "a11y": "Each goal's bar is a meter named after the goal, with its value and maximum; the count of goals met and the date are text; each day in the week strip is a button with its date as its name and aria-pressed for the day shown.",
   "width": "narrow",
   "spec": {
-    "use_when": ["a wellness or habit screen with two to four daily targets that reset each day"],
-    "avoid_when": ["a streak of yes-or-no habits across days: use habit-tracker", "one big savings or long-term target: use savings-goal", "a single finished workout's stats: use workout-summary"],
+    "use_when": [
+      "a wellness or habit screen with two to four daily targets that reset each day"
+    ],
+    "avoid_when": [
+      "a streak of yes-or-no habits across days: use habit-tracker",
+      "one big savings or long-term target: use savings-goal",
+      "a single finished workout's stats: use workout-summary"
+    ],
     "parts": [
       {
         "name": "title",
@@ -65,7 +86,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["date", "goals"],
+      "required": [
+        "date",
+        "goals"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -84,7 +108,11 @@
           "part": "goals",
           "items": {
             "type": "object",
-            "required": ["name", "value", "goal"],
+            "required": [
+              "name",
+              "value",
+              "goal"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -108,6 +136,9 @@
               "icon": {
                 "type": "string",
                 "maxLength": 32
+              },
+              "percent": {
+                "type": "number"
               }
             }
           }
@@ -124,7 +155,11 @@
           "part": "week",
           "items": {
             "type": "object",
-            "required": ["label", "initial", "percent"],
+            "required": [
+              "label",
+              "initial",
+              "percent"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -149,12 +184,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "on a day with no data, show each value as 0 with an empty bar and a hint such as 'Nothing logged yet today'"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the goal rows and fill the values with muted blocks and the bars empty until the numbers arrive"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -167,14 +204,21 @@
       "overflow": {
         "status": "handled",
         "how": "a bar never runs past its track, however far over the goal the value goes",
-        "evidence": "Math.min(100, Math.round((v / goals[k]) * 100))"
+        "evidence": "Math.min(1, v / goals[k])"
       },
       "long_text": {
         "status": "handled",
         "how": "goal names and the hint wrap; values and the met count never wrap",
         "evidence": ".odl-daily-goals .odl-val { justify-self: end; font: var(--ds-text-title-md); font-variant-numeric: tabular-nums; white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches each day in the week strip", "Enter or Space on a day shows that day's goals, date and hint, and marks the day as pressed"]
+    "keyboard": [
+      "Tab reaches each day in the week strip",
+      "Enter or Space on a day shows that day's goals, date and hint, and marks the day as pressed"
+    ]
   }
 }

@@ -1,0 +1,91 @@
+{
+ "title": "Inbox",
+ "mark_all": {
+  "label": "Mark all read",
+  "event": {
+   "name": "mark_all_read"
+  }
+ },
+ "tabs": [
+  {
+   "label": "All",
+   "filter": "all"
+  },
+  {
+   "label": "Mentions",
+   "filter": "mention",
+   "count": 1
+  },
+  {
+   "label": "Approvals",
+   "filter": "approval",
+   "count": 1
+  }
+ ],
+ "groups": [
+  {
+   "label": "This morning",
+   "items": [
+    {
+     "kind": "mention",
+     "avatar": {
+      "src": "https://images.unsplash.com/photo-1758600587839-56ba05596c69?w=64&h=64&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Odile Brandt"
+     },
+     "line": "Odile Brandt mentioned you on Lakeview Print Co · LP-2210",
+     "quote": "@Sam the reprint was approved by phone, the PO is attached.",
+     "time": "10:12 AM",
+     "source": "Bills",
+     "secondary": {
+      "label": "View bill",
+      "event": {
+       "name": "open_bill"
+      }
+     },
+     "done": ""
+    },
+    {
+     "kind": "approval",
+     "avatar": {
+      "src": "https://images.unsplash.com/photo-1770096951056-c94a812e9fd4?w=64&h=64&fit=crop&crop=faces&auto=format&q=70",
+      "alt": "Photo of Kofi Adjei"
+     },
+     "line": "Kofi Adjei asked you to approve Harrowgate Cleaning for €3,140.00",
+     "time": "9:41 AM",
+     "source": "Over €2,500",
+     "primary": {
+      "label": "Approve",
+      "event": {
+       "name": "approve_bill"
+      }
+     },
+     "secondary": {
+      "label": "View",
+      "event": {
+       "name": "open_bill"
+      }
+     },
+     "done": "Approved · paid on Nov 18"
+    }
+   ]
+  },
+  {
+   "label": "Last week",
+   "items": [
+    {
+     "kind": "system",
+     "line": "9 payments went out by SEPA, €18,402.55 in total",
+     "time": "Nov 7",
+     "source": "Payments",
+     "done": ""
+    }
+   ]
+  }
+ ],
+ "footer": {
+  "label": "Notification settings",
+  "event": {
+   "name": "open_notification_settings"
+  }
+ }
+}

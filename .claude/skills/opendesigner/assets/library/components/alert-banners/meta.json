@@ -4,15 +4,37 @@
   "use": "for telling people something about the page they are on, from a tip to a failure",
   "type": "feedback",
   "style": "quiet",
-  "industries": ["any"],
-  "tags": ["alert", "banner", "notice", "callout", "status"],
-  "states": ["info", "success", "warning", "danger", "hover", "focus", "dismissed"],
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "alert",
+    "banner",
+    "notice",
+    "callout",
+    "status"
+  ],
+  "states": [
+    "info",
+    "success",
+    "warning",
+    "danger",
+    "hover",
+    "focus",
+    "dismissed"
+  ],
   "source": null,
   "a11y": "Info, success and warning use role status and the danger notice uses role alert; actions and dismiss are real buttons, and dismissing moves focus to the next notice.",
   "width": "medium",
   "spec": {
-    "use_when": ["a stack of page-level notices of mixed urgency, each with its own fix and a way to dismiss it"],
-    "avoid_when": ["a short confirmation after an action that should go away on its own: use toast-stack", "a page with nothing to show yet: use empty-state", "a question the person must answer before going on: use confirm-dialog"],
+    "use_when": [
+      "a stack of page-level notices of mixed urgency, each with its own fix and a way to dismiss it"
+    ],
+    "avoid_when": [
+      "a short confirmation after an action that should go away on its own: use toast-stack",
+      "a page with nothing to show yet: use empty-state",
+      "a question the person must answer before going on: use confirm-dialog"
+    ],
     "parts": [
       {
         "name": "notices",
@@ -47,7 +69,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["notices"],
+      "required": [
+        "notices"
+      ],
       "properties": {
         "label": {
           "type": "string",
@@ -60,10 +84,18 @@
           "part": "notices",
           "items": {
             "type": "object",
-            "required": ["tone", "title"],
+            "required": [
+              "tone",
+              "title"
+            ],
             "properties": {
               "tone": {
-                "enum": ["info", "success", "warning", "danger"]
+                "enum": [
+                  "info",
+                  "success",
+                  "warning",
+                  "danger"
+                ]
               },
               "title": {
                 "type": "string",
@@ -82,7 +114,9 @@
                 "part": "actions",
                 "items": {
                   "type": "object",
-                  "required": ["label"],
+                  "required": [
+                    "label"
+                  ],
                   "properties": {
                     "label": {
                       "type": "string",
@@ -105,17 +139,19 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "when every notice is dismissed the list is left empty; remove the list, or show nothing in its place"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "notices describe a state that is already known; do not show one until its message is ready"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "shown",
         "how": "the danger notice is the error form, announced at once as an alert, with a strong fix button",
-        "evidence": "<li class=\"is-danger\" role=\"alert\">"
+        "evidence": "role=\"alert\""
       },
       "disabled": {
         "status": "not_built",
@@ -130,8 +166,16 @@
         "status": "handled",
         "how": "the message column can shrink and wraps; button labels never wrap",
         "evidence": "minmax(0, 1fr) auto"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches each notice's action buttons, then its Dismiss button, notice by notice", "Enter or Space presses the focused button", "Dismissing a notice moves focus to the Dismiss button of the next notice, or the previous one if it was last"]
+    "keyboard": [
+      "Tab reaches each notice's action buttons, then its Dismiss button, notice by notice",
+      "Enter or Space presses the focused button",
+      "Dismissing a notice moves focus to the Dismiss button of the next notice, or the previous one if it was last"
+    ]
   }
 }

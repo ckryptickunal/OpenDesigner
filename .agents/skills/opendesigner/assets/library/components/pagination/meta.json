@@ -4,15 +4,35 @@
   "use": "under a long table",
   "type": "navigation",
   "style": "dense",
-  "industries": ["any"],
-  "tags": ["pagination", "pager", "table footer", "pages", "rows per page"],
-  "states": ["current page", "hover", "focus", "disabled", "narrow"],
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "pagination",
+    "pager",
+    "table footer",
+    "pages",
+    "rows per page"
+  ],
+  "states": [
+    "current page",
+    "hover",
+    "focus",
+    "disabled",
+    "narrow"
+  ],
   "source": null,
   "a11y": "A navigation landmark named Pagination; the current page has aria-current, page buttons have full names, the ellipsis is hidden from screen readers and the row count is a polite live region.",
   "width": "wide",
   "spec": {
-    "use_when": ["under a list or search results long enough to split, where people need to know how many items there are and jump to a page"],
-    "avoid_when": ["a feed people scroll through without needing a page number: load more at the end instead", "moving between steps of one task: use setup-steps", "switching between views of one page: use page-header-tabs"],
+    "use_when": [
+      "under a list or search results long enough to split, where people need to know how many items there are and jump to a page"
+    ],
+    "avoid_when": [
+      "a feed people scroll through without needing a page number: load more at the end instead",
+      "moving between steps of one task: use setup-steps",
+      "switching between views of one page: use page-header-tabs"
+    ],
     "parts": [
       {
         "name": "count",
@@ -53,7 +73,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["current_page", "total_pages"],
+      "required": [
+        "current_page",
+        "total_pages"
+      ],
       "properties": {
         "first_row": {
           "type": "integer",
@@ -101,20 +124,32 @@
           "maxItems": 7,
           "part": "pages",
           "items": {
-            "type": "integer",
-            "minimum": 1
+            "type": "object",
+            "properties": {
+              "current": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "kind": {
+                "enum": [
+                  "page"
+                ]
+              }
+            }
           }
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no rows, hide the pager and let the table show empty-state"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "while a page loads, disable Previous, Next and the page buttons and keep the old count"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -134,8 +169,16 @@
         "status": "handled",
         "how": "the count, the rows label and 'Page 3 of 49' never wrap; the bar wraps its groups instead",
         "evidence": "white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches the rows-per-page choice, Previous, each page number, then Next", "Arrow keys change the rows-per-page choice, as in any native select", "Enter or Space presses the focused button; the file has no script, so pages do not change until the project wires them"]
+    "keyboard": [
+      "Tab reaches the rows-per-page choice, Previous, each page number, then Next",
+      "Arrow keys change the rows-per-page choice, as in any native select",
+      "Enter or Space presses the focused button; the file has no script, so pages do not change until the project wires them"
+    ]
   }
 }

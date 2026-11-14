@@ -1,0 +1,15 @@
+{"title": "Porto, two days",
+ "summary": "Fri 4 to Sat 5 Dec · 3 travellers · 5 stops",
+ "days": [
+  {"label": "Day 1", "date": "Fri 4 Dec", "name": "Arrive and settle in",
+   "stops": [
+    {"time": "11:05", "kind": "flight", "name": "Flight TP 1947 from Lyon", "details": "Terminal 1 · two checked bags", "code": "QX7RTA", "map_x": 70, "map_y": 330},
+    {"time": "14:00", "kind": "stay", "name": "Check in at Casa Ribeirinha", "details": "2 nights · Ribeira · ask for the river room", "photo": {"src": "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=112&h=112&fit=crop&auto=format&q=70", "alt": "Hotel bed with white linen and pillows"}, "code": "CR-5512", "map_x": 230, "map_y": 250},
+    {"time": "20:00", "kind": "meal", "name": "Dinner at Adega do Cais", "details": "Table for 3 · terrace if dry", "code": "", "photo": {"src": "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=112&h=112&fit=crop&auto=format&q=70", "alt": "Restaurant with a view of the water"}, "map_x": 260, "map_y": 210}
+   ]},
+  {"label": "Day 2", "date": "Sat 5 Dec", "name": "River and tiles",
+   "stops": [
+    {"time": "09:30", "kind": "walk", "name": "Walk the Dom Luís bridge", "details": "Top deck · about 40 minutes", "code": ""},
+    {"time": "15:00", "kind": "class", "name": "Tile painting class", "details": "Bring an apron · 2 hours", "code": "TP-0088", "map_x": 160, "map_y": 120}
+   ]}
+ ]}

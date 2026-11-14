@@ -4,15 +4,34 @@
   "use": "for showing how a total splits into a few categories",
   "type": "chart",
   "style": "quiet",
-  "industries": ["saas", "finance", "devtools", "any"],
-  "tags": ["donut", "breakdown", "categories", "share", "legend"],
-  "states": ["hover row highlights its segment"],
+  "industries": [
+    "saas",
+    "finance",
+    "devtools",
+    "any"
+  ],
+  "tags": [
+    "donut",
+    "breakdown",
+    "categories",
+    "share",
+    "legend"
+  ],
+  "states": [
+    "hover row highlights its segment"
+  ],
   "source": null,
   "a11y": "The drawing is hidden from screen readers; the legend list carries every category, amount and share, and its label gives the total.",
   "width": "medium",
   "spec": {
-    "use_when": ["a billing or usage page that needs the total and each category's amount and share side by side"],
-    "avoid_when": ["more than four categories, or values to compare over time: use bar-chart", "a few headline numbers with no part-of-a-whole split: use kpi-strip", "spending against limits per category: use budget-meters"],
+    "use_when": [
+      "a billing or usage page that needs the total and each category's amount and share side by side"
+    ],
+    "avoid_when": [
+      "more than four categories, or values to compare over time: use bar-chart",
+      "a few headline numbers with no part-of-a-whole split: use kpi-strip",
+      "spending against limits per category: use budget-meters"
+    ],
     "parts": [
       {
         "name": "title",
@@ -53,7 +72,11 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "total", "categories"],
+      "required": [
+        "title",
+        "total",
+        "categories"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -68,7 +91,9 @@
         "total": {
           "type": "object",
           "part": "total",
-          "required": ["value"],
+          "required": [
+            "value"
+          ],
           "properties": {
             "value": {
               "type": "string",
@@ -87,7 +112,11 @@
           "part": "legend",
           "items": {
             "type": "object",
-            "required": ["name", "amount", "share"],
+            "required": [
+              "name",
+              "amount",
+              "share"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -113,17 +142,23 @@
           "type": "string",
           "maxLength": 120,
           "part": "foot"
+        },
+        "total_caption": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no spend yet, draw the ring in the track colour only, show $0 in the middle and replace the legend with a one-line empty-state"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show the ring as a single muted circle and the legend rows as muted blocks until numbers arrive"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -142,6 +177,10 @@
         "status": "handled",
         "how": "a long category name wraps in its own column while amount and share keep their width",
         "evidence": "grid-template-columns: var(--ds-space-12) minmax(0, 1fr) auto 5ch"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": []

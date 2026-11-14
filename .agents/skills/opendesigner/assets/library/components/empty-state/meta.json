@@ -4,15 +4,33 @@
   "use": "when a list or page has nothing in it yet",
   "type": "feedback",
   "style": "friendly",
-  "industries": ["any"],
-  "tags": ["empty state", "zero data", "illustration", "onboarding", "call to action"],
-  "states": ["empty, all done", "hover", "focus"],
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "empty state",
+    "zero data",
+    "illustration",
+    "onboarding",
+    "call to action"
+  ],
+  "states": [
+    "empty, all done",
+    "hover",
+    "focus"
+  ],
   "source": null,
   "a11y": "The drawing is decorative and hidden from screen readers; the heading says what the state means, and the one primary action is a real button.",
   "width": "narrow",
   "spec": {
-    "use_when": ["a list someone has cleared, where the message should say all is done and when new items will arrive"],
-    "avoid_when": ["something went wrong loading the list: use alert-banners with a retry action", "a first-run checklist of several steps to get going: use setup-steps", "a short notice above a list that still has items: use alert-banners"],
+    "use_when": [
+      "a list someone has cleared, where the message should say all is done and when new items will arrive"
+    ],
+    "avoid_when": [
+      "something went wrong loading the list: use alert-banners with a retry action",
+      "a first-run checklist of several steps to get going: use setup-steps",
+      "a short notice above a list that still has items: use alert-banners"
+    ],
     "parts": [
       {
         "name": "art",
@@ -47,7 +65,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title"],
+      "required": [
+        "title"
+      ],
       "properties": {
         "label": {
           "type": "string",
@@ -70,7 +90,10 @@
         },
         "secondary": {
           "type": "object",
-          "required": ["label", "href"],
+          "required": [
+            "label",
+            "href"
+          ],
           "part": "secondary",
           "properties": {
             "label": {
@@ -92,8 +115,9 @@
         "evidence": "<section class=\"odl-empty-state\""
       },
       "loading": {
-        "status": "not_built",
-        "how": "do not show it while the list is still loading; show the list's own placeholder rows until it is known to be empty"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -112,8 +136,15 @@
         "status": "handled",
         "how": "the heading balances its lines and the sentence wraps at 38 characters",
         "evidence": "max-inline-size: 38ch"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
-    "keyboard": ["Tab reaches the main button, then the link", "Enter or Space presses the button; Enter follows the link"]
+    "keyboard": [
+      "Tab reaches the main button, then the link",
+      "Enter or Space presses the button; Enter follows the link"
+    ]
   }
 }

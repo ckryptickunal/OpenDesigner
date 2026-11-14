@@ -1,0 +1,32 @@
+{
+ "title": "Passport renewal application",
+ "status": "Waiting for your photo to be checked",
+ "tone": "warning",
+ "progress": 40,
+ "steps": [
+  {
+   "label": "Form submitted",
+   "time": "Oct 30, 16:05",
+   "state": "done"
+  },
+  {
+   "label": "Fee of \u00a388.50 paid",
+   "time": "Oct 30, 16:07",
+   "state": "done"
+  },
+  {
+   "label": "Photo check",
+   "time": "Taking longer than usual",
+   "state": "now"
+  },
+  {
+   "label": "Passport printed",
+   "state": "next"
+  },
+  {
+   "label": "Sent by tracked post",
+   "state": "next"
+  }
+ ],
+ "updated": "Checked 5 minutes ago"
+}

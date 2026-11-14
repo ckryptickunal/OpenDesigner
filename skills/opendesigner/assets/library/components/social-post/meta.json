@@ -46,8 +46,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a community or club app where members share photos and react to each other's"],
-    "avoid_when": ["a blog post or changelog entry to read: use article-card", "a text conversation between people: use comment-thread or chat-thread", "a row of creators to follow: use follow-suggestions"],
+    "use_when": [
+      "a community or club app where members share photos and react to each other's"
+    ],
+    "avoid_when": [
+      "a blog post or changelog entry to read: use article-card",
+      "a text conversation between people: use comment-thread or chat-thread",
+      "a row of creators to follow: use follow-suggestions"
+    ],
     "parts": [
       {
         "name": "avatar",
@@ -124,11 +130,17 @@
     ],
     "data": {
       "type": "object",
-      "required": ["author", "photo", "likes"],
+      "required": [
+        "author",
+        "photo",
+        "likes"
+      ],
       "properties": {
         "author": {
           "type": "object",
-          "required": ["handle"],
+          "required": [
+            "handle"
+          ],
           "properties": {
             "handle": {
               "type": "string",
@@ -153,7 +165,10 @@
         },
         "photo": {
           "type": "object",
-          "required": ["src", "alt"],
+          "required": [
+            "src",
+            "alt"
+          ],
           "part": "photo",
           "properties": {
             "src": {
@@ -211,8 +226,16 @@
           "maxItems": 5,
           "part": "caption",
           "items": {
-            "type": "string",
-            "maxLength": 24
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 24
+              }
+            }
           }
         },
         "comment_count": {
@@ -222,7 +245,10 @@
         },
         "top_comment": {
           "type": "object",
-          "required": ["handle", "text"],
+          "required": [
+            "handle",
+            "text"
+          ],
           "part": "top_comment",
           "properties": {
             "handle": {
@@ -248,17 +274,69 @@
           "type": "string",
           "maxLength": 24,
           "part": "time"
+        },
+        "author_photo": {
+          "type": "object",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 2048
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "author_handle": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "author_place": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "top_comment_photo": {
+          "type": "object",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 2048
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "top_comment_handle": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "top_comment_text": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no comments, leave out the comments button and the top comment; with no posts, show empty-state in the feed"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the card: the photo box already has a muted fill, so add muted blocks for the handle, likes and caption"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -277,8 +355,19 @@
         "status": "handled",
         "how": "a long handle or place ends in an ellipsis; a long caption stays short until more opens it",
         "evidence": ".odl-who b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Follow, More options, Like, Comment, Share, Save, more, View all comments and the comment's like", "Enter or Space on Like, Save, Follow or the comment's like switches it on or off; the like count changes with Like", "Enter or Space on more opens the full caption and the button then reads less", "liking by double click on the photo has no keyboard version; the Like button does the same", "More options, Comment, Share and View all comments are buttons with no action in the file"]
+    "keyboard": [
+      "Tab reaches Follow, More options, Like, Comment, Share, Save, more, View all comments and the comment's like",
+      "Enter or Space on Like, Save, Follow or the comment's like switches it on or off; the like count changes with Like",
+      "Enter or Space on more opens the full caption and the button then reads less",
+      "liking by double click on the photo has no keyboard version; the Like button does the same",
+      "More options, Comment, Share and View all comments are buttons with no action in the file"
+    ]
   }
 }

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart UI demo: a travel assistant</title>
+<link rel="icon" href="data:,">
+<link id="tokens" rel="stylesheet" href="opendesigner/build/css/tokens.css">
+<link rel="stylesheet" href="../../skills/opendesigner-smart-ui/assets/od-surface.css">
+<link rel="stylesheet" href="chat.css">
+<script src="opendesigner/smart-ui/od-components.js"></script>
+</head>
+<body>
+<div class="chat" data-od-demo>
+  <header class="bar">
+    <div class="who">
+      <span class="mark" aria-hidden="true"></span>
+      <div><h1>Orvell Travel assistant</h1><p>Demo with recorded answers</p></div>
+    </div>
+    <div class="tools">
+      <label class="pick"><span>System</span>
+        <select id="system" aria-label="Design system">
+          <option value="opendesigner/build/css/tokens.css">Orvell Travel (its own)</option>
+          <option value="../devtool-dense/build/css/tokens.css">Devtool Dense</option>
+          <option value="../consumer-playful/build/css/tokens.css">Consumer Playful</option>
+        </select>
+      </label>
+      <button type="button" id="theme" class="tool" aria-pressed="false">Dark</button>
+      <button type="button" id="textonly" class="tool" aria-pressed="false">Text only</button>
+    </div>
+  </header>
+  <main id="log" class="log" aria-label="Conversation"></main>
+  <footer class="composer">
+    <div id="next" class="next" aria-label="Ask next"></div>
+    <p class="note">These answers are recorded, not live. Each one still goes through the same validator and renderer a live answer would. <button type="button" id="bad" class="link">Send a broken answer</button></p>
+  </footer>
+</div>
+<script type="module" src="chat.js"></script>
+</body>
+</html>

@@ -32,8 +32,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a training log entry opened later, where the splits and heart-rate zones explain how the session went"],
-    "avoid_when": ["progress toward a daily target: use daily-goals", "a streak of days done: use habit-tracker or lesson-streak", "sleep stages over a night: use sleep-chart"],
+    "use_when": [
+      "a training log entry opened later, where the splits and heart-rate zones explain how the session went"
+    ],
+    "avoid_when": [
+      "progress toward a daily target: use daily-goals",
+      "a streak of days done: use habit-tracker or lesson-streak",
+      "sleep stages over a night: use sleep-chart"
+    ],
     "parts": [
       {
         "name": "athlete",
@@ -104,7 +110,12 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "distance", "unit", "stats"],
+      "required": [
+        "title",
+        "distance",
+        "unit",
+        "stats"
+      ],
       "properties": {
         "athlete": {
           "type": "object",
@@ -140,7 +151,10 @@
           "part": "distance"
         },
         "unit": {
-          "enum": ["km", "mi"],
+          "enum": [
+            "km",
+            "mi"
+          ],
           "part": "distance"
         },
         "badge": {
@@ -155,7 +169,10 @@
           "part": "stats",
           "items": {
             "type": "object",
-            "required": ["label", "value"],
+            "required": [
+              "label",
+              "value"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -179,7 +196,9 @@
           "part": "zones",
           "items": {
             "type": "object",
-            "required": ["minutes"],
+            "required": [
+              "minutes"
+            ],
             "properties": {
               "range": {
                 "type": "string",
@@ -199,7 +218,10 @@
           "part": "splits",
           "items": {
             "type": "object",
-            "required": ["label", "pace"],
+            "required": [
+              "label",
+              "pace"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -228,17 +250,44 @@
         "saved": {
           "type": "boolean",
           "part": "save"
+        },
+        "athlete_photo": {
+          "type": "object",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 2048
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "athlete_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "athlete_when": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "for a workout with no GPS or heart rate, hide the map and the zones section and keep the stats"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "while the workout syncs, show the card with a sunken map box and muted blocks for the numbers"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -257,8 +306,16 @@
         "status": "handled",
         "how": "stat values never wrap, so keep them short; labels, names and the place line wrap",
         "evidence": ".odl-stats dd { margin: 0; font: var(--ds-text-title-md); font-variant-numeric: tabular-nums; white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Save route, then Share", "Enter or Space on Save route toggles it and changes its text to Route saved"]
+    "keyboard": [
+      "Tab reaches Save route, then Share",
+      "Enter or Space on Save route toggles it and changes its text to Route saved"
+    ]
   }
 }

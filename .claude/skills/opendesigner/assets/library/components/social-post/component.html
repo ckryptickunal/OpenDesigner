@@ -27,7 +27,9 @@
 .odl-social-post .odl-dots { position: absolute; inset-block-end: var(--ds-space-inset-md); inset-inline: 0; display: flex; justify-content: center; gap: var(--ds-space-6); inline-size: max-content; margin-inline: auto;
   padding: var(--ds-space-4) var(--ds-space-8); border-radius: var(--ds-radius-full); background: var(--ds-color-neutral-alpha-light-11); }
 .odl-social-post .odl-dots i { inline-size: var(--ds-space-6); block-size: var(--ds-space-6); border-radius: var(--ds-radius-full); background: var(--ds-color-surface-raised); opacity: 0.5; }
-.odl-social-post .odl-dots i:first-child { opacity: 1; }
+.odl-social-post .odl-dots i:first-child, .odl-social-post .odl-dots i.is-on { opacity: 1; }
+.odl-social-post .odl-dots:has(.is-on) i:first-child:not(.is-on) { opacity: 0.5; }
+.odl-social-post .odl-dots[hidden] { display: none; }
 .odl-social-post .odl-burst { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; opacity: 0; color: var(--ds-color-surface-raised); }
 .odl-social-post .odl-burst svg { inline-size: 28%; block-size: auto; fill: currentColor; stroke-width: 0; filter: drop-shadow(0 0 var(--ds-space-12) var(--ds-color-shadow-key)); }
 .odl-social-post .odl-burst.is-on { animation: odl-social-post-burst var(--ds-motion-duration-extra) var(--ds-motion-easing-standard); }
@@ -65,14 +67,14 @@
 <article class="odl-social-post" aria-label="Post by rafal.makes">
   <div class="odl-card">
     <header class="odl-head">
-      <span class="odl-ring" aria-hidden="true"><img class="odl-av" src="https://images.unsplash.com/photo-1705645930353-0e335311ef20?w=96&h=96&fit=crop&auto=format&q=70" alt="" width="48" height="48" loading="lazy" decoding="async"></span>
-      <span class="odl-who"><b>rafal.makes</b><span>Los Angeles, California</span></span>
+      <span class="odl-ring" aria-hidden="true"><img class="odl-av" data-od-media="author_photo" src="https://images.unsplash.com/photo-1705645930353-0e335311ef20?w=96&h=96&fit=crop&auto=format&q=70" alt="" width="48" height="48" loading="lazy" decoding="async"></span>
+      <span class="odl-who"><b data-od-slot="author_handle">rafal.makes</b><span data-od-slot="author_place" data-od-optional>Los Angeles, California</span></span>
       <button type="button" class="odl-follow" aria-pressed="false">Follow</button>
       <button type="button" aria-label="More options"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
     </header>
     <div class="odl-photo">
-      <img class="odl-pic" src="https://images.unsplash.com/photo-1512531123205-560f5974e686?w=960&h=960&fit=crop&crop=bottom&auto=format&q=70" alt="Photo 1 of 3: city rooftops and towers at sunset, the sky turning gold" width="480" height="480" loading="lazy" decoding="async">
-      <span class="odl-count" aria-hidden="true">1/3</span>
+      <img class="odl-pic" data-od-media="photo" src="https://images.unsplash.com/photo-1512531123205-560f5974e686?w=960&h=960&fit=crop&crop=bottom&auto=format&q=70" alt="Photo 1 of 3: city rooftops and towers at sunset, the sky turning gold" width="480" height="480" loading="lazy" decoding="async">
+      <span class="odl-count" aria-hidden="true" data-od-optional><span data-od-slot="photo_index">1</span>/<span data-od-slot="photo_total">3</span></span>
       <span class="odl-dots" aria-hidden="true"><i></i><i></i><i></i></span>
       <span class="odl-burst" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span>
     </div>
@@ -83,12 +85,12 @@
         <button type="button" aria-label="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></svg></button>
         <button type="button" class="odl-save" aria-pressed="false" aria-label="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>
       </div>
-      <p class="odl-likes" aria-live="polite">Liked by <b>yuki_h</b> and <b class="odl-n">2,481</b> others</p>
-      <p class="odl-caption" id="odl-sp-cap"><b>rafal.makes</b> <span class="odl-short">Third morning in a row on the same roof, waiting for the towers to turn gold…</span><span class="odl-full" id="odl-sp-full" hidden>Third morning in a row on the same roof, waiting for the towers to turn gold. It finally did, for about four minutes, and then the fog rolled back in. Worth every early alarm. <span class="odl-tag">#bluehour</span> <span class="odl-tag">#rooftops</span></span> <button type="button" class="odl-text-btn odl-more" aria-expanded="false" aria-controls="odl-sp-full">more</button></p>
-      <button type="button" class="odl-text-btn">View all 86 comments</button>
-      <p class="odl-top"><img class="odl-av is-sm" src="https://images.unsplash.com/photo-1596580817363-a4a8f67d4bc8?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async"><span><b>kwesi.frames</b> That light on the towers is unreal. Which lens?</span>
+      <p class="odl-likes" aria-live="polite"><span data-od-optional>Liked by <b data-od-slot="liked_by">yuki_h</b> and </span><b class="odl-n" data-od-slot="likes">2,481</b> others</p>
+      <p class="odl-caption" id="odl-sp-cap"><b class="odl-cap-by">rafal.makes</b> <span class="odl-short" data-od-slot="caption_short">Third morning in a row on the same roof, waiting for the towers to turn gold…</span><span class="odl-full" id="odl-sp-full" hidden><span data-od-slot="caption_full">Third morning in a row on the same roof, waiting for the towers to turn gold. It finally did, for about four minutes, and then the fog rolled back in. Worth every early alarm.</span> <span class="odl-tags" data-od-list="tags"><span class="odl-tag" data-od-item data-od-slot="text">#bluehour</span> <span class="odl-tag" data-od-item>#rooftops</span></span></span> <button type="button" class="odl-text-btn odl-more" aria-expanded="false" aria-controls="odl-sp-full">more</button></p>
+      <button type="button" class="odl-text-btn" data-od-optional><span>View all <span data-od-slot="comment_count">86</span> comments</span></button>
+      <p class="odl-top" data-od-optional><img class="odl-av is-sm" data-od-media="top_comment_photo" src="https://images.unsplash.com/photo-1596580817363-a4a8f67d4bc8?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async"><span><b data-od-slot="top_comment_handle">kwesi.frames</b> <span data-od-slot="top_comment_text">That light on the towers is unreal. Which lens?</span></span>
         <button type="button" aria-pressed="false" aria-label="Like comment by kwesi.frames"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button></p>
-      <time datetime="PT2H">2 hours ago</time>
+      <time datetime="PT2H" data-od-slot="time" data-od-optional>2 hours ago</time>
     </div>
   </div>
 </article>
@@ -96,8 +98,19 @@
 document.querySelectorAll(".odl-social-post").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
+  // names and counts come from the post itself, so a rendered post reads right
+  const handle = root.querySelector(".odl-who b").textContent;
+  root.querySelector(".odl-cap-by").textContent = handle;
+  if (handle) root.setAttribute("aria-label", `Post by ${handle}`);
+  const by = root.querySelector(".odl-top b"), cl = root.querySelector(".odl-top button");
+  if (by && cl) cl.setAttribute("aria-label", `Like comment by ${by.textContent}`);
+  const dots = root.querySelector(".odl-dots"), cnt = root.querySelectorAll(".odl-count span");
+  if (dots && cnt.length === 2) {
+    const at = parseInt(cnt[0].textContent, 10) || 1, of = parseInt(cnt[1].textContent, 10) || 1;
+    if (dots.children.length !== of || at !== 1) dots.replaceChildren(...Array.from({ length: of }, (_, i) => { const d = document.createElement("i"); if (i === at - 1) d.className = "is-on"; return d; }));
+  } else if (dots && !cnt.length) dots.hidden = true;
   const like = root.querySelector(".odl-like"), n = root.querySelector(".odl-n"), burst = root.querySelector(".odl-burst");
-  const base = 2481, fmt = new Intl.NumberFormat("en");
+  const fmt = new Intl.NumberFormat("en"), base = parseInt(n.textContent.replace(/[^0-9]/g, ""), 10) || 0;
   const setLike = (on) => {
     like.setAttribute("aria-pressed", String(on));
     like.setAttribute("aria-label", on ? "Unlike" : "Like");
@@ -113,6 +126,7 @@ document.querySelectorAll(".odl-social-post").forEach((root) => {
   const follow = root.querySelector(".odl-follow");
   follow.addEventListener("click", () => { const on = follow.getAttribute("aria-pressed") !== "true"; follow.setAttribute("aria-pressed", String(on)); follow.textContent = on ? "Following" : "Follow"; });
   const more = root.querySelector(".odl-more"), short = root.querySelector(".odl-short"), full = root.querySelector(".odl-full");
+  if (!full.textContent.trim()) more.hidden = true; // nothing more to show
   more.addEventListener("click", () => { const open = full.hidden; full.hidden = !open; short.hidden = open; more.setAttribute("aria-expanded", String(open)); more.textContent = open ? "less" : "more"; });
 });
 </script>

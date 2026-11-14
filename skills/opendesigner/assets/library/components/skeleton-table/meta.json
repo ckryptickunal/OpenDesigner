@@ -136,8 +136,9 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "When the request returns nothing, replace the bones with an empty state (empty-first-use or empty-no-results)."
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
         "status": "shown",
@@ -162,6 +163,10 @@
         "status": "handled",
         "how": "Each line is clamped to one line with an ellipsis, so the skeleton and the loaded layout keep one height.",
         "evidence": "text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": [

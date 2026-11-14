@@ -81,8 +81,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a broadcast where many viewers type short messages at once and the host or moderators pin one note above them"],
-    "avoid_when": ["a one-to-one or small-group conversation: use chat-thread", "comments that stay with a record and can be resolved: use comment-thread", "a recorded video with no live audience: use video-player"],
+    "use_when": [
+      "a broadcast where many viewers type short messages at once and the host or moderators pin one note above them"
+    ],
+    "avoid_when": [
+      "a one-to-one or small-group conversation: use chat-thread",
+      "comments that stay with a record and can be resolved: use comment-thread",
+      "a recorded video with no live audience: use video-player"
+    ],
     "parts": [
       {
         "name": "stream",
@@ -159,12 +165,20 @@
     ],
     "data": {
       "type": "object",
-      "required": ["stream", "title", "host", "messages"],
+      "required": [
+        "stream",
+        "title",
+        "host",
+        "messages"
+      ],
       "properties": {
         "stream": {
           "type": "object",
           "part": "stream",
-          "required": ["src", "alt"],
+          "required": [
+            "src",
+            "alt"
+          ],
           "properties": {
             "src": {
               "type": "string",
@@ -188,7 +202,9 @@
         "host": {
           "type": "object",
           "part": "host",
-          "required": ["name"],
+          "required": [
+            "name"
+          ],
           "properties": {
             "name": {
               "type": "string",
@@ -220,7 +236,9 @@
         "pinned": {
           "type": "object",
           "part": "pinned",
-          "required": ["text"],
+          "required": [
+            "text"
+          ],
           "properties": {
             "by": {
               "type": "string",
@@ -232,7 +250,10 @@
             },
             "link": {
               "type": "object",
-              "required": ["label", "href"],
+              "required": [
+                "label",
+                "href"
+              ],
               "properties": {
                 "label": {
                   "type": "string",
@@ -253,7 +274,10 @@
           "part": "messages",
           "items": {
             "type": "object",
-            "required": ["author", "text"],
+            "required": [
+              "author",
+              "text"
+            ],
             "properties": {
               "author": {
                 "type": "string",
@@ -264,7 +288,13 @@
                 "maxLength": 300
               },
               "role": {
-                "enum": ["host", "mod", "member", "you", "none"]
+                "enum": [
+                  "host",
+                  "mod",
+                  "member",
+                  "you",
+                  "none"
+                ]
               },
               "badge": {
                 "type": "string",
@@ -281,17 +311,52 @@
           "type": "string",
           "maxLength": 32,
           "part": "composer"
+        },
+        "host_photo": {
+          "type": "object",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 2048
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "host_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "host_meta": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "pinned_by": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "pinned_text": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no messages yet, put one secondary line in the log ('No messages yet. Say hello.') and keep the composer"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show the frame as a dark box and two or three message rows as muted blocks until the stream and chat connect"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -310,8 +375,18 @@
         "status": "handled",
         "how": "messages break anywhere, so long words and links never push the panel wider; the title balances its lines",
         "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Follow, the pinned link, the message log, the message box, Add an emoji and Send", "Enter or Space on Follow turns following on or off", "With the message log focused, the arrow keys scroll it", "Enter in the message box sends the message when it is not empty"]
+    "keyboard": [
+      "Tab reaches Follow, the pinned link, the message log, the message box, Add an emoji and Send",
+      "Enter or Space on Follow turns following on or off",
+      "With the message log focused, the arrow keys scroll it",
+      "Enter in the message box sends the message when it is not empty"
+    ]
   }
 }

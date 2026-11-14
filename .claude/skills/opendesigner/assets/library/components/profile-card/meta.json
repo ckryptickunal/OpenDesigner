@@ -37,8 +37,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a card that opens when someone clicks a name, to show who they are and their local time before messaging"],
-    "avoid_when": ["a list of many people with roles: use member-list", "the top of a person's own full profile page: use profile-hero", "suggesting people to follow: use follow-suggestions"],
+    "use_when": [
+      "a card that opens when someone clicks a name, to show who they are and their local time before messaging"
+    ],
+    "avoid_when": [
+      "a list of many people with roles: use member-list",
+      "the top of a person's own full profile page: use profile-hero",
+      "suggesting people to follow: use follow-suggestions"
+    ],
     "parts": [
       {
         "name": "cover",
@@ -103,7 +109,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["name", "avatar"],
+      "required": [
+        "name",
+        "avatar"
+      ],
       "properties": {
         "cover": {
           "type": "string",
@@ -137,10 +146,15 @@
           "part": "meta",
           "items": {
             "type": "object",
-            "required": ["text"],
+            "required": [
+              "text"
+            ],
             "properties": {
               "icon": {
-                "enum": ["place", "time"]
+                "enum": [
+                  "place",
+                  "time"
+                ]
               },
               "text": {
                 "type": "string",
@@ -156,7 +170,10 @@
           "part": "stats",
           "items": {
             "type": "object",
-            "required": ["label", "value"],
+            "required": [
+              "label",
+              "value"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -192,12 +209,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no portrait or cover, show the cover's sunken background and the person's initials in the avatar circle"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the card shape and fill the avatar, name, role and stats with muted blocks; hide the buttons"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -216,8 +235,17 @@
         "status": "handled",
         "how": "name, role and about wrap; the presence pill never breaks",
         "evidence": "font: var(--ds-text-label-md); white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Message, then Follow", "Enter or Space presses the focused button; Follow switches to Following and back", "Message is a button, but the file wires no action to it"]
+    "keyboard": [
+      "Tab reaches Message, then Follow",
+      "Enter or Space presses the focused button; Follow switches to Following and back",
+      "Message is a button, but the file wires no action to it"
+    ]
   }
 }

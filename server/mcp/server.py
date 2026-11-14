@@ -257,10 +257,21 @@ def tool_defs(ui):
 VIEWS = {GALLERY_URI: {"file": "gallery.html", "name": "library-gallery", "title": "Component gallery", "csp": CSP,
                        "description": "The component library as a gallery; 'Use this' sends an OD:add line to the chat."}}
 
+# Smart UI (smartui_tool.py): show_ui draws an assistant's answer with the project's own system. Its view is made from the
+# project's catalog and tokens when read ("render" and "csp" are callables), and stays read-only like the rest.
+sys.path.insert(0, str(HERE))
+import smartui_tool  # noqa: E402
+VIEWS[smartui_tool.SURFACE_URI] = {k: v for k, v in smartui_tool.VIEW.items() if k != "uri"}
+TOOLS.append({**{k: v for k, v in smartui_tool.TOOL.items()}, "fn": lambda args: smartui_tool.show_ui(args, ToolError)})
+
+
+def _csp(v):
+    return v["csp"]() if callable(v["csp"]) else v["csp"]
+
 
 def view_resources():
     return [{"uri": u, "name": v["name"], "title": v["title"], "mimeType": APP_MIME, "description": v["description"],
-             "_meta": {"ui": {"csp": v["csp"], "prefersBorder": True}}} for u, v in VIEWS.items()]
+             "_meta": {"ui": {"csp": _csp(v), "prefersBorder": True}}} for u, v in VIEWS.items()]
 
 
 def catalog_resource():
@@ -335,15 +346,18 @@ class Server:
         if method == "tools/call":
             return self.call(params)
         if method == "resources/list":
-            return {"resources": view_resources() + [catalog_resource()], **cache}
+            return {"resources": view_resources() + [catalog_resource(), smartui_tool.catalog_resource()], **cache}
         if method == "resources/templates/list":
             return {"resourceTemplates": [], **cache}
         if method == "resources/read":
             uri = params.get("uri")
             if uri in VIEWS:
                 v = VIEWS[uri]
-                return {"contents": [{"uri": uri, "mimeType": APP_MIME, "text": (HERE / "views" / v["file"]).read_text(),
-                                      "_meta": {"ui": {"csp": v["csp"], "prefersBorder": True}}}], **cache}
+                text = v["render"]() if "render" in v else (HERE / "views" / v["file"]).read_text()
+                return {"contents": [{"uri": uri, "mimeType": APP_MIME, "text": text,
+                                      "_meta": {"ui": {"csp": _csp(v), "prefersBorder": True}}}], **cache}
+            if uri == "od://smart-ui/catalog":
+                return {"contents": [{"uri": uri, "mimeType": "application/json", "text": smartui_tool.catalog_text()}]}
             if uri == "od://library/catalog":
                 return {"contents": [{"uri": uri, "mimeType": "application/json", "text": json.dumps(catalog(), ensure_ascii=False)}], **cache}
             raise RpcError(-32602 if self.modern(params) else -32002, "Resource not found", {"uri": uri})

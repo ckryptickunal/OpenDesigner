@@ -1,0 +1,158 @@
+{
+ "title": "Desk memberships",
+ "note": "Harbour Street studio, prices per month, cancel any time",
+ "options": [
+  {
+   "name": "Drop-in",
+   "price": "$95",
+   "price_note": "10 days a month",
+   "choose": {
+    "label": "Choose",
+    "event": {
+     "name": "choose_membership",
+     "context": {
+      "plan": "drop_in"
+     }
+    }
+   }
+  },
+  {
+   "name": "Part-time",
+   "price": "$165",
+   "price_note": "3 days a week",
+   "choose": {
+    "label": "Choose",
+    "event": {
+     "name": "choose_membership",
+     "context": {
+      "plan": "part_time"
+     }
+    }
+   }
+  },
+  {
+   "name": "Resident",
+   "badge": "Best value",
+   "price": "$240",
+   "price_note": "every weekday",
+   "choose": {
+    "label": "Choose",
+    "event": {
+     "name": "choose_membership",
+     "context": {
+      "plan": "resident"
+     }
+    }
+   }
+  },
+  {
+   "name": "Private office",
+   "price": "$610",
+   "price_note": "for up to 3 people",
+   "choose": {
+    "label": "Choose",
+    "event": {
+     "name": "choose_membership",
+     "context": {
+      "plan": "private_office"
+     }
+    }
+   }
+  }
+ ],
+ "rows": [
+  {
+   "label": "Desk",
+   "values": [
+    {
+     "value": "Any free desk"
+    },
+    {
+     "value": "Any free desk"
+    },
+    {
+     "value": "Your own desk",
+     "mark": "yes"
+    },
+    {
+     "value": "Lockable room",
+     "mark": "yes"
+    }
+   ]
+  },
+  {
+   "label": "Meeting room",
+   "values": [
+    {
+     "value": "2 hours a month"
+    },
+    {
+     "value": "4 hours a month"
+    },
+    {
+     "value": "8 hours a month"
+    },
+    {
+     "value": "Unlimited",
+     "mark": "yes"
+    }
+   ]
+  },
+  {
+   "label": "Locker",
+   "values": [
+    {
+     "value": "Not included",
+     "mark": "no"
+    },
+    {
+     "value": "Shared locker"
+    },
+    {
+     "value": "Included",
+     "mark": "yes"
+    },
+    {
+     "value": "Included",
+     "mark": "yes"
+    }
+   ]
+  },
+  {
+   "label": "Guests",
+   "values": [
+    {
+     "value": "Not allowed",
+     "mark": "no"
+    },
+    {
+     "value": "1 a week"
+    },
+    {
+     "value": "1 a day"
+    },
+    {
+     "value": "Up to 5 a day"
+    }
+   ]
+  },
+  {
+   "label": "Opening hours",
+   "values": [
+    {
+     "value": "8:00 to 18:00",
+     "mark": "none"
+    },
+    {
+     "value": "8:00 to 20:00"
+    },
+    {
+     "value": "Around the clock"
+    },
+    {
+     "value": "Around the clock"
+    }
+   ]
+  }
+ ]
+}

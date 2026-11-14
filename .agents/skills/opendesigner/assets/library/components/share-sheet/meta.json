@@ -65,8 +65,14 @@
     }
   ],
   "spec": {
-    "use_when": ["sending a post, photo or listing straight to a few recent contacts with an optional message"],
-    "avoid_when": ["inviting people to join a workspace with roles: use invite-members", "a list of actions on an item, not sharing: use action-menu", "a yes or no question in an overlay: use confirm-dialog"],
+    "use_when": [
+      "sending a post, photo or listing straight to a few recent contacts with an optional message"
+    ],
+    "avoid_when": [
+      "inviting people to join a workspace with roles: use invite-members",
+      "a list of actions on an item, not sharing: use action-menu",
+      "a yes or no question in an overlay: use confirm-dialog"
+    ],
     "parts": [
       {
         "name": "backdrop",
@@ -143,7 +149,11 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "people", "link"],
+      "required": [
+        "title",
+        "people",
+        "link"
+      ],
       "properties": {
         "backdrop": {
           "type": "string",
@@ -172,7 +182,10 @@
           "part": "people",
           "items": {
             "type": "object",
-            "required": ["id", "name"],
+            "required": [
+              "id",
+              "name"
+            ],
             "properties": {
               "id": {
                 "type": "string",
@@ -201,7 +214,9 @@
           "part": "apps",
           "items": {
             "type": "object",
-            "required": ["name"],
+            "required": [
+              "name"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -228,12 +243,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no recent people, hide the Recent group and leave search, apps and copy link"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show the Recent row with grey circles where the photos go until contacts load"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "handled",
@@ -253,8 +270,18 @@
         "status": "handled",
         "how": "person and app names are cut with an ellipsis; the link wraps at any character",
         "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Close, Search, each recent person, each app, Copy link, then the message field and Send once someone is picked", "Space on a person picks or unpicks them; picking anyone replaces the apps with a message field and Send", "Enter in the message field or on Send sends to the picked people and announces it", "Enter or Space on Copy link copies it and announces 'Link copied'"]
+    "keyboard": [
+      "Tab reaches Close, Search, each recent person, each app, Copy link, then the message field and Send once someone is picked",
+      "Space on a person picks or unpicks them; picking anyone replaces the apps with a message field and Send",
+      "Enter in the message field or on Send sends to the picked people and announces it",
+      "Enter or Space on Copy link copies it and announces 'Link copied'"
+    ]
   }
 }

@@ -66,17 +66,30 @@
   .odl-leaderboard .odl-row { grid-template-columns: var(--ds-space-24) auto minmax(0, 1fr) auto; gap: var(--ds-space-inline-sm); padding-inline: var(--ds-space-inset-xs); }
 }
 @media (prefers-reduced-motion: reduce) { .odl-leaderboard, .odl-leaderboard *, .odl-leaderboard *::before, .odl-leaderboard *::after { transition: none !important; animation: none !important; } }
+/* For a renderer: the periods and the ranked rows sit in lists that add no box; a hidden period stays hidden. */
+.odl-leaderboard .odl-periods, .odl-leaderboard .odl-group, .odl-leaderboard .odl-group > ol { display: contents; }
+.odl-leaderboard .odl-panel[hidden] { display: none; }
 </style>
 <section class="odl-leaderboard" aria-labelledby="odl-lb-title">
   <div class="odl-card">
     <div class="odl-top">
-      <div class="odl-head"><p class="odl-eyebrow">Puzzle league · ends in 2 d 14 h</p><h3 id="odl-lb-title">Leaderboard</h3></div>
+      <div class="odl-head"><p class="odl-eyebrow" data-od-slot="eyebrow" data-od-optional>Puzzle league · ends in 2 d 14 h</p><h3 id="odl-lb-title" data-od-slot="title">Leaderboard</h3></div>
       <fieldset><legend class="odl-sr">Period</legend><div class="odl-seg">
-        <label><input type="radio" name="odl-lb-period" value="week" checked><span>This week</span></label>
-        <label><input type="radio" name="odl-lb-period" value="all"><span>All time</span></label>
+        <label data-od-sample><input type="radio" name="odl-lb-period" value="week" checked><span>This week</span></label>
+        <label data-od-sample><input type="radio" name="odl-lb-period" value="all"><span>All time</span></label>
       </div></fieldset>
     </div>
-    <div class="odl-panel odl-week">
+    <div class="odl-periods" data-od-list="periods"><div class="odl-panel" data-od-item data-od-template hidden><data data-od-slot="label" hidden></data>
+      <ol class="odl-podium" data-od-list="podium">
+        <li class="odl-p" data-od-item><span class="odl-ph"><svg class="odl-crown" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg><img class="odl-pav" data-od-media="photo" alt="" width="64" height="64" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1632765854612-9b02b6ec2b15?w=176&h=176&fit=crop&crop=faces&auto=format&q=70"><span class="odl-badge" aria-hidden="true"></span></span><span class="odl-pn" data-od-slot="name"></span><span class="odl-pp"><bdi data-od-slot="points"></bdi> pts<span class="odl-sr odl-place"></span></span></li>
+      </ol>
+      <ol class="odl-list">
+        <li class="odl-group"><ol data-od-list="rows"><li class="odl-row" data-od-item><span class="odl-rank" data-od-slot="rank"></span><img class="odl-av" data-od-media="photo" alt="" width="40" height="40" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1632765854612-9b02b6ec2b15?w=176&h=176&fit=crop&crop=faces&auto=format&q=70"><span class="odl-who"><span class="odl-name" data-od-slot="name"></span><span class="odl-chg" data-od-optional><svg data-dir="up" class="odl-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg><svg data-dir="down" class="odl-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg><svg data-dir="same" class="odl-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg><bdi data-od-slot="change"></bdi><span class="odl-sr"></span></span></span><span class="odl-pts"><bdi data-od-slot="points"></bdi><span class="odl-sr"> points</span></span></li></ol></li>
+        <li class="odl-gap" aria-hidden="true"><span></span><span></span><span></span></li>
+        <li class="odl-row is-you" aria-current="true" data-od-optional><span class="odl-rank" data-od-slot="you_rank"></span><img class="odl-av" data-od-media="you_photo" alt="" width="40" height="40" loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1632765854612-9b02b6ec2b15?w=176&h=176&fit=crop&crop=faces&auto=format&q=70"><span class="odl-who"><span class="odl-name"><span class="odl-nm" data-od-slot="you_name"></span><span class="odl-you">You</span></span><span class="odl-chg" data-od-optional><svg data-dir="up" class="odl-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg><svg data-dir="down" class="odl-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg><svg data-dir="same" class="odl-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg><bdi data-od-slot="you_change"></bdi><span class="odl-sr"></span></span></span><span class="odl-pts"><bdi data-od-slot="you_points"></bdi><span class="odl-sr"> points</span></span></li>
+      </ol>
+    </div>
+    <div class="odl-panel odl-week" data-od-item>
       <ol class="odl-podium" aria-label="Top three, this week">
         <li class="odl-p odl-p1"><span class="odl-ph"><svg class="odl-crown" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg><img class="odl-pav" src="https://images.unsplash.com/photo-1632765854612-9b02b6ec2b15?w=176&h=176&fit=crop&crop=faces&auto=format&q=70" alt="" width="88" height="88" loading="lazy" decoding="async"><span class="odl-badge" aria-hidden="true">1</span></span><span class="odl-pn">Akosua Mensimah</span><span class="odl-pp">2,840 pts<span class="odl-sr">, place 1</span></span></li>
         <li class="odl-p odl-p2"><span class="odl-ph"><img class="odl-pav" src="https://images.unsplash.com/photo-1544168190-79c17527004f?w=128&h=128&fit=crop&crop=faces&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><span class="odl-badge" aria-hidden="true">2</span></span><span class="odl-pn">Ryota Ishikawa</span><span class="odl-pp">2,615 pts<span class="odl-sr">, place 2</span></span></li>
@@ -92,7 +105,7 @@
         <li class="odl-row is-you" aria-current="true"><span class="odl-rank">14</span><img class="odl-av" src="https://images.unsplash.com/photo-1596075700978-ecba72d16eb0?w=80&h=80&fit=crop&crop=faces&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"><span class="odl-who"><span class="odl-name"><span class="odl-nm">Wynn Castellane</span><span class="odl-you">You</span></span><span class="odl-chg is-up"><svg class="odl-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>5<span class="odl-sr"> places up</span></span></span><span class="odl-pts">1,410<span class="odl-sr"> points</span></span></li>
       </ol>
     </div>
-    <div class="odl-panel odl-all">
+    <div class="odl-panel odl-all" data-od-item>
       <ol class="odl-podium" aria-label="Top three, all time">
         <li class="odl-p odl-p1"><span class="odl-ph"><svg class="odl-crown" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/></svg><img class="odl-pav" src="https://images.unsplash.com/photo-1544168190-79c17527004f?w=176&h=176&fit=crop&crop=faces&auto=format&q=70" alt="" width="88" height="88" loading="lazy" decoding="async"><span class="odl-badge" aria-hidden="true">1</span></span><span class="odl-pn">Ryota Ishikawa</span><span class="odl-pp">148,200 pts<span class="odl-sr">, place 1</span></span></li>
         <li class="odl-p odl-p2"><span class="odl-ph"><img class="odl-pav" src="https://images.unsplash.com/photo-1566616213894-2d4e1baee5d8?w=128&h=128&fit=crop&crop=faces&auto=format&q=70" alt="" width="64" height="64" loading="lazy" decoding="async"><span class="odl-badge" aria-hidden="true">2</span></span><span class="odl-pn">Astrid Holmqvist</span><span class="odl-pp">141,950 pts<span class="odl-sr">, place 2</span></span></li>
@@ -108,5 +121,44 @@
         <li class="odl-row is-you" aria-current="true"><span class="odl-rank">211</span><img class="odl-av" src="https://images.unsplash.com/photo-1596075700978-ecba72d16eb0?w=80&h=80&fit=crop&crop=faces&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"><span class="odl-who"><span class="odl-name"><span class="odl-nm">Wynn Castellane</span><span class="odl-you">You</span></span><span class="odl-chg is-up"><svg class="odl-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>12<span class="odl-sr"> places up</span></span></span><span class="odl-pts">21,630<span class="odl-sr"> points</span></span></li>
       </ol>
     </div>
+    </div>
   </div>
 </section>
+<script>
+document.querySelectorAll(".odl-leaderboard").forEach((root) => {
+  if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
+  root.dataset.odlReady = "1";
+  const seg = root.querySelector(".odl-seg");
+  if (!seg || seg.querySelector("input")) return; // the sample switches its two periods with CSS alone
+  // A rendered answer: one switch per period, places and changes drawn from the numbers.
+  const panels = [...root.querySelectorAll(".odl-panel:not([data-od-template])")], group = "odl-lb-" + Math.random().toString(36).slice(2, 8);
+  const show = (i) => panels.forEach((p, j) => { p.hidden = j !== i; });
+  panels.forEach((p, i) => {
+    const label = ((p.querySelector('[data-od-slot="label"]') || {}).textContent || "").trim() || `Period ${i + 1}`;
+    const l = document.createElement("label"), inp = document.createElement("input"), sp = document.createElement("span");
+    inp.type = "radio"; inp.name = group; inp.checked = i === 0; inp.addEventListener("change", () => show(i));
+    sp.textContent = label; l.append(inp, sp); seg.append(l);
+    const pod = p.querySelector(".odl-podium"), list = p.querySelector(".odl-list");
+    if (pod) pod.setAttribute("aria-label", `Top three, ${label}`);
+    if (list) list.setAttribute("aria-label", `Ranks 4 and below, ${label}`);
+    p.querySelectorAll(".odl-podium > .odl-p").forEach((li, k) => {
+      li.classList.add("odl-p" + (k + 1));
+      if (k) { const c = li.querySelector(".odl-crown"); if (c) c.remove(); }
+      const b = li.querySelector(".odl-badge"), s = li.querySelector(".odl-place");
+      if (b) b.textContent = String(k + 1);
+      if (s) s.textContent = `, place ${k + 1}`;
+    });
+    p.querySelectorAll(".odl-chg").forEach((c) => {
+      const v = c.querySelector('[data-od-slot$="change"]'), n = parseInt(((v || {}).textContent || "0").replace(/[^\d-]/g, ""), 10) || 0;
+      const dir = n > 0 ? "up" : n < 0 ? "down" : "same";
+      c.classList.add("is-" + dir);
+      c.querySelectorAll("[data-dir]").forEach((svg) => { if (svg.dataset.dir !== dir) svg.remove(); });
+      if (v) v.textContent = n ? String(Math.abs(n)) : "";
+      const sr = c.querySelector(".odl-sr");
+      if (sr) sr.textContent = n ? ` ${Math.abs(n) === 1 ? "place" : "places"} ${dir}` : "no change";
+    });
+    if (!p.querySelector(".odl-row.is-you")) { const g = p.querySelector(".odl-gap"); if (g) g.remove(); }
+  });
+  show(0);
+});
+</script>

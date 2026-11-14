@@ -33,8 +33,14 @@
     }
   ],
   "spec": {
-    "use_when": ["stepping through a queue of records one by one, with previous and next, while the list stays in view"],
-    "avoid_when": ["a short yes-or-no question with no record behind it: use confirm-dialog", "the decision needs the approval steps and the balance effect laid out: use approval-panel", "a cart or checkout side sheet: use cart-drawer"],
+    "use_when": [
+      "stepping through a queue of records one by one, with previous and next, while the list stays in view"
+    ],
+    "avoid_when": [
+      "a short yes-or-no question with no record behind it: use confirm-dialog",
+      "the decision needs the approval steps and the balance effect laid out: use approval-panel",
+      "a cart or checkout side sheet: use cart-drawer"
+    ],
     "parts": [
       {
         "name": "title",
@@ -105,7 +111,10 @@
     ],
     "data": {
       "type": "object",
-      "required": ["title", "fields"],
+      "required": [
+        "title",
+        "fields"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -137,8 +146,16 @@
           "maxItems": 2,
           "part": "subtitle",
           "items": {
-            "type": "string",
-            "maxLength": 60
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 60
+              }
+            }
           }
         },
         "fields": {
@@ -148,7 +165,10 @@
           "part": "fields",
           "items": {
             "type": "object",
-            "required": ["label", "value"],
+            "required": [
+              "label",
+              "value"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -172,7 +192,9 @@
         "file": {
           "type": "object",
           "part": "file",
-          "required": ["name"],
+          "required": [
+            "name"
+          ],
           "properties": {
             "name": {
               "type": "string",
@@ -198,17 +220,27 @@
               "part": "reject"
             }
           }
+        },
+        "file_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "file_meta": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "for a field with no value, show a muted dash in its value cell; with no record picked, do not open the drawer"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the header and footer and fill the amount and each field value with a muted block; disable both decision buttons"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -227,8 +259,16 @@
         "status": "handled",
         "how": "the title and file name are cut with an ellipsis; field values break anywhere rather than overflow",
         "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "not_built",
+        "how": "a photo that fails to load shows the browser's broken image"
       }
     },
-    "keyboard": ["Tab moves through Previous, Next and Close, the open-file button, then Reject and Approve", "Enter or Space presses the focused button", "The file has no script: Esc does not close it and Previous and Next do nothing until wired"]
+    "keyboard": [
+      "Tab moves through Previous, Next and Close, the open-file button, then Reject and Approve",
+      "Enter or Space presses the focused button",
+      "The file has no script: Esc does not close it and Previous and Next do nothing until wired"
+    ]
   }
 }

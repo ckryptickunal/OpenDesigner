@@ -4,15 +4,35 @@
   "use": "on a billing or usage page, for limits that can run out",
   "type": "chart",
   "style": "quiet",
-  "industries": ["saas", "devtools", "finance"],
-  "tags": ["billing", "usage", "budget", "meter", "forecast"],
-  "states": ["under budget", "forecast over budget", "full"],
+  "industries": [
+    "saas",
+    "devtools",
+    "finance"
+  ],
+  "tags": [
+    "billing",
+    "usage",
+    "budget",
+    "meter",
+    "forecast"
+  ],
+  "states": [
+    "under budget",
+    "forecast over budget",
+    "full"
+  ],
   "source": "brand/showcase/product/05-kilnworks-billing",
   "a11y": "Each bar has role meter with its value and label; the forecast and thresholds are also said in the text under it.",
   "width": "wide",
   "spec": {
-    "use_when": ["a plan or account summary where two to three limits sit side by side and one may run out before the period ends"],
-    "avoid_when": ["a trend over time rather than a share of a limit: use bar-chart", "headline numbers with no limit to run out: use kpi-strip", "more than three limits: the wide layout holds three columns"],
+    "use_when": [
+      "a plan or account summary where two to three limits sit side by side and one may run out before the period ends"
+    ],
+    "avoid_when": [
+      "a trend over time rather than a share of a limit: use bar-chart",
+      "headline numbers with no limit to run out: use kpi-strip",
+      "more than three limits: the wide layout holds three columns"
+    ],
     "parts": [
       {
         "name": "meters",
@@ -53,7 +73,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["meters"],
+      "required": [
+        "meters"
+      ],
       "properties": {
         "label": {
           "type": "string",
@@ -66,7 +88,11 @@
           "part": "meters",
           "items": {
             "type": "object",
-            "required": ["label", "used", "limit"],
+            "required": [
+              "label",
+              "used",
+              "limit"
+            ],
             "properties": {
               "label": {
                 "type": "string",
@@ -100,9 +126,14 @@
                 "minItems": 0,
                 "maxItems": 3,
                 "items": {
-                  "type": "number",
-                  "minimum": 0,
-                  "maximum": 100
+                  "type": "object",
+                  "properties": {
+                    "at": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100
+                    }
+                  }
                 }
               },
               "high": {
@@ -111,6 +142,13 @@
               "note": {
                 "type": "string",
                 "maxLength": 80
+              },
+              "limit_display": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "share": {
+                "type": "number"
               }
             }
           }
@@ -119,12 +157,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no usage yet, show each meter at 0% with a note such as 'Nothing used this month'; with no limits at all, show empty-state"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the sections and show an empty track with a muted block in place of the amount"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -143,6 +183,10 @@
         "status": "handled",
         "how": "the label row wraps the alert chip under the label; the chip itself never wraps",
         "evidence": "flex-wrap: wrap; justify-content: space-between"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": []

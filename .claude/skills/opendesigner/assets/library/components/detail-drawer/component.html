@@ -76,12 +76,15 @@
   .odl-detail-drawer dd { padding-block-start: var(--ds-space-2); padding-inline-start: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .odl-detail-drawer, .odl-detail-drawer *, .odl-detail-drawer *::before { transition: none !important; animation: none !important; } }
+.odl-detail-drawer .odl-wrap { display: contents; }
+.odl-detail-drawer .odl-top .od-empty { display: none; } /* a renderer's "nothing yet" line where an empty list should simply show nothing */
+.odl-detail-drawer [hidden] { display: none; }
 </style>
-<aside class="odl-detail-drawer" role="dialog" aria-modal="false" aria-label="Bill from Redwillow Produce">
+<aside class="odl-detail-drawer" role="dialog" aria-modal="false" aria-label="Bill from Redwillow Produce" data-od-label="title">
   <header>
-    <h2>Redwillow Produce</h2>
+    <h2 data-od-slot="title">Redwillow Produce</h2>
     <div class="odl-nav">
-      <span class="odl-pos">5 of 14</span>
+      <span class="odl-pos" data-od-slot="position" data-od-optional>5 of 14</span>
       <button type="button" class="odl-icon-btn" aria-label="Previous bill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg></button>
       <button type="button" class="odl-icon-btn" aria-label="Next bill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
       <span class="odl-sep" aria-hidden="true"></span>
@@ -90,34 +93,35 @@
   </header>
   <div class="odl-body">
     <div class="odl-top">
-      <span class="odl-pill">1 of 2 approved</span>
-      <p class="odl-amount">$5,402<span>.88</span><small>USD</small></p>
-      <p class="odl-sub">Due Oct 18 · in 4 days · Net 30 from Sep 18</p>
-      <p class="odl-sub">Approving schedules ACH for Oct 17.</p>
+      <span class="odl-pill" data-od-slot="status" data-od-optional>1 of 2 approved</span>
+      <p class="odl-amount" data-od-optional><data data-od-slot="amount">$5,402</data><span data-od-sample>.88</span><small data-od-slot="currency" data-od-optional>USD</small></p>
+      <div class="odl-wrap" data-od-list="subtitle"><p class="odl-sub" data-od-item data-od-template hidden><span data-od-slot="text"></span></p><p class="odl-sub" data-od-item>Due Oct 18 · in 4 days · Net 30 from Sep 18</p>
+      <p class="odl-sub" data-od-item>Approving schedules ACH for Oct 17.</p></div>
     </div>
     <div>
       <p class="odl-label">Details</p>
-      <dl>
-        <div><dt>Bill number</dt><dd><code>EVP-3390</code></dd></div>
-        <div><dt>Submitted by</dt><dd><span class="odl-person"><img src="https://images.unsplash.com/photo-1725033489648-a819750348eb?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async">Nandini Iyer</span><span class="odl-muted">· Oct 8</span></dd></div>
-        <div><dt>GL account</dt><dd><code>5120</code> Produce and dairy</dd></div>
-        <div><dt>Department</dt><dd>Kitchen · Reno DC</dd></div>
-        <div><dt>Pay from</dt><dd>Operating ··4410</dd></div>
-        <div><dt>Payment</dt><dd>ACH on Oct 17</dd></div>
-        <div><dt>Matched to</dt><dd><code>PO-3291</code> <span class="odl-muted">· 3 of 3 lines</span></dd></div>
+      <dl data-od-list="fields">
+        <div data-od-item data-od-template hidden><dt data-od-slot="label"></dt><dd><span data-od-slot="value"></span><span class="odl-muted" data-od-optional>· <span data-od-slot="note"></span></span></dd></div>
+        <div data-od-item><dt>Bill number</dt><dd><code>EVP-3390</code></dd></div>
+        <div data-od-item><dt>Submitted by</dt><dd><span class="odl-person"><img src="https://images.unsplash.com/photo-1725033489648-a819750348eb?w=64&h=64&fit=crop&auto=format&q=70" alt="" width="32" height="32" loading="lazy" decoding="async">Nandini Iyer</span><span class="odl-muted">· Oct 8</span></dd></div>
+        <div data-od-item><dt>GL account</dt><dd><code>5120</code> Produce and dairy</dd></div>
+        <div data-od-item><dt>Department</dt><dd>Kitchen · Reno DC</dd></div>
+        <div data-od-item><dt>Pay from</dt><dd>Operating ··4410</dd></div>
+        <div data-od-item><dt>Payment</dt><dd>ACH on Oct 17</dd></div>
+        <div data-od-item><dt>Matched to</dt><dd><code>PO-3291</code> <span class="odl-muted">· 3 of 3 lines</span></dd></div>
       </dl>
     </div>
-    <div>
+    <div data-od-optional>
       <p class="odl-label">Attachment</p>
       <div class="odl-file">
         <span class="odl-file-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg></span>
-        <p><b>EVP-3390.pdf</b><small>Invoice · 2 pages · 211 KB</small></p>
-        <button type="button" class="odl-icon-btn" aria-label="Open EVP-3390.pdf in a new tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
+        <p><b data-od-slot="file_name">EVP-3390.pdf</b><small data-od-slot="file_meta" data-od-optional>Invoice · 2 pages · 211 KB</small></p>
+        <button type="button" class="odl-icon-btn" aria-label="Open EVP-3390.pdf in a new tab" data-od-label="file_name"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
       </div>
     </div>
   </div>
   <footer>
-    <button type="button" class="odl-btn odl-secondary">Reject</button>
-    <button type="button" class="odl-btn odl-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Approve</button>
+    <button type="button" class="odl-btn odl-secondary" data-od-action="reject" data-od-effect="change">Reject</button>
+    <button type="button" class="odl-btn odl-primary" data-od-action="approve" data-od-effect="change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span data-od-slot="label">Approve</span></button>
   </footer>
 </aside>

@@ -35,6 +35,8 @@ assets/library/
 | `live_region` | Optional: `polite`, `assertive` or `none`, how the part tells screen readers that something changed |
 | `tokens_planned` | Optional: `--ds-state-*` variables it reads where a system has them, each with the token it falls back to |
 | `spec` | What agents, the MCP server and smart UI need to use it without reading the file: see "spec" below |
+| `live_region` | Optional: `polite`, `assertive` or `none`, how the part tells screen readers that something changed |
+| `tokens_planned` | Optional: `--ds-state-*` variables it reads where a system has them, each with the token it falls back to |
 
 ### spec (in meta.json) and library.json
 `library.json` holds one entry per component. Some fields are derived from `component.html`, so they cannot drift: the `--ds-*` tokens it reads, ARIA roles, how many controls, whether it has `:focus-visible`, reduced motion and the target floor, its size and whether it has a script. The rest come from `spec`, written by whoever writes the component:

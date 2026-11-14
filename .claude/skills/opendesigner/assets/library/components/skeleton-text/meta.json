@@ -112,6 +112,10 @@
         "status": "handled",
         "how": "Each line is clamped to one line with an ellipsis, so the skeleton and the loaded layout keep one height.",
         "evidence": "text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
       }
     },
     "keyboard": [

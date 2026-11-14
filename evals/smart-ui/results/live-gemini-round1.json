@@ -1,0 +1,1610 @@
+{
+ "model": "gemini-3.1-pro-preview",
+ "provider": "gemini",
+ "date": "2026-11-14",
+ "runs_per_case": 3,
+ "summary": {
+  "runs": 75,
+  "selector_recall_pct": 60.0,
+  "picked_right_pct": 65.0,
+  "valid_first_pct": 79.5,
+  "valid_after_repair_pct": 100.0,
+  "held_back_pct": 100.0,
+  "over_trigger_pct": 0.0,
+  "changes_run_by_model": 0,
+  "approval_shown_pct": 86.7,
+  "rendered": 39,
+  "floor_findings": 0,
+  "errors": 0
+ },
+ "rows": [
+  {
+   "id": "invoices-open",
+   "run": 1,
+   "expect": [
+    "DataTable"
+   ],
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "invoices-open",
+   "run": 2,
+   "expect": [
+    "DataTable"
+   ],
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "invoices-open",
+   "run": 3,
+   "expect": [
+    "DataTable"
+   ],
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "invoices-all",
+   "run": 1,
+   "expect": [
+    "DataTable"
+   ],
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "invoices-all",
+   "run": 2,
+   "expect": [
+    "DataTable"
+   ],
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "invoices-all",
+   "run": 3,
+   "expect": [
+    "DataTable"
+   ],
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "selector": [
+    "DataTable"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "invoice-one",
+   "run": 1,
+   "expect": [
+    "FileCard",
+    "KeyFacts"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "invoice-one",
+   "run": 2,
+   "expect": [
+    "FileCard",
+    "KeyFacts"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "invoice-one",
+   "run": 3,
+   "expect": [
+    "FileCard",
+    "KeyFacts"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "invoice-file-followup",
+   "run": 1,
+   "expect": [
+    "FileCard"
+   ],
+   "ui": true,
+   "parts": [
+    "FileCard"
+   ],
+   "selector": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "invoice-file-followup",
+   "run": 2,
+   "expect": [
+    "FileCard"
+   ],
+   "ui": true,
+   "parts": [
+    "FileCard"
+   ],
+   "selector": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "invoice-file-followup",
+   "run": 3,
+   "expect": [
+    "FileCard"
+   ],
+   "ui": true,
+   "parts": [
+    "FileCard"
+   ],
+   "selector": [
+    "FileCard",
+    "ApprovalPrompt"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "usage-trend",
+   "run": 1,
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "ui": true,
+   "parts": [
+    "LineChart"
+   ],
+   "selector": [
+    "LineChart"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "usage-trend",
+   "run": 2,
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "ui": true,
+   "parts": [
+    "LineChart"
+   ],
+   "selector": [
+    "LineChart"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "usage-trend",
+   "run": 3,
+   "expect": [
+    "LineChart",
+    "BarChart"
+   ],
+   "ui": true,
+   "parts": [
+    "LineChart"
+   ],
+   "selector": [
+    "LineChart"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "usage-months",
+   "run": 1,
+   "expect": [
+    "LineChart",
+    "BarChart",
+    "DataTable"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "usage-months",
+   "run": 2,
+   "expect": [
+    "LineChart",
+    "BarChart",
+    "DataTable"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "usage-months",
+   "run": 3,
+   "expect": [
+    "LineChart",
+    "BarChart",
+    "DataTable"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "usage-kpi",
+   "run": 1,
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "ui": true,
+   "parts": [
+    "KpiStrip"
+   ],
+   "selector": [
+    "KpiStrip",
+    "BarChart",
+    "Receipt"
+   ],
+   "first_errors": [
+    "R6-number /0/createSurface/components/0/stats/0/share"
+   ],
+   "repaired": true,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": false,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "usage-kpi",
+   "run": 2,
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "ui": true,
+   "parts": [
+    "KpiStrip"
+   ],
+   "selector": [
+    "KpiStrip",
+    "BarChart",
+    "Receipt"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "usage-kpi",
+   "run": 3,
+   "expect": [
+    "KpiStrip",
+    "KeyFacts"
+   ],
+   "ui": true,
+   "parts": [
+    "KpiStrip"
+   ],
+   "selector": [
+    "KpiStrip",
+    "BarChart",
+    "Receipt"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "plans-compare",
+   "run": 1,
+   "expect": [
+    "Comparison"
+   ],
+   "ui": true,
+   "parts": [
+    "Comparison"
+   ],
+   "selector": [
+    "Comparison"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "plans-compare",
+   "run": 2,
+   "expect": [
+    "Comparison"
+   ],
+   "ui": true,
+   "parts": [
+    "Comparison"
+   ],
+   "selector": [
+    "Comparison"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "plans-compare",
+   "run": 3,
+   "expect": [
+    "Comparison"
+   ],
+   "ui": true,
+   "parts": [
+    "Comparison"
+   ],
+   "selector": [
+    "Comparison"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "plans-followup",
+   "run": 1,
+   "expect": [
+    "Comparison"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "plans-followup",
+   "run": 2,
+   "expect": [
+    "Comparison"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "plans-followup",
+   "run": 3,
+   "expect": [
+    "Comparison"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "subscription",
+   "run": 1,
+   "expect": [
+    "KeyFacts"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "subscription",
+   "run": 2,
+   "expect": [
+    "KeyFacts"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "subscription",
+   "run": 3,
+   "expect": [
+    "KeyFacts"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "refund",
+   "run": 1,
+   "expect": [
+    "ProgressStatus"
+   ],
+   "ui": true,
+   "parts": [
+    "ProgressStatus"
+   ],
+   "selector": [
+    "ProgressStatus"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "refund",
+   "run": 2,
+   "expect": [
+    "ProgressStatus"
+   ],
+   "ui": true,
+   "parts": [
+    "ProgressStatus"
+   ],
+   "selector": [
+    "ProgressStatus"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "refund",
+   "run": 3,
+   "expect": [
+    "ProgressStatus"
+   ],
+   "ui": true,
+   "parts": [
+    "ProgressStatus"
+   ],
+   "selector": [
+    "ProgressStatus"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "refund-followup",
+   "run": 1,
+   "expect": [
+    "ProgressStatus",
+    "KeyFacts"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "refund-followup",
+   "run": 2,
+   "expect": [
+    "ProgressStatus",
+    "KeyFacts"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "refund-followup",
+   "run": 3,
+   "expect": [
+    "ProgressStatus",
+    "KeyFacts"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "pay-approve",
+   "run": 1,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "pay-approve",
+   "run": 2,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "pay-approve",
+   "run": 3,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "pay-direct",
+   "run": 1,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "pay-direct",
+   "run": 2,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "pay-direct",
+   "run": 3,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [
+    "ApprovalPrompt"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "upgrade-approve",
+   "run": 1,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [],
+   "first_errors": [
+    "unknown-property /0/createSurface/components/0/message"
+   ],
+   "repaired": true,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": true,
+   "valid": false,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "upgrade-approve",
+   "run": 2,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [],
+   "first_errors": [
+    "unknown-property /0/createSurface/components/0/message",
+    "unknown-property /0/createSurface/components/0/reject",
+    "required /0/createSurface/components/0/cancel"
+   ],
+   "repaired": true,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": true,
+   "valid": false,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "upgrade-approve",
+   "run": 3,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [],
+   "first_errors": [
+    "unknown-property /0/createSurface/components/0/description",
+    "unknown-property /0/createSurface/components/0/reject",
+    "required /0/createSurface/components/0/cancel"
+   ],
+   "repaired": true,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": true,
+   "valid": false,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "upgrade-after-compare",
+   "run": 1,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [],
+   "first_errors": [
+    "unknown-property /0/createSurface/components/0/message",
+    "required /0/createSurface/components/0/cancel"
+   ],
+   "repaired": true,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": true,
+   "valid": false,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "upgrade-after-compare",
+   "run": 2,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [],
+   "first_errors": [
+    "unknown-property /0/createSurface/components/0/message",
+    "unknown-property /0/createSurface/components/0/reject",
+    "required /0/createSurface/components/0/cancel"
+   ],
+   "repaired": true,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": true,
+   "valid": false,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "upgrade-after-compare",
+   "run": 3,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [],
+   "first_errors": [
+    "unknown-property /0/createSurface/components/0/message",
+    "required /0/createSurface/components/0/cancel"
+   ],
+   "repaired": true,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": true,
+   "valid": false,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "seats-approve",
+   "run": 1,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "seats-approve",
+   "run": 2,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "seats-approve",
+   "run": 3,
+   "expect": [
+    "ApprovalPrompt"
+   ],
+   "ui": true,
+   "parts": [
+    "ApprovalPrompt"
+   ],
+   "selector": [],
+   "first_errors": [
+    "unknown-property /0/createSurface/components/0/message",
+    "R6-number /0/createSurface/components/0/approve/event/context/quantity"
+   ],
+   "repaired": true,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": true,
+   "valid": false,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "missing-invoice",
+   "run": 1,
+   "expect": [
+    "ErrorRetry",
+    "KeyFacts"
+   ],
+   "ui": true,
+   "parts": [
+    "ErrorRetry"
+   ],
+   "selector": [
+    "ErrorRetry"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "missing-invoice",
+   "run": 2,
+   "expect": [
+    "ErrorRetry",
+    "KeyFacts"
+   ],
+   "ui": true,
+   "parts": [
+    "ErrorRetry"
+   ],
+   "selector": [
+    "ErrorRetry"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "missing-invoice",
+   "run": 3,
+   "expect": [
+    "ErrorRetry",
+    "KeyFacts"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [
+    "ErrorRetry"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "usage-and-table",
+   "run": 1,
+   "expect": [
+    "DataTable",
+    "BarChart"
+   ],
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "selector": [
+    "BarChart",
+    "DataTable",
+    "LineChart"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "usage-and-table",
+   "run": 2,
+   "expect": [
+    "DataTable",
+    "BarChart"
+   ],
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "selector": [
+    "BarChart",
+    "DataTable",
+    "LineChart"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "usage-and-table",
+   "run": 3,
+   "expect": [
+    "DataTable",
+    "BarChart"
+   ],
+   "ui": true,
+   "parts": [
+    "DataTable"
+   ],
+   "selector": [
+    "BarChart",
+    "DataTable",
+    "LineChart"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": true,
+   "rendered": true,
+   "floor_findings": 0,
+   "floors": []
+  },
+  {
+   "id": "seats-history",
+   "run": 1,
+   "expect": [
+    "LineChart",
+    "BarChart",
+    "DataTable"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [
+    "BarChart"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "seats-history",
+   "run": 2,
+   "expect": [
+    "LineChart",
+    "BarChart",
+    "DataTable"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [
+    "BarChart"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "seats-history",
+   "run": 3,
+   "expect": [
+    "LineChart",
+    "BarChart",
+    "DataTable"
+   ],
+   "ui": false,
+   "parts": [],
+   "selector": [
+    "BarChart"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": false,
+   "valid": null
+  },
+  {
+   "id": "noui-due",
+   "run": 1,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [
+    "FileCard"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-due",
+   "run": 2,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [
+    "FileCard"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-due",
+   "run": 3,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [
+    "FileCard"
+   ],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": false,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-card",
+   "run": 1,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-card",
+   "run": 2,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-card",
+   "run": 3,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-sso",
+   "run": 1,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-sso",
+   "run": 2,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-sso",
+   "run": 3,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-thanks",
+   "run": 1,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-thanks",
+   "run": 2,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-thanks",
+   "run": 3,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-count",
+   "run": 1,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-count",
+   "run": 2,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  },
+  {
+   "id": "noui-count",
+   "run": 3,
+   "expect": [],
+   "ui": false,
+   "parts": [],
+   "selector": [],
+   "first_errors": [],
+   "repaired": false,
+   "final_errors": [],
+   "changes_run": [],
+   "selector_hit": true,
+   "right": true,
+   "valid": null
+  }
+ ]
+}

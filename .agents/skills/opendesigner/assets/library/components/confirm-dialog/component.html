@@ -48,30 +48,32 @@
   .odl-confirm-dialog .odl-delete { order: -1; }
 }
 @media (prefers-reduced-motion: reduce) { .odl-confirm-dialog, .odl-confirm-dialog *, .odl-confirm-dialog *::before { transition: none !important; animation: none !important; } }
+.odl-confirm-dialog [hidden] { display: none; }
 </style>
 <div class="odl-confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="odl-cd-title" aria-describedby="odl-cd-desc">
   <div class="odl-main">
     <div class="odl-head">
       <span class="odl-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg></span>
       <div>
-        <h2 id="odl-cd-title">Delete 3 receipts?</h2>
-        <p class="odl-lede" id="odl-cd-desc">They will be removed from the ledger and from the October export. Matched bank lines go back to unmatched. This cannot be undone.</p>
+        <h2 id="odl-cd-title" data-od-slot="title">Delete 3 receipts?</h2>
+        <p class="odl-lede" id="odl-cd-desc" data-od-slot="lede">They will be removed from the ledger and from the October export. Matched bank lines go back to unmatched. This cannot be undone.</p>
       </div>
     </div>
-    <ul aria-label="Receipts to delete">
-      <li><span>Redwillow Produce <small>· Oct 18</small></span><span>$5,402.88</span></li>
-      <li><span>Inchley Print Co. <small>· Oct 14</small></span><span>$612.40</span></li>
-      <li><span>Hollin Water Co. <small>· Oct 19</small></span><span>$238.14</span></li>
+    <ul aria-label="Receipts to delete" data-od-label="items_label" data-od-list="items">
+      <li data-od-item><span>Redwillow Produce <small>· Oct 18</small></span><span>$5,402.88</span></li>
+      <li data-od-item><span>Inchley Print Co. <small>· Oct 14</small></span><span>$612.40</span></li>
+      <li data-od-item><span>Hollin Water Co. <small>· Oct 19</small></span><span>$238.14</span></li>
+      <li data-od-item data-od-template hidden><span><span data-od-slot="name"></span> <small data-od-optional>· <span data-od-slot="note"></span></small></span><span data-od-slot="value"></span></li>
     </ul>
     <div class="odl-field">
-      <label for="odl-cd-input">Type <code>thistlecombe-foods</code> to confirm</label>
+      <label for="odl-cd-input">Type <code data-od-slot="confirm_text">thistlecombe-foods</code> to confirm</label>
       <input id="odl-cd-input" type="text" value="thistlecombe-foods" autocomplete="off" spellcheck="false" aria-describedby="odl-cd-hint">
-      <p class="odl-hint" id="odl-cd-hint">The workspace name, as it appears in your URL.</p>
+      <p class="odl-hint" id="odl-cd-hint" data-od-slot="hint" data-od-optional>The workspace name, as it appears in your URL.</p>
     </div>
   </div>
   <footer>
-    <button type="button" class="odl-cancel">Cancel</button>
-    <button type="button" class="odl-delete"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>Delete 3 receipts</button>
+    <button type="button" class="odl-cancel" data-od-action="cancel">Cancel</button>
+    <button type="button" class="odl-delete" data-od-action="delete" data-od-effect="change"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg><span data-od-slot="label">Delete 3 receipts</span></button>
   </footer>
 </div>
 <script>
@@ -83,6 +85,7 @@ document.querySelectorAll(".odl-confirm-dialog").forEach((root, n) => {
   root.querySelectorAll("[id]").forEach((el) => { el.id += "-" + n; });
   refs.forEach((r) => ["for", "aria-labelledby", "aria-describedby"].forEach((a) => { if (r.hasAttribute(a)) r.setAttribute(a, r.getAttribute(a) + "-" + n); }));
   const input = root.querySelector("input"), del = root.querySelector(".odl-delete"), want = root.querySelector("label code").textContent.trim();
+  if (input.value.trim() !== want) input.value = ""; // rendered with another name: start empty, not with the sample's typing
   const sync = () => { del.disabled = input.value.trim() !== want; };
   input.addEventListener("input", sync);
   input.addEventListener("keydown", (e) => { if (e.key === "Enter" && !del.disabled) del.click(); });

@@ -1,0 +1,13 @@
+{"title": "Suggested for you",
+ "see_all": {"label": "Show more", "event": {"name": "see_all_suggestions"}},
+ "people": [
+  {"name": "Tomasz Wielgosz", "handle": "@tomasz.w", "photo": {"src": "https://images.unsplash.com/photo-1605980776566-0486c3ac7617?w=144&h=144&fit=crop&auto=format&q=70", "alt": "Tomasz Wielgosz"},
+   "reason": "Followed by amara.o and 5 others", "follow_label": "Follow",
+   "mutual_photos": [{"photo": {"src": "https://images.unsplash.com/photo-1632765854612-9b02b6ec2b15?w=40&h=40&fit=crop&auto=format&q=70", "alt": "amara.o"}}, {"photo": {"src": "https://images.unsplash.com/photo-1622626426572-c268eb006092?w=40&h=40&fit=crop&auto=format&q=70", "alt": "jonah.p"}}]},
+  {"name": "Amara Okafor", "handle": "@amara.o", "photo": {"src": "https://images.unsplash.com/photo-1632765854612-9b02b6ec2b15?w=144&h=144&fit=crop&auto=format&q=70", "alt": "Amara Okafor"},
+   "reason": "Follows you", "follow_label": "Follow back",
+   "mutual_photos": [{"photo": {"src": "https://images.unsplash.com/photo-1605980776566-0486c3ac7617?w=40&h=40&fit=crop&auto=format&q=70", "alt": "tomasz.w"}}]},
+  {"name": "Ingrid Solheim", "handle": "@ingrid.s", "photo": {"src": "https://images.unsplash.com/photo-1699899657680-421c2c2d5064?w=144&h=144&fit=crop&auto=format&q=70", "alt": "Ingrid Solheim"},
+   "reason": "New to the app", "follow_label": "Follow", "following": "true"}
+ ],
+ "done": "That's everyone for now. We'll suggest more as people join."}

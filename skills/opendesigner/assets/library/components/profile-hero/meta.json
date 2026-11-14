@@ -59,8 +59,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a creator or member page where following, messaging and story highlights matter more than account details"],
-    "avoid_when": ["a small person card inside a list or popover: use profile-card", "a work record such as a company or deal with tabs: use page-header-tabs", "suggesting several people to follow: use follow-suggestions"],
+    "use_when": [
+      "a creator or member page where following, messaging and story highlights matter more than account details"
+    ],
+    "avoid_when": [
+      "a small person card inside a list or popover: use profile-card",
+      "a work record such as a company or deal with tabs: use page-header-tabs",
+      "suggesting several people to follow: use follow-suggestions"
+    ],
     "parts": [
       {
         "name": "cover",
@@ -131,12 +137,19 @@
     ],
     "data": {
       "type": "object",
-      "required": ["name", "handle", "counts"],
+      "required": [
+        "name",
+        "handle",
+        "counts"
+      ],
       "properties": {
         "cover": {
           "type": "object",
           "part": "cover",
-          "required": ["src", "alt"],
+          "required": [
+            "src",
+            "alt"
+          ],
           "properties": {
             "src": {
               "type": "string",
@@ -169,8 +182,16 @@
           "maxItems": 3,
           "part": "handle",
           "items": {
-            "type": "string",
-            "maxLength": 16
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 16
+              }
+            }
           }
         },
         "bio": {
@@ -181,7 +202,10 @@
         "link": {
           "type": "object",
           "part": "link",
-          "required": ["label", "href"],
+          "required": [
+            "label",
+            "href"
+          ],
           "properties": {
             "label": {
               "type": "string",
@@ -196,7 +220,11 @@
         "counts": {
           "type": "object",
           "part": "counts",
-          "required": ["posts", "followers", "following"],
+          "required": [
+            "posts",
+            "followers",
+            "following"
+          ],
           "properties": {
             "posts": {
               "type": "integer"
@@ -220,7 +248,9 @@
           "part": "highlights",
           "items": {
             "type": "object",
-            "required": ["title"],
+            "required": [
+              "title"
+            ],
             "properties": {
               "title": {
                 "type": "string",
@@ -232,17 +262,31 @@
               }
             }
           }
+        },
+        "posts": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "followers": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "following": {
+          "type": "string",
+          "maxLength": 80
         }
       }
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no highlights, leave the highlights row out; with no posts, the count reads 0 and the page below shows empty-state"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show the cover and photo as muted boxes, the name and bio as muted lines, and the counts as dashes"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -261,8 +305,17 @@
         "status": "handled",
         "how": "highlight titles end in an ellipsis, tags and buttons never wrap, and the handle line wraps",
         "evidence": "max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches the bio link, the posts, followers and following counts, Follow, Message, Similar accounts, then each highlight", "Enter or Space on Follow follows or unfollows and updates the follower count", "Enter or Space presses any other button; Enter follows the link"]
+    "keyboard": [
+      "Tab reaches the bio link, the posts, followers and following counts, Follow, Message, Similar accounts, then each highlight",
+      "Enter or Space on Follow follows or unfollows and updates the follower count",
+      "Enter or Space presses any other button; Enter follows the link"
+    ]
   }
 }

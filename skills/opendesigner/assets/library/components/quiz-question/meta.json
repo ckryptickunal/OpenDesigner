@@ -35,8 +35,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a short check at the end of a lesson or onboarding, where a wrong answer should explain the right one"],
-    "avoid_when": ["a survey or form with no right answer: use settings-toggles or a plain form", "showing a streak or score after the quiz: use lesson-streak or leaderboard", "picking a plan or option to buy: use plan-picker"],
+    "use_when": [
+      "a short check at the end of a lesson or onboarding, where a wrong answer should explain the right one"
+    ],
+    "avoid_when": [
+      "a survey or form with no right answer: use settings-toggles or a plain form",
+      "showing a streak or score after the quiz: use lesson-streak or leaderboard",
+      "picking a plan or option to buy: use plan-picker"
+    ],
     "parts": [
       {
         "name": "close",
@@ -95,7 +101,13 @@
     ],
     "data": {
       "type": "object",
-      "required": ["question", "choices", "correct", "explain_right", "explain_wrong"],
+      "required": [
+        "question",
+        "choices",
+        "correct",
+        "explain_right",
+        "explain_wrong"
+      ],
       "properties": {
         "answered": {
           "type": "integer",
@@ -125,7 +137,10 @@
         },
         "picture": {
           "type": "object",
-          "required": ["src", "alt"],
+          "required": [
+            "src",
+            "alt"
+          ],
           "part": "picture",
           "properties": {
             "src": {
@@ -145,7 +160,10 @@
           "part": "choices",
           "items": {
             "type": "object",
-            "required": ["value", "label"],
+            "required": [
+              "value",
+              "label"
+            ],
             "properties": {
               "value": {
                 "type": "string",
@@ -177,12 +195,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no questions left, replace the card with empty-state or a result screen"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "keep the bar, and show muted blocks for the question and four answer rows with Check disabled"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -202,8 +222,17 @@
         "status": "handled",
         "how": "a long answer wraps between its letter key and its mark; the question and explanation wrap with no line limit",
         "evidence": ".odl-choice { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab reaches Leave quiz, the answer group, then Check once it is enabled", "Arrow keys move between answers and pick one, as in any native radio group", "Enter or Space on Check marks the answer and shows the feedback; pressing it again resets the demo to the same question"]
+    "keyboard": [
+      "Tab reaches Leave quiz, the answer group, then Check once it is enabled",
+      "Arrow keys move between answers and pick one, as in any native radio group",
+      "Enter or Space on Check marks the answer and shows the feedback; pressing it again resets the demo to the same question"
+    ]
   }
 }

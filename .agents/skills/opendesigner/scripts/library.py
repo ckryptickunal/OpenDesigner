@@ -20,6 +20,9 @@ import subprocess
 import sys
 import tempfile
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))  # loaded by path too (the MCP server does)
+import slots  # noqa: E402  slot marks: the variable parts Smart UI and library.json read
+
 HERE = pathlib.Path(__file__).resolve().parent
 LIB = HERE.parent / "assets" / "library" / "components"
 CATALOG = LIB.parent / "library.json"
@@ -31,8 +34,8 @@ INDUSTRIES = ["finance", "saas", "devtools", "security", "crm", "logistics", "he
 WIDTHS = ["narrow", "medium", "wide"]
 CONSUMER = {"retail", "health", "education", "social", "media", "travel", "food", "fitness", "events", "home", "money", "games"}
 CORE_WORK = {"finance", "saas", "devtools", "security", "crm"}
-EDGE = ["empty", "loading", "error", "disabled", "overflow", "long_text"]
-EDGE_STATUS = ["shown", "handled", "not_built"]
+EDGE = ["empty", "loading", "error", "disabled", "overflow", "long_text", "missing_image"]
+EDGE_STATUS = ["shown", "handled", "not_built", "none"]  # none: only for missing_image, in a part with no <img>
 SLOTS = ["text", "rich", "number", "media", "list", "action", "input", "none"]
 FORMAT = "opendesigner.library/1"
 FIELDS = ["name", "summary", "use", "type", "style", "industries", "tags", "states", "source", "a11y", "width"]
@@ -133,7 +136,7 @@ def cmd_add(a):
     if not re.fullmatch(r"[a-z0-9]+(-[a-z0-9]+)*", a.slug):
         print(f"'{a.slug}' is not a component name. Run: library.py list")
         return 1
-    if a.base:
+    if getattr(a, "base", None):
         try:
             text = fetch(a.base, a.slug)
         except Exception as e:  # a missing page, no network or a wrong address: say which, change nothing
@@ -309,6 +312,13 @@ def check_one(c, known):
         if v.startswith("--ds-state-") and all(fb and used_vars(fb) and used_vars(fb) <= known for fb in fallbacks(html_, v)):
             continue
         errs.append(f"{v} is not a variable every engine system writes" + (" (a --ds-state-* one needs a fallback to one that is)" if v.startswith("--ds-state-") else ""))
+    # every part marks the words and numbers that change, and has a fixture: Smart UI and the state audit read both
+    if not slots.has_marks(html_):
+        errs.append("no slot marks: mark the parts that hold data (data-od-slot and the others, see slots.py)")
+    else:
+        errs += [f"slot marks: {e}" for e in slots.check_marks(html_) + slots.check_against_spec(html_, (c.get("spec") or {}).get("data"))]
+    if not (LIB / slug / "fixture.json").exists():
+        errs.append("no fixture.json: the part's data as an app sends it")
     if f'class="odl-{slug}' not in rest:
         errs.append(f"the root element needs class odl-{slug}")
     return errs
@@ -351,7 +361,7 @@ def entry(c):
         "id": c["slug"], "name": c["name"], "purpose": c["summary"], "use_when": use, "avoid_when": sp.get("avoid_when", []),
         "type": c["type"], "style": c["style"], "width": c["width"],
         "tags": {"audience": audience(c), "industries": c["industries"], "keywords": c["tags"]},
-        "root": f".odl-{c['slug']}", "parts": sp.get("parts", []), "data": sp.get("data", {}),
+        "root": f".odl-{c['slug']}", "parts": sp.get("parts") or slots.parts(src, f".odl-{c['slug']}"), "data": sp.get("data", {}),
         "states": {"shown": c["states"], "edge": {k: sp.get("edge", {}).get(k) for k in EDGE}},
         "tokens": sorted(used_vars(src)),
         "a11y": {"summary": c["a11y"], "roles": roles(src), "keyboard": sp.get("keyboard", []),
@@ -425,6 +435,9 @@ def schema_errors(node, where, parts):
                 errs.append(f"{where} requires {r!r}, which is not a property")
         for k, v in props.items():
             errs += schema_errors(v, f"{where}.{k}", parts)
+    elif isinstance(t, list) and set(t) <= {"string", "number", "integer", "boolean", "null"}:
+        if "string" in t and "maxLength" not in node:  # a union of plain values (a chart's gap is ["number", "null"])
+            errs.append(f"{where} can be a string without maxLength")
     elif t not in ("number", "integer", "boolean"):
         errs.append(f"{where} has type {t!r}")
     return errs
@@ -437,6 +450,8 @@ def spec_errors(c):
         return ["meta.json lacks spec (see README.md, library.json)"]
     src = (LIB / c["slug"] / "component.html").read_text()
     m = markup(src)
+    if slots.has_marks(src) and not sp.get("parts"):  # a marked part's pieces come from its marks (slots.parts)
+        sp = {**sp, "parts": slots.parts(src, f".odl-{c['slug']}")}
     for k in ("avoid_when", "parts", "keyboard"):
         if not isinstance(sp.get(k), list):
             errs.append(f"spec.{k} must be a list")
@@ -468,6 +483,10 @@ def spec_errors(c):
             continue
         if not e.get("how"):
             errs.append(f"spec.edge.{k} needs how")
+        if e["status"] == "none":
+            if k != "missing_image" or "<img" in src:
+                errs.append(f"spec.edge.{k} is none: only missing_image may be, and only in a part with no <img>")
+            continue
         if e["status"] != "not_built" and (not e.get("evidence") or e["evidence"] not in src):
             errs.append(f"spec.edge.{k} is {e['status']}: its evidence {e.get('evidence')!r} must be a string found in component.html")
     for k in set(edge) - set(EDGE):
@@ -477,11 +496,26 @@ def spec_errors(c):
     return errs
 
 
+def fixture_errors(c):
+    """fixture.json: the part's data as an app sends it; its keys are spec.data properties."""
+    f = LIB / c["slug"] / "fixture.json"
+    if not f.exists():
+        return []  # check_one reports a missing fixture
+    try:
+        d = json.loads(f.read_text())
+    except ValueError as e:
+        return [f"fixture.json is not JSON: {e}"]
+    props = ((c.get("spec") or {}).get("data") or {}).get("properties", {})
+    # buttons are parts in the spec, not data: a fixture's {label, event} values need no spec.data entry
+    return [f"fixture.json has {k!r}, which spec.data does not list" for k, v in d.items()
+            if props and k not in props and not (isinstance(v, dict) and "event" in v)]
+
+
 def cmd_check(_a):
     known = engine_vars()
     cs, bad = components(), 0
     for c in cs:
-        errs = check_one(c, known) + spec_errors(c)
+        errs = check_one(c, known) + spec_errors(c) + fixture_errors(c)
         bad += bool(errs)
         print(f"{c['slug']}: " + ("ok" if not errs else "\n  " + "\n  ".join(errs)))
     print(f"{len(cs)} components, {bad} with problems")

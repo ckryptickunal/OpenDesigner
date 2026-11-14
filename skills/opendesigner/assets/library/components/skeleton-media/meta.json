@@ -133,6 +133,11 @@
         "status": "handled",
         "how": "Each line is clamped to one line with an ellipsis, so the skeleton and the loaded layout keep one height.",
         "evidence": "text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
     "keyboard": [

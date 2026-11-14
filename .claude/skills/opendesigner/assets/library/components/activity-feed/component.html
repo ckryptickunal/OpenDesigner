@@ -41,11 +41,21 @@
   .odl-activity-feed .odl-card { padding: var(--ds-space-inset-lg); }
   .odl-activity-feed dl div { grid-template-columns: minmax(0, 1fr); }
 }
+.odl-activity-feed [hidden] { display: none; }
+.odl-activity-feed li.od-empty { display: block; }
 </style>
 <section class="odl-activity-feed" aria-labelledby="odl-af-title"><div class="odl-card">
-  <h3 id="odl-af-title">Activity</h3>
-  <ol aria-label="Activity on Vessendon Airframes">
-    <li>
+  <h3 id="odl-af-title" data-od-slot="title" data-od-optional>Activity</h3>
+  <ol aria-label="Activity on Vessendon Airframes" data-od-label="label" data-od-list="events">
+    <li data-od-item data-od-template hidden>
+      <span class="odl-who"><img class="odl-avatar" data-od-media="avatar" data-od-optional src="https://images.unsplash.com/photo-1601412436009-d964bd02edbc?w=80&h=80&fit=crop&crop=faces&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"><span class="odl-kind" data-od-when="kind=edit" title="Edited"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg></span><span class="odl-kind" data-od-when="kind=email" title="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span><span class="odl-kind" data-od-when="kind=call" title="Call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span></span>
+      <div class="odl-main">
+        <div class="odl-line"><p><strong data-od-slot="actor"></strong> <span data-od-slot="action"></span> <strong class="odl-nb" data-od-slot="target" data-od-optional></strong></p><time data-od-slot="time"></time></div>
+        <dl data-od-list="changes" data-od-optional><div data-od-item><dt data-od-slot="field"></dt><dd><del data-od-slot="from"></del><span class="odl-to"><span aria-hidden="true">→</span> <ins data-od-slot="to"></ins></span><span class="odl-delta" data-od-slot="delta" data-od-optional></span></dd></div></dl>
+        <blockquote data-od-slot="quote" data-od-optional></blockquote>
+      </div>
+    </li>
+    <li data-od-item>
       <span class="odl-who"><img class="odl-avatar" src="https://images.unsplash.com/photo-1601412436009-d964bd02edbc?w=80&h=80&fit=crop&crop=faces&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"><span class="odl-kind" title="Edited"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg></span></span>
       <div class="odl-main">
         <div class="odl-line"><p><strong>Paloma Etxeberria</strong> changed 3 fields on <strong class="odl-nb">3-site rollout</strong></p><time>Today, 10:14</time></div>
@@ -56,14 +66,14 @@
         </dl>
       </div>
     </li>
-    <li>
+    <li data-od-item>
       <span class="odl-who"><img class="odl-avatar" src="https://images.unsplash.com/photo-1523278669709-c05da80b6a65?w=80&h=80&fit=crop&crop=faces&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"><span class="odl-kind" title="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span></span>
       <div class="odl-main">
         <div class="odl-line"><p><strong>Hamish Dalgleish</strong> replied to <a href="#" class="odl-nb">Revised order form</a></p><time>Mon, 16:52</time></div>
         <blockquote>Procurement signed off on 155. Can you confirm single sign-on is in the Team plan?</blockquote>
       </div>
     </li>
-    <li>
+    <li data-od-item>
       <span class="odl-who"><img class="odl-avatar" src="https://images.unsplash.com/photo-1601412436009-d964bd02edbc?w=80&h=80&fit=crop&crop=faces&auto=format&q=70" alt="" width="40" height="40" loading="lazy" decoding="async"><span class="odl-kind" title="Call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span></span>
       <div class="odl-main"><div class="odl-line"><p><strong>Paloma Etxeberria</strong> logged a <span class="odl-nb">34-minute call</span> with <strong>Annelies Vermeulen</strong></p><time>Mon, 11:30</time></div></div>
     </li>

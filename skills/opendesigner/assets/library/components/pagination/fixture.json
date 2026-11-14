@@ -1,0 +1,12 @@
+{"first_row": 41, "last_row": 60, "total_rows": 1307,
+ "current_page": 3, "total_pages": 66,
+ "previous": {"label": "Previous", "a11y_label": "Previous page", "event": {"name": "go_to_previous_page"}},
+ "next": {"label": "Next", "a11y_label": "Next page", "event": {"name": "go_to_next_page"}},
+ "visible_pages": [
+  {"kind": "page", "current": "false", "page": {"label": "1", "a11y_label": "Page 1", "event": {"name": "go_to_page_1"}}},
+  {"kind": "page", "current": "false", "page": {"label": "2", "a11y_label": "Page 2", "event": {"name": "go_to_page_2"}}},
+  {"kind": "page", "current": "true", "page": {"label": "3", "a11y_label": "Page 3, current page", "event": {"name": "go_to_page_3"}}},
+  {"kind": "page", "current": "false", "page": {"label": "4", "a11y_label": "Page 4", "event": {"name": "go_to_page_4"}}},
+  {"kind": "gap"},
+  {"kind": "page", "current": "false", "page": {"label": "66", "a11y_label": "Page 66, last page", "event": {"name": "go_to_page_66"}}}
+ ]}

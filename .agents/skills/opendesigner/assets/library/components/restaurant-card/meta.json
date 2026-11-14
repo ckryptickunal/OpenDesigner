@@ -45,8 +45,14 @@
     }
   ],
   "spec": {
-    "use_when": ["a 'near you' or 'popular' row of places on a home screen, where each card opens that place's menu"],
-    "avoid_when": ["one dish with its options: use menu-item", "places to stay with dates and nightly prices: use stay-card", "products from one shop: use product-card or wishlist-grid"],
+    "use_when": [
+      "a 'near you' or 'popular' row of places on a home screen, where each card opens that place's menu"
+    ],
+    "avoid_when": [
+      "one dish with its options: use menu-item",
+      "places to stay with dates and nightly prices: use stay-card",
+      "products from one shop: use product-card or wishlist-grid"
+    ],
     "parts": [
       {
         "name": "title",
@@ -111,7 +117,9 @@
     ],
     "data": {
       "type": "object",
-      "required": ["places"],
+      "required": [
+        "places"
+      ],
       "properties": {
         "title": {
           "type": "string",
@@ -130,7 +138,11 @@
           "part": "places",
           "items": {
             "type": "object",
-            "required": ["name", "href", "photo"],
+            "required": [
+              "name",
+              "href",
+              "photo"
+            ],
             "properties": {
               "name": {
                 "type": "string",
@@ -174,10 +186,17 @@
                 "maxLength": 40
               },
               "promo_kind": {
-                "enum": ["offer", "new"]
+                "enum": [
+                  "offer",
+                  "new"
+                ]
               },
               "saved": {
                 "type": "boolean"
+              },
+              "save_label": {
+                "type": "string",
+                "maxLength": 120
               }
             }
           }
@@ -186,12 +205,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "with no places delivering to the address, show empty-state under the heading with a button to change the address"
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "show three cards with a grey cover box and grey bars for the name and details"
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",
@@ -210,8 +231,17 @@
         "status": "handled",
         "how": "the place name is cut off with an ellipsis so the rating stays on its line; the rating count hides in a very narrow card",
         "evidence": "white-space: nowrap; text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
-    "keyboard": ["Tab moves, for each card, to the save heart and then the place's name link", "Enter on the name opens the place; the focus ring shows on the cover", "Enter or Space on the heart saves or unsaves the place"]
+    "keyboard": [
+      "Tab moves, for each card, to the save heart and then the place's name link",
+      "Enter on the name opens the place; the focus ring shows on the cover",
+      "Enter or Space on the heart saves or unsaves the place"
+    ]
   }
 }

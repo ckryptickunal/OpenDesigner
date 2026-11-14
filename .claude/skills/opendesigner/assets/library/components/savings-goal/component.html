@@ -50,6 +50,9 @@
 .odl-savings-goal legend { padding: 0; margin-block-end: var(--ds-space-stack-md); font: var(--ds-text-title-sm); }
 .odl-savings-goal .odl-amounts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--ds-space-inline-sm); }
 .odl-savings-goal .odl-amounts label { position: relative; }
+/* Rendered from data: data-roundups_on is the switch's starting state (the script copies it); the template item stays hidden. */
+.odl-savings-goal .odl-round[data-roundups_on="true"], .odl-savings-goal .odl-round[data-roundups_on="false"] { cursor: pointer; }
+.odl-savings-goal [hidden] { display: none !important; }
 .odl-savings-goal .odl-amounts input { position: absolute; inset: 0; margin: 0; opacity: 0; cursor: pointer; }
 .odl-savings-goal .odl-amounts span { display: grid; place-items: center; min-block-size: max(var(--ds-size-control-lg), var(--ds-size-target-touch)); border-radius: var(--ds-radius-control);
   border: var(--ds-border-width-default) solid var(--ds-color-border-default); font: var(--ds-text-label-lg); font-variant-numeric: tabular-nums;
@@ -77,9 +80,9 @@
 </style>
 <section class="odl-savings-goal" aria-labelledby="odl-sg-title">
   <div class="odl-card">
-    <img class="odl-cover" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=896&h=504&fit=crop&auto=format&q=70" alt="Beach at golden hour" width="896" height="504" loading="lazy" decoding="async">
+    <img class="odl-cover" data-od-media="cover" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=896&h=504&fit=crop&auto=format&q=70" alt="Beach at golden hour" width="896" height="504" loading="lazy" decoding="async">
     <div class="odl-body">
-      <div class="odl-title"><h3 id="odl-sg-title">Coast trip</h3><p class="odl-goal">Goal £3,000 · Savings pot</p></div>
+      <div class="odl-title"><h3 id="odl-sg-title" data-od-slot="title">Coast trip</h3><p class="odl-goal">Goal <data class="odl-goalv">£3,000</data> · Savings pot<data data-od-slot="goal" hidden>3000</data><data data-od-slot="saved" hidden>1840</data><data data-od-slot="currency" hidden>GBP</data><data data-od-slot="from_account" hidden>Everyday</data></p></div>
       <div class="odl-main">
         <div class="odl-ring" role="progressbar" aria-label="Saved toward Coast trip" aria-valuemin="0" aria-valuemax="3000" aria-valuenow="1840" aria-valuetext="£1,840 of £3,000, 61%">
           <svg viewBox="0 0 100 100" aria-hidden="true"><circle class="odl-track" cx="50" cy="50" r="44"/><circle class="odl-arc" cx="50" cy="50" r="44" pathLength="100" stroke-dasharray="61.3 100"/></svg>
@@ -90,17 +93,18 @@
           <div><dt>Still to go</dt><dd class="odl-left">£1,160</dd></div>
         </dl>
       </div>
-      <p class="odl-on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>On track for 24 Apr <span>· £40 a week</span></p>
-      <button type="button" class="odl-round" role="switch" aria-checked="true">
+      <p class="odl-on" data-od-optional><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="m9 16 2 2 4-4"/></svg><data data-od-slot="pace">On track for 24 Apr</data> <span data-od-slot="pace_detail" data-od-optional>· £40 a week</span></p>
+      <button type="button" class="odl-round" role="switch" aria-checked="true" data-od-optional data-od-var="roundups_on" data-roundups_on="true">
         <span class="odl-tile" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg></span>
-        <span><b>Round-ups</b><small>£18.40 this month</small></span><span class="odl-switch" aria-hidden="true"></span>
+        <span><b>Round-ups</b><small data-od-slot="roundups_note" data-od-optional>£18.40 this month</small></span><span class="odl-switch" aria-hidden="true"></span>
       </button>
       <fieldset class="odl-add">
         <legend>Add money</legend>
-        <div class="odl-amounts">
-          <label><input type="radio" name="odl-sg-amount" value="10"><span>£10</span></label>
-          <label><input type="radio" name="odl-sg-amount" value="25" checked><span>£25</span></label>
-          <label><input type="radio" name="odl-sg-amount" value="50"><span>£50</span></label>
+        <div class="odl-amounts" data-od-list="amounts">
+          <label data-od-item data-od-template hidden><input type="radio" name="odl-sg-amount"><span data-od-slot="label"></span><data data-od-slot="value" hidden></data></label>
+          <label data-od-item><input type="radio" name="odl-sg-amount" value="10"><span>£10</span></label>
+          <label data-od-item><input type="radio" name="odl-sg-amount" value="25" checked><span>£25</span></label>
+          <label data-od-item><input type="radio" name="odl-sg-amount" value="50"><span>£50</span></label>
         </div>
         <button type="button" class="odl-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg><span>Add £25 from Everyday</span></button>
         <p class="odl-said" aria-live="polite"></p>
@@ -112,10 +116,24 @@
 document.querySelectorAll(".odl-savings-goal").forEach((root) => {
   if (root.dataset.odlReady) return; // wire once, even if the file is pasted twice
   root.dataset.odlReady = "1";
-  const GOAL = 3000, money = (n) => "£" + n.toLocaleString("en-GB");
-  let saved = 1840;
+  // Rendered from data: goal, saved, currency, account and amounts come from the marked values.
+  const val = (n) => root.querySelector(`[data-od-slot="${n}"]`)?.textContent.trim() || "";
+  // a rendered number arrives formatted for the reader ("1,800" or "1.800"): read it back with the page's decimal sign
+  const dec = (new Intl.NumberFormat(root.closest("[lang]")?.getAttribute("lang") || undefined).formatToParts(1.5).find((p) => p.type === "decimal") || { value: "." }).value;
+  const num = (t) => Number(t.split(dec).map((x) => x.replace(/[^\d-]/g, "")).join("."));
+  const GOAL = num(val("goal")) || 3000, cur = val("currency") || "GBP", from = val("from_account") || "Everyday";
+  let fmt; try { fmt = new Intl.NumberFormat("en-GB", { style: "currency", currency: cur, minimumFractionDigits: 0, maximumFractionDigits: 2 }); } catch (e) { fmt = new Intl.NumberFormat("en-GB", { minimumFractionDigits: 0, maximumFractionDigits: 2 }); } // an unknown currency code: plain numbers
+  const money = (n) => fmt.format(n);
+  let saved = num(val("saved")) || 0;
+  root.querySelectorAll(".odl-amounts label:not([hidden])").forEach((l) => { const v = l.querySelector('[data-od-slot="value"]')?.textContent.trim(); if (v) l.querySelector("input").value = v; });
+  const radios = [...root.querySelectorAll(".odl-amounts label:not([hidden]) input")];
+  if (radios.length && !radios.some((i) => i.checked)) radios[Math.min(1, radios.length - 1)].checked = true;
+  root.querySelector(".odl-goalv").textContent = money(GOAL);
   const ring = root.querySelector(".odl-ring"), arc = root.querySelector(".odl-arc"), go = root.querySelector(".odl-go"), goLabel = go.querySelector("span"), said = root.querySelector(".odl-said");
-  const amount = () => Number((root.querySelector(".odl-amounts input:checked") || { value: 25 }).value);
+  const amount = () => Number((root.querySelector(".odl-amounts input:checked") || { value: 0 }).value);
+  const title = root.querySelector(".odl-title h3")?.textContent.trim();
+  if (title) ring.setAttribute("aria-label", `Saved toward ${title}`);
+  ring.setAttribute("aria-valuemax", String(GOAL));
   const show = () => {
     const pct = Math.min(100, (saved / GOAL) * 100);
     arc.setAttribute("stroke-dasharray", `${pct.toFixed(1)} 100`);
@@ -124,7 +142,7 @@ document.querySelectorAll(".odl-savings-goal").forEach((root) => {
     root.querySelector(".odl-left").textContent = saved >= GOAL ? "Nothing" : money(GOAL - saved);
     ring.setAttribute("aria-valuenow", String(Math.min(saved, GOAL)));
     ring.setAttribute("aria-valuetext", `${money(saved)} of ${money(GOAL)}, ${Math.floor(pct)}%`);
-    goLabel.textContent = saved >= GOAL ? "Goal reached" : `Add ${money(amount())} from Everyday`;
+    goLabel.textContent = saved >= GOAL ? "Goal reached" : `Add ${money(amount())} from ${from}`;
     go.disabled = saved >= GOAL;
   };
   root.querySelectorAll(".odl-amounts input").forEach((i) => i.addEventListener("change", show));
@@ -134,7 +152,8 @@ document.querySelectorAll(".odl-savings-goal").forEach((root) => {
     said.textContent = saved >= GOAL ? "Goal reached. Time to book it." : `Added ${money(a)}. ${money(GOAL - saved)} to go.`;
   });
   const round = root.querySelector(".odl-round");
-  round.addEventListener("click", () => round.setAttribute("aria-checked", String(round.getAttribute("aria-checked") !== "true")));
+  if (round && round.dataset.roundups_on) round.setAttribute("aria-checked", round.dataset.roundups_on === "true" ? "true" : "false");
+  round?.addEventListener("click", () => round.setAttribute("aria-checked", String(round.getAttribute("aria-checked") !== "true")));
   show();
 });
 </script>

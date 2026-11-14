@@ -1,0 +1,22 @@
+{"athlete_name": "Priya Ramesh", "athlete_photo": {"src": "https://images.unsplash.com/photo-1758600587839-56ba05596c69?w=96&h=96&fit=crop&auto=format&q=70", "alt": "Priya Ramesh"},
+ "athlete_when": "Sun 15 Nov · 07:10 · Canal towpath",
+ "title": "Sunday long run", "map_label": "Route map: out along the canal to the lock and back the same way",
+ "distance": 5.6, "unit": "mi", "badge": "Longest run this year",
+ "stats": [
+  {"label": "Time", "value": "52:07", "unit": ""},
+  {"label": "Avg pace", "value": "9:18", "unit": "/mi"},
+  {"label": "Avg heart rate", "value": "147", "unit": "bpm"},
+  {"label": "Elevation gain", "value": "41", "unit": "ft"}
+ ],
+ "zones": [
+  {"range": "under 115 bpm", "minutes": 4}, {"range": "115–134 bpm", "minutes": 21}, {"range": "135–148 bpm", "minutes": 22},
+  {"range": "149–162 bpm", "minutes": 5}, {"minutes": 0}
+ ],
+ "splits": [
+  {"label": "1", "pace": "9:41", "bpm": 139, "relative": 35},
+  {"label": "2", "pace": "9:22", "bpm": 145, "relative": 62},
+  {"label": "3", "pace": "9:15", "bpm": 148, "relative": 74},
+  {"label": "4", "pace": "9:09", "bpm": 151, "relative": 88},
+  {"label": "5", "pace": "9:01", "bpm": 154, "relative": 100},
+  {"label": "0.6", "pace": "9:12", "bpm": "", "relative": 80}
+ ]}
