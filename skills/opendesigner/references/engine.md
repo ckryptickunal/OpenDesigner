@@ -42,6 +42,7 @@ python3 <skill>/scripts/engine.py standard override <id> --why "<their words>" [
 python3 <skill>/scripts/engine.py standard restore <id> [--why "..."]      undo an override
 python3 <skill>/scripts/engine.py standard add --rule "..." --why "..." --source <url or "person, <date>"> [--path P --value <json>]... [--values '{...}'] [--review-pattern RE --review-message "..."] [--authority good-to-have] [--beats STD-a,STD-b]
 python3 <skill>/scripts/engine.py standard remove PRJ-<nn> --why "..."   project standards only
+python3 <skill>/scripts/engine.py checkin [--json] [--every N] [--off|--on] [--offers on|off]   a check-in: decisions and closed rounds since the last one, open ledger items, stale DESIGN.md, review's count, one next step; records it. Also printed by status --hook and after every N decisions or a closed round (rules.md section 13)
 python3 <skill>/scripts/engine.py version                    this copy's release, and whether the system here is older, newer or up to date
 python3 <skill>/scripts/engine.py status [--json]           the Now line: the step, what waits for the owner and the next command; first after a context reset or in a new session
 python3 <skill>/scripts/engine.py status --hook             the same in five lines, and nothing without a system: the Claude Code plugin's start-of-session hook runs it

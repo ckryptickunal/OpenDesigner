@@ -602,6 +602,8 @@ class Live(unittest.TestCase):
           <div style="position:relative"><span class=tip>Revenue 4,200</span><p>Chart</p></div>""")
         p = pg.evaluate(PROBE)
         self.assertEqual(p["labels"]["broken"], [])
+        pg.set_content("<div style='transform:scale(.3);transform-origin:0 0'><span style='display:inline-block;width:6px'>14</span></div>")
+        self.assertEqual(pg.evaluate(PROBE)["craft"]["spill"], [])          # a scaled preview's rounding is not a spill (S5 report)
         self.assertFalse([c for c in p["contrast"]["failing"] if c["fg"] == c["bg"]])
 
     def test_missing_names_and_pictures_that_collapse_are_measured(self):     # ST-19

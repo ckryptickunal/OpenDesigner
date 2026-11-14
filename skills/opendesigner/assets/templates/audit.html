@@ -26,7 +26,7 @@ h3{font-size:15px;margin:0;font-weight:600}
 .sub{color:var(--c-muted);font-size:13px;margin:4px 0 0;max-width:72ch;overflow-wrap:anywhere}
 main{max-width:1120px;margin:0 auto;padding:20px;display:grid;gap:32px;min-width:0}
 section{min-width:0}
-.kv{font:12px/1.4 var(--mono);color:var(--c-muted)}
+.kv{font:12px/1.4 var(--font);color:var(--c-muted)}.mono{font-family:var(--mono)}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 button{font:inherit;min-height:44px;padding:0 14px;border-radius:var(--r);border:1px solid var(--c-border);background:var(--c-surface);color:var(--c-fg);cursor:pointer}
 button.primary{background:var(--c-strong);color:var(--c-on-strong);border-color:var(--c-strong);font-weight:600;font-size:15px}
@@ -74,7 +74,7 @@ details>summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
 .rec{display:inline-block;margin-left:6px;font:600 12px var(--font);padding:1px 6px;border:1px solid var(--c-border);border-radius:99px;color:var(--c-muted);vertical-align:1px}
 .ba{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
 .pane{position:relative;border:1px solid var(--c-border);border-radius:var(--r);background:var(--s-bg);color:var(--s-fg);font-family:var(--s-font);padding:30px 14px 14px;min-height:120px;overflow-x:auto;min-width:0}
-.pane::before{content:attr(data-label);position:absolute;top:8px;left:12px;font:12px var(--mono)}
+.pane::before{content:attr(data-label);position:absolute;top:8px;left:12px;font:12px var(--font);color:var(--c-muted)}
 .pane .empty{font:13px var(--font);opacity:.7}
 .blk{display:flex;flex-wrap:wrap;gap:6px}.blk span{display:inline-flex;align-items:center;justify-content:center;min-width:64px;height:40px;padding:0 8px;border-radius:6px;font:12px var(--mono)}
 .specbox{border:1px dashed rgba(128,128,128,.7);background:var(--s-surface);display:grid}
@@ -83,6 +83,8 @@ details>summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
 .cmps{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
 .cmps figure{margin:0;display:grid;gap:4px;justify-items:start;min-width:0}.cmps figcaption{font:12px/1.3 var(--mono);max-width:180px;overflow-wrap:anywhere}
 .shadowbox{width:90px;height:56px;border-radius:8px;background:var(--s-surface)}
+.more-issues>summary{list-style:none}.more-issues>summary::-webkit-details-marker{display:none}.more-issues>summary h3::before{content:"▸ ";color:var(--c-muted)}.more-issues[open]>summary h3::before{content:"▾ "}
+.top5{margin:8px 0 0;padding-left:20px;display:grid;gap:4px}.top5 a{color:var(--c-fg)}
 .waivewhy{display:none;gap:6px}.issue.waive .waivewhy{display:grid}
 .empty-state{border:1px dashed var(--c-border);border-radius:var(--r);padding:16px;color:var(--c-muted)}
 @media (max-width:520px){main{padding:16px}.od-h,.od-f{padding:12px 16px}.issue{padding:12px}.tbl{font-size:12px}.tbl th,.tbl td{padding:6px}}
@@ -95,11 +97,11 @@ details>summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
 <h2 id="h-sum">Summary</h2>
 <div class="stats" id="stats"></div>
 <p class="verdict" id="verdict"></p>
-<nav class="nav" aria-label="Sections"><a href="#h-sys">Your system</a><a href="#h-dec">Decisions</a><a href="#h-iss">What does not match</a><a href="#h-kept">Kept on purpose and the ledger</a></nav>
+<nav class="nav" aria-label="Sections"><a href="#h-iss">What does not match</a><a href="#h-sys">Your system</a><a href="#h-dec">Decisions</a><a href="#h-kept">Kept on purpose and the ledger</a></nav>
 </section>
+<section aria-labelledby="h-iss"><h2 id="h-iss">What does not match</h2><p class="sub" id="iss-sub"></p><div id="issues" style="display:grid;gap:14px"></div></section>
 <section aria-labelledby="h-sys"><h2 id="h-sys">Your system, and where the code uses it</h2><p class="sub">Each token with the number of times the code uses it. A token with a dashed border is never used.</p><div id="fams"></div></section>
 <section aria-labelledby="h-dec"><h2 id="h-dec">Decisions</h2><p class="sub">Each answer, how it was set, and whether it changes the tokens or only adds a rule to DESIGN.md.</p><div id="decs" style="overflow-x:auto"></div></section>
-<section aria-labelledby="h-iss"><h2 id="h-iss">What does not match</h2><p class="sub" id="iss-sub"></p><div id="issues" style="display:grid;gap:14px"></div></section>
 <section aria-labelledby="h-kept"><h2 id="h-kept">Kept on purpose, and the ledger</h2><div id="kept" style="display:grid;gap:12px"></div></section>
 </main>
 <footer class="od-f">
@@ -177,11 +179,11 @@ function draw(kind,p,after,el){el.innerHTML='';
   card.style.background=after&&after.color?after.color:(vals[0]||{}).value;return}
  if(kind==='space'){const vals=p.values?p.values:[p.value];const w=add('<div style="display:grid;gap:10px"></div>').firstChild;
   vals.slice(0,6).forEach(v0=>{const v=after&&after.value!=null?after.value:(after&&after.nearest?nearest(v0,p.steps):v0);
-   const f=document.createElement('div');f.innerHTML='<div class="kv">'+esc(v0)+'px'+(v!==v0?' → '+esc(v)+'px':'')+'</div>';
+   const f=document.createElement('div');f.innerHTML='<div class="kv mono">'+esc(v0)+'px'+(v!==v0?' → '+esc(v)+'px':'')+'</div>';
    const b=document.createElement('div');b.className='specbox';b.style.padding=px(v);b.style.gap=px(v);b.innerHTML='<div></div><div style="width:70%"></div><div style="width:40%"></div>';f.appendChild(b);w.appendChild(f)});return}
  if(kind==='type'){const vals=p.values?p.values:[p.value];const w=add('<div style="display:grid;gap:8px"></div>').firstChild;
   vals.slice(0,6).forEach(v0=>{const v=after&&after.value!=null?after.value:(after&&after.nearest?nearest(v0,p.steps):v0);
-   const f=document.createElement('div');f.innerHTML='<div class="kv">'+esc(v0)+'px'+(v!==v0?' → '+esc(v)+'px':'')+'</div>';
+   const f=document.createElement('div');f.innerHTML='<div class="kv mono">'+esc(v0)+'px'+(v!==v0?' → '+esc(v)+'px':'')+'</div>';
    const t=document.createElement('div');t.style.fontSize=px(v);t.style.lineHeight='1.3';t.textContent=(D.name||'Your product')+': settings saved';f.appendChild(t);w.appendChild(f)});
   if(p.steps)add('<p class="kv" style="margin:8px 0 0">The scale: '+p.steps.map(esc).join(', ')+'</p>');return}
  if(kind==='radius'){const vals=p.values?p.values:[p.value];const w=add('<div class="cmps"></div>').firstChild;
@@ -205,7 +207,7 @@ function lum(h){h=String(h||'#888').replace('#','');if(h.length===3)h=h.split(''
  const c=[0,2,4].map(i=>parseInt(h.substr(i,2),16)/255).map(v=>v<=0.04045?v/12.92:Math.pow((v+0.055)/1.055,2.4));return .2126*c[0]+.7152*c[1]+.0722*c[2]}
 /* ---------- sections ---------- */
 function summary(){$('#t').textContent=(D.name||'Your product')+': your system, as built';
- $('#st').textContent='Read from '+(D.project||'your code')+'. This page only reports: nothing in your code changes until you pick an option and say yes.';
+ $('#st').textContent='Read from the code of '+(D.project||'your project')+'. This page only reports: nothing in your code changes until you pick an option and say yes.';
  const s=[['Files read',D.scanned],['Token uses',D.tokenUses],['Values typed by hand',D.raw],['Things to decide',(D.issues||[]).length]];
  $('#stats').innerHTML=s.map(x=>'<div class="stat"><b>'+esc(x[1])+'</b><span class="kv">'+esc(x[0])+'</span></div>').join('');
  const w={ok:'The code follows the tokens more than it skips them.',losing:'The tokens are losing: the code types values by hand more often than it uses them.',none:'The code uses none of the tokens yet.'};
@@ -214,19 +216,26 @@ function summary(){$('#t').textContent=(D.name||'Your product')+': your system, 
 function families(){$('#fams').innerHTML=(D.families||[]).map((f,i)=>{const sw=f.name==='Colours';
  const body=sw?'<div class="sw">'+f.tokens.map(t=>'<div class="chip'+(t.uses?'':' unused')+'" title="'+esc(t.at.join(', '))+'"><i style="background:'+esc(t.value)+'"></i><span class="p">'+esc(t.path)+'</span><span class="kv">'+esc(t.value)+' · '+n(t.uses,'use')+'</span></div>').join('')+'</div>'
   :'<table class="tbl"><thead><tr><th>Token</th><th>Value</th><th>Uses</th><th>Where, first few</th></tr></thead><tbody>'+f.tokens.map(t=>'<tr class="'+(t.uses?'':'unused')+'"><td class="kv">'+esc(t.var)+'</td><td>'+esc(typeof t.value==='number'?t.value+(f.name==='Motion'?'ms':'px'):t.value)+'</td><td>'+esc(t.uses)+'</td><td class="kv">'+esc(t.at.join(', ')||'never used')+'</td></tr>').join('')+'</tbody></table>';
- return '<details class="fam"'+(i<2?' open':'')+'><summary><h3>'+esc(f.name)+'</h3><span class="kv">'+esc(f.used)+' of '+esc(f.total)+' used · '+esc(f.plain)+'</span></summary><div class="in">'+body+'</div></details>'}).join('')||'<p class="empty-state">No tokens yet.</p>'}
+ return '<details class="fam"><summary><h3>'+esc(f.name)+'</h3><span class="kv">'+esc(f.used)+' of '+esc(f.total)+' used · '+esc(f.plain)+'</span></summary><div class="in">'+body+'</div></details>'}).join('')||'<p class="empty-state">No tokens yet.</p>'}
 function decisions(){const ds=D.decisions||[];if(!ds.length){$('#decs').innerHTML='<p class="empty-state">No answers recorded yet. The system is still on its sketch defaults.</p>';return}
- $('#decs').innerHTML='<table class="tbl"><thead><tr><th>Question</th><th>Answer</th><th>How it was set</th><th>Changes tokens?</th><th>In the code</th></tr></thead><tbody>'+ds.map(x=>'<tr><td class="kv">'+esc(x.id)+'</td><td>'+esc(x.answer)+'</td><td>'+esc(x.setBy)+'</td><td>'+(x.changesTokens?'<span class="tag ok">yes</span>':'<span class="tag">a rule in DESIGN.md</span>')+'</td><td>'+(x.family?esc(x.family)+': '+n(x.follows||0,'token use')+(x.raw?', '+n(x.raw,'value')+' by hand':''):'<span class="kv">not checked in code</span>')+'</td></tr>').join('')+'</tbody></table>'}
+ $('#decs').innerHTML='<details><summary>'+n(ds.length,'answer')+', '+ds.filter(x=>x.changesTokens).length+' of them change tokens</summary><table class="tbl"><thead><tr><th>Question</th><th>Answer</th><th>How it was set</th><th>Changes tokens?</th><th>In the code</th></tr></thead><tbody>'+ds.map(x=>'<tr><td class="kv">'+esc(x.id)+'</td><td>'+esc(x.answer)+'</td><td>'+esc(x.setBy)+'</td><td>'+(x.changesTokens?'<span class="tag ok">yes</span>':'<span class="tag">a rule in DESIGN.md</span>')+'</td><td>'+(x.family?esc(x.family)+': '+n(x.follows||0,'token use')+(x.raw?', '+n(x.raw,'value')+' by hand':''):'<span class="kv">not checked in code</span>')+'</td></tr>').join('')+'</tbody></table></details>'}
 function issues(){const is=D.issues||[];
- $('#iss-sub').textContent=is.length?n(is.length,'thing')+' where the code and the system disagree. Each one shows where, how often, and two or three ways to settle it. Pick one to see the change; leave the rest as they are.':'';
+ const real=i=>i.options.filter(o=>o.id!=='keep').length>1; // a decision has two or more real ways to settle it
+ const byCount=is.slice().sort((a,b)=>(real(b)-real(a))||(b.count-a.count));const top=new Set(byCount.slice(0,5).map(i=>i.id));
+ $('#iss-sub').textContent=is.length?n(is.length,'thing')+' where the code and the system disagree. Each one shows where, how often, and up to three ways to settle it. Pick one to see the change; leave the rest as they are.':'';
  if(!is.length){$('#issues').innerHTML='<p class="empty-state">Nothing to settle: the code and the system agree.</p>';return}
- $('#issues').innerHTML=is.map(i=>{const led=i.ledger?'<span class="tag'+(i.ledger.status==='waived'||i.ledger.status==='done'?' ok':' bad')+'">ledger: '+esc(i.ledger.status)+'</span>':'';
-  return '<article class="issue" id="'+esc(i.id)+'" data-id="'+esc(i.id)+'"><div class="ihead"><h3>'+esc(i.title)+'</h3><span class="row"><span class="kv">'+esc(i.id)+'</span>'+led+'</span></div>'
+ const card=i=>{const led=i.ledger?'<span class="tag'+(i.ledger.status==='waived'||i.ledger.status==='done'?' ok':' bad')+'">ledger: '+esc(i.ledger.status)+'</span>':'';
+  return '<article class="issue" id="'+esc(i.id)+'" data-id="'+esc(i.id)+'"><div class="ihead"><h3>'+esc(i.title)+'</h3><span class="row"><span class="kv mono">'+esc(i.id)+'</span>'+led+'</span></div>'
   +'<p class="sub" style="margin:0">'+esc(i.plain)+' <b>'+n(i.count,'time')+' in '+n(i.files,'file')+'.</b></p>'
   +'<details><summary>Where: '+n(i.count,'place')+'</summary><ul class="ev">'+i.evidence.map(e=>'<li><b>'+esc(e.file)+':'+esc(e.line)+'</b> '+esc(e.value)+'</li>').join('')+(i.more?'<li>… and '+esc(i.more)+' more (engine.py audit-page --json)</li>':'')+'</ul></details>'
   +'<fieldset class="opts"><legend class="vh">Options for '+esc(i.title)+'</legend>'+i.options.map((o,k)=>'<label class="opt"><input type="radio" name="o-'+esc(i.id)+'" value="'+k+'"><span class="opt-t">'+esc(o.label)+(o.recommended?'<span class="rec">Recommended</span>':'')+'</span><span class="opt-n">'+esc(o.note)+'</span></label>').join('')+'</fieldset>'
   +'<label class="waivewhy"><span class="kv">Why keep it? (goes in the ledger)</span><input type="text" data-why="'+esc(i.id)+'" placeholder="for example: the print styles need exact points"></label>'
-  +'<div class="ba"><div class="pane" data-label="now, in your code" data-pane="now"></div><div class="pane" data-label="with this option" data-pane="after"></div></div></article>'}).join('');
+  +'<div class="ba"><div class="pane" data-label="now, in your code" data-pane="now"></div><div class="pane" data-label="with this option" data-pane="after"></div></div></article>'};
+ const rest=is.filter(i=>!top.has(i.id));
+ $('#issues').innerHTML='<div class="verdict"><b>Start with these '+Math.min(5,is.length)+'</b>, the decisions that cover the most places:<ol class="top5">'
+  +byCount.slice(0,5).map(i=>'<li><a href="#'+esc(i.id)+'">'+esc(i.title)+'</a> <span class="kv">'+n(i.count,'place')+' in '+n(i.files,'file')+'</span></li>').join('')+'</ol></div>'
+  +byCount.slice(0,5).map(card).join('')
+  +(rest.length?'<details class="more-issues"><summary><h3>'+n(rest.length,'more thing')+' to settle</h3></summary><div style="display:grid;gap:14px;margin-top:12px">'+rest.map(card).join('')+'</div></details>':'');
  is.forEach(i=>{const el=document.getElementById(i.id);el.querySelectorAll('.pane').forEach(paneStyle);
   draw(i.kind,i.preview,false,el.querySelector('[data-pane=now]'));draw(i.kind,i.preview,undefined,el.querySelector('[data-pane=after]'));
   el.querySelector('.opts').onchange=e=>{const k=+e.target.value;PICK[i.id]=k;const o=i.options[k];el.classList.add('picked');el.classList.toggle('waive',o.id==='keep');
