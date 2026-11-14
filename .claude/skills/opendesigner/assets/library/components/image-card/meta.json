@@ -149,6 +149,11 @@
         "status": "handled",
         "how": "caption and credit wrap, also long words",
         "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
       }
     },
     "keyboard": [

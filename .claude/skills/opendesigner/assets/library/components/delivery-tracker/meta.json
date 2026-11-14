@@ -33,5 +33,286 @@
       "author": "abolfazl babaei",
       "page": "2YS2yb8qusU"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a food, grocery or parcel app where a courier is on the way and the customer may need to reach them"
+    ],
+    "avoid_when": [
+      "an order that has not been placed yet: use order-summary or cart-drawer",
+      "a list of past orders or events: use activity-list",
+      "a trip with flights and stays: use itinerary"
+    ],
+    "parts": [
+      {
+        "name": "map",
+        "selector": ".odl-map",
+        "what": "a drawn map with the route travelled and to go, described in words for screen readers",
+        "slot": "media"
+      },
+      {
+        "name": "live",
+        "selector": ".odl-tag",
+        "what": "the live badge on the map",
+        "slot": "text"
+      },
+      {
+        "name": "from",
+        "selector": ".odl-kicker",
+        "what": "where the order is coming from",
+        "slot": "text"
+      },
+      {
+        "name": "eta",
+        "selector": ".odl-delivery-tracker h3",
+        "what": "time to arrival, the card's heading",
+        "slot": "text"
+      },
+      {
+        "name": "expected",
+        "selector": ".odl-by",
+        "what": "expected clock time and distance",
+        "slot": "text"
+      },
+      {
+        "name": "progress",
+        "selector": ".odl-segs",
+        "what": "four segments showing how far along the order is",
+        "slot": "number"
+      },
+      {
+        "name": "photo",
+        "selector": ".odl-av",
+        "what": "the courier's photo",
+        "slot": "media"
+      },
+      {
+        "name": "courier",
+        "selector": ".odl-name",
+        "what": "the courier's first name",
+        "slot": "text"
+      },
+      {
+        "name": "vehicle",
+        "selector": ".odl-sub",
+        "what": "how they travel and their rating",
+        "slot": "text"
+      },
+      {
+        "name": "contact",
+        "selector": ".odl-round",
+        "what": "message and call buttons",
+        "slot": "action"
+      },
+      {
+        "name": "steps",
+        "selector": "ol > li",
+        "what": "one order step with its time: done, now or upcoming",
+        "slot": "list"
+      },
+      {
+        "name": "order",
+        "selector": ".odl-order p",
+        "what": "item count, total and order number",
+        "slot": "text"
+      },
+      {
+        "name": "view",
+        "selector": ".odl-view",
+        "what": "opens the full order",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "eta",
+        "steps"
+      ],
+      "properties": {
+        "from": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "from"
+        },
+        "eta": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "eta"
+        },
+        "expected": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "expected"
+        },
+        "map_label": {
+          "type": "string",
+          "maxLength": 160,
+          "part": "map"
+        },
+        "live": {
+          "type": "boolean",
+          "part": "live"
+        },
+        "courier": {
+          "type": "object",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 20,
+              "part": "courier"
+            },
+            "photo": {
+              "type": "string",
+              "maxLength": 300,
+              "part": "photo"
+            },
+            "vehicle": {
+              "type": "string",
+              "maxLength": 16,
+              "part": "vehicle"
+            },
+            "rating": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 5,
+              "part": "vehicle"
+            }
+          }
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 6,
+          "part": "steps",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "state"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "time": {
+                "type": "string",
+                "maxLength": 6
+              },
+              "state": {
+                "enum": [
+                  "done",
+                  "now",
+                  "upcoming"
+                ]
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
+          }
+        },
+        "order": {
+          "type": "object",
+          "part": "order",
+          "properties": {
+            "summary": {
+              "type": "string",
+              "maxLength": 24
+            },
+            "reference": {
+              "type": "string",
+              "maxLength": 32
+            }
+          }
+        },
+        "view_label": {
+          "type": "string",
+          "maxLength": 14,
+          "part": "view"
+        },
+        "courier_photo": {
+          "type": "object",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 2048
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "courier_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "courier_vehicle": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "courier_rating": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "order_summary": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "order_reference": {
+          "type": "string",
+          "maxLength": 80
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "shown",
+        "how": "a pulsing halo around the courier on the map shows the position is live",
+        "evidence": "animation: odl-dt-pulse"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "for a late or failed delivery, change the current step's note and put an alert-banners line above the timeline"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "once delivered, remove the live badge and disable message and call"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrow box the body padding and gaps get smaller",
+        "evidence": "@container (max-width: 24rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the courier's vehicle and rating line stays on one line and is cut off; step labels and notes wrap",
+        "evidence": "overflow: hidden; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Message, Call, then View order",
+      "Enter or Space presses the focused button"
+    ]
+  }
 }

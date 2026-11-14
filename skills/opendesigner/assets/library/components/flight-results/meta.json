@@ -4,10 +4,268 @@
   "use": "on a flight search results page, for comparing and choosing a flight",
   "type": "data",
   "style": "friendly",
-  "industries": ["travel"],
-  "tags": ["flights", "search results", "sort", "airline", "price"],
-  "states": ["sorted by best", "sorted by price", "sorted by time", "hover", "focus"],
+  "industries": [
+    "travel"
+  ],
+  "tags": [
+    "flights",
+    "search results",
+    "sort",
+    "airline",
+    "price"
+  ],
+  "states": [
+    "sorted by best",
+    "sorted by price",
+    "sorted by time",
+    "hover",
+    "focus"
+  ],
   "source": null,
   "a11y": "Sort chips are toggle buttons with aria-pressed, and each flight is one link whose name reads the whole flight (times, airports, duration, stops, price and tag); the drawn marks are decorative.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "a short list of journeys of any kind where time, stops and price decide the pick"
+    ],
+    "avoid_when": [
+      "the pass for a flight already booked: use boarding-pass",
+      "the search form before results: use trip-search",
+      "hotel or home results: use stay-card"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-flight-results h3",
+        "what": "the route searched, the heading",
+        "slot": "text"
+      },
+      {
+        "name": "summary",
+        "selector": ".odl-head .odl-sub",
+        "what": "date, travellers, cabin and how many flights are shown",
+        "slot": "text"
+      },
+      {
+        "name": "sort",
+        "selector": ".odl-sort button",
+        "what": "a sort chip with the best price and duration for that sort",
+        "slot": "list"
+      },
+      {
+        "name": "flights",
+        "selector": ".odl-list > li",
+        "what": "one flight option, a link to choose it",
+        "slot": "list"
+      },
+      {
+        "name": "depart",
+        "selector": ".odl-end:first-child",
+        "what": "departure time and airport code",
+        "slot": "text"
+      },
+      {
+        "name": "path",
+        "selector": ".odl-path",
+        "what": "duration over a line with a dot per stop, then the stops",
+        "slot": "text"
+      },
+      {
+        "name": "arrive",
+        "selector": ".odl-end:last-child",
+        "what": "arrival time, with +1 for next day, and airport code",
+        "slot": "text"
+      },
+      {
+        "name": "airline",
+        "selector": ".odl-carrier",
+        "what": "a drawn airline mark, the airline name and a tag",
+        "slot": "text"
+      },
+      {
+        "name": "price",
+        "selector": ".odl-buy",
+        "what": "price and what it is per",
+        "slot": "number"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "flights"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "title"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 64,
+          "part": "summary"
+        },
+        "sorts": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 3,
+          "part": "sort",
+          "items": {
+            "type": "object",
+            "required": [
+              "key",
+              "label"
+            ],
+            "properties": {
+              "key": {
+                "enum": [
+                  "best",
+                  "price",
+                  "time"
+                ]
+              },
+              "label": {
+                "type": "string",
+                "maxLength": 10
+              },
+              "price": {
+                "type": "string",
+                "maxLength": 8
+              },
+              "duration": {
+                "type": "string",
+                "maxLength": 8
+              }
+            }
+          }
+        },
+        "flights": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 10,
+          "part": "flights",
+          "items": {
+            "type": "object",
+            "required": [
+              "depart",
+              "arrive",
+              "from",
+              "to",
+              "duration",
+              "airline",
+              "price",
+              "href"
+            ],
+            "properties": {
+              "depart": {
+                "type": "string",
+                "maxLength": 5,
+                "part": "depart"
+              },
+              "from": {
+                "type": "string",
+                "maxLength": 3,
+                "part": "depart"
+              },
+              "arrive": {
+                "type": "string",
+                "maxLength": 5,
+                "part": "arrive"
+              },
+              "to": {
+                "type": "string",
+                "maxLength": 3,
+                "part": "arrive"
+              },
+              "day_offset": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2,
+                "part": "arrive"
+              },
+              "duration": {
+                "type": "string",
+                "maxLength": 8,
+                "part": "path"
+              },
+              "stops": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 3,
+                "part": "path",
+                "items": {
+                  "type": "string",
+                  "maxLength": 3
+                }
+              },
+              "airline": {
+                "type": "string",
+                "maxLength": 24,
+                "part": "airline"
+              },
+              "tag": {
+                "type": "string",
+                "maxLength": 12,
+                "part": "airline"
+              },
+              "price": {
+                "type": "string",
+                "maxLength": 8,
+                "part": "price"
+              },
+              "per": {
+                "type": "string",
+                "maxLength": 12,
+                "part": "price"
+              },
+              "href": {
+                "type": "string",
+                "maxLength": 300
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the search fails, show alert-banners under the heading with a retry button in place of the list"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "for a sold-out flight, drop its link, dim the card and replace the price with 'Sold out'"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the sort chips scroll sideways in their own row; on a phone each card stacks the route above the airline and price",
+        "evidence": "overflow-x: auto; scrollbar-width: none;"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long airline name is cut with an ellipsis; times and prices never wrap",
+        "evidence": "text-overflow: ellipsis; white-space: nowrap; font: var(--ds-text-label-lg)"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the three sort chips, then each flight link",
+      "Enter or Space on a sort chip re-sorts the list and marks that chip pressed",
+      "Enter on a flight follows its link"
+    ]
+  }
 }

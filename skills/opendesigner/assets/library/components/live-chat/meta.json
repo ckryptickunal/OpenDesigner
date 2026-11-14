@@ -79,5 +79,314 @@
       "author": "Hà Nguyễn",
       "page": "OFSQ6bHjFjs"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a broadcast where many viewers type short messages at once and the host or moderators pin one note above them"
+    ],
+    "avoid_when": [
+      "a one-to-one or small-group conversation: use chat-thread",
+      "comments that stay with a record and can be resolved: use comment-thread",
+      "a recorded video with no live audience: use video-player"
+    ],
+    "parts": [
+      {
+        "name": "stream",
+        "selector": ".odl-frame img",
+        "what": "the stream frame, 16:9, with a description",
+        "slot": "media"
+      },
+      {
+        "name": "live_tag",
+        "selector": ".odl-live",
+        "what": "the LIVE tag with a pulsing dot",
+        "slot": "none"
+      },
+      {
+        "name": "viewers",
+        "selector": ".odl-viewers",
+        "what": "how many are watching, over the frame",
+        "slot": "number"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-about h3",
+        "what": "the stream's title",
+        "slot": "text"
+      },
+      {
+        "name": "host",
+        "selector": ".odl-channel",
+        "what": "the host's photo in a live ring, name, category and how long they have been live",
+        "slot": "text"
+      },
+      {
+        "name": "follow",
+        "selector": ".odl-follow",
+        "what": "a Follow toggle that reads Following when on",
+        "slot": "action"
+      },
+      {
+        "name": "chat_head",
+        "selector": ".odl-chat-top",
+        "what": "the chat heading and how many are chatting",
+        "slot": "text"
+      },
+      {
+        "name": "pinned",
+        "selector": ".odl-pin",
+        "what": "one pinned message with who pinned it and an optional link",
+        "slot": "rich"
+      },
+      {
+        "name": "messages",
+        "selector": ".odl-log li",
+        "what": "one message: avatar, name, an optional Host, Mod or Member badge, and the text",
+        "slot": "list"
+      },
+      {
+        "name": "composer",
+        "selector": ".odl-compose input",
+        "what": "the message box, up to 200 characters",
+        "slot": "input"
+      },
+      {
+        "name": "emoji",
+        "selector": ".odl-emoji",
+        "what": "an icon button inside the box for emoji",
+        "slot": "action"
+      },
+      {
+        "name": "send",
+        "selector": ".odl-send",
+        "what": "the send icon button; it looks quiet while the box is empty",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "stream",
+        "title",
+        "host",
+        "messages"
+      ],
+      "properties": {
+        "stream": {
+          "type": "object",
+          "part": "stream",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 300
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        },
+        "viewers": {
+          "type": "integer",
+          "part": "viewers"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 64,
+          "part": "title"
+        },
+        "host": {
+          "type": "object",
+          "part": "host",
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 32
+            },
+            "photo": {
+              "type": "string",
+              "maxLength": 300
+            },
+            "meta": {
+              "type": "string",
+              "maxLength": 40
+            }
+          }
+        },
+        "following": {
+          "type": "boolean",
+          "part": "follow"
+        },
+        "chat_title": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "chat_head"
+        },
+        "chatting": {
+          "type": "integer",
+          "part": "chat_head"
+        },
+        "pinned": {
+          "type": "object",
+          "part": "pinned",
+          "required": [
+            "text"
+          ],
+          "properties": {
+            "by": {
+              "type": "string",
+              "maxLength": 32
+            },
+            "text": {
+              "type": "string",
+              "maxLength": 160
+            },
+            "link": {
+              "type": "object",
+              "required": [
+                "label",
+                "href"
+              ],
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "maxLength": 40
+                },
+                "href": {
+                  "type": "string",
+                  "maxLength": 300
+                }
+              }
+            }
+          }
+        },
+        "messages": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 100,
+          "part": "messages",
+          "items": {
+            "type": "object",
+            "required": [
+              "author",
+              "text"
+            ],
+            "properties": {
+              "author": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "avatar": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "role": {
+                "enum": [
+                  "host",
+                  "mod",
+                  "member",
+                  "you",
+                  "none"
+                ]
+              },
+              "badge": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 200
+              }
+            }
+          }
+        },
+        "placeholder": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "composer"
+        },
+        "host_photo": {
+          "type": "object",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 2048
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 200
+            }
+          }
+        },
+        "host_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "host_meta": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "pinned_by": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "pinned_text": {
+          "type": "string",
+          "maxLength": 80
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the stream drops, replace the LIVE tag with an Offline chip and show a message over the frame; if a message fails, keep it in the box with an alert-banners line above"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "Send is only dimmed when the box is empty and pressing it does nothing; set disabled on it for slow mode or a closed chat"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the log scrolls in its own box, newest at the bottom; on a phone it grows with the page instead",
+        "evidence": "overflow-y: auto; overscroll-behavior: contain"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "messages break anywhere, so long words and links never push the panel wider; the title balances its lines",
+        "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Follow, the pinned link, the message log, the message box, Add an emoji and Send",
+      "Enter or Space on Follow turns following on or off",
+      "With the message log focused, the arrow keys scroll it",
+      "Enter in the message box sends the message when it is not empty"
+    ]
+  }
 }

@@ -4,10 +4,289 @@
   "use": "in a smart home app's main screen, for switching lights, heating, locks and speakers room by room",
   "type": "form",
   "style": "friendly",
-  "industries": ["home"],
-  "tags": ["smart home", "devices", "thermostat", "lights", "toggle"],
-  "states": ["on", "off", "room filtered", "at limit", "hover", "focus"],
+  "industries": [
+    "home"
+  ],
+  "tags": [
+    "smart home",
+    "devices",
+    "thermostat",
+    "lights",
+    "toggle"
+  ],
+  "states": [
+    "on",
+    "off",
+    "room filtered",
+    "at limit",
+    "hover",
+    "focus"
+  ],
   "source": null,
   "a11y": "Rooms are a radio group; each device is a toggle button with aria-pressed whose name reads the device and its state, sliders are named range inputs, and the thermostat buttons say the temperature they will set.",
-  "width": "medium"
+  "width": "medium",
+  "spec": {
+    "use_when": [
+      "a handful of on-off devices grouped by room, where a few also need one level such as brightness, volume or a target temperature"
+    ],
+    "avoid_when": [
+      "app or account preferences rather than physical devices: use settings-toggles",
+      "one device in depth with schedules and history: use detail-drawer",
+      "a single media player with a queue: use music-player"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-head h3",
+        "what": "the home's name, the section heading",
+        "slot": "text"
+      },
+      {
+        "name": "summary",
+        "selector": ".odl-sub",
+        "what": "a one-line status; the active count updates as devices switch",
+        "slot": "text"
+      },
+      {
+        "name": "rooms",
+        "selector": ".odl-rooms label",
+        "what": "one room chip with its device count; the chips filter the tiles",
+        "slot": "list"
+      },
+      {
+        "name": "devices",
+        "selector": ".odl-tiles > li",
+        "what": "one device tile; on tiles are raised and their icon is accented",
+        "slot": "list"
+      },
+      {
+        "name": "toggle",
+        "selector": ".odl-toggle",
+        "what": "the tile's switch: icon, device name and its current state",
+        "slot": "action"
+      },
+      {
+        "name": "level",
+        "selector": ".odl-slider input",
+        "what": "an optional slider for brightness or volume",
+        "slot": "input"
+      },
+      {
+        "name": "thermostat",
+        "selector": ".odl-thermo",
+        "what": "a wide tile with a dial showing the target temperature, its name and room, and lower and raise buttons",
+        "slot": "none"
+      },
+      {
+        "name": "target",
+        "selector": ".odl-dial output",
+        "what": "the target temperature and the heating mode",
+        "slot": "number"
+      },
+      {
+        "name": "steppers",
+        "selector": ".odl-steps button",
+        "what": "lower and raise the target by half a degree",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "devices"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "title"
+        },
+        "summary": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "summary"
+        },
+        "rooms": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 8,
+          "part": "rooms",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "count": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        "devices": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "part": "devices",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "room",
+              "on"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 20,
+                "part": "toggle"
+              },
+              "room": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "icon": {
+                "type": "string",
+                "maxLength": 24
+              },
+              "on": {
+                "type": "boolean"
+              },
+              "on_label": {
+                "type": "string",
+                "maxLength": 10
+              },
+              "off_label": {
+                "type": "string",
+                "maxLength": 10
+              },
+              "level": {
+                "type": "object",
+                "part": "level",
+                "required": [
+                  "label",
+                  "value"
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "maxLength": 32
+                  },
+                  "min": {
+                    "type": "number"
+                  },
+                  "max": {
+                    "type": "number"
+                  },
+                  "value": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "thermostat": {
+          "type": "object",
+          "part": "thermostat",
+          "required": [
+            "target"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 20
+            },
+            "detail": {
+              "type": "string",
+              "maxLength": 32
+            },
+            "target": {
+              "type": "number",
+              "part": "target"
+            },
+            "mode": {
+              "type": "string",
+              "maxLength": 10,
+              "part": "target"
+            },
+            "min": {
+              "type": "number",
+              "part": "steppers"
+            },
+            "max": {
+              "type": "number",
+              "part": "steppers"
+            }
+          }
+        },
+        "thermostat_target": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "thermostat_mode": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "thermostat_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "thermostat_detail": {
+          "type": "string",
+          "maxLength": 80
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "when a device does not respond, put its toggle back, write 'Not responding' in its state line and add an alert-banners notice above the tiles"
+      },
+      "disabled": {
+        "status": "handled",
+        "how": "the thermostat's lower and raise buttons disable at the minimum and maximum, in the disabled colour",
+        "evidence": ".odl-home-controls .odl-steps button:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "room chips scroll sideways in their own row with a fade at the edge; tiles go to 3 or 4 columns as the box widens",
+        "evidence": "overflow-x: auto; scrollbar-width: none"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the state line ends in an ellipsis; room chips never wrap and device names wrap inside the tile",
+        "evidence": "white-space: nowrap; overflow: hidden; text-overflow: ellipsis"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the room chips as one radio group; the arrow keys move between rooms and filter the tiles",
+      "Tab then reaches each device toggle; Enter or Space switches it on or off",
+      "On a brightness or volume slider, the arrow keys, Home and End change the level",
+      "On the thermostat, Enter or Space on Lower or Raise changes the target by half a degree; each button is disabled at its limit"
+    ]
+  }
 }

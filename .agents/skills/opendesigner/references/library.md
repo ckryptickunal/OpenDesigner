@@ -22,10 +22,11 @@ Read who you are talking to from `profile.voice` and the conversation (`rules.md
 Then one line, as a fact, not a pitch: "The library has an audit log in a technical style that matches this; want it as a base, or build it from your own parts?" If they have their own component for it, never mention the library.
 
 ## Adding one after a yes
-1. `python3 <skill>/scripts/library.py add <slug> --into <their components folder>`. It copies one file and lists any `--ds-*` variable their tokens lack.
+1. `python3 <skill>/scripts/library.py add <slug> --into <their components folder>`. It copies one file and lists any `--ds-*` variable their tokens lack. Add `--from https://opendesigner.dev` to take the website's newest copy instead of the one in this skill; an agent without the skill can run `curl -fsSLo <slug>.html https://opendesigner.dev/library/<slug>.html`. A gallery pick arrives as `OD:add library.<slug>`.
 2. Missing variables: run `engine.py build` first if they have an OpenDesigner system; otherwise map each variable to the nearest token they have, and say which ones you mapped.
-3. Turn the file into a component in their framework (React, Vue, Svelte or plain HTML; the files are web only, so not for SwiftUI or Compose), keeping the markup, the states and the accessibility notes in its `meta.json`. Replace the invented sample content with theirs.
-4. Then do what every build ends with: `engine.py review`, and check it as rendered (`making.md`).
+3. Read its catalog entry before you adapt it (`assets/library/library.json`, or `/library/<slug>.json` on the website): its `data` limits (how long each text can be, how many items a list holds), `avoid_when`, and `states.edge`. Build each edge state marked `not_built` that their screen needs, the way its `how` says.
+4. Turn the file into a component in their framework (React, Vue, Svelte or plain HTML; the files are web only, so not for SwiftUI or Compose), keeping the markup, the states and the accessibility notes in its `meta.json`. Replace the invented sample content with theirs.
+5. Then do what every build ends with: `engine.py review`, and check it as rendered (`making.md`).
 
 ## Never
 - Never add one silently, and never add more than the person asked for.

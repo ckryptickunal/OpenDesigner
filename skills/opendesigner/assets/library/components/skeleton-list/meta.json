@@ -78,8 +78,9 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "When the request returns nothing, replace the bones with an empty state (empty-first-use or empty-no-results)."
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
         "status": "shown",

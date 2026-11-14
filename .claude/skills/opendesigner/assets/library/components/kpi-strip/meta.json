@@ -4,10 +4,154 @@
   "use": "at the top of a dashboard, for its headline numbers",
   "type": "data",
   "style": "quiet",
-  "industries": ["finance", "saas", "any"],
-  "tags": ["kpi", "stats", "summary", "dashboard", "metrics"],
-  "states": ["warning note", "progress", "wraps to two or one column"],
+  "industries": [
+    "finance",
+    "saas",
+    "any"
+  ],
+  "tags": [
+    "kpi",
+    "stats",
+    "summary",
+    "dashboard",
+    "metrics"
+  ],
+  "states": [
+    "warning note",
+    "progress",
+    "wraps to two or one column"
+  ],
   "source": "brand/showcase/product/01-quoin-payments",
   "a11y": "A description list, so each number is read with its label; the bar is decorative and its value is in the text.",
-  "width": "wide"
+  "width": "wide",
+  "spec": {
+    "use_when": [
+      "a report or account page that opens with two to four totals before the detail"
+    ],
+    "avoid_when": [
+      "one number tracked against a limit or goal: use budget-meters or savings-goal",
+      "numbers over time: use bar-chart",
+      "a share of a whole split into parts: use donut-breakdown"
+    ],
+    "parts": [
+      {
+        "name": "stats",
+        "selector": "dl > div",
+        "what": "one headline number: label, value and a note",
+        "slot": "list"
+      },
+      {
+        "name": "label",
+        "selector": "dt",
+        "what": "what the number measures",
+        "slot": "text"
+      },
+      {
+        "name": "value",
+        "selector": ".odl-value",
+        "what": "the number, with cents set lighter",
+        "slot": "number"
+      },
+      {
+        "name": "note",
+        "selector": ".odl-note",
+        "what": "one plain line of context, sometimes with a warning word",
+        "slot": "rich"
+      },
+      {
+        "name": "meter",
+        "selector": ".odl-meter",
+        "what": "a small bar for a share, with the share in words beside it",
+        "slot": "number"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "stats"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "stats": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 4,
+          "part": "stats",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "value"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 24,
+                "part": "label"
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 14,
+                "part": "value"
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 44,
+                "part": "note"
+              },
+              "warning": {
+                "type": "string",
+                "maxLength": 16,
+                "part": "note"
+              },
+              "share": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "part": "meter"
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a number cannot load, show a dash and put the reason in the note with the warning colour"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "the strip has no controls, so there is no disabled state"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "two columns by default, four when the box is wide, and smaller figures on a phone",
+        "evidence": "@container (min-width: 50rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "values never wrap, so keep them short; labels and notes wrap in their cell",
+        "evidence": ".odl-value { font: var(--ds-text-title-lg); font-variant-numeric: tabular-nums; white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": []
+  }
 }

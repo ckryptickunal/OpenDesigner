@@ -4,15 +4,310 @@
   "use": "on a record people discuss together",
   "type": "data",
   "style": "quiet",
-  "industries": ["saas", "finance", "productivity"],
-  "tags": ["comments", "thread", "mentions", "reactions", "composer"],
-  "states": ["hover", "focus", "resolved", "edited", "reaction on", "send disabled", "send enabled"],
+  "industries": [
+    "saas",
+    "finance",
+    "productivity"
+  ],
+  "tags": [
+    "comments",
+    "thread",
+    "mentions",
+    "reactions",
+    "composer"
+  ],
+  "states": [
+    "hover",
+    "focus",
+    "resolved",
+    "edited",
+    "reaction on",
+    "send disabled",
+    "send enabled"
+  ],
   "source": "brand/showcase/product/02-fennick-approvals",
   "a11y": "Comments are an ordered list; reactions are toggle buttons with aria-pressed and a count in their name; the composer's textarea is labelled and Cmd or Ctrl+Enter sends.",
   "width": "medium",
   "photos": [
-    {"img": "photo-1438761681033-6461ffad8d80", "author": "Christopher Campbell", "page": "rDEOVtE7vOs"},
-    {"img": "photo-1522529599102-193c0d76b5b6", "author": "Elizeu Dias", "page": "2EGNqazbAMk"},
-    {"img": "photo-1725033489648-a819750348eb", "author": "Arnab De", "page": "WYwNK-zW7u4"}
-  ]
+    {
+      "img": "photo-1438761681033-6461ffad8d80",
+      "author": "Christopher Campbell",
+      "page": "rDEOVtE7vOs"
+    },
+    {
+      "img": "photo-1522529599102-193c0d76b5b6",
+      "author": "Elizeu Dias",
+      "page": "2EGNqazbAMk"
+    },
+    {
+      "img": "photo-1725033489648-a819750348eb",
+      "author": "Arnab De",
+      "page": "WYwNK-zW7u4"
+    }
+  ],
+  "spec": {
+    "use_when": [
+      "a review or approval where a question needs an answer from a named teammate and can be marked resolved"
+    ],
+    "avoid_when": [
+      "a live back-and-forth conversation: use chat-thread or live-chat",
+      "comments on a phone opened from a record: use comment-sheet",
+      "a log of what changed rather than what people said: use activity-feed"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-head h3",
+        "what": "the heading with the comment count after it",
+        "slot": "text"
+      },
+      {
+        "name": "context",
+        "selector": ".odl-head p",
+        "what": "what the comments are about, such as a record number and amount",
+        "slot": "text"
+      },
+      {
+        "name": "comments",
+        "selector": ".odl-comment",
+        "what": "one comment: avatar, name, time, an edited marker, the text, reactions and Reply",
+        "slot": "list"
+      },
+      {
+        "name": "text",
+        "selector": ".odl-body > p",
+        "what": "the comment, which may hold an @mention",
+        "slot": "rich"
+      },
+      {
+        "name": "reactions",
+        "selector": ".odl-reaction",
+        "what": "a reaction chip with its count; yours is accented",
+        "slot": "action"
+      },
+      {
+        "name": "add_reaction",
+        "selector": ".odl-react",
+        "what": "an icon button to add a reaction",
+        "slot": "action"
+      },
+      {
+        "name": "replies",
+        "selector": ".odl-replies",
+        "what": "a sunken box of replies, under a resolved line when resolved",
+        "slot": "list"
+      },
+      {
+        "name": "resolved",
+        "selector": ".odl-resolved",
+        "what": "who resolved the comment and when",
+        "slot": "text"
+      },
+      {
+        "name": "composer",
+        "selector": "textarea",
+        "what": "the box for a new comment",
+        "slot": "input"
+      },
+      {
+        "name": "composer_tools",
+        "selector": ".odl-bar > button",
+        "what": "Mention and Attach icon buttons",
+        "slot": "action"
+      },
+      {
+        "name": "send",
+        "selector": ".odl-send",
+        "what": "the Comment button, disabled until there is text",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "comments"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "title"
+        },
+        "count": {
+          "type": "integer",
+          "part": "title"
+        },
+        "context": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "context"
+        },
+        "comments": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 8,
+          "part": "comments",
+          "items": {
+            "type": "object",
+            "required": [
+              "author",
+              "time",
+              "text"
+            ],
+            "properties": {
+              "author": {
+                "type": "string",
+                "maxLength": 32
+              },
+              "avatar": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "time": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "edited": {
+                "type": "boolean"
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 600,
+                "part": "text"
+              },
+              "reactions": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 4,
+                "part": "reactions",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "emoji",
+                    "count"
+                  ],
+                  "properties": {
+                    "emoji": {
+                      "type": "string",
+                      "maxLength": 4
+                    },
+                    "count": {
+                      "type": "integer"
+                    },
+                    "mine": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              },
+              "resolved": {
+                "type": "object",
+                "part": "resolved",
+                "properties": {
+                  "by": {
+                    "type": "string",
+                    "maxLength": 32
+                  },
+                  "when": {
+                    "type": "string",
+                    "maxLength": 12
+                  }
+                }
+              },
+              "replies": {
+                "type": "array",
+                "minItems": 0,
+                "maxItems": 5,
+                "part": "replies",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "author",
+                    "text"
+                  ],
+                  "properties": {
+                    "author": {
+                      "type": "string",
+                      "maxLength": 32
+                    },
+                    "avatar": {
+                      "type": "string",
+                      "maxLength": 300
+                    },
+                    "time": {
+                      "type": "string",
+                      "maxLength": 20
+                    },
+                    "text": {
+                      "type": "string",
+                      "maxLength": 400
+                    }
+                  }
+                }
+              },
+              "resolved_by": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "resolved_when": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
+          }
+        },
+        "placeholder": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "composer"
+        },
+        "send_label": {
+          "type": "string",
+          "maxLength": 12,
+          "part": "send"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a comment fails to post, keep its text in the box and put an alert-banners line above the composer"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "the Comment button starts disabled and turns on once the box has text",
+        "evidence": ".odl-comment-thread .odl-send:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the composer grows with its text up to 12rem, then scrolls; the comment list itself grows with the page",
+        "evidence": "field-sizing: content; min-block-size: var(--ds-size-row-two-line); max-block-size: 12rem"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "comment text wraps in a column that can shrink, and the name and time line wraps; a long unbroken link is not broken and can overflow",
+        "evidence": ".odl-comment-thread .odl-body { min-inline-size: 0;"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches each comment's reaction, Add a reaction and Reply, then the comment box, Mention, Attach and Comment",
+      "Enter or Space on a reaction turns yours on or off and updates the count",
+      "Cmd or Ctrl+Enter in the comment box sends it when it has text; the Comment button is disabled, and skipped by Tab, while the box is empty"
+    ]
+  }
 }

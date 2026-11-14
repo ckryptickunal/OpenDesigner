@@ -34,5 +34,183 @@
       "author": "mostafa mahmoudi",
       "page": "J4DnKxz_3sA"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a featured product or add-on shown on its own, with a quick add and save"
+    ],
+    "avoid_when": [
+      "several saved items in a grid: use wishlist-grid",
+      "the full product page with several photos: use product-gallery",
+      "a dish on a menu: use menu-item"
+    ],
+    "parts": [
+      {
+        "name": "photo",
+        "selector": ".odl-cover img",
+        "what": "the product photo",
+        "slot": "media"
+      },
+      {
+        "name": "tag",
+        "selector": ".odl-tag",
+        "what": "a short badge on the photo, such as 'New in'",
+        "slot": "text"
+      },
+      {
+        "name": "save",
+        "selector": ".odl-fav",
+        "what": "save to favourites toggle",
+        "slot": "action"
+      },
+      {
+        "name": "category",
+        "selector": ".odl-kind",
+        "what": "category and material",
+        "slot": "text"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-product-card h3",
+        "what": "the product name",
+        "slot": "text"
+      },
+      {
+        "name": "description",
+        "selector": ".odl-desc",
+        "what": "one or two lines about the product",
+        "slot": "text"
+      },
+      {
+        "name": "rating",
+        "selector": ".odl-rate",
+        "what": "stars, the average and the review count",
+        "slot": "number"
+      },
+      {
+        "name": "price",
+        "selector": ".odl-price",
+        "what": "price, the old price struck out and the saving",
+        "slot": "number"
+      },
+      {
+        "name": "add",
+        "selector": ".odl-add",
+        "what": "Add to bag toggle that turns into Added",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "name",
+        "price",
+        "photo",
+        "photo_alt"
+      ],
+      "properties": {
+        "photo": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "photo"
+        },
+        "photo_alt": {
+          "type": "string",
+          "maxLength": 100,
+          "part": "photo"
+        },
+        "tag": {
+          "type": "string",
+          "maxLength": 14,
+          "part": "tag"
+        },
+        "saved": {
+          "type": "boolean",
+          "part": "save"
+        },
+        "category": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "category"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "name"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 110,
+          "part": "description"
+        },
+        "rating": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 5,
+          "part": "rating"
+        },
+        "reviews": {
+          "type": "integer",
+          "minimum": 0,
+          "part": "rating"
+        },
+        "price": {
+          "type": "string",
+          "maxLength": 10,
+          "part": "price"
+        },
+        "old_price": {
+          "type": "string",
+          "maxLength": 10,
+          "part": "price"
+        },
+        "saving": {
+          "type": "string",
+          "maxLength": 14,
+          "part": "price"
+        },
+        "added": {
+          "type": "boolean",
+          "part": "add"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "not_built",
+        "how": "with no photo, keep the sunken cover box so the card keeps its shape"
+      },
+      "loading": {
+        "status": "handled",
+        "how": "the cover box keeps its shape and a sunken fill while the photo loads lazily",
+        "evidence": "aspect-ratio: 5 / 4; overflow: hidden; background: var(--ds-color-surface-sunken)"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if adding fails, set Add back to not pressed and show toast-stack with the reason"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "for a sold-out product, disable Add, change its text to 'Sold out' and style it with the disabled colours"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrow card the padding shrinks and Add to bag takes the full width under the price",
+        "evidence": "@container (max-width: 20rem)"
+      },
+      "long_text": {
+        "status": "not_built",
+        "how": "name and description wrap with no limit; clamp the description to two lines with -webkit-line-clamp to keep cards in a row even"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches Save to favourites, then Add to bag",
+      "Enter or Space toggles the focused button between pressed and not pressed"
+    ]
+  }
 }

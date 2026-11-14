@@ -51,5 +51,206 @@
       "author": "Adam Rasheed",
       "page": "BGEqCc-bQHg"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "any saved-for-later list of products where price changes and stock matter"
+    ],
+    "avoid_when": [
+      "items the person is about to buy: use cart-drawer",
+      "browsing a shop's catalogue: use product-card",
+      "one product's photos and options: use product-gallery"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": ".odl-wishlist-grid h3",
+        "what": "the list's name, followed by the item count",
+        "slot": "text"
+      },
+      {
+        "name": "count",
+        "selector": ".odl-count",
+        "what": "how many items are saved",
+        "slot": "text"
+      },
+      {
+        "name": "share",
+        "selector": ".odl-share",
+        "what": "shares the list",
+        "slot": "action"
+      },
+      {
+        "name": "items",
+        "selector": "ul > li:not(.odl-slot-li)",
+        "what": "one saved item",
+        "slot": "list"
+      },
+      {
+        "name": "photo",
+        "selector": ".odl-pic img",
+        "what": "the product photo, tall",
+        "slot": "media"
+      },
+      {
+        "name": "remove",
+        "selector": ".odl-heart",
+        "what": "a filled heart that removes the item from saved",
+        "slot": "action"
+      },
+      {
+        "name": "name",
+        "selector": ".odl-name",
+        "what": "the product name, cut to one line",
+        "slot": "text"
+      },
+      {
+        "name": "variant",
+        "selector": ".odl-var",
+        "what": "colour, size or other option",
+        "slot": "text"
+      },
+      {
+        "name": "price",
+        "selector": ".odl-price",
+        "what": "the price; after a drop, the old price struck through and a Price drop tag; or a back-in-stock date",
+        "slot": "rich"
+      },
+      {
+        "name": "move",
+        "selector": ".odl-move",
+        "what": "Move to bag toggle; disabled and saying Sold out when out of stock",
+        "slot": "action"
+      },
+      {
+        "name": "slot",
+        "selector": ".odl-slot",
+        "what": "a dashed box hinting where the next saved item goes",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "items"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "title"
+        },
+        "share_label": {
+          "type": "string",
+          "maxLength": 14,
+          "part": "share"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 24,
+          "part": "items",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "photo",
+              "price"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 28
+              },
+              "photo": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "photo_alt": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "variant": {
+                "type": "string",
+                "maxLength": 22
+              },
+              "price": {
+                "type": "string",
+                "maxLength": 8
+              },
+              "was": {
+                "type": "string",
+                "maxLength": 8
+              },
+              "in_bag": {
+                "type": "boolean"
+              },
+              "sold_out": {
+                "type": "boolean"
+              },
+              "back_on": {
+                "type": "string",
+                "maxLength": 14
+              }
+            }
+          }
+        },
+        "slot": {
+          "type": "object",
+          "part": "slot",
+          "properties": {
+            "title": {
+              "type": "string",
+              "maxLength": 20
+            },
+            "hint": {
+              "type": "string",
+              "maxLength": 60
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "how": "removing every item leaves the count at 0 items and only the dashed 'Save more here' slot",
+        "evidence": "class=\"odl-slot-li\""
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if moving to the bag fails, set the toggle back and show toast-stack with the reason"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "a sold-out item's button is greyed out, says Sold out and cannot be pressed",
+        "evidence": ".odl-move:disabled"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the grid has two columns, three from 40rem and four from 56rem; more items add rows",
+        "evidence": "@container (min-width: 56rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the product name is cut to one line; prices and tags wrap under each other; button labels never wrap",
+        "evidence": "-webkit-line-clamp: 1"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab moves through Share list, then each item's remove heart and Move to bag; sold-out buttons are skipped",
+      "Enter or Space on Move to bag toggles it, and the change is read out",
+      "Enter or Space on a heart removes the item, reads out the change and moves focus to the next item's heart, or to Share list"
+    ]
+  }
 }

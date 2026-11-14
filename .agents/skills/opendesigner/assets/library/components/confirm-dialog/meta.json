@@ -4,10 +4,206 @@
   "use": "before an action that cannot be undone, such as deleting data",
   "type": "overlay",
   "style": "quiet",
-  "industries": ["saas", "finance", "any"],
-  "tags": ["dialog", "modal", "confirm", "delete", "destructive"],
-  "states": ["open", "delete disabled", "delete enabled", "hover", "pressed", "focus"],
+  "industries": [
+    "saas",
+    "finance",
+    "any"
+  ],
+  "tags": [
+    "dialog",
+    "modal",
+    "confirm",
+    "delete",
+    "destructive"
+  ],
+  "states": [
+    "open",
+    "delete disabled",
+    "delete enabled",
+    "hover",
+    "pressed",
+    "focus"
+  ],
   "source": null,
   "a11y": "An alertdialog labelled by its title and described by its sentence; the input has a visible label and hint, Delete stays a disabled native button until the typed name matches, and Enter confirms once it does.",
-  "width": "narrow"
+  "width": "narrow",
+  "spec": {
+    "use_when": [
+      "deleting several records at once, where listing them lets the person check what goes before they type to confirm"
+    ],
+    "avoid_when": [
+      "a reversible action: act at once and offer Undo in toast-stack",
+      "an approval decision with money and policy context: use approval-panel",
+      "editing or reading a record beside a list: use detail-drawer"
+    ],
+    "parts": [
+      {
+        "name": "mark",
+        "selector": ".odl-mark",
+        "what": "a warning icon in a red circle",
+        "slot": "none"
+      },
+      {
+        "name": "title",
+        "selector": "h2",
+        "what": "the question, naming what will be deleted",
+        "slot": "text"
+      },
+      {
+        "name": "lede",
+        "selector": ".odl-lede",
+        "what": "what happens next and that it cannot be undone",
+        "slot": "text"
+      },
+      {
+        "name": "items",
+        "selector": "li",
+        "what": "one thing to be deleted: name, a small date, and an amount",
+        "slot": "list"
+      },
+      {
+        "name": "confirm_label",
+        "selector": "label",
+        "what": "the instruction, with the exact text to type in code",
+        "slot": "rich"
+      },
+      {
+        "name": "confirm_input",
+        "selector": "input",
+        "what": "where the person types the name",
+        "slot": "input"
+      },
+      {
+        "name": "hint",
+        "selector": ".odl-hint",
+        "what": "where to find the name",
+        "slot": "text"
+      },
+      {
+        "name": "cancel",
+        "selector": ".odl-cancel",
+        "what": "the safe way out",
+        "slot": "action"
+      },
+      {
+        "name": "delete",
+        "selector": ".odl-delete",
+        "what": "the red action, unlocked by a matching name",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "lede",
+        "confirm_text",
+        "delete_label"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "title"
+        },
+        "lede": {
+          "type": "string",
+          "maxLength": 220,
+          "part": "lede"
+        },
+        "items": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 5,
+          "part": "items",
+          "items": {
+            "type": "object",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 12
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 14
+              }
+            }
+          }
+        },
+        "items_label": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "items"
+        },
+        "confirm_text": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "confirm_label"
+        },
+        "hint": {
+          "type": "string",
+          "maxLength": 80,
+          "part": "hint"
+        },
+        "cancel_label": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "cancel"
+        },
+        "delete_label": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "delete"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if deleting fails, keep the dialog open, re-enable the buttons and add an alert-banners line above the footer"
+      },
+      "disabled": {
+        "status": "handled",
+        "how": "Delete stays disabled, pale red with a not-allowed cursor, until the typed text matches; the sample is pre-typed, so it opens enabled",
+        "evidence": "del.disabled = input.value.trim() !== want"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "in a narrow box the buttons stack full width with Delete on top; the item list has no height limit, so keep it to a few lines",
+        "evidence": "@container (max-width: 26rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "a long item name ends in an ellipsis and the amount never wraps; a long name to type breaks anywhere",
+        "evidence": "text-overflow: ellipsis; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the text box, then Cancel, then Delete when it is enabled",
+      "Enter in the text box presses Delete once the typed text matches",
+      "Enter or Space presses the focused button",
+      "the file has no Escape handling or focus trap; the project's dialog code must add them"
+    ]
+  }
 }

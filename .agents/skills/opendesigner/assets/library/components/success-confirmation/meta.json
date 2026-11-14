@@ -84,12 +84,14 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "Not applicable: this state screen shows no list of records."
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
-        "status": "not_built",
-        "how": "Not applicable: shown only after the task is done."
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
       },
       "error": {
         "status": "not_built",

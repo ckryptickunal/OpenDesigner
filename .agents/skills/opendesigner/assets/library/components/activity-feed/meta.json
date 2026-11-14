@@ -4,14 +4,239 @@
   "use": "on a record page, to show its history of changes",
   "type": "data",
   "style": "quiet",
-  "industries": ["crm", "saas", "any"],
-  "tags": ["activity", "history", "timeline", "diff", "audit"],
-  "states": ["field change", "reply with quote", "plain event", "link focus"],
+  "industries": [
+    "crm",
+    "saas",
+    "any"
+  ],
+  "tags": [
+    "activity",
+    "history",
+    "timeline",
+    "diff",
+    "audit"
+  ],
+  "states": [
+    "field change",
+    "reply with quote",
+    "plain event",
+    "link focus"
+  ],
   "source": "brand/showcase/product/03-corvane-record",
   "a11y": "An ordered list of events; old and new values use del and ins, so they are not told apart by colour alone.",
   "width": "medium",
   "photos": [
-    {"img": "photo-1601412436009-d964bd02edbc", "author": "OSPAN ALI", "page": "6xv4A1VA1rU"},
-    {"img": "photo-1523278669709-c05da80b6a65", "author": "JJ Jordan", "page": "JBqwqLG0SXw"}
-  ]
+    {
+      "img": "photo-1601412436009-d964bd02edbc",
+      "author": "OSPAN ALI",
+      "page": "6xv4A1VA1rU"
+    },
+    {
+      "img": "photo-1523278669709-c05da80b6a65",
+      "author": "JJ Jordan",
+      "page": "JBqwqLG0SXw"
+    }
+  ],
+  "spec": {
+    "use_when": [
+      "a deal, ticket or account where a reader needs to see exactly which fields changed and by how much"
+    ],
+    "avoid_when": [
+      "a security or admin trail with risk levels and IP addresses: use audit-log",
+      "a short list of recent events across many records with no field changes: use activity-list",
+      "a conversation people reply in: use comment-thread"
+    ],
+    "parts": [
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the feed's heading",
+        "slot": "text"
+      },
+      {
+        "name": "events",
+        "selector": "ol > li",
+        "what": "one event, newest first, joined to the next by a thread line",
+        "slot": "list"
+      },
+      {
+        "name": "avatar",
+        "selector": ".odl-avatar",
+        "what": "photo of the person who acted",
+        "slot": "media"
+      },
+      {
+        "name": "kind",
+        "selector": ".odl-kind",
+        "what": "small icon badge on the avatar for the kind of event (edit, email, call)",
+        "slot": "none"
+      },
+      {
+        "name": "line",
+        "selector": ".odl-line p",
+        "what": "who did what, with names in bold and an optional link",
+        "slot": "rich"
+      },
+      {
+        "name": "time",
+        "selector": "time",
+        "what": "when it happened",
+        "slot": "text"
+      },
+      {
+        "name": "changes",
+        "selector": "dl > div",
+        "what": "one changed field: name, old value, new value and an optional difference",
+        "slot": "list"
+      },
+      {
+        "name": "quote",
+        "selector": "blockquote",
+        "what": "the text of a reply or note",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "events"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "title"
+        },
+        "events": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "part": "events",
+          "items": {
+            "type": "object",
+            "required": [
+              "actor",
+              "action",
+              "time"
+            ],
+            "properties": {
+              "actor": {
+                "type": "string",
+                "maxLength": 32,
+                "part": "line"
+              },
+              "avatar": {
+                "type": "string",
+                "maxLength": 300,
+                "format": "uri",
+                "part": "avatar"
+              },
+              "kind": {
+                "enum": [
+                  "edit",
+                  "email",
+                  "call"
+                ],
+                "part": "kind"
+              },
+              "action": {
+                "type": "string",
+                "maxLength": 100,
+                "part": "line"
+              },
+              "target": {
+                "type": "string",
+                "maxLength": 32,
+                "part": "line"
+              },
+              "time": {
+                "type": "string",
+                "maxLength": 16,
+                "part": "time"
+              },
+              "changes": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 6,
+                "part": "changes",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "field",
+                    "from",
+                    "to"
+                  ],
+                  "properties": {
+                    "field": {
+                      "type": "string",
+                      "maxLength": 18
+                    },
+                    "from": {
+                      "type": "string",
+                      "maxLength": 20
+                    },
+                    "to": {
+                      "type": "string",
+                      "maxLength": 20
+                    },
+                    "delta": {
+                      "type": "string",
+                      "maxLength": 12
+                    }
+                  }
+                }
+              },
+              "quote": {
+                "type": "string",
+                "maxLength": 280,
+                "part": "quote"
+              }
+            }
+          }
+        },
+        "label": {
+          "type": "string",
+          "maxLength": 120
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "keep the heading and put an alert-banners line with a retry in place of the list"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "the feed has no controls to disable; to lock a link, drop its href and show it as plain bold text"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the list grows with every event; cap it at about ten and add a 'Show older' link or pagination below"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the event line and time wrap onto two lines, record names and times never break, and in a narrow box each changed field stacks its name over its values",
+        "evidence": ".odl-activity-feed .odl-nb { white-space: nowrap; }"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches each link in the feed",
+      "Enter follows the focused link"
+    ]
+  }
 }

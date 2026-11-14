@@ -32,5 +32,323 @@
       "author": "Anh Nguyen",
       "page": "kcA-c3f_3FE"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "any made-to-order product with one required choice and a few paid add-ons, such as a drink or a print size"
+    ],
+    "avoid_when": [
+      "browsing many dishes at once: use restaurant-card for the place or product-card for each item",
+      "a product with photos to swipe and sizes to compare: use product-gallery",
+      "reviewing the whole order before paying: use cart-drawer or order-summary"
+    ],
+    "parts": [
+      {
+        "name": "photo",
+        "selector": ".odl-photo img",
+        "what": "the dish photo",
+        "slot": "media"
+      },
+      {
+        "name": "close",
+        "selector": ".odl-close",
+        "what": "closes the sheet",
+        "slot": "action"
+      },
+      {
+        "name": "flag",
+        "selector": ".odl-flag",
+        "what": "a short highlight above the name, such as how popular it is",
+        "slot": "text"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-menu-item h3",
+        "what": "the dish name",
+        "slot": "text"
+      },
+      {
+        "name": "description",
+        "selector": ".odl-desc",
+        "what": "what is in the dish",
+        "slot": "text"
+      },
+      {
+        "name": "facts",
+        "selector": ".odl-facts",
+        "what": "the base price, calories and a tag such as spice level",
+        "slot": "rich"
+      },
+      {
+        "name": "base",
+        "selector": ".odl-base .odl-opt",
+        "what": "one required choice, with an extra price if it costs more",
+        "slot": "list"
+      },
+      {
+        "name": "required",
+        "selector": ".odl-req",
+        "what": "Required, Done or Optional beside each group's heading",
+        "slot": "text"
+      },
+      {
+        "name": "extras",
+        "selector": ".odl-extras .odl-opt",
+        "what": "one optional extra with its price; the rest disable at the limit",
+        "slot": "list"
+      },
+      {
+        "name": "note",
+        "selector": "textarea",
+        "what": "a note for the kitchen",
+        "slot": "input"
+      },
+      {
+        "name": "quantity",
+        "selector": ".odl-step",
+        "what": "one fewer, the count and one more",
+        "slot": "number"
+      },
+      {
+        "name": "add",
+        "selector": ".odl-go",
+        "what": "adds the dish to the order, with the live total",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "price",
+        "currency"
+      ],
+      "properties": {
+        "photo": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "photo"
+        },
+        "photo_alt": {
+          "type": "string",
+          "maxLength": 80,
+          "part": "photo"
+        },
+        "flag": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "flag"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 48,
+          "part": "title"
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 200,
+          "part": "description"
+        },
+        "price": {
+          "type": "number",
+          "part": "facts"
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 3,
+          "part": "facts"
+        },
+        "calories": {
+          "type": "string",
+          "maxLength": 10,
+          "part": "facts"
+        },
+        "tag": {
+          "type": "string",
+          "maxLength": 18,
+          "part": "facts"
+        },
+        "base": {
+          "type": "object",
+          "required": [
+            "title",
+            "options"
+          ],
+          "part": "base",
+          "properties": {
+            "title": {
+              "type": "string",
+              "maxLength": 28
+            },
+            "options": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 6,
+              "items": {
+                "type": "object",
+                "required": [
+                  "label"
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "maxLength": 32
+                  },
+                  "note": {
+                    "type": "string",
+                    "maxLength": 28
+                  },
+                  "extra": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "extras": {
+          "type": "object",
+          "required": [
+            "title",
+            "options"
+          ],
+          "part": "extras",
+          "properties": {
+            "title": {
+              "type": "string",
+              "maxLength": 28
+            },
+            "limit": {
+              "type": "number"
+            },
+            "options": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 8,
+              "items": {
+                "type": "object",
+                "required": [
+                  "label",
+                  "price"
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "maxLength": 32
+                  },
+                  "price": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "note_placeholder": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "note"
+        },
+        "add_label": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "add"
+        },
+        "base_title": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "base_options": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "extra": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
+          }
+        },
+        "extras_title": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "extras_limit": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "extras_options": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 12,
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "price": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "handled",
+        "how": "pressing Add with no base picked moves focus to the first base option, and the button says 'Pick a base' until one is chosen",
+        "evidence": "if (first) { first.focus()"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "once three extras are ticked the others grey out, and One fewer is disabled at a quantity of 1",
+        "evidence": "input:disabled + .odl-box"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "a dish with many options makes the sheet tall; give the body a max height with its own scroll and keep the footer pinned"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "option labels wrap between the tick box and the price column; the note field can be made taller",
+        "evidence": "grid-template-columns: auto minmax(0, 1fr) auto"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab moves through Close, the base options as one radio group, each extra, the note, One fewer, One more and Add",
+      "The arrow keys choose a base; Space ticks or unticks an extra",
+      "Enter or Space on One fewer or One more changes the quantity, which is read out",
+      "Enter on Add, or in an option, submits the dish"
+    ]
+  }
 }

@@ -35,5 +35,274 @@
       "author": "Jake Blucker",
       "page": "tMzCrBkM99Y"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a seated venue with a few price bands and accessible spaces, where people pick exact seats for one showing"
+    ],
+    "avoid_when": [
+      "a plane, train or stadium seat map: every row here is a fixed cinema row of 10 seats in blocks of 2, 6 and 2",
+      "general admission with ticket counts only: use event-ticket or order-summary",
+      "choosing a date or showtime before seats: use date-range-picker or calendar-agenda"
+    ],
+    "parts": [
+      {
+        "name": "poster",
+        "selector": ".odl-poster",
+        "what": "the poster, with a description",
+        "slot": "media"
+      },
+      {
+        "name": "title",
+        "selector": ".odl-info h3",
+        "what": "the film or show, the section heading",
+        "slot": "text"
+      },
+      {
+        "name": "tags",
+        "selector": ".odl-tags",
+        "what": "genre, length and rating on one line",
+        "slot": "text"
+      },
+      {
+        "name": "facts",
+        "selector": ".odl-facts li",
+        "what": "venue and showtime, each after an icon",
+        "slot": "list"
+      },
+      {
+        "name": "screen",
+        "selector": ".odl-screen",
+        "what": "the curved screen line at the top of the map",
+        "slot": "none"
+      },
+      {
+        "name": "tiers",
+        "selector": ".odl-tier",
+        "what": "a price band heading above its rows",
+        "slot": "text"
+      },
+      {
+        "name": "rows",
+        "selector": ".odl-row",
+        "what": "one row of 10 seats in blocks of 2, 6 and 2, with its letter",
+        "slot": "list"
+      },
+      {
+        "name": "seats",
+        "selector": ".odl-seat",
+        "what": "one seat checkbox: free, taken, yours, recliner or wheelchair space",
+        "slot": "input"
+      },
+      {
+        "name": "key",
+        "selector": ".odl-legend li",
+        "what": "one entry of the key",
+        "slot": "list"
+      },
+      {
+        "name": "picked",
+        "selector": ".odl-picked",
+        "what": "how many seats, which ones, and the total, announced as it changes",
+        "slot": "text"
+      },
+      {
+        "name": "continue",
+        "selector": ".odl-go",
+        "what": "the Continue button, disabled with no seats picked",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "rows"
+      ],
+      "properties": {
+        "poster": {
+          "type": "object",
+          "part": "poster",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 300
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "title"
+        },
+        "tags": {
+          "type": "string",
+          "maxLength": 40,
+          "part": "tags"
+        },
+        "facts": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 3,
+          "part": "facts",
+          "items": {
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 40
+              }
+            }
+          }
+        },
+        "tiers": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "part": "tiers",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "price"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "price": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 3,
+          "part": "picked"
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "part": "rows",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "seats"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 2
+              },
+              "tier": {
+                "type": "string",
+                "maxLength": 20
+              },
+              "seats": {
+                "type": "array",
+                "minItems": 10,
+                "maxItems": 10,
+                "part": "seats",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "number",
+                    "state"
+                  ],
+                  "properties": {
+                    "number": {
+                      "type": "integer"
+                    },
+                    "state": {
+                      "enum": [
+                        "free",
+                        "taken",
+                        "selected"
+                      ]
+                    },
+                    "kind": {
+                      "enum": [
+                        "standard",
+                        "recliner",
+                        "wheelchair"
+                      ]
+                    },
+                    "price": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "max_seats": {
+          "type": "integer",
+          "part": "seats"
+        },
+        "continue_label": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "continue"
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "shown",
+        "how": "with no seats picked the summary reads 'Pick up to 8 seats', the total is zero and Continue is disabled",
+        "evidence": "Pick up to ${max} seats"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a picked seat is taken before Continue, uncheck it, disable it and put an alert-banners line above the summary"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "taken seats are disabled, filled grey with a cross, and skipped by Tab; Continue is disabled with none picked",
+        "evidence": ".odl-seat-picker .odl-seat input:disabled + span"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "on a small screen the aisles narrow and the map scrolls sideways in its own box",
+        "evidence": ".odl-seat-picker .odl-map { overflow-x: auto; overscroll-behavior-x: contain;"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the title balances its lines and the info column shrinks beside the poster; seat labels are numbers only",
+        "evidence": ".odl-seat-picker .odl-info { display: grid; gap: var(--ds-space-stack-sm); min-inline-size: 0; }"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the seat map, then each free seat in row order, skipping taken ones, then Continue",
+      "With the seat map focused, the arrow keys scroll it sideways when it is wider than its box",
+      "Space picks or unpicks the focused seat; a ninth pick is undone",
+      "Enter or Space presses Continue once a seat is picked"
+    ]
+  }
 }

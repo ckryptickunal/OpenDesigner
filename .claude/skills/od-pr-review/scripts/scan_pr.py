@@ -28,6 +28,7 @@ HIGH_RISK = [  # (path regex, why a human must read every changed line)
     (r"opendesigner-review/scripts/(capture|review|test_probe_live)\.py$",
      "review skill's browser helpers (owner decision 2026-10-14): capture.py drives a browser to loopback addresses only; review.py serve listens on 127.0.0.1 only"),
     (r"journey\.py$|^server/|^docs/PRIVACY\.md$", "telemetry and consent: what may leave a user's machine"),
+    (r"^server/mcp/", "the library MCP server: code an AI host starts on a user's machine; it must stay read-only, offline and stdout-clean"),
     (r"^(LICENSE|LICENSE-CONTENT|CITATION\.cff|GOVERNANCE\.md|SECURITY\.md)$", "licence, governance or security policy"),
     (r"^\.gitignore$", "ignore rules: removing a line can expose secrets"),
     (r"^tools/.*\.py$|^skills/.*\.py$", "code maintainers and users run"),

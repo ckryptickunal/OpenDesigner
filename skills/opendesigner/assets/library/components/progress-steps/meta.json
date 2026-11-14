@@ -90,8 +90,9 @@
     },
     "edge": {
       "empty": {
-        "status": "not_built",
-        "how": "Not applicable: this state screen shows no list of records."
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
       },
       "loading": {
         "status": "shown",

@@ -33,5 +33,220 @@
       "author": "Sean Oulashin",
       "page": "KMn4VEeEPR8"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "one pot with a target amount, where quick top-ups from the main account should feel immediate"
+    ],
+    "avoid_when": [
+      "several spending categories against limits: use budget-meters",
+      "a split of a total into parts: use donut-breakdown",
+      "a target counted in steps or minutes rather than money: use daily-goals"
+    ],
+    "parts": [
+      {
+        "name": "cover",
+        "selector": ".odl-cover",
+        "what": "the photo the saver picked for the pot",
+        "slot": "media"
+      },
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the pot's name",
+        "slot": "text"
+      },
+      {
+        "name": "goal",
+        "selector": ".odl-goal",
+        "what": "the target amount and the kind of pot",
+        "slot": "text"
+      },
+      {
+        "name": "ring",
+        "selector": ".odl-ring",
+        "what": "progress toward the goal, with the percent saved in the middle",
+        "slot": "number"
+      },
+      {
+        "name": "facts",
+        "selector": ".odl-facts div",
+        "what": "saved so far and still to go",
+        "slot": "list"
+      },
+      {
+        "name": "on_track",
+        "selector": ".odl-on",
+        "what": "the date the pot is on track for and the weekly amount",
+        "slot": "text"
+      },
+      {
+        "name": "roundups",
+        "selector": ".odl-round",
+        "what": "a whole-row switch for round-ups, with this month's amount",
+        "slot": "action"
+      },
+      {
+        "name": "amounts",
+        "selector": ".odl-amounts label",
+        "what": "one quick amount to add; pick one",
+        "slot": "list"
+      },
+      {
+        "name": "add",
+        "selector": ".odl-go",
+        "what": "adds the chosen amount from the named account",
+        "slot": "action"
+      },
+      {
+        "name": "said",
+        "selector": ".odl-said",
+        "what": "a line announcing what was added and what is left",
+        "slot": "text"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "title",
+        "goal",
+        "saved",
+        "currency"
+      ],
+      "properties": {
+        "cover": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "cover"
+        },
+        "cover_alt": {
+          "type": "string",
+          "maxLength": 60,
+          "part": "cover"
+        },
+        "title": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "title"
+        },
+        "goal": {
+          "type": "number",
+          "minimum": 1,
+          "part": "goal"
+        },
+        "saved": {
+          "type": "number",
+          "minimum": 0,
+          "part": "ring"
+        },
+        "currency": {
+          "type": "string",
+          "maxLength": 3,
+          "part": "goal"
+        },
+        "on_track": {
+          "type": "string",
+          "maxLength": 36,
+          "part": "on_track"
+        },
+        "roundups": {
+          "type": "object",
+          "part": "roundups",
+          "properties": {
+            "on": {
+              "type": "boolean"
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 24
+            }
+          }
+        },
+        "amounts": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "part": "amounts",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 80
+              }
+            }
+          }
+        },
+        "from_account": {
+          "type": "string",
+          "maxLength": 14,
+          "part": "add"
+        },
+        "pace": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "pace_detail": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "roundups_on": {
+          "enum": [
+            "false",
+            "true"
+          ]
+        },
+        "roundups_note": {
+          "type": "string",
+          "maxLength": 80
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if a top-up fails, leave the ring where it was and put the reason in the announced line under the button, or use alert-banners"
+      },
+      "disabled": {
+        "status": "shown",
+        "how": "when the goal is reached the Add button turns off and reads 'Goal reached'",
+        "evidence": ".odl-go:disabled { background: var(--ds-color-bg-disabled)"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "on phones the padding and the ring get smaller so the ring and facts still sit side by side",
+        "evidence": ".odl-ring { inline-size: calc(var(--ds-size-control-lg) * 2.3); }"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the facts column takes the room beside the ring and wraps there",
+        "evidence": "grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: var(--ds-space-inset-xl)"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the round-ups switch, the chosen amount, then the Add button",
+      "Enter or Space flips round-ups on or off",
+      "Arrow keys move between the amounts and pick one; the Add button's label follows",
+      "Enter or Space on Add adds the money; the ring moves and the result is announced"
+    ]
+  }
 }

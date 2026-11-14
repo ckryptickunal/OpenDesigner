@@ -4,51 +4,175 @@
   "use": "to give the details of one booking, order, place or product at a glance",
   "type": "data",
   "style": "quiet",
-  "industries": ["travel", "retail", "logistics", "saas", "any"],
-  "tags": ["facts", "details", "specs", "summary", "at a glance"],
-  "states": ["status value (success, warning, danger, info, accent)", "value with note", "label over value on a phone"],
+  "industries": [
+    "travel",
+    "retail",
+    "logistics",
+    "saas",
+    "any"
+  ],
+  "tags": [
+    "facts",
+    "details",
+    "specs",
+    "summary",
+    "at a glance"
+  ],
+  "states": [
+    "status value (success, warning, danger, info, accent)",
+    "value with note",
+    "label over value on a phone"
+  ],
   "source": null,
   "a11y": "A description list, so each value is read with its label; a status is said in the value's words, and its colour and dot only repeat it.",
   "width": "medium",
   "spec": {
-    "use_when": ["the person asks for the details of one thing: a flight, a parcel, an apartment, a plan"],
-    "avoid_when": ["several things side by side: use comparison", "two to four headline numbers for a period: use kpi-strip", "a step-by-step status over time: use progress-status"],
+    "use_when": [
+      "the person asks for the details of one thing: a flight, a parcel, an apartment, a plan"
+    ],
+    "avoid_when": [
+      "several things side by side: use comparison",
+      "two to four headline numbers for a period: use kpi-strip",
+      "a step-by-step status over time: use progress-status"
+    ],
     "parts": [
-      {"name": "title", "selector": "h3", "what": "the thing the facts are about", "slot": "text"},
-      {"name": "subtitle", "selector": ".odl-sub", "what": "one line that places it: where, when or which", "slot": "text"},
-      {"name": "facts", "selector": "dl > div", "what": "one fact: a label, its value and an optional note", "slot": "list"},
-      {"name": "label", "selector": "dt", "what": "what the fact is", "slot": "text"},
-      {"name": "value", "selector": ".odl-value", "what": "the value, coloured only when it is a status", "slot": "text"},
-      {"name": "tone", "selector": ".odl-value[data-tone]", "what": "the value's status colour: neutral unless it is a status", "slot": "none"},
-      {"name": "note", "selector": ".odl-note", "what": "a short line of context under the value", "slot": "text"}
+      {
+        "name": "title",
+        "selector": "h3",
+        "what": "the thing the facts are about",
+        "slot": "text"
+      },
+      {
+        "name": "subtitle",
+        "selector": ".odl-sub",
+        "what": "one line that places it: where, when or which",
+        "slot": "text"
+      },
+      {
+        "name": "facts",
+        "selector": "dl > div",
+        "what": "one fact: a label, its value and an optional note",
+        "slot": "list"
+      },
+      {
+        "name": "label",
+        "selector": "dt",
+        "what": "what the fact is",
+        "slot": "text"
+      },
+      {
+        "name": "value",
+        "selector": ".odl-value",
+        "what": "the value, coloured only when it is a status",
+        "slot": "text"
+      },
+      {
+        "name": "tone",
+        "selector": ".odl-value[data-tone]",
+        "what": "the value's status colour: neutral unless it is a status",
+        "slot": "none"
+      },
+      {
+        "name": "note",
+        "selector": ".odl-note",
+        "what": "a short line of context under the value",
+        "slot": "text"
+      }
     ],
     "data": {
       "type": "object",
-      "required": ["title", "facts"],
+      "required": [
+        "title",
+        "facts"
+      ],
       "properties": {
-        "title": {"type": "string", "maxLength": 70, "part": "title"},
-        "subtitle": {"type": "string", "maxLength": 90, "part": "subtitle"},
+        "title": {
+          "type": "string",
+          "maxLength": 70,
+          "part": "title"
+        },
+        "subtitle": {
+          "type": "string",
+          "maxLength": 90,
+          "part": "subtitle"
+        },
         "facts": {
-          "type": "array", "minItems": 2, "maxItems": 10, "part": "facts",
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 10,
+          "part": "facts",
           "items": {
-            "type": "object", "required": ["label", "value"],
+            "type": "object",
+            "required": [
+              "label",
+              "value"
+            ],
             "properties": {
-              "label": {"type": "string", "maxLength": 32, "part": "label"},
-              "value": {"type": "string", "maxLength": 48, "part": "value"},
-              "note": {"type": "string", "maxLength": 80, "part": "note"},
-              "tone": {"type": "string", "enum": ["neutral", "accent", "success", "warning", "danger", "info"], "part": "tone"}
+              "label": {
+                "type": "string",
+                "maxLength": 32,
+                "part": "label"
+              },
+              "value": {
+                "type": "string",
+                "maxLength": 48,
+                "part": "value"
+              },
+              "note": {
+                "type": "string",
+                "maxLength": 80,
+                "part": "note"
+              },
+              "tone": {
+                "type": "string",
+                "enum": [
+                  "neutral",
+                  "accent",
+                  "success",
+                  "warning",
+                  "danger",
+                  "info"
+                ],
+                "part": "tone"
+              }
             }
           }
         }
       }
     },
     "edge": {
-      "empty": {"status": "not_built", "how": "with no facts, answer in plain text instead; a fact without a value shows a dash"},
-      "loading": {"status": "not_built", "how": "the renderer keeps the rows and fills label and value with muted blocks"},
-      "error": {"status": "not_built", "how": "a fact that could not load shows a dash, and the note says why with tone danger"},
-      "disabled": {"status": "not_built", "how": "the part has no controls, so there is no disabled state"},
-      "overflow": {"status": "handled", "how": "up to ten rows stack in the card; on a phone each label sits over its value", "evidence": "@container (max-width: 26rem)"},
-      "long_text": {"status": "handled", "how": "labels, values and notes wrap in their column, and long words break", "evidence": "overflow-wrap: anywhere"}
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "a fact that could not load shows a dash, and the note says why with tone danger"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "the part has no controls, so there is no disabled state"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "up to ten rows stack in the card; on a phone each label sits over its value",
+        "evidence": "@container (max-width: 26rem)"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "labels, values and notes wrap in their column, and long words break",
+        "evidence": "overflow-wrap: anywhere"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
     },
     "keyboard": []
   }

@@ -4,10 +4,161 @@
   "use": "for short confirmations and background progress",
   "type": "feedback",
   "style": "quiet",
-  "industries": ["any"],
-  "tags": ["toast", "notification", "undo", "progress", "error"],
-  "states": ["success with undo", "in progress", "error with retry", "dismissed", "enter motion"],
+  "industries": [
+    "any"
+  ],
+  "tags": [
+    "toast",
+    "notification",
+    "undo",
+    "progress",
+    "error"
+  ],
+  "states": [
+    "success with undo",
+    "in progress",
+    "error with retry",
+    "dismissed",
+    "enter motion"
+  ],
   "source": "brand/showcase/components/05-toast-stack",
   "a11y": "Success and progress are status regions and the error is an alert; dismiss buttons have names; the entry motion uses the engine's toast tokens, which turn off under reduced motion.",
-  "width": "narrow"
+  "width": "narrow",
+  "spec": {
+    "use_when": [
+      "after an action that can be undone for a few seconds, or a background upload or send the person should not wait on"
+    ],
+    "avoid_when": [
+      "a problem the person must deal with before going on: use alert-banners or confirm-dialog",
+      "a list of past notifications to read later: use notification-inbox",
+      "an error tied to one form field: show it under the field, as in sign-in-form"
+    ],
+    "parts": [
+      {
+        "name": "toasts",
+        "selector": ".odl-toast-stack li",
+        "what": "one notice: an icon for done, busy or failed, a message, actions and dismiss",
+        "slot": "list"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-toast-stack p",
+        "what": "the main line in bold weight",
+        "slot": "text"
+      },
+      {
+        "name": "detail",
+        "selector": "p small",
+        "what": "a short second line with the detail",
+        "slot": "text"
+      },
+      {
+        "name": "progress",
+        "selector": ".odl-progress",
+        "what": "a thin bar under a busy notice",
+        "slot": "none"
+      },
+      {
+        "name": "action",
+        "selector": ".odl-act",
+        "what": "one text action such as Undo, Cancel or Retry",
+        "slot": "action"
+      },
+      {
+        "name": "dismiss",
+        "selector": ".odl-close",
+        "what": "icon button that removes the notice",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "toasts"
+      ],
+      "properties": {
+        "toasts": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "part": "toasts",
+          "items": {
+            "type": "object",
+            "required": [
+              "kind",
+              "message"
+            ],
+            "properties": {
+              "kind": {
+                "enum": [
+                  "ok",
+                  "busy",
+                  "error"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 48
+              },
+              "detail": {
+                "type": "string",
+                "maxLength": 70
+              },
+              "progress": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "action": {
+                "type": "string",
+                "maxLength": 10
+              },
+              "dismissible": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "shown",
+        "how": "a busy notice shows what is running, how far it has got and a thin progress bar",
+        "evidence": "[data-kind=\"busy\"]"
+      },
+      "error": {
+        "status": "shown",
+        "how": "a failed notice is an alert with a danger icon, says the work is kept and offers Retry",
+        "evidence": "role=\"alert\""
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "after Undo or Retry is pressed, set disabled on that button until the result comes back"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the stack grows with each notice; keep at most three and drop the oldest done notice first"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "the message column can shrink and wrap; on a narrow screen the actions move under the text",
+        "evidence": "@container (max-width: 24rem)"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches each notice's action button and dismiss button",
+      "Enter or Space on Dismiss removes the notice and moves focus to a button in the next or previous notice",
+      "Undo, Cancel and Retry are buttons with no behaviour wired in the file"
+    ]
+  }
 }

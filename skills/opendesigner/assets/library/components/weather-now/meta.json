@@ -4,10 +4,254 @@
   "use": "in a weather, travel or home app, for the forecast at a glance",
   "type": "data",
   "style": "friendly",
-  "industries": ["travel", "home"],
-  "tags": ["weather", "forecast", "hourly", "temperature", "week"],
-  "states": ["day", "rain later", "scrolling hours", "focus"],
+  "industries": [
+    "travel",
+    "home"
+  ],
+  "tags": [
+    "weather",
+    "forecast",
+    "hourly",
+    "temperature",
+    "week"
+  ],
+  "states": [
+    "day",
+    "rain later",
+    "scrolling hours",
+    "focus"
+  ],
   "source": null,
   "a11y": "Hours and days are ordered lists; each item has a hidden text with its condition and rain chance, the drawn icons and bars are decorative, and the hourly row scrolls with the keyboard when focused.",
-  "width": "narrow"
+  "width": "narrow",
+  "spec": {
+    "use_when": [
+      "a trip or event page that needs the local forecast next to plans, without opening a weather app"
+    ],
+    "avoid_when": [
+      "a chart of one value over time, such as rainfall by month: use bar-chart",
+      "a smart-home dashboard with device controls: use home-controls",
+      "headline numbers with no forecast: use kpi-strip"
+    ],
+    "parts": [
+      {
+        "name": "place",
+        "selector": ".odl-place",
+        "what": "the place, after a location icon",
+        "slot": "text"
+      },
+      {
+        "name": "when",
+        "selector": ".odl-when",
+        "what": "date and time of the reading",
+        "slot": "text"
+      },
+      {
+        "name": "temp",
+        "selector": ".odl-temp",
+        "what": "the temperature now, very large",
+        "slot": "number"
+      },
+      {
+        "name": "condition",
+        "selector": ".odl-sky .odl-cond",
+        "what": "the condition now in words",
+        "slot": "text"
+      },
+      {
+        "name": "range",
+        "selector": ".odl-range",
+        "what": "today's high, low and feels-like",
+        "slot": "text"
+      },
+      {
+        "name": "icon",
+        "selector": ".odl-big",
+        "what": "the condition drawn as a large icon",
+        "slot": "media"
+      },
+      {
+        "name": "note",
+        "selector": ".odl-note",
+        "what": "one line on what is coming",
+        "slot": "text"
+      },
+      {
+        "name": "hours",
+        "selector": ".odl-hours li",
+        "what": "one hour: time, icon, rain chance and temperature",
+        "slot": "list"
+      },
+      {
+        "name": "days",
+        "selector": ".odl-days li",
+        "what": "one day: name, icon, rain chance, low, a range bar and high",
+        "slot": "list"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "place",
+        "temp",
+        "condition"
+      ],
+      "properties": {
+        "place": {
+          "type": "string",
+          "maxLength": 22,
+          "part": "place"
+        },
+        "when": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "when"
+        },
+        "temp": {
+          "type": "number",
+          "part": "temp"
+        },
+        "condition": {
+          "type": "string",
+          "maxLength": 20,
+          "part": "condition"
+        },
+        "icon": {
+          "enum": [
+            "sunny",
+            "partly-cloudy",
+            "cloudy",
+            "rain",
+            "clear-night"
+          ],
+          "part": "icon"
+        },
+        "range": {
+          "type": "string",
+          "maxLength": 28,
+          "part": "range"
+        },
+        "note": {
+          "type": "string",
+          "maxLength": 90,
+          "part": "note"
+        },
+        "hours": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 24,
+          "part": "hours",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "temp",
+              "condition"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 4
+              },
+              "temp": {
+                "type": "number"
+              },
+              "condition": {
+                "enum": [
+                  "sunny",
+                  "partly-cloudy",
+                  "cloudy",
+                  "rain",
+                  "clear-night"
+                ]
+              },
+              "rain_chance": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              }
+            }
+          }
+        },
+        "days": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 10,
+          "part": "days",
+          "items": {
+            "type": "object",
+            "required": [
+              "label",
+              "low",
+              "high",
+              "condition"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "maxLength": 5
+              },
+              "low": {
+                "type": "number"
+              },
+              "high": {
+                "type": "number"
+              },
+              "condition": {
+                "enum": [
+                  "sunny",
+                  "partly-cloudy",
+                  "cloudy",
+                  "rain",
+                  "clear-night"
+                ]
+              },
+              "rain_chance": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 100
+              }
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if the forecast cannot load, keep the last reading with its time and put an alert-banners line with a retry under the sky panel"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "the card has no controls to disable; for an old reading, dim the sky panel and say how old it is in the time line"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "the hour row scrolls sideways, snaps to hours and fades at its right edge",
+        "evidence": "scroll-snap-type: x proximity"
+      },
+      "long_text": {
+        "status": "not_built",
+        "how": "day names and temperatures sit in fixed-width columns, so keep labels short or abbreviate them; a long place name wraps under the icon"
+      },
+      "missing_image": {
+        "status": "none",
+        "how": "the part has no photo"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the hourly row, which shows a focus ring",
+      "Left and Right arrows scroll the hourly row while it has focus"
+    ]
+  }
 }

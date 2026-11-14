@@ -36,5 +36,246 @@
       "author": "Armin Lotfi",
       "page": "gURxlcD9I0U"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a member screen shown at the till, where the code must stay dark on white in any theme"
+    ],
+    "avoid_when": [
+      "a stored payment or gift card: use card-wallet",
+      "progress toward a personal saving target rather than a reward tier: use savings-goal",
+      "a list of many offers or deals to browse: use product-card in a grid"
+    ],
+    "parts": [
+      {
+        "name": "programme",
+        "selector": ".odl-brand p",
+        "what": "the programme name after an icon",
+        "slot": "text"
+      },
+      {
+        "name": "tier",
+        "selector": ".odl-tier",
+        "what": "the member's current tier",
+        "slot": "text"
+      },
+      {
+        "name": "balance",
+        "selector": ".odl-big",
+        "what": "the points balance, large",
+        "slot": "number"
+      },
+      {
+        "name": "next",
+        "selector": ".odl-next p",
+        "what": "points to the next tier, and the count so far",
+        "slot": "text"
+      },
+      {
+        "name": "progress",
+        "selector": ".odl-track",
+        "what": "the bar to the next tier",
+        "slot": "none"
+      },
+      {
+        "name": "code",
+        "selector": ".odl-qr",
+        "what": "the member code to scan",
+        "slot": "media"
+      },
+      {
+        "name": "member",
+        "selector": ".odl-code p",
+        "what": "the member's name, a short instruction and the card number",
+        "slot": "rich"
+      },
+      {
+        "name": "offers_title",
+        "selector": "h3",
+        "what": "heading over the offers",
+        "slot": "text"
+      },
+      {
+        "name": "offers",
+        "selector": ".odl-offers li",
+        "what": "one offer: photo, title, end date and an Activate toggle",
+        "slot": "list"
+      },
+      {
+        "name": "activate",
+        "selector": ".odl-act",
+        "what": "toggle that reads Activate or Active",
+        "slot": "action"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "programme",
+        "balance",
+        "member"
+      ],
+      "properties": {
+        "programme": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "programme"
+        },
+        "tier": {
+          "type": "string",
+          "maxLength": 16,
+          "part": "tier"
+        },
+        "balance": {
+          "type": "integer",
+          "minimum": 0,
+          "part": "balance"
+        },
+        "next_tier": {
+          "type": "object",
+          "part": "next",
+          "required": [
+            "name",
+            "target"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 12
+            },
+            "target": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "member": {
+          "type": "object",
+          "part": "member",
+          "required": [
+            "name",
+            "number"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "maxLength": 28
+            },
+            "instruction": {
+              "type": "string",
+              "maxLength": 36
+            },
+            "number": {
+              "type": "string",
+              "maxLength": 20
+            },
+            "code_value": {
+              "type": "string",
+              "maxLength": 64
+            }
+          }
+        },
+        "offers_title": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "offers_title"
+        },
+        "offers": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 3,
+          "part": "offers",
+          "items": {
+            "type": "object",
+            "required": [
+              "title"
+            ],
+            "properties": {
+              "photo": {
+                "type": "string",
+                "maxLength": 300
+              },
+              "photo_alt": {
+                "type": "string",
+                "maxLength": 60
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "detail": {
+                "type": "string",
+                "maxLength": 28
+              },
+              "active": {
+                "type": "boolean"
+              },
+              "activate_label": {
+                "type": "string",
+                "maxLength": 120
+              }
+            }
+          }
+        },
+        "next_tier_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "next_tier_target": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "member_name": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "member_instruction": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "member_number": {
+          "type": "string",
+          "maxLength": 80
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if activating fails, set the toggle back to Activate and show a toast-stack message"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "for an offer that has ended, set disabled on its button and grey the row"
+      },
+      "overflow": {
+        "status": "not_built",
+        "how": "the offer list grows with each offer; past three, link to a full offers page"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "offer titles wrap, and on a phone the button drops under the text so the title never squeezes",
+        "evidence": "@container (max-width: 23rem)"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches each offer's Activate button",
+      "Enter or Space switches an offer between Activate and Active"
+    ]
+  }
 }

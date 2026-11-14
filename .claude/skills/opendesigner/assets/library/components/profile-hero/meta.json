@@ -57,5 +57,265 @@
       "author": "Danny Postma",
       "page": "zNxOw2JFNKs"
     }
-  ]
+  ],
+  "spec": {
+    "use_when": [
+      "a creator or member page where following, messaging and story highlights matter more than account details"
+    ],
+    "avoid_when": [
+      "a small person card inside a list or popover: use profile-card",
+      "a work record such as a company or deal with tabs: use page-header-tabs",
+      "suggesting several people to follow: use follow-suggestions"
+    ],
+    "parts": [
+      {
+        "name": "cover",
+        "selector": ".odl-cover img",
+        "what": "a wide cover photo with a description",
+        "slot": "media"
+      },
+      {
+        "name": "avatar",
+        "selector": ".odl-av",
+        "what": "the person's photo in an accent story ring, overlapping the cover",
+        "slot": "media"
+      },
+      {
+        "name": "name",
+        "selector": "h2",
+        "what": "the person's name, the section heading",
+        "slot": "text"
+      },
+      {
+        "name": "handle",
+        "selector": ".odl-handle",
+        "what": "the handle, then small tags such as pronouns or a role",
+        "slot": "text"
+      },
+      {
+        "name": "bio",
+        "selector": ".odl-bio p",
+        "what": "a short bio",
+        "slot": "text"
+      },
+      {
+        "name": "link",
+        "selector": ".odl-link",
+        "what": "one link after the bio",
+        "slot": "action"
+      },
+      {
+        "name": "counts",
+        "selector": ".odl-counts li",
+        "what": "posts, followers and following, each a button",
+        "slot": "list"
+      },
+      {
+        "name": "follow",
+        "selector": ".odl-follow",
+        "what": "a Follow toggle that reads Following when on and adds one to the follower count",
+        "slot": "action"
+      },
+      {
+        "name": "message",
+        "selector": ".odl-actions .odl-btn:not(.odl-follow):not(.is-icon)",
+        "what": "the Message button",
+        "slot": "action"
+      },
+      {
+        "name": "similar",
+        "selector": ".odl-btn.is-icon",
+        "what": "an icon button for similar accounts",
+        "slot": "action"
+      },
+      {
+        "name": "highlights",
+        "selector": ".odl-hl li",
+        "what": "one story highlight: a round photo cover and a short title; the last may be New",
+        "slot": "list"
+      }
+    ],
+    "data": {
+      "type": "object",
+      "required": [
+        "name",
+        "handle",
+        "counts"
+      ],
+      "properties": {
+        "cover": {
+          "type": "object",
+          "part": "cover",
+          "required": [
+            "src",
+            "alt"
+          ],
+          "properties": {
+            "src": {
+              "type": "string",
+              "maxLength": 300
+            },
+            "alt": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        },
+        "avatar": {
+          "type": "string",
+          "maxLength": 300,
+          "part": "avatar"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 32,
+          "part": "name"
+        },
+        "handle": {
+          "type": "string",
+          "maxLength": 24,
+          "part": "handle"
+        },
+        "tags": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 3,
+          "part": "handle",
+          "items": {
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "text": {
+                "type": "string",
+                "maxLength": 16
+              }
+            }
+          }
+        },
+        "bio": {
+          "type": "string",
+          "maxLength": 160,
+          "part": "bio"
+        },
+        "link": {
+          "type": "object",
+          "part": "link",
+          "required": [
+            "label",
+            "href"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 32
+            },
+            "href": {
+              "type": "string",
+              "maxLength": 300
+            }
+          }
+        },
+        "counts": {
+          "type": "object",
+          "part": "counts",
+          "required": [
+            "posts",
+            "followers",
+            "following"
+          ],
+          "properties": {
+            "posts": {
+              "type": "integer"
+            },
+            "followers": {
+              "type": "integer"
+            },
+            "following": {
+              "type": "integer"
+            }
+          }
+        },
+        "is_following": {
+          "type": "boolean",
+          "part": "follow"
+        },
+        "highlights": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 12,
+          "part": "highlights",
+          "items": {
+            "type": "object",
+            "required": [
+              "title"
+            ],
+            "properties": {
+              "title": {
+                "type": "string",
+                "maxLength": 12
+              },
+              "cover": {
+                "type": "string",
+                "maxLength": 300
+              }
+            }
+          }
+        },
+        "posts": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "followers": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "following": {
+          "type": "string",
+          "maxLength": 80
+        }
+      }
+    },
+    "edge": {
+      "empty": {
+        "status": "handled",
+        "evidence": "data-od-list",
+        "how": "the Smart UI renderer puts one plain 'Nothing to show yet.' line in an empty list"
+      },
+      "loading": {
+        "status": "handled",
+        "evidence": "data-od-slot",
+        "how": "the Smart UI renderer draws each marked slot as a quiet block of its size while the data arrives; the static file shows the filled part"
+      },
+      "error": {
+        "status": "not_built",
+        "how": "if following fails, put the button back to Follow, restore the count and show a toast-stack message"
+      },
+      "disabled": {
+        "status": "not_built",
+        "how": "for a blocked or private account, set disabled on Message and add a :disabled style; there is none now"
+      },
+      "overflow": {
+        "status": "handled",
+        "how": "highlights scroll sideways in their own row with a fade at the right edge",
+        "evidence": "overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain"
+      },
+      "long_text": {
+        "status": "handled",
+        "how": "highlight titles end in an ellipsis, tags and buttons never wrap, and the handle line wraps",
+        "evidence": "max-inline-size: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap"
+      },
+      "missing_image": {
+        "status": "handled",
+        "evidence": "data-od-media",
+        "how": "the Smart UI renderer swaps a photo that fails to load for a block of the same size with its alt text"
+      }
+    },
+    "keyboard": [
+      "Tab reaches the bio link, the posts, followers and following counts, Follow, Message, Similar accounts, then each highlight",
+      "Enter or Space on Follow follows or unfollows and updates the follower count",
+      "Enter or Space presses any other button; Enter follows the link"
+    ]
+  }
 }
