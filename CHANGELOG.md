@@ -8,6 +8,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Review notices status colours typed by hand** (2026-11-16). A hex in a status's hue, or a Tailwind class such as `text-red-600`, is listed for a person to judge with the status token to use. The default feedback rule now allows a toast for a low-stakes confirmation with Undo, and an action that cannot be undone still asks first.
+
 - **Status colours and feedback are rules** (2026-11-14). DESIGN.md gets a Status and Feedback section: what success, warning, danger, info and discovery mean, their tokens, never colour alone, and how an action is confirmed (Q-form-04, Q-form-05). `build/status.json` holds the same map for tools. `review` lists status colours off their meaning, colour-only status and forms with no feedback for a person to judge.
 
 - **Review catches what another model got past it** (2026-11-14). `engine.py review` now flags `var(--ds-...)` names that do not exist (with the nearest real one), typed font stacks and weights the system does not have. An `od-ignore` line counts as open until the owner approves its reason with `engine.py keep`, so an existing project's `od-ignore` lines fail `review --strict` until then; review lists each reason to ask about.
