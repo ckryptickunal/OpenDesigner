@@ -505,8 +505,8 @@ Decisions: none recorded yet; values are defaults from references/levers.json.
 
 - **Never colour alone.** Every status carries an icon or a word as well as its colour (WCAG 2.2 SC 1.4.1).
 - **One meaning per colour.** Success, warning and danger colours appear only for that status, never for a brand accent, a primary button or decoration. Delete buttons take danger; everything else takes the action colour.
-- **After every action, the person sees what happened.** In place, next to what changed, or in a banner over the section; no toasts (default until Q-form-04 is answered).
-- **Banners:** a success banner may close on its own after a few seconds; an error stays until the person dismisses it or fixes the cause, and never closes on its own.
+- **After every action, the person sees what happened.** In place, next to what changed, or in a banner over the section; a toast only for a low-stakes confirmation that carries Undo (default until Q-form-04 is answered).
+- **Banners and toasts:** a success banner may close after 4 s; the rare toast (low stakes, with Undo) stays until the person acts or closes it; an error stays until the person dismisses it or fixes the cause, and never closes on its own.
 - **Undo:** a confirm step for what cannot be undone, and an Undo that stays until used or closed for the rest (default, from house standard STD-visual-details-40).
 - The same map, for tools and agents: `build/status.json`.
 
@@ -778,7 +778,7 @@ Your own decisions first (the newest value per path), then your changes to stand
 4. To change the system: `engine.py set <path> <value> --why "..."`, then `engine.py generate`, `engine.py validate`, `engine.py design-md`.
 5. To extend: add a decision (never hand-edit tokens or this file). Keep semantic names the same across modes. Deprecate instead of deleting.
 6. Every build: open a round (`engine.py ledger start "<what>" --items ...`), build from the tokens, run `engine.py review`, check the rendered page with opendesigner-review and show screenshots at phone and desktop width, mark each ledger item done or waived (with the owner's words), then re-read this file.
-7. Status colours (success, warning, danger, info) carry one meaning each and never alone: follow Status and Feedback above (`build/status.json` holds the same map). After every action, show what happened as it says.
+7. Status colours (success, warning, danger, info, discovery) carry one meaning each and never alone: follow Status and Feedback above (`build/status.json` holds the same map). After every action, show what happened as it says.
 
 **Tailwind v4 classes** (one import: `@import "tailwindcss"; @import "<path>/opendesigner/build/tailwind/theme.css";`; Tailwind's default colors, text sizes, radii and shadows are switched off, so only these exist). They need a Tailwind build that imports that file. In plain HTML with no build step, use the CSS name beside each class from `build/css/tokens.css`; never load Tailwind from a CDN script. Each row is one token under its two names:
 

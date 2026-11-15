@@ -185,7 +185,8 @@
   "feedback": {
     "confirm": "inline-banner",
     "confirmSetBy": "default",
-    "usesToasts": false,
+    "usesToasts": true,
+    "toastsFor": "low-stakes confirmations with Undo",
     "toastMs": {
       "success": 4000,
       "info": 4000,

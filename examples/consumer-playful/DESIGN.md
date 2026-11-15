@@ -470,8 +470,8 @@ Decisions: none recorded yet; values are defaults from references/levers.json.
 
 - **Never colour alone.** Every status carries an icon or a word as well as its colour (WCAG 2.2 SC 1.4.1).
 - **One meaning per colour.** Success, warning and danger colours appear only for that status, never for a brand accent, a primary button or decoration. Delete buttons take danger; everything else takes the action colour.
-- **After every action, the person sees what happened.** In place, next to what changed, or in a banner over the section; no toasts (default until Q-form-04 is answered).
-- **Banners:** a success banner may close on its own after a few seconds; an error stays until the person dismisses it or fixes the cause, and never closes on its own.
+- **After every action, the person sees what happened.** In place, next to what changed, or in a banner over the section; a toast only for a low-stakes confirmation that carries Undo (default until Q-form-04 is answered).
+- **Banners and toasts:** a success banner may close after 4 s; the rare toast (low stakes, with Undo) stays until the person acts or closes it; an error stays until the person dismisses it or fixes the cause, and never closes on its own.
 - **Undo:** a confirm step for what cannot be undone, and an Undo that stays until used or closed for the rest (default, from house standard STD-visual-details-40).
 - The same map, for tools and agents: `build/status.json`.
 

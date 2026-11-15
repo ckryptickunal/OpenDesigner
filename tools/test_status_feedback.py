@@ -54,6 +54,8 @@ class StatusAndFeedback(unittest.TestCase):
         (src / "api.ts").write_text('export const users = () => fetch("/api/users").then((r) => r.json());\n')
         (src / "Multi.jsx").write_text('export const M = () => (\n  <div>\n    <p className="text-danger">\n      Payment failed\n    </p>\n  </div>\n);\n')
         (src / "cta.css").write_text(".cta { background: var(--ds-color-danger-dark-9); }\n")
+        (self.root / "hand.html").write_text('<style>\n.badge-ok{color:#16a34a}\n.brand{color:#2338ff}\n</style>\n'
+                                             '<div class="text-red-600">Payment</div>\n<div class="text-red-600">Error: failed</div>\n')
 
     def tearDown(self):
         shutil.rmtree(self.root, ignore_errors=True)
@@ -81,6 +83,7 @@ class StatusAndFeedback(unittest.TestCase):
         self.assertIn("unpaid", sm["statuses"]["danger"]["words"])
         fb = sm["feedback"]
         self.assertEqual((fb["confirm"], fb["confirmSetBy"], fb["undo"], fb["errorsStay"]), ("inline-banner", "default", "both", True))
+        self.assertEqual((fb["usesToasts"], fb["toastsFor"]), (True, "low-stakes confirmations with Undo"), "as Q-form-04's default says")
         self.assertEqual(fb["toastMs"]["success"], 4000)
         run("export", "--format", "status", cwd=self.root)
 
@@ -98,6 +101,8 @@ class StatusAndFeedback(unittest.TestCase):
         self.assertIn("Toasts:", sec)
         self.assertIn("an error stays until the person dismisses it", sec)
         self.assertIn("(Q-form-05)", sec)
+        run("pick", "Q-form-05", "undo-first", "--set-by", "assumed", cwd=self.root)
+        self.assertIn("cannot be undone still asks first", (self.root / "DESIGN.md").read_text())
 
     def test_review_notes_are_judgment_and_not_counted(self):
         rv = json.loads(run("review", "--json", "--project", ".", cwd=self.root).stdout)
@@ -114,6 +119,11 @@ class StatusAndFeedback(unittest.TestCase):
         self.assertFalse([n for n in notes if n[0].endswith("api.ts")], "a GET helper in .ts is not an action")
         self.assertFalse([n for n in notes if n[0].endswith("Multi.jsx")], "text on the next lines: one line cannot judge it")
         self.assertIn((os.path.join("src", "cta.css"), 1, "status-meaning"), notes, "a danger primitive on a call to action")
+        self.assertIn(("hand.html", 2, "status-by-hand"), notes, "a hex in the success hue")
+        self.assertNotIn(("hand.html", 3, "status-by-hand"), notes, "a brand blue is not a status")
+        self.assertIn(("hand.html", 5, "status-by-hand"), notes, "a Tailwind red")
+        self.assertIn(("hand.html", 5, "status-colour-only"), notes)
+        self.assertNotIn(("hand.html", 6, "status-colour-only"), notes, "with a word beside it")
         text = run("review", "--project", ".", cwd=self.root, ok=False).stdout
         self.assertIn("For a person to judge (status and feedback; not counted", text)
 
