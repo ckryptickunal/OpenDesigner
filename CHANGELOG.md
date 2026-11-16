@@ -15,6 +15,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Spanish README and FAQ translation** (2026-11-16). Add Spanish copies of the README and FAQ, with links to the canonical English documentation. A second native Spanish speaker should review them before merge.
+
 - **Smart UI answers with pictures** (2026-11-16). New parts show products in a grid, places, a recipe, an event and a home, each with photos from your app's data. Every photo needs alt text and a shape, so nothing jumps while it loads. A price must show its currency, and "Sold out" or "Only 2 left" can never show in green.
 - **Research names the answers an assistant should show** (2026-11-16). A research finding can now list answer types (a table, a time to book, a step to approve), each with its evidence. Smart UI's use cases cite those findings by id. A plain keyword count of the research is used only when no finding names a type, and it says so.
 - **Smart UI page: picture answers you can try** (2026-11-16). Four example assistants answer with photos of coats and cafés, a parking fine with its evidence photo, and a design review. Ask a follow-up, type your own question or try a slow, empty, failed or approval state, and the answer builds in front of you. Photos load at the size they're shown, so the first view stays light.
