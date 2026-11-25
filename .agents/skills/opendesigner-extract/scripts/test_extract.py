@@ -249,6 +249,20 @@ class ReadPageJs(unittest.TestCase):
                         "a.shadowVisible('rgb(227, 232, 238) 0px -1px 0px 0px inset')]))")
         self.assertEqual(vis, [False, True, False, False])
 
+    def test_state_free_selectors(self):
+        """Issue #110: a :focus or selected rule counts only when its selector, without the state, matches."""
+        cases = {".btn:focus-visible": [".btn"], "a > :focus": ["a > *"], "*:focus": ["*"],
+                 ".Button:hover:focus, .x::before:focus": [".Button", ".x"],
+                 ".tab[aria-selected=\"true\"]": [".tab"], "[aria-current]:not([aria-current=false])": ["*"],
+                 ":is(.a,.b):focus-within .c": [":is(.a,.b) .c"], ".menu .item.is-active::after": [".menu .item"],
+                 "input:checked + label": ["input + label"], ".btn:not(:focus-visible)": [".btn"],
+                 ".btn:not(:disabled):focus": [".btn:not(:disabled)"], ".a:is(:focus, :hover)": [".a"],
+                 "button:-moz-focusring": ["button"], ".x [data-state=\"on\" i]": [".x *"],
+                 ".focus-ring:focus": [".focus-ring"], ".actives:focus": [".actives"]}
+        out = self.node("const a=require(process.env.RP);console.log(JSON.stringify("
+                        + json.dumps(list(cases)) + ".map(a.stateFree)))")
+        self.assertEqual(dict(zip(cases, out)), cases)
+
     def test_collect_then_scan(self):
         items = []
         white, ink, accent, slate = ({"hex": h, "a": 1} for h in ("#ffffff", "#0a2540", "#533afd", "#50617a"))

@@ -184,7 +184,23 @@
   // noise: one unbroken run of 30+ base-64 or hash characters (CJK paragraphs and long words are text, not noise)
   const noiseText = t => /(^|\s)[A-Za-z0-9+\/=_-]{30,}(\s|$)/.test(String(t || ''));
 
-  const api = { noiseText, splitTop, toMs, parseRgb, radiusValue, shadowVisible, textRole, radiusRole, collect, motionLayers, caseOf, voiceOf };
+  // stateFree: a :focus or selected-state rule's selector with its state parts removed (focus, hover,
+  // active and checked pseudo-classes, aria and data-state attributes, .active/.selected classes,
+  // pseudo-elements), one selector per comma part, so the page can be asked whether the component the
+  // rule styles is on it at all. A part left with nothing becomes "*" ("a > :focus" -> "a > *").
+  const STATE_PARTS = new RegExp([
+    '::?-(?:webkit|moz|ms)-[\\w-]+(?![\\w(-])',
+    '::?(?:before|after|placeholder|marker|selection|backdrop|first-line|first-letter|file-selector-button)(?![\\w-])',
+    ':(?:focus-visible|focus-within|focus|hover|active|checked)(?![\\w-])',
+    '\\[\\s*(?:aria-(?:selected|current|pressed|checked)|data-state)\\s*(?:[~|^$*]?=\\s*(?:"[^"]*"|\'[^\']*\'|[^\\]\\s]*)\\s*(?:[is]\\s*)?)?\\]',
+    '\\.(?:active|selected|is-active|is-selected)(?![\\w-])'].join('|'), 'gi');
+  const stateFree = sel => {
+    let s = String(sel == null ? '' : sel).replace(STATE_PARTS, '\u0000'), prev;
+    do { prev = s; s = s.replace(/:(?:not|is|where|matches|-webkit-any|-moz-any)\(\s*\u0000+(?:\s*,\s*\u0000+)*\s*\)/gi, m => /^:not/i.test(m) ? '' : '\u0000'); } while (s !== prev);
+    return splitTop(s).map(p => p.replace(/(^|[\s>+~(])\u0000/g, '$1*').replace(/\u0000/g, '').replace(/\*(?=[\w.#[:])/g, '').trim() || '*');
+  };
+
+  const api = { noiseText, stateFree, splitTop, toMs, parseRgb, radiusValue, shadowVisible, textRole, radiusRole, collect, motionLayers, caseOf, voiceOf };
   if (typeof document === 'undefined' || typeof window === 'undefined') {
     if (typeof module !== 'undefined' && module.exports) module.exports = api;
     return api;
@@ -290,19 +306,23 @@
     else bump(V.entrances, ms);
   } } catch (_) { /* a browser without getAnimations */ }
 
-  // Stylesheets: :root custom properties, :focus and selected-state rules (states the page is not in now).
+  // Stylesheets: :root custom properties, :focus and selected-state rules (states the page is not in now)
+  // whose component is on the page.
   const root = getComputedStyle(document.documentElement);
   const resolve = v => v.replace(/var\((--[\w-]+)\s*(?:,([^()]*))?\)/g, (_, n, fb) => root.getPropertyValue(n).trim() || (fb || '').trim());
   const COLOR_TOKEN = /#[0-9a-f]{3,8}\b|(?:rgba?|hsla?|oklch|oklab|lab|lch|color)\([^()]*\)/gi;
   const ERROR_STATE = /invalid|error|destructive|danger|warning|alert|success/i;
-  const props = {}, media = new Set();
+  const props = {}, media = new Set(), seen = new Map();
+  // a state rule counts only when the component it styles is on the page (issue #110: CSS for
+  // components the page never shows decided the accent)
+  const onPage = sel => { if (!seen.has(sel)) seen.set(sel, stateFree(sel).some(q => { try { return !!document.querySelector(q); } catch (_) { return false; } })); return seen.get(sel); };
   const walk = rules => { for (const r of rules) {
     if (r.media) media.add(r.media.mediaText);
     if (r.selectorText && r.style) {
       if (/(^|,)\s*(:root|html)\b/.test(r.selectorText)) for (const n of r.style) if (n.startsWith('--')) props[n] = r.style.getPropertyValue(n).trim();
       const focus = /:focus/.test(r.selectorText) && !ERROR_STATE.test(r.selectorText);
       const sel = /\[aria-(selected|current|pressed|checked)|:checked|\.(active|selected|is-active|is-selected)\b|\[data-state=?["']?(active|checked|on)/.test(r.selectorText);
-      if (focus || sel) {
+      if ((focus || sel) && onPage(r.selectorText)) {
         const keys = focus ? ['outline-color', 'outline', 'box-shadow', 'border-color'] : ['background-color', 'background', 'color', 'border-color'];
         for (const k of keys) for (const t of resolve(r.style.getPropertyValue(k) || '').match(COLOR_TOKEN) || []) {
           const c = color(t); if (solid(c)) bumpIn(V.accentSources, focus ? 'focus' : 'selected', c.hex); }
