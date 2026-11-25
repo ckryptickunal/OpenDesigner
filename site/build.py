@@ -2186,7 +2186,11 @@ PH_KEY = ANALYTICS.get("posthog_key", "").strip()
 PH_TAG = f'\n<script src="/ph.js" data-key="{esc(PH_KEY)}" defer></script>' if PH_KEY else ""
 # PostHog's endpoints end in a slash (/i/v0/e/, /flags/). With trailingSlash on, "/ingest/:path*" does not match them and
 # Vercel served its 404 to every event (2026-10-24), so the slash form comes first.
+# The project's remote config (/array/<key>/config) is the exception: it lives on the assets host and 404s with a
+# trailing slash, which trailingSlash adds by redirect, so it goes to the assets host with the slash dropped (2026-11-25).
 PH_REWRITES = [{"source": "/ingest/static/:path*", "destination": "https://us-assets.i.posthog.com/static/:path*"},
+               {"source": "/ingest/array/:path*/", "destination": "https://us-assets.i.posthog.com/array/:path*"},
+               {"source": "/ingest/array/:path*", "destination": "https://us-assets.i.posthog.com/array/:path*"},
                {"source": "/ingest/:path*/", "destination": "https://us.i.posthog.com/:path*/"},
                {"source": "/ingest/:path*", "destination": "https://us.i.posthog.com/:path*"}] if PH_KEY else []
 
