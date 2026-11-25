@@ -350,6 +350,12 @@
     var x = Math.min(0, Math.max(W - camW * z, W / 2 - c[0] * z)), y = Math.min(0, Math.max(H - camH * z, H / 2 - c[1] * z));
     return "translate(" + x + "px, " + y + "px) scale(" + z + ")";
   }
+  function span() {  // one box around every issue, in the camera's pixels
+    var rs = D.marks.map(function (m) { return by[m.n].r; }).filter(function (r) { return r.w; });
+    if (!rs.length) return { x: 0, y: 0, w: camW, h: camH };
+    var x = Math.min.apply(0, rs.map(function (r) { return r.x; })), y = Math.min.apply(0, rs.map(function (r) { return r.y; }));
+    return { x: x, y: y, w: Math.max.apply(0, rs.map(function (r) { return r.x + r.w; })) - x, h: Math.max.apply(0, rs.map(function (r) { return r.y + r.h; })) - y };
+  }
   function zFor(r) {  // close enough to read, and out far enough that the whole box shows
     return Math.max(1, Math.min(Z, 0.94 * stage.clientWidth / r.w, 0.9 * stage.clientHeight / r.h));
   }
@@ -382,7 +388,9 @@
   }
   function reset(v) {
     view = v;
-    cam.style.transform = Z > 1 ? shot(spot[v], Z) : "";
+    var z = v === "audit" ? zFor(span()) : Z;  // the audit at rest shows every issue it lists, not only the first
+    cam.style.transform = Z > 1 ? shot(v === "audit" ? centre(span()) : spot[v], z) : "";
+    cam.style.setProperty("--zs", 1 / z);
     cur = cam.style.transform;
     select(view);
     after.style.clipPath = view === "fixed" ? "inset(0 0 0 0)" : "inset(0 0 100% 0)";
