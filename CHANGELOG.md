@@ -21,6 +21,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Added
 
+- **Repeated problems become an issue offer** (2026-11-25). When the same problem comes up twice in your project, or you correct OpenDesigner the same way twice, your AI offers once per session to send it to the project as a GitHub issue, until you answer yes, later or no. You read the draft first; it carries no project names, colours, paths or answers.
+
 - **Send the install to your computer from a phone** (2026-11-25). On a phone, the home page's "Copy both" button becomes "Send to my computer". It opens the phone's share sheet with the install link and the two commands, so you can message or mail them to yourself. Nothing passes through our server.
 
 - **Smart UI answers with pictures** (2026-11-16). New parts show products in a grid, places, a recipe, an event and a home, each with photos from your app's data. Every photo needs alt text and a shape, so nothing jumps while it loads. A price must show its currency, and "Sold out" or "Only 2 left" can never show in green.

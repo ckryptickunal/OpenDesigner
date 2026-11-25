@@ -90,6 +90,9 @@ jobs:
       - name: Status colours and feedback as rules
         run: python3 tools/test_status_feedback.py
 
+      - name: Issue offers for repeated problems
+        run: python3 tools/test_issue_offers.py
+
       - name: Audit page, adapt page, exempt folders and the audit ledger
         run: python3 tools/test_audit_page.py
 

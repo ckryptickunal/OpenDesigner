@@ -71,6 +71,12 @@
 - name: question
   color: "cc317c"
   description: A question; Discussions is usually faster
+- name: repeated
+  color: "e4e669"
+  description: The same problem came up more than once in someone's project
+- name: from-engine
+  color: "bfd4f2"
+  description: Drafted by engine.py feedback or issue-offer, with the person's yes
 - name: triage
   color: "ffffff"
   description: New; a maintainer has not looked at it yet

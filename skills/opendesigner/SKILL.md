@@ -161,4 +161,4 @@ One question per message here, as everywhere.
 6. If the log is on: `journey.py log session_end`, then `journey.py report`. The report line and the sharing question follow `rules.md` section 11.
 
 ## Improve OpenDesigner
-When a question, option or building block is missing, a step confuses the person, or something breaks, follow `references/improve.md`.
+When a question, option or building block is missing, a step confuses the person, or something breaks, follow `references/improve.md`. When the person corrects the same thing twice, or the same step fails twice, record each time with `engine.py feedback` so the engine counts it; when the engine prints "Issue offer ... Ask once this session", ask it as the last line of your reply, then `engine.py issue-offer <id> --asked`; nothing is posted without their yes.

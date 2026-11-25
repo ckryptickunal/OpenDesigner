@@ -1,0 +1,9 @@
+{
+  "offers": {
+    "F-001": {
+      "id": "F-001", "source": "feedback", "kind": "confusing", "first": "2026-11-20", "last": "2026-11-24", "status": "pending",
+      "opened": "2026-11-24", "text": "Q-shape-01: the radius question had to be explained twice before the person could pick",
+      "count": 2, "host": "Claude Code", "step": null, "question": "Q-shape-01"
+    }
+  }
+}

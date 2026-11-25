@@ -31,7 +31,9 @@ python3 <skill>/scripts/engine.py ledger close | show [--json]   close refuses w
 python3 <skill>/scripts/engine.py removed add "<what>" --why "<their words>" [--instead "..."] [--pattern RE]   something the owner removed on purpose; removed list; removed restore <R-id> --why "<their words>"
 python3 <skill>/scripts/engine.py guard install --quote "<their words>"|no|remove|status   after asking once (install needs the owner's words): a pre-commit hook that runs review --strict (git commit --no-verify skips it once); no records the answer. Never writes over another hook or into a shared core.hooksPath
 python3 <skill>/scripts/engine.py feedback "..." --kind gap|bug|confusing|idea [--from-journey]
-python3 <skill>/scripts/engine.py feedback "<the rule>" --kind note [--same N-01]   the owner's note on the work, counted in opendesigner/RULES.md
+python3 <skill>/scripts/engine.py feedback "<the rule>" --kind note [--same N-01] [--about opendesigner]   the owner's note on the work, counted in opendesigner/RULES.md
+python3 <skill>/scripts/engine.py feedback "..." --kind bug|gap|confusing [--same F-001|new] [--expected "..."]   a repeat adds to the earlier entry; the second time opens an issue offer
+python3 <skill>/scripts/engine.py issue-offer [F-001 --asked | F-001 --answer yes|later|no | F-001 --sent <url>]   list issue offers, record the person's answer, print the draft and gh commands after a yes
 python3 <skill>/scripts/engine.py research plan --brief "<users line>" --tools web-search,browser,last30days   user research: what to find, searches, missing tools
 python3 <skill>/scripts/engine.py research check|add <findings.json> [--accept [--only Q-aud-01,...]]   check, save (research/users.md, PRODUCT.md Users), apply on a yes
 python3 <skill>/scripts/engine.py research status | skip --why "..."

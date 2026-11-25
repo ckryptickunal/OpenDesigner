@@ -22,7 +22,21 @@ Don't interrupt the person for this. Record it quietly, and mention it once at t
 5. If they are offline or say no, the notes stay in `opendesigner/feedback.md`, and nothing leaves their machine.
 6. An anonymous report can go with an issue, only with their OK: `journey.py export --anon` writes it (`docs/PRIVACY.md`). Shared reports never go through GitHub issues, because an issue is posted under their account.
 
-**The owner's notes on the work** are not feedback about OpenDesigner. Record each with `engine.py feedback "<the rule>" --kind note`. Said twice, it is a rule in `opendesigner/RULES.md`. At the third time the engine prints one question offering a GitHub issue: ask it once, and file the issue only after a yes, about OpenDesigner, with nothing private.
+**The owner's notes on the work** are not feedback about OpenDesigner. Record each with `engine.py feedback "<the rule>" --kind note`. Said twice, it is a rule in `opendesigner/RULES.md`. A note about how OpenDesigner behaves, not about their design ("stop asking two questions at once"), takes `--about opendesigner`.
+
+## When something repeats: the issue offer
+Repeats are how OpenDesigner learns what hurts most, so they must reach the project, with the person's yes.
+1. **Record every time.** When the person corrects the same thing twice, or the same step fails twice, record it again with `engine.py feedback`, each time. Write the same problem in the same terms (the area or question id first); the engine matches the words and adds to the earlier entry's count. A wrong match: run again with `--same new`; a repeat it missed: `--same F-003`. Add `--expected "<what they expected>"` once.
+2. **The engine opens the offer.** A bug, gap or confusing step seen twice, a note about OpenDesigner said twice, or any note said three times, becomes an offer in `opendesigner/issue-offers.json`. It stays there, across sessions, until the person answers.
+3. **Ask once per session.** `engine.py status` (and the session hook), `build`, `review` and `feedback` print one "Issue offer" line while an offer is open. While it says "Ask once this session", ask it as the last line of your reply, after the work they asked for, then run `engine.py issue-offer F-001 --asked`. After that the line says it was already raised: do not ask again this session.
+4. **Record the answer:** `engine.py issue-offer F-001 --answer yes|later|no`. `later` asks again next session; `no` never asks again for that entry; `yes` prints the draft.
+5. **After a yes:**
+   - Show the draft (saved in `opendesigner/issue-drafts/F-001.md`). The person may edit it; their version is the one filed.
+   - Search first, with the `gh issue list` command the engine prints. If an issue matches, offer to comment on it instead (`gh issue comment`).
+   - With `gh` installed, show the exact `gh issue create` command, then run it. Without `gh`, give them the pre-filled link to check and submit themselves.
+   - Then `engine.py issue-offer F-001 --sent <issue url>` (or `--sent unknown`).
+6. **What a draft carries:** the problem in OpenDesigner's terms, how many times with the first and last dates, the area, question id and step, what they expected, the OpenDesigner version, the host and the Python version. It never carries the project's name, colours, file paths, links, their answers or brand details; the engine removes those it can find, and the person reads the draft before anything is filed (`docs/PRIVACY.md`).
+7. `engine.py issue-offer` with no id lists every offer and its status.
 
 ## Inside the OpenDesigner repo itself
 You are in the repo when `_coordination/PROTOCOL.md` and `tools/od.py` exist. Then fix the source directly:
