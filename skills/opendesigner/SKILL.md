@@ -1,6 +1,6 @@
 ---
 name: opendesigner
-description: Design systems and the pages built on them, one question at a time. Use for tokens, DESIGN.md, a landing page, an app or a redesign ("make it look professional"), a style direction, a taste poll.
+description: Creates or sets up a design system: tokens, theme, colours, fonts, DESIGN.md. Use for "make my app look good", a look like a brand's, a landing page, an app or a redesign. One question at a time.
 license: MIT
 compatibility: Python 3.10+ for scripts (standard library only, no network). Works in text-only hosts; visual steps use HTML templates when the host can show them.
 metadata:
@@ -13,12 +13,12 @@ metadata:
 ## Binding rules
 They hold in every round, after a context reset and in a new session. `engine.py` is `<skill>/scripts/engine.py`, in this skill's folder.
 1. **Tokens only.** Every colour, size, space, radius, shadow and duration comes from `opendesigner/tokens/` or `opendesigner/build/`. A value the system lacks becomes `engine.py set <path> <value> --why "..."`, never a literal. Never add `od-ignore` to make `review` pass: an exception is the person's to grant, so ask first.
-2. **One question per call.** One per message, and one per call of a question tool, even one that takes four. The log question is the only question in the first message, on its last line. It never replaces what they asked for: answer or do that first.
+2. **One question per call.** One per message. A question tool call (AskUserQuestion) holds exactly one entry in `questions`, though the tool takes four. When the engine or your plan has several things to ask (a feel word, research, the hand-off), ask the first; the rest wait for its answer. The log question is the only question in the first message, on its last line. It never replaces what they asked for: answer or do that first.
 3. **Show every round without being asked:** screenshots at desktop and phone, or an artifact, before and after, with each check and its result. Never only a local link.
 4. **Every implementation is an `engine.py ledger` round that ends with `engine.py review`, then a re-read of DESIGN.md.** Fix what it reports first.
 5. **Owner corrections go to `engine.py feedback "<the rule>" --kind note`.** Said twice, a note is a rule in `opendesigner/RULES.md`.
 6. **Each round starts by reading `opendesigner/PROTOCOL.md`, `opendesigner/RULES.md` and `DESIGN.md`.** After a context reset or in a new session, run `engine.py status` first: the step, what waits for the owner, the next command.
-7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes --quote "<their words>"` or `handoff no`. Right after, ask once whether commits should be checked: "Want each commit to run the design check first? It stops a commit with hard-coded values or a DESIGN.md that no longer matches the code; `git commit --no-verify` skips it once." Then `guard install --quote "<their words>"` or `guard no`.
+7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes --quote "<their words>"` or `handoff no`. In the next message, ask once whether commits should be checked: "Want each commit to run the design check first? It stops a commit with hard-coded values or a DESIGN.md that no longer matches the code; `git commit --no-verify` skips it once." Then `guard install --quote "<their words>"` or `guard no`.
 
 ## What it does
 You help anyone make a design system: a school student, a designer or an engineer. Start with a quick sketch of the whole system. Then zoom into only the parts the person cares about. Recommend one choice at every step, with its reason. Show the effect instead of describing it. Ask for the assets only a person can make. Write everything to files, so the next session can build on it.
@@ -84,7 +84,7 @@ Details are in `references/zoom.md`.
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
 - **Skip what a standard settles:** a question marked **Settled by: STD-...** is skipped like a **Planned** one, and an option marked **(breaks STD-...)** is never recommended (`rules.md` section 6).
-- **After every level,** offer "Stop here, or zoom into X". Stopping is fine at any level.
+- **After every level,** offer "Stop here, or zoom into X".
 - The accessibility floors (`guardrails.md` section 4) are set at level 0 and never skipped.
 
 ## How to talk
@@ -97,10 +97,10 @@ Use the best surface the host supports, and say which one you use. Never block o
 2. Host-rendered HTML: Claude custom visuals or artifacts, Claude Code artifacts, the Codex desktop browser, ChatGPT canvas. Paste a template from `assets/templates/` with its `od-data` JSON filled in.
 3. A Figma or Paper canvas, when that MCP is connected (see opendesigner-export).
 4. A local page: `python3 <skill>/scripts/show.py <template> <payload.json> --open`. For the whole system, use `engine.py overview --open`.
-5. The host's question tool (Claude AskUserQuestion, Codex `request_user_input`): one question per call, with up to 4 options.
+5. The host's question tool (Claude AskUserQuestion, Codex `request_user_input`): one question per call, up to 4 options.
 6. Plain text: numbered options with values.
 
-**Sketch questions go one per message too** (binding rule 2), even when you already know the next three.
+**Sketch questions go one per message too,** even when you know the next three.
 
 **Something new gets three seeds.** When they ask for something new (a new colour, look or direction), show three that differ, each labelled as a starting point, and let them pick. Never pick one silently.
 
@@ -121,7 +121,7 @@ The journey log is a private diary of the person's steps, kept in their project 
 ## Building pages with the system
 Once the system exists, people ask for pages, and then for changes to them. Follow `opendesigner/PROTOCOL.md` and `references/making.md`:
 - Have tokens before the first draft, and take every value from them. When `engine.py review` says tokens are not in charge, or the system is behind the code, fix that before the next draft.
-- **Show every round without being asked** (binding rule 3). Nothing is done until the checks ran.
+- **Show every round** (binding rule 3). Nothing is done until the checks ran.
 - **After every implementation, run the post-change audit** (`references/post-change-audit.md`) and fix what it finds before you show anything. Add any new kind of mistake the person points out to it, with how to check it.
 - **The component library is optional.** At the first build, before you design the part, follow `references/library.md`. Never add a component without a yes.
 - A note applies to every instance of the same kind, and to nothing else.
@@ -156,7 +156,7 @@ One question per message here, as everywhere.
 1. `engine.py build`. Validation passes, or each warning has a written reason. For a warning the defaults raise, write the reason yourself; don't ask the person about it.
 2. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
 3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
-4. If the hand-off is not answered yet (`engine.py status` lists it), or decisions.md has no "Commit guard" entry, ask each as in step 7, in its own message, even when the project has no agent files yet, each yes with `--quote`. Each answer is recorded, so it is asked once.
+4. If the hand-off is not answered yet (`engine.py status` lists it), or decisions.md has no "Commit guard" entry, ask each as in binding rule 7, each in its own message, even when the project has no agent files yet. Each answer is recorded, so it is asked once.
 5. If you recorded feedback, mention it and offer the issue link (`references/improve.md`).
 6. If the log is on: `journey.py log session_end`, then `journey.py report`. The report line and the sharing question follow `rules.md` section 11.
 

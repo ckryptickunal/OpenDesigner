@@ -36,7 +36,7 @@ A sketch question that a reading answers becomes one confirm line instead of a q
 4. **How should it feel?** Ask: "Describe the feel in 2 or 3 words, like fun, calm, serious or bold. A picture works too, like a quiet library at night." Pass their words to `sketch --feel`.
    - If they give a picture, pass it unchanged as `sketch --brief "<their words>"` and the feel words it suggests as `--feel`. The picture opens the taste card at the top of DESIGN.md (`references/taste.md`). Never write a picture for them; without one, the card says it is not given yet.
    - The engine maps common words to its own (fun to playful, calm to deferential and minimal). `engine.py feel fun calm` shows the mapping, and `engine.py feel` lists every word it knows.
-   - If the engine doesn't know a word, it builds with the others and prints one short question. Ask that question with the result.
+   - If the engine doesn't know a word, it builds with the others and prints one short question. Ask it with the result, as that message's only question. The research question then comes in the next message, and the hand-off after that.
    - Show six pairs only if they ask for choices, or when the designer voice leads. The pairs are playful or serious · friendly or authoritative · minimal or rich · premium or everyday · modern or heritage · bold or quiet.
    - The words fill in the personality sliders (Q-brand-01), so don't ask for the sliders.
 5. **Do you have a brand color or a logo?** This is Q-color-01, asked together with Q-brand-03.
@@ -85,6 +85,8 @@ Show what they got, not how it was made. Send one message:
    - Engineer voice: the exact file and how to wire it in. For Tailwind v4, two lines in the main CSS file: `@import "tailwindcss";` then `@import "<path to>/opendesigner/build/tailwind/theme.css";`. For plain CSS, import `opendesigner/build/css/tokens.css` once. The opendesigner-export skill lists every file.
    - Designer voice: the one or two defaults most worth a look, such as the body text size. Say where DESIGN.md explains them.
 5. **The offer** (below).
+
+The message asks one question. After the sketch it is the research question, unless research is done or skipped; otherwise it is the offer's. Items 1, 3 and 4 are statements ("say if that's wrong"), not more questions. Everything else that waits for the person (the hand-off, the commit guard) comes in later messages, one each, after the answer before it.
 
 Never dump settings: no dial numbers, token names, hex lists or file trees unless they ask. Point a plain-voice person to the preview first. If they want to read something, DESIGN.md opens with a short plain summary.
 
