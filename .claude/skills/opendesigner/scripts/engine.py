@@ -17647,7 +17647,8 @@ def build_payload(state, template, values=None, labels=None, taste=None):
     label = lambda v: (labels or {}).get(v) or option_label(qid, v) or str(v)
     fixed = sorted(k for k, v in (state.get("dials") or {}).items() if dial_value(v) is not None)
     note_fixed = (f" Your earlier answers fix {', '.join(fixed)}, so the options differ in the rest." if fixed else "")
-    payload = {"question": qid, "recommended": str(cur or question_default(state, qid) or (values[0] if values else "")),
+    payload = {"question": qid, "name": name, "sampleKind": preview_kind(state),  # the sample screen fits their product (#22)
+               "recommended": str(cur or question_default(state, qid) or (values[0] if values else "")),
                "generatedBy": f"engine.py show {template} (OpenDesigner engine {OPENDESIGNER_VERSION}); real values from {name}'s state"}
     if template == "palette":
         payload.update(title=f"{name}: how colorful", subtitle="Each option is your palette, built for real. The shades go from light to dark; "

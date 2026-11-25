@@ -4396,6 +4396,11 @@ class OverviewAndArtifact(unittest.TestCase):
             tpl = rd(d, "preview", "palette.html")
             self.assertIn("Fern", tpl)                                          # the template shows their system, not Acme
             self.assertNotIn(">Acme<", tpl)
+            sheet = rd(d, "preview", "component-sheet.html")                    # #22: their name and a sample that fits their product
+            self.assertIn('"name": "Fern"', sheet)
+            self.assertIn('"sampleKind": "%s"' % e.preview_kind(e.merge_defaults(e.load_state(d))), sheet)
+            for f in os.listdir(os.path.join(e.SKILL_ROOT, "assets", "templates")):
+                self.assertNotIn("acme", rd(e.SKILL_ROOT, "assets", "templates", f).lower(), f)
             proj = os.path.join(d, "build", "artifact", "project")
             tok = e.read_json(os.path.join(proj, "tokens.json"))
             self.assertEqual([th["id"] for th in tok["color"]["themes"]][:1], ["light"])

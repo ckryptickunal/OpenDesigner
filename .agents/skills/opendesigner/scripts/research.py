@@ -1370,7 +1370,7 @@ def directions_board(eng, d, path=None, open_=False):
     tpl = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets", "templates", "direction-board.html")
     with open(tpl, encoding="utf-8") as f:
         page = f.read()
-    blob = json.dumps(board_payload(rec, state, users, ledger, pos), indent=1, ensure_ascii=False).replace("</", "<\\/")
+    blob = json.dumps(dict(board_payload(rec, state, users, ledger, pos), sampleKind=eng.preview_kind(state)), indent=1, ensure_ascii=False).replace("</", "<\\/")
     page, n = re.subn(r'(<script type="application/json" id="od-data">).*?(</script>)', lambda m: m.group(1) + "\n" + blob + "\n" + m.group(2),
                       page, count=1, flags=re.S)
     if n != 1:

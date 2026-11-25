@@ -11,6 +11,8 @@ Three voices: an option's "label" and "note" are plain; optional "short" shows t
 Feed it JSON in one of three ways: replace the contents of <script id="od-data">, set window.OD_DATA before the
 last script runs, or open the file with #data=<url-encoded JSON>. The sample payload below documents every field.
 "Copy my choice" produces OD: lines (grammar in references/rules.md): OD:<action> <target>=<value> <status>.
+"name" is the project's name and "sampleKind" picks the sample content that fits its main screen: club (a club or product site),
+admin (a work table), finance (a money dashboard) or guide (a guide to read). engine.py fills both; persuade, operate and read work too.
 No network requests, no dependencies. The shared chrome is repeated in every template on purpose so each file stands alone.
 -->
 <style>:root{--c-bg:#f6f6f7;--c-surface:#fff;--c-fg:#18181b;--c-muted:#585862;--c-border:#dcdce1;--c-strong:#18181b;--c-on-strong:#fff;--c-ok:#166534;--c-bad:#b42318;--r:8px;--font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color-scheme:light}
@@ -73,6 +75,8 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
 <script type="application/json" id="od-data">
 {
  "question": "Q-type-09",
+ "name": "Devtool Dense",
+ "sampleKind": "operate",
  "recommended": "1.2",
  "generatedBy": "engine.py show type-scale (OpenDesigner engine 0.3.1); real values from Devtool Dense's state",
  "title": "Devtool Dense: text sizes",
@@ -115,6 +119,7 @@ function loadData(){let d={};try{d=JSON.parse($('#od-data').textContent)}catch(e
  if(window.OD_DATA)d=window.OD_DATA;const m=location.hash.match(/[#&]data=([^&]+)/);
  if(m){try{d=JSON.parse(decodeURIComponent(m[1]))}catch(e){console.warn('OpenDesigner: #data is not valid JSON')}}return d}
 const D=loadData();
+const KIND={persuade:'club',operate:'admin',read:'guide'}[D.sampleKind]||D.sampleKind;const SG=({"admin":"Users waiting for review","finance":"Bills due this week","club":"Join us on Saturday","guide":"Getting started"})[KIND]||null;
 const OD={sel:null,extra:null,draw:()=>{}};
 // OD: line grammar (spec 3.7, DC-L18-07): OD:set <path>=<json-value> [--why "reason"], OD:lock <path>
 function fmtv(v){return typeof v==='number'||typeof v==='boolean'?String(v):JSON.stringify(String(v))}
@@ -153,7 +158,7 @@ function take(o){Object.assign(cur,{base:o.base||16,ratio:o.ratio||1.25,family:o
  seg($('#ratios'),D.ratios||[1.125,1.2,1.25,1.333,1.5],cur.ratio,v=>{cur.ratio=+v;cur.tr=true;update()})}
 OD.onPick=o=>take(o);
 OD.extra=()=>{const a=D.adjust||{},L=[];if(cur.tb&&a.base)L.push(fill(a.base,cur.base));if(cur.tr&&a.ratio)L.push(fill(a.ratio,String(cur.ratio)));return L};
-OD.draw=()=>{if(!cur.base)return;const s=D.sample||'Invoices due this week';const el=$('#lad');el.style.fontFamily=cur.family;
+OD.draw=()=>{if(!cur.base)return;const s=D.sample||SG||'Users waiting for review';const el=$('#lad');el.style.fontFamily=cur.family;
  el.innerHTML=STEPS.map(([nm,n])=>{const sz=Math.round(cur.base*Math.pow(cur.ratio,n)),l=lh(sz,n),w=n>=2?cur.hw:cur.bw;
   return '<div class="step"><span class="kv">'+esc(nm)+' · '+sz+'/'+l+' · '+(sz/16).toFixed(3).replace(/0+$/,'')+'rem · '+w+'</span><span class="txt" style="font-size:'+sz+'px;line-height:'+l+'px;font-weight:'+w+'">'+esc(s)+'</span></div>'}).join('')
   +'<p class="para" style="font-size:'+cur.base+'px;line-height:'+lh(cur.base,0)+'px">'+esc(D.paragraph||'Body text at the base size. Lines of 45 to 75 characters read best, so this paragraph is capped at 66 characters. Change the base size and the ratio to see every step move together.')+'</p>'};

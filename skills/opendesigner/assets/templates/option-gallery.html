@@ -11,6 +11,8 @@ Three voices: an option's "label" and "note" are plain; optional "short" shows t
 Feed it JSON in one of three ways: replace the contents of <script id="od-data">, set window.OD_DATA before the
 last script runs, or open the file with #data=<url-encoded JSON>. The sample payload below documents every field.
 "Copy my choice" produces OD: lines (grammar in references/rules.md): OD:<action> <target>=<value> <status>.
+"name" is the project's name and "sampleKind" picks the sample content that fits its main screen: club (a club or product site),
+admin (a work table), finance (a money dashboard) or guide (a guide to read). engine.py fills both; persuade, operate and read work too.
 No network requests, no dependencies. The shared chrome is repeated in every template on purpose so each file stands alone.
 -->
 <style>:root{--c-bg:#f6f6f7;--c-surface:#fff;--c-fg:#18181b;--c-muted:#585862;--c-border:#dcdce1;--c-strong:#18181b;--c-on-strong:#fff;--c-ok:#166534;--c-bad:#b42318;--r:8px;--font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color-scheme:light}
@@ -92,6 +94,7 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
 .gc .acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.gc .acts label{display:inline-flex;gap:6px;align-items:center;min-height:44px;font-weight:600}
 .gc button[aria-pressed=true]{background:var(--c-strong);color:var(--c-on-strong)}
 details summary{cursor:pointer;min-height:32px}
+.mb .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -109,6 +112,8 @@ details summary{cursor:pointer;min-height:32px}
 </footer>
 <script type="application/json" id="od-data">
 {
+ "name": "Your project",
+ "sampleKind": "admin",
  "title": "Three directions",
  "subtitle": "Sample data. Each direction has its own type, colors and shapes. Pick one, and like or dislike any of them. You can also take one part from another. The logo spot stays empty on purpose: your logo comes from you or a designer.",
  "question": "Q-dir-01",
@@ -293,6 +298,8 @@ function loadData(){let d={};try{d=JSON.parse($('#od-data').textContent)}catch(e
  if(window.OD_DATA)d=window.OD_DATA;const m=location.hash.match(/[#&]data=([^&]+)/);
  if(m){try{d=JSON.parse(decodeURIComponent(m[1]))}catch(e){console.warn('OpenDesigner: #data is not valid JSON')}}return d}
 const D=loadData();
+const KIND={persuade:'club',operate:'admin',read:'guide'}[D.sampleKind]||D.sampleKind;const SG=({"admin":{"link":"Requests","hd":"Requests to review","p":"12 are waiting, 4 of them for more than 2 days.","b1":"Review","b2":"Assign","stat":"Approved today","num":"24"},"finance":{"link":"Budget","hd":"Spending this month","p":"You have used 65% of your budget, with 9 days to go.","b1":"Add expense","b2":"Export","stat":"Bills due this week","num":"3"},"club":{"link":"Events","hd":"Join us on Saturday","p":"Friendly games for every level, 10am at the library.","b1":"Sign up","b2":"See events","stat":"Members","num":"48"},"guide":{"link":"Chapters","hd":"Getting started","p":"Five short lessons, about 10 minutes each.","b1":"Start reading","b2":"Contents","stat":"Chapters","num":"12"}})[KIND]||null;
+const SM=SG||{"link":"Requests","hd":"Requests to review","p":"12 are waiting, 4 of them for more than 2 days.","b1":"Review","b2":"Assign","stat":"Approved today","num":"24"};
 const OD={sel:null,extra:null,draw:()=>{}};
 // OD: line grammar (spec 3.7, DC-L18-07): OD:set <path>=<json-value> [--why "reason"], OD:lock <path>
 function fmtv(v){return typeof v==='number'||typeof v==='boolean'?String(v):JSON.stringify(String(v))}
@@ -328,7 +335,7 @@ function applyVars(el,o,m){const v=Object.assign({},(o.vars||{}).shared||{},((o.
  for(const k in v)el.style.setProperty('--t-'+k,v[k])}
 
 const opts=D.options||[],rate={},rx={};const DIMS=D.remix||['color','type','shape','depth'];
-function card(o,i){return '<article class="gc"><div class="mini tk" id="m'+i+'">'+'<div class="mb"><span class="logo" title="Your logo goes here (designer hook)">logo</span><span>Acme</span><span class="mut" style="margin-left:auto">Reports</span></div>\n<div class="mc"><div class="hd">Revenue this quarter</div><p class="mut" style="margin:0">Up 12% on last quarter across all regions.</p>\n<div class="r"><span class="b b-p">Export</span><span class="b b-s">Share</span></div><div class="card"><span class="mut">Open invoices</span><strong style="font-size:1.6em">24</strong></div></div>'+'</div>'
+function card(o,i){return '<article class="gc"><div class="mini tk" id="m'+i+'">'+'<div class="mb"><span class="logo" title="Your logo goes here (designer hook)">logo</span><span class="nm">'+esc(D.name||'Your project')+'</span><span class="mut" style="margin-left:auto">'+esc(SM.link)+'</span></div>\n<div class="mc"><div class="hd">'+esc(SM.hd)+'</div><p class="mut" style="margin:0">'+esc(SM.p)+'</p>\n<div class="r"><span class="b b-p">'+esc(SM.b1)+'</span><span class="b b-s">'+esc(SM.b2)+'</span></div><div class="card"><span class="mut">'+esc(SM.stat)+'</span><strong style="font-size:1.6em">'+esc(SM.num)+'</strong></div></div>'+'</div>'
  +'<h3>'+esc(o.label)+(o.value==D.recommended?' <span class="rec">Recommended</span>':'')+'</h3><p class="sub" style="margin:0">'+esc(o.summary||'')+'</p>'
  +(o.safe&&o.safe.length?'<details><summary>Safe choices ('+o.safe.length+')</summary><ul>'+o.safe.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ul></details>':'')
  +(o.risks&&o.risks.length?'<details><summary>Risks ('+o.risks.length+')</summary><ul>'+o.risks.map(r=>'<li><strong>'+esc(r.what)+'</strong>. Gain: '+esc(r.gain)+'. Cost: '+esc(r.cost)+'.</li>').join('')+'</ul></details>':'')

@@ -7,6 +7,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 ## [Unreleased]
 
 ### Fixed
+- **Previews use your project's name and a fitting sample** (2026-11-25). The preview pages no longer say Acme or show invoices and team plans to everyone. They show your project's name and a sample that fits it: a club site, a work table, a money dashboard or a guide. A few technical labels now use plain words.
 - **Library cards no longer shrink to a sliver in Safari** (2026-11-25). In Safari, the Answer with sources card was sometimes drawn as a thin strip, because Safari kept row heights from a first, very narrow layout. Each card's part now starts at full width before it is scaled.
 - **Analytics settings load again** (2026-11-25). The site asked PostHog for its project settings at the wrong address, so every page logged a "not found" error and used built-in defaults. The request now goes to the right server.
 - **The audit demo shows every issue on phones** (2026-11-13). On a small screen, the home page's audit zoomed in on the first issues, so two of the seven it lists were marked off screen. At rest, the audit view now fits all seven marks in the frame. The animation still zooms in on each issue as it finds it.

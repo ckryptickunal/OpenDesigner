@@ -53,6 +53,7 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
 .lv{position:absolute;padding:14px;border-radius:10px;width:min(240px,60%)}
 .strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:18px}
 .cell{height:80px;border-radius:10px;display:flex;align-items:flex-end;padding:8px}
+.kv{overflow-wrap:anywhere}
 </style>
 </head>
 <body>
@@ -71,6 +72,8 @@ input[type=radio],input[type=checkbox]{accent-color:var(--c-strong);width:18px;h
 <script type="application/json" id="od-data">
 {
  "question": "Q-depth-01",
+ "name": "Public Service Accessible",
+ "sampleKind": "operate",
  "recommended": "borders",
  "generatedBy": "engine.py show elevation (OpenDesigner engine 0.3.1); real values from Public Service Accessible's state",
  "title": "Public Service Accessible: depth",
