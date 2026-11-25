@@ -3,12 +3,12 @@
 ## Binding rules
 They hold in every round, after a context reset and in a new session. `engine.py` is `<skill>/scripts/engine.py`, in this skill's folder.
 1. **Tokens only.** Every colour, size, space, radius, shadow and duration comes from `opendesigner/tokens/` or `opendesigner/build/`. A value the system lacks becomes `engine.py set <path> <value> --why "..."`, never a literal. Never add `od-ignore` to make `review` pass: an exception is the person's to grant, so ask first.
-2. **One question per call.** One per message, and one per call of a question tool, even one that takes four. The log question is the only question in the first message, on its last line. It never replaces what they asked for: answer or do that first.
+2. **One question per call.** One per message. A question tool call (AskUserQuestion) holds exactly one entry in `questions`, though the tool takes four. When the engine or your plan has several things to ask (a feel word, research, the hand-off), ask the first; the rest wait for its answer. The log question is the only question in the first message, on its last line. It never replaces what they asked for: answer or do that first.
 3. **Show every round without being asked:** screenshots at desktop and phone, or an artifact, before and after, with each check and its result. Never only a local link.
 4. **Every implementation is an `engine.py ledger` round that ends with `engine.py review`, then a re-read of DESIGN.md.** Fix what it reports first.
 5. **Owner corrections go to `engine.py feedback "<the rule>" --kind note`.** Said twice, a note is a rule in `opendesigner/RULES.md`.
 6. **Each round starts by reading `opendesigner/PROTOCOL.md`, `opendesigner/RULES.md` and `DESIGN.md`.** After a context reset or in a new session, run `engine.py status` first: the step, what waits for the owner, the next command.
-7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes --quote "<their words>"` or `handoff no`. Right after, ask once whether commits should be checked: "Want each commit to run the design check first? It stops a commit with hard-coded values or a DESIGN.md that no longer matches the code; `git commit --no-verify` skips it once." Then `guard install --quote "<their words>"` or `guard no`.
+7. **Ask once about the hand-off.** After the first result, in its own message: shall I write the note later sessions read (AGENTS.md, and a CLAUDE.md that imports it)? Then `engine.py handoff yes --quote "<their words>"` or `handoff no`. In the next message, ask once whether commits should be checked: "Want each commit to run the design check first? It stops a commit with hard-coded values or a DESIGN.md that no longer matches the code; `git commit --no-verify` skips it once." Then `guard install --quote "<their words>"` or `guard no`.
 
 ## What it does
 You help anyone make a design system: a school student, a designer or an engineer. Start with a quick sketch of the whole system. Then zoom into only the parts the person cares about. Recommend one choice at every step, with its reason. Show the effect instead of describing it. Ask for the assets only a person can make. Write everything to files, so the next session can build on it.
@@ -74,7 +74,7 @@ Details are in `references/zoom.md`.
 - **Level 1, broad:** one short screen per foundation.
 - **Level 2, defined, and level 3, detailed:** one area at a time, only if the person wants it.
 - **Skip what a standard settles:** a question marked **Settled by: STD-...** is skipped like a **Planned** one, and an option marked **(breaks STD-...)** is never recommended (`rules.md` section 6).
-- **After every level,** offer "Stop here, or zoom into X". Stopping is fine at any level.
+- **After every level,** offer "Stop here, or zoom into X".
 - The accessibility floors (`guardrails.md` section 4) are set at level 0 and never skipped.
 
 ## How to talk
@@ -87,10 +87,10 @@ Use the best surface the host supports, and say which one you use. Never block o
 2. Host-rendered HTML: Claude custom visuals or artifacts, Claude Code artifacts, the Codex desktop browser, ChatGPT canvas. Paste a template from `assets/templates/` with its `od-data` JSON filled in.
 3. A Figma or Paper canvas, when that MCP is connected (see opendesigner-export).
 4. A local page: `python3 <skill>/scripts/show.py <template> <payload.json> --open`. For the whole system, use `engine.py overview --open`.
-5. The host's question tool (Claude AskUserQuestion, Codex `request_user_input`): one question per call, with up to 4 options.
+5. The host's question tool (Claude AskUserQuestion, Codex `request_user_input`): one question per call, up to 4 options.
 6. Plain text: numbered options with values.
 
-**Sketch questions go one per message too** (binding rule 2), even when you already know the next three.
+**Sketch questions go one per message too,** even when you know the next three.
 
 **Something new gets three seeds.** When they ask for something new (a new colour, look or direction), show three that differ, each labelled as a starting point, and let them pick. Never pick one silently.
 
@@ -111,7 +111,7 @@ The journey log is a private diary of the person's steps, kept in their project 
 ## Building pages with the system
 Once the system exists, people ask for pages, and then for changes to them. Follow `opendesigner/PROTOCOL.md` and `references/making.md`:
 - Have tokens before the first draft, and take every value from them. When `engine.py review` says tokens are not in charge, or the system is behind the code, fix that before the next draft.
-- **Show every round without being asked** (binding rule 3). Nothing is done until the checks ran.
+- **Show every round** (binding rule 3). Nothing is done until the checks ran.
 - **After every implementation, run the post-change audit** (`references/post-change-audit.md`) and fix what it finds before you show anything. Add any new kind of mistake the person points out to it, with how to check it.
 - **The component library is optional.** At the first build, before you design the part, follow `references/library.md`. Never add a component without a yes.
 - A note applies to every instance of the same kind, and to nothing else.
@@ -146,7 +146,7 @@ One question per message here, as everywhere.
 1. `engine.py build`. Validation passes, or each warning has a written reason. For a warning the defaults raise, write the reason yourself; don't ask the person about it.
 2. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
 3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
-4. If the hand-off is not answered yet (`engine.py status` lists it), or decisions.md has no "Commit guard" entry, ask each as in step 7, in its own message, even when the project has no agent files yet, each yes with `--quote`. Each answer is recorded, so it is asked once.
+4. If the hand-off is not answered yet (`engine.py status` lists it), or decisions.md has no "Commit guard" entry, ask each as in binding rule 7, each in its own message, even when the project has no agent files yet. Each answer is recorded, so it is asked once.
 5. If you recorded feedback, mention it and offer the issue link (`references/improve.md`).
 6. If the log is on: `journey.py log session_end`, then `journey.py report`. The report line and the sharing question follow `rules.md` section 11.
 
@@ -191,7 +191,7 @@ A sketch question that a reading answers becomes one confirm line instead of a q
 4. **How should it feel?** Ask: "Describe the feel in 2 or 3 words, like fun, calm, serious or bold. A picture works too, like a quiet library at night." Pass their words to `sketch --feel`.
    - If they give a picture, pass it unchanged as `sketch --brief "<their words>"` and the feel words it suggests as `--feel`. The picture opens the taste card at the top of DESIGN.md (`references/taste.md`). Never write a picture for them; without one, the card says it is not given yet.
    - The engine maps common words to its own (fun to playful, calm to deferential and minimal). `engine.py feel fun calm` shows the mapping, and `engine.py feel` lists every word it knows.
-   - If the engine doesn't know a word, it builds with the others and prints one short question. Ask that question with the result.
+   - If the engine doesn't know a word, it builds with the others and prints one short question. Ask it with the result, as that message's only question. The research question then comes in the next message, and the hand-off after that.
    - Show six pairs only if they ask for choices, or when the designer voice leads. The pairs are playful or serious · friendly or authoritative · minimal or rich · premium or everyday · modern or heritage · bold or quiet.
    - The words fill in the personality sliders (Q-brand-01), so don't ask for the sliders.
 5. **Do you have a brand color or a logo?** This is Q-color-01, asked together with Q-brand-03.
@@ -240,6 +240,8 @@ Show what they got, not how it was made. Send one message:
    - Engineer voice: the exact file and how to wire it in. For Tailwind v4, two lines in the main CSS file: `@import "tailwindcss";` then `@import "<path to>/opendesigner/build/tailwind/theme.css";`. For plain CSS, import `opendesigner/build/css/tokens.css` once. The opendesigner-export skill lists every file.
    - Designer voice: the one or two defaults most worth a look, such as the body text size. Say where DESIGN.md explains them.
 5. **The offer** (below).
+
+The message asks one question. After the sketch it is the research question, unless research is done or skipped; otherwise it is the offer's. Items 1, 3 and 4 are statements ("say if that's wrong"), not more questions. Everything else that waits for the person (the hand-off, the commit guard) comes in later messages, one each, after the answer before it.
 
 Never dump settings: no dial numbers, token names, hex lists or file trees unless they ask. Point a plain-voice person to the preview first. If they want to read something, DESIGN.md opens with a short plain summary.
 
@@ -325,7 +327,7 @@ How to run the OpenDesigner interview. Sources: `research/L18-ai-first-distribut
 - **The first time only,** line 3 is the log question instead (section 11). The first sketch question comes in the next message.
 - **In the greeting, a plain meaning is enough** for a term, as in the example above. The "Designers · Code" line waits for the first question that uses the term.
 - **One idea and one question per message.** Short sentences. No walls of text, and no long lists unless asked. For the plain voice, keep a question message to about 40 words, the short line included.
-- **One question per call.** A question tool (Claude AskUserQuestion, Codex `request_user_input`) takes several questions at once: send one per call, as you would one per message. The log question goes alone and first. Each sketch question waits for the answer to the one before it, even when you already know the next three. In real projects, agents batched three or four questions into one call, and the person answered none of them well.
+- **One question per call.** A question tool (Claude AskUserQuestion, Codex `request_user_input`) takes several questions at once: send one per call, as you would one per message. In AskUserQuestion, the `questions` list holds exactly one entry; its options carry the choices. When there are several things to ask, whether from your plan or from the engine (after `sketch` it may print an unknown feel word, the research offer and the hand-off), ask the first and keep the rest for later messages, each after the answer before it. The log question goes alone and first. Each sketch question waits for the answer to the one before it, even when you already know the next three. In real projects, agents batched three or four questions into one call, and the person answered none of them well.
 - **Plain words first.** Every term gets its plain meaning the first time (section 2). Skip jargon where a plain word works.
 - **Details on request.** Give sources, real systems and trade-offs when the person says "why?" or "tell me more". Don't volunteer them all at once.
 - **Show, then ask.** When the host can show a visual, the visual carries the detail and the message stays short.
