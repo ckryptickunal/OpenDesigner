@@ -106,7 +106,8 @@
     if (/github\.com\/ckryptickunal\/OpenDesigner/.test(href) && !/PRIVACY\.md/.test(href)) window.odTrack("github_click", { from: from, label: (t.textContent || "").trim().slice(0, 40) });
     else if (href.indexOf("/book") === 0) window.odTrack("book_call_click", { from: from });
     else if (href.indexOf("/docs/install") === 0 || href === "#install") window.odTrack("install_click", { from: from });
-    if (t.matches(".copy, [data-copy], [data-copy-text]")) {
+    if (t.getAttribute("data-mode") === "share") window.odTrack("send_to_computer", { from: from });
+    else if (t.matches(".copy, [data-copy], [data-copy-text]")) {
       var item = t.closest("[id^='item-']"), part = item ? item.id.slice(5) : (from.match(/^\/library\/([a-z0-9-]+)\/$/) || [])[1];
       window.odTrack(part ? "prompt_copied" : "copy_clicked", { from: from, part: part || null });
     }
