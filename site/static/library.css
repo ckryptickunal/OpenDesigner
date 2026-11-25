@@ -89,7 +89,12 @@
 /* the frame hugs what it holds (owner, 2026-10-21: "it should adapt to the internal component"): the bezel takes the part's size, centred on the stage */
 .item-in { --in-r: calc(var(--r-panel) - var(--pad)); box-sizing: border-box; width: auto; height: auto; max-width: 100%; max-height: 100%; overflow: hidden; border-radius: var(--in-r); }
 .item-in .lib-fit { align-content: start; justify-items: center; overflow: hidden; border-radius: calc(var(--in-r) - 6px); background: var(--ds-color-surface-base, #fff); }
-.item-in .lib-live { border-radius: 0; padding: 16px; }
+.item-in .lib-live { border-radius: 0; padding: 16px;
+  /* a starting width before library.js sets the view's: with none, Safari first lays the part out at its narrowest (text
+     wrapping letter by letter) and can keep those row heights after the real width is set, so the card is fitted as a
+     48 px sliver (answer-sources, 1 deploy in 3 blocked by check_browsers.py, 2026-11-25) */
+  width: 1280px; }
+
 .item-body { min-width: 0; padding-top: 14px; }
 .item-body .item-tags { min-width: 0; }
 .item-body .item-tags { display: flex; align-items: center; gap: 10px; margin: 0 0 10px; }
