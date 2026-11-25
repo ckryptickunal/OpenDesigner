@@ -7,6 +7,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 ## [Unreleased]
 
 ### Fixed
+- **The audit demo shows every issue on phones** (2026-11-13). On a small screen, the home page's audit zoomed in on the first issues, so two of the seven it lists were marked off screen. At rest, the audit view now fits all seven marks in the frame. The animation still zooms in on each issue as it finds it.
 - **Receipt total lines up** (2026-11-17). The receipt's paid total now sits on the card's content edge with the amount at the end, and the word "Reference" is the same size as the reference it introduces.
 - **One inset for Smart UI answer cards** (2026-11-17). Flight rows, the fare comparison, the approval and the receipt now share one card inset. The fare grid sits centred with dividers as wide as its columns, and the receipt lists its details like the approval before it, in the same typeface.
 - **One corner shape per answer** (2026-11-17). Icon tiles, the airline mark and the approval's detail and warning bands now take the buttons' corner radius instead of near-square 2 px corners, and every tag uses the same shape. The flight route has a dot at both ends. The travel demo's chips match its buttons, its mark shows a plane, and its demo settings moved under the composer.
