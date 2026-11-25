@@ -1,5 +1,17 @@
 // OpenDesigner site: copy buttons, live GitHub numbers, showcase tag filters and the gallery lightbox. Pages read fine without it.
 (function () {
+  // On a phone the commands can't run, so a button marked data-share opens the share sheet instead: the visitor sends
+  // the install link and commands to their computer (Messages, Mail, AirDrop). Nothing goes through our server.
+  var phone = navigator.share && matchMedia("(pointer: coarse) and (max-width: 767px)").matches;
+  document.querySelectorAll("[data-share]").forEach(function (btn) {
+    if (!phone) return;
+    btn.textContent = btn.getAttribute("data-share"); btn.setAttribute("data-mode", "share");
+    btn.addEventListener("click", function (e) {
+      e.stopImmediatePropagation();
+      navigator.share({ title: "OpenDesigner", url: "https://opendesigner.dev/docs/install/",
+        text: "Install OpenDesigner in Claude Code:\n" + btn.getAttribute("data-copy-text") + "\n" }).catch(function () {});
+    });
+  });
   document.querySelectorAll("[data-copy], [data-copy-text]").forEach(function (btn) {
     var label = btn.textContent;
     btn.addEventListener("click", function () {

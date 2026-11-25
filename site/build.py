@@ -1369,7 +1369,7 @@ def home(pages, facts, faq):
 <div class="h-cta"><a class="btn primary lg" href="#install">Get started free</a><a class="h-link" href="#before-after">See it in action {ARROW}</a></div>
 <div class="h-cmd-wrap"><p class="h-cmd-label">Two commands in Claude Code, then a few plain questions</p>
 <div class="cmd h-cmd"><code>/plugin marketplace add ckryptickunal/OpenDesigner</code><button class="copy" type="button" data-copy-text="/plugin marketplace add ckryptickunal/OpenDesigner
-/plugin install opendesigner@opendesigner">Copy both</button></div></div>
+/plugin install opendesigner@opendesigner" data-share="Send to my computer">Copy both</button></div></div>
 {figure("home-hero")}
 <div class="h-works"><p class="kicker">Works in the AI tool you already use</p><ul class="hosts">{"".join(f'<li><span class="host-tile">{logo(k, 22)}</span><span>{n}</span></li>' for n, k in HOSTS)}</ul></div>
 </section>
