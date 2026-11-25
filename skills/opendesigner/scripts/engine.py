@@ -1173,6 +1173,20 @@ def profile_record(prof):
             "skipped": prof["skipped"]}
 
 
+def profile_handover(old_state, state):
+    """When a change only hands default-profile items over to the person (same profile, items only leave because the
+    person answered, set or locked them), the lines that note it on the person's own decision; else None. Such a handover
+    is part of what the person asked for, not a separate decision (issue #115)."""
+    before, after = default_profile(old_state), default_profile(state)
+    if not before or not after or before["id"] != after["id"]:
+        return None
+    b, a = list(before["items"]), list(after["items"])
+    gone = [i for i in b if i not in a]
+    if not gone or any(i not in b for i in a):
+        return None
+    return [f"no longer a {after['name'].lower()} default: {i} ({after['skipped'].get(i, 'changed')})" for i in gone]
+
+
 def log_profile_change(d, old_state, state, write=True):
     """One auto_default entry in decisions.md when a default profile starts, stops, or hands an item over to the person's
     own answer. Returns a one-line summary for the terminal, or None when nothing changed. write=False (a dry run) only
@@ -5762,8 +5776,11 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
             shown = "back to the default" if evalue == UNSET else json.dumps(evalue, ensure_ascii=False)
             extra.append(f"also set: {epath.rstrip('+')} = {shown} (from {qid})")
     _touch(state, path)
+    handover = profile_handover(old_state, state)
+    if handover:  # noted on this decision; the profile's own entry stays as it was
+        extra += handover
     if dry_run:
-        prof_line = log_profile_change(d, old_state, state, write=False)
+        prof_line = None if handover else log_profile_change(d, old_state, state, write=False)
         if not quiet:
             print(f"dry run: {path} = {json.dumps(value, ensure_ascii=False)} ({set_by}{', locked' if lock else ''}) was not recorded. "
                   "Recording it would do this:")
@@ -5779,7 +5796,7 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
     dump_json(sp, state)
     log_decision(d, path, value, why, set_by, lock, source_ref,  # the person's words go in decisions.md, not the console
                  ([f"quote: {json.dumps(quote, ensure_ascii=False)}"] if quote else []) + extra, supersedes=sup)
-    prof_line = log_profile_change(d, old_state, state)
+    prof_line = None if handover else log_profile_change(d, old_state, state)
     qid, how = (path.split(".", 1)[1], None) if path.startswith("answers.") else ANSWER_PATHS.get(path, (None, None))
     if qid and journey:
         if prev not in (None, "", [], {}) and prev != value:
