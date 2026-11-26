@@ -4,7 +4,7 @@ seo_title: How to make a vibe-coded app look professional
 description: Make a vibe-coded app look professional: set the design language, choose a direction from real references, write DESIGN.md, build with tokens, check every size.
 section: Guides
 order: 22
-updated: 2026-11-07
+updated: 2026-11-26
 ---
 
 To make a vibe-coded app look professional, stop each prompt from choosing its own values. Decide the design language once, write it down where your AI reads it, and check the page as people see it, not only the code. OpenDesigner takes the repetitive part off your hands, but it doesn't rewrite your UI on its own: you or your AI make the fixes.
@@ -12,6 +12,10 @@ To make a vibe-coded app look professional, stop each prompt from choosing its o
 ## Why it looks off
 
 Each prompt picks its own values. One button gets 7 px corners, a card gets 12 px, and a gray is typed in by hand. No single value is wrong, but together they don't match.
+
+## Built with Lovable, Bolt or v0?
+
+The fix is the same. Export or sync the code to GitHub, open it in Claude Code, Cursor or Codex with OpenDesigner installed, and say "Make this app look professional." It audits first and changes nothing until you say yes. Then paste the `DESIGN.md` it writes into your builder's project knowledge or custom instructions, so the next prompts follow the same rules.
 
 ## Five steps
 

@@ -2092,6 +2092,7 @@ LLMS_QUESTIONS = [
     ("How do I create a design system with AI?", ["/docs/quickstart/", "/docs/install/"]),
     ("Is there an open-source tool to create a design system for an app built with Claude Code or Cursor?", ["/docs/introduction/", "/docs/install/"]),
     ("How do I make my vibe-coded app look professional?", ["/docs/improve-vibe-coded-ui/"]),
+    ("My app built with Lovable, Bolt or v0 looks generic. How do I fix the UI?", ["/docs/improve-vibe-coded-ui/"]),
     ("How do I give Cursor my design tokens so every screen matches?", ["/docs/design-system-for-cursor/"]),
     ("How do I generate design tokens, CSS and a Tailwind v4 theme with Claude Code?", ["/docs/design-tokens-for-claude-code/", "/docs/export/"]),
     ("How do I write a DESIGN.md my AI coding agent follows?", ["/docs/decisions/", "/docs/files/"]),
@@ -2112,6 +2113,7 @@ LLMS_QUESTIONS = [
     ("How do I research users and stakeholders before I design?", ["/docs/research/", "/docs/engine/"], "/docs/research/"),
     ("How does it compare with UI UX Pro Max, a shadcn theme generator or Figma's AI tools?", ["/docs/faq/", "/docs/ai-design-system-generator/"]),
     ("How do I get my site cited by ChatGPT and Perplexity?", ["/docs/search/"]),
+    ("How do I make sure my AI-generated UI meets WCAG 2.2 AA contrast?", ["/docs/accessibility/", "/docs/design-tokens-for-claude-code/"]),
 ]
 
 

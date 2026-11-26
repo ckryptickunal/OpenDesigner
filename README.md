@@ -95,7 +95,15 @@ To build the zips yourself, clone the repo and run `python3 tools/build_dist.py`
 <details>
 <summary><b>Codex, Cursor, VS Code with Copilot, Gemini CLI and other agents</b></summary>
 
-These tools read skills from `.agents/skills/`. Run this inside your project. It copies in the ten skill folders and leaves nothing else behind.
+These tools read skills from `.agents/skills/`.
+
+Quickest, with Node.js: run this inside your project and pick the skills whose names start with `opendesigner`.
+
+```bash
+npx skills add ckryptickunal/OpenDesigner
+```
+
+Or copy them by hand. This copies in the ten skill folders and leaves nothing else behind.
 
 ```bash
 git clone --depth 1 https://github.com/ckryptickunal/OpenDesigner .opendesigner-tmp
