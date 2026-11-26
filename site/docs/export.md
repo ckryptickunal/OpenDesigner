@@ -4,7 +4,7 @@ seo_title: Export design tokens to CSS, Tailwind, Swift, Compose, Figma
 description: Every format OpenDesigner exports, where each file lands, how to use it, and how the export skill writes into Figma and Paper when their MCP servers are on.
 section: Guides
 order: 6
-updated: 2026-11-07
+updated: 2026-11-26
 ---
 
 OpenDesigner exports your design system to code and design tools: CSS variables, a Tailwind v4 theme, Swift, Jetpack Compose, Figma variables, Paper tokens, a DTCG resolver, a Claude Design System artifact and a brand and press page. One `engine.py build` writes the ones your platforms need from the DTCG token files, which stay the source of truth. The opendesigner-export skill can also write the system straight into Figma or Paper when their MCP servers are connected.
@@ -31,7 +31,7 @@ Write one format, or all of them:
 engine.py export --format tailwind
 ```
 
-The formats are `css`, `tailwind`, `figma`, `paper`, `swift`, `compose`, `dtcg`, `artifact`, `brand` and `all`.
+The formats are `css`, `tailwind`, `figma`, `paper`, `swift`, `compose`, `dtcg`, `artifact`, `brand` and `all`. `shadcn` is written only when you ask for it, and every build after that keeps it up to date.
 :::
 
 ## Code exports
@@ -44,6 +44,7 @@ The formats are `css`, `tailwind`, `figma`, `paper`, `swift`, `compose`, `dtcg`,
 | DTCG resolver | `build/dtcg/` | With tools that take a single entry point |
 | CSS | `build/css/tokens.css` | Import it once at the root of your app. Light and dark, densities and reduced motion included |
 | Tailwind v4 | `build/tailwind/theme.css` | Add one line after Tailwind in your main CSS file. It imports `tokens.css` itself |
+| shadcn/ui | `build/shadcn/globals.css` | Run `engine.py export --format shadcn` once. In the CSS file that `components.json` names, replace the `:root`, `.dark` and `@theme inline` blocks from `shadcn init` with one import of this file. shadcn components then use your colours and radii, in light and dark |
 | Swift | `build/swift/DesignTokens.swift` | Add it to your iOS target. Text uses Dynamic Type |
 | Jetpack Compose | `build/compose/DesignTokens.kt` | Add it to your Android UI module |
 | Claude Design System artifact | `build/artifact/project/` | The system as an artifact in Claude: tokens, a brand book, a cover and a button preview |
