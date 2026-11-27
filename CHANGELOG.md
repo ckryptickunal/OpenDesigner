@@ -7,6 +7,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 ## [Unreleased]
 
 ### Fixed
+- **Previews use your project's name and a fitting sample** (2026-11-25). The preview pages no longer say Acme or show invoices and team plans to everyone. They show your project's name and a sample that fits it: a club site, a work table, a money dashboard or a guide. A few technical labels now use plain words.
 - **A change records only what you asked** (2026-11-25). On a dense work tool, setting a value such as corner roundness no longer logs a second "work-tool defaults" decision. That the default is now yours is noted on your own decision instead.
 - **The main skill installs again with `npx skills`** (2026-11-26). The opendesigner skill's description had an unquoted colon, which made its frontmatter invalid YAML, so `npx skills add` listed every skill but the main one. The description now uses brackets, and `build_dist.py --check` fails on an unquoted colon.
 - **The skill loads for a plain "set up my design system"** (2026-11-25). The opendesigner skill's description now starts with what people ask for: setting up a design system, tokens, theme, colours, fonts, "make my app look good" or a look like a brand's. Before, agents sometimes answered without loading it.

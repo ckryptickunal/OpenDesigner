@@ -11,6 +11,8 @@ a reference's logo, brand hue, typeface, imagery and copy never carry over, exce
 Feed it JSON in one of three ways: replace the contents of <script id="od-data">, set window.OD_DATA before the
 last script runs, or open the file with #data=<url-encoded JSON>. The sample payload below documents every field.
 "Copy my choice" produces OD:accept <ref-id>:<path> lines (references/rules.md section 9); nothing is recorded before that.
+"name" is the project's name and "sampleKind" picks the sample content that fits its main screen: club (a club or product site),
+admin (a work table), finance (a money dashboard) or guide (a guide to read). engine.py fills both; persuade, operate and read work too.
 No network requests, no dependencies. The shared chrome is repeated in every template on purpose so each file stands alone.
 -->
 <style>:root{--c-bg:#f6f6f7;--c-surface:#fff;--c-fg:#18181b;--c-muted:#585862;--c-border:#dcdce1;--c-strong:#18181b;--c-on-strong:#fff;--c-ok:#166534;--c-bad:#b42318;--r:8px;--font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color-scheme:light}
@@ -77,7 +79,8 @@ input[type=radio]{accent-color:var(--c-strong);width:18px;height:18px}
 </footer>
 <script type="application/json" id="od-data">
 {
- "name": "Acme",
+ "name": "Your project",
+ "sampleKind": "admin",
  "ref": {"id": "calm-site", "tag": "inspiration", "kind": "url", "file": "calm-site.json"},
  "changes": [{"path": "dials.roundness", "now": 30, "ref": 62, "confidence": "high", "basis": "most common control radius 12", "chosen": false, "od": "OD:accept calm-site:dials.roundness=62"}],
  "stays": [{"path": "raw.brandColor", "now": "#2f5bea", "why": "yours: identity stays with you"}],
@@ -98,15 +101,17 @@ function loadData(){let d={};try{d=JSON.parse($('#od-data').textContent)}catch(e
  if(window.OD_DATA)d=window.OD_DATA;const m=location.hash.match(/[#&]data=([^&]+)/);
  if(m){try{d=JSON.parse(decodeURIComponent(m[1]))}catch(e){console.warn('OpenDesigner: #data is not valid JSON')}}return d}
 const D=loadData();
+const KIND={persuade:'club',operate:'admin',read:'guide'}[D.sampleKind]||D.sampleKind;const SG=({"admin":{"p":"Requests waiting for you, newest first.","badge":"New","card":"Leave request","field":"Add a note","b1":"Approve","b2":"Ask a question"},"finance":{"p":"Where your money went this month.","badge":"Due","card":"Phone bill","field":"Amount","b1":"Pay now","b2":"Remind me"},"club":{"p":"Friendly games every Saturday. Everyone is welcome.","badge":"New","card":"Spring event","field":"Your email","b1":"Sign up","b2":"Ask us"},"guide":{"p":"Short lessons you can read in any order.","badge":"New","card":"Chapter 1","field":"Search the guide","b1":"Start reading","b2":"Contents"}})[KIND]||null;
+const SM=SG||{"p":"Requests waiting for you, newest first.","badge":"New","card":"Leave request","field":"Add a note","b1":"Approve","b2":"Ask a question"};
 const fmt=v=>v===null||v===undefined?'not set':typeof v==='object'?JSON.stringify(v):String(v);
 function mode(){const t=document.documentElement.dataset.theme;return t==='light'||t==='dark'?t:(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}
 function paint(el,sys){const s=sys.shared||{};const v=Object.assign({},sys.light||{},mode()==='dark'?(sys.dark||{}):{});const set=(k,x)=>{if(x)el.style.setProperty(k,x)};
  set('--t-bg',v.bg);set('--t-surface',v.surface||v.bg);set('--t-fg',v.fg);set('--t-muted',v['fg-muted']);set('--t-border',v.border);set('--t-border-s',v['border-strong']||v.border);
  set('--t-accent',v.accent);set('--t-on',v['on-accent']);set('--t-accent-sub',v['accent-subtle']||v.surface);set('--t-sh',v['shadow-1']||'none');
  set('--t-size',s.size);set('--t-rb',s['radius-control']);set('--t-rc',s['radius-container']);set('--t-h',s['control-h']);set('--t-pad',s['pad-x']);set('--t-gap',s.gap);set('--t-ratio',s.ratio);set('--t-hw',s['heading-weight'])}
-function ui(el){el.innerHTML='<h3>'+esc(D.name||'Your product')+'</h3><p>Plans start at the size of your team. Change it any time.</p>'
- +'<div class="t-card"><div class="t-row"><span class="t-badge">New</span><strong>Team plan</strong></div><div class="t-in">Work email</div><div class="t-row"><span class="t-btn">Start free</span><span class="t-btn2">Talk to us</span></div></div>'}
-function boot(){$('#t').textContent=(D.name||'Your product')+': adapt from '+((D.ref||{}).id||'a reference');
+function ui(el){el.innerHTML='<h3>'+esc(D.name||'Your project')+'</h3><p>'+esc(SM.p)+'</p>'
+ +'<div class="t-card"><div class="t-row"><span class="t-badge">'+esc(SM.badge)+'</span><strong>'+esc(SM.card)+'</strong></div><div class="t-in">'+esc(SM.field)+'</div><div class="t-row"><span class="t-btn">'+esc(SM.b1)+'</span><span class="t-btn2">'+esc(SM.b2)+'</span></div></div>'}
+function boot(){$('#t').textContent=(D.name||'Your project')+': adapt from '+((D.ref||{}).id||'a reference');
  $('#st').textContent='What '+((D.ref||{}).file||'the reference')+' would change in your current system, and what stays. Nothing is recorded yet.';
  $('#ba-sub').textContent='Both are drawn with real tokens: yours now, and yours with every change below taken.';
  ui($('#now'));ui($('#after'));
