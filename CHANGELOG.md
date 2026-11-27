@@ -7,6 +7,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 ## [Unreleased]
 
 ### Fixed
+- **A change records only what you asked** (2026-11-25). On a dense work tool, setting a value such as corner roundness no longer logs a second "work-tool defaults" decision. That the default is now yours is noted on your own decision instead.
 - **The main skill installs again with `npx skills`** (2026-11-26). The opendesigner skill's description had an unquoted colon, which made its frontmatter invalid YAML, so `npx skills add` listed every skill but the main one. The description now uses brackets, and `build_dist.py --check` fails on an unquoted colon.
 - **The skill loads for a plain "set up my design system"** (2026-11-25). The opendesigner skill's description now starts with what people ask for: setting up a design system, tokens, theme, colours, fonts, "make my app look good" or a look like a brand's. Before, agents sometimes answered without loading it.
 - **One question at a time, even after the engine's output** (2026-11-25). After a sketch, the engine can list several things to ask: an unknown feel word, research and the hand-off. The skill now says to ask only the first, with exactly one question in each question-tool call, and the rest in later messages.
