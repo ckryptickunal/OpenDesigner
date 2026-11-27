@@ -157,8 +157,8 @@ One question per message here, as everywhere.
 2. Check the outputs: `opendesigner/tokens/` (canonical), `opendesigner/build/` (exports), `DESIGN.md` and `PRODUCT.md` at the root, `opendesigner/decisions.md` and `state.json`. Write `opendesigner/RATIONALE.md` for the team from `assets/output/RATIONALE.md`.
 3. Send a short summary in three parts: what we chose and why, what is still open, and how to change it later ("use opendesigner-extend"). Add coverage in one line (decided, defaulted, not applicable, pending). For the plain voice, point to the preview and the short summary at the top of DESIGN.md, not the rest of the file. For the engineer voice, name the export files they will import.
 4. If the hand-off is not answered yet (`engine.py status` lists it), or decisions.md has no "Commit guard" entry, ask each as in binding rule 7, each in its own message, even when the project has no agent files yet. Each answer is recorded, so it is asked once.
-5. If you recorded feedback, mention it and offer the issue link (`references/improve.md`).
+5. If you recorded feedback, mention it.
 6. If the log is on: `journey.py log session_end`, then `journey.py report`. The report line and the sharing question follow `rules.md` section 11.
 
 ## Improve OpenDesigner
-When a question, option or building block is missing, a step confuses the person, or something breaks, follow `references/improve.md`. When the person corrects the same thing twice, or the same step fails twice, record each time with `engine.py feedback` so the engine counts it; when the engine prints "Issue offer ... Ask once this session", ask it as the last line of your reply, then `engine.py issue-offer <id> --asked`; nothing is posted without their yes.
+When a question, option or building block is missing, a step confuses someone, or something breaks, follow `references/improve.md`. Log each repeat with `engine.py feedback`; it says when to offer an issue.
