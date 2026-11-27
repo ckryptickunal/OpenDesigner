@@ -7,6 +7,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 ## [Unreleased]
 
 ### Fixed
+- **The home page works better on phones** (2026-11-27). The install command shows in full, with a Copy button beside Send to my computer. A Menu button in the header reaches every link. The page no longer jumps while the review demo plays in Safari.
+- **Help is easy to find after installing** (2026-11-27). Under the install steps, a line points to Discussions and to reporting a problem. The test results on the home page use plainer words, and every Get started button goes to the install steps.
 - **The main skill fits again after a context reset** (2026-11-27). The new issue-offer instruction had pushed the opendesigner skill past the length that is re-attached after compaction. It now points to `improve.md` and the engine's own "Issue offer" line, which carry the steps.
 - **Previews use your project's name and a fitting sample** (2026-11-25). The preview pages no longer say Acme or show invoices and team plans to everyone. They show your project's name and a sample that fits it: a club site, a work table, a money dashboard or a guide. A few technical labels now use plain words.
 - **A change records only what you asked** (2026-11-25). On a dense work tool, setting a value such as corner roundness no longer logs a second "work-tool defaults" decision. That the default is now yours is noted on your own decision instead.

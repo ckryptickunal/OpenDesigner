@@ -1,17 +1,29 @@
 // OpenDesigner site: copy buttons, live GitHub numbers, showcase tag filters and the gallery lightbox. Pages read fine without it.
 (function () {
-  // On a phone the commands can't run, so a button marked data-share opens the share sheet instead: the visitor sends
-  // the install link and commands to their computer (Messages, Mail, AirDrop). Nothing goes through our server.
+  // On a phone the commands can't run there, so a button marked data-share gets a second button beside it that opens the
+  // share sheet: the visitor sends the install link and commands to their computer (Messages, Mail, AirDrop). The copy
+  // button stays, for people who paste into a notes app or a remote session. Nothing goes through our server.
   var phone = navigator.share && matchMedia("(pointer: coarse) and (max-width: 767px)").matches;
   document.querySelectorAll("[data-share]").forEach(function (btn) {
     if (!phone) return;
-    btn.textContent = btn.getAttribute("data-share"); btn.setAttribute("data-mode", "share");
-    btn.addEventListener("click", function (e) {
-      e.stopImmediatePropagation();
+    var send = document.createElement("button");
+    send.type = "button"; send.className = "copy share"; send.textContent = btn.getAttribute("data-share");
+    btn.parentElement.classList.add("cmd-2");
+    btn.insertAdjacentElement("afterend", send);
+    send.addEventListener("click", function () {
       navigator.share({ title: "OpenDesigner", url: "https://opendesigner.dev/docs/install/",
         text: "Install OpenDesigner in Claude Code:\n" + btn.getAttribute("data-copy-text") + "\n" }).catch(function () {});
     });
   });
+  // the header menu on phones: Escape or a tap outside closes it
+  var menu = document.querySelector(".nav-menu");
+  if (menu) {
+    document.addEventListener("click", function (e) { if (menu.open && !menu.contains(e.target)) menu.open = false; });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && menu.open) { menu.open = false; menu.querySelector("summary").focus(); }
+    });
+  }
+
   document.querySelectorAll("[data-copy], [data-copy-text]").forEach(function (btn) {
     var label = btn.textContent;
     btn.addEventListener("click", function () {
