@@ -2522,9 +2522,8 @@ class WorkToolDefaults(unittest.TestCase):
                                                          "accent": "your brand color decides it", "surfaces": "the depth dial is set"})
             with open(os.path.join(d, "decisions.md"), encoding="utf-8") as f:
                 log = f.read()
-            self.assertIn("no longer a default: accent (your brand color decides it)", log)
-            self.assertRegex(log, r"defaults\.work-tool = \[\]\n- set_by: auto_default .*\n- reason: Dense work tool defaults off: "
-                                  r"Q-aud-01 = dense, but you decided each of them yourself\.")
+            self.assertIn("no longer a dense work tool default: accent (your brand color decides it)", log)
+            self.assertNotIn("defaults.work-tool = []", log)  # a set records only what was asked (#115): no extra entry when the last default goes
         with tempfile.TemporaryDirectory() as t:  # one value set or locked by the person wins too
             d = self.sketch(t)
             quiet(e.cmd_set, d, "radius.control", 2, "keep 2px")
