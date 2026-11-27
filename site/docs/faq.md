@@ -4,7 +4,7 @@ seo_title: OpenDesigner FAQ: AI design systems, tokens, teams, privacy
 description: Plain answers about OpenDesigner: what it is, which AI tools it works with, privacy, accessibility, how it compares, team governance, and how early it is.
 section: Reference
 order: 5
-updated: 2026-11-14
+updated: 2026-11-26
 ---
 
 ### What is OpenDesigner?
@@ -12,6 +12,10 @@ updated: 2026-11-14
 A free, open-source add-on for AI tools like Claude, ChatGPT, Codex and Cursor. It helps you make a design system: the rules for how your app looks, like colors, text sizes, spacing, corners and buttons. It reads your project, asks a few plain questions, suggests an answer for each with a reason, checks the result, and saves the rules as files in your project.
 
 Code, skills and data are MIT; the written research and docs are CC BY 4.0. You need your own AI tool, which may cost money. See the [introduction](/docs/introduction/).
+
+### Is OpenDesigner the same as Open Design?
+
+No. Open Design (open-design.ai) is a separate project by another team: a design workspace for prototypes, slides and motion. OpenDesigner (opendesigner.dev) is an add-on for your AI coding tool that writes one design system into your repo and checks every screen against it.
 
 ### Isn't this just a prompt?
 

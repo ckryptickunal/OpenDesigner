@@ -176,6 +176,7 @@ python3 tools/wiki.py proposals --check  the pending-proposals table in synthesi
 python3 tools/test_wiki.py               learning wiki tests (.venv-wiki/bin/python also runs the OpenWiki ones)
 python3 tools/test_plugin_hook.py        the plugin's start-of-session hook: read-only and fast, one offer per project, silent otherwise
 python3 tools/test_checkins.py           check-ins: every N decisions, closed rounds, settings, none before the first result
+python3 tools/test_profile_handover.py   a set on a work tool adds exactly one decision; handed-over defaults are noted on it
 python3 tools/test_review_drift.py       review flags unknown token names, typed fonts, off-system weights and unapproved od-ignore
 python3 tools/test_status_feedback.py    the status map (build/status.json), DESIGN.md's Status and Feedback rules, review's judgment notes
 python3 tools/test_issue_offers.py       issue offers: repeats counted, pending, later, no, yes, sent, asked once per session, nothing private in the draft

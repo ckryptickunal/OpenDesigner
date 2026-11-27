@@ -18,7 +18,7 @@ Commands (run from the user's project; state lives in ./opendesigner/ unless --d
     engine.py resolve                     effective dials, zoom per area and every derived parameter (JSON)
     engine.py generate                    state.json + levers.json -> tokens/ (DTCG 2025.10 + resolver)
     engine.py validate [--json]           contrast, targets, lint; exit 1 on errors, 0 with warnings
-    engine.py export --format css|tailwind|figma|paper|swift|compose|dtcg|artifact|brand|all
+    engine.py export --format css|tailwind|shadcn|figma|paper|swift|compose|dtcg|artifact|brand|all
     engine.py design-md [--out DIR]       DESIGN.md and PRODUCT.md (project root when the state is ./opendesigner)
     engine.py preview [--open]            preview.html (every token plus a few components, light and dark)
     engine.py overview [--open]           overview.html (the whole system on one page, what is chosen, what is missing)
@@ -1171,6 +1171,20 @@ def profile_record(prof):
             "applied": [{"item": iid, "what": it["what"], "set_by": "auto_default", "reason": why,
                          "evidence": it.get("evidence", []), "inferred": it.get("inferred", False)} for iid, it in prof["items"].items()],
             "skipped": prof["skipped"]}
+
+
+def profile_handover(old_state, state):
+    """When a change only hands default-profile items over to the person (same profile, items only leave because the
+    person answered, set or locked them), the lines that note it on the person's own decision; else None. Such a handover
+    is part of what the person asked for, not a separate decision (issue #115)."""
+    before, after = default_profile(old_state), default_profile(state)
+    if not before or not after or before["id"] != after["id"]:
+        return None
+    b, a = list(before["items"]), list(after["items"])
+    gone = [i for i in b if i not in a]
+    if not gone or any(i not in b for i in a):
+        return None
+    return [f"no longer a {after['name'].lower()} default: {i} ({after['skipped'].get(i, 'changed')})" for i in gone]
 
 
 def log_profile_change(d, old_state, state, write=True):
@@ -5762,8 +5776,11 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
             shown = "back to the default" if evalue == UNSET else json.dumps(evalue, ensure_ascii=False)
             extra.append(f"also set: {epath.rstrip('+')} = {shown} (from {qid})")
     _touch(state, path)
+    handover = profile_handover(old_state, state)
+    if handover:  # noted on this decision; the profile's own entry stays as it was
+        extra += handover
     if dry_run:
-        prof_line = log_profile_change(d, old_state, state, write=False)
+        prof_line = None if handover else log_profile_change(d, old_state, state, write=False)
         if not quiet:
             print(f"dry run: {path} = {json.dumps(value, ensure_ascii=False)} ({set_by}{', locked' if lock else ''}) was not recorded. "
                   "Recording it would do this:")
@@ -5779,7 +5796,7 @@ def cmd_set(d, path, value, why=None, force=False, quiet=False, set_by=None, loc
     dump_json(sp, state)
     log_decision(d, path, value, why, set_by, lock, source_ref,  # the person's words go in decisions.md, not the console
                  ([f"quote: {json.dumps(quote, ensure_ascii=False)}"] if quote else []) + extra, supersedes=sup)
-    prof_line = log_profile_change(d, old_state, state)
+    prof_line = None if handover else log_profile_change(d, old_state, state)
     qid, how = (path.split(".", 1)[1], None) if path.startswith("answers.") else ANSWER_PATHS.get(path, (None, None))
     if qid and journey:
         if prev not in (None, "", [], {}) and prev != value:
@@ -10020,6 +10037,70 @@ FIGMA_STYLE = {100: "Thin", 200: "Extra Light", 300: "Light", 400: "Regular", 50
                800: "Extra Bold", 900: "Black"}
 
 
+SHADCN_MAP = (  # shadcn/ui variable -> design-system color roles, first that exists wins (ui.shadcn.com/docs/theming)
+    ("background", ("surface-base",)), ("foreground", ("text-primary",)),
+    ("card", ("surface-raised", "surface-base")), ("card-foreground", ("text-primary",)),
+    ("popover", ("surface-overlay", "surface-raised")), ("popover-foreground", ("text-primary",)),
+    ("primary", ("bg-action-primary", "bg-accent-bold")), ("primary-foreground", ("text-on-action", "text-on-accent")),
+    ("secondary", ("bg-neutral-subtle", "surface-sunken")), ("secondary-foreground", ("text-primary",)),
+    ("muted", ("surface-sunken", "bg-neutral-subtle")), ("muted-foreground", ("text-secondary",)),
+    ("accent", ("bg-neutral-subtle-hover", "bg-neutral-subtle")), ("accent-foreground", ("text-primary",)),
+    ("destructive", ("bg-danger-bold",)), ("destructive-foreground", ("text-on-danger",)),
+    ("border", ("border-default", "border-subtle")), ("input", ("border-input", "border-default")),
+    ("ring", ("border-focus",)),
+    ("chart-1", ("chart-categorical-1",)), ("chart-2", ("chart-categorical-2",)), ("chart-3", ("chart-categorical-3",)),
+    ("chart-4", ("chart-categorical-4",)), ("chart-5", ("chart-categorical-5",)),
+    ("sidebar", ("surface-nav", "surface-sunken")), ("sidebar-foreground", ("text-primary",)),
+    ("sidebar-primary", ("bg-action-primary", "bg-accent-bold")), ("sidebar-primary-foreground", ("text-on-action", "text-on-accent")),
+    ("sidebar-accent", ("bg-neutral-subtle-hover", "bg-neutral-subtle")), ("sidebar-accent-foreground", ("text-primary",)),
+    ("sidebar-border", ("border-subtle", "border-default")), ("sidebar-ring", ("border-focus",)),
+)
+SHADCN_RADII = (("sm", ("control-sm", "control")), ("md", ("control",)), ("lg", ("container", "control")), ("xl", ("overlay", "container")))
+
+
+def export_shadcn(files, meta, prefix, css=None):
+    """shadcn/ui theme (globals.css contract): shadcn's variable names pointed at the design-system variables, so shadcn
+    components take the system's colours, radii, light/dark, density and reduced motion without hand mapping."""
+    css = css if css is not None else export_css(files, meta, prefix)
+    have = set(re.findall(r"--" + re.escape(prefix) + r"-([a-z0-9-]+)\s*:", css))
+    def pick(group, cands):
+        for c in cands:
+            if f"{group}-{c}" in have:
+                return f"var(--{prefix}-{group}-{c})"
+        return None
+    lines = [f"/* shadcn/ui theme for {meta.get('name')}. Generated by the OpenDesigner engine {OPENDESIGNER_VERSION}; do not edit by hand.",
+             "   Usage: in the CSS file that components.json names (often app/globals.css or src/index.css), replace the :root,",
+             "   .dark and @theme inline blocks that shadcn init wrote with one line, after @import \"tailwindcss\":",
+             "     @import \"<path from your CSS file>/opendesigner/build/shadcn/globals.css\";",
+             "   Dark mode follows data-theme=\"dark\" on <html> and prefers-color-scheme (tokens.css). With next-themes, use",
+             "   <ThemeProvider attribute=\"data-theme\">; a .dark class also works, through the block below. */",
+             "@import \"../css/tokens.css\";", "", ":root {"]
+    missing = []
+    for name, cands in SHADCN_MAP:
+        v = pick("color", cands)
+        if v:
+            lines.append(f"  --{name}: {v};")
+        else:
+            missing.append(name)
+    r = pick("radius", ("control",))
+    if r:
+        lines.append(f"  --radius: {r};")
+    lines += ["}", ""]
+    dark = re.search(r'^(?::root, )?\[data-theme="dark"\] \{\n(.*?)^\}', css, re.S | re.M)
+    if dark:  # shadcn's own .dark class switches the same values as data-theme="dark"
+        lines += ["/* shadcn's .dark class (next-themes default): the same dark values as data-theme=\"dark\". */",
+                  ".dark {"] + dark.group(1).rstrip("\n").split("\n") + ["}", ""]
+    lines += ["@theme inline {"] + [f"  --color-{n}: var(--{n});" for n, _c in SHADCN_MAP if n not in missing]
+    for size, cands in SHADCN_RADII:
+        v = pick("radius", cands)
+        if v:
+            lines.append(f"  --radius-{size}: {v};")
+    lines += ["}"]
+    if missing:
+        lines += ["", "/* Not in this system: " + ", ".join(missing) + ". Keep shadcn's own lines for these in your CSS file. */"]
+    return "\n".join(lines) + "\n"
+
+
 def export_figma(files, meta, state, prefix):
     res = files["opendesigner.resolver.json"]
     mods = res.get("modifiers", {})
@@ -11033,6 +11114,7 @@ figcaption a,.bp-sec li a{{display:inline-flex;align-items:center;min-height:24p
 
 
 EXPORT_FORMATS = ("css", "tailwind", "figma", "paper", "swift", "compose", "dtcg", "artifact", "brand", "status")
+OPT_IN_FORMATS = ("shadcn",)  # written only when asked for (export --format shadcn), then kept fresh by build
 NEUTRAL_FORMATS = ("figma", "paper", "dtcg", "artifact", "brand", "status")  # for design tools, other token tools and people: every platform
 CODE_FORMATS = {"css": ("css", "tailwind"), "swift": ("swift",), "compose": ("compose",)}  # project tag -> the code exports it needs
 PLATFORM_OF = {"css": "web", "tailwind": "web", "swift": "ios", "compose": "android"}  # the platform each code export is for
@@ -11052,7 +11134,8 @@ def build_formats(state, d=None):
     want = set(NEUTRAL_FORMATS) | {f for t, fs in CODE_FORMATS.items() if t in tags for f in fs}
     if d:
         want |= {f for f, parts in FORMAT_FILES.items() if os.path.exists(os.path.join(d, "build", *parts))}
-    return [f for f in EXPORT_FORMATS if f in want], [f for f in EXPORT_FORMATS if f not in want]
+    keep = [f for f in OPT_IN_FORMATS if d and os.path.exists(os.path.join(d, "build", f, "globals.css"))]
+    return [f for f in EXPORT_FORMATS if f in want] + keep, [f for f in EXPORT_FORMATS if f not in want]
 
 
 STATUS_MEANING = {  # what each status means, the words that say it, and an icon (Lucide names); never colour alone (WCAG 1.4.1)
@@ -11154,6 +11237,9 @@ def cmd_export(d, fmt, files=None, meta=None, quiet=False):
         elif f == "tailwind":
             p = os.path.join(d, "build", "tailwind", "theme.css")
             write_text(p, export_tailwind(files, meta, prefix, reset=(state.get("exports") or {}).get("tailwindReset", True) is not False))
+        elif f == "shadcn":
+            p = os.path.join(d, "build", "shadcn", "globals.css")
+            write_text(p, export_shadcn(files, meta, prefix))
         elif f == "figma":
             p = os.path.join(d, "build", "figma", "variables.json")
             dump_json(p, export_figma(files, meta, state, prefix), compact=True)
@@ -11202,7 +11288,7 @@ def cmd_export(d, fmt, files=None, meta=None, quiet=False):
             p = os.path.join(d, "build", "status.json")
             dump_json(p, status_map(files, meta, state, prefix))
         else:
-            raise SystemExit(f"unknown format {f}; use css, tailwind, figma, paper, swift, compose, dtcg, artifact, brand, status or all")
+            raise SystemExit(f"unknown format {f}; use css, tailwind, shadcn, figma, paper, swift, compose, dtcg, artifact, brand, status or all")
         written.append(p)
     if not quiet:
         for p in written:
@@ -13899,7 +13985,7 @@ def _main(argv=None):
     p = sub.add_parser("validate", parents=[common])
     p.add_argument("--json", action="store_true")
     p = sub.add_parser("export", parents=[common])
-    p.add_argument("--format", required=True, choices=list(EXPORT_FORMATS) + ["all"])
+    p.add_argument("--format", required=True, choices=list(EXPORT_FORMATS) + list(OPT_IN_FORMATS) + ["all"])
     p = sub.add_parser("design-md", parents=[common], help="render DESIGN.md and PRODUCT.md")
     p.add_argument("--out", default=None, help="folder for DESIGN.md and PRODUCT.md (default: project root, or the state folder)")
     p = sub.add_parser("preview", parents=[common])

@@ -64,7 +64,15 @@ They land in `dist/`.
 
 ## Codex, Cursor, VS Code with Copilot, Gemini CLI and other agents
 
-These tools read skills from `.agents/skills/`. Run this inside your project. It copies in the nine skill folders and leaves nothing else behind:
+These tools read skills from `.agents/skills/`.
+
+Quickest, with Node.js: run this inside your project and pick the skills whose names start with `opendesigner`.
+
+```
+npx skills add ckryptickunal/OpenDesigner
+```
+
+Or copy them by hand. This copies in the skill folders and leaves nothing else behind:
 
 ```
 git clone --depth 1 https://github.com/ckryptickunal/OpenDesigner .opendesigner-tmp
