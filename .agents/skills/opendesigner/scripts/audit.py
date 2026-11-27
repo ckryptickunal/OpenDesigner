@@ -541,7 +541,7 @@ def adapt_data(eng, d, ref_path):
     for k, v in sorted((state.get("locks") or {}).items()) if isinstance(state.get("locks"), dict) else []:
         if v and not any(s_["path"] == k for s_ in stays):
             stays.append({"path": k, "now": None, "why": "you locked it"})
-    return {"name": state.get("name") or "Your product", "ref": {"id": rid, "tag": fit["tag"], "kind": fit["kind"],
+    return {"name": state.get("name") or "Your product", "sampleKind": eng.preview_kind(state), "ref": {"id": rid, "tag": fit["tag"], "kind": fit["kind"],
                                                                  "file": _short(ref_path)},
             "changes": changes, "stays": stays, "notes": fit["notes"], "table": table, "before": tv0, "after": tv1,
             "tasteIndex": follows, "intake": f"engine.py intake {_short(ref_path)}"}

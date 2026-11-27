@@ -14,6 +14,8 @@ last script runs, or open the file with #data=<url-encoded JSON>. The sample pay
 "Copy my choice" produces OD: lines: OD:direction "<id>" [--why "..."] and OD:remix <axis>="<id>". The agent runs
 research.py directions pick <id> [--remix <axis>=<id>] --why "...".
 Each photo shows its author, licence and grade (the full credit line on hover); a photo made with AI is named in the notes, never in a caption.
+"name" is the project's name and "sampleKind" picks the sample content that fits its main screen: club (a club or product site),
+admin (a work table), finance (a money dashboard) or guide (a guide to read). engine.py fills both; persuade, operate and read work too.
 No network requests, no dependencies. Fonts show in a local stand-in when they are not installed.
 -->
 <style>:root{--c-bg:#f6f6f7;--c-surface:#fff;--c-fg:#18181b;--c-muted:#585862;--c-border:#dcdce1;--c-strong:#18181b;--c-on-strong:#fff;--r:8px;--font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color-scheme:light}
@@ -102,9 +104,10 @@ input[type=radio]{accent-color:var(--c-strong);width:18px;height:18px}
 </footer>
 <script type="application/json" id="od-data">
 {
- "title": "Acme: three directions",
- "product": "Acme",
- "subtitle": "Sample data for an invented product. Each direction changes the ground, the type, the photo grade, how the accent is used and the layout rhythm.",
+ "title": "Your project: three directions",
+ "product": "Your project",
+ "sampleKind": "club",
+ "subtitle": "Sample data. Each direction changes the ground, the type, the photo grade, how the accent is used and the layout rhythm.",
  "positioning": [
   "Who it's for: operations leads at mid-size freight firms",
   "The problem: quotes take a day because the numbers live in email",
@@ -154,7 +157,9 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 function loadData(){let d={};try{d=JSON.parse($('#od-data').textContent)}catch(e){}
  if(window.OD_DATA)d=window.OD_DATA;const m=location.hash.match(/[#&]data=([^&]+)/);
  if(m){try{d=JSON.parse(decodeURIComponent(m[1]))}catch(e){console.warn('OpenDesigner: #data is not valid JSON')}}return d}
-const D=loadData();const dirs=D.directions||[];const axes=D.axes||[];const rate={},rx={};let sel=null;
+const D=loadData();
+const KIND={persuade:'club',operate:'admin',read:'guide'}[D.sampleKind]||D.sampleKind;const SG=({"admin":{"nav":"Features · Help","cta":"Get started"},"finance":{"nav":"How it works · Help","cta":"Start your budget"},"club":{"nav":"Events · About","cta":"Join us"},"guide":{"nav":"Chapters · Search","cta":"Start reading"}})[KIND]||null;
+const SM=SG||{"nav":"Events \u00b7 About","cta":"Join us"};const dirs=D.directions||[];const axes=D.axes||[];const rate={},rx={};let sel=null;
 const STACK={grotesk:'"Helvetica Neue",Arial,system-ui,sans-serif',geometric:'"Avenir Next",Futura,"Century Gothic",system-ui,sans-serif',humanist:'"Gill Sans","Segoe UI",Calibri,system-ui,sans-serif',serif:'Georgia,"Times New Roman",serif',slab:'Rockwell,"Roboto Slab",Georgia,serif',mono:'ui-monospace,Menlo,Consolas,monospace',display:'"Helvetica Neue",Arial,system-ui,sans-serif'};
 const RAD={square:'0px',subtle:'4px',rounded:'8px',pill:'999px'};
 const GRADE={natural:'linear-gradient(180deg,#a9c7e3 0%,#d7e4ee 48%,#8c8f86 49%,#5f6a5c 100%)',warm:'linear-gradient(180deg,#f0b877 0%,#f6dcb2 45%,#8a6a4d 46%,#4d3a2b 100%)',cool:'linear-gradient(180deg,#203a5c 0%,#4f6f95 46%,#1d2733 47%,#0d131b 100%)','high-key':'linear-gradient(180deg,#f4f6f8 0%,#ffffff 50%,#dfe3e6 51%,#c9cfd3 100%)',mono:'linear-gradient(180deg,#bdbdbd 0%,#e0e0e0 46%,#5a5a5a 47%,#262626 100%)','low-key':'linear-gradient(180deg,#0c0f14 0%,#1b222c 50%,#07090c 51%,#000 100%)'};
@@ -171,10 +176,10 @@ function photo(p,cls,i){if(p&&p.src)return '<img class="'+cls+'" src="'+esc(p.sr
  return '<span class="'+cls+'" role="img" aria-label="'+esc((p&&p.title)||'photo')+'" style="background:'+(GRADE[(p&&p.grade)]||GRADE.natural)+'"></span>'}
 function spec(d){const c=d.colors||{},t=d.type||{},st=STACK[t.class]||STACK.grotesk,u=d.accent_use;const acc=u==='none'?c.ink:c.accent;
  const style='--g:'+c.ground+';--ink:'+c.ink+';--acc:'+acc+';--on:'+onColor(acc)+';--mut:'+alpha(c.ink,.66)+';--line:'+alpha(c.ink,.16)+';--disp:"'+fname(t.display)+'",'+st+';--text:"'+fname(t.text)+'",'+STACK.grotesk+';--rad:'+(RAD[(d.cta||{}).shape]||'6px');
- const ph=d.photos||[],p0=ph[0],p1=ph[1]||ph[0];const cta='<span class="cta">'+esc((d.cta||{}).label||'Book a demo')+'</span>';
+ const ph=d.photos||[],p0=ph[0],p1=ph[1]||ph[0];const cta='<span class="cta">'+esc((d.cta||{}).label||SM.cta)+'</span>';
  const claim=D.positioning&&D.positioning[2]?String(D.positioning[2]).replace(/^[^:]*:\s*/,''):'A clear claim in one line';const words=esc(claim.charAt(0).toUpperCase()+claim.slice(1));
  const head=u==='highlight'?words.replace(/(\S+\s+\S+)$/,'<em>$1</em>'):words;
- const nav='<div class="nav"><span class="mark" title="Your logo goes here (designer hook)">logo</span><b>'+esc(D.product||'Acme')+'</b><span>Product · Pricing</span></div>';
+ const nav='<div class="nav"><span class="mark" title="Your logo goes here (designer hook)">logo</span><b>'+esc(D.product||'Your project')+'</b><span>'+esc(SM.nav)+'</span></div>';
  const body='<p>'+esc(d.idea||'')+'</p>';const fld=u==='field'?' field':'';let main='';
  if(d.rhythm==='grid')main='<div class="sec'+fld+'"><div class="hd">'+head+'</div>'+body+'<div>'+cta+'</div></div><div class="cells"><div>'+photo(p0,'im')+'</div><div><b>Step one</b><p>Short line.</p></div><div><b>Step two</b><p>Short line.</p></div><div>'+photo(p1,'im')+'</div></div>';
  else if(d.rhythm==='split')main='<div class="split'+fld+'"><div class="sec"><div class="hd">'+head+'</div>'+body+'<div>'+cta+'</div></div>'+photo(p0,'im')+'</div>';
