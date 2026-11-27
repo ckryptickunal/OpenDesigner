@@ -802,6 +802,7 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 <a class="brand" href="/" aria-label="{NAME} home">{lockup()}</a>
 <nav class="top-nav" aria-label="Main"><a href="/docs/"{CUR if path.startswith("/docs/") else ""}>Docs</a><a href="/docs/install/">Install</a><a href="/docs/enterprise/">For teams</a><a href="/showcase/"{CUR if path == "/showcase/" else ""}>Showcase</a><a href="{smart_ui_page.PATH}"{CUR if path == smart_ui_page.PATH else ""}>Smart UI</a><a class="nav-lib" title="Component library" href="/library/"{CUR if path.startswith("/library/") else ""}><svg class="nav-ic" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M17 13.5v7M13.5 17h7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span class="nav-lib-t">Library</span></a></nav>
 <a class="nav-book" href="/book/">Book a call</a><a class="gh-btn" href="{GH}">{GH_ICON}<span>GitHub</span><span class="gh-count" data-stars>{STATE["stars"]}</span></a>
+{nav_menu(path)}
 </div></header>
 {inner}
 {footer(pages)}
@@ -810,6 +811,21 @@ def shell(path, seo_title, description, main_html, pages, ld=(), og="/og/home.jp
 </body>
 </html>
 """
+
+
+NAV_MENU = [("Docs", "/docs/"), ("Install", "/docs/install/"), ("For teams", "/docs/enterprise/"), ("Showcase", "/showcase/"),
+            ("Smart UI", smart_ui_page.PATH), ("Component library", "/library/"), ("Book a call", "/book/")]
+
+
+def nav_menu(path):
+    """Phones and narrow windows (720 px and under): the header's links behind one Menu button, so none is out of reach
+    (landing audit, 2026-11-25). A <details> opens without script; site.js closes it on Escape or a tap outside."""
+    exact = {u for _t, u in NAV_MENU}
+    cur = lambda u: path == u or (u in ("/docs/", "/library/") and path.startswith(u) and path not in exact)
+    links = "".join(f'<a href="{u}"{CUR if cur(u) else ""}>{t}</a>' for t, u in NAV_MENU)
+    icon = ('<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" '
+            'stroke-width="1.8" stroke-linecap="round"/></svg>')
+    return f'<details class="nav-menu"><summary aria-label="Menu">{icon}</summary><nav class="nav-sheet" aria-label="Menu">{links}</nav></details>'
 
 
 FOOT_COLS = [  # the top row: short labels that fit on one line down to 320 px
@@ -1384,6 +1400,7 @@ def home(pages, facts, faq):
 <div class="h-head">{idx("02", "Get started")}<h2 class="h-h2">Add it to your AI tool.</h2>
 <p class="h-lede">Your AI tool and Python 3.10 or newer. ChatGPT needs nothing installed.</p></div>
 {install_tabs()}
+<p class="h-help">Stuck, or something went wrong? <a href="{GH}/discussions/categories/q-a">Ask in Discussions</a><a href="{GH}/issues/new/choose">Report a problem</a></p>
 </section>
 
 <section class="h-sec" id="evals">
@@ -1471,7 +1488,7 @@ def home(pages, facts, faq):
 <div class="h-end-card">
 <p class="kicker">Try it</p>
 <h2 class="h-h2">Make your next feature feel like it was always there.</h2>
-<div class="h-cta"><a class="btn primary lg" href="/docs/install/">Get started free</a>{book_link("Or book a free " + str(CONFIG["BOOKING_FREE_MINUTES"]) + "-minute call")}</div>
+<div class="h-cta"><a class="btn primary lg" href="#install">Get started free</a>{book_link("Or book a free " + str(CONFIG["BOOKING_FREE_MINUTES"]) + "-minute call")}</div>
 </div>
 </div>
 <p class="h-credit">Photo: <a href="https://unsplash.com/photos/{page_id}">{esc(author)}</a> on Unsplash</p>

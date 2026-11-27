@@ -156,15 +156,15 @@ def block(name):
             tiles.append(("Compared with a plain AI", f"{_pct(fc['with'])} with, {_pct(fc['without'])} without",
                           f"{fc['tasks']} tasks any AI can attempt; {fc['n']} tries per side, {_day(fc['date'])}"))
         if de:
-            tiles.append(("Accessible and complete", f"{de['passed']} of {de['checks']} required checks",
-                          f"{de['briefs']} briefs, no AI; {de.get('qualityPassed')} of {de.get('qualityChecks')} stricter quality checks"))
-        tiles.append(("Looks, judged blind", f"{sc['passed']} of {sc['rebuilt']} rebuilt designs pass",
-                      f"before the rebuild, ours lost {sc['before_lost']} of {sc['before_pairs']} blind pairs"))
+            tiles.append(("Accessible and complete", f"{de['passed']} of {de['checks']} required checks pass",
+                          f"on {de['briefs']} sample projects, checked by code; {de.get('qualityPassed')} of {de.get('qualityChecks')} stricter checks pass"))
+        tiles.append(("Looks, compared blind", f"{sc['passed']} of {sc['rebuilt']} designs pass",
+                      f"each set beside a real product, the judge not told which is ours; before a rebuild, ours lost {sc['before_lost']} of {sc['before_pairs']}"))
         if ch and ch.get("checkers"):
             cs = ch["checkers"].values()
             planted, caught, alarms = sum(c.get("planted", 0) for c in cs), sum(c.get("caught", 0) for c in cs), sum(c.get("falseAlarms", 0) for c in cs)
-            tiles.append(("Our own checkers", f"{caught} of {planted} planted mistakes caught",
-                          f"{len(ch['checkers'])} checkers; {_alarms(alarms)} on clean pages"))
+            tiles.append(("Its checks find mistakes", f"{caught} of {planted} planted mistakes found",
+                          f"{len(ch['checkers'])} checks; {_alarms(alarms)} on pages with no mistakes"))
         return f'<div class="ev-stats" data-n="{len(tiles)}">' + "".join(f'<div class="ev-stat"><p class="kicker">{esc(k)}</p><p class="ev-big">{esc(v)}</p><p class="ev-sub">{esc(s)}</p></div>'
                                                 for k, v, s in tiles) + "</div>"
     if name in ("agent", "agent-tools"):
