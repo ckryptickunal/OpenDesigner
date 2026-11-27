@@ -57,6 +57,8 @@ def check(skill):
         errs.append(f"description length {len(desc)} (1-1024)")
     elif len(desc) > 200:
         warns.append(f"description is {len(desc)} chars; claude.ai may reject over 200")
+    if desc[:1] not in "\"'" and (": " in desc or " #" in desc):
+        errs.append("description has an unquoted ': ' or ' #', which makes the frontmatter invalid YAML (skill hosts and `npx skills` then skip the skill)")
     if re.search(r"<[a-zA-Z/]", name + desc):
         errs.append("XML-like tags in name or description")
     lines = text.count("\n")

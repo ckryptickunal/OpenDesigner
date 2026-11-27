@@ -8,6 +8,8 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 ### Fixed
 - **Previews use your project's name and a fitting sample** (2026-11-25). The preview pages no longer say Acme or show invoices and team plans to everyone. They show your project's name and a sample that fits it: a club site, a work table, a money dashboard or a guide. A few technical labels now use plain words.
+- **A change records only what you asked** (2026-11-25). On a dense work tool, setting a value such as corner roundness no longer logs a second "work-tool defaults" decision. That the default is now yours is noted on your own decision instead.
+- **The main skill installs again with `npx skills`** (2026-11-26). The opendesigner skill's description had an unquoted colon, which made its frontmatter invalid YAML, so `npx skills add` listed every skill but the main one. The description now uses brackets, and `build_dist.py --check` fails on an unquoted colon.
 - **The skill loads for a plain "set up my design system"** (2026-11-25). The opendesigner skill's description now starts with what people ask for: setting up a design system, tokens, theme, colours, fonts, "make my app look good" or a look like a brand's. Before, agents sometimes answered without loading it.
 - **One question at a time, even after the engine's output** (2026-11-25). After a sketch, the engine can list several things to ask: an unknown feel word, research and the hand-off. The skill now says to ask only the first, with exactly one question in each question-tool call, and the rest in later messages.
 - **Extract ignores accent CSS for parts the page doesn't show** (2026-11-25). Reading a page counted every focus and selected-state rule in its stylesheets, even for components that weren't there, so primer.style's Button page came out with another product's blue. These rules now count only when the component they style is on the page.
@@ -21,6 +23,11 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 - **Smart UI hides an empty warning band** (2026-11-17). An approval with no warning no longer shows an amber band holding only its icon. When the answer has a fuller line for what the button sends, such as "Standard, 1 checked bag" for the fare, the approval shows that line instead of the raw value.
 
 ### Added
+
+- **shadcn/ui export** (2026-11-26). `engine.py export --format shadcn` writes `build/shadcn/globals.css`, which points shadcn's variables (`--background`, `--primary`, `--ring`, sidebar, `--radius`) at your design system. Replace the blocks `shadcn init` wrote with one import, and shadcn components use your colours and radii in light and dark, with `data-theme` or `.dark`.
+
+- **Install with `npx skills add`** (2026-11-26). Codex, Cursor and other agents that read `.agents/skills/` can now install with one command, `npx skills add ckryptickunal/OpenDesigner`, as well as by copying the folders.
+- **Answers for Lovable, Bolt and v0 apps, and the Open Design name** (2026-11-26). The vibe-coded UI guide says what to do with an app from Lovable, Bolt or v0, the FAQ says OpenDesigner is not Open Design, and llms.txt answers two more questions people ask.
 
 - **Send the install to your computer from a phone** (2026-11-25). On a phone, the home page's "Copy both" button becomes "Send to my computer". It opens the phone's share sheet with the install link and the two commands, so you can message or mail them to yourself. Nothing passes through our server.
 

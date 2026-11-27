@@ -2434,6 +2434,32 @@ class ReviewReactAndTailwind(unittest.TestCase):
             self.assertIn("off", vals["bg-blue-600"])                           # the reset removes default palette classes
 
 
+class ShadcnExport(unittest.TestCase):
+    """shadcn/ui export: shadcn's variable names point at the system's variables, opt in, then kept fresh by build."""
+
+    def test_shadcn_maps_every_role_and_dark_class(self):
+        with tempfile.TemporaryDirectory() as t:
+            d = os.path.join(t, "opendesigner")
+            quiet(e.cmd_sketch, d, "Ops", "#2563eb", "dense", "web", "serious", quiet=True)
+            quiet(e.cmd_build, d)
+            p = os.path.join(d, "build", "shadcn", "globals.css")
+            self.assertFalse(os.path.exists(p))                                 # opt in: build alone does not write it
+            quiet(e.cmd_export, d, "shadcn")
+            css = open(p).read()
+            tokens = open(os.path.join(d, "build", "css", "tokens.css")).read()
+            for name in ("background", "foreground", "primary", "primary-foreground", "muted-foreground", "border", "input", "ring",
+                         "destructive", "sidebar"):
+                self.assertRegex(css, r"\n  --" + name + r": var\(--ds-[a-z0-9-]+\);", name)
+                self.assertIn(f"--color-{name}: var(--{name});", css)
+            for ref in set(re.findall(r"var\((--ds-[a-z0-9-]+)\)", css)):  # every variable it points at exists in tokens.css
+                self.assertIn(ref + ":", tokens, ref)
+            self.assertIn("\n.dark {", css)                                     # next-themes' default class switches dark too
+            self.assertIn('@import "../css/tokens.css";', css)
+            if "--chart-1:" not in css:                                         # a system with no chart colours says so
+                self.assertIn("Not in this system: chart-1", css)
+            self.assertIn("shadcn", e.build_formats(e.load_state(d), d)[0])     # once written, build keeps it fresh
+
+
 class WorkToolDefaults(unittest.TestCase):
     """The dense work-tool defaults (levers.json profiles, DC-L23-01..07): they fill only what the person left open,
     and each is recorded as auto_default with a reason. Plus the three smaller bugs the B2B study found."""

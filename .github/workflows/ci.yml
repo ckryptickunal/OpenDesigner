@@ -84,6 +84,9 @@ jobs:
       - name: Check-ins at session start, every N decisions and each closed round
         run: python3 tools/test_checkins.py
 
+      - name: A set records only what was asked (issue 115)
+        run: python3 tools/test_profile_handover.py
+
       - name: Review catches what a second model got past it (S4 drift)
         run: python3 tools/test_review_drift.py
 

@@ -1,6 +1,6 @@
 ---
 name: opendesigner
-description: Creates or sets up a design system: tokens, theme, colours, fonts, DESIGN.md. Use for "make my app look good", a look like a brand's, a landing page, an app or a redesign. One question at a time.
+description: Creates or sets up a design system (tokens, theme, colours, fonts, DESIGN.md). Use for "make my app look good", a look like a brand's, a landing page, an app or a redesign. One question at a time.
 license: MIT
 compatibility: Python 3.10+ for scripts (standard library only, no network). Works in text-only hosts; visual steps use HTML templates when the host can show them.
 metadata:
