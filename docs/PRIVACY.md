@@ -74,6 +74,11 @@ Your answers or the values you chose. Names of people, products, companies or pr
 
 A step that is not a public question id is dropped from the report, not sent. An example is a name typed by mistake into a step.
 
+## Issues about repeated problems
+When the same problem comes up twice in your project, or you correct OpenDesigner the same way twice, your AI offers to send it to the OpenDesigner project as a GitHub issue. This is separate from the reports above: an issue is public and posted under your own GitHub account, so it is only filed after you say yes and read the draft. The offer and your answer are kept in `opendesigner/issue-offers.json`; whether it was asked in this session is kept in `~/.opendesigner/issue-offers.json`.
+
+An issue draft contains: what keeps happening, in OpenDesigner's terms; how many times, with the first and last dates; the area, question id and step; what you expected; the OpenDesigner version, the AI tool (host) and the Python version. It never contains your project's name, colours, file paths or folders, links, email addresses, your answers or brand details. The engine removes the ones it can find, and you can edit the draft (`opendesigner/issue-drafts/`) before it is filed. Say no, and you are never asked about that problem again.
+
 ## How it is sent, and where it goes
 - Sending uses a plain HTTPS request with a 5-second timeout, to the address in the `OPENDESIGNER_REPORTS_URL` environment variable or `profile.reports_url` in `state.json`.
 - **Right now no server is collecting reports.** Until the maintainers set one up and publish its address here, nothing is sent. A report you agree to share is saved in your project, in `opendesigner/journey/outbox/`, and `journey.py share` says so plainly.

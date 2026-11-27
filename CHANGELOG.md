@@ -28,6 +28,7 @@ All notable changes to OpenDesigner are recorded here. The format follows [Keep 
 
 - **Install with `npx skills add`** (2026-11-26). Codex, Cursor and other agents that read `.agents/skills/` can now install with one command, `npx skills add ckryptickunal/OpenDesigner`, as well as by copying the folders.
 - **Answers for Lovable, Bolt and v0 apps, and the Open Design name** (2026-11-26). The vibe-coded UI guide says what to do with an app from Lovable, Bolt or v0, the FAQ says OpenDesigner is not Open Design, and llms.txt answers two more questions people ask.
+- **Repeated problems become an issue offer** (2026-11-25). When the same problem comes up twice in your project, or you correct OpenDesigner the same way twice, your AI offers once per session to send it to the project as a GitHub issue, until you answer yes, later or no. You read the draft first; it carries no project names, colours, paths or answers.
 
 - **Send the install to your computer from a phone** (2026-11-25). On a phone, the home page's "Copy both" button becomes "Send to my computer". It opens the phone's share sheet with the install link and the two commands, so you can message or mail them to yourself. Nothing passes through our server.
 

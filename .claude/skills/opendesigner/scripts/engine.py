@@ -6275,6 +6275,12 @@ def cmd_status(d, as_json=False, hook=False):
               "engine.py feedback \"<the rule>\" --kind note.")
         print("engine.py here is: python3 " + shlex.quote(os.path.abspath(__file__)))
         try:
+            line = offer_line(d, _hook_session_id())
+            if line:
+                print(line)
+        except Exception:  # the hook never fails a session start
+            pass
+        try:
             cfg = checkin_settings(state)
             if cfg["enabled"] and first_result_shown(d, state):
                 lines_ = checkin_lines(checkin_facts(d, state, scan=False))  # no code scan at session start: it must stay fast
@@ -6313,6 +6319,7 @@ def cmd_status(d, as_json=False, hook=False):
              if notes else ""))
     print("Binding: tokens only; one question per call; show every round; every implementation ends with engine.py review "
           "and a re-read of DESIGN.md; owner corrections go to engine.py feedback \"<the rule>\" --kind note.")
+    print_offer(d)
     return 0
 
 
@@ -6770,7 +6777,7 @@ DETECT_MAX_DEPTH = 6
 DETECT_MAX_STYLE = 300   # style files read for the brand colour and the font, smallest paths first
 OD_OWN = {"state.json", "decisions.md", "feedback.md", "RATIONALE.md", "standards.md", "PROTOCOL.md", "RULES.md",
           "overview.html", "preview.html", "coverage.md", "assets.json", "tokens", "build", "preview", "journey", "research", "review",
-          "taste-indexes", "DESIGN.md", "PRODUCT.md", "DESIGN.md.hand-edited", "PRODUCT.md.hand-edited"}  # what OpenDesigner writes
+          "taste-indexes", "issue-offers.json", "issue-drafts", "DESIGN.md", "PRODUCT.md", "DESIGN.md.hand-edited", "PRODUCT.md.hand-edited"}  # what OpenDesigner writes
 CODE_EXT = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".vue", ".svelte", ".astro", ".html", ".htm", ".css", ".scss", ".sass", ".less",
             ".py", ".rb", ".php", ".go", ".rs", ".swift", ".kt", ".kts", ".java", ".dart", ".cs", ".ex", ".exs"}
 STYLE_EXT = {".css", ".scss", ".sass", ".less", ".html", ".htm", ".vue", ".svelte", ".astro", ".jsx", ".tsx"}
@@ -14122,11 +14129,19 @@ def _main(argv=None):
     p.add_argument("text", nargs="?", default="")
     p.add_argument("--kind", default=None, choices=list(FEEDBACK_KINDS) + ["note"],
                    help="default: idea (confusing with --from-journey); note: the owner's note on the work, counted in RULES.md")
-    p.add_argument("--same", default=None, help="with --kind note: the earlier note (N-01) this one repeats, or new")
+    p.add_argument("--same", default=None, help="the earlier note (N-01) or problem (F-001) this one repeats, or new")
+    p.add_argument("--expected", default=None, help="bug, gap or confusing: what the person expected instead")
+    p.add_argument("--about", default="design", choices=("design", "opendesigner"),
+                   help="with --kind note: opendesigner when the note is about how OpenDesigner behaves, not about their design")
     p.add_argument("--from-journey", dest="from_journey", action="store_true",
                    help="add the hotspots from the journey log: question ids and counts only, never notes")
     p.add_argument("--area", default=None)
     p.add_argument("--question", default=None)
+    p = sub.add_parser("issue-offer", parents=[common], help="list issue offers for repeated problems, answer one, or record it as sent")
+    p.add_argument("id", nargs="?", default=None, help="F-001 or N-01; leave out to list the offers")
+    p.add_argument("--answer", choices=("yes", "later", "no"), default=None)
+    p.add_argument("--sent", default=None, metavar="URL", help="the issue was filed: its url, or unknown")
+    p.add_argument("--asked", action="store_true", help="you asked the person this session; no ask again until the next one")
     p = sub.add_parser("standards", parents=[common], help="the standards this system follows, overridden ones and house updates")
     p.add_argument("--json", action="store_true")
     p.add_argument("--all", dest="show_all", action="store_true", help="also list the house standards for other platforms or stacks")
@@ -14251,7 +14266,9 @@ def _main(argv=None):
     elif a.cmd == "intake":
         cmd_intake(d, a.file, a.accept, a.json)
     elif a.cmd == "build":
-        return cmd_build(d, a.force)
+        rc = cmd_build(d, a.force)
+        print_offer(d)
+        return rc
     elif a.cmd == "sketch":
         return cmd_sketch(d, a.name, a.brand, a.audience, a.platforms, a.feel, a.theme, surfaces=a.surfaces, delegated=a.delegated,
                           stack=a.stack, brief=a.brief, logo=a.logo)
@@ -14263,7 +14280,10 @@ def _main(argv=None):
     elif a.cmd == "show":
         cmd_show(d, a.template, a.out, a.open, a.json)
     elif a.cmd == "review":
-        return cmd_review(d, a.project, a.strict, a.json, show_all=a.show_all)
+        rc = cmd_review(d, a.project, a.strict, a.json, show_all=a.show_all)
+        if not a.json:
+            print_offer(d)
+        return rc
     elif a.cmd == "audit-page":
         if not audit_py:
             raise SystemExit("audit-page needs scripts/audit.py next to engine.py.")
@@ -14340,7 +14360,12 @@ def _main(argv=None):
             if not hot:
                 raise SystemExit("There is no journey log yet, so there are no hotspots to add.")
             text = f"{text} {hot}".strip()
-        cmd_feedback(d, text, a.kind or ("confusing" if a.from_journey else "idea"), area=a.area, question=a.question, same=a.same)
+        cmd_feedback(d, text, a.kind or ("confusing" if a.from_journey else "idea"), area=a.area, question=a.question, same=a.same,
+                     expected=a.expected, about=a.about)
+    elif a.cmd == "issue-offer":
+        if a.id and not a.answer and a.sent is None and not a.asked:
+            raise SystemExit("Add --asked (you asked), --answer yes|later|no (the person's answer), or --sent <issue url>.")
+        return cmd_issue_offer(d, a.id, a.answer, a.sent, a.asked)
     return 0
 
 
@@ -17924,6 +17949,20 @@ def note_words(text):
     return out
 
 
+def note_match(text, items):
+    """The earlier item ({"text": ...}) this text repeats, by note_words, or None. Opposite wording never matches."""
+    mine = note_words(text)
+
+    def score(n):
+        theirs = note_words(n["text"])
+        both = len(mine & theirs)
+        if not both or (mine & NOTE_POLAR) != (theirs & NOTE_POLAR):
+            return 0
+        return both / min(len(mine), len(theirs))
+    best = max(items, key=score, default=None)
+    return best if best and score(best) >= NOTE_MATCH else None
+
+
 def read_notes(fp):
     """[{id, text, said, last}] from opendesigner/RULES.md, in file order."""
     if not os.path.exists(fp):
@@ -17944,9 +17983,10 @@ def write_rules(fp, notes):
                    "\n## Notes (said once)\n" + table([n for n in notes if n["said"] < 2], "Note"))
 
 
-def record_note(d, text, same=None, quiet=False):
+def record_note(d, text, same=None, quiet=False, about="design"):
     """An owner's note on the work, counted. A repeat (same words, or --same N-xx) adds to the earlier note: said twice it is a
-    rule in RULES.md; at three times the agent offers a GitHub issue, which needs the person's yes."""
+    rule in RULES.md. A note about how OpenDesigner behaves (--about opendesigner) said twice, or any note said three times,
+    becomes an issue offer that stays pending until the person answers it (issue-offer); posting needs their yes."""
     fp = os.path.join(d, "RULES.md")
     notes, today = read_notes(fp), _dt.date.today().isoformat()
     text = text.replace("|", "/")
@@ -17957,16 +17997,7 @@ def record_note(d, text, same=None, quiet=False):
         if not hit:
             raise SystemExit(f"{same} is not in {fp}. Nothing was written.")
     else:
-        mine = note_words(text)
-
-        def score(n):
-            theirs = note_words(n["text"])
-            both = len(mine & theirs)
-            if not both or (mine & NOTE_POLAR) != (theirs & NOTE_POLAR):
-                return 0
-            return both / min(len(mine), len(theirs))
-        best = max(notes, key=score, default=None)
-        hit = best if best and score(best) >= NOTE_MATCH else None
+        hit = note_match(text, notes)
     if hit:  # the earlier wording stays; edit the row in RULES.md to restate the rule
         hit.update(said=hit["said"] + 1, last=today)
     else:
@@ -17985,22 +18016,22 @@ def record_note(d, text, same=None, quiet=False):
                   f"--source \"person, {today}\" ...")
         elif n > 2:
             print(f"Said {n} times: {nid}. Write a check that finds every case, and run it before every showing.")
-        if n == 3:
-            print("Ask once: \"Want me to draft a GitHub issue so OpenDesigner keeps notes like this?\" After a yes: "
-                  "engine.py feedback \"<the rule, about OpenDesigner, nothing private>\" --kind gap")
+    offer_count(d, hit["id"], "note", "note", hit["text"], hit["said"], about=about, quiet=quiet)
     return hit
 
 
-def cmd_feedback(d, text, kind="idea", quiet=False, area=None, question=None, same=None):
+def cmd_feedback(d, text, kind="idea", quiet=False, area=None, question=None, same=None, expected=None, about="design"):
     """Record feedback locally and print a pre-filled issue link. Nothing is posted: the person decides. kind note is the
-    owner's note on the work: counted in RULES.md (record_note), with no link."""
+    owner's note on the work: counted in RULES.md (record_note), with no link. A bug, gap or confusing step that repeats an
+    earlier one (same words, or --same F-xxx; --same new forces a new entry) adds to its count, and the second time makes an
+    issue offer that stays pending until the person answers it (issue-offer)."""
     from urllib.parse import quote
-    if same and kind != "note":
-        raise SystemExit("--same goes with --kind note.")
+    if same and kind not in ("note",) + OFFER_KINDS:
+        raise SystemExit("--same goes with --kind note, bug, gap or confusing.")
     if kind == "note":
         if not " ".join(str(text).split()):
             raise SystemExit("Add the note, in quotes: the rule in one line.")
-        return record_note(d, " ".join(str(text).split()), same=same, quiet=quiet)
+        return record_note(d, " ".join(str(text).split()), same=same, quiet=quiet, about=about)
     if kind not in FEEDBACK_KINDS:
         raise SystemExit(f"--kind must be one of {', '.join(FEEDBACK_KINDS)}")
     text = " ".join(str(text).split())
@@ -18016,17 +18047,349 @@ def cmd_feedback(d, text, kind="idea", quiet=False, area=None, question=None, sa
             f"**OpenDesigner:** {OPENDESIGNER_VERSION} (Python {sys.version_info.major}.{sys.version_info.minor})\n\n"
             "_Filed from `engine.py feedback`. Please remove anything private before submitting._")
     url = f"{ISSUES_URL}?title={quote(title)}&body={quote(body)}&labels={quote(FEEDBACK_KINDS[kind] + ',from-engine')}"
-    with open(fp, encoding="utf-8") as f:
-        n = sum(1 for line in f if line.startswith("## F-"))
+    entries = read_feedback(fp)
+    if kind in OFFER_KINDS:
+        pool = [e for e in entries if e["kind"] in OFFER_KINDS]
+        if same and same.lower() == "new":
+            hit = None
+        elif same:
+            hit = next((e for e in entries if e["id"] == same.upper()), None)
+            if not hit:
+                raise SystemExit(f"{same} is not in {fp}. Nothing was written.")
+        else:
+            hit = note_match(text, pool)
+        if hit:
+            o = read_offers(d)["offers"].get(hit["id"]) or {}
+            n = int(o.get("count") or 1) + 1
+            mark_feedback_seen(fp, hit["id"], n)
+            track(d, "feedback_filed", kind=kind, step=question)
+            if not quiet:
+                print(f"Counted as a repeat of {hit['id']} (seen {n} times): \"{hit['text'][:90]}\". Wrong match? Run again with "
+                      "--same new.")
+            offer_count(d, hit["id"], "feedback", hit["kind"], hit["text"], n, area=area or o.get("area"),
+                        question=question or o.get("question"), expected=expected, quiet=quiet)
+            return url
+    fid = f"F-{len(entries) + 1:03d}"
     with open(fp, "a", encoding="utf-8", newline="\n") as f:
-        f.write(f"\n## F-{n + 1:03d} · {_dt.date.today().isoformat()} · {kind}" + (f" · {where}" if where else "")
+        f.write(f"\n## {fid} · {_dt.date.today().isoformat()} · {kind}" + (f" · {where}" if where else "")
                 + f"\n{text}\n\n[File this as an issue]({url})\n")
     track(d, "feedback_filed", kind=kind, step=question)
+    if kind in OFFER_KINDS:
+        offer_count(d, fid, "feedback", kind, text, 1, area=area, question=question, expected=expected, quiet=True)
     if not quiet:
-        print(f"Saved to {fp}.")
+        print(f"Saved to {fp} as {fid}.")
         print("To report it, open this link, check it, and submit it yourself (nothing was posted):")
         print(url)
     return url
+
+
+# =============================================================================================
+# issue offers (owner, 2026-11-25): when the person repeats themselves or hits the same problem again, the agent offers to
+# send it to the OpenDesigner repo as an issue. The offer lives in opendesigner/issue-offers.json until it is answered, so a
+# new session cannot forget it; the agent asks once per session (remembered in OD_HOME, so the session hook stays read-only
+# in the project). Nothing is posted without the person's yes, and the draft carries nothing private.
+# =============================================================================================
+
+OFFER_KINDS = ("bug", "gap", "confusing")
+OFFERS_FILE = "issue-offers.json"
+OFFER_REPO = "ckryptickunal/OpenDesigner"
+OFFER_OPEN = ("pending", "later", "yes")   # still surfaced; "no" and "sent" are answered for good
+OFFER_GAP_HOURS = 3                         # without a session id, this long since the last engine line starts a new session
+RX_FB_HEAD = re.compile(r"^## (F-\d+) · (\d{4}-\d\d-\d\d) · (\w+)(?: · (.*))?$")
+RX_FB_SEEN = re.compile(r"^_Seen \d+ times, last \d{4}-\d\d-\d\d\._$")
+
+
+def read_feedback(fp):
+    """[{id, date, kind, where, text}] from opendesigner/feedback.md, in file order."""
+    if not os.path.exists(fp):
+        return []
+    out, lines = [], open(fp, encoding="utf-8").read().splitlines()
+    for i, ln in enumerate(lines):
+        m = RX_FB_HEAD.match(ln)
+        if m:
+            text = next((x.strip() for x in lines[i + 1:i + 3] if x.strip()), "")
+            out.append({"id": m.group(1), "date": m.group(2), "kind": m.group(3), "where": m.group(4) or "", "text": text})
+    return out
+
+
+def mark_feedback_seen(fp, fid, n):
+    """Write (or rewrite) the "_Seen N times_" line under entry fid in feedback.md."""
+    lines = open(fp, encoding="utf-8").read().splitlines()
+    i = next(k for k, ln in enumerate(lines) if ln.startswith(f"## {fid} · "))
+    seen = f"_Seen {n} times, last {_dt.date.today().isoformat()}._"
+    j = i + 2
+    if j < len(lines) and RX_FB_SEEN.match(lines[j]):
+        lines[j] = seen
+    else:
+        lines.insert(j, seen)
+    write_text(fp, "\n".join(lines) + "\n")
+
+
+def read_offers(d):
+    try:
+        data = read_json(os.path.join(d, OFFERS_FILE))
+    except (OSError, ValueError):
+        data = {}
+    data.setdefault("offers", {})
+    return data
+
+
+def write_offers(d, data):
+    data["about"] = ("Repeated problems and owner notes about OpenDesigner, counted by engine.py feedback. status: none (seen "
+                     "once), pending, later, yes, no, sent. Answer with engine.py issue-offer <id> --answer yes|later|no.")
+    dump_json(os.path.join(d, OFFERS_FILE), data)
+
+
+def detect_host():
+    e = os.environ
+    if e.get("CLAUDECODE") or e.get("CLAUDE_CODE_SESSION_ID"):
+        return "Claude Code"
+    if any(k.startswith("CODEX") for k in e):
+        return "Codex"
+    if e.get("CURSOR_TRACE_ID") or e.get("CURSOR_AGENT"):
+        return "Cursor"
+    if e.get("GEMINI_CLI"):
+        return "Gemini CLI"
+    if e.get("TERM_PROGRAM") == "vscode":
+        return "VS Code"
+    return "unknown"
+
+
+def offer_count(d, oid, source, kind, text, count, area=None, question=None, expected=None, about=None, quiet=False):
+    """Record the count for a feedback entry (F-xxx) or note (N-xx) and open the offer when it qualifies: a problem seen twice,
+    a note about OpenDesigner said twice, any note said three times. Prints the offer line when it opens."""
+    data = read_offers(d)
+    o = data["offers"].get(oid)
+    if o is None and source == "note" and about != "opendesigner" and count < 3:
+        return None  # a note about their own design is theirs until it is said three times
+    today = _dt.date.today().isoformat()
+    o = o or {"id": oid, "source": source, "kind": kind, "first": today, "status": "none"}
+    if about == "opendesigner" or o.get("about") == "opendesigner":
+        o["about"] = "opendesigner"
+    o.update(text=text, count=count, last=today, host=detect_host(),
+             step=o.get("step") or (now_facts(d)["step"] if os.path.exists(os.path.join(d, "PROTOCOL.md")) else None))
+    for k, v in (("area", area), ("question", question), ("expected", expected)):
+        if v:
+            o[k] = " ".join(str(v).split())
+    need = 2 if source == "feedback" or o.get("about") == "opendesigner" else 3
+    opened = o["status"] == "none" and count >= need
+    if opened:
+        o["status"], o["opened"] = "pending", today
+    data["offers"][oid] = o
+    write_offers(d, data)
+    if opened and not quiet:
+        line = offer_line(d)
+        if line:
+            print(line)
+    return o
+
+
+def _hook_session_id():
+    """The session id Claude Code passes to a SessionStart hook on stdin, if any. Never waits long."""
+    try:
+        import select
+        if sys.stdin is None or sys.stdin.isatty():
+            return None
+        if not select.select([sys.stdin], [], [], 0.2)[0]:
+            return None
+        return (json.loads(sys.stdin.read() or "{}") or {}).get("session_id")
+    except Exception:
+        return None
+
+
+def offer_session(d, sid=None):
+    """This session's id for asking once: the host's session id when there is one, else a new id after OFFER_GAP_HOURS of
+    quiet. Remembered in OD_HOME/issue-offers.json, never in the project."""
+    rec = _home_json("issue-offers.json")
+    p = rec.setdefault(os.path.abspath(d), {})
+    now = _dt.datetime.now().timestamp()
+    sid = sid or os.environ.get("OD_SESSION_ID") or os.environ.get("CLAUDE_CODE_SESSION_ID") or os.environ.get("CODEX_SESSION_ID")
+    if not sid:
+        sid = p.get("sid") if p.get("sid") and now - float(p.get("seen") or 0) < OFFER_GAP_HOURS * 3600 else f"t{int(now)}"
+    p.update(sid=sid, seen=now)
+    _home_write("issue-offers.json", rec)
+    return sid, rec, p
+
+
+def offer_line(d, sid=None):
+    """One line about the oldest open offer, or None. Until the agent records that it asked this session (issue-offer --asked,
+    or the person's answer), the line says to ask once at the end of the reply; after that it only names the offer, so the
+    agent never asks twice in a session."""
+    try:
+        offers = [o for o in read_offers(d)["offers"].values() if o.get("status") in OFFER_OPEN]
+    except Exception:
+        return None
+    if not offers:
+        return None
+    offers.sort(key=lambda o: (o.get("opened") or o.get("first") or "", o["id"]))
+    sid, rec, p = offer_session(d, sid)
+    asked = p.setdefault("asked", {})
+    fresh = [o for o in offers if asked.get(o["id"]) != sid]
+    more = f" ({len(offers) - 1} more open)" if len(offers) > 1 else ""
+    if not fresh:
+        o = offers[0]
+        return (f"Issue offer {o['id']} is open{more}; it was already raised this session, so do not ask again until the next one "
+                f"(engine.py issue-offer {o['id']} --answer yes|later|no when the person answers).")
+    o = fresh[0]
+    what = "Said" if o["source"] == "note" else "Seen"
+    if o["status"] == "yes":
+        return (f"Issue offer {o['id']}: the person said yes, and it is not filed yet{more}. Show the draft "
+                f"(engine.py issue-offer {o['id']} --answer yes), file it, then engine.py issue-offer {o['id']} --sent <issue url>.")
+    return (f"Issue offer {o['id']}{more}. {what} {o['count']} times: \"{o['text'][:80]}\". Ask once this session, as the last "
+            "line of your reply (or in its own message if you have nothing else to say), naming the problem in plain words: \"<The "
+            "problem> has come up more than once. Want me to send it to the OpenDesigner project as a GitHub issue? You see the draft first, and nothing is posted without your "
+            f"yes.\" Right after asking: engine.py issue-offer {o['id']} --asked. When they answer: engine.py issue-offer {o['id']} "
+            "--answer yes|later|no.")
+
+
+def mark_asked(d, oid):
+    sid, rec, p = offer_session(d)
+    p.setdefault("asked", {})[oid] = sid
+    _home_write("issue-offers.json", rec)
+
+
+def print_offer(d):
+    line = offer_line(d)
+    if line:
+        print(line)
+
+
+def offer_private(d):
+    """Strings from this project that must never reach an issue: its name and folder, the context it was given, free-text
+    answers, quotes and font names."""
+    st = state_or_none(d) or {}
+    out = {st.get("name"), os.path.basename(os.path.dirname(os.path.abspath(d))), os.path.basename(os.path.abspath(d))
+           if os.path.basename(os.path.abspath(d)) != "opendesigner" else None}
+
+    def walk(v):
+        if isinstance(v, str):
+            out.add(v)
+        elif isinstance(v, dict):
+            for x in v.values():
+                walk(x)
+        elif isinstance(v, list):
+            for x in v:
+                walk(x)
+    walk(st.get("context"))
+    walk(st.get("summary"))
+    for a in (st.get("answers") or {}).values():
+        if isinstance(a, dict):
+            walk(a.get("quote"))
+            walk(a.get("why"))
+            v = a.get("value")
+            if isinstance(v, str) and (" " in v or len(v) > 24):  # free text, not an option id
+                out.add(v)
+    raw = st.get("raw") or {}
+    for k in ("textFace", "displayFace", "monoFace", "brandFace"):
+        v = raw.get(k)
+        if isinstance(v, str) and not v.startswith("=") and v not in ("system", "ui-monospace", "ui-sans-serif", "ui-serif"):
+            out.add(v)
+    return sorted((x for x in out if isinstance(x, str) and len(x.strip()) >= 3), key=len, reverse=True)
+
+
+RX_PRIVATE = [re.compile(p, re.I) for p in (
+    r"https?://\S+", r"\b[\w.+-]+@[\w-]+\.[\w.]+\b", r"#[0-9a-f]{3,8}\b", r"\b(?:rgba?|hsla?|oklch|oklab|lab|lch)\([^)]*\)",
+    r"(?:~|\.{1,2})?(?:[\w@.-]+)?[/\\][\w@./\\-]+", r"\b[\w-]+\.(?:css|scss|tsx?|jsx?|vue|svelte|html|json|swift|kt|py|md)\b")]
+
+
+def scrub(text, private):
+    for s_ in private:
+        text = re.sub(re.escape(s_.strip()), "[removed]", text, flags=re.I)
+    for rx in RX_PRIVATE:
+        text = rx.sub("[removed]", text)
+    return text
+
+
+def offer_draft(d, o):
+    """(title, body, labels) for an offer: OpenDesigner's terms only, nothing from the project."""
+    private = offer_private(d)
+    text = scrub(o.get("text") or "", private)
+    kind = o.get("kind") or "note"
+    what = "an owner note about OpenDesigner" if o["source"] == "note" else f"a {kind}"
+    times = f"{o.get('count')} times, first {o.get('first')}, last {o.get('last')}"
+    where = ", ".join(x for x in (f"area {o['area']}" if o.get("area") else "", f"question {o['question']}" if o.get("question") else "",
+                                  o.get("step") or "") if x)
+    short = text if len(text) <= 70 else text[:70].rsplit(" ", 1)[0].rstrip(" ,.:;") + "..."
+    title = f"[repeated][{kind}] {short}"
+    body = (f"**What keeps happening** ({what}):\n{text}\n\n"
+            + (f"**What was expected:**\n{scrub(o['expected'], private)}\n\n" if o.get("expected") else "")
+            + f"**How often:** {times}\n\n"
+            + (f"**Where:** {scrub(where, private)}\n\n" if where else "")
+            + f"**OpenDesigner:** {OPENDESIGNER_VERSION} · host {o.get('host') or detect_host()} · "
+              f"Python {sys.version_info.major}.{sys.version_info.minor}\n\n"
+            "_Drafted by `engine.py issue-offer` after the person said yes. It carries no project name, colours, file paths, "
+            "answers or brand details; the person read it before it was filed._")
+    labels = ["repeated", "from-engine"] + ([FEEDBACK_KINDS[kind]] if kind in FEEDBACK_KINDS else [])
+    return title, body, labels
+
+
+def cmd_issue_offer(d, oid=None, answer=None, sent=None, asked=False):
+    """engine.py issue-offer: list the offers, record that the agent asked, answer one (yes, later, no) or record that it was
+    sent."""
+    from urllib.parse import quote
+    data = read_offers(d)
+    offers = data["offers"]
+    if not oid:
+        rows = [o for o in offers.values() if o.get("status") != "none"]
+        if not rows:
+            print("No issue offers. One opens when the same problem is recorded twice (engine.py feedback).")
+        for o in sorted(rows, key=lambda o: o["id"]):
+            print(f"{o['id']}  {o['status']:<7}  seen {o.get('count')}x  {o.get('text', '')[:70]}"
+                  + (f"  {o['url']}" if o.get("url") else ""))
+        return 0
+    o = offers.get(oid.upper())
+    if not o:
+        raise SystemExit(f"{oid} has no issue offer in {os.path.join(d, OFFERS_FILE)}. engine.py issue-offer lists them.")
+    if o["status"] == "none":
+        raise SystemExit(f"{o['id']} was seen once; an offer opens when it comes up again. Nothing was changed.")
+    today = _dt.date.today().isoformat()
+    if asked:
+        mark_asked(d, o["id"])
+        print(f"{o['id']}: asked this session. It is not asked again until the next session; record the answer with --answer.")
+        return 0
+    mark_asked(d, o["id"])  # an answer is an ask too: nothing more this session
+    if sent is not None:
+        o.update(status="sent", sent=today, **({"url": sent} if sent and sent != "unknown" else {}))
+        write_offers(d, data)
+        print(f"{o['id']} is sent" + (f": {o['url']}" if o.get("url") else "") + ". It will not be offered again.")
+        return 0
+    if answer == "later":
+        o.update(status="later", answered=today)
+        write_offers(d, data)
+        print(f"{o['id']}: later. It comes back at the next session, once.")
+        return 0
+    if answer == "no":
+        o.update(status="no", answered=today)
+        write_offers(d, data)
+        print(f"{o['id']}: no. It will never be offered again; it stays in this project only.")
+        return 0
+    o.update(status="yes", answered=o.get("answered") or today)
+    write_offers(d, data)
+    title, body, labels = offer_draft(d, o)
+    draft_dir = os.path.join(d, "issue-drafts")
+    os.makedirs(draft_dir, exist_ok=True)
+    fp = os.path.join(draft_dir, f"{o['id']}.md")
+    if os.path.exists(fp):  # the person may have edited it: their version is the one filed
+        with open(fp, encoding="utf-8") as f:
+            body = f.read().strip()
+    else:
+        write_text(fp, body + "\n")
+    plain = [w for w in re.findall(r"[A-Za-z][A-Za-z-]{3,}", title.split("] ", 2)[-1]) if w.lower() not in NOTE_STOP | {"removed"}]
+    words = " ".join(sorted(dict.fromkeys(plain), key=len, reverse=True)[:4])
+    print(f"Draft for {o['id']} (in {fp}; show it to the person, who may edit that file before it is filed):\n")
+    print(f"Title: {title}\n")
+    print(body)
+    print("\nFirst look for the same issue, and if one matches, offer to add a comment there instead:")
+    print(f"  gh issue list --repo {OFFER_REPO} --state all --search {shlex.quote(words)}")
+    print(f"  gh issue comment <number> --repo {OFFER_REPO} --body-file {shlex.quote(fp)}")
+    print("Otherwise, with gh installed, show this exact command, then run it:")
+    print(f"  gh issue create --repo {OFFER_REPO} --title {shlex.quote(title)} --body-file {shlex.quote(fp)} "
+          f"--label {','.join(labels)}")
+    print("  (If gh says a label is not found, run the same command without --label: the [repeated] title still marks it.)")
+    print("Without gh, give the person this link to check and submit themselves:")
+    print(f"  {ISSUES_URL}?title={quote(title)}&body={quote(body)}&labels={quote(','.join(labels))}")
+    print(f"Then: engine.py issue-offer {o['id']} --sent <issue url>   (or --sent unknown when the url is not known)")
+    return 0
 
 
 if __name__ == "__main__":

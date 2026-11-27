@@ -179,6 +179,7 @@ python3 tools/test_checkins.py           check-ins: every N decisions, closed ro
 python3 tools/test_profile_handover.py   a set on a work tool adds exactly one decision; handed-over defaults are noted on it
 python3 tools/test_review_drift.py       review flags unknown token names, typed fonts, off-system weights and unapproved od-ignore
 python3 tools/test_status_feedback.py    the status map (build/status.json), DESIGN.md's Status and Feedback rules, review's judgment notes
+python3 tools/test_issue_offers.py       issue offers: repeats counted, pending, later, no, yes, sent, asked once per session, nothing private in the draft
 python3 tools/design_evals.py --check --no-save   the engine on 20 fixed briefs: every required check passes (evals/README.md)
 python3 skills/opendesigner/scripts/library.py check   every library component uses only tokens every engine system writes, is scoped, and has complete tags, a complete spec, and library.json is current (else: library.py catalog)
 python3 server/mcp/test_server.py           the library MCP server over stdio: read-only tools, the gallery view, both protocol versions
